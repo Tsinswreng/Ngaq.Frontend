@@ -1,0 +1,9 @@
+using Avalonia.Controls;
+
+namespace Ngaq.Ui.Views;
+
+public partial class MainWindow : Window {
+	public MainWindow() {
+		//InitializeComponent();
+	}
+}

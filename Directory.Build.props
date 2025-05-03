@@ -1,0 +1,5 @@
+<Project>
+	<ItemGroup>
+		<Compile Include="../CsShared/TypeAlias.cs"/>
+	</ItemGroup>
+</Project>
