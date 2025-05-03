@@ -1,4 +1,14 @@
 <Project>
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net9.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<PublishAot>true</PublishAot>
+		<PublishTrimmed>true</PublishTrimmed>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Compile Include="../CsShared/TypeAlias.cs"/>
 	</ItemGroup>
