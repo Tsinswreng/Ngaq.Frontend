@@ -27,6 +27,10 @@ public class CBE : CompiledBindingExtension{
 		return Pth<T, object?>(propertySelector);
 	}
 
+	public static CompiledBindingExtension Mk<T>(Expression<Func<T, object?>> propertySelector){
+		return new CBE(Pth<T, object?>(propertySelector));
+	}
+
 
 
 	public static CompiledBindingPath Pth<T, Tar>(

@@ -11,8 +11,17 @@ public partial class Vm_WordCard: ViewModelBase{
 		{
 			var o = new Ctx();
 			Samples.Add(o);
+			o.WordText = "Hello";
 
 		}
 	}
+
+	protected str _WordText = "";
+	public str WordText{
+		get{return _WordText;}
+		set{SetProperty(ref _WordText, value);}
+	}
+
+
 
 }

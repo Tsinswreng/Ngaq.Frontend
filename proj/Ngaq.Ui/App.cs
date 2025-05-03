@@ -14,6 +14,9 @@ public partial class App : Application {
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
 		Styles.Add(new FluentTheme());
+#if DEBUG
+		this.AttachDevTools();
+#endif
 	}
 
 	public override void OnFrameworkInitializationCompleted() {
@@ -23,6 +26,8 @@ public partial class App : Application {
 			DisableAvaloniaDataAnnotationValidation();
 			desktop.MainWindow = new MainWindow {
 				DataContext = new MainViewModel()
+				,Width = 400
+				,Height = 700
 			};
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
 			singleViewPlatform.MainView = new MainView {
