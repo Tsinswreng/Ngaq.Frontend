@@ -6,12 +6,14 @@ using System.Linq;
 using Avalonia.Markup.Xaml;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views;
+using Avalonia.Themes.Fluent;
 
 namespace Ngaq.Ui;
 
 public partial class App : Application {
 	public override void Initialize() {
-		AvaloniaXamlLoader.Load(this);
+		//AvaloniaXamlLoader.Load(this);
+		Styles.Add(new FluentTheme());
 	}
 
 	public override void OnFrameworkInitializationCompleted() {
