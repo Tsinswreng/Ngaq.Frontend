@@ -14,4 +14,29 @@ public partial class Vm_AddWord: ViewModelBase{
 		}
 	}
 
+	protected str _Path = "";
+	public str Path{
+		get{return _Path;}
+		set{SetProperty(ref _Path, value);}
+	}
+
+	protected str _Text = "";
+	public str Text{
+		get{return _Text;}
+		set{SetProperty(ref _Text, value);}
+	}
+
+
+	public nil Confirm(){
+		if(str.IsNullOrEmpty(Path) || str.IsNullOrEmpty(Text)){
+			return null!;
+		}
+		if(!str.IsNullOrEmpty(Text)){
+
+		}
+		return null!;
+	}
+
+
+
 }
