@@ -1,8 +1,11 @@
 ﻿using System;
 using Avalonia;
-using Ngaq.Core.Util;
 
-namespace Ngaq.Ui.Desktop;
+//using Microsoft.CodeAnalysis.Text;
+using Ngaq.Core.Util;
+using Ngaq.Ui;
+
+namespace Ngaq.Windows;
 
 sealed class Program
 {
@@ -11,17 +14,7 @@ sealed class Program
 	// yet and stuff might break.
 	[STAThread]
 	public static void Main(string[] args){
-		for(var i = 0; i < 1000; i++){
-			var id = IdUtil.NewUInt128();
-			var base64Url = IdUtil.ToBase64Url(id);
-			var id2 = IdUtil.FromBase64Url(base64Url);
-			System.Console.WriteLine(
-				id+"  "+base64Url
-			);
-			if(id!= id2){
-				throw new Exception("IdUtil test failed");
-			}
-		}
+
 		BuildAvaloniaApp()
 		.StartWithClassicDesktopLifetime(args);
 	}
