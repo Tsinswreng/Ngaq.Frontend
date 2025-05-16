@@ -26,7 +26,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="../../Ngaq.Local\Ngaq.Local.csproj" />
+		<ProjectReference Include="../../../Ngaq.Local/Ngaq.Local.csproj" />
 	</ItemGroup>
 
 </Project>

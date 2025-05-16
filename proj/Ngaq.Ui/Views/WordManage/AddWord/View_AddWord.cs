@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Tsinswreng.Avalonia.Util;
 using Ctx = Vm_AddWord;
+using Microsoft.Extensions.DependencyInjection;
 public partial class View_AddWord
 	:UserControl
 {
@@ -14,7 +15,9 @@ public partial class View_AddWord
 	}
 
 	public View_AddWord(){
-		Ctx = new Ctx();
+		//Ctx = new Ctx();
+		Ctx = App.ServiceProvider.GetRequiredService<Vm_AddWord>();
+
 		Style();
 		Render();
 	}

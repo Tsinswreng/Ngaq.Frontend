@@ -7,10 +7,19 @@ using Avalonia.Markup.Xaml;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views;
 using Avalonia.Themes.Fluent;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Ngaq.Ui;
 
 public partial class App : Application {
+
+
+	public static IServiceProvider ServiceProvider { get; private set; } = null!;
+	public static void ConfigureServices(IServiceProvider serviceProvider){
+		ServiceProvider = serviceProvider;
+	}
+
+
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
 		Styles.Add(new FluentTheme());

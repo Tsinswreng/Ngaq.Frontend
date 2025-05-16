@@ -10,10 +10,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="../CsShared/TypeAlias.cs"/>
+		<Compile Include="../../../Tsinswreng.CsTypeAlias/TypeAlias.cs"/>
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="../../../Ngaq.Core/Ngaq.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
 	</ItemGroup>
 </Project>

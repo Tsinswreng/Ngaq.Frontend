@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Service.Word;
 using Ngaq.Ui.ViewModels;
 
@@ -12,12 +13,16 @@ public partial class Vm_AddWord
 
 	}
 
-	public Vm_AddWord(I_Svc_Word? SvcWord = null){
-		this.Svc_Word = SvcWord;
+	public Vm_AddWord(
+		I_Svc_Word? SvcWord = null
+		,I_UserCtxMgr? UserCtxMgr = null
+	){
+		this.Svc_Word = SvcWord!;
+		this.UserCtxMgr = UserCtxMgr!;
 	}
 
-	I_Svc_Word? Svc_Word{get;set;}
-
+	I_Svc_Word Svc_Word{get;set;} = null!;
+	I_UserCtxMgr UserCtxMgr{get;set;} = null!;
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static Vm_AddWord(){
@@ -43,12 +48,16 @@ public partial class Vm_AddWord
 
 	public nil Confirm(){
 		if(str.IsNullOrEmpty(Path) || str.IsNullOrEmpty(Text)){
-			return null!;
+			return Nil;
 		}
 		if(!str.IsNullOrEmpty(Text)){
-
+			Svc_Word?.AddWordsFromTextAsy(
+				UserCtxMgr.GetUserCtx()
+				,Text
+				,default //TODO ct
+			);
 		}
-		return null!;
+		return Nil;
 	}
 
 
