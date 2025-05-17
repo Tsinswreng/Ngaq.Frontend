@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using Avalonia.Data.Core;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
-namespace Tsinswreng.Avalonia.Util;
+namespace Tsinswreng.Avalonia.Tools;
 
 /// <summary>
 //于c#中用編譯期綁定

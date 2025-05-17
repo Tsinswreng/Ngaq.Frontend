@@ -47,7 +47,9 @@ public partial class Vm_AddWord
 
 
 	public nil Confirm(){
-		if(str.IsNullOrEmpty(Path) || str.IsNullOrEmpty(Text)){
+		//System.Console.WriteLine(Text);//t +
+		//System.Console.WriteLine(Svc_Word == null); false
+		if(str.IsNullOrEmpty(Path) && str.IsNullOrEmpty(Text)){
 			return Nil;
 		}
 		if(!str.IsNullOrEmpty(Text)){
@@ -55,7 +57,11 @@ public partial class Vm_AddWord
 				UserCtxMgr.GetUserCtx()
 				,Text
 				,default //TODO ct
-			);
+			).ContinueWith(d=>{
+				if(d.IsFaulted){
+					System.Console.WriteLine(d.Exception);//t
+				}
+			});
 		}
 		return Nil;
 	}

@@ -1,7 +1,7 @@
 namespace Ngaq.Ui.Views.WordCard;
 
 using Avalonia.Controls;
-using Tsinswreng.Avalonia.Util;
+using Tsinswreng.Avalonia.Tools;
 using Ctx = Vm_WordCard;
 public partial class View_WordCard
 	:UserControl
@@ -30,7 +30,7 @@ public partial class View_WordCard
 	}
 
 	protected nil Render(){
-		
+
 		var RootGrid = Root.Grid;
 		Content = RootGrid;
 		RootGrid.RowDefinitions.AddRange([

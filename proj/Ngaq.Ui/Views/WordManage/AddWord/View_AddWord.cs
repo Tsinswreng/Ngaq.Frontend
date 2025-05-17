@@ -2,9 +2,12 @@ namespace Ngaq.Ui.Views.WordManage.AddWord;
 
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Tsinswreng.Avalonia.Util;
 using Ctx = Vm_AddWord;
 using Microsoft.Extensions.DependencyInjection;
+using Avalonia.Data;
+using Avalonia.Styling;
+using Tsinswreng.Avalonia.Tools;
+
 public partial class View_AddWord
 	:UserControl
 {
@@ -28,6 +31,14 @@ public partial class View_AddWord
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
+		var AcceptReturn = new Style(x=>
+			x.Is<TextBox>()
+		);
+		Styles.Add(AcceptReturn);
+		{
+			var o = AcceptReturn;
+			o.Set(TextBox.AcceptsReturnProperty, true);
+		}
 		return null!;
 	}
 
@@ -74,6 +85,9 @@ public partial class View_AddWord
 				o.Content = "Confirm";
 				o.HorizontalAlignment = HorizontalAlignment.Center;
 				o.HorizontalContentAlignment = HorizontalAlignment.Center;
+				o.Click += (s,e)=>{
+					Ctx?.Confirm();
+				};
 			}
 		}}//~IndexGrid
 		return null!;
@@ -90,7 +104,6 @@ public partial class View_AddWord
 		]);
 		{{
 			Ans.Add();
-
 
 			var Path = new IndexGrid(IsRow:false);
 			Ans.Add(Path.Grid);
@@ -119,6 +132,10 @@ public partial class View_AddWord
 				{
 					var o = Input;
 					o.HorizontalAlignment = HorizontalAlignment.Stretch;
+					o.Bind(
+						TextBox.TextProperty
+						,new CBE(CBE.Pth<Ctx>(x=>x.Path)){Mode=BindingMode.TwoWay}
+					);
 				}
 
 				// var Confirm = new Button();
@@ -149,6 +166,10 @@ public partial class View_AddWord
 		Ans.Add(Input);
 		{
 			var o = Input;
+			o.Bind(
+				TextBox.TextProperty
+				,new CBE(CBE.Pth<Ctx>(x=>x.Text)){Mode=BindingMode.TwoWay}
+			);
 		}
 		Ans.Add();
 		Ans.Add();

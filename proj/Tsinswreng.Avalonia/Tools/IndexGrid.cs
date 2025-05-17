@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using System;
 
-namespace Tsinswreng.Avalonia.Util;
+namespace Tsinswreng.Avalonia.Tools;
 public partial struct IndexGrid{
 
 	public Grid Grid = new Grid();
