@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Ngaq.Ui.Views.BottomBar;
 using Ngaq.Ui.Views.WordCard;
 using Ngaq.Ui.Views.WordManage.AddWord;
 
@@ -8,6 +9,8 @@ public partial class MainView : UserControl {
 	public MainView() {
 		//InitializeComponent();
 		//Content = new View_WordCard();
-		Content = new View_AddWord();
+		//Content = new ViewAddWord();
+		Content = new ViewBottomBar();
+
 	}
 }

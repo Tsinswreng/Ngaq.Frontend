@@ -2,13 +2,15 @@ namespace Ngaq.Ui.Views.WordManage.AddWord;
 
 using Avalonia.Controls;
 using Avalonia.Layout;
-using Ctx = Vm_AddWord;
+using Ctx = VmAddWord;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Data;
 using Avalonia.Styling;
 using Tsinswreng.Avalonia.Tools;
+using Avalonia.Media;
+using Avalonia;
 
-public partial class View_AddWord
+public partial class ViewAddWord
 	:UserControl
 {
 
@@ -17,9 +19,9 @@ public partial class View_AddWord
 		set{DataContext = value;}
 	}
 
-	public View_AddWord(){
+	public ViewAddWord(){
 		//Ctx = new Ctx();
-		Ctx = App.ServiceProvider.GetRequiredService<Vm_AddWord>();
+		Ctx = App.ServiceProvider.GetRequiredService<VmAddWord>();
 
 		Style();
 		Render();
@@ -39,7 +41,7 @@ public partial class View_AddWord
 			var o = AcceptReturn;
 			o.Set(TextBox.AcceptsReturnProperty, true);
 		}
-		return null!;
+		return Nil;
 	}
 
 	protected nil Render(){
@@ -48,12 +50,41 @@ public partial class View_AddWord
 		{
 			var o = root;
 			root.Grid.RowDefinitions.AddRange([
+				new RowDefinition(1, GridUnitType.Auto),
 				new RowDefinition(8, GridUnitType.Star),
 				new RowDefinition(1, GridUnitType.Auto),
 				new RowDefinition(1, GridUnitType.Star),
 			]);
 		}
 		{{
+
+
+			var FloatPanel = new Panel();
+			root.Add(FloatPanel);//t
+			{{
+				var floatingBorder = new Border{
+					Background = Brushes.Red,
+					BorderBrush = Brushes.Black,
+					BorderThickness = new Thickness(2),
+					Width = 100,
+					Height = 100,
+					HorizontalAlignment = HorizontalAlignment.Center,
+					VerticalAlignment = VerticalAlignment.Center
+				};
+				FloatPanel.Children.Add(floatingBorder);
+			}}
+
+			//...后问还有别的元素
+
+
+
+			// 设置ZIndex确保悬浮在最上层
+			//Panel.SetZIndex(floatingBorder, 1);
+
+			//grid.Children.Add(floatingBorder);
+
+
+
 			var Tab = new TabControl();
 			root.Add(Tab);
 			{
@@ -90,7 +121,7 @@ public partial class View_AddWord
 				};
 			}
 		}}//~IndexGrid
-		return null!;
+		return Nil;
 	}
 
 

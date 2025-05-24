@@ -4,28 +4,28 @@ using Ngaq.Core.Service.Word;
 using Ngaq.Ui.ViewModels;
 
 namespace Ngaq.Ui.Views.WordManage.AddWord;
-using Ctx = Vm_AddWord;
-public partial class Vm_AddWord
+using Ctx = VmAddWord;
+public partial class VmAddWord
 	:ViewModelBase
 {
 
-	public Vm_AddWord(){
+	public VmAddWord(){
 
 	}
 
-	public Vm_AddWord(
-		I_Svc_Word? SvcWord = null
-		,I_UserCtxMgr? UserCtxMgr = null
+	public VmAddWord(
+		ISvcWord? SvcWord = null
+		,IUserCtxMgr? UserCtxMgr = null
 	){
 		this.Svc_Word = SvcWord!;
 		this.UserCtxMgr = UserCtxMgr!;
 	}
 
-	I_Svc_Word Svc_Word{get;set;} = null!;
-	I_UserCtxMgr UserCtxMgr{get;set;} = null!;
+	ISvcWord Svc_Word{get;set;} = null!;
+	IUserCtxMgr UserCtxMgr{get;set;} = null!;
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static Vm_AddWord(){
+	static VmAddWord(){
 		{
 			var o = new Ctx();
 			Samples.Add(o);

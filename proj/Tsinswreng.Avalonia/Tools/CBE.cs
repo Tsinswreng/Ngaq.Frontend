@@ -34,17 +34,17 @@ public class CBE : CompiledBindingExtension{
 
 
 	public static CompiledBindingPath Pth<T, Tar>(
-		Expression<Func<T, Tar>> propertySelector)
-	{
+		Expression<Func<T, Tar>> propertySelector
+	){
 		var builder = new CompiledBindingPathBuilder();
 		var body = propertySelector.Body;
 
 		// 处理类型转换表达式（如值类型装箱）
-		if (body is UnaryExpression { NodeType: ExpressionType.Convert } unaryExpr)
+		if (body is UnaryExpression { NodeType: ExpressionType.Convert } unaryExpr){
 			body = unaryExpr.Operand;
+		}
 
-		switch (body)
-		{
+		switch (body){
 			case MemberExpression memberExpr:  // 属性访问模式
 				ProcessMemberExpression<T>(builder, memberExpr);
 				break;
@@ -58,14 +58,15 @@ public class CBE : CompiledBindingExtension{
 		return builder.Build();
 	}
 
-	private static void ValidateObjectBinding(Type sourceType, Type targetType)
-	{
+	private static void ValidateObjectBinding(Type sourceType, Type targetType){
 		if (!targetType.IsAssignableFrom(sourceType))
 			throw new InvalidOperationException($"类型不兼容：{sourceType}无法转换为{targetType}");
 	}
 
-	private static void ProcessMemberExpression<T>(CompiledBindingPathBuilder builder, MemberExpression expr)
-	{
+	private static void ProcessMemberExpression<T>(
+		CompiledBindingPathBuilder builder
+		,MemberExpression expr
+	){
 		var propName = expr.Member.Name;
 		var propType = expr.Type;
 

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Data;
 using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Core.Infra.Db;
+using Ngaq.Core.Model.Po.Kv;
+using Ngaq.Core.Model.Po.Learn;
+using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Service.Word;
 
@@ -13,6 +17,8 @@ using Ngaq.Local.Db;
 using Ngaq.Local.Service.Word;
 using Ngaq.Ui;
 using Ngaq.Ui.Views.WordManage.AddWord;
+using Tsinswreng.SqlHelper;
+using Tsinswreng.SqlHelper.Cmd;
 
 namespace Ngaq.Windows;
 
@@ -29,13 +35,30 @@ sealed class Program
 		// services.AddTransient<WordCrudVm>();
 
 		//svc.AddScoped<DbCtx, DbCtx>();
-		svc.AddDbContext<DbCtx>();
-		svc.AddScoped<Dao_Word, Dao_Word>();
-		svc.AddScoped<I_TxnAsyFnRunner, TxnAsyFnRunner>();
-		svc.AddScoped<I_Svc_ParseWordList, Svc_ParseWordList>();
-		svc.AddScoped<I_Svc_Word, Svc_Word>();
-		svc.AddScoped<I_UserCtxMgr, UserCtxMgr>();
-		svc.AddTransient<Vm_AddWord>();
+		svc.AddDbContext<LocalDbCtx>();
+		svc.AddScoped<DaoWord, DaoWord>();
+		svc.AddScoped<DaoSqlWord, DaoSqlWord>();
+		svc.AddScoped<ISqlCmdMkr, SqlCmdMkr>();
+		svc.AddSingleton<IDbConnection>(AppTblInfo.Inst.DbConnection);
+		svc.AddSingleton<ITableMgr>(AppTableMgr.Inst);
+		// svc.AddScoped(
+		// 	typeof(RepoSql<>)
+		// 	,typeof(RepoSql<>)
+		// );
+		//<RepoSql, RepoSql>
+
+svc.AddScoped<RepoSql<PoWord,	IdWord>>();
+svc.AddScoped<RepoSql<PoKv,	IdKv>>();
+svc.AddScoped<RepoSql<PoLearn,	IdLearn>>();
+
+		//svc.AddScoped<I_TxnRunnerAsy, EfTxnRunner>();
+		svc.AddScoped<IRunInTxn, SqlTxnRunner>();
+		svc.AddScoped<ITxnRunner, SqlTxnRunner>();
+		svc.AddScoped<ISvcParseWordList, SvcParseWordList>();
+		svc.AddScoped<ISvcWord, SvcWord>();
+		svc.AddScoped<IUserCtxMgr, UserCtxMgr>();
+		svc.AddScoped<IGetTxnAsy, SqlCmdMkr>();
+		svc.AddTransient<VmAddWord>();
 
 		var servicesProvider = svc.BuildServiceProvider();
 		BuildAvaloniaApp()
