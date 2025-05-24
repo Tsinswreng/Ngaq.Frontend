@@ -15,6 +15,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="../../../Tsinswreng.CsCore/Tsinswreng.CsCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="../../../Ngaq.Core/Ngaq.Core.csproj" />
 	</ItemGroup>
 

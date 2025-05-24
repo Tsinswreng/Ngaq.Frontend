@@ -45,7 +45,12 @@ public class LongPressBtn
 
 	#region Fn
 
-public class LongPressBtnFn{
+/// <summary>
+/// Call Init() after construct
+/// </summary>
+public class LongPressBtnFn
+	:Tsinswreng.CsCore.IF.IInitable
+{
 	protected DispatcherTimer _PressTimer;
 	protected bool _IsLongPressTriggered;
 
