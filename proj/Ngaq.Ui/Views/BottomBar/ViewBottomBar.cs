@@ -27,17 +27,17 @@ public partial class ViewBottomBar
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
-		var ShowGrid = new Style(x=>
-			x.Is<Grid>()
-		);
-		Styles.Add(ShowGrid);
-		{
-			var o = ShowGrid;
-			o.Set(
-				Grid.ShowGridLinesProperty
-				,true
-			);
-		}
+		// var ShowGrid = new Style(x=>
+		// 	x.Is<Grid>()
+		// );
+		// Styles.Add(ShowGrid);
+		// {
+		// 	var o = ShowGrid;
+		// 	o.Set(
+		// 		Grid.ShowGridLinesProperty
+		// 		,true
+		// 	);
+		// }
 		return Nil;
 	}
 
@@ -47,16 +47,14 @@ public partial class ViewBottomBar
 		{
 			var o = Root.Grid;
 			o.ColumnDefinitions.AddRange([
-				new ColDef(1, GUT.Star),
+				//new ColDef(1, GUT.Star),
 				new ColDef(4, GUT.Star),
 				new ColDef(4, GUT.Star),
 				new ColDef(4, GUT.Star),
-				new ColDef(1, GUT.Star),
+				//new ColDef(1, GUT.Star),
 			]);
 		}
 		{{
-			Root.Add();
-
 			var Learn = BarItem("Learn", "📖");
 			Root.Add(Learn);
 
@@ -65,8 +63,6 @@ public partial class ViewBottomBar
 
 			var Me = BarItem("Me", "👤");
 			Root.Add(Me);
-
-			Root.Add();
 		}}
 		return Nil;
 	}
@@ -80,6 +76,7 @@ public partial class ViewBottomBar
 			var o = Ans;
 			o.VerticalAlignment = VertAlign.Stretch;
 			o.HorizontalAlignment = HoriAlign.Stretch;
+			o.Background = Brushes.Black;
 		}
 		{{
 			var Grid = new IndexGrid(IsRow:true);
@@ -87,14 +84,12 @@ public partial class ViewBottomBar
 
 			Grid.Grid.Classes.Add(Cls.BarItem);
 			Grid.Grid.RowDefinitions.AddRange([
-				new RowDef(1, GUT.Star),
-				new RowDef(6, GUT.Star),
-				new RowDef(2, GUT.Star),
-				new RowDef(1, GUT.Star),
+				//new RowDef(1, GUT.Star),
+				new RowDef(12, GUT.Star),
+				new RowDef(4, GUT.Star),
+				//new RowDef(1, GUT.Star),
 			]);
 			{{
-				Grid.Add();
-
 				var Icon = new TextBlock{};
 				Grid.Add(Icon);
 				{
@@ -113,7 +108,6 @@ public partial class ViewBottomBar
 					o.TextAlignment = TxtAlign.Center;
 					o.VerticalAlignment = VertAlign.Center;
 				}
-				Grid.Add();
 			}}//~Grid
 		}}//~Button
 		return Ans;

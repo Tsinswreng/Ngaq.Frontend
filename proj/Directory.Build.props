@@ -15,6 +15,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="../Tsinswreng.Avalonia/GlobalUsing.cs"/>
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="../../../Tsinswreng.CsCore/Tsinswreng.CsCore.csproj" />
 	</ItemGroup>
 
