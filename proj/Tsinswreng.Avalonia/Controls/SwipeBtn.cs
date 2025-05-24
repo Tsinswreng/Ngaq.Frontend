@@ -19,13 +19,13 @@ public class SwipeBtn
 		set{_SwipeBtnFn.SwipeThreshold=value;}
 	}
 
-	public event EventHandler<SwipeEventArgs>? Swipe;
+	public event EventHandler<SwipeEventArgs>? OnSwipe;
 	public SwipeBtnFn _SwipeBtnFn{get;set;}=new SwipeBtnFn();
 
 	public SwipeBtn():base(){
 		//_swipeBtnFn.init();
 		_SwipeBtnFn.OnSwipe = (e)=>{
-			Swipe?.Invoke(this,e);
+			OnSwipe?.Invoke(this,e);
 			return Nil;
 		};
 	}

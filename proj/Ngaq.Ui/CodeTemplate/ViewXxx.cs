@@ -1,8 +1,8 @@
 namespace Xxx;
 
 using Avalonia.Controls;
-using Ctx = Vm_Xxx;
-public partial class Template
+using Ctx = VmXxx;
+public partial class ViewXxx
 	:UserControl
 {
 
@@ -11,7 +11,7 @@ public partial class Template
 		set{DataContext = value;}
 	}
 
-	public Template(){
+	public ViewXxx(){
 		Ctx = new Ctx();
 		Style();
 		Render();

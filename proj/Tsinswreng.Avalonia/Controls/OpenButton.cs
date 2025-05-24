@@ -61,17 +61,17 @@ public class OpenButton:Button{
 	}
 	//-
 
-	public Func<PointerReleasedEventArgs, nil>? f_OnPointerReleased{get;set;}
+	public Func<PointerReleasedEventArgs, nil>? FnOnPointerReleased{get;set;}
 	public void BOnPointerReleased(PointerReleasedEventArgs e){
 		base.OnPointerReleased(e);
 	}
 
 	protected override void OnPointerReleased(PointerReleasedEventArgs e){
-		if(f_OnPointerReleased == null){
+		if(FnOnPointerReleased == null){
 			base.OnPointerReleased(e);
 			return;
 		}
-		f_OnPointerReleased.Invoke(e);
+		FnOnPointerReleased.Invoke(e);
 	}
 	//-
 
@@ -90,7 +90,7 @@ public class OpenButton:Button{
 	//-
 
 	public Func<RoutedEventArgs, nil>? FnOnLostFocus{get;set;}
-	public void b_OnLostFocus(RoutedEventArgs e){
+	public void BOnLostFocus(RoutedEventArgs e){
 		base.OnLostFocus(e);
 	}
 	protected override void OnLostFocus(RoutedEventArgs e){

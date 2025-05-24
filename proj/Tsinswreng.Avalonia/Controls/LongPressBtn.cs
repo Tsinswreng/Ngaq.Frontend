@@ -14,14 +14,14 @@ public class LongPressBtn
 		get{return FnLongPressBtn.LongPressDurationMs;}
 		set{FnLongPressBtn.LongPressDurationMs = value;}
 	}
-	public event EventHandler? LongPressed;
+	public event EventHandler? OnLongPressed;
 
 	public LongPressBtnFn FnLongPressBtn{get;set;} = new LongPressBtnFn();
 	public LongPressBtn():base(){
 		FnLongPressBtn.Init();
 		//_longPressBtnFn.onClick = ()=>{OnClick();return Nil;};
 		FnLongPressBtn.OnLongPress = ()=>{
-			LongPressed?.Invoke(this, EventArgs.Empty);
+			OnLongPressed?.Invoke(this, EventArgs.Empty);
 			return Nil;
 		};
 	}

@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.BottomBar;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Tsinswreng.Avalonia.Controls;
 using Tsinswreng.Avalonia.Tools;
 using Ctx = Vm_BottomBar;
 public partial class ViewBottomBar
@@ -74,12 +75,11 @@ public partial class ViewBottomBar
 		str Title
 		,str IconStr
 	){
-		var Ans = new Button();
+		var Ans = new SwipeLongPressBtn();
 		{
 			var o = Ans;
 			o.VerticalAlignment = VertAlign.Stretch;
 			o.HorizontalAlignment = HoriAlign.Stretch;
-
 		}
 		{{
 			var Grid = new IndexGrid(IsRow:true);

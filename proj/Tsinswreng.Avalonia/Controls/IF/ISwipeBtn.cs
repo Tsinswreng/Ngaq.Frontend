@@ -3,7 +3,7 @@ using System;
 namespace Tsinswreng.Avalonia.Controls.IF;
 
 public interface ISwipeBtn{
-	public event EventHandler<SwipeEventArgs> Swipe;
+	public event EventHandler<SwipeEventArgs> OnSwipe;
 	public f64 SwipeThreshold{get;set;}
 
 

@@ -21,7 +21,7 @@ public class SwipeLongPressBtn
 		set{_SwipeBtnFn.SwipeThreshold=value;}
 	}
 
-	public event EventHandler<SwipeEventArgs>? Swipe;
+	public event EventHandler<SwipeEventArgs>? OnSwipe;
 	public SwipeBtn.SwipeBtnFn _SwipeBtnFn{get;set;}=new ();
 
 
@@ -29,20 +29,20 @@ public class SwipeLongPressBtn
 		get{return _LongPressBtnFn.LongPressDurationMs;}
 		set{_LongPressBtnFn.LongPressDurationMs = value;}
 	}
-	public event EventHandler? LongPressed;
+	public event EventHandler? OnLongPressed;
 
 	public LongPressBtn.LongPressBtnFn _LongPressBtnFn{get;set;} = new();
 
 	protected override Type StyleKeyOverride => typeof(Button);
 	public SwipeLongPressBtn():base(){
 		_SwipeBtnFn.OnSwipe = (e)=>{
-			Swipe?.Invoke(this,e);
+			OnSwipe?.Invoke(this,e);
 			return Nil;
 		};
 		_LongPressBtnFn.Init();
 		//_longPressBtnFn.onClick = ()=>{OnClick();return Nil;};
 		_LongPressBtnFn.OnLongPress = ()=>{
-			LongPressed?.Invoke(this, EventArgs.Empty);
+			OnLongPressed?.Invoke(this, EventArgs.Empty);
 			return Nil;
 		};
 	}
