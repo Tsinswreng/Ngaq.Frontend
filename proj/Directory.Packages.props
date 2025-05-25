@@ -14,10 +14,13 @@
 		<PackageVersion Include="Avalonia.iOS" Version="11.2.1" />
 		<PackageVersion Include="Avalonia.Browser" Version="11.2.1" />
 		<PackageVersion Include="Avalonia.Android" Version="11.2.1" />
-
 		<PackageVersion Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-
 		<PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
+
 		<PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2"/>
+
+		<PackageVersion Include="Irihi.Ursa" Version="1.9.0" />
+		<PackageVersion Include="Irihi.Ursa.Themes.Semi" Version="1.9.0" />
+		<PackageVersion Include="Semi.Avalonia" Version="11.2.1.5" />
 	</ItemGroup>
 </Project>

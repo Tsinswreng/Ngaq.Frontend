@@ -6,7 +6,9 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
-		
+		<PublishAot>true</PublishAot>
+		<PublishTrimmed>true</PublishTrimmed>
+
 	</PropertyGroup>
 
 	<PropertyGroup>

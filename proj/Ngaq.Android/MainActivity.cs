@@ -2,8 +2,9 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
+using Ngaq.Ui;
 
-namespace Ngaq.Ui.Android;
+namespace Ngaq.Android;
 
 [Activity(
     Label = "Ngaq.Ui.Android",

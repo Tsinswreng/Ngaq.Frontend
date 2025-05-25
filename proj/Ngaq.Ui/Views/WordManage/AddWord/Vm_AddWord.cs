@@ -17,11 +17,11 @@ public partial class VmAddWord
 		ISvcWord? SvcWord = null
 		,IUserCtxMgr? UserCtxMgr = null
 	){
-		this.Svc_Word = SvcWord!;
+		this.SvcWord = SvcWord!;
 		this.UserCtxMgr = UserCtxMgr!;
 	}
 
-	ISvcWord Svc_Word{get;set;} = null!;
+	ISvcWord SvcWord{get;set;} = null!;
 	IUserCtxMgr UserCtxMgr{get;set;} = null!;
 
 	public static ObservableCollection<Ctx> Samples = [];
@@ -46,20 +46,27 @@ public partial class VmAddWord
 	}
 
 
+	protected str _ErrStr="";//t
+	public str ErrStr{
+		get{return _ErrStr;}
+		set{SetProperty(ref _ErrStr, value);}
+	}
+
+
 	public nil Confirm(){
-		//System.Console.WriteLine(Text);//t +
-		//System.Console.WriteLine(Svc_Word == null); false
 		if(str.IsNullOrEmpty(Path) && str.IsNullOrEmpty(Text)){
 			return Nil;
 		}
 		if(!str.IsNullOrEmpty(Text)){
-			Svc_Word?.AddWordsFromTextAsy(
+			SvcWord?.AddWordsFromTextAsy(
 				UserCtxMgr.GetUserCtx()
 				,Text
 				,default //TODO ct
 			).ContinueWith(d=>{
 				if(d.IsFaulted){
 					System.Console.WriteLine(d.Exception);//t
+					this.Errors.Add(d.Exception.ToString());
+					this.ErrStr = d.Exception.ToString();
 				}
 			});
 		}

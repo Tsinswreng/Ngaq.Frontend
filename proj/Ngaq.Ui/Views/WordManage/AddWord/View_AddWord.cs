@@ -9,6 +9,13 @@ using Avalonia.Styling;
 using Tsinswreng.Avalonia.Tools;
 using Avalonia.Media;
 using Avalonia;
+using Semi.Avalonia;
+using Ursa.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data.Converters;
+using Tsinswreng.Avalonia.Sugar;
+using System.Collections.ObjectModel;
+using Avalonia.Threading;
 
 public partial class ViewAddWord
 	:UserControl
@@ -41,52 +48,78 @@ public partial class ViewAddWord
 			var o = AcceptReturn;
 			o.Set(TextBox.AcceptsReturnProperty, true);
 		}
+
+		//Styles.Add(SugarStyle.GridShowLines());
 		return Nil;
 	}
 
 	protected nil Render(){
-		var root = new IndexGrid(IsRow:true);
-		Content = root.Grid;
+		var Root = new IndexGrid(IsRow:true);
+		Content = Root.Grid;
 		{
-			var o = root;
-			root.Grid.RowDefinitions.AddRange([
-				new RowDefinition(1, GridUnitType.Auto),
-				new RowDefinition(8, GridUnitType.Star),
-				new RowDefinition(1, GridUnitType.Auto),
-				new RowDefinition(1, GridUnitType.Star),
+			var o = Root;
+			Root.Grid.RowDefinitions.AddRange([
+				new RowDef(1, GUT.Auto),//Popup
+				new RowDef(1, GUT.Auto),//empty
+				new RowDef(8, GUT.Star),//tab
+				new RowDef(1, GUT.Auto),//Confirm
+				new RowDef(1, GUT.Star),//empty
 			]);
 		}
 		{{
 
-
-			var FloatPanel = new Panel();
-			root.Add(FloatPanel);//t
-			{{
-				var floatingBorder = new Border{
-					Background = Brushes.Red,
-					BorderBrush = Brushes.Black,
-					BorderThickness = new Thickness(2),
-					Width = 100,
-					Height = 100,
-					HorizontalAlignment = HorizontalAlignment.Center,
-					VerticalAlignment = VerticalAlignment.Center
+			var popup = new Popup();
+			Root.Add(popup);
+			{var o = popup;
+				o.PlacementTarget = Root.Grid;
+				o.Placement = PlacementMode.Top;
+				//var top = TopLevel.GetTopLevel(this);
+				// o.VerticalOffset = top?.Width/4??0.0;
+				// o.HorizontalOffset = top?.Height/4??0.0;
+				o.HorizontalAlignment = HoriAlign.Stretch;
+				o.VerticalAlignment = VertAlign.Stretch;
+				Ctx!.Errors.CollectionChanged += (s,e)=>{
+					Dispatcher.UIThread.Post(()=>{
+						if(Ctx.HasErr){o.IsOpen = true;}
+					});
 				};
-				FloatPanel.Children.Add(floatingBorder);
-			}}
 
-			//...后问还有别的元素
+				// o.Bind(
+				// 	Popup.IsOpenProperty
+				// 	,new CBE(CBE.Pth<Ctx>(x=>x.HasErr))//TODO 不效
+				// 	// ,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
+				// 	// 	Converter = new FnConvtr<ObservableCollection<str>, bool>(x=>x.Count>0)
+				// 	// }
 
-
-
-			// 设置ZIndex确保悬浮在最上层
-			//Panel.SetZIndex(floatingBorder, 1);
-
-			//grid.Children.Add(floatingBorder);
-
-
+				// );
+			}
+			{{
+				var ErrBlock = new TextBlock{Text="123"};
+				popup.Child = ErrBlock;
+				{var o = ErrBlock;
+					// o.Bind(
+					// 	TextBlock.TextProperty
+					// 	,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
+					// 		Mode=BindingMode.OneWay
+					// 		,Converter = new FnConvtr<ObservableCollection<str>, str>(
+					// 			x=>string.Join("\n", x)
+					// 		)
+					// 	}
+					// 	//,new CBE(CBE.Pth<Ctx>(x=>x.ErrStr))
+					// );
+					Ctx!.Errors.CollectionChanged += (s,e)=>{
+						Dispatcher.UIThread.Post(()=>{
+							var ErrStr = string.Join("\n", Ctx.Errors);
+							//System.Console.WriteLine(ErrStr+"\nErrStr");
+							ErrBlock.Text = ErrStr;
+						});
+					};
+				}
+			}}//~Popup
+			Root.Add();
 
 			var Tab = new TabControl();
-			root.Add(Tab);
+			Root.Add(Tab);
 			{
 				var o = Tab;
 
@@ -110,28 +143,27 @@ public partial class ViewAddWord
 				}
 			}}//~TabControl
 			var Confirm = new Button();
-			root.Add(Confirm);
+			Root.Add(Confirm);
 			{
 				var o = Confirm;
 				o.Content = "Confirm";
-				o.HorizontalAlignment = HorizontalAlignment.Center;
-				o.HorizontalContentAlignment = HorizontalAlignment.Center;
+				o.HorizontalAlignment = HoriAlign.Center;
+				o.HorizontalContentAlignment = HoriAlign.Center;
 				o.Click += (s,e)=>{
 					Ctx?.Confirm();
 				};
 			}
+
 		}}//~IndexGrid
 		return Nil;
 	}
 
-
-
 	Control? ByFile(){
 		var Ans = new IndexGrid(IsRow:true);
 		Ans.Grid.RowDefinitions.AddRange([
-			new RowDefinition(1, GridUnitType.Star),
-			new RowDefinition(1, GridUnitType.Auto),
-			new RowDefinition(8, GridUnitType.Star),
+			new RowDef(1, GUT.Star),
+			new RowDef(1, GUT.Auto),
+			new RowDef(8, GUT.Star),
 		]);
 		{{
 			Ans.Add();
@@ -141,20 +173,19 @@ public partial class ViewAddWord
 			{
 				var o = Path;
 				o.Grid.ColumnDefinitions.AddRange([
-					new ColumnDefinition(2, GridUnitType.Star),
-					new ColumnDefinition(8, GridUnitType.Star),
+					new ColDef(2, GUT.Star),
+					new ColDef(8, GUT.Star),
 					//new ColumnDefinition(2, GridUnitType.Star),
 				]);
 			}
 			{{
-
 				var Browse = new Button();
 				Path.Add(Browse);
 				{
 					var o = Browse;
 					o.Content = "Browse";
-					o.HorizontalAlignment = HorizontalAlignment.Stretch;
-					o.HorizontalContentAlignment = HorizontalAlignment.Stretch;
+					o.HorizontalAlignment = HoriAlign.Stretch;
+					o.HorizontalContentAlignment = HoriAlign.Stretch;
 				}
 
 
@@ -162,19 +193,12 @@ public partial class ViewAddWord
 				Path.Add(Input);
 				{
 					var o = Input;
-					o.HorizontalAlignment = HorizontalAlignment.Stretch;
+					o.HorizontalAlignment = HoriAlign.Stretch;
 					o.Bind(
 						TextBox.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Path)){Mode=BindingMode.TwoWay}
 					);
 				}
-
-				// var Confirm = new Button();
-				// Path.Add(Confirm);
-				// {
-				// 	var o = Confirm;
-				// 	o.Content = "Confirm";
-				// }
 			}}
 			Ans.Add();
 
@@ -185,10 +209,9 @@ public partial class ViewAddWord
 	Control? ByText(){
 		var Ans = new IndexGrid(IsRow:true);
 		Ans.Grid.RowDefinitions.AddRange([
-			new RowDefinition(1, GridUnitType.Star),
-			new RowDefinition(8, GridUnitType.Star),
-			new RowDefinition(1, GridUnitType.Star),
-			new RowDefinition(1, GridUnitType.Star),
+			new RowDef(1, GUT.Star),
+			new RowDef(8, GUT.Star),
+			new RowDef(1, GUT.Star),
 		]);
 
 		Ans.Add();
@@ -202,7 +225,6 @@ public partial class ViewAddWord
 				,new CBE(CBE.Pth<Ctx>(x=>x.Text)){Mode=BindingMode.TwoWay}
 			);
 		}
-		Ans.Add();
 		Ans.Add();
 
 		return Ans.Grid;
