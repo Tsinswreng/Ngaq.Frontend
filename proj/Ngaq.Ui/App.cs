@@ -24,7 +24,7 @@ public partial class App : Application {
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
 		Styles.Add(new FluentTheme());
-#if DEBUG && WINDOWS
+#if DEBUG
 		this.AttachDevTools();
 #endif
 	}

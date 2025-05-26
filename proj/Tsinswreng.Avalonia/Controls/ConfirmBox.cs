@@ -7,13 +7,13 @@ using Tsinswreng.Avalonia.Tools;
 
 namespace Tsinswreng.Avalonia.Controls;
 
-public class ConfirmBox : UserControl{
+public class MsgBox : UserControl{
 	// public Ctx? Ctx{
 	// 	get{return DataContext as Ctx;}
 	// 	set{DataContext = value;}
 	// }
 
-	public ConfirmBox(){
+	public MsgBox(){
 		//Ctx = new Ctx();
 		Render();
 		_Style();
@@ -24,10 +24,10 @@ public class ConfirmBox : UserControl{
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
 
-	public IndexGrid Root = new(IsRow: true);
+	public IndexGrid Root {get;protected set;} = new(IsRow: true);
 
 	public static readonly StyledProperty<str> TitleProperty =
-		AvaloniaProperty.Register<ConfirmBox, str>(
+		AvaloniaProperty.Register<MsgBox, str>(
 			nameof(Title)
 		);
 
@@ -37,7 +37,7 @@ public class ConfirmBox : UserControl{
 	}
 
 	public static readonly StyledProperty<str> BodyProperty =
-		AvaloniaProperty.Register<ConfirmBox, str>(
+		AvaloniaProperty.Register<MsgBox, str>(
 			nameof(Body)
 		);
 
@@ -47,7 +47,7 @@ public class ConfirmBox : UserControl{
 	}
 
 	public static readonly StyledProperty<object?> LeftBtnContentProperty =
-		AvaloniaProperty.Register<ConfirmBox, object?>(
+		AvaloniaProperty.Register<MsgBox, object?>(
 			nameof(LeftBtnContent)
 		);
 
@@ -57,7 +57,7 @@ public class ConfirmBox : UserControl{
 	}
 
 	public static readonly StyledProperty<object?> RightBtnContentProperty =
-		AvaloniaProperty.Register<ConfirmBox, object?>(
+		AvaloniaProperty.Register<MsgBox, object?>(
 			nameof(RightBtnContent)
 		);
 
@@ -70,11 +70,12 @@ public class ConfirmBox : UserControl{
 	// public Func<nil> OnLeftBtn = ()=>Nil;
 	// public Func<nil> OnRightBtn = ()=>Nil;
 
-	public TextBlock _Title;
-	public TextBlock _Body;
-	public Button _LeftBtn;
-	public Button _RightBtn;
-	public Border _TitleBdr;
+	public ContentControl _Title{get;} = new();
+	public ContentControl _Body{get;} = new();
+	public Button _LeftBtn{get; protected set;}
+	public SwipeLongPressBtn _CloseBtn{get; protected set;}
+	public Button _RightBtn{get; protected set;}
+	public Border _TitleBdr{get; protected set;}
 
 
 
@@ -82,28 +83,42 @@ public class ConfirmBox : UserControl{
 		Styles.Add(SugarStyle.NoCornerRadius());
 		return Nil;
 	}
-
+//TODO 滾動不效; 關閉按鈕專置于標題欄右側, 底步允許自定義 多按鈕
 	protected nil Render(){
 		Content = Root.Grid;
 		{var o = Root.Grid;
+
 			o.RowDefinitions.AddRange([
-				new RowDef(1, GUT.Auto),
+				new RowDef(1, GUT.Auto),//Title
 				new RowDef(1, GUT.Auto),
 				new RowDef(1, GUT.Auto),
 				new RowDef(1, GUT.Auto),
 			]);
 		}
 		{{
-			_Title = new TextBlock{};
-			Root.Add(_Title);
-			{var o = _Title;
-				o.VerticalAlignment = VertAlign.Center;
-				o.FontSize = 26.0;
-				o.Bind(
-					TextBlock.TextProperty
-					,this.GetObservable(TitleProperty)
-				);
+			var TitleRow = new IndexGrid(IsRow: false);
+			Root.Add(TitleRow.Grid);
+			{var o = TitleRow.Grid;
+				o.ColumnDefinitions.AddRange([
+					new ColDef(1, GUT.Star),
+					new ColDef(1, GUT.Auto),
+				]);
 			}
+			{{
+				//_Title = new SelectableTextBlock{};
+				TitleRow.Add(_Title);
+				{var o = _Title;
+					o.VerticalAlignment = VertAlign.Center;
+				}
+
+				_CloseBtn = new SwipeLongPressBtn{};
+				TitleRow.Add(_CloseBtn);
+				{var o = _CloseBtn;
+					o.Content = "×";
+					o.HorizontalAlignment = HoriAlign.Right;
+					o.Background = Brushes.Red;
+				}
+			}}//~TitleLine
 
 			_TitleBdr = new Border{};
 			Root.Add(_TitleBdr);
@@ -112,18 +127,28 @@ public class ConfirmBox : UserControl{
 				o.BorderBrush = Brushes.White;
 			}
 
-			var Scr = new ScrollViewer();
-			Root.Add(Scr);
+			var Bdr2 = new Border{};
+			Root.Add(Bdr2);
+			{var o = Bdr2;
+				//o.BorderThickness = new Thickness(0, 0, 0, 1);
+				o.BorderThickness = new Thickness(0);
+				o.Height = 150;//TODO 別寫死
+			}
 			{{
-				_Body = new SelectableTextBlock{};
-				Scr.Content = _Body;
-				{var o = _Body;
-					// o.Bind(
-					// 	TextBlock.TextProperty
-					// 	,this.GetObservable(BodyProperty)
-					// );
-				}
-			}}//~Scr
+				var Scr = new ScrollViewer();
+				Bdr2.Child = Scr;
+				{{
+					//_Body = new SelectableTextBlock{};
+					Scr.Content = _Body;
+					{var o = _Body;
+						// o.Bind(
+						// 	TextBlock.TextProperty
+						// 	,this.GetObservable(BodyProperty)
+						// );
+					}
+				}}//~Scr
+			}}
+
 
 			var BtnGrid = new IndexGrid(IsRow:false);
 			Root.Add(BtnGrid.Grid);

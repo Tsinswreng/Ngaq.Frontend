@@ -16,6 +16,7 @@ using Avalonia.Data.Converters;
 using Tsinswreng.Avalonia.Sugar;
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
+using Tsinswreng.Avalonia.Controls;
 
 public partial class ViewAddWord
 	:UserControl
@@ -67,55 +68,84 @@ public partial class ViewAddWord
 			]);
 		}
 		{{
-
-			var popup = new Popup();
-			Root.Add(popup);
-			{var o = popup;
-				o.PlacementTarget = Root.Grid;
-				o.Placement = PlacementMode.Top;
-				//var top = TopLevel.GetTopLevel(this);
-				// o.VerticalOffset = top?.Width/4??0.0;
-				// o.HorizontalOffset = top?.Height/4??0.0;
-				o.HorizontalAlignment = HoriAlign.Stretch;
-				o.VerticalAlignment = VertAlign.Stretch;
-				Ctx!.Errors.CollectionChanged += (s,e)=>{
-					Dispatcher.UIThread.Post(()=>{
-						if(Ctx.HasErr){o.IsOpen = true;}
-					});
+			var Popup = new ConfirmPopup();
+			Root.Add(Popup);
+			{var o = Popup;
+				//o.Width = 400;//t 不效
+				//o._ConfirmBox.Root.Grid.Width = Root.Grid.Width*0.8; //不效
+				//o._ConfirmBox.Root.Grid.Width = 600;
+				o._Popup.Width = 320; //有效
+				//o._Popup.MaxHeight = 200;
+				//o._Popup.Width = Root.Grid.Width*0.8; //不效 蓋Root之寬 此時未定
+				o._Popup.PlacementTarget = Root.Grid;
+				o._Popup.IsOpen = true;
+				o._ConfirmBox._LeftBtn.Content = "Close";
+				o._ConfirmBox._LeftBtn.Click += (s,e)=>{
+					o._Popup.IsOpen = false;
 				};
+				o._ConfirmBox._RightBtn.Content = "Ok";
 
-				// o.Bind(
-				// 	Popup.IsOpenProperty
-				// 	,new CBE(CBE.Pth<Ctx>(x=>x.HasErr))//TODO 不效
-				// 	// ,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
-				// 	// 	Converter = new FnConvtr<ObservableCollection<str>, bool>(x=>x.Count>0)
-				// 	// }
+				// o._ConfirmBox._Title = new SelectableTextBlock{
+				// 	Text = "Error"
+				// 	,FontSize = 26.0
+				// };//不示
+				o._ConfirmBox._Title.Content = new TextBlock{Text = "Error", FontSize = 26.0};//t
 
-				// );
+				o._ConfirmBox._Body.Content = new SelectableTextBlock{
+					Text =
+"Error\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError"
+				};
+				o._ConfirmBox.Root.Grid.Background = Brushes.DarkSlateGray;
 			}
-			{{
-				var ErrBlock = new TextBlock{Text="123"};
-				popup.Child = ErrBlock;
-				{var o = ErrBlock;
-					// o.Bind(
-					// 	TextBlock.TextProperty
-					// 	,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
-					// 		Mode=BindingMode.OneWay
-					// 		,Converter = new FnConvtr<ObservableCollection<str>, str>(
-					// 			x=>string.Join("\n", x)
-					// 		)
-					// 	}
-					// 	//,new CBE(CBE.Pth<Ctx>(x=>x.ErrStr))
-					// );
-					Ctx!.Errors.CollectionChanged += (s,e)=>{
-						Dispatcher.UIThread.Post(()=>{
-							var ErrStr = string.Join("\n", Ctx.Errors);
-							//System.Console.WriteLine(ErrStr+"\nErrStr");
-							ErrBlock.Text = ErrStr;
-						});
-					};
-				}
-			}}//~Popup
+
+			// var popup = new Popup();
+			// Root.Add(popup);
+			// {var o = popup;
+			// 	o.PlacementTarget = Root.Grid;
+			// 	o.Placement = PlacementMode.Top;
+			// 	//var top = TopLevel.GetTopLevel(this);
+			// 	// o.VerticalOffset = top?.Width/4??0.0;
+			// 	// o.HorizontalOffset = top?.Height/4??0.0;
+			// 	o.HorizontalAlignment = HoriAlign.Stretch;
+			// 	o.VerticalAlignment = VertAlign.Stretch;
+			// 	Ctx!.Errors.CollectionChanged += (s,e)=>{
+			// 		Dispatcher.UIThread.Post(()=>{
+			// 			if(Ctx.HasErr){o.IsOpen = true;}
+			// 		});
+			// 	};
+
+			// 	// o.Bind(
+			// 	// 	Popup.IsOpenProperty
+			// 	// 	,new CBE(CBE.Pth<Ctx>(x=>x.HasErr))//TODO 不效
+			// 	// 	// ,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
+			// 	// 	// 	Converter = new FnConvtr<ObservableCollection<str>, bool>(x=>x.Count>0)
+			// 	// 	// }
+
+			// 	// );
+			// }
+			// {{
+			// 	var ErrBlock = new TextBlock{Text="123"};
+			// 	popup.Child = ErrBlock;
+			// 	{var o = ErrBlock;
+			// 		// o.Bind(
+			// 		// 	TextBlock.TextProperty
+			// 		// 	,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
+			// 		// 		Mode=BindingMode.OneWay
+			// 		// 		,Converter = new FnConvtr<ObservableCollection<str>, str>(
+			// 		// 			x=>string.Join("\n", x)
+			// 		// 		)
+			// 		// 	}
+			// 		// 	//,new CBE(CBE.Pth<Ctx>(x=>x.ErrStr))
+			// 		// );
+			// 		Ctx!.Errors.CollectionChanged += (s,e)=>{
+			// 			Dispatcher.UIThread.Post(()=>{
+			// 				var ErrStr = string.Join("\n", Ctx.Errors);
+			// 				//System.Console.WriteLine(ErrStr+"\nErrStr");
+			// 				ErrBlock.Text = ErrStr;
+			// 			});
+			// 		};
+			// 	}
+			// }}//~Popup
 			Root.Add();
 
 			var Tab = new TabControl();
