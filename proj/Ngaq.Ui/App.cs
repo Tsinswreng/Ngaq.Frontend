@@ -9,6 +9,7 @@ using Ngaq.Ui.Views;
 using Avalonia.Themes.Fluent;
 using Microsoft.Extensions.DependencyInjection;
 using Semi.Avalonia;
+using Tsinswreng.Avalonia.Sugar;
 
 namespace Ngaq.Ui;
 
@@ -24,6 +25,7 @@ public partial class App : Application {
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
 		Styles.Add(new FluentTheme());
+		Styles.Add(SugarStyle.NoCornerRadius());
 #if DEBUG
 		this.AttachDevTools();
 #endif

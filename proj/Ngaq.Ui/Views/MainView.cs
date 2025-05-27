@@ -11,8 +11,8 @@ public partial class MainView : UserControl {
 	Button Btn = new();
 	public MainView() {
 		//InitializeComponent();
-		//Content = new View_WordCard();
-		Content = new ViewAddWord();
+		Content = new ViewWordCard();
+		//Content = new ViewAddWord();
 		//Content = new ViewBottomBar();
 		// var o = new ConfirmBox();
 		// Content = o;

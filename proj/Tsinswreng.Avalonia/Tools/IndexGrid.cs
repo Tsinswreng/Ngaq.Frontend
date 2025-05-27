@@ -2,7 +2,7 @@ using Avalonia.Controls;
 using System;
 
 namespace Tsinswreng.Avalonia.Tools;
-public partial struct IndexGrid{
+public partial class IndexGrid{
 
 	public Grid Grid = new Grid();
 	public i32 Index = 0;
@@ -15,7 +15,7 @@ public partial struct IndexGrid{
 	public nil Add(Control? control= default){
 		if(control == null){
 			Index++;
-			return null!;
+			return Nil;
 		}
 		Grid.Children.Add(control);
 		if(IsRow){
@@ -23,7 +23,7 @@ public partial struct IndexGrid{
 		}else{
 			Grid.SetColumn(control, Index++);
 		}
-		return null!;
+		return Nil;
 	}
 
 }

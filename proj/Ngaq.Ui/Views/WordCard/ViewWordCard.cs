@@ -1,9 +1,10 @@
 namespace Ngaq.Ui.Views.WordCard;
 
 using Avalonia.Controls;
+using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
-using Ctx = Vm_WordCard;
-public partial class View_WordCard
+using Ctx = VmWordCard;
+public partial class ViewWordCard
 	:UserControl
 {
 
@@ -12,7 +13,7 @@ public partial class View_WordCard
 		set{DataContext = value;}
 	}
 
-	public View_WordCard(){
+	public ViewWordCard(){
 		//Ctx = new Ctx();
 		Ctx = Ctx.Samples[0];
 		Style();
@@ -26,7 +27,8 @@ public partial class View_WordCard
 	public IndexGrid Root{get;set;} = new IndexGrid(IsRow:true);
 
 	protected nil Style(){
-		return null!;
+		Styles.Add(SugarStyle.GridShowLines());
+		return Nil;
 	}
 
 	protected nil Render(){
@@ -34,38 +36,55 @@ public partial class View_WordCard
 		var RootGrid = Root.Grid;
 		Content = RootGrid;
 		RootGrid.RowDefinitions.AddRange([
-			new RowDefinition(1, GridUnitType.Star),
-			new RowDefinition(8, GridUnitType.Star),
-			new RowDefinition(1, GridUnitType.Star)
+			new RowDef(4, GUT.Star),
+			new RowDef(8, GUT.Star),
 		]);
-		Root.Add();
 
-		var Body = new IndexGrid(IsRow:false);
-		Root.Add(Body.Grid);
-		{
-			Body.Grid.ColumnDefinitions.AddRange([
-				new ColumnDefinition(1, GridUnitType.Star),
-				new ColumnDefinition(16, GridUnitType.Star),
-				new ColumnDefinition(1, GridUnitType.Star),
+		var LangGrid = new IndexGrid(IsRow:true);
+		System.Console.WriteLine(Root.Index);//t -> 0
+		Root.Add(LangGrid.Grid); // -> 1
+		System.Console.WriteLine(Root.Index);//t -> 0
+		{var o = LangGrid;
+			o.Grid.ColumnDefinitions.AddRange([
+				new ColDef(1, GUT.Star),
 			]);
 		}
 		{{
-			Body.Add();
-
-			var WordText = new SelectableTextBlock();
-			Body.Add(WordText);
-			{
-				var o = WordText;
+			var Lang = new TextBlock();
+			LangGrid.Add(Lang);
+			{var o = Lang;
 				o.Bind(
 					TextBlock.TextProperty
-					,CBE.Mk<Ctx>(x=>x.WordText)
+					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
+				);
+			}
+		}}//~Header
+
+
+		var HeadBox = new IndexGrid(IsRow:false);
+		System.Console.WriteLine(Root.Index);//t
+		Root.Add(HeadBox.Grid);
+		System.Console.WriteLine(Root.Index);//t
+		//Grid.SetRow(HeadBox.Grid, 1);//t
+		{
+			HeadBox.Grid.ColumnDefinitions.AddRange([
+				new ColDef(1, GUT.Star),
+				new ColDef(1, GUT.Star),
+			]);
+		}
+		{{
+			var Head = new SelectableTextBlock();
+			HeadBox.Add(Head);
+			{var o = Head;
+				o.Bind(
+					TextBlock.TextProperty
+					,CBE.Mk<Ctx>(x=>x.Head)
 				);
 			}
 
-			Body.Add();
+			HeadBox.Add(new Button{Content="123"});
 		}}
-		Root.Add();
 
-		return null!;
+		return Nil;
 	}
 }
