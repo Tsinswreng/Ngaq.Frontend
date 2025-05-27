@@ -57,7 +57,7 @@ svc.AddScoped<RepoSql<PoLearn,	IdLearn>>();
 		svc.AddScoped<ISvcParseWordList, SvcParseWordList>();
 		svc.AddScoped<ISvcWord, SvcWord>();
 		svc.AddScoped<IUserCtxMgr, UserCtxMgr>();
-		svc.AddScoped<IGetTxnAsy, SqlCmdMkr>();
+		svc.AddScoped<IGetTxn, SqlCmdMkr>();
 		svc.AddTransient<VmAddWord>();
 
 		var servicesProvider = svc.BuildServiceProvider();
