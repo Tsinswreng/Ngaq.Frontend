@@ -1,4 +1,4 @@
 namespace Tsinswreng.Avalonia.Navigation;
-public interface I_HasViewNavigator{
-	public I_ViewNavigator? ViewNavigator{get;set;}
+public interface IHasViewNavigator{
+	public IViewNavigator? ViewNavigator{get;set;}
 }

@@ -1,10 +1,11 @@
 namespace Ngaq.Ui.Views.WordCard;
 
 using Avalonia.Controls;
+using Avalonia.Media;
 using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
 using Ctx = VmWordCard;
-public partial class ViewWordCard
+public partial class ViewWordListCard
 	:UserControl
 {
 
@@ -13,7 +14,7 @@ public partial class ViewWordCard
 		set{DataContext = value;}
 	}
 
-	public ViewWordCard(){
+	public ViewWordListCard(){
 		//Ctx = new Ctx();
 		Ctx = Ctx.Samples[0];
 		Style();
@@ -27,7 +28,7 @@ public partial class ViewWordCard
 	public IndexGrid Root{get;set;} = new IndexGrid(IsRow:true);
 
 	protected nil Style(){
-		Styles.Add(SugarStyle.GridShowLines());
+		//Styles.Add(SugarStyle.GridShowLines());
 		return Nil;
 	}
 
@@ -41,9 +42,7 @@ public partial class ViewWordCard
 		]);
 
 		var LangGrid = new IndexGrid(IsRow:true);
-		System.Console.WriteLine(Root.Index);//t -> 0
-		Root.Add(LangGrid.Grid); // -> 1
-		System.Console.WriteLine(Root.Index);//t -> 0
+		Root.Add(LangGrid.Grid);
 		{var o = LangGrid;
 			o.Grid.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
@@ -53,22 +52,20 @@ public partial class ViewWordCard
 			var Lang = new TextBlock();
 			LangGrid.Add(Lang);
 			{var o = Lang;
+				o.VerticalAlignment = VertAlign.Center;
 				o.Bind(
 					TextBlock.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 				);
+				o.Foreground = Brushes.LightGray;
 			}
 		}}//~Header
 
 
 		var HeadBox = new IndexGrid(IsRow:false);
-		System.Console.WriteLine(Root.Index);//t
 		Root.Add(HeadBox.Grid);
-		System.Console.WriteLine(Root.Index);//t
-		//Grid.SetRow(HeadBox.Grid, 1);//t
 		{
 			HeadBox.Grid.ColumnDefinitions.AddRange([
-				new ColDef(1, GUT.Star),
 				new ColDef(1, GUT.Star),
 			]);
 		}
@@ -76,13 +73,13 @@ public partial class ViewWordCard
 			var Head = new SelectableTextBlock();
 			HeadBox.Add(Head);
 			{var o = Head;
+				o.VerticalAlignment = VertAlign.Center;
 				o.Bind(
 					TextBlock.TextProperty
 					,CBE.Mk<Ctx>(x=>x.Head)
 				);
+				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 			}
-
-			HeadBox.Add(new Button{Content="123"});
 		}}
 
 		return Nil;

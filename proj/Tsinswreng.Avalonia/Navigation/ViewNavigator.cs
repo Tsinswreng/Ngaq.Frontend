@@ -7,7 +7,7 @@ namespace Tsinswreng.Avalonia.Navigation;
 
 public class ViewNavigator
 	//:UserControl
-	:I_ViewNavigator
+	:IViewNavigator
 {
 
 	public ViewNavigator(Control current){
@@ -46,7 +46,7 @@ public class ViewNavigator
 	public void GoTo(Control view){
 		Stack.Add(view);
 		Current.Content = view;
-		if(view is I_HasViewNavigator navigatorView){
+		if(view is IHasViewNavigator navigatorView){
 			navigatorView.ViewNavigator = this;
 		}
 	}
@@ -64,9 +64,9 @@ class StackView
 
 class Welcome
 	:UserControl
-	,I_HasViewNavigator
+	,IHasViewNavigator
 {
-	public I_ViewNavigator? ViewNavigator{get;set;}
+	public IViewNavigator? ViewNavigator{get;set;}
 	public Welcome(){
 		var btn = new Button();
 		Content = btn;
@@ -80,9 +80,9 @@ class Welcome
 
 class Login
 	:UserControl
-	,I_HasViewNavigator
+	,IHasViewNavigator
 {
-	public I_ViewNavigator? ViewNavigator{get;set;}
+	public IViewNavigator? ViewNavigator{get;set;}
 	public Login(){
 		var backBtn = new Button();
 		Content = backBtn;

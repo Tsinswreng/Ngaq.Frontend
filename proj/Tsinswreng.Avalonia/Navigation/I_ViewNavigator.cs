@@ -3,7 +3,7 @@ using Control = Avalonia.Controls.ContentControl;
 namespace Tsinswreng.Avalonia.Navigation;
 
 
-public interface I_ViewNavigator{
+public interface IViewNavigator{
 
 	public bool Back();
 
