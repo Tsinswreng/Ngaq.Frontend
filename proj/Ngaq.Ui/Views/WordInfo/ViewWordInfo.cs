@@ -34,7 +34,8 @@ public partial class ViewWordInfo
 		Content = Root.Grid;
 		{var o = Root.Grid;
 			o.RowDefinitions.AddRange([
-				new RowDef(1, GUT.Star),
+				new RowDef(1, GUT.Star),//LangId
+				new RowDef(3, GUT.Star),//Head
 			]);
 		}
 		{{
@@ -70,14 +71,18 @@ public partial class ViewWordInfo
 				}
 			}}//~LangId
 
-			var Head = new SelectableTextBlock{};
+			var Head = new TextBox{};
 			Root.Add(Head);
 			{var o = Head;
 				o.Bind(
 					TextBlock.TextProperty
-					,new CBE(CBE.Pth<Ctx>(x=>x.Head))
+					,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
+						Mode = BindingMode.TwoWay
+					}
 				);
 			}
+
+
 		}}//~Root
 		return Nil;
 	}

@@ -1,3 +1,5 @@
+global using BindingMode = Avalonia.Data.BindingMode;
+
 #region Grid
 global using ColDef = Avalonia.Controls.ColumnDefinition;
 global using RowDef = Avalonia.Controls.RowDefinition;
