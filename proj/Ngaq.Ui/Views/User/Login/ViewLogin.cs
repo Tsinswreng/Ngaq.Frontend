@@ -7,7 +7,6 @@ using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
-using Tsinswreng.Avalonia.Navigation;
 using Tsinswreng.Avalonia.Tools;
 
 namespace Ngaq.Ui.Views.User.Login;
