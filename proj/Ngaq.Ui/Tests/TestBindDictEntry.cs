@@ -13,7 +13,7 @@ using Tsinswreng.Avalonia.Controls;
 using Tsinswreng.Avalonia.Converters;
 using Tsinswreng.Avalonia.Tools;
 
-namespace Ngaq.Ui.Views;
+namespace Ngaq.Ui.Tests;
 
 public partial class MainView : UserControl {
 	public MainView() {
