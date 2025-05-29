@@ -37,8 +37,8 @@ public partial class ViewWordListCard
 		var RootGrid = Root.Grid;
 		Content = RootGrid;
 		RootGrid.RowDefinitions.AddRange([
-			new RowDef(4, GUT.Star),
-			new RowDef(8, GUT.Star),
+			new RowDef(4, GUT.Auto),
+			new RowDef(8, GUT.Auto),
 		]);
 
 		var LangGrid = new IndexGrid(IsRow:true);

@@ -19,6 +19,7 @@ namespace Ngaq.Ui.Views;
 
 public partial class MainView : UserControl {
 	public MainView() {
-		Content = new ViewWordInfo();
+		//Content = new ViewWordInfo();
+		Content = new ViewWordListCard();
 	}
 }

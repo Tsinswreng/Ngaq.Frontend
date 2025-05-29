@@ -80,7 +80,7 @@ public class MsgBox : UserControl{
 
 
 	protected nil _Style(){
-		Styles.Add(SugarStyle.NoCornerRadius());
+		
 		return Nil;
 	}
 //TODO 滾動不效; 關閉按鈕專置于標題欄右側, 底步允許自定義 多按鈕

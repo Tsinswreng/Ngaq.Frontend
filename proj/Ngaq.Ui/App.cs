@@ -28,8 +28,9 @@ public partial class App : Application {
 
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
+		var Sty = SugarStyle.MkStyForAnyControl();
 		Styles.Add(new FluentTheme());
-		Styles.Add(SugarStyle.NoCornerRadius());
+		Styles.Add(SugarStyle.NoCornerRadius(Sty));
 		// 在 App 初始化时添加资源（如 App.axaml.cs 的构造函数）
 		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
 		_Style();

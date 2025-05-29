@@ -8,6 +8,9 @@ using Ngaq.Ui.ViewModels;
 using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
 using Ctx = VmWordInfo;
+using Ngaq.Core.Model.Po.Kv;
+using Avalonia.Controls.Templates;
+
 public partial class ViewWordInfo
 	:UserControl
 {
@@ -24,13 +27,27 @@ public partial class ViewWordInfo
 		Render();
 	}
 
-	public class Cls_{
 
+	public class Cls_{
+		//o.Foreground = new SolidColorBrush(Colors.LightGray)
+		public str LightGray = nameof(LightGray);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
 
+	public Color Gray = Colors.LightGray;
+
 	protected nil Style(){
-		Styles.Add(SugarStyle.GridShowLines());
+		//Styles.Add(SugarStyle.GridShowLines());
+
+		var LightGray = new Style(
+			x=>x.Is<Control>()
+			.Class(Cls.LightGray)
+		).Set(
+			ForegroundProperty
+			,new SolidColorBrush(Gray)
+			//,new SolidColorBrush(Colors.Red)
+		);
+		Styles.Add(LightGray);
 
 		var InputBoxNoBorder = new Style(x=>
 			x.Is<TextBlock>()
@@ -49,8 +66,11 @@ public partial class ViewWordInfo
 		Content = Root.Grid;
 		{var o = Root.Grid;
 			o.RowDefinitions.AddRange([
-				new RowDef(1, GUT.Star),//LangId
-				new RowDef(3, GUT.Star),//Head
+				new RowDef(1, GUT.Auto),//LangId
+				new RowDef(3, GUT.Auto),//Head
+				new RowDef(1, GUT.Auto),//Summary
+				new RowDef(100, GUT.Star),//Description
+				new RowDef(1, GUT.Star),
 			]);
 		}
 		{{
@@ -61,6 +81,7 @@ public partial class ViewWordInfo
 					new ColDef(1, GUT.Star),
 					new ColDef(1, GUT.Auto),
 				]);
+				o.Classes.Add(Cls.LightGray);//即o.Classes.Add("LightGray");
 			}
 			{{
 				var Lang = new SelectableTextBlock{};
@@ -87,11 +108,17 @@ public partial class ViewWordInfo
 				}
 			}}//~LangId
 
-			var Head = new TextBox{};
-			Root.Add(Head);
+			var BdrHead = new Border{};
+			Root.Add(BdrHead);
+			{var o = BdrHead;
+				o.BorderThickness = new Thickness(0, 1, 0, 1);
+				o.BorderBrush = new SolidColorBrush(Colors.LightGray);
+			}
+
+			var Head = new SelectableTextBlock{};
+			BdrHead.Child = Head;
 			{var o = Head;
-				var a = TextBlock.TextProperty;
-				var b = TextBox.TextProperty;
+				o.Styles.Add(new Style().NoMargin().NoPadding());
 				o.Bind(
 					TextBox.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
@@ -100,14 +127,88 @@ public partial class ViewWordInfo
 				);
 				o.VerticalAlignment = VertAlign.Stretch;
 				//o.VerticalContentAlignment = VertAlign.Center;
-				o.FontSize = 32.0;
-				//o.FontSize += UiCfg.Inst.BaseFontSize + 6;
-
+				//o.TextAlignment = TxtAlign.Right;
+				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
 			}
 
+			var Summary = new SelectableTextBlock{};
+			Root.Add(Summary);
+			{var o = Summary;
+				o.Bind(
+					TextBlock.TextProperty
+					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
+						Converter = new FnConvtr< IDictionary<str, IList<str>>, str>(
+							x=>str.Join("\t",x[ConstTokens.Inst.Concat(null, KeysProp.Inst.summary)])
+						),
+						Mode = BindingMode.OneWay
+					}
+				);
+			}
+
+			var BdrScr = new Border{};
+			Root.Add(BdrScr);
+			{var o = BdrScr;
+				//o.Height = UiCfg.Inst.WindowHeight;
+			}
+
+			var ScrDescr = new ScrollViewer();
+			BdrScr.Child = ScrDescr;
+			{var o = ScrDescr;}
+			{{
+				var Description = _DescriptionList();
+				ScrDescr.Content = Description;
+				{var o = Description;
+
+				}
+			}}
+			Root.Add();
 
 		}}//~Root
 		return Nil;
+	}
+
+
+	Control _DescriptionList(){
+		var Items = new ItemsControl();
+		{var o = Items;
+			o.Bind(
+				ItemsControl.ItemsSourceProperty
+				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
+					Mode = BindingMode.OneWay
+					,Converter = new FnConvtr< IDictionary<str, IList<str>>, IList<str>>(
+						x=>x[ConstTokens.Inst.Concat(null, KeysProp.Inst.description)]
+					)
+				}
+			);
+		}
+		Items.ItemTemplate = new FuncDataTemplate<str>((Descr,b)=>{
+			var Ans = new Border();
+			{var o = Ans;
+				o.BorderThickness = new Thickness(0, 1, 0, 0);
+				o.BorderBrush = new SolidColorBrush(Gray);
+			}
+			var Grid = new IndexGrid(IsRow: true);
+			Ans.Child = Grid.Grid;
+			{var o = Grid.Grid;
+				o.RowDefinitions.AddRange([
+					new RowDef(1, GUT.Auto),
+				]);
+			}
+			{{
+				var Text = new SelectableTextBlock{};
+				Grid.Add(Text);
+				{var o = Text;
+					o.TextWrapping = TextWrapping.Wrap;
+					o.Bind(
+						TextBlock.TextProperty
+						,new CBE(CBE.Pth<str>(x=>x))
+					);
+				}
+			}}
+			return Ans;
+		});
+
+		return Items;
 	}
 
 

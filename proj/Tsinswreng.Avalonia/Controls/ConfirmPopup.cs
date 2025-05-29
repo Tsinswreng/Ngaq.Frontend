@@ -21,7 +21,6 @@ public class ConfirmPopup : UserControl{
 
 	protected nil _Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
-		Styles.Add(SugarStyle.NoCornerRadius());
 		return Nil;
 	}
 
