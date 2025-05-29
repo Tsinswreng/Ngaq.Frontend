@@ -8,6 +8,7 @@ public static class Extn_Style{
 		this Style z, AvaloniaProperty property, object? value
 	){
 		z.Setters.Add(new Setter(property, value));
+
 		return z;
 	}
 }

@@ -13,6 +13,7 @@ using Tsinswreng.Avalonia.Sugar;
 using Avalonia.Styling;
 using Avalonia.Controls;
 using Tsinswreng.Avalonia.Tools;
+using Avalonia.Controls.Documents;
 
 namespace Ngaq.Ui;
 
@@ -29,21 +30,24 @@ public partial class App : Application {
 		//AvaloniaXamlLoader.Load(this);
 		Styles.Add(new FluentTheme());
 		Styles.Add(SugarStyle.NoCornerRadius());
+		// 在 App 初始化时添加资源（如 App.axaml.cs 的构造函数）
+		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
 		_Style();
+
 #if DEBUG
 		this.AttachDevTools();
 #endif
 	}
 
 	protected nil _Style(){
-		var StyBaseFontSize = new Style(x=>
-			x.Is<Control>()
-		).Set(
-			TextBlock.FontSizeProperty
-			,UiCfg.Inst.BaseFontSize
-		);
-
-		Styles.Add(StyBaseFontSize);
+		// 如下設置後 在局部覆蓋全局字體旹 TextBlock生效洏TextBox不效、不效者 字體大小恆不變
+		// var StyBaseFontSize = new Style(x=>
+		// 	x.Is<Control>()
+		// ).Set(
+		// 	TextElement.FontSizeProperty
+		// 	,UiCfg.Inst.BaseFontSize
+		// );
+		// Styles.Add(StyBaseFontSize);
 		return Nil;
 	}
 
@@ -52,6 +56,23 @@ public partial class App : Application {
 			// Avoid duplicate validations from both Avalonia and the CommunityToolkit.
 			// More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
 			DisableAvaloniaDataAnnotationValidation();
+
+			#region 全局基字體 2025-05-29T17:14:54.155+08:00_W22-4
+			// 创建资源字典并添加资源
+			var resources = new ResourceDictionary();
+			resources.Add("ControlContentThemeFontSize", 14.0);
+
+			// 确保主资源字典存在
+			if (App.Current != null && App.Current.Resources == null){
+				App.Current.Resources = new ResourceDictionary();
+			}
+
+			// 合并新资源到全局字典
+			App.Current?.Resources.MergedDictionaries.Add(resources);
+			#endregion #region 全局基字體 2025-05-29T17:14:54.155+08:00_W22-4
+
+
+
 			var Cfg = UiCfg.Inst;
 			desktop.MainWindow = new MainWindow {
 				DataContext = new MainViewModel()

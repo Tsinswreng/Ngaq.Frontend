@@ -1,7 +1,11 @@
 namespace Ngaq.Ui.Views.WordInfo;
 
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Styling;
+using Avalonia.Media;
 using Ngaq.Ui.ViewModels;
+using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
 using Ctx = VmWordInfo;
 public partial class ViewWordInfo
@@ -14,7 +18,8 @@ public partial class ViewWordInfo
 	}
 
 	public ViewWordInfo(){
-		Ctx = new Ctx();
+		//Ctx = new Ctx();
+		Ctx = Ctx.Samples[0];
 		Style();
 		Render();
 	}
@@ -25,6 +30,16 @@ public partial class ViewWordInfo
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
+		Styles.Add(SugarStyle.GridShowLines());
+
+		var InputBoxNoBorder = new Style(x=>
+			x.Is<TextBlock>()
+		).Set(
+			BorderThicknessProperty
+			,new Thickness(0)
+		);
+		Styles.Add(InputBoxNoBorder);
+
 		return Nil;
 	}
 
@@ -44,7 +59,7 @@ public partial class ViewWordInfo
 			{var o = LangId.Grid;
 				o.ColumnDefinitions.AddRange([
 					new ColDef(1, GUT.Star),
-					new ColDef(1, GUT.Star),
+					new ColDef(1, GUT.Auto),
 				]);
 			}
 			{{
@@ -66,20 +81,28 @@ public partial class ViewWordInfo
 						TextBlock.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Id))
 					);
-					o.HorizontalAlignment = HoriAlign.Right;
 					o.VerticalAlignment = VertAlign.Center;
+					o.HorizontalAlignment = HoriAlign.Right;
+					o.TextAlignment = TxtAlign.Right;
 				}
 			}}//~LangId
 
 			var Head = new TextBox{};
 			Root.Add(Head);
 			{var o = Head;
+				var a = TextBlock.TextProperty;
+				var b = TextBox.TextProperty;
 				o.Bind(
-					TextBlock.TextProperty
+					TextBox.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
 						Mode = BindingMode.TwoWay
 					}
 				);
+				o.VerticalAlignment = VertAlign.Stretch;
+				//o.VerticalContentAlignment = VertAlign.Center;
+				o.FontSize = 32.0;
+				//o.FontSize += UiCfg.Inst.BaseFontSize + 6;
+
 			}
 
 
