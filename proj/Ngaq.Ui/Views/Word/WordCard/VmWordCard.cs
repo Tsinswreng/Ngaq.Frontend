@@ -1,20 +1,40 @@
-namespace Ngaq.Ui.Views.WordCard;
+namespace Ngaq.Ui.Views.Word.WordCard;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Model.Bo;
+using Ngaq.Core.Model.Samples.Word;
 using Ngaq.Ui.ViewModels;
 
 
-using Ctx = VmWordCard;
-public partial class VmWordCard: ViewModelBase{
+using Ctx = VmWordListCard;
+public partial class VmWordListCard: ViewModelBase{
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmWordCard(){
+	static VmWordListCard(){
 		{
 			var o = new Ctx();
 			Samples.Add(o);
-			o.Head = "Hello";
-			o.Lang = "English";
+			o.FromBo(SampleWord.Inst.Samples[0]);
+		}
+		{
+			var o = new Ctx();
+			Samples.Add(o);
+			o.FromBo(SampleWord.Inst.Samples[1]);
 		}
 	}
+
+	public Ctx FromBo(BoWord BoWord){
+		this.BoWord = BoWord;
+		Head = BoWord.PoWord.Head;
+		Lang = BoWord.PoWord.Lang;
+		return this;
+	}
+
+	protected BoWord? _BoWord;
+	public BoWord? BoWord{
+		get{return _BoWord;}
+		set{SetProperty(ref _BoWord, value);}
+	}
+
 
 	protected str _Head = "";
 	public str Head{

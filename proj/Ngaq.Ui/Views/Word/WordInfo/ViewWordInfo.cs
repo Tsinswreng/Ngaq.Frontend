@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.WordInfo;
+namespace Ngaq.Ui.Views.Word.WordInfo;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -10,10 +10,34 @@ using Tsinswreng.Avalonia.Tools;
 using Ctx = VmWordInfo;
 using Ngaq.Core.Model.Po.Kv;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 
 public partial class ViewWordInfo
 	:UserControl
 {
+
+	// public IValueConverter ConvMultiDictToList(str KeyWithoutNs){
+	// 	return new FnConvtr< IDictionary<str, IList<str>>, IList<str>>(
+	// 		x=>{
+	// 			var Key = ConstTokens.Inst.Concat(null, KeyWithoutNs);
+	// 			x.TryGetValue(Key, out var v);
+	// 			//return str.Join("\t",v??[]);
+	// 			return v??[];
+	// 		}
+	// 	);
+	// }
+
+	// public IValueConverter ConvMultiDictToStr(str KeyWithoutNs){
+	// 	return new FnConvtr< IDictionary<str, IList<str>>, IList<str>>(
+	// 		x=>{
+	// 			var Key = ConstTokens.Inst.Concat(null, KeyWithoutNs);
+	// 			x.TryGetValue(Key, out var v);
+	// 			return str.Join("\t",v??[]);
+	// 			//return v??[];
+	// 		}
+	// 	);
+	// }
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -21,8 +45,8 @@ public partial class ViewWordInfo
 	}
 
 	public ViewWordInfo(){
-		//Ctx = new Ctx();
-		Ctx = Ctx.Samples[0];
+		Ctx = new Ctx();
+		//Ctx = Ctx.Samples[0];
 		Style();
 		Render();
 	}
@@ -137,10 +161,15 @@ public partial class ViewWordInfo
 				o.Bind(
 					TextBlock.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
-						Converter = new FnConvtr< IDictionary<str, IList<str>>, str>(
-							x=>str.Join("\t",x[ConstTokens.Inst.Concat(null, KeysProp.Inst.summary)])
-						),
+						//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 						Mode = BindingMode.OneWay
+						,Converter = new FnConvtr<IDictionary<str, IList<str>>, str>(
+						x=>{
+							var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.summary);
+							x.TryGetValue(Key, out var v);
+							return str.Join("\t",v??[]);
+						}
+					)
 					}
 				);
 			}
@@ -175,8 +204,13 @@ public partial class ViewWordInfo
 				ItemsControl.ItemsSourceProperty
 				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 					Mode = BindingMode.OneWay
-					,Converter = new FnConvtr< IDictionary<str, IList<str>>, IList<str>>(
-						x=>x[ConstTokens.Inst.Concat(null, KeysProp.Inst.description)]
+					//,Converter = ConvMultiDictToList(KeysProp.Inst.description)
+					,Converter = new FnConvtr<IDictionary<str, IList<str>>, IList<str>>(
+						x=>{
+							var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.description);
+							x.TryGetValue(Key, out var v);
+							return v??[];
+						}
 					)
 				}
 			);

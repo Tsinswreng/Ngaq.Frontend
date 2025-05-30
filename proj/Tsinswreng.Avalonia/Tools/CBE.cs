@@ -1,6 +1,7 @@
 //2025-03-09T21:11:06.192+08:00_W10-7
 using System;
 using System.Linq.Expressions;
+using Avalonia.Data.Converters;
 using Avalonia.Data.Core;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
@@ -27,8 +28,32 @@ public class CBE : CompiledBindingExtension{
 		return Pth<T, object?>(propertySelector);
 	}
 
-	public static CompiledBindingExtension Mk<T>(Expression<Func<T, object?>> propertySelector){
-		return new CBE(Pth<T, object?>(propertySelector));
+/// <summary>
+/// 除首個參數外 禁止依賴參數定義順序㕥傳參 須用命名參數 如 Mk<Ctx>(x=>x.Foo, Mode:BindingMode.TwoWay ...)
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="PropertySelector"></param>
+/// <param name="Mode"></param>
+/// <param name="Converter"></param>
+/// <param name="Path"></param>
+/// <param name="Source"></param>
+/// <param name="DataType"></param>
+/// <returns></returns>
+	public static CompiledBindingExtension Mk<T>(
+		Expression<Func<T, object?>> PropertySelector
+		,BindingMode Mode = default
+		,IValueConverter? Converter = default
+		,CompiledBindingPath? Path = default
+		,object? Source = default
+		,Type? DataType = default
+	){
+		var r = new CBE(Pth<T, object?>(PropertySelector)){};
+		r.Mode = Mode;
+		r.Converter = Converter;
+		if(Path != null){r.Path = Path;}
+		if(Source!= null){r.Source = Source;}
+		if(DataType!= null){r.DataType = DataType;}
+		return r;
 	}
 
 

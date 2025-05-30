@@ -3,7 +3,7 @@ using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Service.Word;
 using Ngaq.Ui.ViewModels;
 
-namespace Ngaq.Ui.Views.WordManage.AddWord;
+namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ctx = VmAddWord;
 public partial class VmAddWord
 	:ViewModelBase
@@ -64,9 +64,9 @@ public partial class VmAddWord
 				,default //TODO ct
 			).ContinueWith(d=>{
 				if(d.IsFaulted){
-					System.Console.WriteLine(d.Exception);//t
-					this.Errors.Add(d.Exception.ToString());
-					this.ErrStr = d.Exception.ToString();
+					Console.WriteLine(d.Exception);//t
+					Errors.Add(d.Exception.ToString());
+					ErrStr = d.Exception.ToString();
 				}
 			});
 		}

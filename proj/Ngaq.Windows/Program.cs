@@ -16,7 +16,7 @@ using Ngaq.Local.Dao;
 using Ngaq.Local.Db;
 using Ngaq.Local.Service.Word;
 using Ngaq.Ui;
-using Ngaq.Ui.Views.WordManage.AddWord;
+using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Tsinswreng.SqlHelper;
 using Tsinswreng.SqlHelper.Cmd;
 

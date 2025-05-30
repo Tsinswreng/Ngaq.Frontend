@@ -8,9 +8,8 @@ using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.BottomBar;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
-using Ngaq.Ui.Views.WordCard;
-using Ngaq.Ui.Views.WordInfo;
-using Ngaq.Ui.Views.WordManage.AddWord;
+using Ngaq.Ui.Views.Word.Query;
+using Ngaq.Ui.Views.Word.WordCard;
 using Tsinswreng.Avalonia.Controls;
 using Tsinswreng.Avalonia.Converters;
 using Tsinswreng.Avalonia.Tools;
@@ -20,6 +19,7 @@ namespace Ngaq.Ui.Views;
 public partial class MainView : UserControl {
 	public MainView() {
 		//Content = new ViewWordInfo();
-		Content = new ViewWordListCard();
+		//Content = new ViewWordListCard();
+		Content = new ViewWordQuery();
 	}
 }

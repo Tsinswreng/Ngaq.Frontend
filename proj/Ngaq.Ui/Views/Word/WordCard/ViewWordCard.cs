@@ -1,10 +1,10 @@
-namespace Ngaq.Ui.Views.WordCard;
+namespace Ngaq.Ui.Views.Word.WordCard;
 
 using Avalonia.Controls;
 using Avalonia.Media;
 using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
-using Ctx = VmWordCard;
+using Ctx = VmWordListCard;
 public partial class ViewWordListCard
 	:UserControl
 {

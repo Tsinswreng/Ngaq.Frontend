@@ -6,7 +6,7 @@ using Ngaq.Core.Model.Samples.Word;
 using Ngaq.Ui.ViewModels;
 using Tsinswreng.CsCore.Tools.MultiDict;
 
-namespace Ngaq.Ui.Views.WordInfo;
+namespace Ngaq.Ui.Views.Word.WordInfo;
 using Ctx = VmWordInfo;
 public partial class VmWordInfo
 	:ViewModelBase
@@ -19,7 +19,12 @@ public partial class VmWordInfo
 		{
 			var o = new Ctx();
 			Samples.Add(o);
-			o.FromBo(S.BoWord);
+			o.FromBo(S.Samples[0]);
+		}
+		{
+			var o = new Ctx();
+			Samples.Add(o);
+			o.FromBo(S.Samples[1]);
 		}
 	}
 
@@ -29,14 +34,18 @@ public partial class VmWordInfo
 		Head = BoWord.PoWord.Head;
 		Lang = BoWord.PoWord.Lang;
 
+		var NeoStrProps = new Dictionary<str, IList<str>>();
 		foreach(var Prop in BoWord.Props){
 			if(Prop.KType == (i64)EKvType.Str
 				&& Prop.VType == (i64)EKvType.Str
 			){
-				StrProps.AddInValues(Prop.KStr, Prop.VStr);
+				NeoStrProps.AddInValues(Prop.KStr, Prop.VStr);
 			}
 		}
-
+		//斯集合未叶INotifyPropertyChanged、故唯當地址變旹纔緟渲染Ui
+		// 直ᵈ 不變地址ᵈ 改StrProps之內容則不效
+		// 改內容後汶SetProperty(ref _StrProps, StrProps);亦不效
+		this.StrProps = NeoStrProps;
 		return this;
 	}
 
@@ -61,10 +70,14 @@ public partial class VmWordInfo
 		set{SetProperty(ref _Lang, value);}
 	}
 
-	public IDictionary<str, IList<str>> StrProps{get;set;} = new Dictionary<str, IList<str>>();
 
-
-
+	protected IDictionary<str, IList<str>> _StrProps = new Dictionary<str, IList<str>>(){
+		//[":summary"] = ["testWrong"]//t
+	};
+	public IDictionary<str, IList<str>> StrProps{
+		get{return _StrProps;}
+		set{SetProperty(ref _StrProps, value);}
+	}
 
 
 

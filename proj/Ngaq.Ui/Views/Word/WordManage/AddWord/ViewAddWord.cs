@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.WordManage.AddWord;
+namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -29,7 +29,7 @@ public partial class ViewAddWord
 
 	public ViewAddWord(){
 		//Ctx = new Ctx();
-		Ctx = App.ServiceProvider.GetRequiredService<VmAddWord>();
+		Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
 
 		Style();
 		Render();

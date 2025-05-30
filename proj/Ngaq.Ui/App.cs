@@ -14,6 +14,7 @@ using Avalonia.Styling;
 using Avalonia.Controls;
 using Tsinswreng.Avalonia.Tools;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Primitives;
 
 namespace Ngaq.Ui;
 
@@ -49,6 +50,18 @@ public partial class App : Application {
 		// 	,UiCfg.Inst.BaseFontSize
 		// );
 		// Styles.Add(StyBaseFontSize);
+
+		var Button = new Style(x=>
+			x.Is<Button>()
+		).Set(
+			TemplatedControl.HorizontalAlignmentProperty
+			,HoriAlign.Stretch
+		).Set(
+			ContentControl.HorizontalContentAlignmentProperty
+			,HoriAlign.Center
+		);
+		Styles.Add(Button);
+
 		return Nil;
 	}
 

@@ -9,9 +9,9 @@ public class FnConvtr<TIn, TRet>
 {
 	public Func<TIn, TRet>? FnConv{get;set;}
 	public Func<TRet, TIn>? FnBack{get;set;}
-	public FnConvtr(Func<TIn, TRet> FnConv){
-		this.FnConv = FnConv;
-	}
+		public FnConvtr(Func<TIn, TRet> FnConv){
+			this.FnConv = FnConv;
+		}
 
 	public FnConvtr(
 		Func<TIn, TRet> FnConv
