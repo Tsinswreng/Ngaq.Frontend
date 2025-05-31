@@ -46,7 +46,11 @@ public abstract class ViewModelBase
 	}
 
 	public nil ShowMsg(){
-		//IsShowMsg = false;
+
+		var Old = Msgs;
+		Msgs = new();
+		Msgs = Old;
+
 		IsShowMsg = true;
 		return Nil;
 	}

@@ -90,6 +90,7 @@ public partial class ViewAddWord
 				var Body = new SelectableTextBlock{};
 				a._Body.Content = Body;
 				{var b = Body;
+					b.TextWrapping = TextWrapping.Wrap;
 					b.Bind(
 						TextBlock.TextProperty
 						,CBE.Mk<Ctx>(x=>x.Msgs

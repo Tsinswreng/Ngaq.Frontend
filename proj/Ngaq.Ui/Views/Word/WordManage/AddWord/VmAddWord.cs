@@ -66,8 +66,7 @@ public partial class VmAddWord
 				if(d.IsFaulted){
 					Console.WriteLine(d.Exception);//t
 					AddMsg(d.Exception.ToString());
-					ErrStr = d.Exception.ToString();
-					//IsShowErr = true;
+					//ErrStr = d.Exception.ToString();
 					ShowMsg();
 				}
 			});
