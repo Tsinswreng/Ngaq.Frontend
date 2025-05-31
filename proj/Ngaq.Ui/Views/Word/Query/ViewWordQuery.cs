@@ -1,7 +1,9 @@
 namespace Ngaq.Ui.Views.Word.Query;
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.Avalonia.Controls;
@@ -43,6 +45,7 @@ public partial class ViewWordQuery
 			o.RowDefinitions.AddRange([
 				new RowDef(1, GUT.Auto),
 				new RowDef(4, GUT.Star),
+				new RowDef(1, GUT.Auto),//GridSplitter
 				new RowDef(5, GUT.Star),
 			]);
 		}
@@ -60,6 +63,14 @@ public partial class ViewWordQuery
 					ItemsControl.ItemsSourceProperty
 					,CBE.Mk<Ctx>(x=>x.WordCards, Mode: BindingMode.TwoWay)
 				);
+			}
+
+			var Spl = new GridSplitter();
+			Root.Add(Spl);
+			{var o = Spl;
+				o.Background = Brushes.Black;
+				o.BorderThickness = new Thickness(1);
+				o.BorderBrush = Brushes.LightGray;
 			}
 
 			var WordInfo = _WordInfo();

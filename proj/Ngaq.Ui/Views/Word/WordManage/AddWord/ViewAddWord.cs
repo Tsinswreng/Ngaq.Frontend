@@ -68,7 +68,7 @@ public partial class ViewAddWord
 			]);
 		}
 		{{
-			var Popup = new ConfirmPopup();
+			var Popup = new MsgPopup();
 			Root.Add(Popup);
 			{var o = Popup;
 				//o.Width = 400;//t 不效
@@ -79,23 +79,24 @@ public partial class ViewAddWord
 				//o._Popup.Width = Root.Grid.Width*0.8; //不效 蓋Root之寬 此時未定
 				o._Popup.PlacementTarget = Root.Grid;
 				o._Popup.IsOpen = true;
-				o._ConfirmBox._LeftBtn.Content = "Close";
-				o._ConfirmBox._LeftBtn.Click += (s,e)=>{
-					o._Popup.IsOpen = false;
-				};
-				o._ConfirmBox._RightBtn.Content = "Ok";
+				// o._MsgBox._LeftBtn.Content = "Close";
+				// o._MsgBox._LeftBtn.Click += (s,e)=>{
+				// 	o._Popup.IsOpen = false;
+				// };
+				// o._MsgBox._RightBtn.Content = "Ok";
 
 				// o._ConfirmBox._Title = new SelectableTextBlock{
 				// 	Text = "Error"
 				// 	,FontSize = 26.0
 				// };//不示
-				o._ConfirmBox._Title.Content = new TextBlock{Text = "Error", FontSize = 26.0};//t
+				o._MsgBox._Title.Content = new TextBlock{Text = "Error", FontSize = 26.0};//t
 
-				o._ConfirmBox._Body.Content = new SelectableTextBlock{
+				o._MsgBox._Body.Content = new SelectableTextBlock{
 					Text =
 "Error\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError"
++"Error\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError"
 				};
-				o._ConfirmBox.Root.Grid.Background = Brushes.DarkSlateGray;
+				o._MsgBox.Root.Grid.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
 			}
 
 			// var popup = new Popup();

@@ -13,7 +13,7 @@ public partial class VmWordQuery: ViewModelBase{
 		{
 			var o = new Ctx();
 			Samples.Add(o);
-			for(var i = 0; i < 99; i++){
+			for(var i = 0; i < 20; i++){
 				o.WordCards.Add(VmWordListCard.Samples[0]);
 				o.WordCards.Add(VmWordListCard.Samples[1]);
 			}

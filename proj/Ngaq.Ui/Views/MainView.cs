@@ -6,6 +6,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Styling;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.BottomBar;
+using Ngaq.Ui.Views.Home;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
 using Ngaq.Ui.Views.Word.Query;
@@ -20,6 +21,8 @@ public partial class MainView : UserControl {
 	public MainView() {
 		//Content = new ViewWordInfo();
 		//Content = new ViewWordListCard();
-		Content = new ViewWordQuery();
+		//Content = new ViewWordQuery();
+		//Content = new ViewBottomBar();
+		Content = new ViewHome();
 	}
 }
