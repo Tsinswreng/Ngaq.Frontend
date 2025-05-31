@@ -68,36 +68,42 @@ public partial class ViewAddWord
 			]);
 		}
 		{{
-			var Popup = new MsgPopup();
-			Root.Add(Popup);
-			{var o = Popup;
-				//o.Width = 400;//t 不效
-				//o._ConfirmBox.Root.Grid.Width = Root.Grid.Width*0.8; //不效
-				//o._ConfirmBox.Root.Grid.Width = 600;
-				o._Popup.Width = 320; //有效
-				//o._Popup.MaxHeight = 200;
-				//o._Popup.Width = Root.Grid.Width*0.8; //不效 蓋Root之寬 此時未定
-				o._Popup.PlacementTarget = Root.Grid;
-				o._Popup.IsOpen = true;
-				// o._MsgBox._LeftBtn.Content = "Close";
-				// o._MsgBox._LeftBtn.Click += (s,e)=>{
-				// 	o._Popup.IsOpen = false;
-				// };
-				// o._MsgBox._RightBtn.Content = "Ok";
-
-				// o._ConfirmBox._Title = new SelectableTextBlock{
-				// 	Text = "Error"
-				// 	,FontSize = 26.0
-				// };//不示
-				o._MsgBox._Title.Content = new TextBlock{Text = "Error", FontSize = 26.0};//t
-
-				o._MsgBox._Body.Content = new SelectableTextBlock{
-					Text =
-"Error\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError"
-+"Error\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError\nmessage\nError"
+			var Popup_ = new MsgPopup();
+			Root.Add(Popup_);
+			{var a = Popup_;
+				var Cfg = UiCfg.Inst;
+				a._Popup.Width = Cfg.WindowWidth*0.9;
+				a._Popup.MaxHeight = Cfg.WindowHeight*0.6;
+				a._BdrBody.MaxHeight = a._Popup.MaxHeight*0.8;
+				a._Popup.PlacementTarget = Root.Grid;
+				a._Title.Content = new TextBlock{Text = "Error", FontSize = 26.0};
+				a._CloseBtn.Click += (s,e)=>{
+					Ctx!.IsShowMsg = false;
 				};
-				o._MsgBox.Root.Grid.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
+				a._Popup.Bind(
+					Popup.IsOpenProperty
+					,CBE.Mk<Ctx>(x=>x.IsShowMsg
+						,Mode: BindingMode.OneWay
+					)
+				);
+
+				var Body = new SelectableTextBlock{};
+				a._Body.Content = Body;
+				{var b = Body;
+					b.Bind(
+						TextBlock.TextProperty
+						,CBE.Mk<Ctx>(x=>x.Msgs
+							,Converter: new FnConvtr<ObservableCollection<str>, str>(y=>{
+									var ans = string.Join("\n", y);
+									return ans;
+								}
+							)
+						)
+					);
+				}
+				a._Border.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
 			}
+
 
 			// var popup = new Popup();
 			// Root.Add(popup);

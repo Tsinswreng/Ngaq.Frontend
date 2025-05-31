@@ -110,7 +110,7 @@ public partial class ViewRegister
 		var ans = new ItemsControl{};
 		ans.Bind(
 			ItemsControl.ItemsSourceProperty
-			,new CBE(CBE.Pth<Ctx>(x=>x.Errors))
+			,new CBE(CBE.Pth<Ctx>(x=>x.Msgs))
 		);
 		ans.ItemTemplate = new FuncDataTemplate<str>((err,b)=>{
 			var ua = new SelectableTextBlock{};

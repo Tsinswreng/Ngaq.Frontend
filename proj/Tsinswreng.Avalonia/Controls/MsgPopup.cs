@@ -30,7 +30,7 @@ public class MsgPopup : UserControl{
 	public Border _BdrBottomView{get{
 		return _MsgBox._BdrBottomView;
 	}}
-	public ContentControl? _BottomView{get{
+	public ContentControl _BottomView{get{
 		return _MsgBox._BottomView;
 	}}
 

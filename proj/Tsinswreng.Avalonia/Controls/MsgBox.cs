@@ -36,7 +36,7 @@ public class MsgBox : UserControl{
 	public ContentControl _Body{get;} = new();
 	public SwipeLongPressBtn _CloseBtn{get; protected set;}
 	public Border _BdrBottomView{get; protected set;} = new();
-	public ContentControl? _BottomView{get;} = new();
+	public ContentControl _BottomView{get;} = new();
 
 
 
