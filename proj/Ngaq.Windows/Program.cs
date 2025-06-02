@@ -16,6 +16,7 @@ using Ngaq.Local.Dao;
 using Ngaq.Local.Db;
 using Ngaq.Local.Service.Word;
 using Ngaq.Ui;
+using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Tsinswreng.SqlHelper;
 using Tsinswreng.SqlHelper.Cmd;
@@ -59,6 +60,7 @@ svc.AddScoped<RepoSql<PoLearn,	IdLearn>>();
 		svc.AddScoped<IUserCtxMgr, UserCtxMgr>();
 		svc.AddScoped<IGetTxn, SqlCmdMkr>();
 		svc.AddTransient<VmAddWord>();
+		svc.AddTransient<VmWordQuery>();
 
 		var servicesProvider = svc.BuildServiceProvider();
 		BuildAvaloniaApp()

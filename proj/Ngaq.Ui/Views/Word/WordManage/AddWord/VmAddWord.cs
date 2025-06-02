@@ -58,7 +58,7 @@ public partial class VmAddWord
 			return Nil;
 		}
 		if(!str.IsNullOrEmpty(Text)){
-			SvcWord?.AddWordsFromTextAsy(
+			SvcWord?.AddWordsFromText(
 				UserCtxMgr.GetUserCtx()
 				,Text
 				,default //TODO ct

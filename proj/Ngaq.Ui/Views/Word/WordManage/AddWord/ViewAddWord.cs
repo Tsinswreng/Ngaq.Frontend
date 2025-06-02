@@ -105,55 +105,6 @@ public partial class ViewAddWord
 				a._Border.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
 			}
 
-
-			// var popup = new Popup();
-			// Root.Add(popup);
-			// {var o = popup;
-			// 	o.PlacementTarget = Root.Grid;
-			// 	o.Placement = PlacementMode.Top;
-			// 	//var top = TopLevel.GetTopLevel(this);
-			// 	// o.VerticalOffset = top?.Width/4??0.0;
-			// 	// o.HorizontalOffset = top?.Height/4??0.0;
-			// 	o.HorizontalAlignment = HoriAlign.Stretch;
-			// 	o.VerticalAlignment = VertAlign.Stretch;
-			// 	Ctx!.Errors.CollectionChanged += (s,e)=>{
-			// 		Dispatcher.UIThread.Post(()=>{
-			// 			if(Ctx.HasErr){o.IsOpen = true;}
-			// 		});
-			// 	};
-
-			// 	// o.Bind(
-			// 	// 	Popup.IsOpenProperty
-			// 	// 	,new CBE(CBE.Pth<Ctx>(x=>x.HasErr))//TODO 不效
-			// 	// 	// ,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
-			// 	// 	// 	Converter = new FnConvtr<ObservableCollection<str>, bool>(x=>x.Count>0)
-			// 	// 	// }
-
-			// 	// );
-			// }
-			// {{
-			// 	var ErrBlock = new TextBlock{Text="123"};
-			// 	popup.Child = ErrBlock;
-			// 	{var o = ErrBlock;
-			// 		// o.Bind(
-			// 		// 	TextBlock.TextProperty
-			// 		// 	,new CBE(CBE.Pth<Ctx>(x=>x.Errors)){
-			// 		// 		Mode=BindingMode.OneWay
-			// 		// 		,Converter = new FnConvtr<ObservableCollection<str>, str>(
-			// 		// 			x=>string.Join("\n", x)
-			// 		// 		)
-			// 		// 	}
-			// 		// 	//,new CBE(CBE.Pth<Ctx>(x=>x.ErrStr))
-			// 		// );
-			// 		Ctx!.Errors.CollectionChanged += (s,e)=>{
-			// 			Dispatcher.UIThread.Post(()=>{
-			// 				var ErrStr = string.Join("\n", Ctx.Errors);
-			// 				//System.Console.WriteLine(ErrStr+"\nErrStr");
-			// 				ErrBlock.Text = ErrStr;
-			// 			});
-			// 		};
-			// 	}
-			// }}//~Popup
 			Root.Add();
 
 			var Tab = new TabControl();
@@ -225,7 +176,6 @@ public partial class ViewAddWord
 					o.HorizontalAlignment = HoriAlign.Stretch;
 					o.HorizontalContentAlignment = HoriAlign.Stretch;
 				}
-
 
 				var Input = new TextBox();
 				Path.Add(Input);

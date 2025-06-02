@@ -10,7 +10,7 @@ namespace Ngaq.Ui.Views.Word.WordInfo;
 using Ctx = VmWordInfo;
 public partial class VmWordInfo
 	:ViewModelBase
-	,IVmWord
+	//,IVmWord
 {
 
 	public static ObservableCollection<Ctx> Samples = [];

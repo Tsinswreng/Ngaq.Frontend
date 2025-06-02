@@ -20,6 +20,11 @@ namespace Ngaq.Ui;
 
 public partial class App : Application {
 
+	public static T GetSvc<T>()
+		where T : class
+	{
+		return App.ServiceProvider.GetRequiredService<T>();
+	}
 
 	public static IServiceProvider ServiceProvider { get; private set; } = null!;
 	public static void ConfigureServices(IServiceProvider serviceProvider){

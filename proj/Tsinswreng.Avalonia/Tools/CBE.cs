@@ -56,8 +56,6 @@ public class CBE : CompiledBindingExtension{
 		return r;
 	}
 
-
-
 	public static CompiledBindingPath Pth<T, Tar>(
 		Expression<Func<T, Tar>> propertySelector
 	){
@@ -104,40 +102,5 @@ public class CBE : CompiledBindingExtension{
 
 		builder.Property(clrProp, PropertyInfoAccessorFactory.CreateInpcPropertyAccessor);
 	}
-
-
-
-	// public static CompiledBindingPath pth<T, Tar>(
-	// 	Expression<Func<T, Tar>> propertySelector
-	// ){
-	// 	var builder = new CompiledBindingPathBuilder();
-	// 	var body = propertySelector.Body;
-
-	// 	// 处理类型转换表达式
-	// 	if (body is UnaryExpression unaryExpr && unaryExpr.NodeType == ExpressionType.Convert){
-	// 		body = unaryExpr.Operand;
-	// 	}
-
-	// 	if (!(body is MemberExpression memberExpr)){
-	// 		throw new ArgumentException("表达式必须为属性访问");
-	// 	}
-	// 	//var memberExpr = (MemberExpression)propertySelector.Body;
-	// 	var propName = memberExpr.Member.Name;
-
-	// 	var clrProp = new ClrPropertyInfo(
-	// 		propName,
-	// 		obj => ((T)obj).GetType().GetProperty(propName).GetValue(obj),
-	// 		(obj, val) => ((T)obj).GetType().GetProperty(propName).SetValue(obj, val),
-	// 		typeof(Tar)
-	// 	);
-	// 	builder.Property(clrProp, PropertyInfoAccessorFactory.CreateInpcPropertyAccessor);
-	// 	var path = builder.Build();
-	// 	return path;
-	// 	// var ans = new CompiledBindingExtension(path){
-
-	// 	// };
-	// 	// return ans;
-	// }
-
 
 }

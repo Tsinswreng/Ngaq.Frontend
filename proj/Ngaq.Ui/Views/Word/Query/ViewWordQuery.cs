@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Media;
+using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.Avalonia.Controls;
@@ -21,7 +22,8 @@ public partial class ViewWordQuery
 
 	public ViewWordQuery(){
 		//Ctx = new Ctx();
-		Ctx = Ctx.Samples[0];
+		//Ctx = Ctx.Samples[0];
+		Ctx = App.GetSvc<Ctx>();
 		Style();
 		Render();
 	}
@@ -95,7 +97,13 @@ public partial class ViewWordQuery
 			]);
 		}
 		{{
-			Ans.Add();
+			var TestBtn = new SwipeLongPressBtn{Content = "Test"};
+			Ans.Add(TestBtn);
+			{var o = TestBtn;
+				o.Click += (s,e)=>{
+					Ctx?.GetAllWords();
+				};
+			}
 
 			var SearchBox = new AutoCompleteBox();
 			{var o = SearchBox;Ans.Add(o);
