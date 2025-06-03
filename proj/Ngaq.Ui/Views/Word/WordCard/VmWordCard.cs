@@ -1,7 +1,9 @@
 namespace Ngaq.Ui.Views.Word.WordCard;
 using System.Collections.ObjectModel;
+using Avalonia.Media;
 using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.Samples.Word;
+using Ngaq.Core.Service.Word.Learn_.Models;
 using Ngaq.Ui.ViewModels;
 
 
@@ -22,18 +24,29 @@ public partial class VmWordListCard: ViewModelBase{
 		}
 	}
 
-	public Ctx FromBo(BoWord BoWord){
+	public Ctx FromBo(JoinedWord BoWord){
 		this.BoWord = BoWord;
 		Head = BoWord.PoWord.Head;
 		Lang = BoWord.PoWord.Lang;
+		WordForLearn = new WordForLearn(BoWord);
 		return this;
 	}
 
-	protected BoWord? _BoWord;
-	public BoWord? BoWord{
-		get{return _BoWord;}
-		set{SetProperty(ref _BoWord, value);}
+
+	protected IWordForLearn? _WordForLearn;
+	public IWordForLearn? WordForLearn{
+		get{return _WordForLearn;}
+		set{SetProperty(ref _WordForLearn, value);}
 	}
+
+
+	protected JoinedWord? _JWord;
+	public JoinedWord? BoWord{
+		get{return _JWord;}
+		set{SetProperty(ref _JWord, value);}
+	}
+
+
 
 
 	protected str _Head = "";
@@ -48,7 +61,10 @@ public partial class VmWordListCard: ViewModelBase{
 		set{SetProperty(ref _Lang, value);}
 	}
 
-
-
+	protected IBrush _BgColor = Brushes.Black;
+	public IBrush BgColor{
+		get{return _BgColor;}
+		set{SetProperty(ref _BgColor, value);}
+	}
 
 }

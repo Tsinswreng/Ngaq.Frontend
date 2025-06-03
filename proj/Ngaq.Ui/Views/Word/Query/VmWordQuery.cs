@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Avalonia.Media;
 using Ngaq.Core.Infra.Page;
 using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.UserCtx;
@@ -9,9 +10,23 @@ using Ngaq.Ui.Views.Word.WordInfo;
 
 namespace Ngaq.Ui.Views.Word.Query;
 using Ctx = VmWordQuery;
+
 public partial class VmWordQuery
 	:ViewModelBase
 {
+
+	public class Cfg_{
+		/// <summary>
+		/// 單詞條長按
+		/// </summary>
+		public i64 LongPressDurationMs = 100;
+		public IBrush ColorRmb = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 0, 80, 0));
+		public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 80, 0, 0));
+	}
+
+	public Cfg_ Cfg = new();
+
+
 
 	public VmWordQuery(){}
 
@@ -25,6 +40,8 @@ public partial class VmWordQuery
 
 	public ISvcWord? SvcWord;
 	public IUserCtxMgr? UserCtxMgr;
+
+	public LearnMgr LearnMgr = new ();
 
 
 	public static ObservableCollection<Ctx> Samples = [];
@@ -51,13 +68,25 @@ public partial class VmWordQuery
 		set{SetProperty(ref _VmWordInfo, value);}
 	}
 
-	public nil SetCurBoWord(BoWord BoWord){
+	public nil ClickVmWordCard(
+		VmWordListCard Vm
+	){
+		if(Vm.BoWord != null){
+			SetCurBoWord(Vm.BoWord);
+		}
+		Vm.BgColor = Cfg.ColorRmb;
+
+		return Nil;
+	}
+
+	public nil OnLongPressed(VmWordListCard Vm){
+		Vm.BgColor = Cfg.ColorFgt;
+		return Nil;
+	}
+
+
+	public nil SetCurBoWord(JoinedWord BoWord){
 		CurWordInfo.FromBo(BoWord);
-		// if(CurWordInfo != null){
-		// 	CurWordInfo.FromBo(BoWord);
-		// }
-		// CurWordInfo = new();
-		// CurWordInfo.FromBo(BoWord);
 		return Nil;
 	}
 
@@ -79,6 +108,7 @@ public partial class VmWordQuery
 				foreach(var BoWord in BoWords){
 					WordCards.Add(new VmWordListCard().FromBo(BoWord));
 				}
+				LearnMgr.Load(BoWords);
 			}
 		});
 		return Nil;

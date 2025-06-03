@@ -64,6 +64,7 @@ public class MsgPopup : UserControl{
 			//o.Placement = PlacementMode.Top;
 			o.IsOpen = true;
 			o.IsHitTestVisible = true;
+			//o.StaysOpen = false // 点击其它地方自动关闭
 		}
 		return Nil;
 	}

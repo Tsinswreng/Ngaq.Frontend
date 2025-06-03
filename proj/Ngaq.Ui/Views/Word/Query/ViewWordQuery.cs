@@ -2,8 +2,12 @@ namespace Ngaq.Ui.Views.Word.Query;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
@@ -25,6 +29,7 @@ public partial class ViewWordQuery
 		//Ctx = Ctx.Samples[0];
 		Ctx = App.GetSvc<Ctx>();
 		Style();
+		Menu = _Menu();
 		Render();
 	}
 
@@ -39,6 +44,35 @@ public partial class ViewWordQuery
 	}
 
 	IndexGrid Root = new IndexGrid(IsRow: true);
+	Panel Menu;
+
+	protected Panel _Menu(){
+		var R = new IndexGrid(IsRow: true);
+		R.Grid.IsVisible = false;
+		var Row1 = new IndexGrid(IsRow: false);
+		R.Add(Row1.Grid);
+		{var o = Row1.Grid;
+			o.ColumnDefinitions.AddRange([
+				new ColDef(1, GUT.Star),
+				new ColDef(1, GUT.Star),
+				new ColDef(1, GUT.Star),
+				new ColDef(1, GUT.Star),
+			]);
+		}
+		{{
+			var LoadWord = new SwipeLongPressBtn{Content = "Load"};
+			R.Add(LoadWord);
+			{var o = LoadWord;
+				o.Click += (s,e)=>{
+					Ctx?.GetAllWords();
+				};
+			}
+
+
+		}}
+
+		return R.Grid;
+	}
 
 
 	protected nil Render(){
@@ -46,6 +80,7 @@ public partial class ViewWordQuery
 		{var o = Root.Grid;
 			o.RowDefinitions.AddRange([
 				new RowDef(1, GUT.Auto),
+				new RowDef(1, GUT.Auto),//可隱藏ʹ菜單
 				new RowDef(4, GUT.Star),
 				new RowDef(1, GUT.Auto),//GridSplitter
 				new RowDef(5, GUT.Star),
@@ -54,6 +89,18 @@ public partial class ViewWordQuery
 		{{
 			var RowSearch = _RowSearch();
 			Root.Add(RowSearch);
+
+
+			var Canv = new Canvas();
+			Root.Add(Canv);
+			{var o = Canv;
+				o.Background = Brushes.Black;
+				o.ZIndex = 1;
+			}
+			Canv.Children.Add(Menu);
+			{var o = Menu;
+				o.Background = Brushes.Black;
+			}
 
 			var Scr = new ScrollViewer();
 			Root.Add(Scr);
@@ -97,11 +144,11 @@ public partial class ViewWordQuery
 			]);
 		}
 		{{
-			var TestBtn = new SwipeLongPressBtn{Content = "Test"};
-			Ans.Add(TestBtn);
-			{var o = TestBtn;
+			var MenuBtn = new SwipeLongPressBtn{Content = "···"};
+			Ans.Add(MenuBtn);
+			{var o = MenuBtn;
 				o.Click += (s,e)=>{
-					Ctx?.GetAllWords();
+					Menu.IsVisible = !Menu.IsVisible;
 				};
 			}
 
@@ -123,6 +170,9 @@ public partial class ViewWordQuery
 		{var o = Ans;
 		}
 		var Cnt = 1;
+		Ans.ItemsPanel = new FuncTemplate<Panel?>(()=>{
+			return new VirtualizingStackPanel();
+		});
 		Ans.ItemTemplate = new FuncDataTemplate<VmWordListCard>((VmWordCard,b)=>{
 			var Grid = new Grid();
 			{var o = Grid;
@@ -137,8 +187,9 @@ public partial class ViewWordQuery
 				var Index = new TextBlock();
 				Grid.Children.Add(Index);
 				{var o = Index;
-					o.Text = Cnt+"";
+					o.Text = Cnt+""; //TODO 虛擬化時此不準
 					o.HorizontalAlignment = HoriAlign.Right;
+					o.ZIndex = 999;
 				}
 				Cnt++;
 
@@ -146,6 +197,12 @@ public partial class ViewWordQuery
 				{var o = Btn;
 					o.HorizontalContentAlignment = HoriAlign.Left;
 					o.Styles.Add(new Style().NoMargin().NoPadding());
+					o.Bind(
+						Button.BackgroundProperty
+						,CBE.Mk<VmWordListCard>(x=>x.BgColor, Mode: BindingMode.OneWay)
+					);
+					o.LongPressDurationMs = Ctx?.Cfg.LongPressDurationMs??o.LongPressDurationMs;
+					StyBtnWordCard(o.Styles);
 				}
 				Grid.Children.Add(Btn);
 
@@ -159,8 +216,13 @@ public partial class ViewWordQuery
 						)
 					);
 					Btn.Click += (s,e)=>{
-						if(o?.Ctx?.BoWord != null){
-							Ctx?.SetCurBoWord(o.Ctx.BoWord);
+						if(o?.Ctx != null){
+							Ctx?.ClickVmWordCard(o.Ctx);
+						}
+					};
+					Btn.OnLongPressed += (s,e)=>{
+						if(o?.Ctx != null){
+							Ctx?.OnLongPressed(o.Ctx);
 						}
 					};
 				}
@@ -175,4 +237,41 @@ public partial class ViewWordQuery
 		var R = new ViewWordInfo();
 		return R;
 	}
+
+	Styles StyBtnWordCard(Styles s){
+		var PC = PsdCls.inst;
+		var Hover = new Style(x=>
+			x.Is<Button>()
+			.Class(PC.pointerover)
+			.Template()
+			.OfType<ContentPresenter>()
+		);
+		s.Add(Hover);
+		{var o = Hover;
+			o.Set(
+				BackgroundProperty
+				,CBE.Mk<VmWordListCard>(x=>x.BgColor)
+				//,Brushes.Transparent
+			);
+		}
+		var Pressed = new Style(x=>
+			x.Is<Button>()
+			.Class(PC.pressed)
+			.Template()
+			.OfType<ContentPresenter>()
+		);
+		s.Add(Pressed);
+		{var o = Pressed;
+			o.Set(
+				BackgroundProperty
+				//,Brushes.Yellow
+				,CBE.Mk<VmWordListCard>(x=>x.BgColor)
+			);
+		}
+
+		return s;
+
+	}
 }
+
+

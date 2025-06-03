@@ -44,8 +44,6 @@ public partial class ViewBottomBar
 	public ContentControl Cur{get; protected set;} = new ContentControl();
 
 
-
-
 	protected nil Render(){
 		Content = Root.Grid;
 		{var o = Root.Grid;
@@ -55,7 +53,6 @@ public partial class ViewBottomBar
 			]);
 		}
 		{{
-
 			Root.Add(Cur);
 			ItemsControl = new ItemsControl();
 			Root.Add(ItemsControl);
@@ -63,10 +60,6 @@ public partial class ViewBottomBar
 				o.ItemsSource = Items;
 				o.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 					return new UniformHorizontalPanel();
-					// return new StackPanel{
-					// 	Orientation = Orientation.Horizontal
-					// 	,
-					// };
 				});
 			}
 			ItemsControl.ItemTemplate = new FuncDataTemplate<Btn_Control>((Btn_Control, b)=>{
@@ -81,80 +74,45 @@ public partial class ViewBottomBar
 		return Nil;
 	}
 
-	// protected nil Render(){
-	// 	Content = Root.Grid;
-	// 	{
-	// 		var o = Root.Grid;
-	// 		o.ColumnDefinitions.AddRange([
-	// 			//new ColDef(1, GUT.Star),
-	// 			new ColDef(4, GUT.Auto),
-	// 			new ColDef(4, GUT.Auto),
-	// 			new ColDef(4, GUT.Auto),
-	// 			//new ColDef(1, GUT.Star),
-	// 		]);
-	// 	}
-	// 	{{
-	// 		var Learn = BarItem("Learn", "📖");
-	// 		Root.Add(Learn);
-
-	// 		var Settings = BarItem("Lib", "📚");
-	// 		Root.Add(Settings);
-
-	// 		var Me = BarItem("Me", "👤");
-	// 		Root.Add(Me);
-	// 	}}
-	// 	return Nil;
-	// }
-
-	protected Control BarItem(
-		str Title
-		,str IconStr
-	){
-		return StrBarItem.Inst.BarItem(Title, IconStr);
-	}
-
 }
 
 
 
-public class UniformHorizontalPanel : Panel
-{
-    protected override Size MeasureOverride(Size availableSize)
-    {
-        double maxHeight = 0;
-        int count = Children.Count;
-        if (count == 0)
-            return new Size();
+public class UniformHorizontalPanel : Panel{
+	protected override Size MeasureOverride(Size availableSize){
+		f64 maxHeight = 0;
+		i32 count = Children.Count;
+		if (count == 0)
+			return new Size();
 
-        double itemWidth = availableSize.Width / count; // 均分宽度
+		f64 itemWidth = availableSize.Width / count; // 均分宽度
 
-        foreach (var child in Children)
-        {
-            child.Measure(new Size(itemWidth, availableSize.Height));
-            if (child.DesiredSize.Height > maxHeight)
-                maxHeight = child.DesiredSize.Height;
-        }
+		foreach (var child in Children){
+			child.Measure(new Size(itemWidth, availableSize.Height));
+			if (child.DesiredSize.Height > maxHeight){
+				maxHeight = child.DesiredSize.Height;
+			}
+		}
 
-        return new Size(availableSize.Width, maxHeight);
-    }
+		return new Size(availableSize.Width, maxHeight);
+	}
 
-    protected override Size ArrangeOverride(Size finalSize)
-    {
-        int count = Children.Count;
-        if (count == 0)
-            return finalSize;
+	protected override Size ArrangeOverride(Size finalSize){
+		i32 count = Children.Count;
+		if (count == 0){
+			return finalSize;
+		}
 
-        double itemWidth = finalSize.Width / count;
+		f64 itemWidth = finalSize.Width / count;
 
-        double x = 0;
-        foreach (var child in Children)
-        {
-            // 按均分宽度排列，每个元素宽度相同，高度为自己的DesiredSize.Height（或者 finalSize.Height）
-            Rect rect = new Rect(x, 0, itemWidth, finalSize.Height);
-            child.Arrange(rect);
-            x += itemWidth;
-        }
+		f64 x = 0;
+		foreach (var child in Children){
+			// 按均分宽度排列，每个元素宽度相同，高度为自己的DesiredSize.Height（或者 finalSize.Height）
+			Rect rect = new Rect(x, 0, itemWidth, finalSize.Height);
+			child.Arrange(rect);
+			x += itemWidth;
+		}
 
-        return finalSize;
-    }
+		return finalSize;
+	}
 }

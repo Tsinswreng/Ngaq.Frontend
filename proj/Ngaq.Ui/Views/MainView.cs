@@ -1,8 +1,10 @@
 using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
+using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.BottomBar;
@@ -24,5 +26,23 @@ public partial class MainView : UserControl {
 		//Content = new ViewWordQuery();
 		//Content = new ViewBottomBar();
 		Content = new ViewHome();
+		// var Btn = new Button { Content = "Hello World!" };
+		// Content = Btn;
+		// var Pressed = new Style(x=>
+		// 	x.Is<Button>()
+		// 	.Class(":pressed")
+		// 	.Template()
+		// 	.OfType<ContentPresenter>()
+		// 	//.Name("PART_ContentPresenter")
+		// 	//"PART_ContentPresenter"
+		// );
+		// //var Pressed = new Style(x => x.OfType<Button>().Class(":pressed").Template().Name("PART_ContentPresenter"));
+		// Btn.Styles.Add(Pressed);
+		// {var o = Pressed;
+		// 	o.Set(
+		// 		BackgroundProperty
+		// 		,Brushes.Yellow
+		// 	);
+		// }
 	}
 }

@@ -28,7 +28,7 @@ public partial class VmWordInfo
 		}
 	}
 
-	public Ctx FromBo(BoWord BoWord){
+	public Ctx FromBo(JoinedWord BoWord){
 		this.BoWord = BoWord;
 		Id = BoWord.Id.ToString();
 		Head = BoWord.PoWord.Head;
@@ -49,7 +49,7 @@ public partial class VmWordInfo
 		return this;
 	}
 
-	public BoWord? BoWord{get;set;}
+	public JoinedWord? BoWord{get;set;}
 
 	protected str _Id = "";
 	public str Id{

@@ -55,7 +55,16 @@ public class LongPressBtnFn
 	protected bool _IsLongPressTriggered;
 
 	protected bool _HasLongPressed = false;
-	public i64 LongPressDurationMs{get;set;} = 500; // in milliseconds
+	protected i64 _LongPressDurationMs = 500;
+	public i64 LongPressDurationMs{
+		get{return _LongPressDurationMs;}
+		set{
+			_LongPressDurationMs = value;
+			if(_PressTimer != null){
+				_PressTimer.Interval = TimeSpan.FromMilliseconds(value);
+			}
+		}
+	}
 	//public Func<zero> onClick{get;set;} = ()=>0; // 点击事件
 	public Func<nil> OnLongPress{get;set;} = ()=>0; // 长按事件
 
