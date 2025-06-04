@@ -81,7 +81,7 @@ public partial class ViewWordListCard
 			]);
 		}
 		{{
-			var Head = new SelectableTextBlock();
+			var Head = new TextBlock();
 			HeadBox.Add(Head);
 			{var o = Head;
 				o.VerticalAlignment = VertAlign.Center;
@@ -120,7 +120,7 @@ public partial class ViewWordListCard
 					,CBE.Mk<Ctx>(x=>x.SavedLearnRecords
 						,Converter: new SimpleFnConvtr<IList<ILearnRecord>, str>(x=>{
 							if(x.Count > 0){
-								return Ctx.LearnToSymbol(x[^1].Value);
+								return Ctx.LearnToSymbol(x[^1].Learn);
 							}
 							throw new FatalLogicErr("No learn record found.");
 						})

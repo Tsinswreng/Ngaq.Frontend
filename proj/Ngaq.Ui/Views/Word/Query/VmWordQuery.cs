@@ -21,34 +21,38 @@ public partial class VmWordQuery
 		/// 單詞條長按
 		/// </summary>
 		public i64 LongPressDurationMs = 100;
+		public IBrush ColorNone = Brushes.Transparent;
 		public IBrush ColorRmb = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 0, 80, 0));
 		public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 80, 0, 0));
 	}
 
 	public Cfg_ Cfg = new();
 
-	public VmWordQuery(){
-		_Init();
-	}
+	// public VmWordQuery(){
+	// 	_Init();
+	// }
 
 	public VmWordQuery(
 		ISvcWord SvcWord
 		,IUserCtxMgr? UserCtxMgr
+		,MgrLearn MgrLearn
 	){
 		this.SvcWord = SvcWord;
 		this.UserCtxMgr = UserCtxMgr;
+		this.MgrLearn = MgrLearn;
 		_Init();
 	}
 
 	public ISvcWord? SvcWord;
 	public IUserCtxMgr? UserCtxMgr;
 
-	public LearnMgr LearnMgr = new ();
+	public MgrLearn MgrLearn{get;set;}
 	nil _Init(){
 		return _InitLearnMgr();
 	}
 	nil _InitLearnMgr(){
-		LearnMgr.OnErr += (s,e)=>{
+		MgrLearn.OnErr += (s,e)=>{
+			System.Console.WriteLine(e);//t
 			AddMsg(App.ErrI18n?.Parse(e.Err)??e.Err+"");
 			ShowMsg();
 		};
@@ -58,7 +62,7 @@ public partial class VmWordQuery
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmWordQuery(){
-		#if DEBUG
+		#if false//||DEBUG
 		{
 			var o = new Ctx();
 			Samples.Add(o);
@@ -82,27 +86,40 @@ public partial class VmWordQuery
 		set{SetProperty(ref _VmWordInfo, value);}
 	}
 
-	protected nil _Learn(VmWordListCard Vm, Learn Learn){
+	protected i64 _LearnOrUndo(VmWordListCard Vm, Learn Learn){
 		if(Vm.WordForLearn == null){
-			return Nil;
+			return (i64)MgrLearn.ELearnOpRtn.Invalid;
 		}
-		LearnMgr.Learn(Vm.WordForLearn, Learn);
+		var R = MgrLearn.LearnOrUndo(Vm.WordForLearn, Learn);
 		SetCurVmWord(Vm);
-		return Nil;
-
+		return R;
 	}
+
+	// IBrush MatchBg(i64 ELearnOptRtn){
+	// 	if(ELearnOptRtn == (i64)MgrLearn.ELearnOpRtn.Learn){
+	// 		return Cfg.ColorRmb;
+	// 	}else if(ELearnOptRtn == (i64)MgrLearn.ELearnOpRtn.Undo){
+	// 		return Cfg.ColorNone;
+	// 	}
+	// }
 
 	public nil ClickVmWordCard(
 		VmWordListCard Vm
 	){
-		_Learn(Vm, ELearn.Inst.Rmb);
-		Vm.BgColor = Cfg.ColorRmb;
+		if(_LearnOrUndo(Vm, ELearn.Inst.Rmb) == (i64)MgrLearn.ELearnOpRtn.Learn){
+			Vm.BgColor = Cfg.ColorRmb;
+		}else{
+			Vm.BgColor = Cfg.ColorNone;
+		}
 		return Nil;
 	}
 
 	public nil OnLongPressed(VmWordListCard Vm){
-		_Learn(Vm, ELearn.Inst.Fgt);
-		Vm.BgColor = Cfg.ColorFgt;
+		if(_LearnOrUndo(Vm, ELearn.Inst.Fgt) == (i64)MgrLearn.ELearnOpRtn.Learn){
+			Vm.BgColor = Cfg.ColorFgt;
+		}else{
+			Vm.BgColor = Cfg.ColorNone;
+		}
 		return Nil;
 	}
 
@@ -138,7 +155,7 @@ public partial class VmWordQuery
 				foreach(var BoWord in BoWords){
 					WordCards.Add(new VmWordListCard().FromJnWord(BoWord));
 				}
-				LearnMgr.Load(BoWords);
+				MgrLearn.Load(BoWords);
 			}
 		});
 		return Nil;
@@ -146,7 +163,7 @@ public partial class VmWordQuery
 
 	public nil Save(){
 		CT Ct = default;
-		LearnMgr.SaveAsy(Ct).ContinueWith(d=>{
+		MgrLearn.SaveAsy(Ct).ContinueWith(d=>{
 			if(d.IsFaulted){
 				System.Console.WriteLine(d.Exception.ToString());//t
 				AddMsg(d.Exception.ToString());

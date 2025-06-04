@@ -41,6 +41,7 @@ sealed class Program
 		svc.AddScoped<DaoSqlWord, DaoSqlWord>();
 		svc.AddScoped<ISqlCmdMkr, SqlCmdMkr>();
 		svc.AddSingleton<IDbConnection>(AppTblInfo.Inst.DbConnection);
+		svc.AddTransient<MgrLearn, MgrLearn>();
 		svc.AddSingleton<ITableMgr>(AppTableMgr.Inst);
 		// svc.AddScoped(
 		// 	typeof(RepoSql<>)
@@ -61,6 +62,7 @@ svc.AddScoped<RepoSql<PoLearn,	IdLearn>>();
 		svc.AddScoped<IGetTxn, SqlCmdMkr>();
 		svc.AddTransient<VmAddWord>();
 		svc.AddTransient<VmWordQuery>();
+
 
 		var servicesProvider = svc.BuildServiceProvider();
 		BuildAvaloniaApp()
