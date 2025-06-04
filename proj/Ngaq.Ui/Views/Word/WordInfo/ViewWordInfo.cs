@@ -163,7 +163,7 @@ public partial class ViewWordInfo
 					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 						//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 						Mode = BindingMode.OneWay
-						,Converter = new FnConvtr<IDictionary<str, IList<str>>, str>(
+						,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str>(
 						x=>{
 							var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.summary);
 							x.TryGetValue(Key, out var v);
@@ -205,7 +205,7 @@ public partial class ViewWordInfo
 				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 					Mode = BindingMode.OneWay
 					//,Converter = ConvMultiDictToList(KeysProp.Inst.description)
-					,Converter = new FnConvtr<IDictionary<str, IList<str>>, IList<str>>(
+					,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, IList<str>>(
 						x=>{
 							var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.description);
 							x.TryGetValue(Key, out var v);

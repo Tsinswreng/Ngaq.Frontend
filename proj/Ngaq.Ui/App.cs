@@ -15,6 +15,7 @@ using Avalonia.Controls;
 using Tsinswreng.Avalonia.Tools;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
+using Ngaq.Core.Infra.Errors;
 
 namespace Ngaq.Ui;
 
@@ -30,6 +31,8 @@ public partial class App : Application {
 	public static void ConfigureServices(IServiceProvider serviceProvider){
 		ServiceProvider = serviceProvider;
 	}
+
+	public static IErrI18n? ErrI18n;
 
 
 	public override void Initialize() {

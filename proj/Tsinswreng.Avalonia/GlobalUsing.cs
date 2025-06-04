@@ -1,3 +1,5 @@
+global using CT = System.Threading.CancellationToken;
+
 global using BindingMode = Avalonia.Data.BindingMode;
 
 #region Grid

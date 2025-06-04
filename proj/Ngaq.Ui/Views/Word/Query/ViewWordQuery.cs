@@ -61,10 +61,18 @@ public partial class ViewWordQuery
 		}
 		{{
 			var LoadWord = new SwipeLongPressBtn{Content = "Load"};
-			R.Add(LoadWord);
+			Row1.Add(LoadWord);
 			{var o = LoadWord;
 				o.Click += (s,e)=>{
 					Ctx?.GetAllWords();
+				};
+			}
+
+			var Save = new SwipeLongPressBtn{Content = "Save"};
+			Row1.Add(Save);
+			{var o = Save;
+				o.Click += (s,e)=>{
+					Ctx?.Save();
 				};
 			}
 
@@ -184,18 +192,20 @@ public partial class ViewWordQuery
 				if(Cnt > Ctx?.WordCards.Count){
 					Cnt = 1;
 				}
-				var Index = new TextBlock();
-				Grid.Children.Add(Index);
-				{var o = Index;
-					o.Text = Cnt+""; //TODO 虛擬化時此不準
-					o.HorizontalAlignment = HoriAlign.Right;
-					o.ZIndex = 999;
-				}
+				// var Index = new TextBlock();
+				// Grid.Children.Add(Index);
+				// {var o = Index;
+				// 	o.Text = Cnt+""; //TODO 虛擬化時此不準
+				// 	o.HorizontalAlignment = HoriAlign.Right;
+				// 	o.ZIndex = 999;
+				// }
 				Cnt++;
 
 				var Btn = new SwipeLongPressBtn();
+				Grid.Children.Add(Btn);
 				{var o = Btn;
-					o.HorizontalContentAlignment = HoriAlign.Left;
+					//o.HorizontalContentAlignment = HoriAlign.Left;
+					o.HorizontalContentAlignment = HoriAlign.Stretch;
 					o.Styles.Add(new Style().NoMargin().NoPadding());
 					o.Bind(
 						Button.BackgroundProperty
@@ -204,11 +214,13 @@ public partial class ViewWordQuery
 					o.LongPressDurationMs = Ctx?.Cfg.LongPressDurationMs??o.LongPressDurationMs;
 					StyBtnWordCard(o.Styles);
 				}
-				Grid.Children.Add(Btn);
+
 
 				var Card = new ViewWordListCard{};
 				Btn.Content = Card;
 				{var o = Card;
+					o.VerticalAlignment = VertAlign.Stretch;
+					o.HorizontalAlignment = HoriAlign.Stretch;
 					o.Bind(
 						Control.DataContextProperty
 						,CBE.Mk<VmWordListCard>(x=>x

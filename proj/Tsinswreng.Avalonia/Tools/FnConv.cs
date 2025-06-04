@@ -4,16 +4,17 @@ using Avalonia.Data.Converters;
 
 namespace Tsinswreng.Avalonia.Tools;
 
-public class FnConvtr<TIn, TRet>
+
+public class SimpleFnConvtr<TIn, TRet>
 	:IValueConverter
 {
 	public Func<TIn, TRet>? FnConv{get;set;}
 	public Func<TRet, TIn>? FnBack{get;set;}
-		public FnConvtr(Func<TIn, TRet> FnConv){
+		public SimpleFnConvtr(Func<TIn, TRet> FnConv){
 			this.FnConv = FnConv;
 		}
 
-	public FnConvtr(
+	public SimpleFnConvtr(
 		Func<TIn, TRet> FnConv
 		,Func<TRet, TIn> FnBack
 	){

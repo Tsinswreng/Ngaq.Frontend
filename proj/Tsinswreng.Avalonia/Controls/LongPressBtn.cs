@@ -6,6 +6,7 @@ using Avalonia.Threading;
 
 namespace Tsinswreng.Avalonia.Controls;
 using IF;
+//TODO 區分ʃᶤ長按ʹ鍵 左鍵抑右鍵
 public class LongPressBtn
 	:OpenButton
 	,ILongPressBtn

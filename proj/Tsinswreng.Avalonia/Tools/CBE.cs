@@ -43,6 +43,7 @@ public class CBE : CompiledBindingExtension{
 		Expression<Func<T, object?>> PropertySelector
 		,BindingMode Mode = default
 		,IValueConverter? Converter = default
+		,object? ConverterParameter = default
 		,CompiledBindingPath? Path = default
 		,object? Source = default
 		,Type? DataType = default
@@ -53,6 +54,7 @@ public class CBE : CompiledBindingExtension{
 		if(Path != null){r.Path = Path;}
 		if(Source!= null){r.Source = Source;}
 		if(DataType!= null){r.DataType = DataType;}
+		if(ConverterParameter != null){r.ConverterParameter = ConverterParameter;}
 		return r;
 	}
 

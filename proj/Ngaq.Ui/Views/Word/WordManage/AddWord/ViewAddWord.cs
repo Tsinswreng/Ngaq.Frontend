@@ -94,7 +94,7 @@ public partial class ViewAddWord
 					b.Bind(
 						TextBlock.TextProperty
 						,CBE.Mk<Ctx>(x=>x.Msgs
-							,Converter: new FnConvtr<ObservableCollection<str>, str>(y=>{
+							,Converter: new SimpleFnConvtr<ObservableCollection<str>, str>(y=>{
 									var ans = string.Join("\n", y);
 									return ans;
 								}
