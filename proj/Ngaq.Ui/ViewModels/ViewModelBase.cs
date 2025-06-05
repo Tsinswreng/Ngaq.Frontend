@@ -1,6 +1,8 @@
 ﻿#define Impl
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Tsinswreng.Avalonia.Navigation;
 
@@ -60,5 +62,27 @@ public abstract class ViewModelBase
 		return Nil;
 	}
 
+/// <summary>
+/// 地址未變但內容ˋ變旹 適用此
+/// </summary>
+/// <typeparam name="T"></typeparam>
+/// <param name="field"></param>
+/// <param name="newValue"></param>
+/// <param name="propertyName"></param>
+/// <returns></returns>
+	public bool ForceSetProp<T>(
+		[NotNullIfNotNull(nameof(newValue))] ref T field
+		,T newValue
+		,[CallerMemberName] string? propertyName = null
+	){
+		OnPropertyChanging(propertyName);
+		field = newValue;
+		OnPropertyChanged(propertyName);
+		return true;
+	}
 
+	// void test(){
+	// 	ForceSetProperty(ref _IsShowMsg, true);
+	// }
 }
+

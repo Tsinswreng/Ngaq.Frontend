@@ -11,6 +11,7 @@ using Ngaq.Core.Service.Word;
 
 //using Microsoft.CodeAnalysis.Text;
 using Ngaq.Core.Tools;
+using Ngaq.Core.Word;
 using Ngaq.Db;
 using Ngaq.Local.Dao;
 using Ngaq.Local.Db;

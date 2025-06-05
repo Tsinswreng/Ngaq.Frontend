@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Ngaq.Core.Infra.Core;
-using Ngaq.Core.Service.Word.Learn_.Models;
+using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Converters;
 using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
@@ -19,8 +19,8 @@ public partial class ViewWordListCard
 	}
 
 	public ViewWordListCard(){
-		//Ctx = new Ctx();
-		Ctx = Ctx.Samples[0];
+		Ctx = new Ctx();
+		//Ctx = Ctx.Samples[0];
 		Style();
 		Render();
 	}
@@ -118,12 +118,15 @@ public partial class ViewWordListCard
 					TextBlock.TextProperty
 					//LearnRecord不應潙空集合、緣添旹必得'add'
 					,CBE.Mk<Ctx>(x=>x.SavedLearnRecords
-						,Converter: new SimpleFnConvtr<IList<ILearnRecord>, str>(x=>{
+						,Converter: new ParamFnConvtr<IList<ILearnRecord>, str>((x, p)=>{
 							if(x.Count > 0){
 								return Ctx.LearnToSymbol(x[^1].Learn);
 							}
-							throw new FatalLogicErr("No learn record found.");
+							return "";
+							// var Word = (Ctx)p!;
+							// throw new FatalLogicErr("No learn record found. Word:"+Word.Lang+":"+Word.Head);
 						})
+						,ConverterParameter: Ctx
 					)
 				);
 			}

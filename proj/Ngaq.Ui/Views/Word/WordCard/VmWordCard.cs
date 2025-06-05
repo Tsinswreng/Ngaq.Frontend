@@ -1,11 +1,12 @@
 namespace Ngaq.Ui.Views.Word.WordCard;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Ngaq.Core.Infra.Core;
 using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.Samples.Word;
-using Ngaq.Core.Service.Word.Learn_.Models;
+using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.ViewModels;
 using Tsinswreng.Avalonia.Tools;
 using Ctx = VmWordListCard;
@@ -29,17 +30,40 @@ public partial class VmWordListCard
 
 	public Ctx FromJnWord(JnWord JnWord){
 		this.JnWord = JnWord;
-		Head = JnWord.PoWord.Head;
-		Lang = JnWord.PoWord.Lang;
 		WordForLearn = new WordForLearn(JnWord);
+		Init();
 		return this;
 	}
 
+	nil Init(){
+		if(Bo == null){
+			return Nil;
+		}
+		Head = Bo.Head;
+		Lang = Bo.Lang;
+		Learn_Records = Bo.Learn_Records;
+		SavedLearnRecords = Bo.SavedLearnRecords;
+		LastLearnedTime = Bo.LastLearnedTime_();
+		return Nil;
+	}
 
-	protected IWordForLearn _WordForLearn = null!;
-	public IWordForLearn WordForLearn{
+	void OnBoChanged(object? sender, PropertyChangedEventArgs e){
+		Init();
+	}
+
+	protected IWordForLearn? _WordForLearn;
+	public IWordForLearn? WordForLearn{
 		get{return _WordForLearn;}
-		set{SetProperty(ref _WordForLearn, value);}
+		set{
+			ForceSetProp(ref _WordForLearn, value);
+			if(value == null){return;}
+			_WordForLearn!.PropertyChanged += OnBoChanged;
+		}
+	}
+
+	protected IWordForLearn? Bo{
+		get{return WordForLearn;}
+		set{WordForLearn = value;}
 	}
 
 
@@ -49,19 +73,22 @@ public partial class VmWordListCard
 		set{SetProperty(ref _JWord, value);}
 	}
 
-
-
-
 	protected str _Head = "";
 	public str Head{
 		get{return _Head;}
-		set{SetProperty(ref _Head, value);}
+		set{
+			if(Bo!=null){Bo.Head = value;}
+			SetProperty(ref _Head, value);
+		}
 	}
 
 	protected str _Lang = "";
 	public str Lang{
 		get{return _Lang;}
-		set{SetProperty(ref _Lang, value);}
+		set{
+			if(Bo!=null){Bo.Lang = value;}
+			SetProperty(ref _Lang, value);
+		}
 	}
 
 	protected IBrush _BgColor = Brushes.Black;
@@ -70,21 +97,31 @@ public partial class VmWordListCard
 		set{SetProperty(ref _BgColor, value);}
 	}
 
-
+	protected IDictionary<Learn, IList<ILearnRecord>> _Learn_Records = new Dictionary<Learn, IList<ILearnRecord>>();
 	public IDictionary<Learn, IList<ILearnRecord>> Learn_Records{
-		get{return WordForLearn.Learn_Records;}
-		set{WordForLearn.Learn_Records = value;}
+		get{return _Learn_Records;}
+		set{
+			if(Bo!=null){Bo.Learn_Records = value;}
+			ForceSetProp(ref _Learn_Records, value);
+			// SetProperty(ref _Learn_Records, value);
+			// OnPropertyChanged(nameof(Learn_Records));
+		}
 	}
 
+	protected IList<ILearnRecord> _SavedLearnRecords = new List<ILearnRecord>();
 	public IList<ILearnRecord> SavedLearnRecords{
-		get{return WordForLearn.SavedLearnRecords;}
-		set{WordForLearn.SavedLearnRecords = value;}
+		get{return _SavedLearnRecords;}
+		set{
+			if(Bo!=null){Bo.SavedLearnRecords = value;}
+			//OnPropertyChanged(nameof(_SavedLearnRecords));
+			ForceSetProp(ref _SavedLearnRecords, value);
+		}
 	}
 
-	//protected i64 _LastLearnedTime = 0;
+	protected i64 _LastLearnedTime = 0;
 	public i64 LastLearnedTime{
-		get{return WordForLearn.LastLearnedTime_();}
-		//set{SetProperty(ref _LastLearnedTime, value);}
+		get{return _LastLearnedTime;}
+		set{SetProperty(ref _LastLearnedTime, value);}
 	}
 
 	public static str LearnToSymbol(Learn Learn){

@@ -4,7 +4,8 @@ using Ngaq.Core.Infra.Page;
 using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Service.Word;
-using Ngaq.Core.Service.Word.Learn_.Models;
+using Ngaq.Core.Word;
+using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
@@ -53,6 +54,7 @@ public partial class VmWordQuery
 	nil _InitLearnMgr(){
 		MgrLearn.OnErr += (s,e)=>{
 			System.Console.WriteLine(e);//t
+			System.Console.WriteLine(e.Err);
 			AddMsg(App.ErrI18n?.Parse(e.Err)??e.Err+"");
 			ShowMsg();
 		};
