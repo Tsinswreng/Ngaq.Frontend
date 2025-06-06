@@ -4,7 +4,7 @@ using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Core.Infra.Db;
 using Ngaq.Core.Model.Po.Kv;
-using Ngaq.Core.Model.Po.Learn;
+using Ngaq.Core.Model.Po.Learn_;
 using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Service.Word;
@@ -12,10 +12,12 @@ using Ngaq.Core.Service.Word;
 //using Microsoft.CodeAnalysis.Text;
 using Ngaq.Core.Tools;
 using Ngaq.Core.Word;
+using Ngaq.Core.Word.Svc;
 using Ngaq.Db;
 using Ngaq.Local.Dao;
 using Ngaq.Local.Db;
 using Ngaq.Local.Service.Word;
+using Ngaq.Local.Word.Svc;
 using Ngaq.Ui;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
@@ -59,10 +61,12 @@ svc.AddScoped<RepoSql<PoLearn,	IdLearn>>();
 		svc.AddScoped<ITxnRunner, SqlTxnRunner>();
 		svc.AddScoped<ISvcParseWordList, SvcParseWordList>();
 		svc.AddScoped<ISvcWord, SvcWord>();
+		svc.AddScoped<IWeightCalctr, SvcWeight>();
 		svc.AddScoped<IUserCtxMgr, UserCtxMgr>();
 		svc.AddScoped<IGetTxn, SqlCmdMkr>();
 		svc.AddTransient<VmAddWord>();
 		svc.AddTransient<VmWordQuery>();
+
 
 
 		var servicesProvider = svc.BuildServiceProvider();

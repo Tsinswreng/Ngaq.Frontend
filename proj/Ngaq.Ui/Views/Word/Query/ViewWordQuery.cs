@@ -57,14 +57,15 @@ public partial class ViewWordQuery
 				new ColDef(1, GUT.Star),
 				new ColDef(1, GUT.Star),
 				new ColDef(1, GUT.Star),
+				new ColDef(1, GUT.Star),
 			]);
 		}
 		{{
-			var LoadWord = new SwipeLongPressBtn{Content = "Load"};
+			var LoadWord = new SwipeLongPressBtn{Content = "Start"};
 			Row1.Add(LoadWord);
 			{var o = LoadWord;
 				o.Click += (s,e)=>{
-					Ctx?.GetAllWords();
+					Ctx?.LoadEtStart();
 				};
 			}
 
@@ -72,7 +73,16 @@ public partial class ViewWordQuery
 			Row1.Add(Save);
 			{var o = Save;
 				o.Click += (s,e)=>{
-					Ctx?.Save();
+					Ctx?.SaveEtRestart();
+				};
+			}
+
+			var Reload = new SwipeLongPressBtn{Content = "Reset"};
+			Row1.Add(Reload);
+			{
+				var o = Reload;
+				o.Click += (s,e)=>{
+					Ctx?.Reset();
 				};
 			}
 

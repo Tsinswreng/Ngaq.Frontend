@@ -23,4 +23,7 @@
 		<PackageVersion Include="Irihi.Ursa.Themes.Semi" Version="1.9.0" />
 		<PackageVersion Include="Semi.Avalonia" Version="11.2.1.5" />
 	</ItemGroup>
+	<ItemGroup>
+		<PackageVersion Include="System.Linq.Async" Version="6.0.1" />
+	</ItemGroup>
 </Project>

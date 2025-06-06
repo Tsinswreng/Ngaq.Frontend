@@ -108,6 +108,8 @@ public partial class ViewWordListCard
 				new ColDef(1, GUT.Auto),//fgt
 				new ColDef(1, GUT.Auto),//tab
 				new ColDef(1, GUT.Auto),//last review time
+				new ColDef(1, GUT.Auto),//tab
+				new ColDef(1, GUT.Auto),//weight
 			]);
 		}
 		{{
@@ -168,6 +170,21 @@ public partial class ViewWordListCard
 							return Ctx.FormatUnixMsDiff(Diff);
 						})
 					)
+				);
+			}
+			R.Add(new TextBlock{Text = "\t"});
+			var Weight = new TextBlock();
+			R.Add(Weight);
+			{var o = Weight;
+				o.Bind(
+					TextBlock.TextProperty
+					,CBE.Mk<Ctx>(x=>x.Weight
+						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
+							Ctx.FmtNum(x??0, 2)
+						)
+						//,ConverterParameter: "Debug"//t
+					)
+
 				);
 			}
 		}}

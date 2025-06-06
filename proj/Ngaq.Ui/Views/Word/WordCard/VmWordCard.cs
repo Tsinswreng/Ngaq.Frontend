@@ -16,21 +16,30 @@ public partial class VmWordListCard
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmWordListCard(){
-		{
-			var o = new Ctx();
-			Samples.Add(o);
-			o.FromJnWord(SampleWord.Inst.Samples[0]);
-		}
-		{
-			var o = new Ctx();
-			Samples.Add(o);
-			o.FromJnWord(SampleWord.Inst.Samples[1]);
-		}
+		#if DEBUG
+		// {
+		// 	var o = new Ctx();
+		// 	Samples.Add(o);
+		// 	o.FromJnWord(SampleWord.Inst.Samples[0]);
+		// }
+		// {
+		// 	var o = new Ctx();
+		// 	Samples.Add(o);
+		// 	o.FromJnWord(SampleWord.Inst.Samples[1]);
+		// }
+		#endif
 	}
 
-	public Ctx FromJnWord(JnWord JnWord){
-		this.JnWord = JnWord;
-		WordForLearn = new WordForLearn(JnWord);
+	// [Obsolete]
+	// public Ctx FromJnWord(JnWord JnWord){
+	// 	this.JnWord = JnWord;
+	// 	WordForLearn = new WordForLearn(JnWord);
+	// 	Init();
+	// 	return this;
+	// }
+
+	public Ctx FromIWordForLearn(IWordForLearn Word){
+		this.WordForLearn = Word;
 		Init();
 		return this;
 	}
@@ -41,8 +50,10 @@ public partial class VmWordListCard
 		}
 		Head = Bo.Head;
 		Lang = Bo.Lang;
+		Index = Bo.Index;
+		Weight = Bo.Weight;
 		Learn_Records = Bo.Learn_Records;
-		SavedLearnRecords = Bo.SavedLearnRecords;
+		SavedLearnRecords = Bo.LearnRecords;
 		LastLearnedTime = Bo.LastLearnedTime_();
 		return Nil;
 	}
@@ -67,11 +78,11 @@ public partial class VmWordListCard
 	}
 
 
-	protected JnWord? _JWord;
-	public JnWord? JnWord{
-		get{return _JWord;}
-		set{SetProperty(ref _JWord, value);}
-	}
+	// protected JnWord? _JWord;
+	// public JnWord? JnWord{
+	// 	get{return _JWord;}
+	// 	set{SetProperty(ref _JWord, value);}
+	// }
 
 	protected str _Head = "";
 	public str Head{
@@ -90,6 +101,28 @@ public partial class VmWordListCard
 			SetProperty(ref _Lang, value);
 		}
 	}
+
+
+	protected u64? _Index;
+	public u64? Index{
+		get{return _Index;}
+		set{
+			if(Bo!=null){Bo.Index = value;}
+			SetProperty(ref _Index, value);
+		}
+	}
+
+
+	protected f64? _Weight;
+	public f64? Weight{
+		get{return _Weight;}
+		set{
+			if(Bo!=null){Bo.Weight = value;}
+			SetProperty(ref _Weight, value);
+		}
+	}
+
+
 
 	protected IBrush _BgColor = Brushes.Black;
 	public IBrush BgColor{
@@ -112,7 +145,7 @@ public partial class VmWordListCard
 	public IList<ILearnRecord> SavedLearnRecords{
 		get{return _SavedLearnRecords;}
 		set{
-			if(Bo!=null){Bo.SavedLearnRecords = value;}
+			if(Bo!=null){Bo.LearnRecords = value;}
 			//OnPropertyChanged(nameof(_SavedLearnRecords));
 			ForceSetProp(ref _SavedLearnRecords, value);
 		}
@@ -156,6 +189,29 @@ public partial class VmWordListCard
 			return ToI64(H)+"h";
 		}
 		return ToI64(D)+"d";
+	}
+
+	public static string FmtNum(double num, int fix){
+		string exp = num.ToString("e");  // 例如 "1.030000e+003"
+		var parts = exp.Split('e');      // ["1.030000", "+003"]
+
+		double baseValue = double.Parse(parts[0]);
+		baseValue = Math.Round(baseValue, fix);
+		string baseStr = baseValue.ToString($"F{fix}");
+
+		string expPart = parts[1];       // "+003" or "-004"
+
+		// 提取符号和数字部分
+		char sign = expPart[0];
+		string digits = expPart.Substring(1);
+
+		// 转成整数去掉前导0
+		int expNum = int.Parse(digits);
+
+		// 拼接指数，去掉多余的零，比如 "e+003" -> "e3"
+		string result = baseStr + "e" + (sign == '+' ? "+" : "-") + expNum.ToString();
+
+		return result;
 	}
 
 

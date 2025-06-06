@@ -9,6 +9,7 @@ using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
+using Tsinswreng.CsCore.Tools;
 
 namespace Ngaq.Ui.Views.Word.Query;
 using Ctx = VmWordQuery;
@@ -35,7 +36,7 @@ public partial class VmWordQuery
 
 	public VmWordQuery(
 		ISvcWord SvcWord
-		,IUserCtxMgr? UserCtxMgr
+		,IUserCtxMgr UserCtxMgr
 		,MgrLearn MgrLearn
 	){
 		this.SvcWord = SvcWord;
@@ -44,8 +45,8 @@ public partial class VmWordQuery
 		_Init();
 	}
 
-	public ISvcWord? SvcWord;
-	public IUserCtxMgr? UserCtxMgr;
+	public ISvcWord SvcWord;
+	public IUserCtxMgr UserCtxMgr;
 
 	public MgrLearn MgrLearn{get;set;}
 	nil _Init(){
@@ -126,42 +127,101 @@ public partial class VmWordQuery
 	}
 
 	public nil SetCurVmWord(VmWordListCard Vm){
-		if(Vm.JnWord == null){
+		if(Vm.WordForLearn == null){
 			return Nil;
 		}
-		CurWordInfo.FromBo(Vm.JnWord);
+		CurWordInfo.FromIWordForLearn(Vm.WordForLearn);
 		return Nil;
 	}
 
+	public async Task<nil> LoadEtStartAsy(CT Ct){
+		if(!MgrLearn.State.OperationStatus.Load){
+			var Page = await SvcWord.PageBoWord(
+				UserCtxMgr.GetUserCtx()
+				,PageQuery.SelectAll()
+				,Ct
+			);
 
-	// public nil SetCurWord(JoinedWord JWord){
-	// 	CurWordInfo.FromBo(JWord);
-	// 	return Nil;
-	// }
+			var Words = Page.DataAsy?.ToBlockingEnumerable(Ct)??[];
+			MgrLearn.Load(Words);
+		}
+		await MgrLearn.StartAsy(Ct);
+		RenderWordList();
+		return Nil;
+	}
 
-	public nil GetAllWords(){
-		CancellationToken Ct = default;
-		SvcWord?.PageBoWord(
-			UserCtxMgr?.GetUserCtx()
-			,PageQuery.SelectAll()
-			,Ct
-		).ContinueWith(d=>{
+	public async Task<nil> SaveEtRestartAsy(CT Ct){
+		await MgrLearn.SaveAsy(Ct);
+		await MgrLearn.StartAsy(Ct);
+		RenderWordList();
+		return Nil;
+	}
+
+	public nil RenderWordList(){
+		WordCards.Clear();
+		MgrLearn.State.WordsToLearn.Select(x=>{
+			WordCards.Add(new VmWordListCard().FromIWordForLearn(x));
+			return 0;
+		}).ToList();
+		return Nil;
+	}
+
+	public nil LoadEtStart(){
+		CT Ct = default;
+		LoadEtStartAsy(Ct).ContinueWith(d=>{
 			if(d.IsFaulted){
-				System.Console.WriteLine(d.Exception.ToString());//t
-				AddMsg(d.Exception.ToString());
+				var e = d.Exception.ToString();
+				System.Console.WriteLine(e);
+				Msgs.Add(e);
 				ShowMsg();
-			}else{
-				WordCards.Clear();
-				var Page = d.Result;
-				var BoWords = Page.DataAsy?.ToBlockingEnumerable(Ct)??[];
-				foreach(var BoWord in BoWords){
-					WordCards.Add(new VmWordListCard().FromJnWord(BoWord));
-				}
-				MgrLearn.Load(BoWords);
 			}
 		});
 		return Nil;
 	}
+
+	public nil SaveEtRestart(){
+		CT Ct = default;
+		SaveEtRestartAsy(Ct).ContinueWith(d=>{
+			if(d.IsFaulted){
+				Msgs.Add(d?.ToString()??"");
+				ShowMsg();
+			}
+		});
+		return Nil;
+	}
+
+	public nil Reset(){
+		MgrLearn = App.GetSvc<MgrLearn>();
+		WordCards = new();
+		return Nil;
+	}
+
+
+
+
+	// public nil GetAllWords(){
+	// 	CancellationToken Ct = default;
+	// 	SvcWord?.PageBoWord(
+	// 		UserCtxMgr?.GetUserCtx()
+	// 		,PageQuery.SelectAll()
+	// 		,Ct
+	// 	).ContinueWith(d=>{
+	// 		if(d.IsFaulted){
+	// 			System.Console.WriteLine(d.Exception.ToString());//t
+	// 			AddMsg(d.Exception.ToString());
+	// 			ShowMsg();
+	// 		}else{
+	// 			WordCards.Clear();
+	// 			var Page = d.Result;
+	// 			var BoWords = Page.DataAsy?.ToBlockingEnumerable(Ct)??[];
+	// 			foreach(var BoWord in BoWords){
+	// 				WordCards.Add(new VmWordListCard().FromJnWord(BoWord));
+	// 			}
+	// 			MgrLearn.Load(BoWords);
+	// 		}
+	// 	});
+	// 	return Nil;
+	// }
 
 	public nil Save(){
 		CT Ct = default;
