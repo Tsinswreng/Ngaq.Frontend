@@ -30,6 +30,7 @@ public partial class ViewWordQuery
 		Ctx = App.GetSvc<Ctx>();
 		Style();
 		Menu = _Menu();
+		//Menu.IsVisible = false;
 		Render();
 	}
 
@@ -48,7 +49,6 @@ public partial class ViewWordQuery
 
 	protected Panel _Menu(){
 		var R = new IndexGrid(IsRow: true);
-		R.Grid.IsVisible = false;
 		var Row1 = new IndexGrid(IsRow: false);
 		R.Add(Row1.Grid);
 		{var o = Row1.Grid;
@@ -98,27 +98,27 @@ public partial class ViewWordQuery
 		{var o = Root.Grid;
 			o.RowDefinitions.AddRange([
 				new RowDef(1, GUT.Auto),
-				new RowDef(1, GUT.Auto),//可隱藏ʹ菜單
+				//new RowDef(1, GUT.Auto),//可隱藏ʹ菜單
 				new RowDef(4, GUT.Star),
 				new RowDef(1, GUT.Auto),//GridSplitter
 				new RowDef(5, GUT.Star),
 			]);
 		}
 		{{
-			var RowSearch = _RowSearch();
-			Root.Add(RowSearch);
+			var Menu = _Menu();
+			Root.Add(Menu);
 
 
-			var Canv = new Canvas();
-			Root.Add(Canv);
-			{var o = Canv;
-				o.Background = Brushes.Black;
-				o.ZIndex = 1;
-			}
-			Canv.Children.Add(Menu);
-			{var o = Menu;
-				o.Background = Brushes.Black;
-			}
+			// var Canv = new Canvas();
+			// Root.Add(Canv);
+			// {var o = Canv;
+			// 	o.Background = Brushes.Black;
+			// 	o.ZIndex = 1;
+			// }
+			// Canv.Children.Add(this.Menu);
+			// {var o = this.Menu;
+			// 	o.Background = Brushes.Black;
+			// }
 
 			var Scr = new ScrollViewer();
 			Root.Add(Scr);

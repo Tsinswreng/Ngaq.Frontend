@@ -21,8 +21,8 @@ using Ngaq.Local.Word.Svc;
 using Ngaq.Ui;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
-using Tsinswreng.SqlHelper;
-using Tsinswreng.SqlHelper.Cmd;
+using Tsinswreng.CsSqlHelper;
+using Tsinswreng.CsSqlHelper.Cmd;
 
 namespace Ngaq.Windows;
 
