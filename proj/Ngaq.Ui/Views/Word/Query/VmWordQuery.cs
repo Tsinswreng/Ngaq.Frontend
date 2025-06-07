@@ -22,7 +22,7 @@ public partial class VmWordQuery
 		/// <summary>
 		/// 單詞條長按
 		/// </summary>
-		public i64 LongPressDurationMs = 100;
+		public i64 LongPressDurationMs = 200;
 		public IBrush ColorNone = Brushes.Transparent;
 		public IBrush ColorRmb = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 0, 80, 0));
 		public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 80, 0, 0));

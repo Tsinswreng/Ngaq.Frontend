@@ -217,7 +217,11 @@ public partial class VmWordListCard
 		return ToI64(D)+"d";
 	}
 
+
 	public static string FmtNum(double num, int fix){
+		if(f64.IsInfinity(num)){
+			return "∞";
+		}
 		string exp = num.ToString("e");  // 例如 "1.030000e+003"
 		var parts = exp.Split('e');      // ["1.030000", "+003"]
 

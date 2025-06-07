@@ -98,6 +98,7 @@ public partial class App : Application {
 			var Cfg = UiCfg.Inst;
 			desktop.MainWindow = new MainWindow {
 				DataContext = new MainViewModel()
+				,Title= "ŋaʔ"
 				,Width = Cfg.WindowWidth
 				,Height = Cfg.WindowHeight
 			};
