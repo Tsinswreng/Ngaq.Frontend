@@ -55,6 +55,7 @@ public partial class VmWordListCard
 		Learn_Records = Bo.Learn_Records;
 		SavedLearnRecords = Bo.LearnRecords;
 		LastLearnedTime = Bo.LastLearnedTime_();
+		FontColor = AddCntToFontColor((u64)Learn_Records[ELearn.Inst.Add].Count);
 		return Nil;
 	}
 
@@ -122,14 +123,6 @@ public partial class VmWordListCard
 		}
 	}
 
-
-
-	protected IBrush _BgColor = Brushes.Black;
-	public IBrush BgColor{
-		get{return _BgColor;}
-		set{SetProperty(ref _BgColor, value);}
-	}
-
 	protected IDictionary<Learn, IList<ILearnRecord>> _Learn_Records = new Dictionary<Learn, IList<ILearnRecord>>();
 	public IDictionary<Learn, IList<ILearnRecord>> Learn_Records{
 		get{return _Learn_Records;}
@@ -157,6 +150,20 @@ public partial class VmWordListCard
 		set{SetProperty(ref _LastLearnedTime, value);}
 	}
 
+	protected IBrush _BgColor = Brushes.Black;
+	public IBrush BgColor{
+		get{return _BgColor;}
+		set{SetProperty(ref _BgColor, value);}
+	}
+
+	protected IBrush _FontColor = Brushes.White;
+	public IBrush FontColor{
+		get{return _FontColor;}
+		set{SetProperty(ref _FontColor, value);}
+	}
+
+
+
 	public static str LearnToSymbol(Learn Learn){
 		var E = ELearn.Inst;
 		if(Learn == E.Add){
@@ -167,6 +174,25 @@ public partial class VmWordListCard
 			return "❌";
 		}
 		throw new FatalLogicErr("Unknown Learn: " + Learn);
+	}
+
+	public static IBrush AddCntToFontColor(u64 Cnt){
+		var rgb = (u8 r,u8 g,u8 b)=>{
+			return new SolidColorBrush(Color.FromRgb(r,g,b));
+		};
+		if(Cnt <= 1){
+			return Brushes.White;
+		}else if(Cnt == 2){
+			return rgb(0,255,128);
+		}else if(Cnt == 3){
+			return rgb(0,255,255);
+		}else if(Cnt == 4){
+			return rgb(255,255,0);
+		}else if(Cnt == 5){
+			return rgb(200, 100, 255);
+		}else{
+			return rgb(255,50,50);
+		}
 	}
 
 	public static str FormatUnixMsDiff(

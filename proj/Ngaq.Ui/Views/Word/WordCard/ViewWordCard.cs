@@ -85,11 +85,16 @@ public partial class ViewWordListCard
 			HeadBox.Add(Head);
 			{var o = Head;
 				o.VerticalAlignment = VertAlign.Center;
+				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.Bind(
 					TextBlock.TextProperty
 					,CBE.Mk<Ctx>(x=>x.Head)
 				);
-				o.FontSize = UiCfg.Inst.BaseFontSize+8;
+				o.Bind(
+					TextBlock.ForegroundProperty
+					,CBE.Mk<Ctx>(x=>x.FontColor)
+				);
+
 			}
 		}}
 
