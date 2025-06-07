@@ -185,7 +185,7 @@ public partial class VmWordListCard
 			return ToI64(M)+"m";
 		}
 		var D = H/24.0;
-		if(D < 100){
+		if(H < 100){
 			return ToI64(H)+"h";
 		}
 		return ToI64(D)+"d";
