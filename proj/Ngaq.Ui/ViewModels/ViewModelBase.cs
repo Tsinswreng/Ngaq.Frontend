@@ -44,7 +44,7 @@ public abstract class ViewModelBase
 
 	public nil AddMsg(str Msg){
 		Msgs.Add(Msg);
-		return Nil;
+		return NIL;
 	}
 
 	public nil ShowMsg(){
@@ -54,12 +54,12 @@ public abstract class ViewModelBase
 		Msgs = Old;
 
 		IsShowMsg = true;
-		return Nil;
+		return NIL;
 	}
 
 	public nil ClearErr(){
 		Msgs.Clear();
-		return Nil;
+		return NIL;
 	}
 
 /// <summary>

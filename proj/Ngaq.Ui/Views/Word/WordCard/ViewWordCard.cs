@@ -33,7 +33,7 @@ public partial class ViewWordListCard
 
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
-		return Nil;
+		return NIL;
 	}
 
 	protected nil Render(){
@@ -98,7 +98,7 @@ public partial class ViewWordListCard
 			}
 		}}
 
-		return Nil;
+		return NIL;
 	}
 
 	Control _InfoGrid(){

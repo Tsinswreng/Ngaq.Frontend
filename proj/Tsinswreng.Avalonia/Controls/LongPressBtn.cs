@@ -23,7 +23,7 @@ public class LongPressBtn
 		//_longPressBtnFn.onClick = ()=>{OnClick();return Nil;};
 		FnLongPressBtn.OnLongPress = ()=>{
 			OnLongPressed?.Invoke(this, EventArgs.Empty);
-			return Nil;
+			return NIL;
 		};
 	}
 
@@ -71,19 +71,19 @@ public class LongPressBtnFn
 
 	bool _Inited = false;
 	public nil Init(){
-		if(_Inited){return Nil;}
+		if(_Inited){return NIL;}
 		_PressTimer = new DispatcherTimer(){
 			Interval = TimeSpan.FromMilliseconds(LongPressDurationMs)
 		};
 		_PressTimer.Tick += OnTimerElapsed;
 		_Inited = true;
-		return Nil;
+		return NIL;
 	}
 
 	public nil _OnPointerPressed(PointerPressedEventArgs e){
 		_IsLongPressTriggered = false;
 		_PressTimer.Start();
-		return Nil;
+		return NIL;
 	}
 
 	public nil _OnPointerReleased(PointerReleasedEventArgs e){
@@ -94,7 +94,7 @@ public class LongPressBtnFn
 			//onClick?.Invoke();
 		}
 		_IsLongPressTriggered = false;
-		return Nil;
+		return NIL;
 	}
 
 	private void OnTimerElapsed(object? sender, EventArgs e){

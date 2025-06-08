@@ -53,12 +53,12 @@ public class Cls_{
 			);
 		}
 
-		return Nil;
+		return NIL;
 	}
 
 	protected nil _Render(){
 		Content = _Root();
-		return Nil;
+		return NIL;
 	}
 
 	protected Control _Root(){

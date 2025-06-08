@@ -48,7 +48,7 @@ public class MsgPopup : UserControl{
 
 	protected nil _Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
-		return Nil;
+		return NIL;
 	}
 
 	protected nil Render(){
@@ -66,6 +66,6 @@ public class MsgPopup : UserControl{
 			o.IsHitTestVisible = true;
 			//o.StaysOpen = false // 点击其它地方自动关闭
 		}
-		return Nil;
+		return NIL;
 	}
 }

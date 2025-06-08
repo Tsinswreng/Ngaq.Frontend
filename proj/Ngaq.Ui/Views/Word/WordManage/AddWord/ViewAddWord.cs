@@ -51,7 +51,7 @@ public partial class ViewAddWord
 		}
 
 		//Styles.Add(SugarStyle.GridShowLines());
-		return Nil;
+		return NIL;
 	}
 
 	protected nil Render(){
@@ -144,7 +144,7 @@ public partial class ViewAddWord
 			}
 
 		}}//~IndexGrid
-		return Nil;
+		return NIL;
 	}
 
 	Control? ByFile(){

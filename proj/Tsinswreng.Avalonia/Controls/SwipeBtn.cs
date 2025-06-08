@@ -26,7 +26,7 @@ public class SwipeBtn
 		//_swipeBtnFn.init();
 		_SwipeBtnFn.OnSwipe = (e)=>{
 			OnSwipe?.Invoke(this,e);
-			return Nil;
+			return NIL;
 		};
 	}
 
@@ -64,11 +64,11 @@ public class SwipeBtnFn{
 		StartPoint = e.GetPosition(z); // 记录初始触摸点
 		IsSwiping = true;
 		e.Handled = true; // 阻止事件冒泡
-		return Nil;
+		return NIL;
 	}
 
 	public nil _OnPointerReleased(Button z, PointerReleasedEventArgs e){
-		if (!IsSwiping){return Nil;}
+		if (!IsSwiping){return NIL;}
 		var currentPoint = e.GetPosition(z);
 		var delta = currentPoint - StartPoint;
 		// 判断滑动方向（可调整阈值）
@@ -78,7 +78,7 @@ public class SwipeBtnFn{
 			OnSwipe?.Invoke(new SwipeEventArgs(direction));
 			IsSwiping = false; // 触发后结束滑动
 		}
-		return Nil;
+		return NIL;
 	}
 
 	// public Func<PointerEventArgs, zero> fn_OnPointerMoved(Button z){

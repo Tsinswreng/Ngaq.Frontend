@@ -55,7 +55,7 @@ public partial class VmAddWord
 
 	public nil Confirm(){
 		if(str.IsNullOrEmpty(Path) && str.IsNullOrEmpty(Text)){
-			return Nil;
+			return NIL;
 		}
 		if(!str.IsNullOrEmpty(Text)){
 			SvcWord?.AddWordsFromText(
@@ -71,7 +71,7 @@ public partial class VmAddWord
 				}
 			});
 		}
-		return Nil;
+		return NIL;
 	}
 
 

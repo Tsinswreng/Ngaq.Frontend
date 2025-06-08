@@ -50,12 +50,12 @@ public partial class ViewRegister
 				,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
 			);
 		}
-		return Nil;
+		return NIL;
 	}
 
 	protected nil _Render(){
 		Content = _root();
-		return Nil;
+		return NIL;
 	}
 
 	protected Control _root(){
@@ -146,7 +146,7 @@ public partial class ViewRegister
 				);
 			}
 
-			return Nil;
+			return NIL;
 		};
 	}
 

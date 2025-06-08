@@ -41,7 +41,7 @@ public partial class ViewWordQuery
 
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
-		return Nil;
+		return NIL;
 	}
 
 	IndexGrid Root = new IndexGrid(IsRow: true);
@@ -149,7 +149,7 @@ public partial class ViewWordQuery
 			}
 		}}
 
-		return Nil;
+		return NIL;
 	}
 
 	Control _RowSearch(){

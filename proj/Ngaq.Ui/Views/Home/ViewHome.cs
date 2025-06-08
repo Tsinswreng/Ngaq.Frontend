@@ -28,7 +28,7 @@ public partial class ViewHome
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
-		return Nil;
+		return NIL;
 	}
 
 	IndexGrid Root = new(IsRow:true);
@@ -68,7 +68,7 @@ public partial class ViewHome
 			ViewBottomBar.Items.Add(Me);
 		}}
 
-		return Nil;
+		return NIL;
 	}
 
 

@@ -46,7 +46,7 @@ public partial class VmWordListCard
 
 	nil Init(){
 		if(Bo == null){
-			return Nil;
+			return NIL;
 		}
 		Head = Bo.Head;
 		Lang = Bo.Lang;
@@ -56,7 +56,7 @@ public partial class VmWordListCard
 		SavedLearnRecords = Bo.LearnRecords;
 		LastLearnedTime = Bo.LastLearnedTime_();
 		FontColor = AddCntToFontColor((u64)Learn_Records[ELearn.Inst.Add].Count);
-		return Nil;
+		return NIL;
 	}
 
 	void OnBoChanged(object? sender, PropertyChangedEventArgs e){

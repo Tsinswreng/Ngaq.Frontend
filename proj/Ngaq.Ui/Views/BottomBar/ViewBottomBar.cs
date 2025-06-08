@@ -34,7 +34,7 @@ public partial class ViewBottomBar
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
-		return Nil;
+		return NIL;
 	}
 
 	IndexGrid Root = new(IsRow:true);
@@ -71,7 +71,7 @@ public partial class ViewBottomBar
 			});
 
 		}}
-		return Nil;
+		return NIL;
 	}
 
 }

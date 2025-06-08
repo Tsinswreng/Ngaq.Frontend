@@ -81,7 +81,7 @@ public partial class ViewWordInfo
 		);
 		Styles.Add(InputBoxNoBorder);
 
-		return Nil;
+		return NIL;
 	}
 
 	public IndexGrid Root{get;set;} = new(IsRow: true);
@@ -193,7 +193,7 @@ public partial class ViewWordInfo
 			Root.Add();
 
 		}}//~Root
-		return Nil;
+		return NIL;
 	}
 
 

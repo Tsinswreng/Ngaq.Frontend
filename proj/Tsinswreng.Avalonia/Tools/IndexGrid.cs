@@ -15,7 +15,7 @@ public partial class IndexGrid{
 	public nil Add(Control? control= default){
 		if(control == null){
 			Index++;
-			return Nil;
+			return NIL;
 		}
 		Grid.Children.Add(control);
 		if(IsRow){
@@ -23,7 +23,7 @@ public partial class IndexGrid{
 		}else{
 			Grid.SetColumn(control, Index++);
 		}
-		return Nil;
+		return NIL;
 	}
 
 }

@@ -59,7 +59,7 @@ public partial class VmWordQuery
 			AddMsg(App.ErrI18n?.Parse(e.Err)??e.Err+"");
 			ShowMsg();
 		};
-		return Nil;
+		return NIL;
 	}
 
 
@@ -114,7 +114,7 @@ public partial class VmWordQuery
 		}else{
 			Vm.BgColor = Cfg.ColorNone;
 		}
-		return Nil;
+		return NIL;
 	}
 
 	public nil OnLongPressed(VmWordListCard Vm){
@@ -123,15 +123,15 @@ public partial class VmWordQuery
 		}else{
 			Vm.BgColor = Cfg.ColorNone;
 		}
-		return Nil;
+		return NIL;
 	}
 
 	public nil SetCurVmWord(VmWordListCard Vm){
 		if(Vm.WordForLearn == null){
-			return Nil;
+			return NIL;
 		}
 		CurWordInfo.FromIWordForLearn(Vm.WordForLearn);
-		return Nil;
+		return NIL;
 	}
 
 	public async Task<nil> LoadEtStartAsy(CT Ct){
@@ -147,14 +147,14 @@ public partial class VmWordQuery
 		}
 		await MgrLearn.StartAsy(Ct);
 		RenderWordList();
-		return Nil;
+		return NIL;
 	}
 
 	public async Task<nil> SaveEtRestartAsy(CT Ct){
 		await MgrLearn.SaveAsy(Ct);
 		await MgrLearn.StartAsy(Ct);
 		RenderWordList();
-		return Nil;
+		return NIL;
 	}
 
 	public nil RenderWordList(){
@@ -163,7 +163,7 @@ public partial class VmWordQuery
 			WordCards.Add(new VmWordListCard().FromIWordForLearn(x));
 			return 0;
 		}).ToList();
-		return Nil;
+		return NIL;
 	}
 
 	public nil LoadEtStart(){
@@ -176,7 +176,7 @@ public partial class VmWordQuery
 				ShowMsg();
 			}
 		});
-		return Nil;
+		return NIL;
 	}
 
 	public nil SaveEtRestart(){
@@ -187,13 +187,13 @@ public partial class VmWordQuery
 				ShowMsg();
 			}
 		});
-		return Nil;
+		return NIL;
 	}
 
 	public nil Reset(){
 		MgrLearn = App.GetSvc<MgrLearn>();
 		WordCards = new();
-		return Nil;
+		return NIL;
 	}
 
 
@@ -232,7 +232,7 @@ public partial class VmWordQuery
 				ShowMsg();
 			}
 		});
-		return Nil;
+		return NIL;
 	}
 
 

@@ -23,11 +23,11 @@ public partial class ViewXxx
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
-		return Nil;
+		return NIL;
 	}
 
 	protected nil Render(){
-		return Nil;
+		return NIL;
 	}
 
 

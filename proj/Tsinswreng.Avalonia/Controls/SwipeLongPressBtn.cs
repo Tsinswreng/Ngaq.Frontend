@@ -37,13 +37,13 @@ public class SwipeLongPressBtn
 	public SwipeLongPressBtn():base(){
 		_SwipeBtnFn.OnSwipe = (e)=>{
 			OnSwipe?.Invoke(this,e);
-			return Nil;
+			return NIL;
 		};
 		_LongPressBtnFn.Init();
 		//_longPressBtnFn.onClick = ()=>{OnClick();return Nil;};
 		_LongPressBtnFn.OnLongPress = ()=>{
 			OnLongPressed?.Invoke(this, EventArgs.Empty);
-			return Nil;
+			return NIL;
 		};
 	}
 

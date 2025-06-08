@@ -42,7 +42,7 @@ public class MsgBox : UserControl{
 
 	protected nil _Style(){
 
-		return Nil;
+		return NIL;
 	}
 
 	protected nil Render(){
@@ -101,7 +101,7 @@ public class MsgBox : UserControl{
 			Root.Add(_BdrBottomView);
 			_BdrBottomView.Child = _BottomView;
 		}}//~Root
-		return Nil;
+		return NIL;
 	}
 
 	// protected Style _Sty2Btn(){

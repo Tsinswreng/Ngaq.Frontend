@@ -70,7 +70,7 @@ public partial class App : Application {
 		);
 		Styles.Add(Button);
 
-		return Nil;
+		return NIL;
 	}
 
 	public override void OnFrameworkInitializationCompleted() {
