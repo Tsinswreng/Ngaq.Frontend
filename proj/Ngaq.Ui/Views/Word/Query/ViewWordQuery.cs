@@ -261,7 +261,7 @@ public partial class ViewWordQuery
 	}
 
 	Styles StyBtnWordCard(Styles s){
-		var PC = PsdCls.inst;
+		var PC = PsdCls.Inst;
 		var Hover = new Style(x=>
 			x.Is<Button>()
 			.Class(PC.pointerover)

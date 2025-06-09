@@ -12,6 +12,7 @@ using Ngaq.Core.Model.Po.Kv;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Controls.Presenters;
 
 public partial class ViewWordInfo
 	:UserControl
@@ -55,6 +56,7 @@ public partial class ViewWordInfo
 	public class Cls_{
 		//o.Foreground = new SolidColorBrush(Colors.LightGray)
 		public str LightGray = nameof(LightGray);
+		public str TxtBox = nameof(TxtBox);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
 
@@ -85,6 +87,47 @@ public partial class ViewWordInfo
 	}
 
 	public IndexGrid Root{get;set;} = new(IsRow: true);
+
+	protected TextBox TxtBox(){
+		var R = new TextBox();
+		R.Classes.Add(Cls.TxtBox);
+		//R.BorderThickness = new Thickness(0);
+		R.IsReadOnly = true;
+		R.Focusable = false;
+		//R.IsEnabled = false;
+		R.Background = new SolidColorBrush(Colors.Transparent);
+		R.Foreground = new SolidColorBrush(Colors.White);
+		R.Styles.Add(new Style().NoMargin().NoPadding());
+		R.MinHeight = 0;
+		var NoBdr = new Style(x=>
+			x.Is<TextBox>()
+			.Class(Cls.TxtBox)
+			//.Class(PsdCls.Inst.focus)
+			.Template()
+			.OfType<Border>()
+		);
+		R.Styles.Add(NoBdr);
+		{var o = NoBdr;
+			o.Set(
+				BorderThicknessProperty
+				,new Thickness(0)
+			);
+		}
+		var FocusNoBdr = new Style(x=>
+			x.Is<TextBox>()
+			.Class(PsdCls.Inst.focus)
+			.Template()
+			.OfType<Border>()
+		);
+		R.Styles.Add(FocusNoBdr);
+		{var o = FocusNoBdr;
+			o.Set(
+				BorderThicknessProperty
+				,new Thickness(0)
+			);
+		}
+		return R;
+	}
 
 	protected nil Render(){
 		Content = Root.Grid;
@@ -139,7 +182,7 @@ public partial class ViewWordInfo
 				o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 			}
 
-			var Head = new SelectableTextBlock{};
+			var Head = TxtBox();
 			BdrHead.Child = Head;
 			{var o = Head;
 				o.Styles.Add(new Style().NoMargin().NoPadding());
@@ -155,7 +198,7 @@ public partial class ViewWordInfo
 				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
 			}
 
-			var Summary = new SelectableTextBlock{};
+			var Summary = TxtBox();
 			Root.Add(Summary);
 			{var o = Summary;
 				o.Bind(
@@ -229,7 +272,7 @@ public partial class ViewWordInfo
 				]);
 			}
 			{{
-				var Text = new SelectableTextBlock{};
+				var Text = TxtBox();
 				Grid.Add(Text);
 				{var o = Text;
 					o.TextWrapping = TextWrapping.Wrap;
