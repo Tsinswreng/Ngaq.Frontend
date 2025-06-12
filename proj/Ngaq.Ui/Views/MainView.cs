@@ -5,6 +5,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.BottomBar;
@@ -25,6 +26,7 @@ public partial class MainView : UserControl {
 		//Content = new ViewWordListCard();
 		//Content = new ViewWordQuery();
 		//Content = new ViewBottomBar();
+		//Content = new ViewRegister();
 		Content = new ViewHome();
 		// var Btn = new Button { Content = "Hello World!" };
 		// Content = Btn;
@@ -44,5 +46,6 @@ public partial class MainView : UserControl {
 		// 		,Brushes.Yellow
 		// 	);
 		// }
+
 	}
 }

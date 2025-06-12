@@ -13,6 +13,8 @@ using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
+using Tsinswreng.Avalonia.Controls;
 
 public partial class ViewWordInfo
 	:UserControl
@@ -97,6 +99,14 @@ public partial class ViewWordInfo
 		//R.IsEnabled = false;
 		R.Background = new SolidColorBrush(Colors.Transparent);
 		R.Foreground = new SolidColorBrush(Colors.White);
+		// var Menu = new ContextMenu();
+		// R.ContextMenu = Menu;
+		// {var o = Menu;
+		// 	o.Items.Add(new MenuItem{Header = "複製"});
+		// }
+		var flyout = new MenuFlyout();
+		FlyoutBase.SetAttachedFlyout(R, flyout);
+
 		R.Styles.Add(new Style().NoMargin().NoPadding());
 		R.MinHeight = 0;
 		var NoBdr = new Style(x=>
@@ -196,6 +206,7 @@ public partial class ViewWordInfo
 				//o.VerticalContentAlignment = VertAlign.Center;
 				//o.TextAlignment = TxtAlign.Right;
 				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
+				//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
 			}
 
 			var Summary = TxtBox();
