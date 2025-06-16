@@ -1,5 +1,10 @@
 using System.Collections.ObjectModel;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Ngaq.Core.FrontendIF;
 using Ngaq.Core.Infra.Page;
 using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.UserCtx;
@@ -33,22 +38,25 @@ public partial class VmWordQuery
 	// public VmWordQuery(){
 	// 	_Init();
 	// }
+public ISvcWord SvcWord;
+public IUserCtxMgr UserCtxMgr;
 
+public MgrLearn MgrLearn{get;set;}
+public IImgGetter? SvcImg{get;set;}
 	public VmWordQuery(
 		ISvcWord SvcWord
 		,IUserCtxMgr UserCtxMgr
 		,MgrLearn MgrLearn
+		,IImgGetter? SvcImg
 	){
+		this.SvcImg = SvcImg;
 		this.SvcWord = SvcWord;
 		this.UserCtxMgr = UserCtxMgr;
 		this.MgrLearn = MgrLearn;
 		_Init();
 	}
 
-	public ISvcWord SvcWord;
-	public IUserCtxMgr UserCtxMgr;
 
-	public MgrLearn MgrLearn{get;set;}
 	nil _Init(){
 		return _InitLearnMgr();
 	}
@@ -58,6 +66,9 @@ public partial class VmWordQuery
 			System.Console.WriteLine(e.Err);
 			AddMsg(App.ErrI18n?.Parse(e.Err)??e.Err+"");
 			ShowMsg();
+		};
+		MgrLearn.OnLearnOrUndo += (s,e)=>{
+			ChangeBg();
 		};
 		return NIL;
 	}
@@ -234,6 +245,46 @@ public partial class VmWordQuery
 		});
 		return NIL;
 	}
+
+	protected IBrush _BgBrush;
+	public IBrush BgBrush{
+		get{return _BgBrush;}
+		set{SetProperty(ref _BgBrush, value);}
+	}
+
+
+	public nil ChangeBg(){
+		try{
+			if(SvcImg == null){
+				return NIL;
+			}
+			var typedObj = SvcImg.GetN(1).First();
+			if(typedObj.Type != typeof(Stream) || typedObj.Data == null){
+				return NIL;
+			}
+			using Stream BgFileStream = (Stream)typedObj.Data!;
+			var BitMap = new Bitmap(BgFileStream);
+			var imageBrush = new ImageBrush(BitMap){
+				Stretch = Stretch.UniformToFill
+			};
+			BgBrush = imageBrush;
+			return NIL;
+		}
+		catch (System.Exception e){
+			System.Console.Error.WriteLine(e);//t
+		}
+		return NIL;
+	}
+
+	// public nil ChangeBg(){
+	// 	using Stream BgFileStream = File.OpenRead(@"e:\_\視聽\圖\貼吧ᙆᵗ圖\0FA34ED0FEB65D19513B8E18913AF166.jpg");
+	// 	var BitMap = new Bitmap(BgFileStream);
+	// 	var imageBrush = new ImageBrush(BitMap){
+	// 		Stretch = Stretch.UniformToFill
+	// 	};
+	// 	BgBrush = imageBrush;
+	// 	return NIL;
+	// }
 
 
 }

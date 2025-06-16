@@ -7,7 +7,9 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
@@ -32,6 +34,51 @@ public partial class ViewWordQuery
 		Menu = _Menu();
 		//Menu.IsVisible = false;
 		Render();
+		Loaded += (s,e)=>{
+			var top = TopLevel.GetTopLevel(this);
+			var originalBrush = new ImageBrush(
+				new Bitmap(@"e:\_\視聽\圖\貼吧ᙆᵗ圖\0C53591E9A4774790AE2F769C095AD99.jpg")
+			){
+				Stretch = Stretch.Uniform
+			};
+
+    var overlayBrush = new SolidColorBrush(Color.FromArgb(100, 0, 0, 0)); // 半透明黑，alpha可调
+
+ var overlayGrid = new Grid
+    {
+        Width = top.Bounds.Width,
+        Height = top.Bounds.Height,
+        Children =
+        {
+            new Border { Background = originalBrush },
+            new Border { Background = overlayBrush }
+        }
+    };
+
+    // 动态监听窗口大小变化，保持同步
+    // top.GetObservable(TopLevel.BoundsProperty).Subscribe(bounds => //无法将 lambda 表达式 转换为类型“IObserver<Rect>”，原因是它不是委托类型CS1660
+    // {
+    //     overlayGrid.Width = bounds.Width;
+    //     overlayGrid.Height = bounds.Height;
+    // });
+
+    // 用 VisualBrush 包裹 overlayGrid
+    var combinedBrush = new VisualBrush
+    {
+        Visual = overlayGrid,
+        Stretch = Stretch.Fill
+    };
+
+    top.Background = combinedBrush;
+
+			// top!.Bind(
+			// 	BackgroundProperty
+			// 	,CBE.Mk<Ctx>(x=>x.BgBrush
+			// 		,Source: Ctx
+			// 		,Mode: BindingMode.OneWay
+			// 	)
+			// );
+		};
 	}
 
 	public class Cls_{
@@ -97,6 +144,7 @@ public partial class ViewWordQuery
 		Content = Root.Grid;
 		{var o = Root.Grid;
 			o.RowDefinitions.AddRange([
+				new RowDef(1, GUT.Auto),//overlay
 				new RowDef(1, GUT.Auto),
 				//new RowDef(1, GUT.Auto),//可隱藏ʹ菜單
 				new RowDef(4, GUT.Star),
@@ -105,6 +153,16 @@ public partial class ViewWordQuery
 			]);
 		}
 		{{
+			var overlay = new Border();
+			Root.Add(overlay);
+			{var o = overlay;
+				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
+				//o.Bind(BoundsProperty, )
+				// o.Width = UiCfg.Inst.WindowWidth;
+				// o.Height = UiCfg.Inst.WindowHeight;
+				o.ZIndex = -1;
+			}
+
 			var Menu = _Menu();
 			Root.Add(Menu);
 

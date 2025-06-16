@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
+using Ngaq.Core;
 using Ngaq.Core.Infra;
+using Ngaq.Core.Infra.Cfg;
 using Ngaq.Local;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
@@ -18,9 +20,9 @@ sealed class Program
 			CfgFilePath = args[0];
 		}else{
 #if DEBUG
-			CfgFilePath = "Ngaq.dev.yml";
+			CfgFilePath = "Ngaq.dev.json";
 #else
-			CfgFilePath = "Ngaq.yml";
+			CfgFilePath = "Ngaq.json";
 #endif
 		}
 		return CfgFilePath;
@@ -32,13 +34,20 @@ sealed class Program
 	[STAThread]
 	public static void Main(string[] args){
 		try{
-			AppCfg.Inst = AppCfgParser.Inst.FromYaml(GetCfgFilePath(args));
+			var CfgPath = GetCfgFilePath(args);
+			var CfgText = File.ReadAllText(CfgPath);
+			AppCfg.Inst.FromJson(CfgText);
+			//AppCfg.Inst = AppCfgParser.Inst.FromYaml(GetCfgFilePath(args));
 		}
 		catch (System.Exception e){
 			System.Console.Error.WriteLine("Failed to load config file: "+e);
 		}
+		System.Console.WriteLine(
+			AppCfgItems.Inst.GalleryDirs.Get()
+		);
 
 		var svc = new ServiceCollection();
+		DiCore.SetUpCore(svc);
 		DiLocal.SetUpLocal(svc);
 		//new Setup().ConfigureServices(services);
 		// services.AddSingleton<I_SeekFullWordKVByIdAsy, WordSeeker>();

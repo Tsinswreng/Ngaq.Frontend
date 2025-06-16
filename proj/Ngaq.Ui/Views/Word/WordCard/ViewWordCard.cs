@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordCard;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Ngaq.Core.Infra.Core;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Converters;
@@ -33,6 +34,24 @@ public partial class ViewWordListCard
 
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
+		var ShadowText = new Style(x=>
+			x.Is<TextBlock>()
+		);
+		Styles.Add(ShadowText);
+		{var o = ShadowText;
+
+			o.Set(
+				EffectProperty
+				,new DropShadowDirectionEffect{
+					Color = Colors.Black
+					,BlurRadius = 4
+					,ShadowDepth = 4
+					//,Direction = 315 //高度 315是左上角
+					,Direction = 330
+					,Opacity = 0.5
+				}
+			);
+		}
 		return NIL;
 	}
 
