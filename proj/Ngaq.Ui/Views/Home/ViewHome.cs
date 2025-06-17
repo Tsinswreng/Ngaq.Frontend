@@ -45,7 +45,7 @@ public partial class ViewHome
 		var ViewBottomBar = new ViewBottomBar();
 		Root.Add(ViewBottomBar);
 		{var o = ViewBottomBar;
-			o.ItemsControl.Background = new SolidColorBrush(Color.FromRgb(30, 30, 30));
+			//o.ItemsControl.Background = new SolidColorBrush(Color.FromRgb(30, 30, 30));
 		}
 		{{
 			var Learn = new Btn_Control(
@@ -53,7 +53,11 @@ public partial class ViewHome
 				,new ViewWordQuery()
 			);
 			ViewBottomBar.Items.Add(Learn);
-			ViewBottomBar.Cur.Content = Learn.Control;
+			{var o = Learn;
+				ViewBottomBar.Cur.Content = Learn.Control;
+				o.Button.Background = Brushes.Transparent;
+			}
+
 
 			var Lib = new Btn_Control(
 				StrBarItem.Inst.BarItem("Lib", "📚")

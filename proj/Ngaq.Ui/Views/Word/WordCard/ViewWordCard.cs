@@ -27,7 +27,7 @@ public partial class ViewWordListCard
 	}
 
 	public class Cls_{
-
+		public str InInfoGrid = nameof(InInfoGrid);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
 	public IndexGrid Root{get;set;} = new IndexGrid(IsRow:true);
@@ -52,6 +52,20 @@ public partial class ViewWordListCard
 				}
 			);
 		}
+		// var InfoGridColor = new Style(x=>
+		// 	x.Is<TextBlock>()
+		// 	.Class(Cls.InInfoGrid)
+		// );
+		// Styles.Add(InfoGridColor);
+		// {var o = InfoGridColor;
+		// 	o.Bind(
+		// 		TextBlock.ForegroundProperty
+		// 		,CBE.Mk<Ctx>(x=>x.LearnedColor,
+		// 			Mode: BindingMode.OneWay
+		// 			,Source: Ctx
+		// 		)
+		// 	);
+		// }
 		return NIL;
 	}
 
@@ -123,6 +137,7 @@ public partial class ViewWordListCard
 	Control _InfoGrid(){
 		var R = new IndexGrid(IsRow:false);
 		{var o = R.Grid;
+			o.Classes.Add(Cls.InInfoGrid);
 			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Auto),//上次學習記錄
 				new ColDef(1, GUT.Auto),//add

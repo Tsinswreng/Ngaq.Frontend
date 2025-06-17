@@ -16,6 +16,7 @@ using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.Avalonia.Controls;
 using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.CsCore.Tools;
 using Ctx = VmWordQuery;
 public partial class ViewWordQuery
 	:UserControl
@@ -37,9 +38,9 @@ public partial class ViewWordQuery
 		Loaded += (s,e)=>{
 			var top = TopLevel.GetTopLevel(this);
 			var originalBrush = new ImageBrush(
-				new Bitmap(@"e:\_\視聽\圖\貼吧ᙆᵗ圖\0C53591E9A4774790AE2F769C095AD99.jpg")
+				new Bitmap(@"e:\_\mmf\壁紙頭像等\壁紙\magazine-unlock-hi2964701.jpg")
 			){
-				Stretch = Stretch.Uniform
+				Stretch = Stretch.Uniform//改用綁定 否則窗口大小ˋ變旹則比例不對。
 			};
 
     var overlayBrush = new SolidColorBrush(Color.FromArgb(100, 0, 0, 0)); // 半透明黑，alpha可调
@@ -275,10 +276,13 @@ public partial class ViewWordQuery
 					//o.HorizontalContentAlignment = HoriAlign.Left;
 					o.HorizontalContentAlignment = HoriAlign.Stretch;
 					o.Styles.Add(new Style().NoMargin().NoPadding());
+					o.Background = Brushes.Transparent;
 					o.Bind(
-						Button.BackgroundProperty
-						,CBE.Mk<VmWordListCard>(x=>x.BgColor, Mode: BindingMode.OneWay)
+						//Button.BackgroundProperty
+						BorderBrushProperty
+						,CBE.Mk<VmWordListCard>(x=>x.LearnedColor, Mode: BindingMode.OneWay)
 					);
+					o.BorderThickness = new Thickness(8,0,0,0);
 					o.LongPressDurationMs = Ctx?.Cfg.LongPressDurationMs??o.LongPressDurationMs;
 					StyBtnWordCard(o.Styles);
 				}
@@ -289,6 +293,7 @@ public partial class ViewWordQuery
 				{var o = Card;
 					o.VerticalAlignment = VertAlign.Stretch;
 					o.HorizontalAlignment = HoriAlign.Stretch;
+					o.Background = Brushes.Transparent;
 					o.Bind(
 						Control.DataContextProperty
 						,CBE.Mk<VmWordListCard>(x=>x
@@ -329,8 +334,43 @@ public partial class ViewWordQuery
 		s.Add(Hover);
 		{var o = Hover;
 			o.Set(
+				BorderBrushProperty
+				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+				//,Brushes.Transparent
+			);
+		}
+		var Pressed = new Style(x=>
+			x.Is<Button>()
+			.Class(PC.pressed)
+			.Template()
+			.OfType<ContentPresenter>()
+		);
+		s.Add(Pressed);
+		{var o = Pressed;
+			o.Set(
+				BorderBrushProperty
+				//,Brushes.Yellow
+				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+			);
+		}
+
+		return s;
+
+	}
+
+	Styles _StyBtnWordCard(Styles s){
+		var PC = PsdCls.Inst;
+		var Hover = new Style(x=>
+			x.Is<Button>()
+			.Class(PC.pointerover)
+			.Template()
+			.OfType<ContentPresenter>()
+		);
+		s.Add(Hover);
+		{var o = Hover;
+			o.Set(
 				BackgroundProperty
-				,CBE.Mk<VmWordListCard>(x=>x.BgColor)
+				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
 				//,Brushes.Transparent
 			);
 		}
@@ -345,7 +385,7 @@ public partial class ViewWordQuery
 			o.Set(
 				BackgroundProperty
 				//,Brushes.Yellow
-				,CBE.Mk<VmWordListCard>(x=>x.BgColor)
+				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
 			);
 		}
 

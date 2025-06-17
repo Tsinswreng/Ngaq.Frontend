@@ -150,10 +150,10 @@ public partial class VmWordListCard
 		set{SetProperty(ref _LastLearnedTime, value);}
 	}
 
-	protected IBrush _BgColor = Brushes.Black;
-	public IBrush BgColor{
-		get{return _BgColor;}
-		set{SetProperty(ref _BgColor, value);}
+	protected IBrush _LearnedColor = Brushes.Transparent;
+	public IBrush LearnedColor{
+		get{return _LearnedColor;}
+		set{SetProperty(ref _LearnedColor, value);}
 	}
 
 	protected IBrush _FontColor = Brushes.White;

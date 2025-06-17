@@ -29,8 +29,10 @@ public partial class VmWordQuery
 		/// </summary>
 		public i64 LongPressDurationMs = 200;
 		public IBrush ColorNone = Brushes.Transparent;
-		public IBrush ColorRmb = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 0, 80, 0));
-		public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 80, 0, 0));
+		// public IBrush ColorRmb = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 0, 80, 0));
+		// public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 80, 0, 0));
+		public IBrush ColorRmb = new SolidColorBrush(Color.FromArgb((u8)(1*0xff), 0, 0xff, 0));
+		public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(1*0xff), 0xff, 0, 0));
 	}
 
 	public Cfg_ Cfg = new();
@@ -121,18 +123,18 @@ public IImgGetter? SvcImg{get;set;}
 		VmWordListCard Vm
 	){
 		if(_LearnOrUndo(Vm, ELearn.Inst.Rmb) == (i64)MgrLearn.ELearnOpRtn.Learn){
-			Vm.BgColor = Cfg.ColorRmb;
+			Vm.LearnedColor = Cfg.ColorRmb;
 		}else{
-			Vm.BgColor = Cfg.ColorNone;
+			Vm.LearnedColor = Cfg.ColorNone;
 		}
 		return NIL;
 	}
 
 	public nil OnLongPressed(VmWordListCard Vm){
 		if(_LearnOrUndo(Vm, ELearn.Inst.Fgt) == (i64)MgrLearn.ELearnOpRtn.Learn){
-			Vm.BgColor = Cfg.ColorFgt;
+			Vm.LearnedColor = Cfg.ColorFgt;
 		}else{
-			Vm.BgColor = Cfg.ColorNone;
+			Vm.LearnedColor = Cfg.ColorNone;
 		}
 		return NIL;
 	}
