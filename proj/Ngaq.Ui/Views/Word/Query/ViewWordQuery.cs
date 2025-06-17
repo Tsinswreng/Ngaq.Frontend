@@ -17,6 +17,8 @@ using Tsinswreng.Avalonia.Controls;
 using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
 using Tsinswreng.CsCore.Tools;
+//using System.IObservable;
+//using System.Reactive;
 using Ctx = VmWordQuery;
 public partial class ViewWordQuery
 	:UserControl
@@ -36,49 +38,7 @@ public partial class ViewWordQuery
 		//Menu.IsVisible = false;
 		Render();
 		Loaded += (s,e)=>{
-			var top = TopLevel.GetTopLevel(this);
-			var originalBrush = new ImageBrush(
-				new Bitmap(@"e:\_\mmf\壁紙頭像等\壁紙\magazine-unlock-hi2964701.jpg")
-			){
-				Stretch = Stretch.Uniform//改用綁定 否則窗口大小ˋ變旹則比例不對。
-			};
-
-    var overlayBrush = new SolidColorBrush(Color.FromArgb(100, 0, 0, 0)); // 半透明黑，alpha可调
-
- var overlayGrid = new Grid
-    {
-        Width = top.Bounds.Width,
-        Height = top.Bounds.Height,
-        Children =
-        {
-            new Border { Background = originalBrush },
-            new Border { Background = overlayBrush }
-        }
-    };
-
-    // 动态监听窗口大小变化，保持同步
-    // top.GetObservable(TopLevel.BoundsProperty).Subscribe(bounds => //无法将 lambda 表达式 转换为类型“IObserver<Rect>”，原因是它不是委托类型CS1660
-    // {
-    //     overlayGrid.Width = bounds.Width;
-    //     overlayGrid.Height = bounds.Height;
-    // });
-
-    // 用 VisualBrush 包裹 overlayGrid
-    var combinedBrush = new VisualBrush
-    {
-        Visual = overlayGrid,
-        Stretch = Stretch.Fill
-    };
-
-    top.Background = combinedBrush;
-
-			// top!.Bind(
-			// 	BackgroundProperty
-			// 	,CBE.Mk<Ctx>(x=>x.BgBrush
-			// 		,Source: Ctx
-			// 		,Mode: BindingMode.OneWay
-			// 	)
-			// );
+			_OnLoad();
 		};
 	}
 
@@ -94,6 +54,55 @@ public partial class ViewWordQuery
 
 	IndexGrid Root = new IndexGrid(IsRow: true);
 	Panel Menu;
+
+	protected IBrush Shade(IBrush originalBrush, ContentControl top){
+		var overlayBrush = new SolidColorBrush(Color.FromArgb(100, 0, 0, 0)); // 半透明黑，alpha可调
+		var overlayGrid = new Grid{
+			Width = top.Bounds.Width,
+			Height = top.Bounds.Height,
+			Children ={
+				new Border { Background = originalBrush },
+				new Border { Background = overlayBrush }
+			}
+		};
+		// 动态监听窗口大小变化，保持同步
+		// top.GetObservable(TopLevel.BoundsProperty).Subscribe(bounds => //无法将 lambda 表达式 转换为类型“IObserver<Rect>”，原因是它不是委托类型CS1660
+		// {
+		// 	System.Console.WriteLine(1);//t  有輸出
+		// 	originalBrush.Stretch = Stretch.Uniform;
+		// 	overlayGrid.Width = bounds.Width;
+		// 	overlayGrid.Height = bounds.Height;
+		// });
+
+		// 用 VisualBrush 包裹 overlayGrid
+		var combinedBrush = new VisualBrush{
+			Visual = overlayGrid,
+			Stretch = Stretch.Fill
+		};
+		return combinedBrush;
+
+	}
+
+	protected nil _OnLoad(){
+		var top = TopLevel.GetTopLevel(this);
+		if(top == null){return NIL;}
+		// var originalBrush = new ImageBrush(
+		// 	new Bitmap(@"e:\_\mmf\壁紙頭像等\壁紙\magazine-unlock-hi2964701.jpg")
+		// ){
+		// 	Stretch = Stretch.Uniform//改用綁定 否則窗口大小ˋ變旹則比例不對。
+		// };
+		top!.Bind(
+			BackgroundProperty
+			,CBE.Mk<Ctx>(x=>x.BgBrush
+				,Source: Ctx
+				,Mode: BindingMode.OneWay
+				,Converter: new ParamFnConvtr<IBrush, nil>((oldBrush, arg)=>{
+					return Shade(oldBrush, top);
+				})
+			)
+		);
+		return NIL;
+	}
 
 	protected Panel _Menu(){
 		var R = new IndexGrid(IsRow: true);
