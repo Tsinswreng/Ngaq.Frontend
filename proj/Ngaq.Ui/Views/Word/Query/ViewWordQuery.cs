@@ -86,12 +86,7 @@ public partial class ViewWordQuery
 	protected nil _OnLoad(){
 		var top = TopLevel.GetTopLevel(this);
 		if(top == null){return NIL;}
-		// var originalBrush = new ImageBrush(
-		// 	new Bitmap(@"e:\_\mmf\壁紙頭像等\壁紙\magazine-unlock-hi2964701.jpg")
-		// ){
-		// 	Stretch = Stretch.Uniform//改用綁定 否則窗口大小ˋ變旹則比例不對。
-		// };
-		top!.Bind(
+		top.Bind(
 			BackgroundProperty
 			,CBE.Mk<Ctx>(x=>x.BgBrush
 				,Source: Ctx
@@ -101,6 +96,15 @@ public partial class ViewWordQuery
 				})
 			)
 		);
+		top.GetObservable(TopLevel.BoundsProperty).Subscribe(_ =>{
+			// 触发 Background 的刷新或重设，保证ImageBrush用UniformToFill渲染
+			if(Ctx==null){return;}
+			if(top.Background is TileBrush tb){
+				tb.Stretch = Stretch.UniformToFill; //TODO與Ctx中ʹ配置 持一
+			}
+			//Background = Shade(Ctx.BgBrush, top);
+			//top.Background.Stretch = Stretch.Uniform;
+		});
 		return NIL;
 	}
 

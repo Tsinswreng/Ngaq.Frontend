@@ -204,7 +204,8 @@ public IImgGetter? SvcImg{get;set;}
 	}
 
 	public nil Reset(){
-		MgrLearn = App.GetSvc<MgrLearn>();
+		//MgrLearn = App.GetSvc<MgrLearn>();
+		MgrLearn.Reset();
 		WordCards = new();
 		return NIL;
 	}
