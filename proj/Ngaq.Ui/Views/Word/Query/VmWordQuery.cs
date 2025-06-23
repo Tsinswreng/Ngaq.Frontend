@@ -5,16 +5,16 @@ using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Ngaq.Core.FrontendIF;
-using Ngaq.Core.Infra.Page;
 using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.UserCtx;
-using Ngaq.Core.Service.Word;
 using Ngaq.Core.Word;
 using Ngaq.Core.Word.Models.Learn_;
+using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.CsCore.Tools;
+using Tsinswreng.CsPage;
 
 namespace Ngaq.Ui.Views.Word.Query;
 using Ctx = VmWordQuery;

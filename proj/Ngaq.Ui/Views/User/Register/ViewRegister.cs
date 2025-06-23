@@ -63,14 +63,14 @@ public partial class ViewRegister
 			Spacing = 4.0
 		};
 		{{
-			var backBtn = new Button();
-			root.Children.Add(backBtn);
-			{
-				backBtn.Content = "←";
-				backBtn.Click += (s,e)=>{
-					Ctx?.ViewNavigator?.Back();
-				};
-			}
+			// var backBtn = new Button();
+			// root.Children.Add(backBtn);
+			// {var o = backBtn;
+			// 	o.Content = "←";
+			// 	o.Click += (s,e)=>{
+			// 		Ctx?.ViewNavigator?.Back();
+			// 	};
+			// }
 
 			var logo = new AppTextLogo(){
 				FontSize = 30.0

@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 using Ngaq.Core.Model.UserCtx;
-using Ngaq.Core.Service.Word;
+using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.ViewModels;
 
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;

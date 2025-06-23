@@ -36,14 +36,14 @@ sealed class Program
 		try{
 			var CfgPath = GetCfgFilePath(args);
 			var CfgText = File.ReadAllText(CfgPath);
-			AppCfg.Inst.FromJson(CfgText);
+			LocalCfg.Inst.FromJson(CfgText);
 			//AppCfg.Inst = AppCfgParser.Inst.FromYaml(GetCfgFilePath(args));
 		}
 		catch (System.Exception e){
 			System.Console.Error.WriteLine("Failed to load config file: "+e);
 		}
 		System.Console.WriteLine(
-			AppCfgItems.Inst.GalleryDirs.Get()
+			LocalCfgItems.Inst.GalleryDirs.Get()
 		);
 
 		var svc = new ServiceCollection();
