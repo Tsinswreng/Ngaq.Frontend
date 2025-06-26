@@ -23,7 +23,8 @@ public partial class ViewRegister
 
 
 	public ViewRegister(){
-		Ctx = new Ctx();
+		//Ctx = new Ctx();
+		Ctx=App.GetSvc<Ctx>();
 		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
 		_Style();
 		_Render();
@@ -92,7 +93,7 @@ public partial class ViewRegister
 				o.Content = "Register";
 				o.HorizontalAlignment = HoriAlign.Center;
 				o.Click += (s,e)=>{
-					//Ctx?.SubmitAsy().ContinueWith(d=>{});
+					Ctx?.Register();
 				};
 			}
 

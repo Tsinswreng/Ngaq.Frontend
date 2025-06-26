@@ -278,16 +278,4 @@ public IImgGetter? SvcImg{get;set;}
 		}
 		return NIL;
 	}
-
-	// public nil ChangeBg(){
-	// 	using Stream BgFileStream = File.OpenRead(@"e:\_\視聽\圖\貼吧ᙆᵗ圖\0FA34ED0FEB65D19513B8E18913AF166.jpg");
-	// 	var BitMap = new Bitmap(BgFileStream);
-	// 	var imageBrush = new ImageBrush(BitMap){
-	// 		Stretch = Stretch.UniformToFill
-	// 	};
-	// 	BgBrush = imageBrush;
-	// 	return NIL;
-	// }
-
-
 }

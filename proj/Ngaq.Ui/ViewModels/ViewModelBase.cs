@@ -5,19 +5,21 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Tsinswreng.Avalonia.Navigation;
+using Tsinswreng.CsTools;
 
 namespace Ngaq.Ui.ViewModels;
 
 public abstract class ViewModelBase
 	:ObservableObject
 	,IViewModel
-	,IHasViewNavigator
+	,I_ViewNavigator
 {
 
+	[Impl(typeof(I_ViewNavigator))]
 	public IViewNavigator? ViewNavigator{get;set;}
 
-	protected ObservableCollection<str> _Msgs = new();
-	public ObservableCollection<str> Msgs{
+	protected ObservableCollection<object?> _Msgs = new();
+	public ObservableCollection<object?> Msgs{
 		get{return _Msgs;}
 		set{SetProperty(ref _Msgs, value);}
 	}
@@ -75,9 +77,9 @@ public abstract class ViewModelBase
 		,T newValue
 		,[CallerMemberName] string? propertyName = null
 	){
-		OnPropertyChanging(propertyName);
+		base.OnPropertyChanging(propertyName);
 		field = newValue;
-		OnPropertyChanged(propertyName);
+		base.OnPropertyChanged(propertyName);
 		return true;
 	}
 

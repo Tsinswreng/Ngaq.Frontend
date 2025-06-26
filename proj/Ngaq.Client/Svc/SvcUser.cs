@@ -1,21 +1,24 @@
 using System.Text;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Model.Sys.Req;
+using Ngaq.Core.Sys.Svc;
 using Ngaq.Core.Tools;
+using Tsinswreng.CsTools;
 using Tsinswreng.CsTools.Tools;
 
 namespace Ngaq.Client.Svc;
 
-public class SvcUser
-
+public class ClientUser
+	:ISvcUser
 {
 	protected I_GetBaseUrl GetBaseUrl;
-	public SvcUser(
+	public ClientUser(
 		I_GetBaseUrl GetBaseUrl
 	){
 		this.GetBaseUrl = GetBaseUrl;
 	}
 
+	[Impl]
 	public async Task<nil> AddUser(
 		ReqAddUser Req
 		,CT Ct

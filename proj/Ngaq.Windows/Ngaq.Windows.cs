@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
+using Ngaq.Client;
 using Ngaq.Core;
 using Ngaq.Core.Infra.Cfg;
 using Ngaq.Local;
@@ -44,6 +45,7 @@ sealed class Program
 		svc
 			.SetUpCore()
 			.SetUpLocal()
+			.SetUpClient()
 			.SetupWindows()
 		;
 		var servicesProvider = svc.BuildServiceProvider();
