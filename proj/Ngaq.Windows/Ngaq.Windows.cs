@@ -1,13 +1,10 @@
 ﻿using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Core;
-using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Cfg;
 using Ngaq.Local;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
-using Ngaq.Ui.Views.Word.Query;
-using Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 namespace Ngaq.Windows;
 
@@ -42,29 +39,13 @@ sealed class Program
 		catch (System.Exception e){
 			System.Console.Error.WriteLine("Failed to load config file: "+e);
 		}
-		System.Console.WriteLine(
-			LocalCfgItems.Inst.GalleryDirs.Get()
-		);
 
 		var svc = new ServiceCollection();
-		DiCore.SetUpCore(svc);
-		DiLocal.SetUpLocal(svc);
-		//new Setup().ConfigureServices(services);
-		// services.AddSingleton<I_SeekFullWordKVByIdAsy, WordSeeker>();
-		// services.AddTransient<WordCrudVm>();
-
-		//svc.AddScoped<DbCtx, DbCtx>();
-
-		// svc.AddScoped(
-		// 	typeof(RepoSql<>)
-		// 	,typeof(RepoSql<>)
-		// );
-		//<RepoSql, RepoSql>
-
-		//svc.AddScoped<I_TxnRunnerAsy, EfTxnRunner>();
-		svc.AddTransient<VmAddWord>();
-		svc.AddTransient<VmWordQuery>();
-
+		svc
+			.SetUpCore()
+			.SetUpLocal()
+			.SetupWindows()
+		;
 		var servicesProvider = svc.BuildServiceProvider();
 		BuildAvaloniaApp()
 			.AfterSetup(e=>{

@@ -16,7 +16,7 @@ using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.Avalonia.Controls;
 using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
-using Tsinswreng.CsCore.Tools;
+using Tsinswreng.CsTools.Tools;
 //using System.IObservable;
 //using System.Reactive;
 using Ctx = VmWordQuery;

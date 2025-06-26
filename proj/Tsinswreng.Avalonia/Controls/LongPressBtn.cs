@@ -50,7 +50,7 @@ public class LongPressBtn
 /// Call Init() after construct
 /// </summary>
 public class LongPressBtnFn
-	:Tsinswreng.CsCore.IF.IInitable
+	:Tsinswreng.CsTools.IF.IInitable
 {
 	protected DispatcherTimer _PressTimer;
 	protected bool _IsLongPressTriggered;

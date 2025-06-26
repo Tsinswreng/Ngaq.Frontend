@@ -13,7 +13,7 @@ using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
-using Tsinswreng.CsCore.Tools;
+using Tsinswreng.CsTools.Tools;
 using Tsinswreng.CsPage;
 
 namespace Ngaq.Ui.Views.Word.Query;

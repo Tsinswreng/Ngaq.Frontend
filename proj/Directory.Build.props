@@ -17,7 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="../../../Tsinswreng.CsCore/Tsinswreng.CsCore.csproj" />
+		<ProjectReference Include="../../../Tsinswreng.CsTools/Tsinswreng.CsTools.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

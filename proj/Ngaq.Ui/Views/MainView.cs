@@ -26,8 +26,8 @@ public partial class MainView : UserControl {
 		//Content = new ViewWordListCard();
 		//Content = new ViewWordQuery();
 		//Content = new ViewBottomBar();
-		Content = new ViewRegister();
-		//Content = new ViewHome();
+		// Content = new ViewRegister();
+		Content = new ViewHome();
 		// var Btn = new Button { Content = "Hello World!" };
 		// Content = Btn;
 		// var Pressed = new Style(x=>
