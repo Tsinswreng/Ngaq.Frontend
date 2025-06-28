@@ -56,12 +56,13 @@ public partial class VmLoginRegister: ViewModelBase{
 			};
 			SvcUser?.AddUser(ReqAddUser, default).ContinueWith(t=>{
 				if(t.IsFaulted){
-					this.Msgs.Add(t?.Exception);//TODO
+					//this.Msgs.Add(t?.Exception);//TODO
+					this.AddMsg(t?.Exception);
 				}
 			});
 		}
 		catch (System.Exception e){
-			this.Msgs.Add(e.Message);//TODO
+			this.AddMsg(e.Message);//TODO
 			//throw;
 		}
 		return NIL;

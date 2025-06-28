@@ -46,7 +46,7 @@ sealed class Program
 			.SetUpCore()
 			.SetUpLocal()
 			.SetUpClient()
-			.SetupWindows()
+			.SetupUi()
 		;
 		var servicesProvider = svc.BuildServiceProvider();
 		BuildAvaloniaApp()

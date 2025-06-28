@@ -4,6 +4,7 @@ using Ngaq.Core.Model.Sys.Req;
 using Ngaq.Core.Sys.Svc;
 using Ngaq.Core.Tools;
 using Tsinswreng.CsTools;
+using Tsinswreng.CsCore;
 using Tsinswreng.CsTools.Tools;
 
 namespace Ngaq.Client.Svc;

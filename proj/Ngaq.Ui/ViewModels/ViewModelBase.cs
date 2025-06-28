@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Tsinswreng.Avalonia.Navigation;
 using Tsinswreng.CsTools;
+using Tsinswreng.CsCore;
 
 namespace Ngaq.Ui.ViewModels;
 
@@ -44,8 +45,11 @@ public abstract class ViewModelBase
 	// 	get{return Errors.Count > 0;}
 	// }
 
-	public nil AddMsg(str Msg){
+	public nil AddMsg(object? Msg){
 		Msgs.Add(Msg);
+#if DEBUG
+		System.Console.WriteLine(Msg);
+#endif
 		return NIL;
 	}
 

@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Home;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Ngaq.Ui.Views.BottomBar;
+using Ngaq.Ui.Views.User.Register;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Tsinswreng.Avalonia.Tools;
@@ -67,7 +68,7 @@ public partial class ViewHome
 
 			var Me = new Btn_Control(
 				StrBarItem.Inst.BarItem("Me", "👤")
-				,new Control()
+				,new ViewRegister()
 			);
 			ViewBottomBar.Items.Add(Me);
 		}}
