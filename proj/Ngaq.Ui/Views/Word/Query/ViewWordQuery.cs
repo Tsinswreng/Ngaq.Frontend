@@ -295,7 +295,7 @@ public partial class ViewWordQuery
 						BorderBrushProperty
 						,CBE.Mk<VmWordListCard>(x=>x.LearnedColor, Mode: BindingMode.OneWay)
 					);
-					o.BorderThickness = new Thickness(8,0,0,0);
+					o.BorderThickness = new Thickness(4,0,0,0);
 					o.LongPressDurationMs = Ctx?.Cfg.LongPressDurationMs??o.LongPressDurationMs;
 					StyBtnWordCard(o.Styles);
 				}

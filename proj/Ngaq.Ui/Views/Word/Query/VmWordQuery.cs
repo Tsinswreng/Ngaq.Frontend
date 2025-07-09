@@ -249,7 +249,7 @@ public IImgGetter? SvcImg{get;set;}
 		return NIL;
 	}
 
-	protected IBrush _BgBrush;
+	protected IBrush _BgBrush = Brushes.Black;
 	public IBrush BgBrush{
 		get{return _BgBrush;}
 		set{SetProperty(ref _BgBrush, value);}

@@ -16,6 +16,7 @@ using Tsinswreng.Avalonia.Tools;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Ngaq.Core.Infra.Errors;
+using Avalonia.Media;
 
 namespace Ngaq.Ui;
 
@@ -39,6 +40,7 @@ public partial class App : Application {
 		//AvaloniaXamlLoader.Load(this);
 		var Sty = SugarStyle.MkStyForAnyControl();
 		Styles.Add(new FluentTheme());
+		this.RequestedThemeVariant = ThemeVariant.Dark;
 		Styles.Add(SugarStyle.NoCornerRadius(Sty));
 		// 在 App 初始化时添加资源（如 App.axaml.cs 的构造函数）
 		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
@@ -93,14 +95,13 @@ public partial class App : Application {
 			App.Current?.Resources.MergedDictionaries.Add(resources);
 			#endregion #region 全局基字體 2025-05-29T17:14:54.155+08:00_W22-4
 
-
-
 			var Cfg = UiCfg.Inst;
-			desktop.MainWindow = new MainWindow {
+			desktop.MainWindow = new MainWindow{
 				DataContext = new MainViewModel()
 				,Title= "ŋaʔ"
 				,Width = Cfg.WindowWidth
 				,Height = Cfg.WindowHeight
+				,Foreground = Brushes.White
 			};
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
 			singleViewPlatform.MainView = new MainView {
