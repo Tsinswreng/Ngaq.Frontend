@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.User;
 
 using System.Collections.ObjectModel;
 using Ngaq.Core.Model.Sys.Req;
+using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Sys.Svc;
 using Ngaq.Ui.ViewModels;
 
@@ -46,7 +47,7 @@ public partial class VmLoginRegister: ViewModelBase{
 	public nil Register(){
 		if(Password != ConfirmPassword){
 			//TODO
-			this.Msgs.Add("Password and Confirm Password must be the same.");
+			this.AddMsg("Password and Confirm Password must be the same.");
 			return NIL;
 		}
 		try{
@@ -68,7 +69,30 @@ public partial class VmLoginRegister: ViewModelBase{
 		return NIL;
 	}
 
+	public nil Login(){
+		try{
+			var reqLogin = new ReqLogin{
+				Email = Email
+				,Password = Password
+				,KeepLogin = true
+				,UserIdentityMode = (i32)ReqLogin.EUserIdentityMode.Email
+			};
+			SvcUser?.Login(reqLogin, default).ContinueWith(t=>{
+				if(t.IsFaulted){
+					//this.Msgs.Add(t?.Exception);//TODO
+					this.AddMsg(t?.Exception);
+				}
+			});
+		}catch(Exception e){
+			this.AddMsg(e.Message);//TODO
+		}
+		return NIL;
+	}
+
+
+
 
 
 
 }
+

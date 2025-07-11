@@ -95,7 +95,7 @@ public class Cls_{
 				o.Content = "Login";
 				o.HorizontalAlignment = HoriAlign.Center;
 				o.Click += (s,e)=>{
-					//Ctx?.SubmitAsy().ContinueWith(d=>{});
+					Ctx?.Login();
 				};
 			}
 

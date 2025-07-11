@@ -10,6 +10,7 @@ using Avalonia.Styling;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.BottomBar;
 using Ngaq.Ui.Views.Home;
+using Ngaq.Ui.Views.User;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
 using Ngaq.Ui.Views.Word.Query;
@@ -27,7 +28,8 @@ public partial class MainView : UserControl {
 		//Content = new ViewWordQuery();
 		//Content = new ViewBottomBar();
 		//Content = new ViewRegister();
-		Content = new ViewHome();
+		//Content = new ViewHome();
+		Content = new ViewLoginRegister();
 		// var Btn = new Button { Content = "Hello World!" };
 		// Content = Btn;
 		// var Pressed = new Style(x=>
