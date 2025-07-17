@@ -1,13 +1,10 @@
 namespace Ngaq.Ui.Views.Word.WordCard;
 
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Ngaq.Core.Infra.Core;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Converters;
-using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
 using Ctx = VmWordListCard;
 public partial class ViewWordListCard

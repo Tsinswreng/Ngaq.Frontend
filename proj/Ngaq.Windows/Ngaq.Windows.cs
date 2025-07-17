@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Client;
 using Ngaq.Core;
 using Ngaq.Core.Infra.Cfg;
-using Ngaq.Local;
+using Ngaq.Local.Di;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
 
@@ -18,9 +18,9 @@ sealed class Program
 			CfgFilePath = args[0];
 		}else{
 #if DEBUG
-			CfgFilePath = "Ngaq.dev.json";
+			CfgFilePath = "Ngaq.dev.jsonc";
 #else
-			CfgFilePath = "Ngaq.json";
+			CfgFilePath = "Ngaq.jsonc";
 #endif
 		}
 		return CfgFilePath;
@@ -32,6 +32,9 @@ sealed class Program
 	[STAThread]
 	public static void Main(string[] args){
 		try{
+			System.Console.WriteLine(
+				"pwd: "+Directory.GetCurrentDirectory()
+			);
 			var CfgPath = GetCfgFilePath(args);
 			var CfgText = File.ReadAllText(CfgPath);
 			LocalCfg.Inst.FromJson(CfgText);

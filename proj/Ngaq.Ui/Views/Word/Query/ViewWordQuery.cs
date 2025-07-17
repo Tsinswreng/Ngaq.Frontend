@@ -14,11 +14,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.Avalonia.Controls;
-using Tsinswreng.Avalonia.Sugar;
+using Tsinswreng.Avalonia.Dsl;
+// using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
 using Tsinswreng.CsTools.Tools;
 //using System.IObservable;
 //using System.Reactive;
+using static Tsinswreng.Avalonia.Dsl.DslFactory;
 using Ctx = VmWordQuery;
 public partial class ViewWordQuery
 	:UserControl
@@ -111,8 +113,7 @@ public partial class ViewWordQuery
 	protected Panel _Menu(){
 		var R = new IndexGrid(IsRow: true);
 		var Row1 = new IndexGrid(IsRow: false);
-		R.Add(Row1.Grid);
-		{var o = Row1.Grid;
+		R.AddInit(Row1.Grid, (o)=>{
 			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
 				new ColDef(1, GUT.Star),
@@ -120,34 +121,21 @@ public partial class ViewWordQuery
 				new ColDef(1, GUT.Star),
 				new ColDef(1, GUT.Star),
 			]);
-		}
+		});
 		{{
-			var LoadWord = new SwipeLongPressBtn{Content = "Start"};
-			Row1.Add(LoadWord);
-			{var o = LoadWord;
+			Row1.AddInit(new SwipeLongPressBtn{Content = "Start"}, (o)=>{
 				o.Click += (s,e)=>{
 					Ctx?.LoadEtStart();
 				};
-			}
-
-			var Save = new SwipeLongPressBtn{Content = "Save"};
-			Row1.Add(Save);
-			{var o = Save;
+			}).AddInit(new SwipeLongPressBtn{Content = "Save"}, o=>{
 				o.Click += (s,e)=>{
 					Ctx?.SaveEtRestart();
 				};
-			}
-
-			var Reload = new SwipeLongPressBtn{Content = "Reset"};
-			Row1.Add(Reload);
-			{
-				var o = Reload;
+			}).AddInit(new SwipeLongPressBtn{Content = "Reset"}, o=>{
 				o.Click += (s,e)=>{
 					Ctx?.Reset();
 				};
-			}
-
-
+			});
 		}}
 
 		return R.Grid;
@@ -155,72 +143,39 @@ public partial class ViewWordQuery
 
 
 	protected nil Render(){
-		Content = Root.Grid;
-		{var o = Root.Grid;
+		this.ContentInit(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				new RowDef(1, GUT.Auto),//overlay
-				new RowDef(1, GUT.Auto),
-				//new RowDef(1, GUT.Auto),//可隱藏ʹ菜單
-				new RowDef(4, GUT.Star),
-				new RowDef(1, GUT.Auto),//GridSplitter
-				new RowDef(5, GUT.Star),
+				RowDef(1, GUT.Auto),//overlay
+				RowDef(1, GUT.Auto),
+				RowDef(4, GUT.Star),
+				RowDef(1, GUT.Auto),//GridSplitter
+				RowDef(5, GUT.Star),
 			]);
-		}
+		});
 		{{
-			var overlay = new Border();
-			Root.Add(overlay);
-			{var o = overlay;
+			Root.AddInit(Border(), o=>{
 				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
-				//o.Bind(BoundsProperty, )
-				// o.Width = UiCfg.Inst.WindowWidth;
-				// o.Height = UiCfg.Inst.WindowHeight;
 				o.ZIndex = -1;
-			}
-
-			var Menu = _Menu();
-			Root.Add(Menu);
-
-
-			// var Canv = new Canvas();
-			// Root.Add(Canv);
-			// {var o = Canv;
-			// 	o.Background = Brushes.Black;
-			// 	o.ZIndex = 1;
-			// }
-			// Canv.Children.Add(this.Menu);
-			// {var o = this.Menu;
-			// 	o.Background = Brushes.Black;
-			// }
-
-			var Scr = new ScrollViewer();
-			Root.Add(Scr);
-
-			var ListWordCard = _ListWordCard();
-			Scr.Content = ListWordCard;
-			{var o = ListWordCard;
-				o.Bind(
-					ItemsControl.ItemsSourceProperty
-					,CBE.Mk<Ctx>(x=>x.WordCards, Mode: BindingMode.TwoWay)
-				);
-			}
-
-			var Spl = new GridSplitter();
-			Root.Add(Spl);
-			{var o = Spl;
-				o.Background = Brushes.Black;
-				o.BorderThickness = new Thickness(1);
-				o.BorderBrush = Brushes.LightGray;
-			}
-
-			var WordInfo = _WordInfo();
-			Root.Add(WordInfo);
-			{var o = WordInfo;
-				o.Bind(Control.DataContextProperty
-					,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
-				);
-			}
+			})
+			.AddInit(_Menu())
+			.AddInit(ScrollViewer(), Scr=>{
+				Scr.ContentInit(_ListWordCard(), o=>{
+					o.Bind(
+						ItemsControl.ItemsSourceProperty
+						,CBE.Mk<Ctx>(x=>x.WordCards, Mode: BindingMode.TwoWay)
+					);
+				});
+				Root.AddInit(GridSplitter(), o=>{
+					o.Background = Brushes.Black;
+					o.BorderThickness = new Thickness(1);
+					o.BorderBrush = Brushes.LightGray;
+				}).AddInit(_WordInfo(), o=>{
+					o.Bind(Control.DataContextProperty
+						,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
+					);
+				});
+			});//~ScrollViewer
 		}}
-
 		return NIL;
 	}
 

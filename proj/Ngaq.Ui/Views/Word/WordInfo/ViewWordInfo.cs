@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Styling;
 using Avalonia.Media;
 using Ngaq.Ui.ViewModels;
-using Tsinswreng.Avalonia.Sugar;
 using Tsinswreng.Avalonia.Tools;
 using Ctx = VmWordInfo;
 using Ngaq.Core.Model.Po.Kv;
@@ -15,6 +14,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Tsinswreng.Avalonia.Controls;
+using Tsinswreng.Avalonia.Dsl;
 
 public partial class ViewWordInfo
 	:UserControl

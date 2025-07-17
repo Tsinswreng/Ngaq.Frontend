@@ -28,8 +28,8 @@ public partial class MainView : UserControl {
 		//Content = new ViewWordQuery();
 		//Content = new ViewBottomBar();
 		//Content = new ViewRegister();
-		//Content = new ViewHome();
-		Content = new ViewLoginRegister();
+		Content = new ViewHome();
+		//Content = new ViewLoginRegister();
 		// var Btn = new Button { Content = "Hello World!" };
 		// Content = Btn;
 		// var Pressed = new Style(x=>

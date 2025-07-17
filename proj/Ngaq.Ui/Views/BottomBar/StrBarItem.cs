@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using Tsinswreng.Avalonia.Controls;
-using Tsinswreng.Avalonia.Sugar;
+using Tsinswreng.Avalonia.Dsl;
 using Tsinswreng.Avalonia.Tools;
 
 namespace Ngaq.Ui.Views.BottomBar;

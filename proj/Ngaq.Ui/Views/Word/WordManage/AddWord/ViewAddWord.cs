@@ -13,7 +13,6 @@ using Semi.Avalonia;
 using Ursa.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
-using Tsinswreng.Avalonia.Sugar;
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using Tsinswreng.Avalonia.Controls;

@@ -9,7 +9,6 @@ using Ngaq.Ui.Views;
 using Avalonia.Themes.Fluent;
 using Microsoft.Extensions.DependencyInjection;
 using Semi.Avalonia;
-using Tsinswreng.Avalonia.Sugar;
 using Avalonia.Styling;
 using Avalonia.Controls;
 using Tsinswreng.Avalonia.Tools;
@@ -17,6 +16,7 @@ using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Ngaq.Core.Infra.Errors;
 using Avalonia.Media;
+using Tsinswreng.Avalonia.Dsl;
 
 namespace Ngaq.Ui;
 
@@ -38,10 +38,10 @@ public partial class App : Application {
 
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
-		var Sty = SugarStyle.MkStyForAnyControl();
+		var Sty = DslStyle.MkStyForAnyControl();
 		Styles.Add(new FluentTheme());
 		this.RequestedThemeVariant = ThemeVariant.Dark;
-		Styles.Add(SugarStyle.NoCornerRadius(Sty));
+		Styles.Add(DslStyle.NoCornerRadius(Sty));
 		// 在 App 初始化时添加资源（如 App.axaml.cs 的构造函数）
 		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
 		_Style();

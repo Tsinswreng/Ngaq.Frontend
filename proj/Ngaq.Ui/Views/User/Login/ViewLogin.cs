@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
+using Tsinswreng.Avalonia.Dsl;
 using Tsinswreng.Avalonia.Tools;
 
 namespace Ngaq.Ui.Views.User.Login;
@@ -75,10 +76,15 @@ public class Cls_{
 				};
 			}
 
-			var logo = new AppTextLogo(){
+
+			Root.AddInit(new AppTextLogo(){
 				FontSize = 30.0
-			};
-			Root.Children.Add(logo);
+			});
+
+			// var logo = new AppTextLogo(){
+			// 	FontSize = 30.0
+			// };
+			// Root.Children.Add(logo);
 
 
 			var formItem = FnAddLabelBox(Root);
@@ -88,16 +94,24 @@ public class Cls_{
 			//formItem("Confirm Password", CBE.pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
 
-			var Submit = new Button{};
-			Root.Children.Add(Submit);
-			{
-				var o = Submit;
+			Root.AddInit(new Button{}, (o)=>{
 				o.Content = "Login";
 				o.HorizontalAlignment = HoriAlign.Center;
 				o.Click += (s,e)=>{
 					Ctx?.Login();
 				};
-			}
+			});
+
+			// var Submit = new Button{};
+			// Root.Children.Add(Submit);
+			// {
+			// 	var o = Submit;
+			// 	o.Content = "Login";
+			// 	o.HorizontalAlignment = HoriAlign.Center;
+			// 	o.Click += (s,e)=>{
+			// 		Ctx?.Login();
+			// 	};
+			// }
 
 			//TODO 用popup彈出框
 			var errMsgSclv = new ScrollViewer{};
