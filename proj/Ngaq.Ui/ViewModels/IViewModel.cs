@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Tools;
 
 namespace Ngaq.Ui.ViewModels;
 

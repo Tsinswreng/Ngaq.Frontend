@@ -8,7 +8,7 @@ using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.Samples.Word;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.ViewModels;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordListCard;
 public partial class VmWordListCard
 	:ViewModelBase

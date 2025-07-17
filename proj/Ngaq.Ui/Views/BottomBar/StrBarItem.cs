@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Media;
-using Tsinswreng.Avalonia.Controls;
-using Tsinswreng.Avalonia.Dsl;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Controls;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
 
 namespace Ngaq.Ui.Views.BottomBar;
 

@@ -15,9 +15,9 @@ using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordCard;
-using Tsinswreng.Avalonia.Controls;
-using Tsinswreng.Avalonia.Converters;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Controls;
+using Tsinswreng.AvlnTools.Converters;
+using Tsinswreng.AvlnTools.Tools;
 
 namespace Ngaq.Ui.Views;
 

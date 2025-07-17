@@ -13,14 +13,14 @@ using Avalonia.VisualTree;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
-using Tsinswreng.Avalonia.Controls;
-using Tsinswreng.Avalonia.Dsl;
-// using Tsinswreng.Avalonia.Sugar;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Controls;
+using Tsinswreng.AvlnTools.Dsl;
+// using Tsinswreng.AvlnTools.Sugar;
+using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTools.Tools;
 //using System.IObservable;
 //using System.Reactive;
-using static Tsinswreng.Avalonia.Dsl.DslFactory;
+using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmWordQuery;
 public partial class ViewWordQuery
 	:UserControl

@@ -6,7 +6,7 @@ using Ctx = VmAddWord;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Data;
 using Avalonia.Styling;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Tools;
 using Avalonia.Media;
 using Avalonia;
 using Semi.Avalonia;
@@ -15,7 +15,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
-using Tsinswreng.Avalonia.Controls;
+using Tsinswreng.AvlnTools.Controls;
 
 public partial class ViewAddWord
 	:UserControl

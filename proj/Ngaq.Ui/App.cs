@@ -11,12 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Semi.Avalonia;
 using Avalonia.Styling;
 using Avalonia.Controls;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Tools;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Ngaq.Core.Infra.Errors;
 using Avalonia.Media;
-using Tsinswreng.Avalonia.Dsl;
+using Tsinswreng.AvlnTools.Dsl;
 
 namespace Ngaq.Ui;
 

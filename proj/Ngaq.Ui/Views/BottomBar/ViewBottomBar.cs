@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.BottomBar;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Tools;
 using Ctx = Vm_BottomBar;
 public partial class ViewBottomBar
 	:UserControl

@@ -5,7 +5,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Converters;
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordListCard;
 public partial class ViewWordListCard
 	:UserControl

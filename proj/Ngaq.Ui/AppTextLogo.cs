@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 
 using Ctx = object;//unused
-using Tsinswreng.Avalonia.Tools;
+using Tsinswreng.AvlnTools.Tools;
 
 public partial class AppTextLogo
 	:UserControl
