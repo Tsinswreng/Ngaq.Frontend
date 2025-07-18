@@ -264,7 +264,7 @@ public partial class ViewWordInfo
 					o.TextWrapping = TextWrapping.Wrap;
 					o.Bind(
 						TextBlock.TextProperty
-						,new CBE(CBE.Pth<str>(x=>x))
+						,CBE.Mk<str>(x=>x)
 					);
 				});
 			}}

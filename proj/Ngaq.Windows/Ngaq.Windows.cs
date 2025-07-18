@@ -6,6 +6,7 @@ using Ngaq.Core.Infra.Cfg;
 using Ngaq.Local.Di;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
+using Tsinswreng.AvlnTools.Navigation;
 
 namespace Ngaq.Windows;
 
@@ -47,7 +48,7 @@ sealed class Program
 		var svc = new ServiceCollection();
 		svc
 			.SetUpCore()
-			.SetUpLocal()
+			.SetUpLocal()//TODO 改成按需API調用
 			.SetUpClient()
 			.SetupUi()
 		;

@@ -7,20 +7,28 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
+using Tsinswreng.CsTools.Tools;
+using Ngaq.Ui.Infra;
 
 namespace Ngaq.Ui.ViewModels;
 
-public abstract class ViewModelBase
+public class ViewModelBase
 	:ObservableObject
 	,IViewModel
-	,I_ViewNavigator
+	,I_ViewNavi
+	,I_Arg
 {
+	public ViewModelBase(){
+		ViewNavi = MgrViewNavi.ViewNavi;
+	}
 
-	[Impl(typeof(I_ViewNavigator))]
-	public IViewNavigator? ViewNavigator{get;set;}
+	[Impl(typeof(I_ViewNavi))]
+	public IViewNavi? ViewNavi{get;set;}
+	//跳轉傳參
+	public ITypedObj? Arg{get;set;}
 
-	protected ObservableCollection<object?> _Msgs = new();
-	public ObservableCollection<object?> Msgs{
+	protected ICollection<object?> _Msgs = new ObservableCollection<object?>();
+	public ICollection<object?> Msgs{
 		get{return _Msgs;}
 		set{SetProperty(ref _Msgs, value);}
 	}
@@ -54,16 +62,14 @@ public abstract class ViewModelBase
 	}
 
 	public nil ShowMsg(){
-
 		var Old = Msgs;
-		Msgs = new();
+		Msgs = new ObservableCollection<object?>();
 		Msgs = Old;
-
 		IsShowMsg = true;
 		return NIL;
 	}
 
-	public nil ClearErr(){
+	public nil ClearMsg(){
 		Msgs.Clear();
 		return NIL;
 	}

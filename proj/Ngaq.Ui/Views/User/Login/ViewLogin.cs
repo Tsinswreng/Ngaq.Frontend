@@ -72,7 +72,7 @@ public class Cls_{
 			{
 				backBtn.Content = "←";
 				backBtn.Click += (s,e)=>{
-					Ctx?.ViewNavigator?.Back();
+					Ctx?.ViewNavi?.Back();
 				};
 			}
 

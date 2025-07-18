@@ -33,6 +33,12 @@ public partial class ViewAddWord
 
 		Style();
 		Render();
+
+		this.KeyDown += (s,e)=>{
+			if(e.Key == Avalonia.Input.Key.Escape){
+				
+			}
+		};
 	}
 
 	public class Cls_{
@@ -56,9 +62,8 @@ public partial class ViewAddWord
 
 	protected nil Render(){
 		var Root = new AutoGrid(IsRow:true);
-		//Content = Root.Grid;
-		this.ContentInit(Root, o=>{
-			Root.Grid.RowDefinitions.AddRange([
+		this.ContentInit(Root.Grid, o=>{
+			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//Popup
 				RowDef(1, GUT.Auto),//empty
 				RowDef(8, GUT.Star),//tab
@@ -91,11 +96,10 @@ public partial class ViewAddWord
 					b.Bind(
 						TextBlock.TextProperty
 						,CBE.Mk<Ctx>(x=>x.Msgs
-							,Converter: new SimpleFnConvtr<object?, str>(y=>{
-									var ans = string.Join("\n", y);
-									return ans;
-								}
-							)
+							,Converter: new SimpleFnConvtr<ICollection<object?>, str>(y=>{
+								var ans = string.Join("\n", y);
+								return ans;
+							})
 						)
 					);
 				});

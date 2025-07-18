@@ -3,12 +3,18 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsTools.Tools;
 
 namespace Ngaq.Ui.ViewModels;
 
+public interface I_Arg{
+	public ITypedObj? Arg{get;set;}
+}
+
 public interface IViewModel{}
 
-//棄用 緣lambda中無法推導出IViewModelʹ具體ʹ叶ˡ類ʹ類型
+
+
 // public static class ExtnIViewModel{
 // 	public static nil Bind(
 // 		this IViewModel z
@@ -23,6 +29,6 @@ public interface IViewModel{}
 // 				Mode = BindingMode.TwoWay
 // 			}
 // 		);
-// 		return Nil;
+// 		return NIL;
 // 	}
 // }

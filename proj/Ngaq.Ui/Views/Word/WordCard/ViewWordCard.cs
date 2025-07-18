@@ -33,10 +33,11 @@ public partial class ViewWordListCard
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
 
-		Styles.AddInit(new Style(x=>
+		Styles.AddInit(
+			new Style(x=>
 				x.Is<TextBlock>()
-			), o=>{
-			o.Set(
+			)
+			,o=>{o.Set(
 				EffectProperty
 				,new DropShadowDirectionEffect{
 					Color = Colors.Black
@@ -45,9 +46,9 @@ public partial class ViewWordListCard
 					//,Direction = 315 //高度 315是左上角
 					,Direction = 330
 					,Opacity = 0.5
-				}
-			);
-		});
+				});
+			}
+		);
 
 		// var InfoGridColor = new Style(x=>
 		// 	x.Is<TextBlock>()

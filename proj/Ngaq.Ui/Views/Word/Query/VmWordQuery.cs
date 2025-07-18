@@ -66,7 +66,7 @@ public IImgGetter? SvcImg{get;set;}
 		MgrLearn.OnErr += (s,e)=>{
 			System.Console.WriteLine(e);//t
 			System.Console.WriteLine(e.Err);
-			AddMsg(App.ErrI18n?.Parse(e.Err)??e.Err+"");
+			AddMsg(App.ErrI18n?.Parse(e.Err)??e.Err+""); // TODO 改成注入
 			ShowMsg();
 		};
 		MgrLearn.OnLearnOrUndo += (s,e)=>{
@@ -74,7 +74,6 @@ public IImgGetter? SvcImg{get;set;}
 		};
 		return NIL;
 	}
-
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmWordQuery(){
@@ -211,8 +210,6 @@ public IImgGetter? SvcImg{get;set;}
 	}
 
 
-
-
 	// public nil GetAllWords(){
 	// 	CancellationToken Ct = default;
 	// 	SvcWord?.PageBoWord(
@@ -256,7 +253,7 @@ public IImgGetter? SvcImg{get;set;}
 	}
 
 
-	public nil ChangeBg(){
+	public nil ChangeBg(){//TODO緩存
 		try{
 			if(SvcImg == null){
 				return NIL;
