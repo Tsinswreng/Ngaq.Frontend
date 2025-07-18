@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using Ngaq.Core.Model.Sys.Req;
 using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Sys.Svc;
-using Ngaq.Ui.ViewModels;
+using Ngaq.Ui.Infra;
 
 using Ctx = VmLoginRegister;
 public partial class VmLoginRegister: ViewModelBase{

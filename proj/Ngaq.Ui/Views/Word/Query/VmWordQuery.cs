@@ -10,11 +10,11 @@ using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Word;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Core.Word.Svc;
-using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.CsTools.Tools;
 using Tsinswreng.CsPage;
+using Ngaq.Ui.Infra;
 
 namespace Ngaq.Ui.Views.Word.Query;
 using Ctx = VmWordQuery;

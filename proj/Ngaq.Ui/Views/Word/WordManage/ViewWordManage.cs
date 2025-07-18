@@ -1,3 +1,5 @@
+using Ngaq.Ui.Infra;
+
 namespace Ngaq.Ui.Views.Word.WordManage;
 
 using Avalonia.Controls;
@@ -5,7 +7,7 @@ using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = Ngaq.Ui.ViewModels.ViewModelBase;
+using Ctx = ViewModelBase;
 public partial class ViewWordManage
 	:UserControl
 {

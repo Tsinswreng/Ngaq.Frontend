@@ -4,7 +4,7 @@ using Ngaq.Core.Model.Bo.IFWord;
 using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Model.Samples.Word;
 using Ngaq.Core.Word.Models.Learn_;
-using Ngaq.Ui.ViewModels;
+using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools.Tools.MultiDict;
 
 namespace Ngaq.Ui.Views.Word.WordInfo;

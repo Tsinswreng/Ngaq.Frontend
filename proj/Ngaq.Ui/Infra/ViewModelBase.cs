@@ -8,9 +8,9 @@ using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsTools.Tools;
-using Ngaq.Ui.Infra;
+using Ngaq.Ui.ViewModels;
 
-namespace Ngaq.Ui.ViewModels;
+namespace Ngaq.Ui.Infra;
 
 public class ViewModelBase
 	:ObservableObject
@@ -56,7 +56,7 @@ public class ViewModelBase
 	public nil AddMsg(object? Msg){
 		Msgs.Add(Msg);
 #if DEBUG
-		System.Console.WriteLine(Msg);
+		Console.WriteLine(Msg);
 #endif
 		return NIL;
 	}
@@ -87,9 +87,9 @@ public class ViewModelBase
 		,T newValue
 		,[CallerMemberName] string? propertyName = null
 	){
-		base.OnPropertyChanging(propertyName);
+		OnPropertyChanging(propertyName);
 		field = newValue;
-		base.OnPropertyChanged(propertyName);
+		OnPropertyChanged(propertyName);
 		return true;
 	}
 

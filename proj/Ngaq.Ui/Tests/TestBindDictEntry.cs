@@ -2,7 +2,7 @@ using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data.Converters;
-using Ngaq.Ui.ViewModels;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.BottomBar;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;

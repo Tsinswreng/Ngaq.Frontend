@@ -7,7 +7,7 @@ using Ngaq.Core.Infra.Core;
 using Ngaq.Core.Model.Bo;
 using Ngaq.Core.Model.Samples.Word;
 using Ngaq.Core.Word.Models.Learn_;
-using Ngaq.Ui.ViewModels;
+using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordListCard;
 public partial class VmWordListCard

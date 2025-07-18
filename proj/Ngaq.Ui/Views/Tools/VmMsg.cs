@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using Ngaq.Ui.ViewModels;
+using Ngaq.Ui.Infra;
 
 namespace Ngaq.Ui.Views.Tools;
 using Ctx = VmXxx;
