@@ -3,10 +3,12 @@ namespace Ngaq.Ui.Views.Home;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Ngaq.Ui.Views.BottomBar;
+using Ngaq.Ui.Views.User;
 using Ngaq.Ui.Views.User.Register;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmHome;
 public partial class ViewHome
 	:UserControl
@@ -32,46 +34,33 @@ public partial class ViewHome
 		return NIL;
 	}
 
-	IndexGrid Root = new(IsRow:true);
+	AutoGrid Root = new(IsRow:true);
 
 	protected nil Render(){
-		Content = Root.Grid;
-		{var o = Root.Grid;
+		this.ContentInit(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				new RowDef(20, GUT.Star),
-				//new RowDef(1, GUT.Star),
+				RowDef(20, GUT.Star),
 			]);
-		}
+		});
 
-		var ViewBottomBar = new ViewBottomBar();
-		Root.Add(ViewBottomBar);
-		{var o = ViewBottomBar;
-			//o.ItemsControl.Background = new SolidColorBrush(Color.FromRgb(30, 30, 30));
-		}
-		{{
-			var Learn = new Btn_Control(
-				StrBarItem.Inst.BarItem("Learn", "📖")
-				,new ViewWordQuery()
-			);
-			ViewBottomBar.Items.Add(Learn);
-			{var o = Learn;
-				ViewBottomBar.Cur.Content = Learn.Control;
+		Root.AddInit(new ViewBottomBar(), ViewBottomBar=>{
+			ViewBottomBar.Items.AddInit(
+				new Btn_Control(
+					StrBarItem.Inst.BarItem("Learn", "📖")
+					,new ViewWordQuery()
+				),o=>{
+				ViewBottomBar.Cur.Content = o.Control;
 				o.Button.Background = Brushes.Transparent;
-			}
-
-
-			var Lib = new Btn_Control(
+			})
+			.AddInit(new Btn_Control(
 				StrBarItem.Inst.BarItem("Lib", "📚")
 				,new ViewAddWord()
-			);
-			ViewBottomBar.Items.Add(Lib);
-
-			var Me = new Btn_Control(
+			))
+			.AddInit(new Btn_Control(
 				StrBarItem.Inst.BarItem("Me", "👤")
-				,new ViewRegister()
-			);
-			ViewBottomBar.Items.Add(Me);
-		}}
+				,new ViewLoginRegister()
+			));
+		});
 
 		return NIL;
 	}

@@ -10,3 +10,4 @@ global using Style = Avalonia.Styling.Style;
 global using TxtAlign = Avalonia.Media.TextAlignment;
 global using VertAlign = Avalonia.Layout.VerticalAlignment;
 global using HoriAlign = Avalonia.Layout.HorizontalAlignment;
+global using static Tsinswreng.AvlnTools.Dsl.DslFactory;

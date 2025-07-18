@@ -5,6 +5,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Converters;
+using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordListCard;
 public partial class ViewWordListCard
@@ -27,16 +28,14 @@ public partial class ViewWordListCard
 		public str InInfoGrid = nameof(InInfoGrid);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
-	public IndexGrid Root{get;set;} = new IndexGrid(IsRow:true);
+	public AutoGrid Root{get;set;} = new AutoGrid(IsRow:true);
 
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
-		var ShadowText = new Style(x=>
-			x.Is<TextBlock>()
-		);
-		Styles.Add(ShadowText);
-		{var o = ShadowText;
 
+		Styles.AddInit(new Style(x=>
+				x.Is<TextBlock>()
+			), o=>{
 			o.Set(
 				EffectProperty
 				,new DropShadowDirectionEffect{
@@ -48,7 +47,8 @@ public partial class ViewWordListCard
 					,Opacity = 0.5
 				}
 			);
-		}
+		});
+
 		// var InfoGridColor = new Style(x=>
 		// 	x.Is<TextBlock>()
 		// 	.Class(Cls.InInfoGrid)
@@ -75,7 +75,7 @@ public partial class ViewWordListCard
 			new RowDef(8, GUT.Auto),
 		]);
 
-		var LangGrid = new IndexGrid(IsRow:false);
+		var LangGrid = new AutoGrid(IsRow:false);
 		Root.Add(LangGrid.Grid);
 		{var o = LangGrid;
 			o.Grid.ColumnDefinitions.AddRange([
@@ -103,7 +103,7 @@ public partial class ViewWordListCard
 		}}//~Header
 
 
-		var HeadBox = new IndexGrid(IsRow:false);
+		var HeadBox = new AutoGrid(IsRow:false);
 		Root.Add(HeadBox.Grid);
 		{
 			HeadBox.Grid.ColumnDefinitions.AddRange([
@@ -132,7 +132,7 @@ public partial class ViewWordListCard
 	}
 
 	Control _InfoGrid(){
-		var R = new IndexGrid(IsRow:false);
+		var R = new AutoGrid(IsRow:false);
 		{var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
 			o.ColumnDefinitions.AddRange([

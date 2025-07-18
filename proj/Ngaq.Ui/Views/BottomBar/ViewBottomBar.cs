@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.BottomBar;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = Vm_BottomBar;
 public partial class ViewBottomBar
@@ -32,7 +33,7 @@ public partial class ViewBottomBar
 		return NIL;
 	}
 
-	IndexGrid Root = new(IsRow:true);
+	AutoGrid Root = new(IsRow:true);
 
 	public ItemsControl ItemsControl{get;set;} = new ItemsControl();
 
@@ -40,31 +41,27 @@ public partial class ViewBottomBar
 
 
 	protected nil Render(){
-		Content = Root.Grid;
-		{var o = Root.Grid;
+		this.ContentInit(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				new RowDef(18, GUT.Star),
-				new RowDef(1, GUT.Star),
+				RowDef(18, GUT.Star),
+				RowDef(1, GUT.Star),
 			]);
-		}
+		});
 		{{
-			Root.Add(Cur);
-			ItemsControl = new ItemsControl();
-			Root.Add(ItemsControl);
-			{var o = ItemsControl;
+			Root.AddInit(Cur)
+			.AddInit(_ItemsControl(), o=>{
 				o.ItemsSource = Items;
 				o.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 					return new UniformHorizontalPanel();
 				});
-			}
-			ItemsControl.ItemTemplate = new FuncDataTemplate<Btn_Control>((Btn_Control, b)=>{
-				var Ans = Btn_Control.Button;
-				Ans.Click += (s,e)=>{
-					Cur.Content = Btn_Control.Control;
-				};
-				return Ans;
+				o.ItemTemplate = new FuncDataTemplate<Btn_Control>((Btn_Control, b)=>{
+					var Ans = Btn_Control.Button;
+					Ans.Click += (s,e)=>{
+						Cur.Content = Btn_Control.Control;
+					};
+					return Ans;
+				});
 			});
-
 		}}
 		return NIL;
 	}

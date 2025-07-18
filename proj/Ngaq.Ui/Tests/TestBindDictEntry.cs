@@ -41,7 +41,7 @@ class ViewTestBindDict : UserControl {
 
 	public ViewTestBindDict() {
 		Ctx = new VmTestBindDict();
-		var Root = new IndexGrid(IsRow: true);
+		var Root = new AutoGrid(IsRow: true);
 		Content = Root.Grid;
 		{
 			var o = Root.Grid;

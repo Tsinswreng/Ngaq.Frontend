@@ -8,6 +8,7 @@ using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Microsoft.Extensions.DependencyInjection;
+using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 namespace Ngaq.Ui.Views.User.Register;
 
@@ -42,14 +43,11 @@ public partial class ViewRegister
 			x.Is<Control>()
 			.Class(Cls.inputBox)
 		);
-		Styles.Add(cls_inputBox);
-		{
-			var o = cls_inputBox;
-			o.Set(
-				BackgroundProperty
-				,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
-			);
-		}
+		Styles.AddInit(cls_inputBox, o=>o.Set(
+			BackgroundProperty
+			,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
+		));
+
 		return NIL;
 	}
 
@@ -72,11 +70,13 @@ public partial class ViewRegister
 			// 	};
 			// }
 
-			var logo = new AppTextLogo(){
-				FontSize = 30.0
-			};
-			root.Children.Add(logo);
+			// root.AddInit(new AppTextLogo(){
+			// 	FontSize = 30.0
+			// });
 
+			new AppTextLogo(){
+				FontSize = 30.0
+			}.Attach(root);
 
 			var formItem = _fn_addLabelBox(root);
 
@@ -85,22 +85,18 @@ public partial class ViewRegister
 			formItem("Confirm Password", CBE.Pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
 
-			var submit = new Button{};
-			root.Children.Add(submit);
-			{
-				var o = submit;
+
+			root.AddInit(_Button(), o=>{
 				o.Content = "Register";
 				o.HorizontalAlignment = HoriAlign.Center;
 				o.Click += (s,e)=>{
 					Ctx?.Register();
 				};
-			}
+			});
 
 			var errMsgSclv = new ScrollViewer{};
 			root.Children.Add(errMsgSclv);
-			{
 
-			}
 			errMsgSclv.Content = _ErrorList();
 		}}
 		return root;
@@ -149,7 +145,5 @@ public partial class ViewRegister
 			return NIL;
 		};
 	}
-
-
-
 }
+

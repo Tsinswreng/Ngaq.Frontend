@@ -73,25 +73,22 @@ public partial class ViewWordInfo
 		).Set(
 			ForegroundProperty
 			,new SolidColorBrush(Gray)
-			//,new SolidColorBrush(Colors.Red)
-		);
-		Styles.Add(LightGray);
+		).Attach(Styles);
 
 		var InputBoxNoBorder = new Style(x=>
 			x.Is<TextBlock>()
 		).Set(
 			BorderThicknessProperty
 			,new Thickness(0)
-		);
-		Styles.Add(InputBoxNoBorder);
-
+		).Attach(Styles);
 		return NIL;
 	}
 
-	public IndexGrid Root{get;set;} = new(IsRow: true);
+	public AutoGrid Root{get;set;} = new(IsRow: true);
 
 	protected TextBox TxtBox(){
 		var R = new TextBox();
+		var S = R.Styles;
 		R.Classes.Add(Cls.TxtBox);
 		//R.BorderThickness = new Thickness(0);
 		R.IsReadOnly = true;
@@ -107,7 +104,7 @@ public partial class ViewWordInfo
 		var flyout = new MenuFlyout();
 		FlyoutBase.SetAttachedFlyout(R, flyout);
 
-		R.Styles.Add(new Style().NoMargin().NoPadding());
+		S.Add(new Style().NoMargin().NoPadding());
 		R.MinHeight = 0;
 		var NoBdr = new Style(x=>
 			x.Is<TextBox>()
@@ -115,66 +112,53 @@ public partial class ViewWordInfo
 			//.Class(PsdCls.Inst.focus)
 			.Template()
 			.OfType<Border>()
-		);
-		R.Styles.Add(NoBdr);
-		{var o = NoBdr;
-			o.Set(
-				BorderThicknessProperty
-				,new Thickness(0)
-			);
-		}
+		).Set(
+			BorderThicknessProperty
+			,new Thickness(0)
+		).Attach(S);
+
 		var FocusNoBdr = new Style(x=>
 			x.Is<TextBox>()
 			.Class(PsdCls.Inst.focus)
 			.Template()
 			.OfType<Border>()
+		).Attach(S)
+		.Set(
+			BorderThicknessProperty
+			,new Thickness(0)
 		);
-		R.Styles.Add(FocusNoBdr);
-		{var o = FocusNoBdr;
-			o.Set(
-				BorderThicknessProperty
-				,new Thickness(0)
-			);
-		}
 		return R;
 	}
 
 	protected nil Render(){
-		Content = Root.Grid;
-		{var o = Root.Grid;
+		this.ContentInit(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				new RowDef(1, GUT.Auto),//LangId
-				new RowDef(3, GUT.Auto),//Head
-				new RowDef(1, GUT.Auto),//Summary
-				new RowDef(100, GUT.Star),//Description
-				new RowDef(1, GUT.Star),
+				RowDef(1, GUT.Auto),//LangId
+				RowDef(3, GUT.Auto),//Head
+				RowDef(1, GUT.Auto),//Summary
+				RowDef(100, GUT.Star),//Description
+				RowDef(1, GUT.Star),
 			]);
-		}
+		});
 		{{
-			var LangId = new IndexGrid(IsRow: false);
-			Root.Add(LangId.Grid);
-			{var o = LangId.Grid;
+			var LangId = new AutoGrid(IsRow: false);
+			Root.AddInit(LangId.Grid, o=>{
 				o.ColumnDefinitions.AddRange([
-					new ColDef(1, GUT.Star),
-					new ColDef(1, GUT.Auto),
+					ColDef(1, GUT.Star),
+					ColDef(1, GUT.Auto),
 				]);
 				o.Classes.Add(Cls.LightGray);//即o.Classes.Add("LightGray");
-			}
+			});
 			{{
-				var Lang = new SelectableTextBlock{};
-				LangId.Add(Lang);
-				{var o = Lang;
+				LangId.AddInit(_SelectableTextBlock(), o=>{
 					o.Bind(
 						TextBlock.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 					);
 					o.HorizontalAlignment = HoriAlign.Left;
 					o.VerticalAlignment = VertAlign.Center;
-				}
-
-				var Id = new SelectableTextBlock{};
-				LangId.Add(Id);
-				{var o = Id;
+				});
+				LangId.AddInit(_SelectableTextBlock(), o=>{
 					o.Bind(
 						TextBlock.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Id))
@@ -182,15 +166,14 @@ public partial class ViewWordInfo
 					o.VerticalAlignment = VertAlign.Center;
 					o.HorizontalAlignment = HoriAlign.Right;
 					o.TextAlignment = TxtAlign.Right;
-				}
+				});
 			}}//~LangId
 
-			var BdrHead = new Border{};
-			Root.Add(BdrHead);
-			{var o = BdrHead;
+			var BdrHead = _Border();
+			Root.AddInit(BdrHead, o=>{
 				o.BorderThickness = new Thickness(0, 1, 0, 1);
 				o.BorderBrush = new SolidColorBrush(Colors.LightGray);
-			}
+			});
 
 			var Head = TxtBox();
 			BdrHead.Child = Head;
@@ -209,30 +192,24 @@ public partial class ViewWordInfo
 				//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
 			}
 
-			var Summary = TxtBox();
-			Root.Add(Summary);
-			{var o = Summary;
+			Root.AddInit(TxtBox(), o=>{
 				o.Bind(
 					TextBlock.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 						//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 						Mode = BindingMode.OneWay
-						,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str>(
-						x=>{
+						,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str>(x=>{
 							var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.summary);
 							x.TryGetValue(Key, out var v);
 							return str.Join("\t",v??[]);
-						}
-					)
-					}
-				);
-			}
+						})//~Converter:
+					}//~new CBE
+				);//~Bind
+			});//~TxtBox
+
 
 			var BdrScr = new Border{};
 			Root.Add(BdrScr);
-			{var o = BdrScr;
-				//o.Height = UiCfg.Inst.WindowHeight;
-			}
 
 			var ScrDescr = new ScrollViewer();
 			BdrScr.Child = ScrDescr;
@@ -275,29 +252,24 @@ public partial class ViewWordInfo
 				o.BorderThickness = new Thickness(0, 1, 0, 0);
 				o.BorderBrush = new SolidColorBrush(Gray);
 			}
-			var Grid = new IndexGrid(IsRow: true);
+			var Grid = new AutoGrid(IsRow: true);
 			Ans.Child = Grid.Grid;
 			{var o = Grid.Grid;
 				o.RowDefinitions.AddRange([
-					new RowDef(1, GUT.Auto),
+					RowDef(1, GUT.Auto),
 				]);
 			}
 			{{
-				var Text = TxtBox();
-				Grid.Add(Text);
-				{var o = Text;
+				Grid.AddInit(TxtBox(), o=>{
 					o.TextWrapping = TextWrapping.Wrap;
 					o.Bind(
 						TextBlock.TextProperty
 						,new CBE(CBE.Pth<str>(x=>x))
 					);
-				}
+				});
 			}}
 			return Ans;
 		});
-
 		return Items;
 	}
-
-
 }

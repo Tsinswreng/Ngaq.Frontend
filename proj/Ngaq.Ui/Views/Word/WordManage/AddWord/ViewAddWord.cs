@@ -16,6 +16,7 @@ using Avalonia.Data.Converters;
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using Tsinswreng.AvlnTools.Controls;
+using Tsinswreng.AvlnTools.Dsl;
 
 public partial class ViewAddWord
 	:UserControl
@@ -54,22 +55,20 @@ public partial class ViewAddWord
 	}
 
 	protected nil Render(){
-		var Root = new IndexGrid(IsRow:true);
-		Content = Root.Grid;
-		{
-			var o = Root;
+		var Root = new AutoGrid(IsRow:true);
+		//Content = Root.Grid;
+		this.ContentInit(Root, o=>{
 			Root.Grid.RowDefinitions.AddRange([
-				new RowDef(1, GUT.Auto),//Popup
-				new RowDef(1, GUT.Auto),//empty
-				new RowDef(8, GUT.Star),//tab
-				new RowDef(1, GUT.Auto),//Confirm
-				new RowDef(1, GUT.Star),//empty
+				RowDef(1, GUT.Auto),//Popup
+				RowDef(1, GUT.Auto),//empty
+				RowDef(8, GUT.Star),//tab
+				RowDef(1, GUT.Auto),//Confirm
+				RowDef(1, GUT.Star),//empty
 			]);
-		}
+		});
 		{{
-			var Popup_ = new MsgPopup();
-			Root.Add(Popup_);
-			{var a = Popup_;
+
+			Root.AddInit(new MsgPopup(), a=>{
 				var Cfg = UiCfg.Inst;
 				a._Popup.Width = Cfg.WindowWidth*0.9;
 				a._Popup.MaxHeight = Cfg.WindowHeight*0.6;
@@ -86,9 +85,8 @@ public partial class ViewAddWord
 					)
 				);
 
-				var Body = new SelectableTextBlock{};
-				a._Body.Content = Body;
-				{var b = Body;
+				//a._Body.Content = Body;
+				a._Body.ContentInit(new SelectableTextBlock{}, b=>{
 					b.TextWrapping = TextWrapping.Wrap;
 					b.Bind(
 						TextBlock.TextProperty
@@ -100,92 +98,65 @@ public partial class ViewAddWord
 							)
 						)
 					);
-				}
+				});
 				a._Border.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
-			}
+			});
 
 			Root.Add();
-
-			var Tab = new TabControl();
-			Root.Add(Tab);
-			{
-				var o = Tab;
-
-			}
-			{{
-				var byUrl = new TabItem();
-				Tab.Items.Add(byUrl);
-				{
-					var o = byUrl;
-					//o.Content = "By URL";
+			Root.AddInit(_TabControl(), Tab=>{
+				Tab.Items.AddInit(_TabItem(), o=>{
 					o.Header = "By File";
 					o.Content = ByFile();
-				}
-
-				var byText = new TabItem();
-				Tab.Items.Add(byText);
-				{
-					var o = byText;
+				});
+				Tab.Items.AddInit(_TabItem(), o=>{
 					o.Header = "By Text";
 					o.Content = ByText();
-				}
-			}}//~TabControl
-			var Confirm = new Button();
-			Root.Add(Confirm);
-			{
-				var o = Confirm;
+				});
+			});
+			Root.AddInit(_Button(), o=>{
 				o.Content = "Confirm";
 				o.HorizontalAlignment = HoriAlign.Center;
 				o.HorizontalContentAlignment = HoriAlign.Center;
 				o.Click += (s,e)=>{
 					Ctx?.Confirm();
 				};
-			}
-
+			});
 		}}//~IndexGrid
 		return NIL;
 	}
 
 	Control? ByFile(){
-		var Ans = new IndexGrid(IsRow:true);
+		var Ans = new AutoGrid(IsRow:true);
 		Ans.Grid.RowDefinitions.AddRange([
-			new RowDef(1, GUT.Star),
-			new RowDef(1, GUT.Auto),
-			new RowDef(8, GUT.Star),
+			RowDef(1, GUT.Star),
+			RowDef(1, GUT.Auto),
+			RowDef(8, GUT.Star),
 		]);
 		{{
 			Ans.Add();
 
-			var Path = new IndexGrid(IsRow:false);
-			Ans.Add(Path.Grid);
-			{
-				var o = Path;
-				o.Grid.ColumnDefinitions.AddRange([
-					new ColDef(2, GUT.Star),
-					new ColDef(8, GUT.Star),
-					//new ColumnDefinition(2, GridUnitType.Star),
+			var Path = new AutoGrid(IsRow:false);
+			Ans.AddInit(Path.Grid, o=>{
+				o.ColumnDefinitions.AddRange([
+					ColDef(2, GUT.Star),
+					ColDef(8, GUT.Star),
 				]);
-			}
+			});
 			{{
-				var Browse = new Button();
-				Path.Add(Browse);
-				{
-					var o = Browse;
+
+				Path.AddInit(_Button(), o=>{
 					o.Content = "Browse";
 					o.HorizontalAlignment = HoriAlign.Stretch;
 					o.HorizontalContentAlignment = HoriAlign.Stretch;
-				}
-
-				var Input = new TextBox();
-				Path.Add(Input);
-				{
-					var o = Input;
+				});
+				Path.AddInit(_TextBox(), o=>{
 					o.HorizontalAlignment = HoriAlign.Stretch;
 					o.Bind(
 						TextBox.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Path)){Mode=BindingMode.TwoWay}
 					);
-				}
+				});
+
 			}}
 			Ans.Add();
 
@@ -194,24 +165,22 @@ public partial class ViewAddWord
 	}
 
 	Control? ByText(){
-		var Ans = new IndexGrid(IsRow:true);
+		var Ans = new AutoGrid(IsRow:true);
 		Ans.Grid.RowDefinitions.AddRange([
-			new RowDef(1, GUT.Star),
-			new RowDef(8, GUT.Star),
-			new RowDef(1, GUT.Star),
+			RowDef(1, GUT.Star),
+			RowDef(8, GUT.Star),
+			RowDef(1, GUT.Star),
 		]);
 
 		Ans.Add();
 
-		var Input = new TextBox();
-		Ans.Add(Input);
-		{
-			var o = Input;
+		Ans.AddInit(_TextBox(), o=>{
 			o.Bind(
 				TextBox.TextProperty
 				,new CBE(CBE.Pth<Ctx>(x=>x.Text)){Mode=BindingMode.TwoWay}
 			);
-		}
+		});
+
 		Ans.Add();
 
 		return Ans.Grid;

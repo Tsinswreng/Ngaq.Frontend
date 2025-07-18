@@ -25,7 +25,7 @@ public class StrBarItem{
 			o.Styles.Add(new Style().NoMargin().NoPadding());
 		}
 		{{
-			var Grid = new IndexGrid(IsRow:true);
+			var Grid = new AutoGrid(IsRow:true);
 			Ans.Content = Grid.Grid;
 			//Grid.Grid.Classes.Add(Cls.BarItem);
 			Grid.Grid.RowDefinitions.AddRange([

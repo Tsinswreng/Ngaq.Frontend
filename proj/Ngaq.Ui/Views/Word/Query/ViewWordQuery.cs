@@ -15,11 +15,7 @@ using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
-// using Tsinswreng.AvlnTools.Sugar;
 using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.CsTools.Tools;
-//using System.IObservable;
-//using System.Reactive;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmWordQuery;
 public partial class ViewWordQuery
@@ -54,7 +50,7 @@ public partial class ViewWordQuery
 		return NIL;
 	}
 
-	IndexGrid Root = new IndexGrid(IsRow: true);
+	AutoGrid Root = new AutoGrid(IsRow: true);
 	Panel Menu;
 
 	protected IBrush Shade(IBrush originalBrush, ContentControl top){
@@ -111,15 +107,15 @@ public partial class ViewWordQuery
 	}
 
 	protected Panel _Menu(){
-		var R = new IndexGrid(IsRow: true);
-		var Row1 = new IndexGrid(IsRow: false);
+		var R = new AutoGrid(IsRow: true);
+		var Row1 = new AutoGrid(IsRow: false);
 		R.AddInit(Row1.Grid, (o)=>{
 			o.ColumnDefinitions.AddRange([
-				new ColDef(1, GUT.Star),
-				new ColDef(1, GUT.Star),
-				new ColDef(1, GUT.Star),
-				new ColDef(1, GUT.Star),
-				new ColDef(1, GUT.Star),
+				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Star),
 			]);
 		});
 		{{
@@ -153,19 +149,19 @@ public partial class ViewWordQuery
 			]);
 		});
 		{{
-			Root.AddInit(Border(), o=>{
+			Root.AddInit(_Border(), o=>{
 				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
 				o.ZIndex = -1;
 			})
 			.AddInit(_Menu())
-			.AddInit(ScrollViewer(), Scr=>{
+			.AddInit(_ScrollViewer(), Scr=>{
 				Scr.ContentInit(_ListWordCard(), o=>{
 					o.Bind(
 						ItemsControl.ItemsSourceProperty
 						,CBE.Mk<Ctx>(x=>x.WordCards, Mode: BindingMode.TwoWay)
 					);
 				});
-				Root.AddInit(GridSplitter(), o=>{
+				Root.AddInit(_GridSplitter(), o=>{
 					o.Background = Brushes.Black;
 					o.BorderThickness = new Thickness(1);
 					o.BorderBrush = Brushes.LightGray;
@@ -180,12 +176,12 @@ public partial class ViewWordQuery
 	}
 
 	Control _RowSearch(){
-		var Ans = new IndexGrid(IsRow: false);
+		var Ans = new AutoGrid(IsRow: false);
 		{var o = Ans.Grid;
 			o.ColumnDefinitions.AddRange([
-				new ColDef(1, GUT.Star),
-				new ColDef(7, GUT.Star),
-				new ColDef(2, GUT.Star),
+				ColDef(1, GUT.Star),
+				ColDef(7, GUT.Star),
+				ColDef(2, GUT.Star),
 			]);
 		}
 		{{
