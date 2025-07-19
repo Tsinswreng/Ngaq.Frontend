@@ -8,11 +8,14 @@ public interface I_GetViewNavi{
 
 
 public class MgrViewNavi:I_GetViewNavi{
-protected static MgrViewNavi? _Inst = null;
-public static MgrViewNavi Inst => _Inst??= new MgrViewNavi();
+	protected static MgrViewNavi? _Inst = null;
+	public static MgrViewNavi Inst => _Inst??= new MgrViewNavi();
 
-	public static IViewNavi ViewNavi{get;set;} = new ViewNavi();
-	public IViewNavi? GetViewNavi(){
+	public IViewNavi? ViewNavi{get;set;}
+	public IViewNavi GetViewNavi(){
+		if(ViewNavi == null){
+			ViewNavi = new ViewNavi();
+		}
 		return ViewNavi;
 	}
 }

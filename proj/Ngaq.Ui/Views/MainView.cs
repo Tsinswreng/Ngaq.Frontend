@@ -1,34 +1,28 @@
-using System.Globalization;
 using Avalonia.Controls;
-using Avalonia.Controls.Documents;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
-using Avalonia.Data.Converters;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Styling;
-using Ngaq.Ui.ViewModels;
-using Ngaq.Ui.Views.BottomBar;
+using Avalonia.Input;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Home;
-using Ngaq.Ui.Views.User;
-using Ngaq.Ui.Views.User.Login;
-using Ngaq.Ui.Views.User.Register;
-using Ngaq.Ui.Views.Word.Query;
-using Ngaq.Ui.Views.Word.WordCard;
-using Tsinswreng.AvlnTools.Controls;
-using Tsinswreng.AvlnTools.Converters;
-using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.AvlnTools.Navigation;
 
 namespace Ngaq.Ui.Views;
 
 public partial class MainView : UserControl {
 	public MainView() {
-		//Content = new ViewWordInfo();
-		//Content = new ViewWordListCard();
-		//Content = new ViewWordQuery();
-		//Content = new ViewBottomBar();
-		//Content = new ViewRegister();
-		Content = new ViewHome();
+		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
+			(s,e)=>{
+				if(e.Key == Avalonia.Input.Key.Escape){
+					MgrViewNavi.Inst.GetViewNavi().Back();//t
+				}
+			}
+			,handledEventsToo: true
+		);
+
+		MgrViewNavi.Inst.ViewNavi = new ViewNavi(this);
+		var Navi = MgrViewNavi.Inst.ViewNavi;
+
+		var Home = new ViewHome();
+		Navi.GoTo(Home);
+		//Content = Home;
 		//Content = new ViewLoginRegister();
 		// var Btn = new Button { Content = "Hello World!" };
 		// Content = Btn;

@@ -27,8 +27,7 @@ public partial class ViewHome
 		Ctx = new Ctx();
 		Style();
 		Render();
-		Ctx.ViewNavi = MgrViewNavi.ViewNavi;
-		Ctx.ViewNavi.Current = this;
+		//Ctx.ViewNavi = MgrViewNavi.ViewNavi;
 	}
 
 	public class Cls_{

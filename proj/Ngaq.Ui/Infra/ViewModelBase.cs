@@ -19,7 +19,7 @@ public class ViewModelBase
 	,I_Arg
 {
 	public ViewModelBase(){
-		ViewNavi = MgrViewNavi.ViewNavi;
+		ViewNavi = MgrViewNavi.Inst.ViewNavi;
 	}
 
 	[Impl(typeof(I_ViewNavi))]
