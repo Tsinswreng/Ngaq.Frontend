@@ -51,7 +51,7 @@ public partial class ViewHome
 		Root.AddInit(new ViewBottomBar(), ViewBottomBar=>{
 			var ViewWordQuery = new ViewWordQuery();
 
-			ViewBottomBar.Items.AddInit(
+			ViewBottomBar.Items.AddInitT(
 				new Btn_Control(
 					StrBarItem.Inst.BarItem("Learn", "📖")
 					,ViewWordQuery
@@ -60,12 +60,12 @@ public partial class ViewHome
 					ViewBottomBar.Cur.Content = o.Control;
 					o.Button.Background = Brushes.Transparent;
 				}
-			).AddInit(new Btn_Control(
+			).AddInitT(new Btn_Control(
 				StrBarItem.Inst.BarItem("Library", "📚")
 				,new ViewWordManage()
 				//,new ViewAddWord()
 			))
-			.AddInit(new Btn_Control(
+			.AddInitT(new Btn_Control(
 				StrBarItem.Inst.BarItem("Me", "👤")
 				,new ViewLoginRegister()
 			));

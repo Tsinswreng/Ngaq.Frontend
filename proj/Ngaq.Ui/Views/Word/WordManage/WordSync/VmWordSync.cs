@@ -1,4 +1,4 @@
-namespace Xxx;
+namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 using System.Collections.ObjectModel;
 using Ngaq.Ui.Infra;
 
