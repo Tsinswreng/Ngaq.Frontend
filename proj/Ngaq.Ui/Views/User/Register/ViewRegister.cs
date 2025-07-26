@@ -51,56 +51,43 @@ public partial class ViewRegister
 		return NIL;
 	}
 
+	AutoGrid Root = new(IsRow: true);
 	protected nil _Render(){
-		Content = _root();
-		return NIL;
-	}
+		this.ContentInit(Root.Grid, o=>{
+			o.RowDefinitions.AddRange([
+				RowDef(1, GUT.Star),
+				RowDef(1, GUT.Star),
+			]);
+		});
 
-	protected Control _root(){
-		var root = new StackPanel{
-			Spacing = 4.0
-		};
-		{{
-			// var backBtn = new Button();
-			// root.Children.Add(backBtn);
-			// {var o = backBtn;
-			// 	o.Content = "←";
-			// 	o.Click += (s,e)=>{
-			// 		Ctx?.ViewNavigator?.Back();
-			// 	};
-			// }
 
-			// root.AddInit(new AppTextLogo(){
-			// 	FontSize = 30.0
-			// });
-
-			// new AppTextLogo(){
-			// 	FontSize = 30.0
-			// }.Attach(root);
-
-			var formItem = _fn_addLabelBox(root);
+		Root.AddInit(_StackPanel(), Stk=>{
+			Stk.Spacing = 4.0;
+			var formItem = _fn_addLabelBox(Stk);
 
 			formItem("Email", CBE.Pth<Ctx>(x=>x.Email));
 			formItem("Password", CBE.Pth<Ctx>(x=>x.Password));
 			formItem("Confirm Password", CBE.Pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
-
-
-			root.AddInit(_Button(), o=>{
-				o.Content = "Register";
-				o.HorizontalAlignment = HoriAlign.Center;
-				o.Click += (s,e)=>{
-					Ctx?.Register();
-				};
-			});
-
 			var errMsgSclv = new ScrollViewer{};
-			root.Children.Add(errMsgSclv);
+			Stk.Children.Add(errMsgSclv);
 
 			errMsgSclv.Content = _ErrorList();
-		}}
-		return root;
+		})
+		.AddInit(_Button(), b=>{
+			b.ContentInit(_TextBlock(), t=>{
+				t.Text = "Register";
+				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+			});
+			b.HorizontalAlignment = HoriAlign.Stretch;
+			b.Click += (s,e)=>{
+				Ctx?.Register();
+			};
+		});
+
+		return NIL;
 	}
+
 
 	protected Control _ErrorList(){
 		var ans = new ItemsControl{};

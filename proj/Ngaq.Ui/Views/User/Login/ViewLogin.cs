@@ -58,69 +58,42 @@ public  partial class Cls_{
 	}
 
 	protected nil _Render(){
-		Content = _Root();
-		return NIL;
-	}
+		this.ContentInit(Root.Grid, o=>{
+			o.RowDefinitions.AddRange([
+				RowDef(1, GUT.Star),
+				RowDef(1, GUT.Star),
+			]);
+		});
+		Root.AddInit(_StackPanel(), Stk=>{
+			Stk.Spacing = 4.0;
 
-	protected Control _Root(){
-		var Root = new StackPanel{
-			Spacing = 4.0
-		};
-		{{
-			// var backBtn = new Button();
-			// Root.Children.Add(backBtn);
-			// {
-			// 	backBtn.Content = "←";
-			// 	backBtn.Click += (s,e)=>{
-			// 		Ctx?.ViewNavi?.Back();
-			// 	};
-			// }
-			// Root.AddInit(new AppTextLogo(){
-			// 	FontSize = 30.0
-			// });
-
-			// var logo = new AppTextLogo(){
-			// 	FontSize = 30.0
-			// };
-			// Root.Children.Add(logo);
-
-
-			var formItem = FnAddLabelBox(Root);
-
+			var formItem = FnAddLabelBox(Stk);
 			formItem("Email", CBE.Pth<Ctx>(x=>x.Email));
 			formItem("Password", CBE.Pth<Ctx>(x=>x.Password));
 			//formItem("Confirm Password", CBE.pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
-
-			Root.AddInit(new Button{}, (o)=>{
-				o.Content = "Login";
-				o.HorizontalAlignment = HoriAlign.Center;
-				o.Click += (s,e)=>{
-					Ctx?.Login();
-				};
-			});
-
-			// var Submit = new Button{};
-			// Root.Children.Add(Submit);
-			// {
-			// 	var o = Submit;
-			// 	o.Content = "Login";
-			// 	o.HorizontalAlignment = HoriAlign.Center;
-			// 	o.Click += (s,e)=>{
-			// 		Ctx?.Login();
-			// 	};
-			// }
-
 			//TODO 用popup彈出框
 			var errMsgSclv = new ScrollViewer{};
-			Root.Children.Add(errMsgSclv);
+			Stk.Children.Add(errMsgSclv);
 			{
 
 			}
 			errMsgSclv.Content = _ErrorList();
-		}}
-		return Root;
+		})
+		.AddInit(new Button{}, (b)=>{
+			b.ContentInit(_TextBlock(), t=>{
+				t.Text = "Login";
+				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+			});
+			b.HorizontalAlignment = HoriAlign.Stretch;
+			b.Click += (s,e)=>{
+				Ctx?.Login();
+			};
+		});
+		return NIL;
 	}
+
+	AutoGrid Root = new(IsRow: true);
 
 	protected Control _ErrorList(){
 		var ans = new ItemsControl{};
