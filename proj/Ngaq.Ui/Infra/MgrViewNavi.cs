@@ -2,7 +2,7 @@ using Tsinswreng.AvlnTools.Navigation;
 
 namespace Ngaq.Ui.Infra;
 
-public interface I_GetViewNavi{
+public  partial interface I_GetViewNavi{
 	public IViewNavi? GetViewNavi();
 }
 

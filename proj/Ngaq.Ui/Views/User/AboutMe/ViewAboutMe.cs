@@ -79,7 +79,7 @@ public partial class ViewAboutMe
 		R.Orientation = Orientation.Horizontal;
 		{{
 			R.AddInit(_Button(), o=>{
-				o.Content = "🔧";
+				o.Content = "⚙️";
 				o.Click += (s,e)=>{
 					Ctx?.ViewNavi?.GoTo(
 						ToolView.WithTitle("Settings", new ViewSettings())

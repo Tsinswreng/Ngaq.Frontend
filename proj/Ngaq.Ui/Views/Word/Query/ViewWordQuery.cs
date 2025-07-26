@@ -54,7 +54,7 @@ public partial class ViewWordQuery
 	Panel Menu;
 
 	protected IBrush Shade(IBrush originalBrush, ContentControl top){
-		var overlayBrush = new SolidColorBrush(Color.FromArgb(100, 0, 0, 0)); // 半透明黑，alpha可调
+		var overlayBrush = new SolidColorBrush(Color.FromArgb(160, 0, 0, 0)); // 半透明黑，alpha可调
 		var overlayGrid = new Grid{
 			Width = top.Bounds.Width,
 			Height = top.Bounds.Height,
@@ -117,15 +117,15 @@ public partial class ViewWordQuery
 			]);
 		});
 		{{
-			Row1.AddInit(new SwipeLongPressBtn{Content = "Start"}, (o)=>{
+			Row1.AddInit(new SwipeLongPressBtn{Content = "▶️Start"}, (o)=>{
 				o.Click += (s,e)=>{
 					Ctx?.LoadEtStart();
 				};
-			}).AddInit(new SwipeLongPressBtn{Content = "Save"}, o=>{
+			}).AddInit(new SwipeLongPressBtn{Content = "💾Save"}, o=>{ //📁
 				o.Click += (s,e)=>{
 					Ctx?.SaveEtRestart();
 				};
-			}).AddInit(new SwipeLongPressBtn{Content = "Reset"}, o=>{
+			}).AddInit(new SwipeLongPressBtn{Content = "🔄Reset"}, o=>{
 				o.Click += (s,e)=>{
 					Ctx?.Reset();
 				};

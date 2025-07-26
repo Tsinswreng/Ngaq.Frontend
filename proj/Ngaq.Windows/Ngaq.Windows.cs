@@ -42,9 +42,8 @@ sealed class Program
 				"pwd: "+Directory.GetCurrentDirectory()
 			);
 			var CfgPath = GetCfgFilePath(args);
-			var CfgText = File.ReadAllText(CfgPath);
 			var localCfg = LocalCfg.Inst;
-			localCfg.FromJson(CfgText);
+			await localCfg.FromFileAsy(CfgPath, Ct);
 
 			var MergedCfgPath = LocalCfgItems.MergedConfigPath.GetFrom(localCfg)??"";
 			ToolFile.EnsureFile(MergedCfgPath);
