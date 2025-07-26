@@ -7,7 +7,7 @@ using Tsinswreng.AvlnTools.Tools;
 namespace Ngaq.Ui.Views.BottomBar;
 
 
-public class StrBarItem{
+public  partial class StrBarItem{
 	protected static StrBarItem? _Inst = null;
 	public static StrBarItem Inst => _Inst??= new StrBarItem();
 

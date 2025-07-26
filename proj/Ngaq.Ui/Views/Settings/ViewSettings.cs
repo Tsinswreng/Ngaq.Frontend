@@ -22,7 +22,7 @@ public partial class ViewSettings
 		Render();
 	}
 
-	public class Cls_{
+	public  partial class Cls_{
 
 	}
 	public Cls_ Cls{get;set;} = new Cls_();

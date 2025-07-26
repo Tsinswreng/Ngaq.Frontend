@@ -5,7 +5,7 @@
 
 // namespace Ngaq.Ui;
 
-// public class ViewLocator : IDataTemplate
+// public  partial class ViewLocator : IDataTemplate
 // {
 //     public Control? Build(object? param)
 //     {

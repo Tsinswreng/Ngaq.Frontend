@@ -22,7 +22,7 @@ public partial class ViewCfgFont
 		Render();
 	}
 
-	public class Cls_{
+	public  partial class Cls_{
 
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
@@ -45,13 +45,10 @@ public partial class ViewCfgFont
 					x=>x.InputFontSize
 				)
 			);
-		})
-		.AddInit(new SwipeLongPressBtn(), o=>{
-			o.Content = "Try";
-			o.Click += (s,e)=>{
-				Ctx?.TryNeoFontSize();
-			};
 		});
+		// .AddInit(new SwipeLongPressBtn(), o=>{
+
+		// });
 		return R.Grid;
 	}
 
@@ -60,28 +57,42 @@ public partial class ViewCfgFont
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),
 			]);
 		});
 		Root.AddInit(_TextBlock(), o=>{
-			o.Text = "Font Size";
+			o.Text = "Base Font Size";
 		});
-		Root.AddInit(InputFontSize());
-		Root.AddInit(_TextBlock(), o=>{
+		Root.AddInit(InputFontSize())
+		.AddInit(new SwipeLongPressBtn(), o=>{
+			o.Content = "Try";
+			o.Click += (s,e)=>{
+				Ctx?.TryNeoFontSize();
+			};
+		})
+		.AddInit(new SwipeLongPressBtn(), o=>{
+			o.Content = "Apply";
+			o.Click += (s,e)=>{
+				Ctx?.ApplyNeoFontSize();
+			};
+		})
+		.AddInit(_TextBlock(), o=>{
 			o.Text = SampleText;
+			o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 			o.Bind(
 				TextBlock.FontSizeProperty
 				,CBE.Mk<Ctx>(x=>x.FontSize)
 			);
 		});
 
-
-
 		return NIL;
 	}
 
 str SampleText =
 """
+You need to relaunch the application after changing the font size.
 !"#$%&'()*+,-./0123456789:;<=>?@
 ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`
 abcdefghijklmnopqrstuvwxyz{|}~

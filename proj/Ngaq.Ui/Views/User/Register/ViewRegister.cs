@@ -31,7 +31,7 @@ public partial class ViewRegister
 
 	}
 
-	public class Cls_{
+	public  partial class Cls_{
 		public str inputBox = nameof(inputBox);
 		public str logo = nameof(logo);
 	}

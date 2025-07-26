@@ -10,7 +10,7 @@ using Ngaq.Core.Models.Sys.Resp;
 
 namespace Ngaq.Client.Svc;
 
-public class ClientUser
+public  partial class ClientUser
 	:ISvcUser
 {
 	protected I_GetBaseUrl GetBaseUrl;

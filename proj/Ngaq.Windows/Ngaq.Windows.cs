@@ -36,6 +36,7 @@ sealed class Program
 
 	[STAThread]
 	public static async Task Main(string[] args){
+		CT Ct = new();
 		try{
 			System.Console.WriteLine(
 				"pwd: "+Directory.GetCurrentDirectory()
@@ -45,24 +46,22 @@ sealed class Program
 			var localCfg = LocalCfg.Inst;
 			localCfg.FromJson(CfgText);
 
-			var MergedCfgPath = LocalCfgItems.Inst.MergedConfigPath.GetFrom(localCfg)??"";
+			var MergedCfgPath = LocalCfgItems.MergedConfigPath.GetFrom(localCfg)??"";
 			ToolFile.EnsureFile(MergedCfgPath);
 			var MergedCfg = new JsonFileCfgAccessor();
-			await MergedCfg.FromFileAsy(MergedCfgPath, default);
-			localCfg.CfgDict = MergedCfg.CfgDict.ToDeepMerge(localCfg.CfgDict);
-			localCfg.FnSaveAsy = MergedCfg._SaveAsy;
-			localCfg.FnReLoadAsy = MergedCfg._ReLoadAsy;
-
-			// var MergedCfg = new JsonFileCfgAccessor().FromJson(
-			// 	File.ReadAllText(MergedCfgPath)
-			// );
-			// MergedCfg.CfgDict = MergedCfg.CfgDict.ToDeepMerge(
-			// 	MergedCfg.CfgDict
-			// ).ToDeepMerge(
-			// 	LocalCfg.Inst.CfgDict
-			// );
-
-
+			localCfg.FnReLoadAsy = async(z, Ct)=>{
+				await MergedCfg.FromFileAsy(MergedCfgPath, Ct);
+				z.CfgDict = MergedCfg.CfgDict.ToDeepMerge(z.CfgDict);
+				MergedCfg.CfgDict = z.CfgDict;
+				return NIL;
+			};
+			await localCfg.ReLoadAsy(Ct);
+			localCfg.FnSaveAsy = async(z,Ct)=>{
+				MergedCfg.CfgDict = z.CfgDict;
+				await MergedCfg._SaveAsy(Ct);
+				return NIL;
+			};
+			//TODO 緟構多源配置框架
 		}
 		catch (System.Exception e){
 			System.Console.Error.WriteLine("Failed to load config file: "+e);

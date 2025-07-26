@@ -3,6 +3,9 @@ using System.Collections.ObjectModel;
 using Ngaq.Ui.Infra;
 using Microsoft.Extensions.Logging;
 using Ctx = VmCfgFont;
+using Ngaq.Core.Infra.Cfg;
+using Tsinswreng.CsCfg;
+
 public partial class VmCfgFont: ViewModelBase{
 	ILogger<VmCfgFont>? Log{get;set;}
 	public VmCfgFont(
@@ -40,7 +43,7 @@ public partial class VmCfgFont: ViewModelBase{
 		set{SetProperty(ref _FontSize, value);}
 	}
 
-	//TODO 持久化、寫入用戶配置
+
 	public nil TryNeoFontSize(){
 		try{
 			//輸入0旹會崩潰 //TODO: avalonia 全局異常處理
@@ -56,6 +59,15 @@ public partial class VmCfgFont: ViewModelBase{
 		catch (System.Exception e){
 			Log?.LogError(e, "TryNeoFontSize");
 		}
+		return NIL;
+	}
+
+	public async Task<nil> ApplyNeoFontSize(){
+		LocalCfg.Inst.SetByPath(
+			LocalCfgItems.BaseFontSize.GetFullPath()
+			,CfgValue.Mk(FontSize)
+		);
+		await LocalCfg.Inst.SaveAsy(default);
 		return NIL;
 	}
 

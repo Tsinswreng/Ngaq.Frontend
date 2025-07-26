@@ -33,7 +33,7 @@ public partial class ViewLogin
 		_Render();
 	}
 
-public class Cls_{
+public  partial class Cls_{
 		public str InputBox = nameof(InputBox);
 		public str Logo = nameof(Logo);
 	}

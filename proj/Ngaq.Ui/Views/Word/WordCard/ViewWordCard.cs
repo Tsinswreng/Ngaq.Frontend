@@ -24,7 +24,7 @@ public partial class ViewWordListCard
 		Render();
 	}
 
-	public class Cls_{
+	public  partial class Cls_{
 		public str InInfoGrid = nameof(InInfoGrid);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();

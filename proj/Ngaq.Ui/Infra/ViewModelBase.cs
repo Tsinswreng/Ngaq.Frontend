@@ -10,7 +10,7 @@ using Tsinswreng.CsCore;
 
 namespace Ngaq.Ui.Infra;
 
-public class ViewModelBase
+public  partial class ViewModelBase
 	:ObservableObject
 	,IViewModel
 	,I_ViewNavi

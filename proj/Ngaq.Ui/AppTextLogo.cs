@@ -27,7 +27,7 @@ public partial class AppTextLogo
 	}
 
 
-	public class Cls_{
+	public  partial class Cls_{
 		public str Logo = nameof(Logo);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();

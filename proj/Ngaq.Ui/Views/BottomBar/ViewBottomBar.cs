@@ -24,7 +24,7 @@ public partial class ViewBottomBar
 		Render();
 	}
 
-	public class Cls_{
+	public  partial class Cls_{
 		public str BarItem = nameof(BarItem);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
@@ -70,7 +70,7 @@ public partial class ViewBottomBar
 
 
 
-public class UniformHorizontalPanel : Panel{
+public  partial class UniformHorizontalPanel : Panel{
 	protected override Size MeasureOverride(Size availableSize){
 		f64 maxHeight = 0;
 		i32 count = Children.Count;

@@ -7,7 +7,7 @@ public interface I_GetViewNavi{
 }
 
 
-public class MgrViewNavi:I_GetViewNavi{
+public  partial class MgrViewNavi:I_GetViewNavi{
 	protected static MgrViewNavi? _Inst = null;
 	public static MgrViewNavi Inst => _Inst??= new MgrViewNavi();
 

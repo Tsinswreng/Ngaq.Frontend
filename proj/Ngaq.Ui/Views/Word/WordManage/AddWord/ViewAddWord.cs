@@ -36,12 +36,12 @@ public partial class ViewAddWord
 
 		this.KeyDown += (s,e)=>{
 			if(e.Key == Avalonia.Input.Key.Escape){
-				
+
 			}
 		};
 	}
 
-	public class Cls_{
+	public  partial class Cls_{
 
 	}
 	public Cls_ Cls{get;set;} = new Cls_();

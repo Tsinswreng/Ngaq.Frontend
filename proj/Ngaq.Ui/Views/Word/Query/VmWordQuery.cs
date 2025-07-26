@@ -23,7 +23,7 @@ public partial class VmWordQuery
 	:ViewModelBase
 {
 
-	public class Cfg_{
+	public  partial class Cfg_{
 		/// <summary>
 		/// 單詞條長按
 		/// </summary>

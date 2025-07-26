@@ -7,7 +7,7 @@ using Tsinswreng.CsPage;
 
 namespace Ngaq.Client.Word.Svc;
 
-public class ClientWord : ISvcWord {
+public  partial class ClientWord : ISvcWord {
 	public Task<nil> AddWordId_LearnRecordss(IUserCtx UserCtx, IEnumerable<WordId_LearnRecords> WordId_LearnRecordss, CT Ct) {
 		throw new NotImplementedException();
 	}
