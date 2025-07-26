@@ -5,7 +5,7 @@ using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Model.Samples.Word;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Infra;
-using Tsinswreng.CsTools.Tools.MultiDict;
+using Tsinswreng.CsTools;
 
 namespace Ngaq.Ui.Views.Word.WordInfo;
 using Ctx = VmWordInfo;

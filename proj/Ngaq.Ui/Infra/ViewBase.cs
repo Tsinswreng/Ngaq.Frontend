@@ -2,6 +2,6 @@ using Avalonia.Controls;
 
 namespace Ngaq.Ui.Infra;
 
-public partial class ViewBase:UserControl{
+public partial class AppViewBase:UserControl{
 
 }

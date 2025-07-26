@@ -7,8 +7,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
-using Tsinswreng.CsTools.Tools;
-using Ngaq.Ui.ViewModels;
 
 namespace Ngaq.Ui.Infra;
 
@@ -18,6 +16,7 @@ public class ViewModelBase
 	,I_ViewNavi
 	,I_Arg
 {
+
 	public ViewModelBase(){
 		ViewNavi = MgrViewNavi.Inst.ViewNavi;
 	}
@@ -53,12 +52,12 @@ public class ViewModelBase
 	// 	get{return Errors.Count > 0;}
 	// }
 
-	public nil AddMsg(object? Msg){
+	public ViewModelBase AddMsg(object? Msg){
 		Msgs.Add(Msg);
 #if DEBUG
 		Console.WriteLine(Msg);
 #endif
-		return NIL;
+		return this;
 	}
 
 	public nil ShowMsg(){

@@ -1,9 +1,9 @@
 namespace Xxx;
 
-using Avalonia.Controls;
+using Ngaq.Ui.Infra;
 using Ctx = VmXxx;
 public partial class ViewXxx
-	:UserControl
+	:AppViewBase
 {
 
 	public Ctx? Ctx{
@@ -12,7 +12,7 @@ public partial class ViewXxx
 	}
 
 	public ViewXxx(){
-		Ctx = new Ctx();
+		Ctx = Ctx.Mk();
 		Style();
 		Render();
 	}

@@ -7,7 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		
+
 	</ItemGroup>
 
 	<ItemGroup>
@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" />
+		<PackageReference Include="Avalonia.Markup.Declarative" />
 		<PackageReference Include="Avalonia.Themes.Fluent" />
 		<PackageReference Include="Avalonia.Fonts.Inter" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -24,11 +25,14 @@
 			<PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="CommunityToolkit.Mvvm" />
+		<PackageReference Include="Live.Avalonia" />
 		<PackageReference Include="System.Reactive" />
 
 		<PackageReference Include="Irihi.Ursa" />
 		<PackageReference Include="Irihi.Ursa.Themes.Semi" />
 		<PackageReference Include="Semi.Avalonia" />
+		<PackageReference Include="Microsoft.Extensions.Logging"  />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions"  />
 
 	</ItemGroup>
 </Project>

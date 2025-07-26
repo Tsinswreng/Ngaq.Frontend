@@ -74,9 +74,9 @@ public partial class ViewRegister
 			// 	FontSize = 30.0
 			// });
 
-			new AppTextLogo(){
-				FontSize = 30.0
-			}.Attach(root);
+			// new AppTextLogo(){
+			// 	FontSize = 30.0
+			// }.Attach(root);
 
 			var formItem = _fn_addLabelBox(root);
 

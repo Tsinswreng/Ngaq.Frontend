@@ -114,8 +114,6 @@ public partial class ViewWordQuery
 				ColDef(1, GUT.Star),
 				ColDef(1, GUT.Star),
 				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Star),
 			]);
 		});
 		{{

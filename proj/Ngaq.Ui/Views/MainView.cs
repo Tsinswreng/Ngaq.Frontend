@@ -8,6 +8,7 @@ namespace Ngaq.Ui.Views;
 
 public partial class MainView : UserControl {
 	public MainView() {
+
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
 				if(e.Key == Avalonia.Input.Key.Escape){

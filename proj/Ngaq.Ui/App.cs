@@ -17,14 +17,21 @@ using Avalonia.Controls.Primitives;
 using Ngaq.Core.Infra.Errors;
 using Avalonia.Media;
 using Tsinswreng.AvlnTools.Dsl;
+using Live.Avalonia;
 
 namespace Ngaq.Ui;
 
-public partial class App : Application {
+public partial class App :Application
+#if DEBUG
+	,ILiveView
+#endif
+{
 
 	public static T GetSvc<T>()
 		where T : class
 	{
+		System.Console.Write("GetSvc: ");
+		System.Console.WriteLine(typeof(T));//t
 		return App.ServiceProvider.GetRequiredService<T>();
 	}
 
@@ -38,16 +45,18 @@ public partial class App : Application {
 
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
-		var Sty = DslStyle.MkStyForAnyControl();
+		var Sty = MkrStyle.MkStyForAnyControl();
 		Styles.Add(new FluentTheme());
 		this.RequestedThemeVariant = ThemeVariant.Dark;
-		Styles.Add(DslStyle.NoCornerRadius(Sty));
+		Styles.Add(MkrStyle.NoCornerRadius(Sty));
 		// 在 App 初始化时添加资源（如 App.axaml.cs 的构造函数）
 		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
 		_Style();
 
 #if DEBUG
-		this.AttachDevTools();
+		if(OperatingSystem.IsWindows()){
+			this.AttachDevTools();
+		}
 #endif
 	}
 
@@ -94,15 +103,10 @@ public partial class App : Application {
 			// 合并新资源到全局字典
 			App.Current?.Resources.MergedDictionaries.Add(resources);
 			#endregion #region 全局基字體 2025-05-29T17:14:54.155+08:00_W22-4
-
-			var Cfg = UiCfg.Inst;
-			desktop.MainWindow = new MainWindow{
-				DataContext = new MainViewModel()
-				,Title= "ŋaʔ"
-				,Width = Cfg.WindowWidth
-				,Height = Cfg.WindowHeight
-				,Foreground = Brushes.White
-			};
+			desktop.MainWindow = MkWindow();
+			// var liveViewHost = new LiveViewHost(this, Console.WriteLine);
+			// liveViewHost.StartWatchingSourceFilesForHotReloading();
+			// liveViewHost.Show();
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
 			singleViewPlatform.MainView = new MainView {
 				DataContext = new MainViewModel()
@@ -121,5 +125,20 @@ public partial class App : Application {
 		foreach (var plugin in dataValidationPluginsToRemove) {
 			BindingPlugins.DataValidators.Remove(plugin);
 		}
+	}
+
+	public Window MkWindow(){
+		var Cfg = UiCfg.Inst;
+		return new MainWindow{
+			DataContext = new MainViewModel()
+			,Title= "ŋaʔ"
+			,Width = Cfg.WindowWidth
+			,Height = Cfg.WindowHeight
+			,Foreground = Brushes.White
+		};
+	}
+
+	public object CreateView(Window window) {
+		return MkWindow();
 	}
 }

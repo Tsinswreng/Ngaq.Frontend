@@ -67,19 +67,17 @@ public class Cls_{
 			Spacing = 4.0
 		};
 		{{
-			var backBtn = new Button();
-			Root.Children.Add(backBtn);
-			{
-				backBtn.Content = "←";
-				backBtn.Click += (s,e)=>{
-					Ctx?.ViewNavi?.Back();
-				};
-			}
-
-
-			Root.AddInit(new AppTextLogo(){
-				FontSize = 30.0
-			});
+			// var backBtn = new Button();
+			// Root.Children.Add(backBtn);
+			// {
+			// 	backBtn.Content = "←";
+			// 	backBtn.Click += (s,e)=>{
+			// 		Ctx?.ViewNavi?.Back();
+			// 	};
+			// }
+			// Root.AddInit(new AppTextLogo(){
+			// 	FontSize = 30.0
+			// });
 
 			// var logo = new AppTextLogo(){
 			// 	FontSize = 30.0

@@ -5,7 +5,8 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<!-- <LangVersion>preview<LangVersion/> -->
+		<!-- <LangVersion>preview<LangVersion/> 設此則報錯 NuGet.targets(186,5): error : 无效的
+框架标识符“”。 -->
 		<NoWarn>CS1998</NoWarn>
 	</PropertyGroup>
 

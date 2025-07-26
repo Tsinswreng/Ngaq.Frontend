@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net9.0-browser</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ngaq.Ui\Ngaq.Ui.csproj" />
+		<ProjectReference Include="../Ngaq.Client/Ngaq.Client.csproj" />
+  </ItemGroup>
+
+<!-- 2025-07-20T23:01:18.749+08:00_W29-7  -->
+<!-- 除蠹 wasm項目編譯時報錯曰緩存褈添。AI曰9.0.301後匡˪此 -->
+<Target Name="RemoveCachedDuplicates" AfterTargets="ResolveProjectStaticWebAssets">
+  <ItemGroup>
+    <!-- 强制去重静态资源缓存 -->
+    <_UniqueAssets Include="@(StaticWebAsset->Distinct())" />
+    <StaticWebAsset Remove="@(StaticWebAsset)" />
+    <StaticWebAsset Include="@(_UniqueAssets)" />
+  </ItemGroup>
+</Target>
+
+<Target Name="_CleanupStaticWebAssetsCache" AfterTargets="Build">
+  <!-- 清除已知缓存路径 -->
+  <PropertyGroup>
+    <StaticWebAssetsCachePaths>
+      $(_ResolveBuildCompressedStaticWebAssetsCachePath);
+      $(_ResolveJsInitializerModuleStaticWebAssetsCachePath);
+      $(_ResolveJSModuleStaticWebAssetsRazorCachePath);
+      $(_ResolveJSModuleStaticWebAssetsCshtmlCachePath);
+      $(_ResolveProjectStaticWebAssetsCachePath)
+    </StaticWebAssetsCachePaths>
+  </PropertyGroup>
+  <Delete Files="$(StaticWebAssetsCachePaths)" />
+</Target>
+
+
+</Project>

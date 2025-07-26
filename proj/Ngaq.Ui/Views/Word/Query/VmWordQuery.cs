@@ -12,7 +12,7 @@ using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
-using Tsinswreng.CsTools.Tools;
+using Tsinswreng.CsTools;
 using Tsinswreng.CsPage;
 using Ngaq.Ui.Infra;
 

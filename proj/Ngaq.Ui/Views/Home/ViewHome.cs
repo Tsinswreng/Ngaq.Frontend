@@ -13,6 +13,7 @@ using Ctx = VmHome;
 using Ngaq.Ui.Views.Word.WordManage;
 using Tsinswreng.AvlnTools.Navigation;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.User.AboutMe;
 
 public partial class ViewHome
 	:UserControl
@@ -63,11 +64,10 @@ public partial class ViewHome
 			).AddInitT(new Btn_Control(
 				StrBarItem.Inst.BarItem("Library", "📚")
 				,new ViewWordManage()
-				//,new ViewAddWord()
 			))
 			.AddInitT(new Btn_Control(
 				StrBarItem.Inst.BarItem("Me", "👤")
-				,new ViewLoginRegister()
+				,new ViewAboutMe()
 			));
 		});
 

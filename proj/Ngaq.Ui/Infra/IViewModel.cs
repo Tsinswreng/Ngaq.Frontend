@@ -1,11 +1,6 @@
-using System.Linq.Expressions;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Data;
-using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.CsTools.Tools;
+using Tsinswreng.CsTools;
 
-namespace Ngaq.Ui.ViewModels;
+namespace Ngaq.Ui.Infra;
 
 public interface I_Arg{
 	public ITypedObj? Arg{get;set;}
