@@ -41,12 +41,18 @@ public partial class ViewWordQuery
 	}
 
 	public  partial class Cls_{
-
+		public str MenuBtn = nameof(MenuBtn);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
-		//Styles.Add(SugarStyle.GridShowLines());
+		Styles.AddInit(new Style(x=>
+			x.Is<Control>()
+			.Class(Cls.MenuBtn)
+		).Set(
+			VerticalAlignmentProperty
+			,VertAlign.Stretch
+		));
 		return NIL;
 	}
 
@@ -111,21 +117,31 @@ public partial class ViewWordQuery
 		var Row1 = new AutoGrid(IsRow: false);
 		R.AddInit(Row1.Grid, (o)=>{
 			o.ColumnDefinitions.AddRange([
-				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Star),
+				ColDef(100, GUT.Star),
+				ColDef(100, GUT.Star),
+				ColDef(100, GUT.Star),
 			]);
 		});
 		{{
-			Row1.AddInit(new SwipeLongPressBtn{Content = "▶️Start"}, (o)=>{
+			Row1.AddInit(new SwipeLongPressBtn{}, (o)=>{
+				o.Classes.Add(Cls.MenuBtn);
+				o.ContentInit(_TextBlock(), t=>{
+					t.Text = "▶️Start";
+				});
 				o.Click += (s,e)=>{
 					Ctx?.LoadEtStart();
 				};
-			}).AddInit(new SwipeLongPressBtn{Content = "💾Save"}, o=>{ //📁
+			}).AddInit(new SwipeLongPressBtn{}, o=>{ //📁
+				o.Classes.Add(Cls.MenuBtn);
+				o.ContentInit(_TextBlock(), t=>{
+					t.Text = "💾Save";
+				});
 				o.Click += (s,e)=>{
 					Ctx?.SaveEtRestart();
 				};
-			}).AddInit(new SwipeLongPressBtn{Content = "🔄Reset"}, o=>{
+			}).AddInit(new SwipeLongPressBtn{}, o=>{
+				o.Classes.Add(Cls.MenuBtn);
+				o.Content = "🔄Reset";
 				o.Click += (s,e)=>{
 					Ctx?.Reset();
 				};

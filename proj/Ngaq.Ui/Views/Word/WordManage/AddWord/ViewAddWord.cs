@@ -142,16 +142,22 @@ public partial class ViewAddWord
 			var Path = new AutoGrid(IsRow:false);
 			Ans.AddInit(Path.Grid, o=>{
 				o.ColumnDefinitions.AddRange([
-					ColDef(2, GUT.Star),
+					ColDef(2, GUT.Auto),
 					ColDef(8, GUT.Star),
 				]);
 			});
 			{{
-
 				Path.AddInit(_Button(), o=>{
 					o.Content = "Browse";
 					o.HorizontalAlignment = HoriAlign.Stretch;
 					o.HorizontalContentAlignment = HoriAlign.Stretch;
+					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色。
+					o.BorderThickness = new Thickness(1);
+					o.Bind(
+						Button.BorderBrushProperty
+						,o.GetObservable(Button.BackgroundProperty)
+					);
+					//o.UseLayoutRounding = true;
 				});
 				Path.AddInit(_TextBox(), o=>{
 					o.HorizontalAlignment = HoriAlign.Stretch;
