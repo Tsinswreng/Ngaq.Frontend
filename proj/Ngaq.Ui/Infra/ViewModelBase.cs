@@ -10,11 +10,17 @@ using Tsinswreng.CsCore;
 
 namespace Ngaq.Ui.Infra;
 
+public class EvtArgMsg:EventArgs{
+
+}
+
 public  partial class ViewModelBase
 	:ObservableObject
 	,IViewModel
 	,I_ViewNavi
 	,I_Arg
+	,I_ForceSetProp
+	,IMsgViewModel
 {
 
 	public ViewModelBase(){
@@ -26,7 +32,17 @@ public  partial class ViewModelBase
 	//跳轉傳參
 	public ITypedObj? Arg{get;set;}
 
+	//public event EventHandler<EventArgs>? EvtMsg;
+	// public nil OnMsg(obj? E = null){
+	// 	E??=EventArgs.Empty;
+	// 	EvtMsg?.Invoke(this, E);
+	// 	return NIL;
+	// }
+
+
 	protected ICollection<object?> _Msgs = new ObservableCollection<object?>();
+
+	[Impl(typeof(IMsgViewModel))]
 	public ICollection<object?> Msgs{
 		get{return _Msgs;}
 		set{SetProperty(ref _Msgs, value);}
@@ -37,6 +53,8 @@ public  partial class ViewModelBase
 /// 在Popup被關閉旹 須手動于回調中把isShowMsg設潙false
 /// </summary>
 	protected bool _IsShowMsg = false;
+
+	[Impl(typeof(IMsgViewModel))]
 	public bool IsShowMsg{
 		get{return _IsShowMsg;}
 		set{
@@ -52,6 +70,7 @@ public  partial class ViewModelBase
 	// 	get{return Errors.Count > 0;}
 	// }
 
+	[Impl(typeof(IMsgViewModel))]
 	public ViewModelBase AddMsg(object? Msg){
 		Msgs.Add(Msg);
 #if DEBUG
@@ -60,6 +79,7 @@ public  partial class ViewModelBase
 		return this;
 	}
 
+	[Impl(typeof(IMsgViewModel))]
 	public nil ShowMsg(){
 		var Old = Msgs;
 		Msgs = new ObservableCollection<object?>();
@@ -68,29 +88,37 @@ public  partial class ViewModelBase
 		return NIL;
 	}
 
+
+	[Impl(typeof(IMsgViewModel))]
 	public nil ClearMsg(){
 		Msgs.Clear();
 		return NIL;
 	}
 
-/// <summary>
-/// 地址未變但內容ˋ變旹 適用此
-/// </summary>
-/// <typeparam name="T"></typeparam>
-/// <param name="field"></param>
-/// <param name="newValue"></param>
-/// <param name="propertyName"></param>
-/// <returns></returns>
+	/// <summary>
+	/// 地址未變但內容ˋ變旹 適用此
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="Field"></param>
+	/// <param name="newValue"></param>
+	/// <param name="propertyName"></param>
+	/// <returns></returns>
+	[Impl]
 	public bool ForceSetProp<T>(
-		[NotNullIfNotNull(nameof(newValue))] ref T field
+		[NotNullIfNotNull(nameof(newValue))] ref T Field
 		,T newValue
 		,[CallerMemberName] string? propertyName = null
-	){
+	)
+#if Impl
+	{
 		OnPropertyChanging(propertyName);
-		field = newValue;
+		Field = newValue;
 		OnPropertyChanged(propertyName);
 		return true;
 	}
+#else
+	;
+#endif
 
 	// void test(){
 	// 	ForceSetProperty(ref _IsShowMsg, true);

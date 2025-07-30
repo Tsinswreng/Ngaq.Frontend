@@ -79,7 +79,10 @@ public partial class ViewAddWord
 				a._Popup.MaxHeight = Cfg.WindowHeight*0.6;
 				a._BdrBody.MaxHeight = a._Popup.MaxHeight*0.8;
 				a._Popup.PlacementTarget = Root.Grid;
-				a._Title.Content = new TextBlock{Text = "Error", FontSize = 26.0};
+				a._Title.ContentInit(_TextBlock(), t=>{
+					t.Text = "Error";
+					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				});
 				a._CloseBtn.Click += (s,e)=>{
 					Ctx!.IsShowMsg = false;
 				};

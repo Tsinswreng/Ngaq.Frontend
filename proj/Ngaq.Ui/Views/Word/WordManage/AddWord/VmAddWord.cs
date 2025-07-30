@@ -65,7 +65,7 @@ public partial class VmAddWord
 			).ContinueWith(d=>{
 				if(d.IsFaulted){
 					Console.WriteLine(d.Exception);//t
-					AddMsg(d.Exception.ToString());
+					//this.OnMsg(d.Exception.ToString());
 					//ErrStr = d.Exception.ToString();
 					ShowMsg();
 				}

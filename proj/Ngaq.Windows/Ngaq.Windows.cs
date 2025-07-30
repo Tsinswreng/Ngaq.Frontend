@@ -13,14 +13,13 @@ using Tsinswreng.CsTools;
 
 namespace Ngaq.Windows;
 
-sealed class Program
-{
+sealed class Program {
 
-	static str GetCfgFilePath(string[] args){
+	static str GetCfgFilePath(string[] args) {
 		var CfgFilePath = "";
-		if(args.Length > 0){
+		if (args.Length > 0) {
 			CfgFilePath = args[0];
-		}else{
+		} else {
 #if DEBUG
 			CfgFilePath = "Ngaq.dev.jsonc";
 #else
@@ -35,35 +34,32 @@ sealed class Program
 	// yet and stuff might break.
 
 	[STAThread]
-	public static async Task Main(string[] args){
+	public static async Task Main(string[] args) {
 		CT Ct = new();
-		try{
+		try {
+/*
+改潙勿合併配置字典
+緣: 初始化旹各從用戶配置文件與Gui配置文件讀、汶合併。保存旹 併ᵣ後ˌʹ配置對象ˋ被寫入Gui配置文件。
+下次初始化旹又各取ⁿ合併、則列表合併旹有褈、益益多矣
+當改作 設多源配置、訪問配置項時 優先讀用戶配置、尋不見汶尋Gui配置。
+保存旹只寫入Gui配置、緣用戶配置潙只讀。
+ */
 			System.Console.WriteLine(
-				"pwd: "+Directory.GetCurrentDirectory()
+				"pwd: " + Directory.GetCurrentDirectory()
 			);
+			var DualSrcCfg = LocalCfg.Inst;
 			var CfgPath = GetCfgFilePath(args);
-			var localCfg = LocalCfg.Inst;
-			await localCfg.FromFileAsy(CfgPath, Ct);
+			var RoCfg = new JsonFileCfgAccessor();
+			DualSrcCfg.RoCfg = RoCfg;
+			await RoCfg.FromFileAsy(CfgPath, Ct);
 
-			var MergedCfgPath = LocalCfgItems.MergedConfigPath.GetFrom(localCfg)??"";
-			ToolFile.EnsureFile(MergedCfgPath);
-			var MergedCfg = new JsonFileCfgAccessor();
-			localCfg.FnReLoadAsy = async(z, Ct)=>{
-				await MergedCfg.FromFileAsy(MergedCfgPath, Ct);
-				z.CfgDict = MergedCfg.CfgDict.ToDeepMerge(z.CfgDict);
-				MergedCfg.CfgDict = z.CfgDict;
-				return NIL;
-			};
-			await localCfg.ReLoadAsy(Ct);
-			localCfg.FnSaveAsy = async(z,Ct)=>{
-				MergedCfg.CfgDict = z.CfgDict;
-				await MergedCfg._SaveAsy(Ct);
-				return NIL;
-			};
-			//TODO 緟構多源配置框架
-		}
-		catch (System.Exception e){
-			System.Console.Error.WriteLine("Failed to load config file: "+e);
+			var GuiCfgPath = LocalCfgItems.GuiConfigPath.GetFrom(DualSrcCfg) ?? "";
+			ToolFile.EnsureFile(GuiCfgPath);
+			var GuiCfg = new JsonFileCfgAccessor();
+			DualSrcCfg.RwCfg = GuiCfg;
+			await GuiCfg.FromFileAsy(GuiCfgPath, Ct);
+		} catch (System.Exception e) {
+			System.Console.Error.WriteLine("Failed to load config file: " + e);
 		}
 
 		var svc = new ServiceCollection();
@@ -79,7 +75,7 @@ sealed class Program
 			.UseHotReload()
 			.UseRiderHotReload()
 #endif
-			.AfterSetup(e=>{
+			.AfterSetup(e => {
 				App.ConfigureServices(servicesProvider);
 				var DbIniter = App.GetSvc<DbIniter>();
 				_ = DbIniter.Init(default).Result;
