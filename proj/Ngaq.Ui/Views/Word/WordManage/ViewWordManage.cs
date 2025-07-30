@@ -61,7 +61,7 @@ public partial class ViewWordManage
 		R.Click += (s,e)=>{
 			Ctx?.ViewNavi?.GoTo(titled);
 		};
-		R.HorizontalContentAlignment = HoriAlign.Left;
+		R.HorizontalContentAlignment = HAlign.Left;
 		R.ContentInit(_TextBlock(), o=>{
 			o.Text = Title;
 		});

@@ -8,6 +8,6 @@ global using GUT = Avalonia.Controls.GridUnitType;
 global using Style = Avalonia.Styling.Style;
 #endregion Grid
 global using TxtAlign = Avalonia.Media.TextAlignment;
-global using VertAlign = Avalonia.Layout.VerticalAlignment;
-global using HoriAlign = Avalonia.Layout.HorizontalAlignment;
+global using VAlign = Avalonia.Layout.VerticalAlignment;
+global using HAlign = Avalonia.Layout.HorizontalAlignment;
 global using static Tsinswreng.AvlnTools.Dsl.DslFactory;

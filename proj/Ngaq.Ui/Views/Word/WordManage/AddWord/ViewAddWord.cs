@@ -122,8 +122,8 @@ public partial class ViewAddWord
 			});
 			Root.AddInit(_Button(), o=>{
 				o.Content = "Confirm";
-				o.HorizontalAlignment = HoriAlign.Center;
-				o.HorizontalContentAlignment = HoriAlign.Center;
+				o.HorizontalAlignment = HAlign.Center;
+				o.HorizontalContentAlignment = HAlign.Center;
 				o.Click += (s,e)=>{
 					Ctx?.Confirm();
 				};
@@ -152,8 +152,8 @@ public partial class ViewAddWord
 			{{
 				Path.AddInit(_Button(), o=>{
 					o.Content = "Browse";
-					o.HorizontalAlignment = HoriAlign.Stretch;
-					o.HorizontalContentAlignment = HoriAlign.Stretch;
+					o.HorizontalAlignment = HAlign.Stretch;
+					o.HorizontalContentAlignment = HAlign.Stretch;
 					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色。
 					o.BorderThickness = new Thickness(1);
 					o.Bind(
@@ -163,7 +163,7 @@ public partial class ViewAddWord
 					//o.UseLayoutRounding = true;
 				});
 				Path.AddInit(_TextBox(), o=>{
-					o.HorizontalAlignment = HoriAlign.Stretch;
+					o.HorizontalAlignment = HAlign.Stretch;
 					o.Bind(
 						TextBox.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Path)){Mode=BindingMode.TwoWay}

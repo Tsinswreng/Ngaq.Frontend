@@ -88,7 +88,7 @@ public partial class ViewWordListCard
 			var Lang = new TextBlock();
 			LangGrid.Add(Lang);
 			{var o = Lang;
-				o.VerticalAlignment = VertAlign.Center;
+				o.VerticalAlignment = VAlign.Center;
 				o.Bind(
 					TextBlock.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
@@ -115,7 +115,7 @@ public partial class ViewWordListCard
 			var Head = new TextBlock();
 			HeadBox.Add(Head);
 			{var o = Head;
-				o.VerticalAlignment = VertAlign.Center;
+				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.Bind(
 					TextBlock.TextProperty

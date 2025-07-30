@@ -18,8 +18,8 @@ public  partial class StrBarItem{
 		var Ans = new SwipeLongPressBtn();
 		{
 			var o = Ans;
-			o.VerticalAlignment = VertAlign.Stretch;
-			o.HorizontalAlignment = HoriAlign.Stretch;
+			o.VerticalAlignment = VAlign.Stretch;
+			o.HorizontalAlignment = HAlign.Stretch;
 			//o.Background = Brushes.Black;
 			o.Background = Brushes.Transparent;
 			o.Styles.Add(new Style().NoMargin().NoPadding());
@@ -39,7 +39,7 @@ public  partial class StrBarItem{
 					var o = Icon;
 					o.Text = IconStr;
 					o.TextAlignment = TxtAlign.Center;
-					o.VerticalAlignment = VertAlign.Center;
+					o.VerticalAlignment = VAlign.Center;
 				}
 
 				var Title_ = new TextBlock{};
@@ -48,7 +48,7 @@ public  partial class StrBarItem{
 					var o = Title_;
 					o.Text = Title;
 					o.TextAlignment = TxtAlign.Center;
-					o.VerticalAlignment = VertAlign.Center;
+					o.VerticalAlignment = VAlign.Center;
 					o.FontSize = UiCfg.Inst.BaseFontSize*0.75;
 				}
 			}}//~Grid

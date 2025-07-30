@@ -50,7 +50,7 @@ public partial class AppTextLogo
 			);
 			o.Set(
 				HorizontalAlignmentProperty
-				, HoriAlign.Center
+				, HAlign.Center
 			);
 		}
 		return 0;

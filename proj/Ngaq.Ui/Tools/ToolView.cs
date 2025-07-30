@@ -15,8 +15,8 @@ public partial class ToolView{
 		//titled.Title.Content = new TextBlock(){Text = Title};
 		titled.Title.ContentInit(_TextBlock(), o=>{
 			o.Text = Title;
-			o.VerticalAlignment = VertAlign.Center;
-			o.HorizontalAlignment = HoriAlign.Center;
+			o.VerticalAlignment = VAlign.Center;
+			o.HorizontalAlignment = HAlign.Center;
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 		});
 		titled.BdrTitle.Background = new SolidColorBrush(Color.FromRgb(32, 32, 32));

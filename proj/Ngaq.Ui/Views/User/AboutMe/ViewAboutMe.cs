@@ -52,14 +52,19 @@ public partial class ViewAboutMe
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Star),
 		]);
+		// R.Grid.RowDefinitions.AddRange([
+		// 	RowDef(1, GUT.Auto)
+		// ]);
+
 		R.AddInit(new SwipeLongPressBtn(), o=>{
+			o.VAlign(VAlign.Stretch);
 			o.Content = "👤";
 		});
 		R.AddInit(new SwipeLongPressBtn(), o=>{
-			//o.Content = "Login/Register";
-			o.ContentInit(_TextBlock(), o=>{
-				o.Text = "Login/Register";
-				o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+			o.VAlign(VAlign.Stretch);
+			o.ContentInit(_TextBlock(), t=>{
+				t.Text = "Login";
+				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
 			o.Click += (s,e)=>{
 				Ctx?.ViewNavi?.GoTo(

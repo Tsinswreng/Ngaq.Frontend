@@ -85,7 +85,7 @@ public  partial class Cls_{
 				t.Text = "Login";
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
-			b.HorizontalAlignment = HoriAlign.Stretch;
+			b.HorizontalAlignment = HAlign.Stretch;
 			b.Click += (s,e)=>{
 				Ctx?.Login();
 			};

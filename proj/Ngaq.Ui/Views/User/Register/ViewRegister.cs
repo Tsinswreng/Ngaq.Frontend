@@ -74,7 +74,7 @@ public partial class ViewRegister
 				t.Text = "Register";
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
-			b.HorizontalAlignment = HoriAlign.Stretch;
+			b.HorizontalAlignment = HAlign.Stretch;
 			b.Click += (s,e)=>{
 				Ctx?.Register();
 			};

@@ -74,10 +74,10 @@ public partial class App :Application
 			x.Is<Button>()
 		).Set(
 			TemplatedControl.HorizontalAlignmentProperty
-			,HoriAlign.Stretch
+			, HAlign.Stretch
 		).Set(
 			ContentControl.HorizontalContentAlignmentProperty
-			,HoriAlign.Center
+			, HAlign.Center
 		);
 		Styles.Add(Button);
 

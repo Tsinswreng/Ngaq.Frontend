@@ -155,16 +155,16 @@ public partial class ViewWordInfo
 						TextBlock.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 					);
-					o.HorizontalAlignment = HoriAlign.Left;
-					o.VerticalAlignment = VertAlign.Center;
+					o.HorizontalAlignment = HAlign.Left;
+					o.VerticalAlignment = VAlign.Center;
 				});
 				LangId.AddInit(_SelectableTextBlock(), o=>{
 					o.Bind(
 						TextBlock.TextProperty
 						,new CBE(CBE.Pth<Ctx>(x=>x.Id))
 					);
-					o.VerticalAlignment = VertAlign.Center;
-					o.HorizontalAlignment = HoriAlign.Right;
+					o.VerticalAlignment = VAlign.Center;
+					o.HorizontalAlignment = HAlign.Right;
 					o.TextAlignment = TxtAlign.Right;
 				});
 			}}//~LangId
@@ -185,7 +185,7 @@ public partial class ViewWordInfo
 						Mode = BindingMode.TwoWay
 					}
 				);
-				o.VerticalAlignment = VertAlign.Stretch;
+				o.VerticalAlignment = VAlign.Stretch;
 				//o.VerticalContentAlignment = VertAlign.Center;
 				//o.TextAlignment = TxtAlign.Right;
 				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;

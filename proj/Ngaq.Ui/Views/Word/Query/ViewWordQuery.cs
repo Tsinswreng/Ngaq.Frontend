@@ -51,7 +51,7 @@ public partial class ViewWordQuery
 			.Class(Cls.MenuBtn)
 		).Set(
 			VerticalAlignmentProperty
-			,VertAlign.Stretch
+			, VAlign.Stretch
 		));
 		return NIL;
 	}
@@ -252,7 +252,7 @@ public partial class ViewWordQuery
 				Grid.Children.Add(Btn);
 				{var o = Btn;
 					//o.HorizontalContentAlignment = HoriAlign.Left;
-					o.HorizontalContentAlignment = HoriAlign.Stretch;
+					o.HorizontalContentAlignment = HAlign.Stretch;
 					o.Styles.Add(new Style().NoMargin().NoPadding());
 					o.Background = Brushes.Transparent;
 					o.Bind(
@@ -269,8 +269,7 @@ public partial class ViewWordQuery
 				var Card = new ViewWordListCard{};
 				Btn.Content = Card;
 				{var o = Card;
-					o.VerticalAlignment = VertAlign.Stretch;
-					o.HorizontalAlignment = HoriAlign.Stretch;
+					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
 					o.Background = Brushes.Transparent;
 					o.Bind(
 						Control.DataContextProperty

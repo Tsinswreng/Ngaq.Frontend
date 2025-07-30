@@ -49,7 +49,7 @@ public partial class ViewSettings
 		var Fn = (str Title, Control Target)=>{
 			var R = new SwipeLongPressBtn();
 			var titled = ToolView.WithTitle(Title, Target);
-			R.HorizontalContentAlignment = HoriAlign.Left;
+			R.HorizontalContentAlignment = HAlign.Left;
 			R.ContentInit(_TextBlock(), o=>{
 				o.Text = Title;
 				o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
