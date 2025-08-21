@@ -1,7 +1,9 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 
 using Avalonia.Controls;
-using Ctx = VmXxx;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
+using Ctx = VmWordSync;
 public partial class ViewWordSync
 	:UserControl
 {
@@ -12,7 +14,7 @@ public partial class ViewWordSync
 	}
 
 	public ViewWordSync(){
-		Ctx = new Ctx();
+		Ctx = Ctx.Mk();
 		Style();
 		Render();
 	}
@@ -26,7 +28,11 @@ public partial class ViewWordSync
 		return NIL;
 	}
 
+	public AutoGrid Root = new(IsRow:true);
 	protected nil Render(){
+		this.ContentInit(Root.Grid, o=>{
+
+		});
 		return NIL;
 	}
 

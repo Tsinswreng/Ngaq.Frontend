@@ -24,7 +24,7 @@ public  partial class ClientWord : ISvcWord {
 		throw new NotImplementedException();
 	}
 
-	public Task<IPageAsy<JnWord>> PageBoWord(IUserCtx UserCtx, IPageQuery PageQry, CT Ct) {
+	public Task<IPageAsy<JnWord>> PageJnWord(IUserCtx UserCtx, IPageQry PageQry, CT Ct) {
 		throw new NotImplementedException();
 	}
 }

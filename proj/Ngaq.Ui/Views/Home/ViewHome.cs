@@ -3,16 +3,11 @@ namespace Ngaq.Ui.Views.Home;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Ngaq.Ui.Views.BottomBar;
-using Ngaq.Ui.Views.User;
-using Ngaq.Ui.Views.User.Register;
 using Ngaq.Ui.Views.Word.Query;
-using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmHome;
 using Ngaq.Ui.Views.Word.WordManage;
-using Tsinswreng.AvlnTools.Navigation;
-using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.User.AboutMe;
 
 public partial class ViewHome

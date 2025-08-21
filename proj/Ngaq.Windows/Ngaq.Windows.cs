@@ -47,13 +47,13 @@ sealed class Program {
 			System.Console.WriteLine(
 				"pwd: " + Directory.GetCurrentDirectory()
 			);
-			var DualSrcCfg = LocalCfg.Inst;
+			var DualSrcCfg = AppCfg.Inst;
 			var CfgPath = GetCfgFilePath(args);
 			var RoCfg = new JsonFileCfgAccessor();
 			DualSrcCfg.RoCfg = RoCfg;
 			await RoCfg.FromFileAsy(CfgPath, Ct);
 
-			var GuiCfgPath = LocalCfgItems.GuiConfigPath.GetFrom(DualSrcCfg) ?? "";
+			var GuiCfgPath = AppCfgItems.GuiConfigPath.GetFrom(DualSrcCfg) ?? "";
 			ToolFile.EnsureFile(GuiCfgPath);
 			var GuiCfg = new JsonFileCfgAccessor();
 			DualSrcCfg.RwCfg = GuiCfg;

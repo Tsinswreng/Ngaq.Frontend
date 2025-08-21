@@ -170,12 +170,12 @@ public partial class ViewWordListCard
 				);
 			}
 
-			var RecordType = (Learn Learn)=>{
+			var RecordType = (ELearn Learn)=>{
 				var R = new TextBlock{};
 				R.Bind(
 					TextBlock.TextProperty
 					,CBE.Mk<Ctx>(x=>x.Learn_Records
-						,Converter: new ConvMultiDictValueCnt<Learn, ILearnRecord>()
+						,Converter: new ConvMultiDictValueCnt<ELearn, ILearnRecord>()
 						,ConverterParameter: Learn
 					)
 				);
@@ -183,14 +183,14 @@ public partial class ViewWordListCard
 			};
 			var Colon = ()=>new TextBlock(){Text = ":"};
 
-			var Add = RecordType(ELearn.Inst.Add);
+			var Add = RecordType(ELearn.Add);
 			R.Add(Add);
 
 			R.Add(Colon());
-			var Rmb = RecordType(ELearn.Inst.Rmb);
+			var Rmb = RecordType(ELearn.Rmb);
 			R.Add(Rmb);
 			R.Add(Colon());
-			var Fgt = RecordType(ELearn.Inst.Fgt);
+			var Fgt = RecordType(ELearn.Fgt);
 			R.Add(Fgt);
 
 			R.Add(new TextBlock{Text = "\t"});

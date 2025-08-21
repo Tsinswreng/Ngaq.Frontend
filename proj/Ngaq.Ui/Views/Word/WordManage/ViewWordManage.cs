@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
+using Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -48,7 +49,7 @@ public partial class ViewWordManage
 		});
 		Root.AddInit(_StackPanel(), stk=>{
 			stk.AddInit(_Item("Add Words", new ViewAddWord()));
-			stk.AddInit(_Item("Backup & Sync", new ViewAddWord()));
+			stk.AddInit(_Item("Backup & Sync", new ViewWordSync()));
 		});
 
 

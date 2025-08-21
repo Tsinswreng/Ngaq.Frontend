@@ -1,12 +1,21 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Sys.Svc;
 using Ngaq.Ui.Infra;
 
-using Ctx = VmXxx;
-public partial class VmXxx: ViewModelBase{
+using Ctx = VmWordSync;
+public partial class VmWordSync: ViewModelBase{
+	ISvcDbCfg? SvcDbCfg;
+	public VmWordSync(ISvcDbCfg? SvcDbCfg){
+		this.SvcDbCfg = SvcDbCfg;
+	}
 
+	protected VmWordSync(){}
+	public static Ctx Mk(){
+		return new Ctx();
+	}
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmXxx(){
+	static VmWordSync(){
 		#if DEBUG
 		{
 			var o = new Ctx();

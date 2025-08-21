@@ -1,14 +1,10 @@
 namespace Ngaq.Ui.Views.Word.WordCard;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Ngaq.Core.Infra.Core;
-using Ngaq.Core.Model.Bo;
-using Ngaq.Core.Model.Samples.Word;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Infra;
-using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordListCard;
 public partial class VmWordListCard
 	:ViewModelBase
@@ -55,7 +51,7 @@ public partial class VmWordListCard
 		Learn_Records = Bo.Learn_Records;
 		SavedLearnRecords = Bo.LearnRecords;
 		LastLearnedTime = Bo.LastLearnedTime_();
-		FontColor = AddCntToFontColor((u64)Learn_Records[ELearn.Inst.Add].Count);
+		FontColor = AddCntToFontColor((u64)Learn_Records[ELearn.Add].Count);
 		return NIL;
 	}
 
@@ -123,8 +119,8 @@ public partial class VmWordListCard
 		}
 	}
 
-	protected IDictionary<Learn, IList<ILearnRecord>> _Learn_Records = new Dictionary<Learn, IList<ILearnRecord>>();
-	public IDictionary<Learn, IList<ILearnRecord>> Learn_Records{
+	protected IDictionary<ELearn, IList<ILearnRecord>> _Learn_Records = new Dictionary<ELearn, IList<ILearnRecord>>();
+	public IDictionary<ELearn, IList<ILearnRecord>> Learn_Records{
 		get{return _Learn_Records;}
 		set{
 			if(Bo!=null){Bo.Learn_Records = value;}
@@ -164,13 +160,12 @@ public partial class VmWordListCard
 
 
 
-	public static str LearnToSymbol(Learn Learn){
-		var E = ELearn.Inst;
-		if(Learn == E.Add){
+	public static str LearnToSymbol(ELearn Learn){
+		if(Learn == ELearn.Add){
 			return "🤔";
-		}else if(Learn == E.Rmb){
+		}else if(Learn == ELearn.Rmb){
 			return "✅";
-		}else if(Learn == E.Fgt){
+		}else if(Learn == ELearn.Fgt){
 			return "❌";
 		}
 		throw new FatalLogicErr("Unknown Learn: " + Learn);

@@ -14,5 +14,4 @@ public partial class VmAboutMe: ViewModelBase{
 		}
 		#endif
 	}
-
 }

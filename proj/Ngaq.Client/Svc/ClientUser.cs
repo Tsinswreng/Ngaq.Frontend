@@ -67,6 +67,9 @@ public  partial class ClientUser
 		}
 	}
 
-
+	[Impl]
+	public async Task<nil> Logout(ReqLogout ReqLogout, CT Ct){
+		return NIL;
+	}
 
 }

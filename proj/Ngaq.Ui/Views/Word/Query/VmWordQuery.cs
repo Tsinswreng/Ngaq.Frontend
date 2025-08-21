@@ -101,7 +101,7 @@ public IImgGetter? SvcImg{get;set;}
 		set{SetProperty(ref _VmWordInfo, value);}
 	}
 
-	protected i64 _LearnOrUndo(VmWordListCard Vm, Learn Learn){
+	protected i64 _LearnOrUndo(VmWordListCard Vm, ELearn Learn){
 		if(Vm.WordForLearn == null){
 			return (i64)MgrLearn.ELearnOpRtn.Invalid;
 		}
@@ -121,7 +121,7 @@ public IImgGetter? SvcImg{get;set;}
 	public nil ClickVmWordCard(
 		VmWordListCard Vm
 	){
-		if(_LearnOrUndo(Vm, ELearn.Inst.Rmb) == (i64)MgrLearn.ELearnOpRtn.Learn){
+		if(_LearnOrUndo(Vm, ELearn.Rmb) == (i64)MgrLearn.ELearnOpRtn.Learn){
 			Vm.LearnedColor = Cfg.ColorRmb;
 		}else{
 			Vm.LearnedColor = Cfg.ColorNone;
@@ -130,7 +130,7 @@ public IImgGetter? SvcImg{get;set;}
 	}
 
 	public nil OnLongPressed(VmWordListCard Vm){
-		if(_LearnOrUndo(Vm, ELearn.Inst.Fgt) == (i64)MgrLearn.ELearnOpRtn.Learn){
+		if(_LearnOrUndo(Vm, ELearn.Fgt) == (i64)MgrLearn.ELearnOpRtn.Learn){
 			Vm.LearnedColor = Cfg.ColorFgt;
 		}else{
 			Vm.LearnedColor = Cfg.ColorNone;
@@ -148,9 +148,9 @@ public IImgGetter? SvcImg{get;set;}
 
 	public async Task<nil> LoadEtStartAsy(CT Ct){
 		if(!MgrLearn.State.OperationStatus.Load){
-			var Page = await SvcWord.PageBoWord(
+			var Page = await SvcWord.PageJnWord(
 				UserCtxMgr.GetUserCtx()
-				,PageQuery.SelectAll()
+				,PageQry.SlctAll()
 				,Ct
 			);
 
