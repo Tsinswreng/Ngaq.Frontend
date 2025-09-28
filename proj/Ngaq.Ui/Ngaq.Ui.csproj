@@ -25,14 +25,19 @@
 			<PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="CommunityToolkit.Mvvm" />
+		<PackageReference Include="Fody">
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 		<PackageReference Include="Live.Avalonia" />
+		<PackageReference Include="MethodTimer.Fody" />
 		<PackageReference Include="System.Reactive" />
 
 		<PackageReference Include="Irihi.Ursa" />
 		<PackageReference Include="Irihi.Ursa.Themes.Semi" />
 		<PackageReference Include="Semi.Avalonia" />
-		<PackageReference Include="Microsoft.Extensions.Logging"  />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions"  />
+		<PackageReference Include="Microsoft.Extensions.Logging" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
 
 	</ItemGroup>
 </Project>

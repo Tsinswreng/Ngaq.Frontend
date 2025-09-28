@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weavers xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="FodyWeavers.xsd">
+  <MethodDecorator>
+    <!-- 1. 把 TimeEveryMethodAttribute 作为标记 -->
+    <Attributes>
+      <Attribute>Ngaq.Windows.TimeEveryMethodAttribute</Attribute>
+    </Attributes>
+    <!-- 2. 织入范围：三个程序集 -->
+    <AssemblyNames>
+      <Name>Ngaq.Windows</Name>
+      <Name>Ngaq.Core</Name>
+      <Name>Ngaq.Local</Name>
+    </AssemblyNames>
+    <!-- 3. 给「所有」方法都打上这个属性（含私有、构造器、属性 getter/setter） -->
+    <ApplyToAllMethods>true</ApplyToAllMethods>
+  </MethodDecorator>
+</Weavers>

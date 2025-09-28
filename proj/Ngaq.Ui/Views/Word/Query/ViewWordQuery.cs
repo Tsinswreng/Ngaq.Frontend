@@ -72,7 +72,6 @@ public partial class ViewWordQuery
 		// 动态监听窗口大小变化，保持同步
 		// top.GetObservable(TopLevel.BoundsProperty).Subscribe(bounds => //无法将 lambda 表达式 转换为类型“IObserver<Rect>”，原因是它不是委托类型CS1660
 		// {
-		// 	System.Console.WriteLine(1);//t  有輸出
 		// 	originalBrush.Stretch = Stretch.Uniform;
 		// 	overlayGrid.Width = bounds.Width;
 		// 	overlayGrid.Height = bounds.Height;

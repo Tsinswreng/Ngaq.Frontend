@@ -1,7 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 using Avalonia.Controls;
-using Avalonia.Layout;
 using Ctx = VmAddWord;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Data;
@@ -9,12 +8,7 @@ using Avalonia.Styling;
 using Tsinswreng.AvlnTools.Tools;
 using Avalonia.Media;
 using Avalonia;
-using Semi.Avalonia;
-using Ursa.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data.Converters;
-using System.Collections.ObjectModel;
-using Avalonia.Threading;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 
@@ -111,13 +105,28 @@ public partial class ViewAddWord
 
 			Root.Add();
 			Root.AddInit(_TabControl(), Tab=>{
+				Tab.Bind(
+					TabControl.SelectedIndexProperty
+					,CBE.Mk<Ctx>(
+						x=>x.TabIndex
+						,Mode: BindingMode.TwoWay
+					)
+				);
 				Tab.Items.AddInit(_TabItem(), o=>{
-					o.Header = "By File";
+					o.Header = "Word Txt File";
 					o.Content = ByFile();
 				});
 				Tab.Items.AddInit(_TabItem(), o=>{
-					o.Header = "By Text";
+					o.Header = "Jsons File";
+					o.Content = ByJsonFile();
+				});
+				Tab.Items.AddInit(_TabItem(), o=>{
+					o.Header = "Text";
 					o.Content = ByText();
+				});
+				Tab.Items.AddInit(_TabItem(), o=>{
+					o.Header = "Json";
+					o.Content = ByJson();
 				});
 			});
 			Root.AddInit(_Button(), o=>{
@@ -166,7 +175,7 @@ public partial class ViewAddWord
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.Bind(
 						TextBox.TextProperty
-						,new CBE(CBE.Pth<Ctx>(x=>x.Path)){Mode=BindingMode.TwoWay}
+						,new CBE(CBE.Pth<Ctx>(x=>x.WordTxtPath)){Mode=BindingMode.TwoWay}
 					);
 				});
 
@@ -176,6 +185,52 @@ public partial class ViewAddWord
 		}}
 		return Ans.Grid;
 	}
+
+	Control? ByJsonFile(){
+		var Ans = new AutoGrid(IsRow:true);
+		Ans.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Star),
+			RowDef(1, GUT.Auto),
+			RowDef(8, GUT.Star),
+		]);
+		{{
+			Ans.Add();
+
+			var Path = new AutoGrid(IsRow:false);
+			Ans.AddInit(Path.Grid, o=>{
+				o.ColumnDefinitions.AddRange([
+					ColDef(2, GUT.Auto),
+					ColDef(8, GUT.Star),
+				]);
+			});
+			{{
+				Path.AddInit(_Button(), o=>{
+					o.Content = "Browse";
+					o.HorizontalAlignment = HAlign.Stretch;
+					o.HorizontalContentAlignment = HAlign.Stretch;
+					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色。
+					o.BorderThickness = new Thickness(1);
+					o.Bind(
+						Button.BorderBrushProperty
+						,o.GetObservable(Button.BackgroundProperty)
+					);
+					//o.UseLayoutRounding = true;
+				});
+				Path.AddInit(_TextBox(), o=>{
+					o.HorizontalAlignment = HAlign.Stretch;
+					o.Bind(
+						TextBox.TextProperty
+						,new CBE(CBE.Pth<Ctx>(x=>x.WordJsonsPath)){Mode=BindingMode.TwoWay}
+					);
+				});
+
+			}}
+			Ans.Add();
+
+		}}
+		return Ans.Grid;
+	}
+
 
 	Control? ByText(){
 		var Ans = new AutoGrid(IsRow:true);
@@ -197,5 +252,26 @@ public partial class ViewAddWord
 		Ans.Add();
 
 		return Ans.Grid;
+	}
+
+	Control? ByJson(){
+		var R = new AutoGrid(IsRow:true);
+		R.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Star),
+			RowDef(8, GUT.Star),
+			RowDef(1, GUT.Star),
+		]);
+
+		R.Add();
+
+		R.AddInit(_TextBox(), o=>{
+			o.Bind(
+				TextBox.TextProperty
+				,new CBE(CBE.Pth<Ctx>(x=>x.Json)){Mode=BindingMode.TwoWay}
+			);
+		});
+
+		R.Add();
+		return R.Grid;
 	}
 }

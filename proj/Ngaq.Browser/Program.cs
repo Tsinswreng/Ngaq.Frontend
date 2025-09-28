@@ -11,15 +11,13 @@ internal sealed partial class Program {
 	private static Task Main(string[] args){
 
 		var svc = new ServiceCollection();
-		System.Console.WriteLine(111);//t
 		svc
-			.SetUpCore()
+			.SetupCore()
 			.SetupUi()
 			.SetupBrowser()
 			//.SetUpLocal()//TODO 改成按需API調用
-			.SetUpClient()
+			.SetupClient()
 		;
-		System.Console.WriteLine(123);//t
 		var servicesProvider = svc.BuildServiceProvider();
 
 		return BuildAvaloniaApp()

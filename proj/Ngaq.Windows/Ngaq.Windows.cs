@@ -35,6 +35,9 @@ sealed class Program {
 
 	[STAThread]
 	public static async Task Main(string[] args) {
+		if(args.Length > 1 && args[0] == "--version"){
+			System.Console.WriteLine(1757779054280);
+		}
 		CT Ct = new();
 		try {
 /*
@@ -64,9 +67,9 @@ sealed class Program {
 
 		var svc = new ServiceCollection();
 		svc
-			.SetUpCore()
-			.SetUpLocal()//TODO 改成按需API調用
-			.SetUpClient()
+			.SetupCore()
+			.SetupLocal()//TODO 改成按需API調用
+			.SetupClient()
 			.SetupUi()
 		;
 		var servicesProvider = svc.BuildServiceProvider();

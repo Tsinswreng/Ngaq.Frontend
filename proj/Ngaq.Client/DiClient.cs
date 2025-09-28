@@ -10,7 +10,7 @@ using Ngaq.Core.Word.Svc;
 namespace Ngaq.Client;
 
 public static class DiClient{
-	public static IServiceCollection SetUpClient(this IServiceCollection z){
+	public static IServiceCollection SetupClient(this IServiceCollection z){
 		z.AddScoped<ISvcUser, ClientUser>();
 #if false //TODO 移至DiBrowser
 		z.AddScoped<ISvcWord, ClientWord>();

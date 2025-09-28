@@ -13,7 +13,7 @@ public partial class MainView : UserControl {
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
 				if(e.Key == Avalonia.Input.Key.Escape){
-					MgrViewNavi.Inst.GetViewNavi().Back();//t
+					MgrViewNavi.Inst.GetViewNavi().Back();
 				}
 			}
 			,handledEventsToo: true

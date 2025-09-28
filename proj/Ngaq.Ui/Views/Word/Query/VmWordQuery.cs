@@ -154,8 +154,8 @@ public IImgGetter? SvcImg{get;set;}
 				,Ct
 			);
 
-			var Words = Page.DataAsy?.ToBlockingEnumerable(Ct)??[];
-			MgrLearn.Load(Words);
+			var Words = Page.Data??[];
+			MgrLearn.Load(Words);//
 		}
 		await MgrLearn.StartAsy(Ct);
 		RenderWordList();
