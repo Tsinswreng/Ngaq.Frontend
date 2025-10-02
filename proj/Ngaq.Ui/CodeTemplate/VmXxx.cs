@@ -20,4 +20,12 @@ public partial class VmXxx: ViewModelBase{
 		#endif
 	}
 
+/*
+	protected str _YYY = "";
+	public str YYY{
+		get{return _YYY;}
+		set{SetProperty(ref _YYY, value);}
+	}
+ */
+
 }

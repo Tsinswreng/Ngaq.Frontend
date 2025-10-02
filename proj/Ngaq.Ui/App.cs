@@ -30,14 +30,13 @@ public partial class App :Application
 	public static T GetSvc<T>()
 		where T : class
 	{
-		System.Console.Write("GetSvc: ");
-		System.Console.WriteLine(typeof(T));//t
-		return App.ServiceProvider.GetRequiredService<T>();
+		System.Console.Write("GetSvc: "+typeof(T));//t
+		return App.SvcProvider.GetRequiredService<T>();
 	}
 
-	public static IServiceProvider ServiceProvider { get; private set; } = null!;
-	public static void ConfigureServices(IServiceProvider serviceProvider){
-		ServiceProvider = serviceProvider;
+	public static IServiceProvider SvcProvider { get; private set; } = null!;
+	public static void SetSvcProvider(IServiceProvider SvcProvider){
+		App.SvcProvider = SvcProvider;
 	}
 
 	public static IErrI18n? ErrI18n;

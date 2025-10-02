@@ -2,11 +2,11 @@ using Tsinswreng.CsTools;
 
 namespace Ngaq.Ui.Infra;
 
-public  partial interface I_Arg{
+public partial interface I_Arg{
 	public ITypedObj? Arg{get;set;}
 }
 
-public  partial interface IViewModel{}
+public partial interface IViewModel{}
 
 
 

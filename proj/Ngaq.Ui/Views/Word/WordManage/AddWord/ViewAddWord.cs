@@ -23,7 +23,7 @@ public partial class ViewAddWord
 
 	public ViewAddWord(){
 		//Ctx = new Ctx();
-		Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
+		Ctx = App.SvcProvider.GetRequiredService<Ctx>();
 
 		Style();
 		Render();

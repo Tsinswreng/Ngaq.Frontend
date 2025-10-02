@@ -22,7 +22,7 @@ internal sealed partial class Program {
 
 		return BuildAvaloniaApp()
 		.AfterSetup(e=>{
-			App.ConfigureServices(servicesProvider);
+			App.SetSvcProvider(servicesProvider);
 		})
 		.WithInterFont()
 		.StartBrowserAppAsync("out");//avalonia窗口 ʃʰ掛載ʹhtml元素

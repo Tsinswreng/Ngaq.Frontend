@@ -3,6 +3,7 @@ using Ngaq.Core.Models.UserCtx;
 using Ngaq.Core.Stream;
 using Ngaq.Core.Tools.Io;
 using Ngaq.Core.Word.Models;
+using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Svc;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsPage;
@@ -49,6 +50,15 @@ public partial class WebClientWord : ISvcWord {
 	public Task<nil> AddWordsByJsonLineIter(
 		IUserCtx User
 		,IAsyncEnumerable<str> JsonLineIter
+		,CT Ct
+	){
+		throw new NotImplementedException();
+	}
+
+	public async Task<IPage<JnWord>> SearchWord(
+		IUserCtx User
+		,IPageQry PageQry
+		,ReqSearchWord Req
 		,CT Ct
 	){
 		throw new NotImplementedException();

@@ -4,6 +4,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.KeyBoard.Dks;
 using Ngaq.Ui.Views.Home;
 using Ngaq.Ui.Views.User;
+using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Tsinswreng.AvlnTools.Navigation;
 
 namespace Ngaq.Ui.Views;
@@ -23,6 +24,7 @@ public partial class MainView : UserControl {
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 		var Home = new ViewHome();
+		//var Home = new ViewSearchWords();
 		Navi.GoTo(Home);
 		//Content = Home;
 		//Content = new ViewLoginRegister();

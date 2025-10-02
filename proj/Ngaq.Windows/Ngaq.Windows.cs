@@ -72,14 +72,14 @@ sealed class Program {
 			.SetupClient()
 			.SetupUi()
 		;
-		var servicesProvider = svc.BuildServiceProvider();
+		var svcProvider = svc.BuildServiceProvider();
 		BuildAvaloniaApp()
 #if DEBUG
 			.UseHotReload()
 			.UseRiderHotReload()
 #endif
 			.AfterSetup(e => {
-				App.ConfigureServices(servicesProvider);
+				App.SetSvcProvider(svcProvider);
 				var DbIniter = App.GetSvc<DbIniter>();
 				_ = DbIniter.Init(default).Result;
 			})
