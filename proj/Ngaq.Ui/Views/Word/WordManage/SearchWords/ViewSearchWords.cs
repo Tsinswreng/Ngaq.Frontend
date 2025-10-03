@@ -2,11 +2,15 @@ namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 using Ngaq.Core.Word.Models;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Converters;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
+using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSearchWords;
@@ -85,7 +89,6 @@ public partial class ViewSearchWords
 		});
 
 
-
 		return NIL;
 	}
 
@@ -95,10 +98,26 @@ public partial class ViewSearchWords
 			return new VirtualizingStackPanel();
 		});
 		R.ItemTemplate = new FuncDataTemplate<JnWord>((jnWord, b)=>{
-			var R = new ViewSearchedWordCard(){Ctx = new VmSearchedWordCard()};
-			if(jnWord == null){return R;};
+			var R = new Button();
+			var View = new ViewSearchedWordCard(){Ctx = new VmSearchedWordCard()};
+			if(jnWord == null){return View;};
 			var WordForLearn = new WordForLearn(jnWord);
-			R.Ctx.FromIWordForLearn(WordForLearn);
+			View.Ctx.FromIWordForLearn(WordForLearn);
+			R.Content = View;
+			//R.HorizontalContentAlignment = HAlign.Left;
+			R.Click += (s,e)=>{
+				var Target = new ViewEditWord();
+				Target.Ctx = App.GetSvc<VmEditWord>();
+				Target.Ctx?.FromJnWord(jnWord);
+				var titleStr = jnWord.Head;
+				var titled = ToolView.WithTitle(titleStr, Target);
+				Ctx?.ViewNavi?.GoTo(titled);
+			};
+			R.Styles.Add(new Style().Set(
+				BackgroundProperty
+				,Brushes.Transparent//背景設潙空則影響點擊判定範圍、點到空處則視潙未點、故用透明㕥代空背景
+			));
+			R.Styles.Add(new Style().NoMargin().NoPadding());
 			return R;
 		});
 		return R;

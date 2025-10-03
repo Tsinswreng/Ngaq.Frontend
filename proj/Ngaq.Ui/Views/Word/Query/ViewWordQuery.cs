@@ -306,68 +306,63 @@ public partial class ViewWordQuery
 			.Class(PC.pointerover)
 			.Template()
 			.OfType<ContentPresenter>()
-		);
-		s.Add(Hover);
-		{var o = Hover;
-			o.Set(
-				BorderBrushProperty
-				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-				//,Brushes.Transparent
-			);
-		}
+		).Set(
+			BorderBrushProperty
+			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+			//,Brushes.Transparent
+		).Attach(s);
+
+
 		var Pressed = new Style(x=>
 			x.Is<Button>()
 			.Class(PC.pressed)
 			.Template()
 			.OfType<ContentPresenter>()
-		);
-		s.Add(Pressed);
-		{var o = Pressed;
-			o.Set(
-				BorderBrushProperty
-				//,Brushes.Yellow
-				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-			);
-		}
+		).Set(
+			BorderBrushProperty
+			//,Brushes.Yellow
+			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+		).Attach(s);
+
 
 		return s;
 
 	}
 
-	Styles _StyBtnWordCard(Styles s){
-		var PC = PsdCls.Inst;
-		var Hover = new Style(x=>
-			x.Is<Button>()
-			.Class(PC.pointerover)
-			.Template()
-			.OfType<ContentPresenter>()
-		);
-		s.Add(Hover);
-		{var o = Hover;
-			o.Set(
-				BackgroundProperty
-				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-				//,Brushes.Transparent
-			);
-		}
-		var Pressed = new Style(x=>
-			x.Is<Button>()
-			.Class(PC.pressed)
-			.Template()
-			.OfType<ContentPresenter>()
-		);
-		s.Add(Pressed);
-		{var o = Pressed;
-			o.Set(
-				BackgroundProperty
-				//,Brushes.Yellow
-				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-			);
-		}
+	// Styles _StyBtnWordCard(Styles s){
+	// 	var PC = PsdCls.Inst;
+	// 	var Hover = new Style(x=>
+	// 		x.Is<Button>()
+	// 		.Class(PC.pointerover)
+	// 		.Template()
+	// 		.OfType<ContentPresenter>()
+	// 	);
+	// 	s.Add(Hover);
+	// 	{var o = Hover;
+	// 		o.Set(
+	// 			BackgroundProperty
+	// 			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+	// 			//,Brushes.Transparent
+	// 		);
+	// 	}
+	// 	var Pressed = new Style(x=>
+	// 		x.Is<Button>()
+	// 		.Class(PC.pressed)
+	// 		.Template()
+	// 		.OfType<ContentPresenter>()
+	// 	);
+	// 	s.Add(Pressed);
+	// 	{var o = Pressed;
+	// 		o.Set(
+	// 			BackgroundProperty
+	// 			//,Brushes.Yellow
+	// 			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+	// 		);
+	// 	}
 
-		return s;
+	// 	return s;
 
-	}
+	// }
 }
 
 

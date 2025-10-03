@@ -69,15 +69,18 @@ public partial class App :Application
 		// );
 		// Styles.Add(StyBaseFontSize);
 
+		//按鈕舒展
 		var Button = new Style(x=>
 			x.Is<Button>()
 		).Set(
 			TemplatedControl.HorizontalAlignmentProperty
 			, HAlign.Stretch
-		).Set(
-			ContentControl.HorizontalContentAlignmentProperty
-			, HAlign.Center
 		);
+		//.Set(
+		// 	ContentControl.HorizontalContentAlignmentProperty
+		// 	, HAlign.Center
+		// );
+
 		Styles.Add(Button);
 
 		return NIL;

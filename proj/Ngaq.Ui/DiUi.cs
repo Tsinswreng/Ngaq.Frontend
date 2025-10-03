@@ -3,6 +3,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.User;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
+using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Tsinswreng.AvlnTools.Navigation;
 
@@ -16,6 +17,7 @@ public static class DiUi{
 		z.AddTransient<VmWordQuery>();
 		z.AddTransient<VmLoginRegister>();
 		z.AddTransient<VmSearchWords>();
+		z.AddTransient<VmEditWord>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}
