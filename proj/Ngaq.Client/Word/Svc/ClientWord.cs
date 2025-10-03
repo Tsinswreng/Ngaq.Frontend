@@ -1,3 +1,4 @@
+using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.Word.Req;
 using Ngaq.Core.Models.UserCtx;
 using Ngaq.Core.Stream;
@@ -63,4 +64,13 @@ public partial class WebClientWord : ISvcWord {
 	){
 		throw new NotImplementedException();
 	}
+
+	public async Task<nil> SoftDelJnWordsByIds(
+		IUserCtx User
+		,IEnumerable<IdWord> Ids
+		,CT Ct
+	){
+		throw new NotImplementedException();
+	}
+
 }

@@ -46,6 +46,7 @@ public partial class VmSearchWords: ViewModelBase{
 		set{SetProperty(ref _PageIdx, value);}
 	}
 
+
 	protected IList<JnWord> _GotWords = new List<JnWord>();
 	public IList<JnWord> GotWords{
 		get{return _GotWords;}
@@ -53,7 +54,11 @@ public partial class VmSearchWords: ViewModelBase{
 	}
 
 	CancellationTokenSource Cts = new();
-	public nil Search(){
+	public nil InitSearch(){
+		PageIdx = 0;
+		return Search();
+	}
+	protected nil Search(){
 		if(SvcWord is null || IUserCtxMgr is null){
 			return NIL;
 		}
@@ -81,6 +86,16 @@ public partial class VmSearchWords: ViewModelBase{
 			GotWords = R.Data??[];
 		});
 		return NIL;
+	}
+
+	public nil NextPage(){
+		PageIdx++;
+		return Search();
+	}
+
+	public nil PrevPage(){
+		PageIdx--;
+		return Search();
 	}
 
 

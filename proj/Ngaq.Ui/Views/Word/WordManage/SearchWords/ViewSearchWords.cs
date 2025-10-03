@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Ngaq.Core.Word.Models;
 using Ngaq.Core.Word.Models.Learn_;
+using Ngaq.Ui.Converters;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.AvlnTools.Dsl;
@@ -43,6 +44,7 @@ public partial class ViewSearchWords
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),
+				RowDef(1, GUT.Auto),
 			]);
 		});
 		var SearchGrid = new AutoGrid(IsRow: false);
@@ -63,7 +65,7 @@ public partial class ViewSearchWords
 			.AddInit(_Button(), o=>{
 				o.Content = "🔍";
 				o.Click += (s,e)=>{
-					Ctx?.Search();
+					Ctx?.InitSearch();
 				};
 			});
 		}}
@@ -77,6 +79,9 @@ public partial class ViewSearchWords
 					)
 				);
 			});
+		});
+		Root.AddInit(_PageBar(), o=>{
+			o.HorizontalAlignment = HAlign.Center;
 		});
 
 
@@ -97,6 +102,47 @@ public partial class ViewSearchWords
 			return R;
 		});
 		return R;
+	}
+
+	Control _PageBar(){
+		var R = new AutoGrid(IsRow: false);
+		R.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Auto),
+			ColDef(1, GUT.Auto),
+			ColDef(1, GUT.Auto),
+		]);
+		R.AddInit(_Button(), o=>{
+			o.Content = "<";
+			o.Click += (s,e)=>{
+				Ctx?.PrevPage();
+			};
+		});
+		R.AddInit(_TextBox(), o=>{
+			o.Bind(
+				TextBox.TextProperty
+				,CBE.Mk<Ctx>(
+					x=>x.PageIdx
+					,Converter: new ParamFnConvtr<u64, str>(
+						(idx, arg)=>(idx+1).ToString()
+						,(Str, arg)=>{
+							if(u64.TryParse(Str, out var R)){
+								return R-1;
+							}
+							return 1;
+						}
+					)
+					,Mode: BindingMode.TwoWay
+				)
+			);
+		});
+		R.AddInit(_Button(), o=>{
+			o.Content = ">";
+			o.Click += (s,e)=>{
+				Ctx?.NextPage();
+			};
+		});
+		return R.Grid;
+
 	}
 
 
