@@ -39,6 +39,7 @@ public partial class ViewEditWord
 			]);
 		});
 		Root.AddInit(_TextBox(), o=>{
+			o.AcceptsReturn = true;
 			o.Bind(
 				TextBox.TextProperty
 				,CBE.Mk<Ctx>(x=>x.Json)
@@ -57,10 +58,16 @@ public partial class ViewEditWord
 			.AddInit(_Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
 				o.Content = "Save";
+				o.Click += (s,e)=>{
+					Ctx?.Save();
+				};
 			})
 			.AddInit(_Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
 				o.Content = "Delete";
+				o.Click += (s,e)=>{
+					Ctx?.Delete();
+				};
 			})
 			;
 		}}

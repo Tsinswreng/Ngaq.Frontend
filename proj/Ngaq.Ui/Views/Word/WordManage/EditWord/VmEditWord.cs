@@ -114,7 +114,21 @@ public partial class VmEditWord: ViewModelBase{
 	}
 
 	public nil Save(){
-		//TODO
+		if(SvcWord is null || UserCtxMgr is null){
+			return NIL;
+		}
+		Deserialize();
+		if(Bo is null){
+			return NIL;
+		}
+		var User = UserCtxMgr.GetUserCtx();
+		var Ct = Cts.Token;
+		SvcWord.UpdJnWord(User, Bo, Ct).ContinueWith(t=>{
+			if(t.IsFaulted){
+				System.Console.WriteLine(t.Exception);//t
+			}
+		});
+
 		return NIL;
 	}
 

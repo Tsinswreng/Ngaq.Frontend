@@ -73,4 +73,8 @@ public partial class WebClientWord : ISvcWord {
 		throw new NotImplementedException();
 	}
 
+	public async Task<nil> UpdJnWord(IUserCtx User, JnWord JnWord, CT Ct){
+		throw new NotImplementedException();
+	}
+
 }
