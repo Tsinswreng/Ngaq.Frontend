@@ -13,6 +13,7 @@ using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
 public partial class ViewSearchWords
 	:AppViewBase
@@ -97,18 +98,19 @@ public partial class ViewSearchWords
 		R.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 			return new VirtualizingStackPanel();
 		});
-		R.ItemTemplate = new FuncDataTemplate<JnWord>((jnWord, b)=>{
+		R.ItemTemplate = new FuncDataTemplate<ITypedObj>((typedObj, b)=>{
 			var R = new Button();
 			var View = new ViewSearchedWordCard(){Ctx = new VmSearchedWordCard()};
-			if(jnWord == null){return View;};
-			var WordForLearn = new WordForLearn(jnWord);
-			View.Ctx.FromIWordForLearn(WordForLearn);
+			if(typedObj == null){return View;};
+
+			View.Ctx.FromTypedObj(typedObj);
 			R.Content = View;
 			//R.HorizontalContentAlignment = HAlign.Left;
 			R.Click += (s,e)=>{
 				var Target = new ViewEditWord();
 				Target.Ctx = App.GetSvc<VmEditWord>();
-				Target.Ctx?.FromJnWord(jnWord);
+				Target.Ctx?.FromTypedObj(typedObj);
+				var jnWord = VmSearchedWordCard.GetJnWordFromTypedObj(typedObj);
 				var titleStr = jnWord.Head;
 				var titled = ToolView.WithTitle(titleStr, Target);
 				Ctx?.ViewNavi?.GoTo(titled);

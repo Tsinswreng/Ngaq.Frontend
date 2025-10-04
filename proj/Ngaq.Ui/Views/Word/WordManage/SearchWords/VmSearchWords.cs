@@ -7,6 +7,7 @@ using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsPage;
+using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
 public partial class VmSearchWords: ViewModelBase{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
@@ -47,8 +48,8 @@ public partial class VmSearchWords: ViewModelBase{
 	}
 
 
-	protected IList<JnWord> _GotWords = new List<JnWord>();
-	public IList<JnWord> GotWords{
+	protected IList<ITypedObj> _GotWords = new List<ITypedObj>();
+	public IList<ITypedObj> GotWords{
 		get{return _GotWords;}
 		set{SetProperty(ref _GotWords, value);}
 	}
@@ -74,7 +75,7 @@ public partial class VmSearchWords: ViewModelBase{
 		if(UserCtx == null){
 			return NIL;
 		}
-		SvcWord.SearchWord(UserCtx, pageQry, req, Ct).ContinueWith(t=>{
+		SvcWord.PageSearch(UserCtx, pageQry, req, Ct).ContinueWith(t=>{
 			if(t.IsFaulted){
 				System.Console.WriteLine(t.Exception);//t
 				return;

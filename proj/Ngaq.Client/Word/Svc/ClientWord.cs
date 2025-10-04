@@ -1,3 +1,4 @@
+using Ngaq.Core.Infra;
 using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.Word.Req;
 using Ngaq.Core.Models.UserCtx;
@@ -8,6 +9,7 @@ using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Svc;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsPage;
+using Tsinswreng.CsTools;
 
 namespace Ngaq.Client.Word.Svc;
 
@@ -74,6 +76,24 @@ public partial class WebClientWord : ISvcWord {
 	}
 
 	public async Task<nil> UpdJnWord(IUserCtx User, JnWord JnWord, CT Ct){
+		throw new NotImplementedException();
+	}
+
+	public async Task<IPage<JnWord>> PageChangedWordsWithDelWordsAfterTime(
+		IUserCtx User
+		,IPageQry PageQry
+		,Tempus Tempus
+		,CT Ct
+	){
+		throw new NotImplementedException();
+	}
+
+	public Task<IPage<ITypedObj>> PageSearch(
+		IUserCtx User
+		,IPageQry PageQry
+		,ReqSearchWord Req
+		,CT Ct
+	){
 		throw new NotImplementedException();
 	}
 

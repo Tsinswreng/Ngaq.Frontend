@@ -3,8 +3,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Avalonia.Media;
 using Ngaq.Core.Infra.Core;
+using Ngaq.Core.Word.Models;
+using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Ui.Infra;
+using Tsinswreng.CsTools;
 using Ctx = VmSearchedWordCard;
 public partial class VmSearchedWordCard
 	:ViewModelBase
@@ -34,11 +37,30 @@ public partial class VmSearchedWordCard
 	// 	return this;
 	// }
 
-	public Ctx FromIWordForLearn(IWordForLearn Word){
-		WordForLearn = Word;
+	// public Ctx FromIWordForLearn(IWordForLearn Word){
+	// 	WordForLearn = Word;
+	// 	Init();
+	// 	return this;
+	// }
+
+	public static JnWord GetJnWordFromTypedObj(ITypedObj Obj){
+		if(Obj.Type == typeof(JnWord)){
+			return (JnWord)Obj.Data!;
+		}else{
+			var Dto = (DtoJnWordEtAsset)(Obj.Data!);
+			return Dto.JnWord;
+		}
+	}
+
+	public ITypedObj? TypedObj{get;set;}
+
+	public Ctx FromTypedObj(ITypedObj Obj){
+		TypedObj = Obj;
+		WordForLearn = new WordForLearn(GetJnWordFromTypedObj(Obj));
 		Init();
 		return this;
 	}
+
 
 	nil Init(){
 		if(Bo == null){

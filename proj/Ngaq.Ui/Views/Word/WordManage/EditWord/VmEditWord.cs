@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.EditWord;
 using System.Collections.ObjectModel;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Ngaq.Core.Model.UserCtx;
@@ -8,7 +9,8 @@ using Ngaq.Core.Tools.Json;
 using Ngaq.Core.Word.Models;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
-
+using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
+using Tsinswreng.CsTools;
 using Ctx = VmEditWord;
 public partial class VmEditWord: ViewModelBase{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
@@ -54,8 +56,16 @@ public partial class VmEditWord: ViewModelBase{
 		// string pretty = System.Text.Json.JsonSerializer.Serialize(doc.RootElement, options);
 		// return pretty;
 		JsonNode? node = JsonNode.Parse(uglyJson);
-		string pretty = node!.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
+		string pretty = node!.ToJsonString(new JsonSerializerOptions {
+			WriteIndented = true
+			,Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping // 允許原樣輸出
+		});
 		return pretty;
+	}
+
+	public nil FromTypedObj(ITypedObj Obj){
+		var JnWord = VmSearchedWordCard.GetJnWordFromTypedObj(Obj);
+		return FromJnWord(JnWord);
 	}
 
 	public nil FromJnWord(JnWord JnWord){
@@ -113,6 +123,10 @@ public partial class VmEditWord: ViewModelBase{
 		return NIL;
 	}
 
+/// <summary>
+/// 注意: 改Props或Learns之內容旹 需刪原ʹ時間、否則diff不到
+/// </summary>
+/// <returns></returns>
 	public nil Save(){
 		if(SvcWord is null || UserCtxMgr is null){
 			return NIL;
