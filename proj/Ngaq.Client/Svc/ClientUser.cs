@@ -1,16 +1,17 @@
+namespace Ngaq.Client.Svc;
+
 using System.Text;
 using Ngaq.Core.Infra;
-using Ngaq.Core.Model.Sys.Req;
 using Ngaq.Core.Sys.Svc;
 using Ngaq.Core.Tools;
 using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
 using Ngaq.Core.Models.Sys.Req;
-using Ngaq.Core.Models.Sys.Resp;
+using Ngaq.Core.Infra.Url;
+using Ngaq.Core.Domains.User.Models.Req;
+using Ngaq.Core.Domains.User.Models.Resp;
 
-namespace Ngaq.Client.Svc;
-
-public  partial class ClientUser
+public partial class ClientUser
 	:ISvcUser
 {
 	protected I_GetBaseUrl GetBaseUrl;
@@ -31,8 +32,7 @@ public  partial class ClientUser
 			var Data = new StringContent(ReqJson, Encoding.UTF8, "application/json");
 			var url = ToolPath.SlashTrimEtJoin([
 				GetBaseUrl.GetBaseUrl()
-				,ConstApiUrl.Inst.ApiV1SysUser
-				,ApiUrl_User.Inst.AddUser
+				,ConstUrl.UrlUser.AddUser
 			]);
 			var Resp = await client.PostAsync(url, Data, Ct);
 			return NIL;
@@ -50,8 +50,7 @@ public  partial class ClientUser
 			var Data = new StringContent(ReqJson, Encoding.UTF8, "application/json");
 			var url = ToolPath.SlashTrimEtJoin([
 				GetBaseUrl.GetBaseUrl()
-				,ConstApiUrl.Inst.ApiV1SysUser
-				,ApiUrl_User.Inst.AddUser
+				,ConstUrl.UrlUser.Login
 			]);
 			var Resp = await client.PostAsync(url, Data, Ct);
 			string responseBody = await Resp.Content.ReadAsStringAsync();

@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Ngaq.Core.FrontendIF;
-using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Word;
 using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Core.Word.Svc;
@@ -13,6 +12,7 @@ using Tsinswreng.CsPage;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmWordQuery;
+using Ngaq.Core.Domains.User.UserCtx;
 
 public partial class VmWordQuery
 	:ViewModelBase
@@ -61,7 +61,7 @@ public IImgGetter? SvcImg{get;set;}
 		MgrLearn.OnErr += (s,e)=>{
 			System.Console.WriteLine(e);//t
 			System.Console.WriteLine(e.Err);
-			AddMsg(App.ErrI18n?.Parse(e.Err)??e.Err+""); // TODO 改成注入
+			AddMsg(e.Err+""); // TODO i18n
 			ShowMsg();
 		};
 		MgrLearn.OnLearnOrUndo += (s,e)=>{

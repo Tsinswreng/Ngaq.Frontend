@@ -1,7 +1,7 @@
 namespace Ngaq.Ui.Views.User;
 
 using System.Collections.ObjectModel;
-using Ngaq.Core.Model.Sys.Req;
+using Ngaq.Core.Domains.User.Models.Req;
 using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Sys.Svc;
 using Ngaq.Ui.Infra;
@@ -51,11 +51,11 @@ public partial class VmLoginRegister: ViewModelBase{
 			return NIL;
 		}
 		try{
-			var ReqAddUser = new ReqAddUser{
+			var reqAddUser = new ReqAddUser{
 				Email = Email
 				,Password = Password
 			};
-			SvcUser?.AddUser(ReqAddUser, default).ContinueWith(t=>{
+			SvcUser?.AddUser(reqAddUser, default).ContinueWith(t=>{
 				if(t.IsFaulted){
 					//this.Msgs.Add(t?.Exception);//TODO
 					this.AddMsg(t?.Exception);
@@ -68,16 +68,16 @@ public partial class VmLoginRegister: ViewModelBase{
 		}
 		return NIL;
 	}
-
+	CancellationTokenSource Cts = new();
 	public nil Login(){
 		try{
 			var reqLogin = new ReqLogin{
 				Email = Email
 				,Password = Password
 				,KeepLogin = true
-				,UserIdentityMode = (i32)ReqLogin.EUserIdentityMode.Email
+				,UserIdentityMode = ReqLogin.EUserIdentityMode.Email
 			};
-			SvcUser?.Login(reqLogin, default).ContinueWith(t=>{
+			SvcUser?.Login(reqLogin, Cts.Token).ContinueWith(t=>{
 				if(t.IsFaulted){
 					//this.Msgs.Add(t?.Exception);//TODO
 					this.AddMsg(t?.Exception);

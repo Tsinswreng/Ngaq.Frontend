@@ -39,9 +39,6 @@ public partial class App :Application
 		App.SvcProvider = SvcProvider;
 	}
 
-	public static IErrI18n? ErrI18n;
-
-
 	public override void Initialize() {
 		//AvaloniaXamlLoader.Load(this);
 		var Sty = MkrStyle.MkStyForAnyControl();

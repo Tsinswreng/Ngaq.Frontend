@@ -1,11 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Client.Svc;
-using Ngaq.Client.Word.Svc;
-using Ngaq.Core.FrontendIF;
-using Ngaq.Core.Infra;
-using Ngaq.Core.Model.UserCtx;
 using Ngaq.Core.Sys.Svc;
-using Ngaq.Core.Word.Svc;
 
 namespace Ngaq.Client;
 

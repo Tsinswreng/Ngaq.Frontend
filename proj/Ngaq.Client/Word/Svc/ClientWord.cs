@@ -1,7 +1,7 @@
+using Ngaq.Core.Domains.User.UserCtx;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.Word.Req;
-using Ngaq.Core.Models.UserCtx;
 using Ngaq.Core.Stream;
 using Ngaq.Core.Tools.Io;
 using Ngaq.Core.Word.Models;

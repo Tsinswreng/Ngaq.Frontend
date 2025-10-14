@@ -26,14 +26,6 @@ public partial class VmWordListCard
 		#endif
 	}
 
-	// [Obsolete]
-	// public Ctx FromJnWord(JnWord JnWord){
-	// 	this.JnWord = JnWord;
-	// 	WordForLearn = new WordForLearn(JnWord);
-	// 	Init();
-	// 	return this;
-	// }
-
 	public Ctx FromIWordForLearn(IWordForLearn Word){
 		this.WordForLearn = Word;
 		Init();
