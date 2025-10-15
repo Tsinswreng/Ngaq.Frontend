@@ -7,6 +7,7 @@ using Ngaq.Core.Infra.Cfg;
 using Ngaq.Local.Di;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
+using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
@@ -61,6 +62,13 @@ sealed class Program {
 			var GuiCfg = new JsonFileCfgAccessor();
 			DualSrcCfg.RwCfg = GuiCfg;
 			await GuiCfg.FromFileAsy(GuiCfgPath, Ct);
+
+			var Lang = AppCfgItems.Lang.GetFrom(AppCfg.Inst)??"default";
+
+			var I18nCfg = new JsonFileCfgAccessor();
+			I18n.Inst.CfgAccessor = I18nCfg;
+			await I18nCfg.FromFileAsy($"Languages/{Lang}.json", Ct);
+
 		} catch (System.Exception e) {
 			System.Console.Error.WriteLine("Failed to load config file: " + e);
 		}

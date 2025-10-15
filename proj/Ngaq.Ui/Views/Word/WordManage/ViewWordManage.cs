@@ -1,4 +1,4 @@
-using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
 
 namespace Ngaq.Ui.Views.Word.WordManage;
 
@@ -13,12 +13,16 @@ using Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = ViewModelBase;
+using Ctx = Ngaq.Ui.Infra.ViewModelBase;
+
+using K = ViewLibrary;
+using Ngaq.Ui.Infra.I18n;
+
 public partial class ViewWordManage
 	:UserControl
 {
 
-
+	public II18n I = I18n.Inst;
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
@@ -49,9 +53,9 @@ public partial class ViewWordManage
 			]);
 		});
 		Root.AddInit(_StackPanel(), stk=>{
-			stk.AddInit(_Item("Search Words", new ViewSearchWords()));
-			stk.AddInit(_Item("Add Words", new ViewAddWord()));
-			stk.AddInit(_Item("Backup & Sync", new ViewWordSync()));
+			stk.AddInit(_Item(I[K.SearchWords], new ViewSearchWords()));
+			stk.AddInit(_Item(I[K.AddWords], new ViewAddWord()));
+			stk.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync()));
 		});
 
 

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.User;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
@@ -13,6 +14,9 @@ public static class DiUi{
 	public static IServiceCollection SetupUi(
 		this IServiceCollection z
 	){
+
+		//z.AddSingleton<II18n>(I18n.Inst);
+
 		z.AddTransient<VmAddWord>();
 		z.AddTransient<VmWordQuery>();
 		z.AddTransient<VmLoginRegister>();

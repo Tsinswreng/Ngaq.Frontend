@@ -1,3 +1,5 @@
+using Ngaq.Ui.Infra.I18n;
+
 namespace Ngaq.Ui.Views.Home;
 
 using Avalonia.Controls;
@@ -9,10 +11,14 @@ using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmHome;
 using Ngaq.Ui.Views.Word.WordManage;
 using Ngaq.Ui.Views.User.AboutMe;
+using Ngaq.Ui.Infra.I18n;
 
+using K = Infra.I18n.ViewHome;
 public partial class ViewHome
 	:UserControl
 {
+
+	public II18n I = I18n.Inst;
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -49,7 +55,7 @@ public partial class ViewHome
 
 			ViewBottomBar.Items.AddInitT(
 				new Btn_Control(
-					StrBarItem.Inst.BarItem("Learn", "📖")
+					StrBarItem.Inst.BarItem(I[K.Learn], "📖")
 					,ViewWordQuery
 				),
 				o=>{
@@ -57,11 +63,11 @@ public partial class ViewHome
 					o.Button.Background = Brushes.Transparent;
 				}
 			).AddInitT(new Btn_Control(
-				StrBarItem.Inst.BarItem("Library", "📚")
+				StrBarItem.Inst.BarItem(I[K.Library], "📚")
 				,new ViewWordManage()
 			))
 			.AddInitT(new Btn_Control(
-				StrBarItem.Inst.BarItem("Me", "👤")
+				StrBarItem.Inst.BarItem(I[K.Me], "👤")
 				,new ViewAboutMe()
 			));
 		});

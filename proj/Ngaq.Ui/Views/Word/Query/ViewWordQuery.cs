@@ -1,3 +1,5 @@
+using Ngaq.Ui.Infra.I18n;
+
 namespace Ngaq.Ui.Views.Word.Query;
 
 using Avalonia;
@@ -7,6 +9,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.AvlnTools.Controls;
@@ -14,9 +17,12 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmWordQuery;
+using K = ViewLearnWord;
 public partial class ViewWordQuery
 	:UserControl
 {
+
+	public II18n I = I18n.Inst;
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -121,7 +127,7 @@ public partial class ViewWordQuery
 			Row1.AddInit(new SwipeLongPressBtn{}, (o)=>{
 				o.Classes.Add(Cls.MenuBtn);
 				o.ContentInit(_TextBlock(), t=>{
-					t.Text = "▶️Start";
+					t.Text = "▶️"+I[K.Start];
 				});
 				o.Click += (s,e)=>{
 					Ctx?.LoadEtStart();
@@ -129,14 +135,14 @@ public partial class ViewWordQuery
 			}).AddInit(new SwipeLongPressBtn{}, o=>{ //📁
 				o.Classes.Add(Cls.MenuBtn);
 				o.ContentInit(_TextBlock(), t=>{
-					t.Text = "💾Save";
+					t.Text = "💾"+I[K.Save];
 				});
 				o.Click += (s,e)=>{
 					Ctx?.SaveEtRestart();
 				};
 			}).AddInit(new SwipeLongPressBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o.Content = "🔄Reset";
+				o.Content = "🔄"+I[K.Reset];
 				o.Click += (s,e)=>{
 					Ctx?.Reset();
 				};
