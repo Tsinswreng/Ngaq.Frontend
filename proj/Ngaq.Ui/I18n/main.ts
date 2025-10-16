@@ -5,7 +5,7 @@ function R(lang:string, kv:TI18nKv){
 	return I18nMgr.inst.register(I18nForOne.mk(lang, kv))
 }
 
-import _default from "./default"
+import _default from "./en-US"
 R("default", _default)
 
 import zh_TW from "./zh-TW"

@@ -1,4 +1,6 @@
 namespace Ngaq.Ui.Infra.I18n;
+
+using Jeffijoe.MessageFormat;
 using Tsinswreng.CsCfg;
 
 public interface II18nKey:ICfgItem{
@@ -31,16 +33,26 @@ public class I18n:II18n{
 		this.CfgAccessor = CfgAccessor;
 	}
 	public ICfgAccessor CfgAccessor{get;set;}
+	MessageFormatter MsgFmt = new();
 	public str Get(II18nKey Key, params obj[] Args){
-		if(CfgAccessor.TryGetByPath(Key.GetFullPathSegs(), out var Value)){
-			if(Value.Data is not str Template){
-				throw new InvalidCastException("CfgValue.Data is not str.");
-			}
-			return str.Format(Template, Args);
+		if(!CfgAccessor.TryGetByPath(Key.GetFullPathSegs(), out var Value)){
+			return Key.GetFullPathSegs().Last();
 		}
-		return Key.GetFullPathSegs().Last();
-
+		if(Value.Data is str Template){
+			if(Args.Length == 0){
+				return Template;
+			}else{
+				var ArgDict = new Dictionary<str, obj?>();
+				for(var i = 0; i < Args.Length; i++){
+					ArgDict[i+""] = i;
+				}
+				return MsgFmt.FormatMessage(Template, ArgDict);
+			}
+		}
+		//TODO handle Dict {type: "xxx", data: ""}
+		throw new NotImplementedException();
 	}
+
 	public str this[II18nKey Key]{get{
 		return Get(Key);
 	}}
