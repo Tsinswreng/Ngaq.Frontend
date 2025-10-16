@@ -38,7 +38,8 @@ public class I18n:II18n{
 			}
 			return str.Format(Template, Args);
 		}
-		return str.Join(".", Key.GetFullPathSegs());
+		return Key.GetFullPathSegs().Last();
+
 	}
 	public str this[II18nKey Key]{get{
 		return Get(Key);

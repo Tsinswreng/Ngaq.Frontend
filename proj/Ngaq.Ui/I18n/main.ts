@@ -8,8 +8,8 @@ function R(lang:string, kv:TI18nKv){
 import _default from "./default"
 R("default", _default)
 
-import zh_tw from "./zh-tw"
-R("zh-tw", zh_tw)
+import zh_TW from "./zh-TW"
+R("zh-TW", zh_TW)
 
 let firstArg:string
 //@ts-ignore
