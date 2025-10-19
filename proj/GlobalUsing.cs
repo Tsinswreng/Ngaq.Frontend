@@ -11,3 +11,4 @@ global using TxtAlign = Avalonia.Media.TextAlignment;
 global using VAlign = Avalonia.Layout.VerticalAlignment;
 global using HAlign = Avalonia.Layout.HorizontalAlignment;
 global using static Tsinswreng.AvlnTools.Dsl.DslFactory;
+global using static Tsinswreng.AvlnTools.Dsl.PropExtn.ExtnProp;

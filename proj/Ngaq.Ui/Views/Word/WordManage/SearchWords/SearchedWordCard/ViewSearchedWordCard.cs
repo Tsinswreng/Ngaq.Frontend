@@ -90,7 +90,7 @@ public partial class ViewSearchedWordCard
 			{var o = Lang;
 				o.VerticalAlignment = VAlign.Center;
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 				);
 				o.Foreground = Brushes.LightGray;
@@ -118,7 +118,7 @@ public partial class ViewSearchedWordCard
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Head)
 				);
 				o.Bind(
@@ -154,7 +154,7 @@ public partial class ViewSearchedWordCard
 			R.Add(LastLearn);
 			{var o = LastLearn;
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					//LearnRecord不應潙空集合、緣添旹必得'add'
 					,CBE.Mk<Ctx>(x=>x.SavedLearnRecords
 						,Converter: new ParamFnConvtr<IList<ILearnRecord>, str>((x, p)=>{
@@ -199,7 +199,7 @@ public partial class ViewSearchedWordCard
 			R.Add(LastReviewTime);
 			{var o = LastReviewTime;
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.LastLearnedTime
 						,Converter: new SimpleFnConvtr<i64, str>(x=>{
 							var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -214,7 +214,7 @@ public partial class ViewSearchedWordCard
 			R.Add(Weight);
 			{var o = Weight;
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Weight
 						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
 							Ctx.FmtNum(x??0, 2)

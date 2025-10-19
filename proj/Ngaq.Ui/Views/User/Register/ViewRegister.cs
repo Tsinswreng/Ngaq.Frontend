@@ -117,7 +117,7 @@ public partial class ViewRegister
 				o.Classes.Add(Cls.inputBox);
 				label.Target = o;
 				o.Bind(
-					TextBox.TextProperty
+					o.PropText_()
 					,new CBE(pth){
 						Mode = BindingMode.TwoWay
 					}

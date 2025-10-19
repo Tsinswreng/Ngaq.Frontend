@@ -10,6 +10,7 @@ using Avalonia.Styling;
 
 using Ctx = object;//unused
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.AvlnTools.Dsl.PropExtn;
 
 public partial class AppTextLogo
 	:UserControl
@@ -66,8 +67,8 @@ public partial class AppTextLogo
 			//o.Text = "TEQVAERŌ";
 			//o.Text = "VOLŌ SCĪRE";
 			o.Bind(
-				TextBlock.FontSizeProperty
-				, this.GetObservable(FontSizeProperty)
+				o.PropFontSize_()
+				,this.GetObservable(FontSizeProperty)
 			);
 		}
 		return 0;

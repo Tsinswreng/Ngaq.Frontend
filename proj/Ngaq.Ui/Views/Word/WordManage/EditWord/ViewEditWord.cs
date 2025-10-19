@@ -41,7 +41,7 @@ public partial class ViewEditWord
 		Root.AddInit(_TextBox(), o=>{
 			o.AcceptsReturn = true;
 			o.Bind(
-				TextBox.TextProperty
+				o.PropText_()
 				,CBE.Mk<Ctx>(x=>x.Json)
 			);
 		});

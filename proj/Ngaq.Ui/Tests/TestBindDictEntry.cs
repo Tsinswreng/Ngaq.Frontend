@@ -57,7 +57,7 @@ class ViewTestBindDict : UserControl {
 				{
 					var o = input;
 					o.Bind(
-						TextBox.TextProperty
+						o.PropText_()
 						, new CBE(CBE.Pth<VmTestBindDict>(x => x.Dict)) {
 							Mode = BindingMode.TwoWay
 							,Converter = new ConvDictEntry<str, str>()

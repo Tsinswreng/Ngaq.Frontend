@@ -57,13 +57,13 @@ sealed class Program {
 			DualSrcCfg.RoCfg = RoCfg;
 			await RoCfg.FromFileAsy(CfgPath, Ct);
 
-			var GuiCfgPath = AppCfgItems.GuiConfigPath.GetFrom(DualSrcCfg) ?? "";
+			var GuiCfgPath = ItemAppCfg.GuiConfigPath.GetFrom(DualSrcCfg) ?? "";
 			ToolFile.EnsureFile(GuiCfgPath);
 			var GuiCfg = new JsonFileCfgAccessor();
 			DualSrcCfg.RwCfg = GuiCfg;
 			await GuiCfg.FromFileAsy(GuiCfgPath, Ct);
 
-			var Lang = AppCfgItems.Lang.GetFrom(AppCfg.Inst)??"default";
+			var Lang = ItemAppCfg.Lang.GetFrom(AppCfg.Inst)??"default";
 
 			var I18nCfg = new JsonFileCfgAccessor();
 			I18n.Inst.CfgAccessor = I18nCfg;

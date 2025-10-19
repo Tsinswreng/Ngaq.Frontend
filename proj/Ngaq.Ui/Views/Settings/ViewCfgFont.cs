@@ -40,7 +40,7 @@ public partial class ViewCfgFont
 		]);
 		R.AddInit(_TextBox(), o=>{
 			o.Bind(
-				TextBox.TextProperty
+				o.PropText_()
 				,CBE.Mk<Ctx>(
 					x=>x.InputFontSize
 				)
@@ -82,7 +82,7 @@ public partial class ViewCfgFont
 			o.Text = SampleText;
 			o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 			o.Bind(
-				TextBlock.FontSizeProperty
+				o.PropFontSize_()
 				,CBE.Mk<Ctx>(x=>x.FontSize)
 			);
 		});

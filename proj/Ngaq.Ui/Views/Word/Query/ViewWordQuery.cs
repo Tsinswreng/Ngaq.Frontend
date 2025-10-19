@@ -181,7 +181,7 @@ public partial class ViewWordQuery
 					o.BorderThickness = new Thickness(1);
 					o.BorderBrush = Brushes.LightGray;
 				}).AddInit(_WordInfo(), o=>{
-					o.Bind(Control.DataContextProperty
+					o.Bind(o.PropDataContext_()
 						,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
 					);
 				});
@@ -273,7 +273,7 @@ public partial class ViewWordQuery
 					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
 					o.Background = Brushes.Transparent;
 					o.Bind(
-						Control.DataContextProperty
+						o.PropDataContext_()
 						,CBE.Mk<VmWordListCard>(x=>x
 							,Mode: BindingMode.OneWay
 						)

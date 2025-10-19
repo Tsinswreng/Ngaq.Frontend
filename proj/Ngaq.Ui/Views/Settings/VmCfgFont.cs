@@ -64,7 +64,7 @@ public partial class VmCfgFont: ViewModelBase{
 
 	public async Task<nil> ApplyNeoFontSize(){
 		AppCfg.Inst.SetByPath(
-			AppCfgItems.BaseFontSize.GetFullPathSegs()
+			ItemAppCfg.BaseFontSize.GetFullPathSegs()
 			,CfgValue.Mk(FontSize)
 		);
 		await AppCfg.Inst.SaveAsy(default);

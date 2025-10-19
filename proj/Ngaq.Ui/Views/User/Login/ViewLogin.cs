@@ -128,7 +128,7 @@ public partial class Cls_{
 				o.Classes.Add(Cls.InputBox);
 				label.Target = o;
 				o.Bind(
-					TextBox.TextProperty
+					o.PropText_()
 					,new CBE(pth){
 						Mode = BindingMode.TwoWay
 					}

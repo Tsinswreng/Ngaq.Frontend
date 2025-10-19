@@ -63,7 +63,7 @@ public partial class ViewSearchWords
 		{{
 			SearchGrid.AddInit(_TextBox(), o=>{
 				o.Bind(
-					TextBox.TextProperty
+					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Input)
 				);
 			})
@@ -140,7 +140,7 @@ public partial class ViewSearchWords
 		});
 		R.AddInit(_TextBox(), o=>{
 			o.Bind(
-				TextBox.TextProperty
+				o.PropText_()
 				,CBE.Mk<Ctx>(
 					x=>x.PageIdx
 					,Converter: new ParamFnConvtr<u64, str>(

@@ -174,7 +174,7 @@ public partial class ViewAddWord
 				Path.AddInit(_TextBox(), o=>{
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.Bind(
-						TextBox.TextProperty
+						o.PropText_()
 						,new CBE(CBE.Pth<Ctx>(x=>x.WordTxtPath)){Mode=BindingMode.TwoWay}
 					);
 				});
@@ -219,7 +219,7 @@ public partial class ViewAddWord
 				Path.AddInit(_TextBox(), o=>{
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.Bind(
-						TextBox.TextProperty
+						o.PropText_()
 						,new CBE(CBE.Pth<Ctx>(x=>x.WordJsonsPath)){Mode=BindingMode.TwoWay}
 					);
 				});
@@ -244,7 +244,7 @@ public partial class ViewAddWord
 
 		Ans.AddInit(_TextBox(), o=>{
 			o.Bind(
-				TextBox.TextProperty
+				o.PropText_()
 				,new CBE(CBE.Pth<Ctx>(x=>x.Text)){Mode=BindingMode.TwoWay}
 			);
 		});
@@ -266,7 +266,7 @@ public partial class ViewAddWord
 
 		R.AddInit(_TextBox(), o=>{
 			o.Bind(
-				TextBox.TextProperty
+				o.PropText_()
 				,new CBE(CBE.Pth<Ctx>(x=>x.Json)){Mode=BindingMode.TwoWay}
 			);
 		});
