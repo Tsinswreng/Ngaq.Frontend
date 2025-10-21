@@ -4,8 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MethodTimer;
 using Ngaq.Core.Domains.User.UserCtx;
+using Ngaq.Core.Domains.Word.Models;
 using Ngaq.Core.Tools;
-using Ngaq.Core.Word.Models;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 

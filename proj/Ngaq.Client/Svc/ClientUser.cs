@@ -1,7 +1,6 @@
 namespace Ngaq.Client.Svc;
 
 using System.Text;
-using Ngaq.Core.Infra;
 using Ngaq.Core.Sys.Svc;
 using Ngaq.Core.Tools;
 using Tsinswreng.CsTools;
@@ -10,15 +9,21 @@ using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Domains.User.Models.Req;
 using Ngaq.Core.Domains.User.Models.Resp;
+using Ngaq.Core.Domains.User.Svc;
+using Ngaq.Core.Domains.Kv.Models;
+using Ngaq.Core.Domains.Word.Models.Po.Kv;
 
 public partial class ClientUser
 	:ISvcUser
 {
-	protected I_GetBaseUrl GetBaseUrl;
+	ISvcKv SvcKv;
+	IHttpCaller HttpCaller;
 	public ClientUser(
-		I_GetBaseUrl GetBaseUrl
+		ISvcKv SvcKv
+		,IHttpCaller HttpCaller
 	){
-		this.GetBaseUrl = GetBaseUrl;
+		this.SvcKv = SvcKv;
+		this.HttpCaller = HttpCaller;
 	}
 
 	[Impl]
@@ -26,44 +31,32 @@ public partial class ClientUser
 		ReqAddUser Req
 		,CT Ct
 	){
-		try{
-			using HttpClient client = new();
-			var ReqJson = JSON.stringify(Req);
-			var Data = new StringContent(ReqJson, Encoding.UTF8, "application/json");
-			var url = ToolPath.SlashTrimEtJoin([
-				GetBaseUrl.GetBaseUrl()
-				,ConstUrl.UrlUser.AddUser
-			]);
-			var Resp = await client.PostAsync(url, Data, Ct);
-			return NIL;
-		}catch (System.Exception){
-			//TODO
-			throw;
-		}
+		await HttpCaller.Post<ReqAddUser, nil>(
+			ConstUrl.UrlUser.AddUser
+			,Req
+			,Ct
+		);
+		return NIL;
 	}
 
-	[Impl] //TODO 封裝請求器
+	[Impl]
 	public async Task<RespLogin> Login(ReqLogin ReqLogin, CT Ct){
-		try{
-			using HttpClient client = new();
-			var ReqJson = JSON.stringify(ReqLogin);
-			var Data = new StringContent(ReqJson, Encoding.UTF8, "application/json");
-			var url = ToolPath.SlashTrimEtJoin([
-				GetBaseUrl.GetBaseUrl()
-				,ConstUrl.UrlUser.Login
-			]);
-			var Resp = await client.PostAsync(url, Data, Ct);
-			string responseBody = await Resp.Content.ReadAsStringAsync();
-			var R = JSON.parse<RespLogin>(responseBody);
-			if(R == null){
-				//TODO
-				throw new Exception("Login failed, response is null.");
-			}
-			return R;
-		}catch (System.Exception){
-			//TODO
-			throw;
-		}
+		var R = await HttpCaller.Post<ReqLogin, RespLogin>(
+			ConstUrl.UrlUser.Login
+			,ReqLogin
+			,Ct
+		);
+		//TODO 原子寫入 或失敗回滾; 加密ᵈ存; 內存ʸ緩存; 
+		await SvcKv.SetAsy(
+			new PoKv().SetStr(KeysClientKv.CurLocalUserId, R.UserId.ToString()) ,Ct
+		);
+		await SvcKv.SetAsy(
+			new PoKv().SetStr(KeysClientKv.AccessToken, R.AccessToken) ,Ct
+		);
+		await SvcKv.SetAsy(
+			new PoKv().SetStr(KeysClientKv.RefreshToken, R.RefreshToken) ,Ct
+		);
+		return R;
 	}
 
 	[Impl]

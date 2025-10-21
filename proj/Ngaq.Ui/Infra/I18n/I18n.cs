@@ -35,7 +35,7 @@ public class I18n:II18n{
 	public ICfgAccessor CfgAccessor{get;set;}
 	MessageFormatter MsgFmt = new();
 	public str Get(II18nKey Key, params obj[] Args){
-		if(!CfgAccessor.TryGetByPath(Key.GetFullPathSegs(), out var Value)){
+		if(!CfgAccessor.TryGetBoxedByPath(Key.GetFullPathSegs(), out var Value)){
 			return Key.GetFullPathSegs().Last();
 		}
 		if(Value.Data is str Template){

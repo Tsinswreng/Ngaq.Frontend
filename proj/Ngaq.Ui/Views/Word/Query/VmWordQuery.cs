@@ -4,7 +4,6 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Ngaq.Core.FrontendIF;
 using Ngaq.Core.Word;
-using Ngaq.Core.Word.Models.Learn_;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
@@ -13,6 +12,7 @@ using Ngaq.Ui.Infra;
 
 using Ctx = VmWordQuery;
 using Ngaq.Core.Domains.User.UserCtx;
+using Ngaq.Core.Domains.Word.Models.Learn_;
 
 public partial class VmWordQuery
 	:ViewModelBase

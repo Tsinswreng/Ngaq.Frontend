@@ -14,7 +14,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
-using Ngaq.Core.Word.Models.Po.Kv;
+using Ngaq.Core.Domains.Word.Models.Po.Kv;
 
 public partial class ViewWordInfo
 	:UserControl
@@ -152,7 +152,7 @@ public partial class ViewWordInfo
 			{{
 				LangId.AddInit(_SelectableTextBlock(), o=>{
 					o.Bind(
-						TextBlock.TextProperty
+						o.PropText_()
 						,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 					);
 					o.HorizontalAlignment = HAlign.Left;
@@ -160,7 +160,7 @@ public partial class ViewWordInfo
 				});
 				LangId.AddInit(_SelectableTextBlock(), o=>{
 					o.Bind(
-						TextBlock.TextProperty
+						o.PropText_()
 						,new CBE(CBE.Pth<Ctx>(x=>x.Id))
 					);
 					o.VerticalAlignment = VAlign.Center;
@@ -180,7 +180,7 @@ public partial class ViewWordInfo
 			{var o = Head;
 				o.Styles.Add(new Style().NoMargin().NoPadding());
 				o.Bind(
-					TextBox.TextProperty
+					o.PropText_()
 					,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
 						Mode = BindingMode.TwoWay
 					}
@@ -194,7 +194,7 @@ public partial class ViewWordInfo
 
 			Root.AddInit(TxtBox(), o=>{
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 						//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 						Mode = BindingMode.OneWay
@@ -263,7 +263,7 @@ public partial class ViewWordInfo
 				Grid.AddInit(TxtBox(), o=>{
 					o.TextWrapping = TextWrapping.Wrap;
 					o.Bind(
-						TextBlock.TextProperty
+						o.PropText_()
 						,CBE.Mk<str>(x=>x)
 					);
 				});

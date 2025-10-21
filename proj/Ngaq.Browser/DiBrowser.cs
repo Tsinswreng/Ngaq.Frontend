@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Browser.Infra;
-using Ngaq.Core.Infra;
+using Ngaq.Core.Infra.Url;
 
 namespace Ngaq.Browser;
 public static class DiUi{

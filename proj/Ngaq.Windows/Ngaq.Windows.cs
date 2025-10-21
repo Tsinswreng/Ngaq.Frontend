@@ -88,8 +88,7 @@ sealed class Program {
 #endif
 			.AfterSetup(e => {
 				App.SetSvcProvider(svcProvider);
-				var DbIniter = App.GetSvc<DbIniter>();
-				_ = DbIniter.Init(default).Result;
+				_ = AppIniter.Inst.Init(default).Result;
 			})
 			.StartWithClassicDesktopLifetime(args)
 		;

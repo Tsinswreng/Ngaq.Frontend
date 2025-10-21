@@ -2,7 +2,6 @@ namespace Ngaq.Ui.Views.User;
 
 using System.Collections.ObjectModel;
 using Ngaq.Core.Domains.User.Models.Req;
-using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Sys.Svc;
 using Ngaq.Ui.Infra;
 
