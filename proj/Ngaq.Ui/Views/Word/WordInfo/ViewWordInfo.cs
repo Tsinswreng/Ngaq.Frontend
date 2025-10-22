@@ -14,7 +14,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
-using Ngaq.Core.Domains.Word.Models.Po.Kv;
+using Ngaq.Core.Shared.Word.Models.Po.Kv;
 
 public partial class ViewWordInfo
 	:UserControl

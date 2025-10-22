@@ -2,7 +2,6 @@ namespace Ngaq.Ui.Views.Word.Query;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Ngaq.Core.FrontendIF;
 using Ngaq.Core.Word;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Views.Word.WordCard;
@@ -11,8 +10,9 @@ using Tsinswreng.CsPage;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmWordQuery;
-using Ngaq.Core.Domains.User.UserCtx;
-using Ngaq.Core.Domains.Word.Models.Learn_;
+using Ngaq.Core.Shared.User.UserCtx;
+using Ngaq.Core.Shared.Word.Models.Learn_;
+using Ngaq.Core.Frontend.ImgBg;
 
 public partial class VmWordQuery
 	:ViewModelBase

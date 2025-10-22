@@ -77,6 +77,7 @@ sealed class Program {
 		svc
 			.SetupCore()
 			.SetupLocal()//TODO 改成按需API調用
+			.SetupLocalFrontend()
 			.SetupClient()
 			.SetupUi()
 		;

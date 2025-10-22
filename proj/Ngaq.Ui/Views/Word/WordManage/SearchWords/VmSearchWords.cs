@@ -1,7 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using System.Collections.ObjectModel;
 using System.Security.AccessControl;
-using Ngaq.Core.Domains.User.UserCtx;
+using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Word.Models;
 using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Svc;

@@ -1,5 +1,5 @@
-using Ngaq.Core.Domains.User.UserCtx;
-using Ngaq.Core.Domains.Word.Models;
+using Ngaq.Core.Shared.User.UserCtx;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.Word.Req;

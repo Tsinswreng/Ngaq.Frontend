@@ -1,6 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 using System.Collections.ObjectModel;
-using Ngaq.Core.Domains.User.Svc;
+using Ngaq.Core.Shared.User.Svc;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmWordSync;

@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordCard;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Ngaq.Core.Domains.Word.Models.Learn_;
+using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Ui.Converters;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;

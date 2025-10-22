@@ -1,15 +1,13 @@
 namespace Ngaq.Windows;
 
-using Ngaq.Core.Domains.Kv.Models;
-using Ngaq.Core.Domains.User.Models.Po.User;
-using Ngaq.Core.Domains.User.Svc;
-using Ngaq.Core.Domains.User.UserCtx;
-using Ngaq.Core.Domains.Word.Models.Po.Kv;
+using Ngaq.Core.Shared.Kv.Models;
+using Ngaq.Core.Shared.User.Models.Po.User;
+using Ngaq.Core.Shared.User.UserCtx;
+using Ngaq.Core.Shared.Word.Models.Po.Kv;
+using Ngaq.Core.Frontend.Kv;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
-
-
-
+using Ngaq.Core.Shared.Kv.Svc;
 
 public class AppIniter{
 	protected static AppIniter? _Inst = null;
@@ -20,6 +18,8 @@ public class AppIniter{
 		await InitUserCtx(Ct);
 		return NIL;
 	}
+
+
 
 	public async Task<nil> InitUserCtx(CT Ct){
 		var _userCtxMgr = App.GetSvc<IUserCtxMgr>();

@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using Ngaq.Core.Domains.Word.Models.Learn_;
+using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
 

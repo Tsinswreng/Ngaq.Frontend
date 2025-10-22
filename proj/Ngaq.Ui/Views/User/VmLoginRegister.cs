@@ -1,8 +1,8 @@
 namespace Ngaq.Ui.Views.User;
 
 using System.Collections.ObjectModel;
-using Ngaq.Core.Domains.User.Models.Req;
-using Ngaq.Core.Sys.Svc;
+using Ngaq.Core.Shared.User.Models.Req;
+using Ngaq.Core.Shared.User.Svc;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmLoginRegister;

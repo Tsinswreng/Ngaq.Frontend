@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Client.Svc;
-using Ngaq.Core.Sys.Svc;
+using Ngaq.Core.Shared.User.Svc;
 
 namespace Ngaq.Client;
 
