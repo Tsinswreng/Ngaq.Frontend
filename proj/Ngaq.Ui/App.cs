@@ -1,3 +1,4 @@
+namespace Ngaq.Ui;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
@@ -19,7 +20,7 @@ using Avalonia.Media;
 using Tsinswreng.AvlnTools.Dsl;
 using Live.Avalonia;
 
-namespace Ngaq.Ui;
+
 
 public partial class App :Application
 #if DEBUG
@@ -30,7 +31,7 @@ public partial class App :Application
 	public static T GetSvc<T>()
 		where T : class
 	{
-		System.Console.Write("GetSvc: "+typeof(T));//t
+		System.Console.WriteLine("GetSvc: "+typeof(T));//t
 		return App.SvcProvider.GetRequiredService<T>();
 	}
 

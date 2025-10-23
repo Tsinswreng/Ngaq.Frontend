@@ -23,11 +23,9 @@ public class AppIniter{
 
 
 	public async Task<nil> InitUserCtx(CT Ct){
-		var _userCtxMgr = App.GetSvc<IFrontendUserCtxMgr>();
+		var userCtxMgr = App.GetSvc<IFrontendUserCtxMgr>();
 		var SvcKv = App.GetSvc<ISvcKv>();
-		if(_userCtxMgr is not UserCtxMgr userCtxMgr){
-			throw new NotImplementedException("");
-		}
+
 
 		var CurLocalUserKv = await SvcKv.GetByOwnerEtKeyAsy(
 			IdUser.Zero
@@ -36,7 +34,7 @@ public class AppIniter{
 		);
 
 		if(CurLocalUserKv is not null){
-			userCtxMgr.UserCtx.UserId = IdUser.FromLow64Base(
+			userCtxMgr.GetUserCtx().UserId = IdUser.FromLow64Base(
 				CurLocalUserKv.VStr??throw new InvalidOperationException("Invalid User Id")
 			);
 		}else{
