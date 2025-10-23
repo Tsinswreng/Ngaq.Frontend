@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Shared.User.Svc;
 using Ngaq.Ui.Infra;
 

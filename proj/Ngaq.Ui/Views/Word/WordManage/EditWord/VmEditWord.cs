@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Tools.Json;
@@ -31,7 +32,7 @@ public partial class VmEditWord: ViewModelBase{
 	public VmEditWord(
 		ISvcWord? SvcWord
 		,IJsonSerializer? JsonSerializer
-		,IUserCtxMgr? UserCtxMgr
+		,IFrontendUserCtxMgr? UserCtxMgr
 	){
 		this.SvcWord = SvcWord;
 		this.JsonSerializer = JsonSerializer;
@@ -40,7 +41,7 @@ public partial class VmEditWord: ViewModelBase{
 	}
 	ISvcWord? SvcWord;
 	IJsonSerializer? JsonSerializer;
-	IUserCtxMgr? UserCtxMgr;
+	IFrontendUserCtxMgr? UserCtxMgr;
 	CancellationTokenSource Cts = new();
 
 	static str FormatJson(string uglyJson){

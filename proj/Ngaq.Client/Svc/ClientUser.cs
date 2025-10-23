@@ -6,27 +6,24 @@ using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Shared.User.Models.Req;
 using Ngaq.Core.Shared.User.Models.Resp;
 using Ngaq.Core.Shared.User.Svc;
-using Ngaq.Core.Shared.Kv.Models;
-using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.User.Models.Po.User;
-using Ngaq.Core.Shared.Encryption.Svc;
-using Ngaq.Core.Frontend.Kv;
 using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Frontend.User.Svc;
+using Ngaq.Core.Frontend.User;
 
 public partial class ClientUser
 	:ISvcUser
 {
 	ISvcKv SvcKv;
 	IHttpCaller HttpCaller;
-	IUserCtxMgr UserCtxMgr;
+	IFrontendUserCtxMgr UserCtxMgr;
 	ISvcTokenStorage SvcTokenStorage;
 
 	public ClientUser(
 		ISvcKv SvcKv
 		,IHttpCaller HttpCaller
-		,IUserCtxMgr UserCtxMgr
+		,IFrontendUserCtxMgr UserCtxMgr
 		,ISvcTokenStorage SvcTokenStorage
 	){
 		this.SvcKv = SvcKv;
@@ -37,7 +34,8 @@ public partial class ClientUser
 
 	[Impl]
 	public async Task<nil> AddUser(
-		ReqAddUser Req
+		IUserCtx User
+		,ReqAddUser Req
 		,CT Ct
 	){
 		await HttpCaller.Post<ReqAddUser, nil>(
@@ -49,13 +47,16 @@ public partial class ClientUser
 	}
 
 	[Impl]
-	public async Task<RespLogin> Login(ReqLogin ReqLogin, CT Ct){
+	public async Task<RespLogin> Login(
+		IUserCtx User
+		,ReqLogin ReqLogin, CT Ct
+	){
 		var R = await HttpCaller.Post<ReqLogin, RespLogin>(
 			ConstUrl.UrlUser.Login
 			,ReqLogin
 			,Ct
 		);
-		var UserCtx = UserCtxMgr.GetFrontendUserCtx();
+		var UserCtx = UserCtxMgr.GetUserCtx();
 
 		UserCtx.RefreshToken = R.RefreshToken;
 		UserCtx.AccessToken = R.AccessToken;
@@ -66,7 +67,7 @@ public partial class ClientUser
 	}
 
 	[Impl]
-	public async Task<nil> Logout(ReqLogout ReqLogout, CT Ct){
+	public async Task<nil> Logout(IUserCtx User, ReqLogout ReqLogout, CT Ct){
 		return NIL;
 	}
 

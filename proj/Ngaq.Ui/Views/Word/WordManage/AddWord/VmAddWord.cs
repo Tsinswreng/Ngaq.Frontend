@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MethodTimer;
+using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Tools;
@@ -23,14 +24,14 @@ public partial class VmAddWord
 
 	public VmAddWord(
 		ISvcWord? SvcWord = null
-		,IUserCtxMgr? UserCtxMgr = null
+		,IFrontendUserCtxMgr? UserCtxMgr = null
 	){
 		this.SvcWord = SvcWord!;
 		this.UserCtxMgr = UserCtxMgr!;
 	}
 
 	ISvcWord SvcWord{get;set;} = null!;
-	IUserCtxMgr UserCtxMgr{get;set;} = null!;
+	IFrontendUserCtxMgr UserCtxMgr{get;set;} = null!;
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmAddWord(){

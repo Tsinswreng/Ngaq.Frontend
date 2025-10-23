@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using System.Collections.ObjectModel;
 using System.Security.AccessControl;
+using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Word.Models;
 using Ngaq.Core.Word.Models.Dto;
@@ -26,9 +27,9 @@ public partial class VmSearchWords: ViewModelBase{
 		#endif
 	}
 	ISvcWord? SvcWord;
-	IUserCtxMgr? IUserCtxMgr;
+	IFrontendUserCtxMgr? IUserCtxMgr;
 	public VmSearchWords(
-		IUserCtxMgr? IUserCtxMgr
+		IFrontendUserCtxMgr? IUserCtxMgr
 		,ISvcWord? SvcWord
 	){
 		this.SvcWord = SvcWord;

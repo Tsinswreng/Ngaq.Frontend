@@ -8,6 +8,7 @@ using Ngaq.Core.Frontend.Kv;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
 using Ngaq.Core.Shared.Kv.Svc;
+using Ngaq.Core.Frontend.User;
 
 public class AppIniter{
 	protected static AppIniter? _Inst = null;
@@ -22,7 +23,7 @@ public class AppIniter{
 
 
 	public async Task<nil> InitUserCtx(CT Ct){
-		var _userCtxMgr = App.GetSvc<IUserCtxMgr>();
+		var _userCtxMgr = App.GetSvc<IFrontendUserCtxMgr>();
 		var SvcKv = App.GetSvc<ISvcKv>();
 		if(_userCtxMgr is not UserCtxMgr userCtxMgr){
 			throw new NotImplementedException("");
