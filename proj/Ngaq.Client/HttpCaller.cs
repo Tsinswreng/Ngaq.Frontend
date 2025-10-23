@@ -3,14 +3,22 @@ using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Tools.Json;
 using Tsinswreng.CsTools;
 
-public abstract class IHttpCaller {
+public interface IHttpCaller {
+	public Task<TResp> Post<TReq, TResp>(
+		str RelaUrl
+		,TReq Req,
+		CT Ct
+	);
+}
+
+
+public class HttpCaller:IHttpCaller{
 	//IHttpClientFactory
 
-	protected IHttpCaller(){}
 	IJsonSerializer JsonS;
 	HttpClient HttpClient;
 	I_GetBaseUrl BaseUrlGetter;
-	public IHttpCaller(
+	public HttpCaller(
 		IJsonSerializer JsonS
 		,HttpClient HttpClient
 		,I_GetBaseUrl BaseUrlGetter
@@ -47,7 +55,6 @@ public abstract class IHttpCaller {
 		var R = JsonS.Parse<TResp>(body); // 若回應是空字串則會拋例外
 		return R;
 	}
+
+
 }
-
-
-public class HttpCaller:IHttpCaller{}
