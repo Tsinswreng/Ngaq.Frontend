@@ -6,18 +6,15 @@ using Ngaq.Core.Frontend.Kv;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Core;
 using Ngaq.Core.Shared.Kv.Svc;
-using Ngaq.Core.Shared.User.Models.Bo.Device;
 using Ngaq.Core.Shared.User.Models.Po.Device;
 using Ngaq.Core.Shared.User.Models.Po.User;
 using Ngaq.Core.Shared.User.Models.Req;
 using Ngaq.Core.Shared.User.Svc;
-using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmLoginRegister;
 public partial class VmLoginRegister: ViewModelBase{
-
 	public VmLoginRegister(){}
 	protected ISvcUser? SvcUser;
 	IFrontendUserCtxMgr? UserCtxMgr;

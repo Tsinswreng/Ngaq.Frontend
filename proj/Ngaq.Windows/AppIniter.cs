@@ -39,6 +39,8 @@ public class AppIniter{
 			);
 		}else{
 			var kv = new PoKv();
+			var UserId = new IdUser();
+			userCtxMgr.GetUserCtx().UserId = UserId;
 			kv.SetStr(KeysClientKv.CurLocalUserId, userCtxMgr.GetUserCtx().UserId.ToString());
 			await SvcKv.SetAsy(
 				kv, Ct
