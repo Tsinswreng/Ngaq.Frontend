@@ -27,26 +27,32 @@ public class AppIniter{
 		var SvcKv = App.GetSvc<ISvcKv>();
 
 
-		var CurLocalUserKv = await SvcKv.GetByOwnerEtKeyAsy(
-			IdUser.Zero
-			,KeysClientKv.CurLocalUserId
-			,Ct
-		);
+		var CurLocalUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLocalUserId,Ct);
+		var CurLoginUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLoginUserId,Ct);
+		var UserCtx = userCtxMgr.GetUserCtx();
+		if(CurLoginUserKv is not null){//TODO 判段是否過期
+			var LoginUserId = IdUser.FromLow64Base(
+				CurLoginUserKv.VStr??throw new InvalidOperationException("Invalid User Id")
+			);
+			UserCtx.UserId = LoginUserId;
+		}
 
 		if(CurLocalUserKv is not null){
-			userCtxMgr.GetUserCtx().UserId = IdUser.FromLow64Base(
+			var LocalUserId = IdUser.FromLow64Base(
 				CurLocalUserKv.VStr??throw new InvalidOperationException("Invalid User Id")
 			);
+			UserCtx.UserId = LocalUserId; // deprecated
+			UserCtx.LocalUserId = LocalUserId;
 		}else{
 			var kv = new PoKv();
-			var UserId = new IdUser();
-			userCtxMgr.GetUserCtx().UserId = UserId;
+			var LocalUserId = new IdUser();
+			UserCtx.UserId = LocalUserId;
+			UserCtx.LocalUserId = LocalUserId;
 			kv.SetStrStr(KeysClientKv.CurLocalUserId, userCtxMgr.GetUserCtx().UserId.ToString());
 			await SvcKv.SetAsy(
 				kv, Ct
 			);
 		}
-
 		return NIL;
 	}
 

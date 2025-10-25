@@ -11,6 +11,9 @@ using Ngaq.Core.Shared.User.Models.Po.User;
 using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Frontend.User.Svc;
 using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Shared.Kv.Models;
+using Ngaq.Core.Shared.Word.Models.Po.Kv;
+using Ngaq.Core.Frontend.Kv;
 
 public partial class ClientUser
 	:ISvcUser
@@ -65,12 +68,22 @@ public partial class ClientUser
 			RefreshToken = R.RefreshToken
 			,RefreshTokenExpireAt = R.RefreshTokenExpireAt
 		}, Ct);
+		await SvcKv.SetAsy(
+			new PoKv{Owner = IdUser.Zero}
+			.SetStrStr(KeysClientKv.CurLoginUserId, UserCtx.UserId.ToString())
+			, Ct
+		);
 
 		return R;
 	}
 
-	[Impl]
+	[Impl]//TODO
 	public async Task<nil> Logout(IUserCtx User, ReqLogout ReqLogout, CT Ct){
+		var OldCtx = UserCtxMgr.GetUserCtx();
+
+		// UserCtxMgr.SetUserCtx(
+
+		// )
 		return NIL;
 	}
 
