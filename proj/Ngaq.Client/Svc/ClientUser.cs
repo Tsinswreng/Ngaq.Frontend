@@ -63,14 +63,14 @@ public partial class ClientUser
 
 		UserCtx.RefreshToken = R.RefreshToken;
 		UserCtx.AccessToken = R.AccessToken;
-		UserCtx.UserId = IdUser.FromLow64Base(R.UserId);
+		UserCtx.LoginUserId = IdUser.FromLow64Base(R.UserId);
 		await SvcTokenStorage.SetRefreshToken(new ReqSetRefreshToken{
 			RefreshToken = R.RefreshToken
 			,RefreshTokenExpireAt = R.RefreshTokenExpireAt
 		}, Ct);
 		await SvcKv.SetAsy(
 			new PoKv{Owner = IdUser.Zero}
-			.SetStrStr(KeysClientKv.CurLoginUserId, UserCtx.UserId.ToString())
+			.SetStrStr(KeysClientKv.CurLoginUserId, UserCtx.LoginUserId.ToString())
 			, Ct
 		);
 
