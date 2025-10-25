@@ -21,7 +21,7 @@ public class AppIniter{
 	}
 
 
-
+	//TODO 初始化ClientId
 	public async Task<nil> InitUserCtx(CT Ct){
 		var userCtxMgr = App.GetSvc<IFrontendUserCtxMgr>();
 		var SvcKv = App.GetSvc<ISvcKv>();
@@ -41,7 +41,7 @@ public class AppIniter{
 			var kv = new PoKv();
 			var UserId = new IdUser();
 			userCtxMgr.GetUserCtx().UserId = UserId;
-			kv.SetStr(KeysClientKv.CurLocalUserId, userCtxMgr.GetUserCtx().UserId.ToString());
+			kv.SetStrStr(KeysClientKv.CurLocalUserId, userCtxMgr.GetUserCtx().UserId.ToString());
 			await SvcKv.SetAsy(
 				kv, Ct
 			);

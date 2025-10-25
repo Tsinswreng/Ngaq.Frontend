@@ -55,10 +55,26 @@ public partial class VmLoginRegister: ViewModelBase{
 		set{SetProperty(ref _ConfirmPassword, value);}
 	}
 
-	public nil Register(){
+	public bool CheckRegister(){
+		//TODO 一次校驗多條
+		this.ClearMsg();
+		if(str.IsNullOrEmpty(Password)){
+			this.AddMsg("Password is empty.");
+			return false;
+		}
 		if(Password != ConfirmPassword){
-			//TODO
 			this.AddMsg("Password and Confirm Password must be the same.");
+			return false;
+		}
+		if(ValidateEmail(Email) == false){
+			this.AddMsg("Email is not valid.");
+			return false;
+		}
+		return true;
+	}
+
+	public nil Register(){
+		if(!CheckRegister()){
 			return NIL;
 		}
 		RegisterAsy(Cts.Token).ContinueWith(t=>{
@@ -114,5 +130,15 @@ public partial class VmLoginRegister: ViewModelBase{
 
 		return NIL;
 	}
+
+
+	//校驗郵箱格式
+	public static bool ValidateEmail(str Email){
+		var R = MyRegex();
+		return R.IsMatch(Email);
+	}
+
+	[System.Text.RegularExpressions.GeneratedRegex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")]
+	private static partial System.Text.RegularExpressions.Regex MyRegex();
 }
 
