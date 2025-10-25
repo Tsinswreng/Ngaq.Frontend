@@ -4,7 +4,7 @@ using Ngaq.Core.Tools.Json;
 using Tsinswreng.CsTools;
 
 public interface IHttpCaller {
-	public Task<TResp> Post<TReq, TResp>(
+	public Task<TResp?> Post<TReq, TResp>(
 		str RelaUrl
 		,TReq Req,
 		CT Ct
@@ -33,7 +33,7 @@ public class HttpCaller:IHttpCaller{
 	/// 發送 POST 請求並把回應反序列化成 TResp。
 	/// 若 TResp 是 nil 可直接當作「不需回應」處理。
 	/// </summary>
-	public async Task<TResp> Post<TReq, TResp>(
+	public async Task<TResp?> Post<TReq, TResp>(
 		str RelaUrl
 		,TReq Req,
 		CT Ct
@@ -52,8 +52,17 @@ public class HttpCaller:IHttpCaller{
 		resp.EnsureSuccessStatusCode();
 
 		var body = await resp.Content.ReadAsStringAsync(Ct);
-		var R = JsonS.Parse<TResp>(body); // 若回應是空字串則會拋例外
-		return R;
+		if(str.IsNullOrEmpty(body)){
+			return default;
+		}
+		try{
+			var R = JsonS.Parse<TResp>(body); // 若回應是空字串則會拋例外
+			return R;
+		}catch(Exception e){
+			System.Console.WriteLine("Json反序列化失敗: "+e);//t
+		}
+		return default;//TODO 返回原樣字串。需緟封裝返回值泛型
+
 	}
 
 
