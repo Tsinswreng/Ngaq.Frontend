@@ -2,13 +2,13 @@ namespace Ngaq.Windows;
 
 using Ngaq.Core.Shared.Kv.Models;
 using Ngaq.Core.Shared.User.Models.Po.User;
-using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Frontend.Kv;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;
 using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Shared.User.Models.Po.Device;
 
 public class AppIniter{
 	protected static AppIniter? _Inst = null;
@@ -21,11 +21,30 @@ public class AppIniter{
 	}
 
 
-	//TODO 初始化ClientId
+	async Task<IdClient> InitClientId(CT Ct){
+		var SvcKv = App.GetSvc<ISvcKv>();
+		var Key = KeysClientKv.ClientId;
+		var CliendIdKv = await SvcKv.GetByOwnerEtKeyAsy(
+			IdUser.Zero, Key, Ct
+		);
+
+
+		if(CliendIdKv is null){
+			var Id = new IdClient();
+			await SvcKv.SetAsy(new PoKv{
+				Owner = IdUser.Zero
+			}.SetStrStr(Key, Id+""), Ct);
+			return Id;
+		}
+		return IdClient.FromLow64Base(
+			CliendIdKv.GetVStr()??throw new InvalidOperationException("Invalid Client Id")
+		);
+
+	}
+
 	public async Task<nil> InitUserCtx(CT Ct){
 		var userCtxMgr = App.GetSvc<IFrontendUserCtxMgr>();
 		var SvcKv = App.GetSvc<ISvcKv>();
-
 
 		var CurLocalUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLocalUserId,Ct);
 		var CurLoginUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLoginUserId,Ct);
@@ -34,7 +53,7 @@ public class AppIniter{
 			var LoginUserId = IdUser.FromLow64Base(
 				CurLoginUserKv.VStr??throw new InvalidOperationException("Invalid User Id")
 			);
-			UserCtx.UserId = LoginUserId;
+			UserCtx.LoginUserId = LoginUserId;
 		}
 
 		if(CurLocalUserKv is not null){
@@ -53,6 +72,7 @@ public class AppIniter{
 				kv, Ct
 			);
 		}
+		UserCtx.ClientId = await InitClientId(Ct);
 		return NIL;
 	}
 
