@@ -19,7 +19,7 @@ public partial class ViewRegister
 
 
 	public ViewRegister(){
-		Ctx = new Ctx();
+		Ctx = Ctx.Mk();
 		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
 		_Style();
 		_Render();

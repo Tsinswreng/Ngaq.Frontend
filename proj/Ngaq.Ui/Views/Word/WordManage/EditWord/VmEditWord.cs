@@ -70,7 +70,7 @@ public partial class VmEditWord: ViewModelBase{
 
 	public nil FromJnWord(JnWord JnWord){
 		this.Bo = JnWord;
-		ISimpleJnWord simple = JnWord;
+		IJnWord simple = JnWord;
 		this.Json = JsonSerializer?.Stringify(simple)??"";
 		Json = FormatJson(Json);
 		return NIL;

@@ -20,12 +20,12 @@ public partial class ViewAboutMe
 	}
 
 	public ViewAboutMe(){
-		Ctx = new Ctx();
+		Ctx = App.GetSvc<Ctx>();
 		Style();
 		Render();
 	}
 
-	public  partial class Cls_{
+	public partial class Cls_{
 
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
@@ -63,8 +63,11 @@ public partial class ViewAboutMe
 		R.AddInit(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);
 			o.ContentInit(_TextBlock(), t=>{
-				t.Text = "Login";
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				t.Bind(
+					t.PropText_()
+					,CBE.Mk<Ctx>(x=>x.UserIdRepr)
+				);
 			});
 			o.Click += (s,e)=>{
 				Ctx?.ViewNavi?.GoTo(

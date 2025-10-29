@@ -121,7 +121,7 @@ public partial class VmAddWord
 				ShowMsg();
 				return NIL;
 			}
-			SvcWord?.AddJnWords(
+			SvcWord?.AddEtMergeWords(
 				UserCtx,JnWords,Ct
 			).ContinueWith(FnThen);
 		}else if(

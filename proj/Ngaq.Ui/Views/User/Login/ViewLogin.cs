@@ -1,3 +1,5 @@
+namespace Ngaq.Ui.Views.User.Login;
+
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
@@ -10,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-namespace Ngaq.Ui.Views.User.Login;
+
 
 using Ctx = VmLoginRegister;
 public partial class ViewLogin
@@ -27,7 +29,7 @@ public partial class ViewLogin
 
 
 	public ViewLogin(){
-		Ctx = new Ctx();
+		Ctx = Ctx.Mk();
 		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
 		_Style();
 		_Render();

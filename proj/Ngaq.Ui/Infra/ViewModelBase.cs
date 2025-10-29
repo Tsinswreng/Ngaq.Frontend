@@ -39,7 +39,6 @@ public  partial class ViewModelBase
 	// 	return NIL;
 	// }
 
-
 	protected ICollection<object?> _Msgs = new ObservableCollection<object?>();
 
 	[Impl(typeof(IMsgViewModel))]

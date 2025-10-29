@@ -15,7 +15,10 @@ using Ngaq.Ui.Infra;
 
 using Ctx = VmLoginRegister;
 public partial class VmLoginRegister: ViewModelBase{
-	public VmLoginRegister(){}
+	protected VmLoginRegister(){}
+	public static Ctx Mk(){
+		return new Ctx();
+	}
 	protected ISvcUser? SvcUser;
 	IFrontendUserCtxMgr? UserCtxMgr;
 	ISvcKv SvcKv;

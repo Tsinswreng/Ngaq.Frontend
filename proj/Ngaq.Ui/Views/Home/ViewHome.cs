@@ -1,5 +1,3 @@
-using Ngaq.Ui.Infra.I18n;
-
 namespace Ngaq.Ui.Views.Home;
 
 using Avalonia.Controls;

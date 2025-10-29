@@ -144,7 +144,7 @@ public IImgGetter? SvcImg{get;set;}
 
 	public async Task<nil> LoadEtStartAsy(CT Ct){
 		if(!MgrLearn.State.OperationStatus.Load){
-			var Page = await SvcWord.PageJnWord(
+			var Page = await SvcWord.PageWord(
 				UserCtxMgr.GetUserCtx()
 				,PageQry.SlctAll()
 				,Ct

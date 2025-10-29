@@ -2,6 +2,7 @@ namespace Ngaq.Client;
 
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Client.Svc;
+using Ngaq.Client.Word.Svc;
 using Ngaq.Core.Shared.User.Svc;
 
 
@@ -10,6 +11,7 @@ public static class DiClient{
 		z.AddScoped<ISvcUser, ClientUser>();
 		z.AddSingleton<IHttpCaller, HttpCaller>();
 		z.AddScoped<HttpClient>();
+		z.AddScoped<ClientWordSync>();
 #if false //TODO 移至DiBrowser
 		z.AddScoped<ISvcWord, ClientWord>();
 		z.AddScoped<IUserCtxMgr, UserCtxMgr>();

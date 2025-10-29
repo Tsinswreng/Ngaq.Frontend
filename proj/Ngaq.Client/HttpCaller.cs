@@ -1,4 +1,6 @@
 using System.Text;
+using System.Net.Http.Headers;
+using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Tools.Json;
 using Tsinswreng.CsTools;
@@ -8,7 +10,7 @@ public interface IHttpCaller {
 		str RelaUrl
 		,TReq Req,
 		CT Ct
-	);
+		);
 }
 
 
@@ -18,16 +20,18 @@ public class HttpCaller:IHttpCaller{
 	IJsonSerializer JsonS;
 	HttpClient HttpClient;
 	I_GetBaseUrl BaseUrlGetter;
+	IFrontendUserCtxMgr UserCtxMgr;
 	public HttpCaller(
 		IJsonSerializer JsonS
 		,HttpClient HttpClient
 		,I_GetBaseUrl BaseUrlGetter
+		,IFrontendUserCtxMgr UserCtxMgr
 	){
 		this.HttpClient = HttpClient;
 		this.JsonS = JsonS;
 		this.BaseUrlGetter = BaseUrlGetter;
+		this.UserCtxMgr = UserCtxMgr;
 	}
-
 
 	/// <summary>
 	/// 發送 POST 請求並把回應反序列化成 TResp。
@@ -46,7 +50,15 @@ public class HttpCaller:IHttpCaller{
 			,"application/json"
 		);
 
-		using var resp = await HttpClient.PostAsync(url, content, Ct);
+		// 從 UserCtxMgr 取得 AccessToken，若存在則放入 Authorization header
+		var userCtx = UserCtxMgr.GetUserCtx();
+		var token = userCtx?.AccessToken;
+		using var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+		if(!str.IsNullOrEmpty(token)){
+			reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+		}
+
+		using var resp = await HttpClient.SendAsync(reqMsg, Ct);
 
 		// 可視需求打開以下兩行，保證非 2xx 直接拋
 		resp.EnsureSuccessStatusCode();

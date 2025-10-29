@@ -42,7 +42,7 @@ public partial class ClientUser
 		,CT Ct
 	){
 		await HttpCaller.Post<ReqAddUser, nil>(
-			ConstUrl.UrlUser.AddUser
+			ConstUrl.UrlOpenUser.AddUser
 			,Req
 			,Ct
 		);
@@ -55,7 +55,7 @@ public partial class ClientUser
 		,ReqLogin ReqLogin, CT Ct
 	){
 		var R = await HttpCaller.Post<ReqLogin, RespLogin>(
-			ConstUrl.UrlUser.Login
+			ConstUrl.UrlOpenUser.Login
 			,ReqLogin
 			,Ct
 		);

@@ -1,0 +1,2 @@
+namespace Ngaq.Client.Svc;
+
