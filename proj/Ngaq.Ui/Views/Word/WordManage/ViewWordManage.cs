@@ -1,11 +1,10 @@
-using Ngaq.Ui.Infra.I18n;
-
 namespace Ngaq.Ui.Views.Word.WordManage;
 
-using Avalonia;
+using Ngaq.Ui.Infra.I18n;
+
 using Avalonia.Controls;
-using Avalonia.Media;
-using Ngaq.Ui.Infra.Ctrls;
+
+
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
@@ -15,8 +14,8 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 
-using K = ViewLibrary;
-using Ngaq.Ui.Infra.I18n;
+using K = Ngaq.Ui.Infra.I18n.ViewLibrary;
+
 
 public partial class ViewWordManage
 	:UserControl
@@ -53,6 +52,12 @@ public partial class ViewWordManage
 			]);
 		});
 		Root.AddInit(_StackPanel(), stk=>{
+			stk.AddInit(_Button(), o=>{
+				o.Click+=(s,e)=>{
+					var window = this.VisualRoot as Window;
+					PopupService.ShowPopupMsg(window, "test");
+				};
+			});
 			stk.AddInit(_Item(I[K.SearchWords], new ViewSearchWords()));
 			stk.AddInit(_Item(I[K.AddWords], new ViewAddWord()));
 			stk.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync()));

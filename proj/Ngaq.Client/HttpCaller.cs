@@ -133,10 +133,10 @@ public class HttpCaller:IHttpCaller{
 		try{
 			var R = JsonS.Parse<TResp>(body); // 若回應是空字串則會拋例外
 			return R;
-		}catch(Exception e){
-			System.Console.WriteLine("Json反序列化失敗: "+e);//t
+		}catch(Exception){
+			throw;//再次引发捕获到的异常会更改堆栈信息CA2200
+			//System.Console.WriteLine("Json反序列化失敗: "+e);//t
 		}
-		return default;//TODO 返回原樣字串。需緟封裝返回值泛型
 	}
 
 	public async Task<IAnswer<nil>> RefreshBothToken(CT Ct){

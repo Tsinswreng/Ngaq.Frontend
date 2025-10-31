@@ -12,8 +12,8 @@ using Tsinswreng.AvlnTools.Tools;
 
 namespace Ngaq.Ui.Tests;
 
-public partial class MainView : UserControl {
-	public MainView() {
+public partial class TestMainView : UserControl {
+	public TestMainView() {
 		//InitializeComponent();
 		//Content = new ViewWordListCard();
 		//Content = new ViewAddWord();

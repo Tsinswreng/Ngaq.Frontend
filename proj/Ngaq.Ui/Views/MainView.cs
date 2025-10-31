@@ -1,17 +1,29 @@
+namespace Ngaq.Ui.Views;
+
 using Avalonia.Controls;
 using Avalonia.Input;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.KeyBoard.Dks;
 using Ngaq.Ui.Views.Home;
-using Ngaq.Ui.Views.User;
-using Ngaq.Ui.Views.Word.WordManage.EditWord;
-using Ngaq.Ui.Views.Word.WordManage.SearchWords;
+using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
+using Tsinswreng.AvlnTools.Tools;
 
-namespace Ngaq.Ui.Views;
+public class ViewNaviBase:UserControl{
+
+}
+
 
 public partial class MainView : UserControl {
+	public AutoGrid AutoGrid = new (IsRow: true);
+	public Grid Root{get{return AutoGrid.Grid;}}
+	public ViewNaviBase ViewNaviBase{get;} = new ();
 	public MainView() {
+		this.ContentInit(AutoGrid.Grid);
+		AutoGrid.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Star),
+		]);
+		AutoGrid.Add(ViewNaviBase);
+
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
 				if(e.Key == Avalonia.Input.Key.Escape){
@@ -21,32 +33,12 @@ public partial class MainView : UserControl {
 			,handledEventsToo: true
 		);
 
-		MgrViewNavi.Inst.ViewNavi = new ViewNavi(this);
+		MgrViewNavi.Inst.ViewNavi = new ViewNavi(ViewNaviBase);
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 		var Home = new ViewHome();
 		//var Home = new ViewEditWord();
 		Navi.GoTo(Home);
-		//Content = Home;
-		//Content = new ViewLoginRegister();
-		// var Btn = new Button { Content = "Hello World!" };
-		// Content = Btn;
-		// var Pressed = new Style(x=>
-		// 	x.Is<Button>()
-		// 	.Class(":pressed")
-		// 	.Template()
-		// 	.OfType<ContentPresenter>()
-		// 	//.Name("PART_ContentPresenter")
-		// 	//"PART_ContentPresenter"
-		// );
-		// //var Pressed = new Style(x => x.OfType<Button>().Class(":pressed").Template().Name("PART_ContentPresenter"));
-		// Btn.Styles.Add(Pressed);
-		// {var o = Pressed;
-		// 	o.Set(
-		// 		BackgroundProperty
-		// 		,Brushes.Yellow
-		// 	);
-		// }
 
 	}
 }
