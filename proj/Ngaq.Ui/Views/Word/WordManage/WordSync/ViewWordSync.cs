@@ -1,7 +1,9 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 
 using Avalonia.Controls;
+using Avalonia.Media;
 using Ngaq.Ui.Infra.I18n;
+using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordSync;
@@ -44,10 +46,99 @@ public partial class ViewWordSync
 			});
 			Sp.AddInit(_Button(), o=>{
 				o.Content = "Pull";
-			});
+			})
+			.AddInit(_Button(), o=>{
+				o.Content = "Test";
+				o.Click+=(s,e)=>{
+					Ctx?.ShowMsg("Test");
+				};
+			})
+			.AddInit(_Button(), o=>{
+				o.Content = "TestLong";
+				o.Click+=(s,e)=>{
+					Ctx?.ShowMsg(LongText);
+				};
+			})
+
+			;
 		});
 		return NIL;
 	}
+
+		public const str LongText =
+"""
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]""Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]""Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+"Font size must be betwen in (0, 64]"
+""";
+
 
 
 }

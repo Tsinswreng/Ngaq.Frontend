@@ -49,8 +49,7 @@ public partial class VmCfgFont: ViewModelBase{
 			//輸入0旹會崩潰 //TODO: avalonia 全局異常處理
 			if(f64.TryParse(InputFontSize, out var numSize)){
 				if(numSize <=0 || numSize > 64){
-					this.AddMsg("Font size must be betwen in (0, 64]");
-					this.ShowMsg();
+					this.ShowMsg("Font size must be betwen in (0, 64]");
 					return NIL;
 				}
 				FontSize = numSize;
@@ -70,7 +69,6 @@ public partial class VmCfgFont: ViewModelBase{
 		await AppCfg.Inst.SaveAsy(default);
 		return NIL;
 	}
-
 
 }
 

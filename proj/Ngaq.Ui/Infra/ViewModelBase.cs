@@ -7,6 +7,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
+using Ngaq.Ui.Views;
+using Ngaq.Core.Infra.Errors;
+using Ngaq.Ui.Infra.I18n;
+using Avalonia.Threading;
 
 namespace Ngaq.Ui.Infra;
 
@@ -48,9 +52,9 @@ public  partial class ViewModelBase
 	}
 
 
-/// <summary>
-/// 在Popup被關閉旹 須手動于回調中把isShowMsg設潙false
-/// </summary>
+	/// <summary>
+	/// 在Popup被關閉旹 須手動于回調中把isShowMsg設潙false
+	/// </summary>
 	protected bool _IsShowMsg = false;
 
 	[Impl(typeof(IMsgViewModel))]
@@ -70,6 +74,7 @@ public  partial class ViewModelBase
 	// }
 
 	[Impl(typeof(IMsgViewModel))]
+	[Obsolete]
 	public ViewModelBase AddMsg(object? Msg){
 		Msgs.Add(Msg);
 #if DEBUG
@@ -79,6 +84,7 @@ public  partial class ViewModelBase
 	}
 
 	[Impl(typeof(IMsgViewModel))]
+	[Obsolete]
 	public nil ShowMsg(){
 		var Old = Msgs;
 		Msgs = new ObservableCollection<object?>();
@@ -89,8 +95,30 @@ public  partial class ViewModelBase
 
 
 	[Impl(typeof(IMsgViewModel))]
+	[Obsolete]
 	public nil ClearMsg(){
 		Msgs.Clear();
+		return NIL;
+	}
+
+	/// <summary>
+	/// 彈窗ʹ抽象。調用方宜無需知其內ʹ叶
+	/// </summary>
+	/// <param name="Msg"></param>
+	/// <returns></returns>
+	public nil ShowMsg(str Msg){
+		Dispatcher.UIThread.Post(()=>{
+			MainView.Inst.ShowMsg(Msg);
+		});
+		return NIL;
+	}
+	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
+	public nil ShowMsg(IAppErr Err){
+		if(Err.Type is null){
+			return NIL;
+		}
+		var Str = I18n.Get(Err.Type.ToI18nKey(), Err.Args??[]);
+		ShowMsg(Str);
 		return NIL;
 	}
 

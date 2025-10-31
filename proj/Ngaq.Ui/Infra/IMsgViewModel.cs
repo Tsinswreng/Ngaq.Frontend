@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Infra;
 
+[Obsolete]
 public interface IMsgViewModel{
 
 	public ICollection<object?> Msgs{get;set;}

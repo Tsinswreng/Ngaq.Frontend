@@ -117,9 +117,7 @@ public partial class App :Application
 			// liveViewHost.StartWatchingSourceFilesForHotReloading();
 			// liveViewHost.Show();
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
-			singleViewPlatform.MainView = new MainView {
-				DataContext = new MainViewModel()
-			};
+			singleViewPlatform.MainView = MainView.Inst;
 		}
 
 		base.OnFrameworkInitializationCompleted();

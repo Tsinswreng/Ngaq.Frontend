@@ -52,12 +52,6 @@ public partial class ViewWordManage
 			]);
 		});
 		Root.AddInit(_StackPanel(), stk=>{
-			stk.AddInit(_Button(), o=>{
-				o.Click+=(s,e)=>{
-					var window = this.VisualRoot as Window;
-					PopupService.ShowPopupMsg(window, "test");
-				};
-			});
 			stk.AddInit(_Item(I[K.SearchWords], new ViewSearchWords()));
 			stk.AddInit(_Item(I[K.AddWords], new ViewAddWord()));
 			stk.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync()));

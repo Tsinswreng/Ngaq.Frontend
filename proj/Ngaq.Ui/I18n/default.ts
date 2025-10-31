@@ -6,28 +6,29 @@ interface ITypedTemplate{
 export type TTemplate = string|ITypedTemplate
 
 type Full = {
-	Common:{
-		Confirm: TTemplate
-		,Cancel: TTemplate
+	View:{
+		Common:{
+			Confirm: TTemplate
+			,Cancel: TTemplate
+		}
+		,ViewHome:{
+			Learn: TTemplate
+			,Library: TTemplate
+			,Me: TTemplate
+		}
+		,ViewLibrary:{
+			SearchWords: TTemplate
+			,AddWords: TTemplate
+			,BackupEtSync: TTemplate
+		}
+		,ViewLearnWord:{
+			Start: TTemplate
+			,Save: TTemplate
+			,Reset: TTemplate
+		}
 	}
-	,ViewHome:{
-		Learn: TTemplate
-		,Library: TTemplate
-		,Me: TTemplate
-	}
-	,ViewLibrary:{
-		SearchWords: TTemplate
-		,AddWords: TTemplate
-		,BackupEtSync: TTemplate
-	}
-	,ViewLearnWord:{
-		Start: TTemplate
-		,Save: TTemplate
-		,Reset: TTemplate
-	}
-
 	//----Errors----
-	,Errors:{
+	,Error:{
 		Common: {
 			ArgErr: TTemplate
 		}

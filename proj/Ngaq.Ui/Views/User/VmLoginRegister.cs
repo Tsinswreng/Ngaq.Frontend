@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ngaq.Core.Frontend.Kv;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Core;
+using Ngaq.Core.Infra.Errors;
 using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Shared.User.Models.Po.Device;
 using Ngaq.Core.Shared.User.Models.Po.User;
@@ -104,7 +105,11 @@ public partial class VmLoginRegister: ViewModelBase{
 	public nil Login(){
 		LoginAsy(Cts.Token).ContinueWith(t=>{
 			if(t.IsFaulted){
-				System.Console.WriteLine(t.Exception);//t
+				if(t.Exception.InnerException is IAppErr Err){
+					this.ShowMsg(Err);
+				}else{
+					System.Console.WriteLine(t);//t //TODO 日誌
+				}
 			}
 		});
 		return NIL;

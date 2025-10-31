@@ -5,10 +5,11 @@ using Microsoft.Win32.SafeHandles;
 using K = II18nKey;
 
 public static class KeysUiI18nRoot{
-	public static readonly K Common = Mk(null, [nameof(Common)]);
-	public static readonly K ViewHome = Mk(null, [nameof(ViewHome)]);
-	public static readonly K ViewLearnWord = Mk(null, [nameof(ViewLearnWord)]);
-	public static readonly K ViewLibrary = Mk(null, [nameof(ViewLibrary)]);
+	public static K? _R = Mk(null, ["View"]);
+	public static readonly K Common = Mk(_R, [nameof(Common)]);
+	public static readonly K ViewHome = Mk(_R, [nameof(ViewHome)]);
+	public static readonly K ViewLearnWord = Mk(_R, [nameof(ViewLearnWord)]);
+	public static readonly K ViewLibrary = Mk(_R, [nameof(ViewLibrary)]);
 }
 
 
