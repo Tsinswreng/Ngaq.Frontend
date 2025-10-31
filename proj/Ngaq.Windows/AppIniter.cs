@@ -48,7 +48,13 @@ public class AppIniter{
 
 		var CurLocalUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLocalUserId,Ct);
 		var CurLoginUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLoginUserId,Ct);
+		var RefreshToken = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero, KeysClientKv.RefreshToken, Ct);
+		var RefreshTokenExpireAt = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero, KeysClientKv.RefreshTokenExpireAt, Ct);
 		var UserCtx = userCtxMgr.GetUserCtx();
+		if(RefreshToken is not null){//TODO 判段是否過期
+			UserCtx.RefreshToken = RefreshToken.GetVStr();
+			UserCtx.RefreshTokenExpireAt = RefreshTokenExpireAt?.GetVI64()??0;
+		}
 		if(CurLoginUserKv is not null){//TODO 判段是否過期
 			var LoginUserId = IdUser.FromLow64Base(
 				CurLoginUserKv.VStr??throw new InvalidOperationException("Invalid User Id")

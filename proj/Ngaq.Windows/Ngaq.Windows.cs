@@ -1,4 +1,6 @@
-﻿using Avalonia;
+﻿namespace Ngaq.Windows;
+
+using Avalonia;
 using Avalonia.Markup.Declarative;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Client;
@@ -12,7 +14,7 @@ using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
 
-namespace Ngaq.Windows;
+
 
 sealed class Program {
 
@@ -22,7 +24,7 @@ sealed class Program {
 			CfgFilePath = args[0];
 		} else {
 #if DEBUG
-			CfgFilePath = "Ngaq.dev.jsonc";
+			CfgFilePath = "Ngaq.jsonc";
 #else
 			CfgFilePath = "Ngaq.jsonc";
 #endif

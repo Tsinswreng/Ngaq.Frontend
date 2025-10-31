@@ -62,7 +62,10 @@ public partial class ClientUser
 		var UserCtx = UserCtxMgr.GetUserCtx();
 
 		UserCtx.RefreshToken = R.RefreshToken;
+		UserCtx.RefreshTokenExpireAt = R.RefreshTokenExpireAt;
 		UserCtx.AccessToken = R.AccessToken;
+		UserCtx.AccessTokenExpireAt = R.AccessTokenExpireAt;
+
 		UserCtx.LoginUserId = IdUser.FromLow64Base(R.UserId);
 		UserCtx.Kv??=new Dictionary<str,obj?>();
 		UserCtx.Kv["PoUser"] = R.PoUser;

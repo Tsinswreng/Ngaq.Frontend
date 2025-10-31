@@ -4,23 +4,22 @@ using Tsinswreng.CsCfg;
 using Microsoft.Win32.SafeHandles;
 using K = II18nKey;
 
-public static class KeysI18nRoot{
+public static class KeysUiI18nRoot{
 	public static readonly K Common = Mk(null, [nameof(Common)]);
 	public static readonly K ViewHome = Mk(null, [nameof(ViewHome)]);
 	public static readonly K ViewLearnWord = Mk(null, [nameof(ViewLearnWord)]);
 	public static readonly K ViewLibrary = Mk(null, [nameof(ViewLibrary)]);
-
 }
 
 
 public class Common{
-	public static readonly K _Root = KeysI18nRoot.Common;
+	public static readonly K _Root = KeysUiI18nRoot.Common;
 	public static readonly K Confirm = Mk(_Root, [nameof(Confirm)]);
 	public static readonly K Cancel = Mk(_Root, [nameof(Cancel)]);
 }
 
 public class ViewHome{
-	public static readonly K _Root = KeysI18nRoot.ViewHome;
+	public static readonly K _Root = KeysUiI18nRoot.ViewHome;
 	public static readonly K Learn = Mk(_Root, [nameof(Learn)]);
 	public static readonly K Library = Mk(_Root, [nameof(Library)]);
 	public static readonly K Me = Mk(_Root, [nameof(Me)]);
@@ -28,7 +27,7 @@ public class ViewHome{
 
 
 public class ViewLearnWord{
-	public static readonly K _Root = KeysI18nRoot.ViewLearnWord;
+	public static readonly K _Root = KeysUiI18nRoot.ViewLearnWord;
 	public static readonly K Start = Mk(_Root, [nameof(Start)]);
 	public static readonly K Save = Mk(_Root, [nameof(Save)]);
 	public static readonly K Reset = Mk(_Root, [nameof(Reset)]);
@@ -36,7 +35,7 @@ public class ViewLearnWord{
 
 
 public class ViewLibrary{
-	public static readonly K R = KeysI18nRoot.ViewLibrary;
+	public static readonly K R = KeysUiI18nRoot.ViewLibrary;
 	public static readonly K SearchWords = Mk(R, [nameof(SearchWords)]);
 	public static readonly K AddWords = Mk(R, [nameof(AddWords)]);
 	public static readonly K BackupEtSync = Mk(R, [nameof(BackupEtSync)]);

@@ -25,6 +25,20 @@ type Full = {
 		,Save: TTemplate
 		,Reset: TTemplate
 	}
+
+	//----Errors----
+	,Errors:{
+		Common: {
+			ArgErr: TTemplate
+		}
+		,User: {
+			UserNotExist: TTemplate
+			UserAlreadyExist: TTemplate
+			PasswordNotMatch: TTemplate
+			InvalidToken: TTemplate
+			TokenExpired: TTemplate
+		}
+	}
 }
 
 type TI18nKv = Full;
