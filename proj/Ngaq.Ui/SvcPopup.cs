@@ -7,28 +7,40 @@ using Ngaq.Ui.Tests;
 using Ngaq.Ui.Views;
 
 public class SvcPopup {
-	private Panel _overlay = new Grid();
+	private Panel Overlay{get{
+		return FnMkOverlay?.Invoke()??new Grid();
+	}}
+	public Func<Panel> FnMkOverlay{get;set;}
 	public Panel? RootPanel{get;set;}
 	public Stack<Control> Popups = new Stack<Control>();
 	public SvcPopup(Panel RootPanel){
 		this.RootPanel = RootPanel;
-		// 创建遮罩层
-		_overlay = new Grid {
-			Background = Brushes.Black,
-			Opacity = 0.5,
-			HorizontalAlignment = HAlign.Stretch,
-			VerticalAlignment = VAlign.Stretch
-		};
-
+		if(FnMkOverlay is null){
+			FnMkOverlay = ()=> new Grid {
+				Background = Brushes.Black,
+				Opacity = 0.5,
+				HorizontalAlignment = HAlign.Stretch,
+				VerticalAlignment = VAlign.Stretch
+			};
+		}
 	}
 
+	/// <summary>
+	/// Ctrl勿多次傳同一實例、除非先關彈窗
+	/// </summary>
+	/// <param name="Ctrl"></param>
 	public void ShowPopup(Control Ctrl){
-		if(RootPanel is null){
-			return;
+		try{
+			if(RootPanel is null){
+				return;
+			}
+			Popups.Push(Ctrl);
+			RootPanel.Children.Add(Overlay);
+			RootPanel.Children.Add(Ctrl);
+		}catch(Exception e){//The control Grid already has a visual parent Grid while trying to add it as a child of Grid.
+			System.Console.WriteLine(e);//t
 		}
-		Popups.Push(Ctrl);
-		RootPanel.Children.Add(_overlay);
-		RootPanel.Children.Add(Ctrl);
+
 	}
 
 	// public void ShowPopupMsg(Window parentWindow, string message) {
