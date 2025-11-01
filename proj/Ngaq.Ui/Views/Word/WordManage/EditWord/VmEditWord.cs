@@ -115,9 +115,7 @@ public partial class VmEditWord: ViewModelBase{
 		var User = UserCtxMgr.GetUserCtx();
 		var Ct = Cts.Token;
 		SvcWord.SoftDelJnWordsByIds(User, [Bo.Id], Ct).ContinueWith(t=>{
-			if(t.IsFaulted){
-				System.Console.WriteLine(t.Exception);//t
-			}
+			HandleErr(t);
 		});
 
 		return NIL;
@@ -138,9 +136,7 @@ public partial class VmEditWord: ViewModelBase{
 		var User = UserCtxMgr.GetUserCtx();
 		var Ct = Cts.Token;
 		SvcWord.UpdJnWord(User, Bo, Ct).ContinueWith(t=>{
-			if(t.IsFaulted){
-				System.Console.WriteLine(t.Exception);//t
-			}
+			HandleErr(t);
 		});
 
 		return NIL;

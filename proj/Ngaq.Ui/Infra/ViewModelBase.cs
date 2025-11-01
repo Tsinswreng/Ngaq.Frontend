@@ -122,6 +122,31 @@ public  partial class ViewModelBase
 		return NIL;
 	}
 
+	public nil HandleErr(Exception Ex){
+		if(Ex is IAppErr Err){
+			ShowMsg(Err);
+			return NIL;
+		}else{
+			ShowMsg("Unknown Error.");//TODO i18n
+			#if DEBUG
+			ShowMsg(Ex+"");
+			#endif
+			//TODO log
+		}
+		return NIL;
+	}
+
+	public nil HandleErr(Task T){
+		if(T.IsFaulted){
+			if(T.Exception.InnerException is not null){
+				HandleErr(T.Exception.InnerException);
+			}else{
+				HandleErr(T.Exception);
+			}
+		}
+		return NIL;
+	}
+
 	/// <summary>
 	/// 地址未變但內容ˋ變旹 適用此
 	/// </summary>

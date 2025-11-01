@@ -45,7 +45,8 @@ public static MainView Inst => _Inst??= new MainView();
 		msgBox._Body.Content = new SelectableTextBlock{
 			Text=Msg,
 			HorizontalAlignment = HAlign.Center,
-			VerticalAlignment = VAlign.Center
+			VerticalAlignment = VAlign.Center,
+			TextWrapping = TextWrapping.Wrap,
 		};
 		msgBox.Background = Brushes.Black;
 		var Bdr = new Border();

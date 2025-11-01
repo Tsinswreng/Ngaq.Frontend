@@ -96,12 +96,7 @@ public partial class VmAddWord
 		var Ct = Cts.Token;
 		var UserCtx = UserCtxMgr.GetUserCtx();
 		var FnThen = (Task<nil> t)=>{
-			if(t.IsFaulted){
-				Console.WriteLine(t.Exception);//t
-				//this.OnMsg(d.Exception.ToString());
-				//ErrStr = d.Exception.ToString();
-				ShowMsg();
-			}
+			HandleErr(t);
 		};
 
 		if(

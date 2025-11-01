@@ -42,7 +42,7 @@ public partial class ViewWordQuery
 		};
 	}
 
-	public  partial class Cls_{
+	public partial class Cls_{
 		public str MenuBtn = nameof(MenuBtn);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();

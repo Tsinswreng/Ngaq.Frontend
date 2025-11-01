@@ -78,7 +78,7 @@ public partial class VmSearchWords: ViewModelBase{
 		}
 		SvcWord.PageSearch(UserCtx, pageQry, req, Ct).ContinueWith(t=>{
 			if(t.IsFaulted){
-				System.Console.WriteLine(t.Exception);//t
+				HandleErr(t);
 				return;
 			}
 			var R = t.Result;

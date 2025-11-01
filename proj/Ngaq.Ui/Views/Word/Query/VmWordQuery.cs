@@ -176,24 +176,16 @@ public IImgGetter? SvcImg{get;set;}
 
 	public nil LoadEtStart(){
 		CT Ct = default;
-		LoadEtStartAsy(Ct).ContinueWith(d=>{
-			if(d.IsFaulted){
-				var e = d.Exception.ToString();
-				System.Console.WriteLine(e);
-				Msgs.Add(e);
-				ShowMsg();
-			}
+		LoadEtStartAsy(Ct).ContinueWith(t=>{
+			HandleErr(t);
 		});
 		return NIL;
 	}
 
 	public nil SaveEtRestart(){
 		CT Ct = default;
-		SaveEtRestartAsy(Ct).ContinueWith(d=>{
-			if(d.IsFaulted){
-				Msgs.Add(d?.ToString()??"");
-				ShowMsg();
-			}
+		SaveEtRestartAsy(Ct).ContinueWith(t=>{
+			HandleErr(t);
 		});
 		return NIL;
 	}
@@ -232,12 +224,8 @@ public IImgGetter? SvcImg{get;set;}
 
 	public nil Save(){
 		CT Ct = default;
-		MgrLearn.SaveAsy(Ct).ContinueWith(d=>{
-			if(d.IsFaulted){
-				System.Console.WriteLine(d.Exception.ToString());//t
-				AddMsg(d.Exception.ToString());
-				ShowMsg();
-			}
+		MgrLearn.SaveAsy(Ct).ContinueWith(t=>{
+			HandleErr(t);
 		});
 		return NIL;
 	}

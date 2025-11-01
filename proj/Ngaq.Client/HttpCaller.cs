@@ -12,10 +12,11 @@ using Ngaq.Core.Infra.Errors;
 
 public interface IHttpCaller {
 	public Task<TResp?> Post<TReq, TResp>(
-		str RelaUrl
-		,TReq Req,
-		CT Ct
-		);
+		str RelaUrl,TReq Req,CT Ct
+	);
+	public Task<TResp?> PostByteStream<TReq, TResp>(
+		str RelaUrl,u8[] Req,CT Ct
+	);
 }
 
 
@@ -47,6 +48,7 @@ public class HttpCaller:IHttpCaller{
 		,TReq Req,
 		CT Ct
 	) {
+		using var Dl = DisposableList.Mk();
 		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), RelaUrl]);
 		var Json = JsonS.Stringify(Req);
 		using var content = new StringContent(
@@ -55,15 +57,17 @@ public class HttpCaller:IHttpCaller{
 			,"application/json"
 		);
 
-		HttpResponseMessage resp = null!;
-		for(var i = 0;i < 1;i++){
+		HttpResponseMessage resp = null!;//記得釋放
+		for(var i = 0;i < 2;i++){
 			var userCtx = UserCtxMgr.GetUserCtx();
 			var token = userCtx?.AccessToken;
-			using var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+			Dl.Add(reqMsg);
 			if(!str.IsNullOrEmpty(token)){
 				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			}
 			resp = await HttpClient.SendAsync(reqMsg, Ct);
+			Dl.Add(resp);
 			if(resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
 				var Refresh = await RefreshBothToken(Ct);
 				//TODO 處理 Refresh 錯誤 如過期等
@@ -95,25 +99,27 @@ public class HttpCaller:IHttpCaller{
 	/// <summary>
 	/// 發送 POST 請求並把回應反序列化成 TResp。
 	/// </summary>
-	public async Task<TResp?> PostBlob<TReq, TResp>(
-		str RelaUrl
-		,u8[] Req,
-		CT Ct
+	public async Task<TResp?> PostByteStream<TReq, TResp>(
+		str RelaUrl,u8[] Req,CT Ct
 	) {
+		using var Dl = DisposableList.Mk();
 		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), RelaUrl]);
 		var Json = JsonS.Stringify(Req);
 		using var content = new ByteArrayContent(Req);
 		content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
 		HttpResponseMessage resp = null!;
-		for(var i = 0;i < 1;i++){
+		for(var i = 0;i < 2;i++){
 			var userCtx = UserCtxMgr.GetUserCtx();
 			var token = userCtx?.AccessToken;
-			using var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+			//reqMsg被釋放旹會自動釋放其關聯㞢Content、故勿在循環中using
+			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
+			Dl.Add(reqMsg);
 			if(!str.IsNullOrEmpty(token)){
 				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			}
 			resp = await HttpClient.SendAsync(reqMsg, Ct);
+			Dl.Add(resp);
 			if(resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
 				var Refresh = await RefreshBothToken(Ct);
 				//TODO 處理 Refresh 錯誤 如過期等
@@ -154,10 +160,13 @@ public class HttpCaller:IHttpCaller{
 			Json, Encoding.UTF8, "application/json"
 		);
 		using var resp = await HttpClient.PostAsync(Url, content, Ct);
-		resp.EnsureSuccessStatusCode();
+
 
 		var body = await resp.Content.ReadAsStringAsync(Ct);
-		var R2 = JsonS.Parse<RespRefreshBothToken>(body);
+		//var R2 = JsonS.Parse<RespRefreshBothToken>(body);
+		var Ans = WebAns.Deserialize<RespRefreshBothToken>(body);
+		var R2 = Ans.DataOrThrow();
+		resp.EnsureSuccessStatusCode();
 
 		User.RefreshToken = R2.RefreshToken;
 		User.AccessToken = R2.AccessToken;

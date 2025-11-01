@@ -45,9 +45,7 @@ public partial class VmWordSync: ViewModelBase{
 
 	public nil Push(){
 		PushAsy(Cts.Token).ContinueWith(t=>{
-			if(t.IsFaulted){
-				System.Console.Error.WriteLine(t.Exception);//t
-			}
+			HandleErr(t);
 		});
 		return NIL;
 	}

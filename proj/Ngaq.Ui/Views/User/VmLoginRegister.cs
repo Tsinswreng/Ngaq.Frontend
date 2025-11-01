@@ -82,9 +82,7 @@ public partial class VmLoginRegister: ViewModelBase{
 			return NIL;
 		}
 		RegisterAsy(Cts.Token).ContinueWith(t=>{
-			if(t.IsFaulted){
-				System.Console.WriteLine(t);//t
-			}
+			HandleErr(t);
 		});
 		return NIL;
 	}
@@ -104,13 +102,7 @@ public partial class VmLoginRegister: ViewModelBase{
 	CancellationTokenSource Cts = new();
 	public nil Login(){
 		LoginAsy(Cts.Token).ContinueWith(t=>{
-			if(t.IsFaulted){
-				if(t.Exception.InnerException is IAppErr Err){
-					this.ShowMsg(Err);
-				}else{
-					System.Console.WriteLine(t);//t //TODO 日誌
-				}
-			}
+			HandleErr(t);
 		});
 		return NIL;
 	}
