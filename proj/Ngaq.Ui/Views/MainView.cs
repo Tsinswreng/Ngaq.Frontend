@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Microsoft.Extensions.Logging;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
@@ -24,6 +25,7 @@ public static MainView Inst => _Inst??= new MainView();
 	public AutoGrid AutoGrid = new (IsRow: true);
 	public Grid Root{get{return AutoGrid.Grid;}}
 	public ViewNaviBase ViewNaviBase{get;} = new ();
+	public ILogger Logger{get;set;}
 	public nil ShowMsg(str Msg){
 		var msgBox = new MsgBox();
 		msgBox.MinHeight = UiCfg.Inst.WindowHeight*0.2;
@@ -56,6 +58,17 @@ public static MainView Inst => _Inst??= new MainView();
 		return NIL;
 	}
 	public MainView() {
+		using var loggerFactory = LoggerFactory.Create(b=>{
+			b.AddConsole()
+			#if DEBUG
+			.SetMinimumLevel(LogLevel.Debug)
+			#else
+			.SetMinimumLevel(LogLevel.Information)
+			#endif
+			;
+		});
+		Logger = loggerFactory.CreateLogger("GlobalLogger");
+
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
 		this.ContentInit(AutoGrid.Grid);

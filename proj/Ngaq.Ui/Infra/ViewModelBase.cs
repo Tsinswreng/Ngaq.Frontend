@@ -11,6 +11,7 @@ using Ngaq.Ui.Views;
 using Ngaq.Core.Infra.Errors;
 using Ngaq.Ui.Infra.I18n;
 using Avalonia.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace Ngaq.Ui.Infra;
 
@@ -18,7 +19,7 @@ public class EvtArgMsg:EventArgs{
 
 }
 
-public  partial class ViewModelBase
+public partial class ViewModelBase
 	:ObservableObject
 	,IViewModel
 	,I_ViewNavi
@@ -26,6 +27,8 @@ public  partial class ViewModelBase
 	,I_ForceSetProp
 	,IMsgViewModel
 {
+
+
 
 	public ViewModelBase(){
 		ViewNavi = MgrViewNavi.Inst.ViewNavi;
@@ -101,30 +104,52 @@ public  partial class ViewModelBase
 		return NIL;
 	}
 
+	public nil LogInfo(str? Msg = null){
+		MainView.Inst.Logger.LogInformation(Msg??"");
+		return NIL;
+	}
+
+	public nil LogDebug(str? Msg = null){
+		MainView.Inst.Logger.LogDebug(Msg??"");
+		return NIL;
+	}
+
+	public nil LogWarn(str? Msg=null){
+		MainView.Inst.Logger.LogWarning(Msg??"");
+		return NIL;
+	}
+
+	public nil LogError(str? Msg = null){
+		MainView.Inst.Logger.LogError(Msg??"");
+		return NIL;
+	}
+
 	/// <summary>
 	/// 彈窗ʹ抽象。調用方宜無需知其內ʹ叶
 	/// </summary>
 	/// <param name="Msg"></param>
 	/// <returns></returns>
 	public nil ShowMsg(str Msg){
+		LogInfo(nameof(ShowMsg)+": "+Msg);
 		Dispatcher.UIThread.Post(()=>{
 			MainView.Inst.ShowMsg(Msg);
 		});
 		return NIL;
 	}
 	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
-	public nil ShowMsg(IAppErr Err){
+	public nil ShowErr(IAppErr Err){
 		if(Err.Type is null){
 			return NIL;
 		}
 		var Str = I18n.Get(Err.Type.ToI18nKey(), Err.Args??[]);
 		ShowMsg(Str);
+		LogError(Err+"");
 		return NIL;
 	}
 
 	public nil HandleErr(Exception Ex){
 		if(Ex is IAppErr Err){
-			ShowMsg(Err);
+			ShowErr(Err);
 			return NIL;
 		}else{
 			ShowMsg("Unknown Error.");//TODO i18n

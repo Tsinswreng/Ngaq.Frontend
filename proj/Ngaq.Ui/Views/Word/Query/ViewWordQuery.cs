@@ -17,7 +17,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmWordQuery;
-using K = ViewLearnWord;
+using K = ItemsUiI18n.LearnWord;
 public partial class ViewWordQuery
 	:UserControl
 {

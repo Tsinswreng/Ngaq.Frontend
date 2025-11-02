@@ -41,34 +41,34 @@ public class HttpCaller:IHttpCaller{
 
 	// 新增：统一的“发送+重试”逻辑
 	private async Task<HttpResponseMessage> SendWithRetryAsync<TContent>(
-		string               relaUrl,
-		TContent             content,
-		Func<TContent, HttpContent> contentFactory,
-		CT                   ct)
-	{
+		string RelaUrl,
+		TContent Content,
+		Func<TContent, HttpContent> ContentFactory,
+		CT Ct
+	){
 		using var dl = DisposableList.Mk();
 
-		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), relaUrl]);
+		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), RelaUrl]);
 		HttpResponseMessage resp = null!;
 
-		for (var i = 0; i < 2; i++)
-		{
+		for (var i = 0; i < 2; i++){
 			var userCtx = UserCtxMgr.GetUserCtx();
 			var token   = userCtx?.AccessToken;
 
-			using var httpContent = contentFactory(content);
+			var httpContent = ContentFactory(Content);
+			dl.Add(httpContent);
 			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = httpContent };
 			dl.Add(reqMsg);
 
-			if (!str.IsNullOrEmpty(token))
+			if (!str.IsNullOrEmpty(token)){
 				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			}
 
-			resp = await HttpClient.SendAsync(reqMsg, ct);
-			dl.Add(resp);
+			resp = await HttpClient.SendAsync(reqMsg, Ct);
 
-			if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-			{
-				var refresh = await RefreshBothToken(ct);
+			if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
+				dl.Add(resp);
+				var refresh = await RefreshBothToken(Ct);
 				// TODO: 处理 refresh 失败
 				continue;
 			}

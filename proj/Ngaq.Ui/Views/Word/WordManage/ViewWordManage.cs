@@ -14,7 +14,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 
-using K = Ngaq.Ui.Infra.I18n.ViewLibrary;
+using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
 
 
 public partial class ViewWordManage

@@ -5,17 +5,17 @@ const a: TI18nKv = {
 			Confirm: "Confirm"
 			, Cancel: "Cancel"
 		}
-		, ViewHome: {
+		, Home: {
 			Learn: "Learn"
 			, Library: "Library"
 			, Me: "Me"
 		}
-		, ViewLibrary: {
+		, Library: {
 			SearchWords: "Search Words"
 			, AddWords: "Add Words"
 			, BackupEtSync: "Backup & Sync"
 		}
-		, ViewLearnWord: {
+		, LearnWord: {
 			Start: "Start"
 			, Save: "Save"
 			, Reset: "Reset"
@@ -23,7 +23,8 @@ const a: TI18nKv = {
 	},
 	Error:{
 		Common:{
-			ArgErr:"ArgErr"
+			ArgErr: "Argument Error",
+			UnknownErr: "Unknown Error"
 		},
 		User:{
 			UserNotExist: "UserNotExist",
@@ -32,6 +33,14 @@ const a: TI18nKv = {
 			InvalidToken: "InvalidToken",
 			TokenExpired: "TokenExpired"
 		}
+	}
+	,LoginRegister:{
+		Login:"Login"
+		,Register:"Register"
+		,UserName:"UserName"
+		,Email:"Email"
+		,Password:"Password"
+		,ConfirmPassword:"ConfirmPassword"
 	}
 }
 export default a

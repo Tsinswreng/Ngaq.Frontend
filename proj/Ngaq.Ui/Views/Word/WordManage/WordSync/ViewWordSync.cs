@@ -7,7 +7,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordSync;
-using K = Infra.I18n.ViewHome;
+using K = Infra.I18n.ItemsUiI18n.Library;
 public partial class ViewWordSync
 	:UserControl
 {

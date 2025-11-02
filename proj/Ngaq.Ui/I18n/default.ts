@@ -11,17 +11,17 @@ type Full = {
 			Confirm: TTemplate
 			,Cancel: TTemplate
 		}
-		,ViewHome:{
+		,Home:{
 			Learn: TTemplate
 			,Library: TTemplate
 			,Me: TTemplate
 		}
-		,ViewLibrary:{
+		,Library:{
 			SearchWords: TTemplate
 			,AddWords: TTemplate
 			,BackupEtSync: TTemplate
 		}
-		,ViewLearnWord:{
+		,LearnWord:{
 			Start: TTemplate
 			,Save: TTemplate
 			,Reset: TTemplate
@@ -31,6 +31,7 @@ type Full = {
 	,Error:{
 		Common: {
 			ArgErr: TTemplate
+			UnknownErr: TTemplate
 		}
 		,User: {
 			UserNotExist: TTemplate
@@ -39,6 +40,14 @@ type Full = {
 			InvalidToken: TTemplate
 			TokenExpired: TTemplate
 		}
+	}
+	,LoginRegister:{
+		Login:TTemplate
+		Register:TTemplate
+		UserName:TTemplate
+		Email:TTemplate
+		Password:TTemplate
+		ConfirmPassword:TTemplate
 	}
 }
 

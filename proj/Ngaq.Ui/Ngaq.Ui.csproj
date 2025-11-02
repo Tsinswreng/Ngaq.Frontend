@@ -35,6 +35,7 @@
 		<PackageReference Include="Live.Avalonia" />
 		<PackageReference Include="MessageFormat" />
 		<PackageReference Include="MethodTimer.Fody" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
 		<PackageReference Include="System.Reactive" />
 
 		<PackageReference Include="Irihi.Ursa" />
