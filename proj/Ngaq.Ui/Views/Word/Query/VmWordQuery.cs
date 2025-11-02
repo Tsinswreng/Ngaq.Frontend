@@ -14,6 +14,7 @@ using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Frontend.ImgBg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word;
+using Ngaq.Core.Shared.Word.Models;
 
 public partial class VmWordQuery
 	:ViewModelBase
@@ -147,7 +148,8 @@ public IImgGetter? SvcImg{get;set;}
 				,Ct
 			);
 
-			var Words = Page.Data??[];
+			IList<IJnWord> Words = (await Page.ToSyncPage(Ct)).Data??[];
+
 			MgrLearn.Load(Words);//
 		}
 		await MgrLearn.StartAsy(Ct);

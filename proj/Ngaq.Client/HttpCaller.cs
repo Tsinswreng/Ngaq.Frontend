@@ -18,6 +18,13 @@ public interface IHttpCaller {
 	public Task<TResp?> PostByteStream<TReq, TResp>(
 		str RelaUrl,u8[] Req,CT Ct
 	);
+
+	public Task<HttpResponseMessage> SendWithRetry<TContent>(
+		string RelaUrl,
+		TContent RawContent,
+		Func<TContent, HttpContent> ContentFactory,
+		CT Ct
+	);
 }
 
 
@@ -40,8 +47,7 @@ public class HttpCaller:IHttpCaller{
 		this.UserCtxMgr = UserCtxMgr;
 	}
 
-	// 新增：统一的“发送+重试”逻辑
-	private async Task<HttpResponseMessage> SendWithRetryAsync<TContent>(
+	public async Task<HttpResponseMessage> SendWithRetry<TContent>(
 		string RelaUrl,
 		TContent Content,
 		Func<TContent, HttpContent> ContentFactory,
@@ -94,11 +100,12 @@ public class HttpCaller:IHttpCaller{
 	) {
 		var json = JsonS.Stringify(Req);
 
-		using var resp = await SendWithRetryAsync(
+		using var resp = await SendWithRetry(
 			RelaUrl,
 			json,
 			j => new StringContent(j, Encoding.UTF8, "application/json"),
-			Ct);
+			Ct
+		);
 
 		var body = await resp.Content.ReadAsStringAsync(Ct);
 		if(str.IsNullOrEmpty(body)){
@@ -125,7 +132,7 @@ public class HttpCaller:IHttpCaller{
 	public async Task<TResp?> PostByteStream<TReq, TResp>(
 		str RelaUrl,u8[] Req,CT Ct
 	) {
-		using var resp = await SendWithRetryAsync(
+		using var resp = await SendWithRetry(
 			RelaUrl,
 			Req,
 			bytes => new ByteArrayContent(bytes)

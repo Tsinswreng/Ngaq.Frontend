@@ -1,13 +1,11 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 
 using Avalonia.Controls;
-using Avalonia.Media;
 using Ngaq.Ui.Infra.I18n;
-using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordSync;
-using K = Infra.I18n.ItemsUiI18n.Library;
+using K = Infra.I18n.ItemsUiI18n.SyncWord;
 public partial class ViewWordSync
 	:UserControl
 {
@@ -39,106 +37,33 @@ public partial class ViewWordSync
 		});
 		Root.AddInit(_StackPanel(), Sp=>{
 			Sp.AddInit(_Button(), o=>{
-				o.Content = "Push";
+				o.Content = I[K.Push];
 				o.Click += (s,e)=>{
 					Ctx?.Push();
 				};
 			});
 			Sp.AddInit(_Button(), o=>{
-				o.Content = "Pull";
-			})
-			.AddInit(_Button(), o=>{
-				o.Content = "Test";
-				o.Click+=(s,e)=>{
-					Ctx?.ShowMsg("Test");
+				o.Content = I[K.Pull];
+				o.Click += (s,e)=>{
+					Ctx?.Pull();
 				};
 			})
-			.AddInit(_Button(), o=>{
-				o.Content = "TestLong";
-				o.Click+=(s,e)=>{
-					Ctx?.ShowMsg(LongText);
-				};
-			})
+			// .AddInit(_Button(), o=>{
+			// 	o.Content = "Test";
+			// 	o.Click+=(s,e)=>{
+			// 		Ctx?.ShowMsg("Test");
+			// 	};
+			// })
+			// .AddInit(_Button(), o=>{
+			// 	o.Content = "TestLong";
+			// 	o.Click+=(s,e)=>{
+			// 		Ctx?.ShowMsg(LongText);
+			// 	};
+			// })
 
 			;
 		});
 		return NIL;
 	}
-
-		public const str LongText =
-"""
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]""Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]""Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-"Font size must be betwen in (0, 64]"
-""";
-
-
 
 }

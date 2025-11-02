@@ -45,6 +45,12 @@ public class LoginRegister{
 
 }
 
+public class SyncWord{
+	public static readonly K _R = Mk(View, [nameof(SyncWord)]);
+	public static readonly K Push = Mk(_R, [nameof(Push)]);
+	public static readonly K Pull = Mk(_R, [nameof(Pull)]);
+}
+
 }
 
 

@@ -50,5 +50,19 @@ public partial class VmWordSync: ViewModelBase{
 		return NIL;
 	}
 
+	public async Task<nil> PullAsy(CT Ct){
+		if(ClientWordSync is null){
+			return NIL;
+		}
+		await ClientWordSync.SaveAllWordsFromServerNonStream(Ct);
+		return NIL;
+	}
+
+	public nil Pull(){
+		PullAsy(Cts.Token).ContinueWith(t=>{
+			HandleErr(t);
+		});
+		return NIL;
+	}
 
 }
