@@ -1,8 +1,6 @@
-// Ngaq.Frontend\proj\Ngaq.Ui\Views\User\Login\ViewLogin.cs
 namespace Ngaq.Ui.Views.User.Login;
 
 using System;
-using System.Reactive.Linq;              // + 仅新增命名空间
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
@@ -12,14 +10,17 @@ using Avalonia.Styling;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
+
+
 using Ctx = VmLoginRegister;
 using Ngaq.Ui.Infra.I18n;
-using ReactiveUI;                        // + 仅新增命名空间
-using Avalonia;
-using System.Reactive.Disposables.Fluent;
 
-public partial class ViewLogin : UserControl, IViewFor<Ctx>
+public partial class ViewLogin
+	:UserControl
+	//,IHasViewNavigator
 {
+
+	//public IViewNavigator? ViewNavigator{get;set;}
 	public II18n I = I18n.Inst;
 
 	public Ctx? Ctx{
@@ -27,27 +28,20 @@ public partial class ViewLogin : UserControl, IViewFor<Ctx>
 		set{DataContext = value;}
 	}
 
+
 	public ViewLogin(){
 		Ctx = Ctx.Mk();
+		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
 		_Style();
 		_Render();
-
-		// + 下面 3 行 = 防抖唯一改动
-		// this.WhenActivated(d => {
-		// 	Ctx?.LoginCommand
-		// 		.Throttle(TimeSpan.FromMilliseconds(400))
-		// 		.InvokeCommand(Ctx.LoginCommand)
-		// 		.DisposeWith(d);
-		// });
 	}
 
-	public partial class Cls_{
+public partial class Cls_{
 		public str InputBox = nameof(InputBox);
 		public str Logo = nameof(Logo);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
-	public Ctx? ViewModel {get=>Ctx;set=>Ctx=value;}
-	object? IViewFor.ViewModel {get=>Ctx;set=>Ctx=value as Ctx;}
+
 
 	protected nil _Style(){
 		var cls_inputBox = new Style(x=>
@@ -62,6 +56,7 @@ public partial class ViewLogin : UserControl, IViewFor<Ctx>
 				,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
 			);
 		}
+
 		return NIL;
 	}
 
@@ -78,9 +73,14 @@ public partial class ViewLogin : UserControl, IViewFor<Ctx>
 			var formItem = FnAddLabelBox(Stk);
 			formItem(I[K.Email], CBE.Pth<Ctx>(x=>x.Email));
 			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password));
-
+			//formItem("Confirm Password", CBE.pth<Ctx>(x=>x.ConfirmPassword));
+			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
+			//TODO 用popup彈出框
 			var errMsgSclv = new ScrollViewer{};
 			Stk.Children.Add(errMsgSclv);
+			{
+
+			}
 			errMsgSclv.Content = _ErrorList();
 		})
 		.AddInit(new Button{}, (b)=>{
@@ -89,15 +89,16 @@ public partial class ViewLogin : UserControl, IViewFor<Ctx>
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
 			b.HorizontalAlignment = HAlign.Stretch;
-			b.Bind(
-				Button.CommandProperty
-				,CBE.Mk<Ctx>(x=>x.LoginCommand)
-			);
+			b.Click += (s,e)=>{
+				Ctx?.Login();
+			};
 		});
 		return NIL;
 	}
 
 	AutoGrid Root = new(IsRow: true);
+
+
 
 	protected Control _ErrorList(){
 		var ans = new ItemsControl{};
@@ -138,7 +139,10 @@ public partial class ViewLogin : UserControl, IViewFor<Ctx>
 					}
 				);
 			}
+
 			return null;
 		};
 	}
+
+
 }
