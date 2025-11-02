@@ -19,7 +19,16 @@ const a: TI18nKv = {
 			SearchWords: "搜詞",
 			AddWords: "加詞",
 			BackupEtSync: "備份與同步"
-		},
+		}
+		, LoginRegister: {
+			Login: "登入"
+			, Register: "註冊"
+			, UserName: "用戶名"
+			, Email: "郵箱"
+			, Password: "密碼"
+			, ConfirmPassword: "確認密碼"
+			,__CannotBeEmpty:"{0}不可爲空"
+		}
 	},
 	Error: {
 		Common: {
@@ -33,14 +42,6 @@ const a: TI18nKv = {
 			, InvalidToken: "令牌無效"
 			, TokenExpired: "令牌已過期"
 		}
-	}
-	,LoginRegister:{
-		Login:"登入"
-		,Register:"註冊"
-		,UserName:"用戶名"
-		,Email:"郵箱"
-		,Password:"密碼"
-		,ConfirmPassword:"確認密碼"
 	}
 }
 export default a

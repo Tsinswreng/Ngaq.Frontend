@@ -26,6 +26,15 @@ type Full = {
 			,Save: TTemplate
 			,Reset: TTemplate
 		}
+		,LoginRegister:{
+			Login:TTemplate
+			Register:TTemplate
+			UserName:TTemplate
+			Email:TTemplate
+			Password:TTemplate
+			ConfirmPassword:TTemplate
+			__CannotBeEmpty:TTemplate
+		}
 	}
 	//----Errors----
 	,Error:{
@@ -40,14 +49,6 @@ type Full = {
 			InvalidToken: TTemplate
 			TokenExpired: TTemplate
 		}
-	}
-	,LoginRegister:{
-		Login:TTemplate
-		Register:TTemplate
-		UserName:TTemplate
-		Email:TTemplate
-		Password:TTemplate
-		ConfirmPassword:TTemplate
 	}
 }
 

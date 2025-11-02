@@ -1,12 +1,15 @@
 namespace Ngaq.Ui.Views.User;
 
 using Avalonia.Controls;
+using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
 using Ctx = VmLoginRegister;
+using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
 public partial class ViewLoginRegister
 	:UserControl
 {
+	public II18n I = I18n.Inst;
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -36,19 +39,17 @@ public partial class ViewLoginRegister
 			var Login = new TabItem();
 			Switch.Items.Add(Login);
 			{var o = Login;
-				o.Header = "Login";
+				o.Header = I[K.Login];
 				o.Content = new ViewLogin(){Ctx=Ctx};
 			}
 
 			var Register = new TabItem();
 			Switch.Items.Add(Register);
 			{var o = Register;
-				o.Header = "Register";
+				o.Header = I[K.Register];
 				o.Content = new ViewRegister(){Ctx=Ctx};
 			}
 		}}
 		return NIL;
 	}
-
-
 }

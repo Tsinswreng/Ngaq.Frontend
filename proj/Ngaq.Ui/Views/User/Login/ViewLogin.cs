@@ -9,16 +9,19 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-
+using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
 
 
 using Ctx = VmLoginRegister;
+using Ngaq.Ui.Infra.I18n;
+
 public partial class ViewLogin
 	:UserControl
 	//,IHasViewNavigator
 {
 
 	//public IViewNavigator? ViewNavigator{get;set;}
+	public II18n I = I18n.Inst;
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -68,8 +71,8 @@ public partial class Cls_{
 			Stk.Spacing = 4.0;
 
 			var formItem = FnAddLabelBox(Stk);
-			formItem("Email", CBE.Pth<Ctx>(x=>x.Email));
-			formItem("Password", CBE.Pth<Ctx>(x=>x.Password));
+			formItem(I[K.Email], CBE.Pth<Ctx>(x=>x.Email));
+			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password));
 			//formItem("Confirm Password", CBE.pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
 			//TODO 用popup彈出框
@@ -82,7 +85,7 @@ public partial class Cls_{
 		})
 		.AddInit(new Button{}, (b)=>{
 			b.ContentInit(_TextBlock(), t=>{
-				t.Text = "Login";
+				t.Text = I[K.Login];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
 			b.HorizontalAlignment = HAlign.Stretch;

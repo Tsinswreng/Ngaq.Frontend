@@ -11,7 +11,7 @@ using Ngaq.Ui.Views.Word.WordManage;
 using Ngaq.Ui.Views.User.AboutMe;
 using Ngaq.Ui.Infra.I18n;
 
-using K = Infra.I18n.ViewHome;
+using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Home;
 public partial class ViewHome
 	:UserControl
 {

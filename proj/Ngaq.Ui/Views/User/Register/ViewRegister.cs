@@ -1,3 +1,5 @@
+namespace Ngaq.Ui.Views.User.Register;
+
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
@@ -5,9 +7,11 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-namespace Ngaq.Ui.Views.User.Register;
+using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
 
 using Ctx = VmLoginRegister;
+using Ngaq.Ui.Infra.I18n;
+
 public partial class ViewRegister
 	:UserControl
 {
@@ -16,6 +20,8 @@ public partial class ViewRegister
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
 	}
+
+	public II18n I = I18n.Inst;
 
 
 	public ViewRegister(){
@@ -60,9 +66,9 @@ public partial class ViewRegister
 			Stk.Spacing = 4.0;
 			var formItem = _fn_addLabelBox(Stk);
 
-			formItem("Email", CBE.Pth<Ctx>(x=>x.Email));
-			formItem("Password", CBE.Pth<Ctx>(x=>x.Password));
-			formItem("Confirm Password", CBE.Pth<Ctx>(x=>x.ConfirmPassword));
+			formItem(I[K.Email], CBE.Pth<Ctx>(x=>x.Email));
+			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password));
+			formItem(I[K.ConfirmPassword], CBE.Pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
 			var errMsgSclv = new ScrollViewer{};
 			Stk.Children.Add(errMsgSclv);
@@ -71,7 +77,7 @@ public partial class ViewRegister
 		})
 		.AddInit(_Button(), b=>{
 			b.ContentInit(_TextBlock(), t=>{
-				t.Text = "Register";
+				t.Text = I[K.Register];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
 			b.HorizontalAlignment = HAlign.Stretch;

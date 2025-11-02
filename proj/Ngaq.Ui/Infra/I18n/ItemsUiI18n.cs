@@ -34,13 +34,14 @@ public class Library{
 }
 
 public class LoginRegister{
-	public static readonly K _R = Mk(View, [nameof(Login)]);
+	public static readonly K _R = Mk(View, [nameof(LoginRegister)]);
 	public static readonly K Login = Mk(_R, [nameof(Login)]);
 	public static readonly K Register = Mk(_R, [nameof(Register)]);
 	public static readonly K UserName = Mk(_R, [nameof(UserName)]);
 	public static readonly K Email = Mk(_R, [nameof(Email)]);
 	public static readonly K Password = Mk(_R, [nameof(Password)]);
 	public static readonly K ConfirmPassword = Mk(_R, [nameof(ConfirmPassword)]);
+	public static readonly K __CannotBeEmpty = Mk(_R, [nameof(__CannotBeEmpty)]);
 
 }
 

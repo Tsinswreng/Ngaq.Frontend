@@ -1,0 +1,44 @@
+{
+  "View": {
+    "Common": {
+      "Confirm": "Confirm",
+      "Cancel": "Cancel"
+    },
+    "Home": {
+      "Learn": "Learn",
+      "Library": "Library",
+      "Me": "Me"
+    },
+    "Library": {
+      "SearchWords": "Search Words",
+      "AddWords": "Add Words",
+      "BackupEtSync": "Backup & Sync"
+    },
+    "LearnWord": {
+      "Start": "Start",
+      "Save": "Save",
+      "Reset": "Reset"
+    },
+    "LoginRegister": {
+      "Login": "Login",
+      "Register": "Register",
+      "UserName": "UserName",
+      "Email": "Email",
+      "Password": "Password",
+      "ConfirmPassword": "ConfirmPassword"
+    }
+  },
+  "Error": {
+    "Common": {
+      "ArgErr": "Argument Error",
+      "UnknownErr": "Unknown Error"
+    },
+    "User": {
+      "UserNotExist": "UserNotExist",
+      "UserAlreadyExist": "UserAlreadyExist",
+      "PasswordNotMatch": "PasswordNotMatch",
+      "InvalidToken": "InvalidToken",
+      "TokenExpired": "TokenExpired"
+    }
+  }
+}

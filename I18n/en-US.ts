@@ -20,27 +20,27 @@ const a: TI18nKv = {
 			, Save: "Save"
 			, Reset: "Reset"
 		}
+		, LoginRegister: {
+			Login: "Login"
+			, Register: "Register"
+			, UserName: "UserName"
+			, Email: "Email"
+			, Password: "Password"
+			, ConfirmPassword: "ConfirmPassword"
+		}
 	},
-	Error:{
-		Common:{
+	Error: {
+		Common: {
 			ArgErr: "Argument Error",
 			UnknownErr: "Unknown Error"
 		},
-		User:{
+		User: {
 			UserNotExist: "UserNotExist",
 			UserAlreadyExist: "UserAlreadyExist",
 			PasswordNotMatch: "PasswordNotMatch",
 			InvalidToken: "InvalidToken",
 			TokenExpired: "TokenExpired"
 		}
-	}
-	,LoginRegister:{
-		Login:"Login"
-		,Register:"Register"
-		,UserName:"UserName"
-		,Email:"Email"
-		,Password:"Password"
-		,ConfirmPassword:"ConfirmPassword"
 	}
 }
 export default a
