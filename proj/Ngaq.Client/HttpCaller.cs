@@ -39,6 +39,45 @@ public class HttpCaller:IHttpCaller{
 		this.UserCtxMgr = UserCtxMgr;
 	}
 
+	// 新增：统一的“发送+重试”逻辑
+	private async Task<HttpResponseMessage> SendWithRetryAsync<TContent>(
+		string               relaUrl,
+		TContent             content,
+		Func<TContent, HttpContent> contentFactory,
+		CT                   ct)
+	{
+		using var dl = DisposableList.Mk();
+
+		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), relaUrl]);
+		HttpResponseMessage resp = null!;
+
+		for (var i = 0; i < 2; i++)
+		{
+			var userCtx = UserCtxMgr.GetUserCtx();
+			var token   = userCtx?.AccessToken;
+
+			using var httpContent = contentFactory(content);
+			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = httpContent };
+			dl.Add(reqMsg);
+
+			if (!str.IsNullOrEmpty(token))
+				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+			resp = await HttpClient.SendAsync(reqMsg, ct);
+			dl.Add(resp);
+
+			if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+			{
+				var refresh = await RefreshBothToken(ct);
+				// TODO: 处理 refresh 失败
+				continue;
+			}
+			break;
+		}
+
+		return resp;
+	}
+
 	/// <summary>
 	/// 發送 POST 請求並把回應反序列化成 TResp。
 	/// 若 TResp 是 nil 可直接當作「不需回應」處理。
@@ -48,34 +87,13 @@ public class HttpCaller:IHttpCaller{
 		,TReq Req,
 		CT Ct
 	) {
-		using var Dl = DisposableList.Mk();
-		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), RelaUrl]);
-		var Json = JsonS.Stringify(Req);
-		using var content = new StringContent(
-			Json
-			,Encoding.UTF8
-			,"application/json"
-		);
+		var json = JsonS.Stringify(Req);
 
-		HttpResponseMessage resp = null!;//記得釋放
-		for(var i = 0;i < 2;i++){
-			var userCtx = UserCtxMgr.GetUserCtx();
-			var token = userCtx?.AccessToken;
-			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
-			Dl.Add(reqMsg);
-			if(!str.IsNullOrEmpty(token)){
-				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-			}
-			resp = await HttpClient.SendAsync(reqMsg, Ct);
-			Dl.Add(resp);
-			if(resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
-				var Refresh = await RefreshBothToken(Ct);
-				//TODO 處理 Refresh 錯誤 如過期等
-				continue;
-			}else{
-				break;
-			}
-		}
+		using var resp = await SendWithRetryAsync(
+			RelaUrl,
+			json,
+			j => new StringContent(j, Encoding.UTF8, "application/json"),
+			Ct);
 
 		var body = await resp.Content.ReadAsStringAsync(Ct);
 		if(str.IsNullOrEmpty(body)){
@@ -102,32 +120,14 @@ public class HttpCaller:IHttpCaller{
 	public async Task<TResp?> PostByteStream<TReq, TResp>(
 		str RelaUrl,u8[] Req,CT Ct
 	) {
-		using var Dl = DisposableList.Mk();
-		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), RelaUrl]);
-		var Json = JsonS.Stringify(Req);
-		using var content = new ByteArrayContent(Req);
-		content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-		HttpResponseMessage resp = null!;
-		for(var i = 0;i < 2;i++){
-			var userCtx = UserCtxMgr.GetUserCtx();
-			var token = userCtx?.AccessToken;
-			//reqMsg被釋放旹會自動釋放其關聯㞢Content、故勿在循環中using
-			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = content };
-			Dl.Add(reqMsg);
-			if(!str.IsNullOrEmpty(token)){
-				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-			}
-			resp = await HttpClient.SendAsync(reqMsg, Ct);
-			Dl.Add(resp);
-			if(resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
-				var Refresh = await RefreshBothToken(Ct);
-				//TODO 處理 Refresh 錯誤 如過期等
-				continue;
-			}else{
-				break;
-			}
-		}
+		using var resp = await SendWithRetryAsync(
+			RelaUrl,
+			Req,
+			bytes => new ByteArrayContent(bytes)
+			{
+				Headers = { ContentType = new MediaTypeHeaderValue("application/octet-stream") }
+			},
+			Ct);
 
 		// 可視需求打開以下兩行，保證非 2xx 直接拋
 		resp.EnsureSuccessStatusCode();
