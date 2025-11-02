@@ -9,6 +9,7 @@ using Ngaq.Core.Infra.Core;
 using Ngaq.Core.Shared.User.Models.Resp;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Errors;
+using Ngaq.Core.Tools;
 
 public interface IHttpCaller {
 	public Task<TResp?> Post<TReq, TResp>(
@@ -54,6 +55,7 @@ public class HttpCaller:IHttpCaller{
 		for (var i = 0; i < 2; i++){
 			var userCtx = UserCtxMgr.GetUserCtx();
 			var token   = userCtx?.AccessToken;
+			var clientId = userCtx?.ClientId;
 
 			var httpContent = ContentFactory(Content);
 			dl.Add(httpContent);
@@ -62,6 +64,9 @@ public class HttpCaller:IHttpCaller{
 
 			if (!str.IsNullOrEmpty(token)){
 				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			}
+			if(!clientId.IsNullOrDefault()){
+				reqMsg.Headers.Add("X-Client-Id", clientId+"");
 			}
 
 			resp = await HttpClient.SendAsync(reqMsg, Ct);
