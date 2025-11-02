@@ -25,10 +25,7 @@ public partial class ViewModelBase
 	,I_ViewNavi
 	,I_Arg
 	,I_ForceSetProp
-	,IMsgViewModel
 {
-
-
 
 	public ViewModelBase(){
 		ViewNavi = MgrViewNavi.Inst.ViewNavi;
@@ -45,64 +42,6 @@ public partial class ViewModelBase
 	// 	EvtMsg?.Invoke(this, E);
 	// 	return NIL;
 	// }
-
-	protected ICollection<object?> _Msgs = new ObservableCollection<object?>();
-
-	[Impl(typeof(IMsgViewModel))]
-	public ICollection<object?> Msgs{
-		get{return _Msgs;}
-		set{SetProperty(ref _Msgs, value);}
-	}
-
-
-	/// <summary>
-	/// 在Popup被關閉旹 須手動于回調中把isShowMsg設潙false
-	/// </summary>
-	protected bool _IsShowMsg = false;
-
-	[Impl(typeof(IMsgViewModel))]
-	public bool IsShowMsg{
-		get{return _IsShowMsg;}
-		set{
-			// OnPropertyChanging(nameof(IsShowMsg));
-			// _IsShowMsg = value;
-			// OnPropertyChanged(nameof(IsShowMsg));
-			SetProperty(ref _IsShowMsg, value);
-			//OnPropertyChanged(nameof(IsShowMsg));
-		}
-	}
-
-	// public bool HasErr{
-	// 	get{return Errors.Count > 0;}
-	// }
-
-	[Impl(typeof(IMsgViewModel))]
-	[Obsolete]
-	public ViewModelBase AddMsg(object? Msg){
-		Msgs.Add(Msg);
-#if DEBUG
-		Console.WriteLine(Msg);
-#endif
-		return this;
-	}
-
-	[Impl(typeof(IMsgViewModel))]
-	[Obsolete]
-	public nil ShowMsg(){
-		var Old = Msgs;
-		Msgs = new ObservableCollection<object?>();
-		Msgs = Old;
-		IsShowMsg = true;
-		return NIL;
-	}
-
-
-	[Impl(typeof(IMsgViewModel))]
-	[Obsolete]
-	public nil ClearMsg(){
-		Msgs.Clear();
-		return NIL;
-	}
 
 	public nil LogInfo(str? Msg = null){
 		MainView.Inst.Logger.LogInformation(Msg??"");
@@ -147,7 +86,7 @@ public partial class ViewModelBase
 		return NIL;
 	}
 
-	public nil HandleErr(Exception Ex){
+	public nil HandleErr(obj? Ex){
 		if(Ex is IAppErr Err){
 			ShowErr(Err);
 			return NIL;
@@ -201,4 +140,3 @@ public partial class ViewModelBase
 	// 	ForceSetProperty(ref _IsShowMsg, true);
 	// }
 }
-

@@ -21,12 +21,13 @@ const a: TI18nKv = {
 			, Reset: "Reset"
 		}
 		, LoginRegister: {
-			Login: "Login"
-			, Register: "Register"
-			, UserName: "UserName"
-			, Email: "Email"
-			, Password: "Password"
-			, ConfirmPassword: "ConfirmPassword"
+			Login: "Login",
+			Register: "Register",
+			UserName: "UserName",
+			Email: "Email",
+			Password: "Password",
+			ConfirmPassword: "Confirm Password",
+			__CannotBeEmpty: "{0} cannot be empty"
 		}
 	},
 	Error: {

@@ -1,7 +1,11 @@
+// Ngaq.Frontend\proj\Ngaq.Ui\Views\User\VmLoginRegister.cs
 namespace Ngaq.Ui.Views.User;
 
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Reactive;              // +new
+using System.Reactive.Linq;         // +new
+using ReactiveUI;                   // +new
 using Ngaq.Core.Frontend.Kv;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Core;
@@ -31,7 +35,14 @@ public partial class VmLoginRegister: ViewModelBase{
 		this.SvcUser = SvcUser;
 		this.UserCtxMgr = UserCtxMgr;
 		this.SvcKv = SvcKv;
+
+		// +构造里初始化命令
+		LoginCommand = ReactiveCommand.CreateFromTask<CT>(LoginAsy);
+		LoginCommand.Throttle(TimeSpan.FromMilliseconds(400))
+		.InvokeCommand(LoginCommand)
+		;
 	}
+
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmLoginRegister(){
@@ -59,9 +70,24 @@ public partial class VmLoginRegister: ViewModelBase{
 		set{SetProperty(ref _ConfirmPassword, value);}
 	}
 
+	protected ICollection<object?> _Msgs = new ObservableCollection<object?>();
+	public ICollection<object?> Msgs{
+		get{return _Msgs;}
+		set{SetProperty(ref _Msgs, value);}
+	}
+
+	public ViewModelBase AddMsg(object? Msg){
+			Msgs.Add(Msg);
+	#if DEBUG
+			Console.WriteLine(Msg);
+	#endif
+			return this;
+		}
+
+
 	public bool CheckRegister(){
-		//TODO 一次校驗多條
-		this.ClearMsg();
+		//TODO 一次校驗多條, i18n
+		Msgs.Clear();
 		if(str.IsNullOrEmpty(Password)){
 			this.AddMsg("Password is empty.");
 			return false;
@@ -100,12 +126,16 @@ public partial class VmLoginRegister: ViewModelBase{
 		return NIL;
 	}
 	CancellationTokenSource Cts = new();
+
+	// + 用命令代替原Login()/LoginAsy
+	public ReactiveCommand<CT, Unit> LoginCommand { get; }
+
 	public nil Login(){
-		LoginAsy(Cts.Token).ContinueWith(t=>{
-			HandleErr(t);
-		});
+		// 原方法僅做觸發，防抖邏輯在View端
+		LoginCommand.Execute(Cts.Token).Subscribe();
 		return NIL;
 	}
+
 	public async Task<nil> LoginAsy(CT Ct){
 		var z = this;
 		if(z.UserCtxMgr is null
@@ -141,4 +171,3 @@ public partial class VmLoginRegister: ViewModelBase{
 	[System.Text.RegularExpressions.GeneratedRegex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$")]
 	private static partial System.Text.RegularExpressions.Regex MyRegex();
 }
-

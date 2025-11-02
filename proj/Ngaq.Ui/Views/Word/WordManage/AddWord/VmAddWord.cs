@@ -112,8 +112,9 @@ public partial class VmAddWord
 		){
 			var JnWords = JSON.parse<IList<JnWord>>(Json);// 測AOT兼容
 			if(JnWords == null){
-				ErrStr = "Json parse error.";
-				ShowMsg();
+				HandleErr("Json parse error.");//TODO i18n
+				// ErrStr = "Json parse error.";
+				// ShowMsg();
 				return NIL;
 			}
 			SvcWord?.AddEtMergeWords(

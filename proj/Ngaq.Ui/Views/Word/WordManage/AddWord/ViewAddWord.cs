@@ -67,42 +67,42 @@ public partial class ViewAddWord
 		});
 		{{
 
-			Root.AddInit(new MsgPopup(), a=>{
-				var Cfg = UiCfg.Inst;
-				a._Popup.Width = Cfg.WindowWidth*0.9;
-				a._Popup.MaxHeight = Cfg.WindowHeight*0.6;
-				a._BdrBody.MaxHeight = a._Popup.MaxHeight*0.8;
-				a._Popup.PlacementTarget = Root.Grid;
-				a._Title.ContentInit(_TextBlock(), t=>{
-					t.Text = "Error";
-					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
-				});
-				a._CloseBtn.Click += (s,e)=>{
-					Ctx!.IsShowMsg = false;
-				};
-				a._Popup.Bind(
-					Popup.IsOpenProperty
-					,CBE.Mk<Ctx>(x=>x.IsShowMsg
-						,Mode: BindingMode.OneWay
-					)
-				);
+			// Root.AddInit(new MsgPopup(), a=>{
+			// 	var Cfg = UiCfg.Inst;
+			// 	a._Popup.Width = Cfg.WindowWidth*0.9;
+			// 	a._Popup.MaxHeight = Cfg.WindowHeight*0.6;
+			// 	a._BdrBody.MaxHeight = a._Popup.MaxHeight*0.8;
+			// 	a._Popup.PlacementTarget = Root.Grid;
+			// 	a._Title.ContentInit(_TextBlock(), t=>{
+			// 		t.Text = "Error";
+			// 		t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+			// 	});
+			// 	a._CloseBtn.Click += (s,e)=>{
+			// 		Ctx!.IsShowMsg = false;
+			// 	};
+			// 	a._Popup.Bind(
+			// 		Popup.IsOpenProperty
+			// 		,CBE.Mk<Ctx>(x=>x.IsShowMsg
+			// 			,Mode: BindingMode.OneWay
+			// 		)
+			// 	);
 
-				//a._Body.Content = Body;
-				a._Body.ContentInit(new SelectableTextBlock{}, b=>{
-					b.TextWrapping = TextWrapping.Wrap;
-					b.Bind(
-						TextBlock.TextProperty
-						,CBE.Mk<Ctx>(x=>x.Msgs
-							,Converter: new SimpleFnConvtr<ICollection<object?>, str>(y=>{
-								var ans = string.Join("\n", y);
-								return ans;
-							})
-						)
-					);
-				});
-				a._Border.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
-			});
-
+			// 	//a._Body.Content = Body;
+			// 	a._Body.ContentInit(new SelectableTextBlock{}, b=>{
+			// 		b.TextWrapping = TextWrapping.Wrap;
+			// 		b.Bind(
+			// 			TextBlock.TextProperty
+			// 			,CBE.Mk<Ctx>(x=>x.Msgs
+			// 				,Converter: new SimpleFnConvtr<ICollection<object?>, str>(y=>{
+			// 					var ans = string.Join("\n", y);
+			// 					return ans;
+			// 				})
+			// 			)
+			// 		);
+			// 	});
+			// 	a._Border.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
+			// });
+			Root.Add();
 			Root.Add();
 			Root.AddInit(_TabControl(), Tab=>{
 				Tab.Bind(

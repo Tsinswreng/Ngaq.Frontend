@@ -60,10 +60,7 @@ public IImgGetter? SvcImg{get;set;}
 	}
 	nil _InitLearnMgr(){
 		MgrLearn.OnErr += (s,e)=>{
-			System.Console.WriteLine(e);//t
-			System.Console.WriteLine(e.Err);
-			AddMsg(e.Err+""); // TODO i18n
-			ShowMsg();
+			HandleErr(e.Err);
 		};
 		MgrLearn.OnLearnOrUndo += (s,e)=>{
 			ChangeBg();
