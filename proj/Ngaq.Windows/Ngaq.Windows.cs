@@ -92,6 +92,7 @@ sealed class Program {
 #endif
 			.AfterSetup(e => {
 				App.SetSvcProvider(svcProvider);
+				AppIniter.Inst.SvcProvider = svcProvider;
 				_ = AppIniter.Inst.Init(default).Result;
 			})
 			.StartWithClassicDesktopLifetime(args)

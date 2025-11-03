@@ -3,6 +3,7 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net9.0-android</TargetFramework>
 		<SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+		<AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
 		<Nullable>enable</Nullable>
 		<ApplicationId>com.Tsinswreng.Ngaq</ApplicationId>
 		<ApplicationVersion>1</ApplicationVersion>
