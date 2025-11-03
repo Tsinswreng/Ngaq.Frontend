@@ -67,8 +67,8 @@ public partial class ClientUser
 		UserCtx.AccessTokenExpireAt = R.AccessTokenExpireAt;
 
 		UserCtx.LoginUserId = IdUser.FromLow64Base(R.UserId);
-		UserCtx.Kv??=new Dictionary<str,obj?>();
-		UserCtx.Kv["PoUser"] = R.PoUser;
+		UserCtx.Props??=new Dictionary<str,obj?>();
+		UserCtx.Props["PoUser"] = R.PoUser;
 		UserCtxMgr.SetUserCtx(UserCtx);
 		await SvcTokenStorage.SetRefreshToken(new ReqSetRefreshToken{
 			RefreshToken = R.RefreshToken

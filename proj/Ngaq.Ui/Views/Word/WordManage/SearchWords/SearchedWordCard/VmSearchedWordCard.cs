@@ -63,17 +63,24 @@ public partial class VmSearchedWordCard
 
 
 	nil Init(){
-		if(Bo == null){
+		try{
+			if(Bo == null){
+				return NIL;
+			}
+			Head = Bo.Head;
+			Lang = Bo.Lang;
+			Index = Bo.Index;
+			Weight = Bo.Weight;
+			Learn_Records = Bo.Learn_Records;
+			SavedLearnRecords = Bo.LearnRecords;
+			LastLearnedTime = Bo.LastLearnedTime_();
+			FontColor = AddCntToFontColor(
+				(u64)Learn_Records[ELearn.Add].Count
+			);
 			return NIL;
+		}catch(Exception e){
+			HandleErr(e);
 		}
-		Head = Bo.Head;
-		Lang = Bo.Lang;
-		Index = Bo.Index;
-		Weight = Bo.Weight;
-		Learn_Records = Bo.Learn_Records;
-		SavedLearnRecords = Bo.LearnRecords;
-		LastLearnedTime = Bo.LastLearnedTime_();
-		FontColor = AddCntToFontColor((u64)Learn_Records[ELearn.Add].Count);
 		return NIL;
 	}
 
