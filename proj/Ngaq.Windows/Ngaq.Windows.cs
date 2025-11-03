@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Client;
 using Ngaq.Core;
 using Ngaq.Core.Infra.Cfg;
+using Ngaq.Local;
 using Ngaq.Local.Di;
 using Ngaq.Local.Sql;
 using Ngaq.Ui;

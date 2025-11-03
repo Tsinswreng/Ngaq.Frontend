@@ -1,20 +1,42 @@
-namespace Ngaq.Windows;
+namespace Ngaq.Local;
 
 using Ngaq.Core.Shared.Kv.Models;
 using Ngaq.Core.Shared.User.Models.Po.User;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Frontend.Kv;
 using Ngaq.Local.Sql;
-using Ngaq.Ui;
 using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.Models.Po.Device;
+using Microsoft.Extensions.DependencyInjection;
 
+public interface IDependencyGetter{
+	public T GetSvc<T>()where T : class;
+}
+
+public class DependencyGetter(
+	IServiceProvider SvcProvider
+) : IDependencyGetter{
+
+	public T GetSvc<T>()
+		where T : class
+	{
+		return SvcProvider.GetRequiredService<T>();
+	}
+}
+
+/// <summary>
+/// 注意: 需動上初始化 DependencyGetter
+/// </summary>
 public class AppIniter{
 	protected static AppIniter? _Inst = null;
 	public static AppIniter Inst => _Inst??= new AppIniter();
+	public IDependencyGetter SvcMgr{get;set;} = null!;
 
 	public async Task<nil> Init(CT Ct){
+		if(SvcMgr is null){
+			throw new InvalidOperationException("SvcMgr is null. Make sure DependencyGetter is initialized manually.");
+		}
 		await InitDbSchema(Ct);
 		await InitUserCtx(Ct);
 		return NIL;
@@ -22,7 +44,7 @@ public class AppIniter{
 
 
 	async Task<IdClient> InitClientId(CT Ct){
-		var SvcKv = App.GetSvc<ISvcKv>();
+		var SvcKv = SvcMgr.GetSvc<ISvcKv>();
 		var Key = KeysClientKv.ClientId;
 		var CliendIdKv = await SvcKv.GetByOwnerEtKeyAsy(
 			IdUser.Zero, Key, Ct
@@ -43,8 +65,8 @@ public class AppIniter{
 	}
 
 	public async Task<nil> InitUserCtx(CT Ct){
-		var userCtxMgr = App.GetSvc<IFrontendUserCtxMgr>();
-		var SvcKv = App.GetSvc<ISvcKv>();
+		var userCtxMgr = SvcMgr.GetSvc<IFrontendUserCtxMgr>();
+		var SvcKv = SvcMgr.GetSvc<ISvcKv>();
 
 		var CurLocalUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLocalUserId,Ct);
 		var CurLoginUserKv = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero,KeysClientKv.CurLoginUserId,Ct);
@@ -83,7 +105,7 @@ public class AppIniter{
 	}
 
 	public async Task<nil> InitDbSchema(CT Ct){
-		var DbIniter = App.GetSvc<DbIniter>();
+		var DbIniter = SvcMgr.GetSvc<DbIniter>();
 		_ = DbIniter.Init(Ct).Result;
 		return NIL;
 	}

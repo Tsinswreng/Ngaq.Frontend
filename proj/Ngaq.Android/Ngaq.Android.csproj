@@ -23,6 +23,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Ngaq.Ui\Ngaq.Ui.csproj" />
+		<ProjectReference Include="../Ngaq.Ui/Ngaq.Ui.csproj" />
+		<ProjectReference Include="../../../Ngaq.Local/Ngaq.Local.csproj" />
+		<ProjectReference Include="../Ngaq.Client/Ngaq.Client.csproj" />
 	</ItemGroup>
 </Project>
