@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Client;
 using Ngaq.Core;
 using Ngaq.Core.Infra.Cfg;
+using Ngaq.Core.Infra.Url;
 using Ngaq.Local;
 using Ngaq.Local.Di;
 using Ngaq.Local.Sql;
@@ -42,6 +43,7 @@ sealed class Program {
 		if(args.Length > 1 && args[0] == "--version"){
 			System.Console.WriteLine(1757779054280);
 		}
+		BaseDirMgr.Inst._BaseDir = Directory.GetCurrentDirectory();
 		CT Ct = new();
 		try {
 /*

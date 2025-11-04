@@ -19,6 +19,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
+using Ngaq.Core.Infra.Url;
+
+
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Android.App;
+using Android.Content;
 
 namespace Ngaq.Android;
 
@@ -35,21 +43,15 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 
 	// 关键修改1：将 OnCreate 改为同步方法，避免 async void 生命周期问题
 	protected override void OnCreate(Bundle? savedInstanceState) {
-		Log.Info("abcdefg", "OnCreate");
-		base.OnCreate(savedInstanceState);
-
-		// 4. 注册服务（Avalonia 依赖此服务，需在框架初始化前完成）
-		var svc = new ServiceCollection();
-		svc
-			.SetupCore()
-			.SetupLocal()
-			.SetupLocalFrontend()
-			.SetupClient()
-			.SetupUi();
-		App.SetSvcProvider(svc.BuildServiceProvider());
+		var cwd = Directory.GetCurrentDirectory();
+		Log.Info("abcdefg", "cwd: "+cwd);
+		Log.Error("abcdefg", "abcdefg OnCreate");
 
 		// 启动后台线程执行初始化，不阻塞主线程
 		//_ = ExecuteInitInBackground(_cts.Token);
+		//base.OnCreate璫置于末
+		Init();
+		base.OnCreate(savedInstanceState);
 	}
 
 	protected override void OnDestroy() {
@@ -59,12 +61,13 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 	}
 
 	// 关键修改2：在后台线程执行耗时初始化
-	private async Task ExecuteInitInBackground(CancellationToken ct) {
+	private async Task ExecuteInitInBackground(CT Ct) {
 		if (_isInitialized) return;
 
 		try {
 			// 切换到后台线程执行 IO 操作（避免阻塞主线程）
-			await Task.Run(async () => await InitializeAppAsync(ct), ct);
+			//await Task.Run(async () => await Init(Ct), Ct);
+			await Task.Run(async () => Init(), Ct);
 			_isInitialized = true;
 
 			// 初始化完成后，通过主线程通知（可选，如需要提示用户）
@@ -84,50 +87,69 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		}
 	}
 
-	private async Task InitializeAppAsync(CancellationToken ct) {
-		// 初始化配置系统
-		var dualSrcCfg = AppCfg.Inst;
+	void Init() {
 		var appContext = global::Android.App.Application.Context;
+		var externalFileDirObj = appContext.GetExternalFilesDir(null)
+			?? throw new Exception("Cannot get ExternalFilesDir");
+		;
+		if(appContext.Assets is null){
+			throw new Exception("Cannot get Assets");
+		}
+		if(appContext.FilesDir is null){
+			throw new Exception("Cannot get FilesDir");
+		}
 
+		var externalFileDir = externalFileDirObj.AbsolutePath; // /sdcard/Android/data/<>/files
+		BaseDirMgr.Inst._BaseDir = externalFileDir;
+		var BaseDir = BaseDirMgr.Inst;
+
+		var roCfgPath = BaseDir.Combine("Ngaq.jsonc");
+		var rwCfgPath = BaseDir.Combine("Ngaq.Gui.jsonc");
+		if(!File.Exists(roCfgPath)){
+			CopyAssetToDirectory("Ngaq.jsonc", externalFileDir);
+			ToolFile.EnsureFile(roCfgPath);
+			File.WriteAllText(roCfgPath, "{}");
+		}
+
+		var dualSrcCfg = AppCfg.Inst;
 		// 1. 加载只读配置（优先从应用资产目录读取）
+
 		var roCfg = new JsonFileCfgAccessor();
 		dualSrcCfg.RoCfg = roCfg;
-		var roCfgPath = Path.Combine(appContext.FilesDir.AbsolutePath, "Ngaq.jsonc");
+		roCfg.FromFile(roCfgPath);
 
-		// 首次启动时从 Assets 复制默认配置（增加 ct 取消支持）
-		if (!File.Exists(roCfgPath)) {
-			using var assetStream = appContext.Assets.Open("Ngaq.jsonc");
-			using var fileStream = new FileStream(roCfgPath, FileMode.CreateNew);
-			// 关键修改4：传递 ct 支持取消，避免阻塞
-			await assetStream.CopyToAsync(fileStream, ct);
-		}
-		await roCfg.FromFileAsy(roCfgPath, ct);
-
-		// 2. 加载可读写配置（应用数据目录）
-		var guiCfgPath = ItemAppCfg.GuiConfigPath.GetFrom(dualSrcCfg)
-					   ?? Path.Combine(appContext.FilesDir.AbsolutePath, "NgaqGui.jsonc");
-		// 关键修改5：确保目录存在（原 ToolFile.EnsureFile 可能未处理目录）
-		Directory.CreateDirectory(Path.GetDirectoryName(guiCfgPath)!);
+		// 2. 加载可读写配置
+		var guiCfgPath = ItemAppCfg.GuiConfigPath.GetFrom(dualSrcCfg)??rwCfgPath;
+		guiCfgPath = BaseDir.Combine(guiCfgPath);
 		ToolFile.EnsureFile(guiCfgPath);
 
 		var guiCfg = new JsonFileCfgAccessor();
 		dualSrcCfg.RwCfg = guiCfg;
-		await guiCfg.FromFileAsy(guiCfgPath, ct);
+		guiCfg.FromFile(guiCfgPath);
 
 		// 3. 初始化国际化配置
 		var lang = ItemAppCfg.Lang.GetFrom(AppCfg.Inst) ?? "default";
 		var i18nCfg = new JsonFileCfgAccessor();
 		I18n.Inst.CfgAccessor = i18nCfg;
 
-		var langFilePath = Path.Combine(appContext.FilesDir.AbsolutePath, $"Languages/{lang}.json");
-		if (!File.Exists(langFilePath)) {
-			var langDir = Path.GetDirectoryName(langFilePath)!;
-			Directory.CreateDirectory(langDir); // 确保语言目录存在
-			using var langAssetStream = appContext.Assets.Open($"Languages/{lang}.json");
-			using var langFileStream = new FileStream(langFilePath, FileMode.CreateNew);
-			await langAssetStream.CopyToAsync(langFileStream, ct);
-		}
-		await i18nCfg.FromFileAsy(langFilePath, ct);
+		// var langFilePath = Path.Combine(appContext.FilesDir.AbsolutePath, $"Languages/{lang}.json");
+		// if (!File.Exists(langFilePath)) {
+		// 	var langDir = Path.GetDirectoryName(langFilePath)!;
+		// 	Directory.CreateDirectory(langDir); // 确保语言目录存在
+		// 	using var langAssetStream = appContext.Assets.Open($"Languages/{lang}.json");
+		// 	using var langFileStream = new FileStream(langFilePath, FileMode.CreateNew);
+		// 	langAssetStream.CopyTo(langFileStream);
+		// }
+		// i18nCfg.FromFile(langFilePath);
+
+		var svc = new ServiceCollection();
+		svc
+			.SetupCore()
+			.SetupLocal()
+			.SetupLocalFrontend()
+			.SetupClient()
+			.SetupUi();
+		App.SetSvcProvider(svc.BuildServiceProvider());
 	}
 
 	// 关键修改6：调整 Avalonia 初始化时机，确保服务已注册
@@ -136,10 +158,10 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 			.WithInterFont()
 			.AfterSetup(async b => {
 				// 等待服务初始化完成（最多等待 5 秒，避免无限阻塞）
-				var initWaitTask = WaitForInitComplete(_cts.Token);
-				if (await Task.WhenAny(initWaitTask, Task.Delay(5000)) != initWaitTask) {
-					throw new TimeoutException("服务初始化超时");
-				}
+				// var initWaitTask = WaitForInitComplete(_cts.Token);
+				// if (await Task.WhenAny(initWaitTask, Task.Delay(5000)) != initWaitTask) {
+				// 	throw new TimeoutException("服务初始化超时");
+				// }
 				// 初始化 AppIniter（等待完成，避免异步遗漏）
 				AppIniter.Inst.SvcProvider = App.SvcProvider;
 				await AppIniter.Inst.Init(_cts.Token);
@@ -147,12 +169,103 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 	}
 
 	// 辅助方法：等待初始化完成
-	private async Task WaitForInitComplete(CancellationToken ct) {
-		while (!_isInitialized && !ct.IsCancellationRequested) {
-			await Task.Delay(100, ct);
+	private async Task WaitForInitComplete(CT Ct) {
+		while (!_isInitialized && !Ct.IsCancellationRequested) {
+			await Task.Delay(100, Ct);
 		}
-		if (ct.IsCancellationRequested) {
+		if (Ct.IsCancellationRequested) {
 			throw new TaskCanceledException();
 		}
 	}
+
+
+
+
+/// <summary>
+	/// 将 Assets 中的文件复制到指定目标路径
+	/// </summary>
+	/// <param name="assetFileName">Assets 中的文件名（含子路径，如 "configs/setting.json"）</param>
+	/// <param name="targetDir">目标目录绝对路径（如外部存储的应用私有目录）</param>
+	/// <returns>是否复制成功</returns>
+	public static bool CopyAssetToDirectory(
+		string assetFileName, string targetDir
+	) {
+		try {
+			// 1. 获取 Android 上下文（访问 Assets 和文件系统）
+			var context = global::Android.App.Application.Context;
+			if (context == null) {
+				throw new InvalidOperationException("无法获取 Android 上下文");
+			}
+
+			// 2. 确保目标目录存在
+			if (!Directory.Exists(targetDir)) {
+				Directory.CreateDirectory(targetDir);
+			}
+
+			// 3. 构建目标文件路径（目标目录 + 原文件名）
+			string targetFilePath = Path.Combine(targetDir, Path.GetFileName(assetFileName));
+
+			// 4. 若目标文件已存在，可选择跳过或覆盖（这里选择覆盖）
+			if (File.Exists(targetFilePath)) {
+				File.Delete(targetFilePath); // 覆盖现有文件
+			}
+
+			// 5. 从 Assets 打开文件流，并复制到目标路径
+			using (Stream assetStream = context.Assets.Open(assetFileName)) // 关键：通过 AssetManager 打开 Assets 流
+			using (FileStream targetStream = new FileStream(targetFilePath, FileMode.CreateNew)) {
+				assetStream.CopyTo(targetStream); // 异步复制流
+			}
+
+			return true;
+		} catch (Exception ex) {
+			// 处理异常（如文件不存在、权限问题等）
+			Console.WriteLine($"复制 Assets 文件失败：{ex.Message}");
+			return false;
+		}
+	}
+
+
+
 }
+
+
+
+#if false
+using Android.App;
+using Android.Util;
+using Android.Content.PM;
+using Android.OS;
+using Android.Widget;
+using Avalonia;
+using Avalonia.Android;
+using Microsoft.Extensions.DependencyInjection;
+using Ngaq.Client;
+using Ngaq.Core;
+using Ngaq.Core.Infra.Cfg;
+using Ngaq.Local;
+using Ngaq.Local.Di;
+using Ngaq.Ui;
+using Ngaq.Ui.Infra.I18n;
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using Tsinswreng.CsCfg;
+using Tsinswreng.CsTools;
+
+namespace Ngaq.Android;
+
+[Activity(
+	Label = "Ngaq",
+	Theme = "@style/MyTheme.NoActionBar",
+	Icon = "@drawable/icon",
+	MainLauncher = true,
+	ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
+public class MainActivity : AvaloniaMainActivity<App> {
+	protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
+		return base.CustomizeAppBuilder(builder)
+			.WithInterFont();
+	}
+}
+
+#endif

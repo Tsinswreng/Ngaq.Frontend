@@ -5,7 +5,7 @@
 		<SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
 		<AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
 		<Nullable>enable</Nullable>
-		<ApplicationId>com.Tsinswreng.Ngaq</ApplicationId>
+		<ApplicationId>Tsinswreng.Ngaq</ApplicationId>
 		<ApplicationVersion>1</ApplicationVersion>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
