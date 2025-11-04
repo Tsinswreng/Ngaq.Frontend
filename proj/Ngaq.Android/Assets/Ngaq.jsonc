@@ -1,9 +1,9 @@
 //用戶配置文件優先級高於GUI配置
 {
-	"Version": "0.0.1"
+	"Version": "1.0.0"
 	,"Lang": "zh-TW"
 	,"GuiConfigPath": "Ngaq.Gui.jsonc"
-	,"SqlitePath": "./Ngaq.dev.sqlite"
+	,"SqlitePath": "./Ngaq.sqlite"
 	// ,"GalleryDirs": ["", "f:/"]
 	,"ServerBaseUrl": "http://localhost:5000/"
 	,"Background": {

@@ -119,7 +119,7 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		roCfg.FromFile(roCfgPath);
 
 		// 2. 加载可读写配置
-		var guiCfgPath = ItemAppCfg.GuiConfigPath.GetFrom(dualSrcCfg)??rwCfgPath;
+		var guiCfgPath = ItemsAppCfg.GuiConfigPath.GetFrom(dualSrcCfg)??rwCfgPath;
 		guiCfgPath = BaseDir.Combine(guiCfgPath);
 		ToolFile.EnsureFile(guiCfgPath);
 
@@ -128,7 +128,7 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		guiCfg.FromFile(guiCfgPath);
 
 		// 3. 初始化国际化配置
-		var lang = ItemAppCfg.Lang.GetFrom(AppCfg.Inst) ?? "default";
+		var lang = ItemsAppCfg.Lang.GetFrom(AppCfg.Inst) ?? "default";
 		var i18nCfg = new JsonFileCfgAccessor();
 		I18n.Inst.CfgAccessor = i18nCfg;
 

@@ -41,13 +41,43 @@ public partial class ViewWordSync
 				o.Click += (s,e)=>{
 					Ctx?.Push();
 				};
-			});
-			Sp.AddInit(_Button(), o=>{
+			})
+			.AddInit(_Button(), o=>{
 				o.Content = I[K.Pull];
 				o.Click += (s,e)=>{
 					Ctx?.Pull();
 				};
 			})
+			.AddInit(_TextBlock(), o=>{
+				o.Text = I[K.ExportPath];
+			})
+			.AddInit(_TextBox(), o=>{
+				o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.PathExport));
+			})
+			.AddInit(_Button(), o=>{
+				o.Content = I[K.Export];
+				o.Click += (s,e)=>{
+					Ctx?.ExportAsy();
+				};
+			})
+
+			.AddInit(_Border(), o=>{
+				o.Height = 10;
+			})
+
+			.AddInit(_TextBlock(), o=>{
+				o.Text = I[K.ImportPath];
+			})
+			.AddInit(_TextBox(), o=>{
+				o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.PathImport));
+			})
+			.AddInit(_Button(), o=>{
+				o.Content = I[K.Import];
+				o.Click += (s,e)=>{
+					Ctx?.ImportAsy();
+				};
+			})
+			;
 			// .AddInit(_Button(), o=>{
 			// 	o.Content = "Test";
 			// 	o.Click+=(s,e)=>{

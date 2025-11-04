@@ -49,6 +49,10 @@ public class SyncWord{
 	public static readonly K _R = Mk(View, [nameof(SyncWord)]);
 	public static readonly K Push = Mk(_R, [nameof(Push)]);
 	public static readonly K Pull = Mk(_R, [nameof(Pull)]);
+	public static readonly K Export = Mk(_R, [nameof(Export)]);
+	public static readonly K ExportPath = Mk(_R, [nameof(ExportPath)]);
+	public static readonly K Import = Mk(_R, [nameof(Import)]);
+	public static readonly K ImportPath = Mk(_R, [nameof(ImportPath)]);
 }
 
 }

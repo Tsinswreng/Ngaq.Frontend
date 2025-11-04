@@ -56,14 +56,14 @@ public partial class VmCfgFont: ViewModelBase{
 			}
 		}
 		catch (System.Exception e){
-			Log?.LogError(e, "TryNeoFontSize");
+			HandleErr(e);
 		}
 		return NIL;
 	}
 
 	public async Task<nil> ApplyNeoFontSize(){
 		AppCfg.Inst.SetBoxedByPath(
-			ItemAppCfg.BaseFontSize.GetFullPathSegs()
+			ItemsAppCfg.BaseFontSize.GetFullPathSegs()
 			,CfgValue.Mk(FontSize)
 		);
 		await AppCfg.Inst.SaveAsy(default);

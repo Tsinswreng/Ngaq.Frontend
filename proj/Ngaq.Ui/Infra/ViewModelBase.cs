@@ -92,7 +92,7 @@ public partial class ViewModelBase
 			return NIL;
 		}else{
 			ShowMsg("Unknown Error.");//TODO i18n
-			#if DEBUG
+			#if DEBUG||true
 			ShowMsg(Ex+"");
 			#endif
 			//TODO log
