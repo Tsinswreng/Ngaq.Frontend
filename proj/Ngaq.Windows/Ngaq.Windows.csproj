@@ -8,7 +8,6 @@
 		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
 		<PublishAot>true</PublishAot>
 		<PublishTrimmed>true</PublishTrimmed>
-
 		<TrimMode>link</TrimMode>
 		<OptimizationPreference>Size</OptimizationPreference>
 		<InvariantGlobalization>true</InvariantGlobalization>

@@ -10,6 +10,15 @@
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+
+		<!-- 启用 AOT 编译 -->
+		<AndroidEnableAot>true</AndroidEnableAot>
+		<!-- 启用链接器（配合 AOT 减小体积，可选但推荐） -->
+		<AndroidLinkMode>Full</AndroidLinkMode>
+		<!-- 启用 ProGuard 混淆（可选，进一步减小体积） -->
+		<!-- <AndroidEnableProguard>true</AndroidEnableProguard> -->
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimMode>link</TrimMode>
 	</PropertyGroup>
 
 	<ItemGroup>
