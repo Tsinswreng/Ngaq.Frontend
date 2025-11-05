@@ -14,6 +14,9 @@ using Ngaq.Core.Frontend.ImgBg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word;
 using Ngaq.Core.Shared.Word.Models;
+using Avalonia.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 public partial class VmLearnWords
 	:ViewModelBase
@@ -63,7 +66,11 @@ public IImgGetter? SvcImg{get;set;}
 			HandleErr(e.Err);
 		};
 		MgrLearn.OnLearnOrUndo += (s,e)=>{
-			ChangeBg();
+			ChangeBg().ContinueWith(t=>{
+				if(t.IsFaulted){
+					HandleErr(t.Exception);
+				}
+			});
 		};
 		return NIL;
 	}
@@ -221,27 +228,60 @@ public IImgGetter? SvcImg{get;set;}
 	}
 
 
-	public nil ChangeBg(){//TODO緩存
+
+	// 类级字段（只加这一行）
+	private readonly ConcurrentQueue<Bitmap> _bgCache = new();
+
+	public async Task<nil> ChangeBg()
+	{
 		try{
-			if(SvcImg == null){
+			await Task.Run(()=>{
+	/* 1. 缓存有就拿一张用 */
+				if (_bgCache.Count > 0){
+					Dispatcher.UIThread.Post(()=>{
+						if(_bgCache.TryDequeue(out var bm)){
+							BgBrush = new ImageBrush(bm) { Stretch = Stretch.UniformToFill };
+						}
+					});
+				}
+				/* 2. 缓存没货才抓一批（第一次或异常后） */
+				else{
+					if (SvcImg == null) return NIL;
+					var batch = SvcImg.GetN(3);
+					if (batch == null) return NIL;
+					int idx = 0;
+					foreach (var obj in batch){
+						if (obj.Type != typeof(Stream) || obj.Data == null) continue;
+						using Stream s = (Stream)obj.Data;
+						var bmp = new Bitmap(s);
+						if (idx == 0){// 第一张直接上屏
+							Dispatcher.UIThread.Post(()=>{
+								BgBrush = new ImageBrush(bmp) { Stretch = Stretch.UniformToFill };
+							});
+						}else{// 其余先囤着
+							_bgCache.Enqueue(bmp);
+						}
+						idx++;
+					}
+				}
+
+				/* 3. 用掉一张立刻补一张，保持库存 2 张 */
+				if (_bgCache.Count < 2 && SvcImg != null){
+					var obj = SvcImg.GetN(1).FirstOrDefault();
+					if (obj != null && obj.Type == typeof(Stream) && obj.Data != null){
+						using (Stream s = (Stream)obj.Data){
+							_bgCache.Enqueue(new Bitmap(s));
+						}
+					}
+				}
 				return NIL;
-			}
-			var typedObj = SvcImg.GetN(1).First();
-			if(typedObj.Type != typeof(Stream) || typedObj.Data == null){
-				return NIL;
-			}
-			using Stream BgFileStream = (Stream)typedObj.Data!;
-			var BitMap = new Bitmap(BgFileStream);
-			var imageBrush = new ImageBrush(BitMap){
-				Stretch = Stretch.UniformToFill
-			};
-			BgBrush = imageBrush;
-			return NIL;
+			});
 		}
-		catch (System.Exception e){
-			LogError(e+"");
-			//HandleErr(e);
+		catch (Exception e){
+			LogError(e.ToString());
 		}
 		return NIL;
 	}
+
+
 }
