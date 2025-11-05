@@ -15,7 +15,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
-
+using Ngaq.Ui.Infra.Ctrls;
 
 public partial class ViewWordManage
 	:UserControl
@@ -55,6 +55,15 @@ public partial class ViewWordManage
 			stk.AddInit(_Item(I[K.SearchWords], new ViewSearchWords()));
 			stk.AddInit(_Item(I[K.AddWords], new ViewAddWord()));
 			stk.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync()));
+			stk.AddInit(new OpBtn(), o=>{
+				o.SetExt(async(Ct)=>{
+					await Task.Run(async ()=>{
+						await Task.Delay(600000);
+					});
+					return NIL;
+				});
+				o.BtnContent = "測試";
+			});
 		});
 
 

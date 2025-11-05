@@ -50,7 +50,8 @@ public partial class App :Application
 		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
 		_Style();
 
-#if DEBUG && WINDOWS
+//#if DEBUG && WINDOWS
+#if DEBUG
 		if(OperatingSystem.IsWindows()){
 			this.AttachDevTools();
 		}

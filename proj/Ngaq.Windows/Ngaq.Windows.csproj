@@ -11,6 +11,8 @@
 		<TrimMode>link</TrimMode>
 		<OptimizationPreference>Size</OptimizationPreference>
 		<InvariantGlobalization>true</InvariantGlobalization>
+		<!-- <DefineConstants>FOO;BAR</DefineConstants> -->
+		<DefineConstants>WINDOWS</DefineConstants>
 
 	</PropertyGroup>
 

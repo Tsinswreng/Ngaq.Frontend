@@ -91,48 +91,10 @@ public static MainView Inst => _Inst??= new MainView();
 
 
 
-	Control? Test()
+Control? Test()
 {
-    var win = new Window { Width = 400, Height = 300 };
-
-    // 1. 按钮
-    var btn = new Button { Content = "开始干活", Margin = new Thickness(10) };
-
-    // 2. 进度条（贴底，宽度跟按钮一致）
-    var bar = new ProgressBar
-    {
-        IsIndeterminate = true,
-        IsVisible = false,
-        Height = 6,               // 细一点好看
-        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch
-    };
-
-    // 3. 用 DockPanel 把按钮放上面，进度条贴底
-    var dock = new StackPanel
-    {
-        Margin = new Thickness(10),
-        Children = { btn, bar }
-    };
-    // DockPanel.SetDock(btn, Dock.Top);
-    // DockPanel.SetDock(bar, Dock.Bottom);
-
-    // 4. 根面板（随便什么面板都行，这里用 Grid 方便居中）
-    var root = new Grid();
-    root.Children.Add(dock);
-
-    win.Content = root;
-
-    // 5. 按钮事件：点一下显示 3 秒
-    btn.Click += async (_, __) =>
-    {
-        bar.IsVisible = true;
-        await Task.Delay(3000);
-        bar.IsVisible = false;
-    };
-
-    win.Show();
-    return null;
-	}
+	return null;
+}
 
 	public MainView() {
 		Test();

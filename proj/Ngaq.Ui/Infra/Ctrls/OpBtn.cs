@@ -1,9 +1,11 @@
 namespace Ngaq.Ui.Infra.Ctrls;
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Ngaq.Ui.Infra;
+using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmOpBtn;
 
 
@@ -97,21 +99,34 @@ public partial class OpBtn: ContentControl{
 			VerticalAlignment = VAlign.Stretch,
 			IsHitTestVisible = false
 		};
-		var loading = new Grid{
-			Background = new SolidColorBrush(Colors.Black, 0.5),
-			IsVisible = false,
-			Children ={
-				new Viewbox{
-					Width = 60,
-					Height = 0,
-					Child = new ProgressBar{
-						IsIndeterminate = true,
-						Classes = { "Spinner" }   // 内置转圈样式
-					}
-				}
-			}
-		};
-		R.Children.Add(loading);
+		R.AddInit(new Grid(), g=>{
+			g.Background = new SolidColorBrush(Colors.Black, 0.5);
+			g.IsVisible = true;
+			g.VerticalAlignment = VAlign.Bottom;
+			g.HorizontalAlignment = HAlign.Stretch;
+			g.Margin = new Thickness(0, 0, 0, 0);
+			g.AddInit(new ProgressBar(), p=>{
+				p.IsIndeterminate = true;
+				p.Margin = new Thickness(0, 0, 0, 0);
+				p.Padding = new Thickness(0, 0, 0, 0);
+				p.Classes.Add("Spinner");   // 内置转圈样式;
+			});
+		});
+		// var loading = new Grid{
+		// 	//Margin = new Thickness(0, 0, 0, -60), // ✅ 向下偏移，避免遮挡按钮
+		// 	Children ={
+		// 		new Viewbox{
+		// 			Stretch = Stretch.Fill,
+		// 			Width = 100, //條ʹ粗度
+		// 			Height = 1, //上下ʹ空白ʹ高。
+		// 			Margin = new Thickness(0, 0, 0, 0),
+		// 			Child = new ProgressBar{
+
+		// 			}
+		// 		}
+		// 	}
+		// };
+		// //R.Children.Add(loading);
 		return R;
 	}
 }
