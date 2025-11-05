@@ -68,6 +68,8 @@ public class HttpCaller:IHttpCaller{
 			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = httpContent };
 			dl.Add(reqMsg);
 
+
+			reqMsg.Headers.Add("App-Version", AppVersion.Inst.Version+"");
 			if (!str.IsNullOrEmpty(token)){
 				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			}
