@@ -20,7 +20,7 @@ public static class DiUi{
 		//z.AddSingleton<II18n>(I18n.Inst);
 
 		z.AddTransient<VmAddWord>();
-		z.AddTransient<VmWordQuery>();
+		z.AddTransient<VmLearnWords>();
 		z.AddTransient<VmLoginRegister>();
 		z.AddTransient<VmSearchWords>();
 		z.AddTransient<VmEditWord>();

@@ -102,11 +102,11 @@ public partial class VmWordSync: ViewModelBase{
 	}
 
 	public async Task<nil> ExportAsy(CT Ct=default){
-		try{
+		await Task.Run(async()=>{
 			if(SvcWord is null
 				|| UserCtxMgr is null
 			){
-				return NIL;
+				return;
 			}
 			var User = UserCtxMgr.GetUserCtx();
 			var textWithBlob = await SvcWord.PackAllWordsToTextWithBlobNoStream(
@@ -119,26 +119,21 @@ public partial class VmWordSync: ViewModelBase{
 			await File.WriteAllBytesAsync(PathExport, bytes, Ct);
 			Cfg?.Set(ItemsAppCfg.Word.WordsPackExportPath, PathExport);
 			Cfg?.SaveAsy(default);
-		}
-		catch (System.Exception e){
-			HandleErr(e);
-		}
+		});
 		return NIL;
 	}
 
 	public async Task<nil> ImportAsy(CT Ct=default){
-		try{
+		await Task.Run(async()=>{
 			if(SvcWord is null || UserCtxMgr is null){
-				return NIL;
+				return;
 			}
 			var bytes = await File.ReadAllBytesAsync(PathImport, Ct);
 			var textWithBlob = ToolTextWithBlob.Parse(bytes);
 			await SvcWord.SyncFromTextWithBlob(UserCtxMgr.GetUserCtx(), textWithBlob, Ct);
 			Cfg?.Set(ItemsAppCfg.Word.WordsPackImportPath, PathImport);
 			Cfg?.SaveAsy(default);
-		}catch (System.Exception e){
-			HandleErr(e);
-		}
+		});
 		return NIL;
 	}
 

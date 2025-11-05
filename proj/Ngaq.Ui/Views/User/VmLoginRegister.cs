@@ -22,11 +22,11 @@ public partial class VmLoginRegister: ViewModelBase{
 	}
 	protected ISvcUser? SvcUser;
 	IFrontendUserCtxMgr? UserCtxMgr;
-	ISvcKv SvcKv;
+	ISvcKv? SvcKv;
 	public VmLoginRegister(
 		ISvcUser SvcUser
 		,IFrontendUserCtxMgr? UserCtxMgr
-		,ISvcKv SvcKv
+		,ISvcKv? SvcKv
 	){
 		this.SvcUser = SvcUser;
 		this.UserCtxMgr = UserCtxMgr;
@@ -92,57 +92,47 @@ public partial class VmLoginRegister: ViewModelBase{
 		return true;
 	}
 
-	public nil Register(){
+
+	public async Task<nil> RegisterAsy(CT Ct){
 		if(!CheckRegister()){
 			return NIL;
 		}
-		RegisterAsy(Cts.Token).ContinueWith(t=>{
-			HandleErr(t);
-		});
-		return NIL;
-	}
-
-	public async Task<nil> RegisterAsy(CT Ct){
-		if(SvcUser is null|| UserCtxMgr is null){
-			return NIL;
-		}
-		var User = UserCtxMgr.GetUserCtx();
-		var reqAddUser = new ReqAddUser{
-			Email = Email
-			,Password = Password
-		};
-		await SvcUser.AddUser(User, reqAddUser, Ct);
-		return NIL;
-	}
-	CancellationTokenSource Cts = new();
-	public nil Login(){
-		LoginAsy(Cts.Token).ContinueWith(t=>{
-			HandleErr(t);
+		await Task.Run(async()=>{
+			if(SvcUser is null|| UserCtxMgr is null){
+				return;
+			}
+			var User = UserCtxMgr.GetUserCtx();
+			var reqAddUser = new ReqAddUser{
+				Email = Email
+				,Password = Password
+			};
+			await SvcUser.AddUser(User, reqAddUser, Ct);
 		});
 		return NIL;
 	}
 	public async Task<nil> LoginAsy(CT Ct){
 		var z = this;
-		if(z.UserCtxMgr is null
-			|| z.SvcUser is null || z.SvcKv is null
-		){
-			return NIL;
-		}
-		var User = z.UserCtxMgr.GetUserCtx();
+		await Task.Run(async()=>{
+			if(z.UserCtxMgr is null
+				|| z.SvcUser is null || z.SvcKv is null
+			){
+				return;
+			}
+			var User = z.UserCtxMgr.GetUserCtx();
 
-		var ClientId = await SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero, KeysClientKv.ClientId, Ct);
-		if(ClientId is null){
-			throw new FatalLogicErr("ClientId is null. ClientId should be in Db when App is launched");
-		}
-		var reqLogin = new ReqLogin{
-			Email = Email
-			,Password = Password
-			,KeepLogin = true
-			,UserIdentityMode = ReqLogin.EUserIdentityMode.Email
-			,CliendId = IdClient.FromLow64Base(ClientId.GetVStr()??"")
-		};
-		await z.SvcUser.Login(User, reqLogin, Cts.Token);
-
+			var ClientId = await z.SvcKv.GetByOwnerEtKeyAsy(IdUser.Zero, KeysClientKv.ClientId, Ct);
+			if(ClientId is null){
+				throw new FatalLogicErr("ClientId is null. ClientId should be in Db when App is launched");
+			}
+			var reqLogin = new ReqLogin{
+				Email = Email
+				,Password = Password
+				,KeepLogin = true
+				,UserIdentityMode = ReqLogin.EUserIdentityMode.Email
+				,CliendId = IdClient.FromLow64Base(ClientId.GetVStr()??"")
+			};
+			await z.SvcUser.Login(User, reqLogin, Ct);
+		});
 		return NIL;
 	}
 

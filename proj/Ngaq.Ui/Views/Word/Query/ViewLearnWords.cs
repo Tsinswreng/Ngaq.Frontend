@@ -9,6 +9,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
@@ -16,9 +17,9 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
-using Ctx = VmWordQuery;
+using Ctx = VmLearnWords;
 using K = ItemsUiI18n.LearnWord;
-public partial class ViewWordQuery
+public partial class ViewLearnWords
 	:UserControl
 {
 
@@ -29,7 +30,7 @@ public partial class ViewWordQuery
 		set{DataContext = value;}
 	}
 
-	public ViewWordQuery(){
+	public ViewLearnWords(){
 		//Ctx = new Ctx();
 		//Ctx = Ctx.Samples[0];
 		Ctx = App.GetSvc<Ctx>();
@@ -124,28 +125,22 @@ public partial class ViewWordQuery
 			]);
 		});
 		{{
-			Row1.AddInit(new SwipeLongPressBtn{}, (o)=>{
+			Row1.AddInit(new OpBtn{}, (o)=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o.ContentInit(_TextBlock(), t=>{
+				o._Button.ContentInit(_TextBlock(), t=>{
 					t.Text = "▶️"+I[K.Start];
 				});
-				o.Click += (s,e)=>{
-					Ctx?.LoadEtStart();
-				};
-			}).AddInit(new SwipeLongPressBtn{}, o=>{ //📁
+				o.SetExt((Ct)=>Ctx?.LoadEtStartAsy(Ct));
+			}).AddInit(new OpBtn{}, o=>{ //📁
 				o.Classes.Add(Cls.MenuBtn);
-				o.ContentInit(_TextBlock(), t=>{
+				o._Button.ContentInit(_TextBlock(), t=>{
 					t.Text = "💾"+I[K.Save];
 				});
-				o.Click += (s,e)=>{
-					Ctx?.SaveEtRestart();
-				};
-			}).AddInit(new SwipeLongPressBtn{}, o=>{
+				o.SetExt((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
+			}).AddInit(new OpBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o.Content = "🔄"+I[K.Reset];
-				o.Click += (s,e)=>{
-					Ctx?.Reset();
-				};
+				o._Button.Content = "🔄"+I[K.Reset];
+				o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
 			});
 		}}
 

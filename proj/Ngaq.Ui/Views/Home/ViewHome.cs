@@ -49,7 +49,7 @@ public partial class ViewHome
 		});
 
 		Root.AddInit(new ViewBottomBar(), ViewBottomBar=>{
-			var ViewWordQuery = new ViewWordQuery();
+			var ViewWordQuery = new ViewLearnWords();
 
 			ViewBottomBar.Items.AddInitT(
 				new Btn_Control(

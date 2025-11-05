@@ -11,6 +11,7 @@ using Avalonia;
 using Avalonia.Controls.Primitives;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
+using Ngaq.Ui.Infra.Ctrls;
 
 public partial class ViewAddWord
 	:UserControl
@@ -129,13 +130,11 @@ public partial class ViewAddWord
 					o.Content = ByJson();
 				});
 			});
-			Root.AddInit(_Button(), o=>{
-				o.Content = "Confirm";
+			Root.AddInit(new OpBtn(), o=>{
+				o.BtnContent = "Submit";
 				o.HorizontalAlignment = HAlign.Center;
 				o.HorizontalContentAlignment = HAlign.Center;
-				o.Click += (s,e)=>{
-					Ctx?.Confirm();
-				};
+				o.SetExt((Ct)=>Ctx?.ConfirmAsy(Ct));
 			});
 		}}//~IndexGrid
 		return NIL;

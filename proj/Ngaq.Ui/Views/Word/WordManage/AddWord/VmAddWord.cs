@@ -1,18 +1,15 @@
+namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
+
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using MethodTimer;
 using Ngaq.Core.Frontend.User;
-using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Tools;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 
 
-
-namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ctx = VmAddWord;
 public partial class VmAddWord
 	:ViewModelBase
@@ -48,7 +45,6 @@ public partial class VmAddWord
 		set{SetProperty(ref _WordTxtPath, value);}
 	}
 
-
 	protected str _WordJsonsPath = "";
 	public str WordJsonsPath{
 		get{return _WordJsonsPath;}
@@ -81,54 +77,50 @@ public partial class VmAddWord
 	}
 
 
-
-
 	protected str _ErrStr="";//t
 	public str ErrStr{
 		get{return _ErrStr;}
 		set{SetProperty(ref _ErrStr, value);}
 	}
 
-	CancellationTokenSource Cts = new();
 
 	[Time]
-	public async Task<nil> Confirm(){
-		var Ct = Cts.Token;
-		var UserCtx = UserCtxMgr.GetUserCtx();
-		var FnThen = (Task<nil> t)=>{
-			HandleErr(t);
-		};
-
-		if(
-			TabIndex == (int)ETabIdx.Text
-			&& !str.IsNullOrEmpty(Text)
-		){
-			SvcWord?.AddWordsFromText(
-				UserCtx,Text,Ct
-			).ContinueWith(FnThen);
-		}else if(
-			TabIndex == (int)ETabIdx.Json
-			&& !str.IsNullOrEmpty(Json)
-		){
-			var JnWords = JSON.parse<IList<JnWord>>(Json);// 測AOT兼容
-			if(JnWords == null){
-				HandleErr("Json parse error.");//TODO i18n
-				// ErrStr = "Json parse error.";
-				// ShowMsg();
-				return NIL;
-			}
-			SvcWord?.AddEtMergeWords(
-				UserCtx,JnWords,Ct
-			).ContinueWith(FnThen);
-		}else if(
-			TabIndex == (int)ETabIdx.JsonsPath
-			&& !str.IsNullOrEmpty(WordJsonsPath)
-		){
-			var Enumr = ReadLinesAsync(WordJsonsPath, Ct);
-			Task.Run(()=>{
-				SvcWord?.AddWordsByJsonLineIter(UserCtx, Enumr, Ct).ContinueWith(FnThen);
-			});
+	public async Task<nil> ConfirmAsy(CT Ct){
+		if(SvcWord is null){
+			return NIL;
 		}
+		var UserCtx = UserCtxMgr.GetUserCtx();
+
+		var eTabIdx = (ETabIdx)TabIndex;
+
+		await Task.Run(async()=>{
+			if(
+				eTabIdx == ETabIdx.Text
+				&& !str.IsNullOrEmpty(Text)
+			){
+				await SvcWord.AddWordsFromText(
+					UserCtx,Text,Ct
+				);
+			}else if(
+				eTabIdx == ETabIdx.Json
+				&& !str.IsNullOrEmpty(Json)
+			){
+				var JnWords = JSON.parse<IList<JnWord>>(Json);// 測AOT兼容
+				if(JnWords == null){
+					HandleErr("Json parse error.");//TODO i18n
+					// ErrStr = "Json parse error.";
+					// ShowMsg();
+					return;
+				}
+				await SvcWord.AddEtMergeWords(UserCtx,JnWords,Ct);
+			}else if(
+				eTabIdx == ETabIdx.JsonsPath
+				&& !str.IsNullOrEmpty(WordJsonsPath)
+			){
+				var Enumr = ReadLinesAsync(WordJsonsPath, Ct);
+				await SvcWord.AddWordsByJsonLineIter(UserCtx, Enumr, Ct);
+			}
+		});
 		return NIL;
 	}
 

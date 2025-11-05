@@ -76,6 +76,7 @@ public static MainView Inst => _Inst??= new MainView();
 	}
 
 	public nil HandleErr(obj? Ex){
+		Logger.LogError(Ex+"");
 		if(Ex is IAppErr Err){
 			ShowErr(Err);
 			return NIL;

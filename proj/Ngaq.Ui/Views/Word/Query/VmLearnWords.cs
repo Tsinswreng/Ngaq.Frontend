@@ -8,19 +8,18 @@ using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.CsPage;
 using Ngaq.Ui.Infra;
 
-using Ctx = VmWordQuery;
-using Ngaq.Core.Shared.User.UserCtx;
+using Ctx = VmLearnWords;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Frontend.ImgBg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word;
 using Ngaq.Core.Shared.Word.Models;
 
-public partial class VmWordQuery
+public partial class VmLearnWords
 	:ViewModelBase
 {
 
-	public  partial class Cfg_{
+	public partial class Cfg_{
 		/// <summary>
 		/// 單詞條長按
 		/// </summary>
@@ -42,7 +41,7 @@ public IFrontendUserCtxMgr UserCtxMgr;
 
 public MgrLearn MgrLearn{get;set;}
 public IImgGetter? SvcImg{get;set;}
-	public VmWordQuery(
+	public VmLearnWords(
 		ISvcWord SvcWord
 		,IFrontendUserCtxMgr UserCtxMgr
 		,MgrLearn MgrLearn
@@ -70,7 +69,7 @@ public IImgGetter? SvcImg{get;set;}
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmWordQuery(){
+	static VmLearnWords(){
 		#if false//||DEBUG
 		{
 			var o = new Ctx();
@@ -141,18 +140,20 @@ public IImgGetter? SvcImg{get;set;}
 	}
 
 	public async Task<nil> LoadEtStartAsy(CT Ct){
-		if(!MgrLearn.State.OperationStatus.Load){
-			var Page = await SvcWord.PageWord(
-				UserCtxMgr.GetUserCtx()
-				,PageQry.SlctAll()
-				,Ct
-			);
+		await Task.Run(async()=>{
+				if(!MgrLearn.State.OperationStatus.Load){
+				var Page = await SvcWord.PageWord(
+					UserCtxMgr.GetUserCtx()
+					,PageQry.SlctAll()
+					,Ct
+				);
 
-			IList<IJnWord> Words = (await Page.ToSyncPage(Ct)).Data??[];
+				IList<IJnWord> Words = (await Page.ToSyncPage(Ct)).Data??[];
 
-			MgrLearn.Load(Words);//
-		}
-		await MgrLearn.StartAsy(Ct);
+				MgrLearn.Load(Words);//
+			}
+			await MgrLearn.StartAsy(Ct);
+		});
 		RenderWordList();
 		return NIL;
 	}
@@ -173,23 +174,7 @@ public IImgGetter? SvcImg{get;set;}
 		return NIL;
 	}
 
-	public nil LoadEtStart(){
-		CT Ct = default;
-		LoadEtStartAsy(Ct).ContinueWith(t=>{
-			HandleErr(t);
-		});
-		return NIL;
-	}
-
-	public nil SaveEtRestart(){
-		CT Ct = default;
-		SaveEtRestartAsy(Ct).ContinueWith(t=>{
-			HandleErr(t);
-		});
-		return NIL;
-	}
-
-	public nil Reset(){
+	public async Task<nil> ResetAsy(CT Ct){
 		//MgrLearn = App.GetSvc<MgrLearn>();
 		MgrLearn.Reset();
 		WordCards = new();
@@ -254,7 +239,8 @@ public IImgGetter? SvcImg{get;set;}
 			return NIL;
 		}
 		catch (System.Exception e){
-			System.Console.Error.WriteLine(e);//t
+			LogError(e+"");
+			//HandleErr(e);
 		}
 		return NIL;
 	}
