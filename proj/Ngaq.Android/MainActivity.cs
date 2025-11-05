@@ -149,7 +149,14 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 			.SetupLocalFrontend()
 			.SetupClient()
 			.SetupUi();
-		App.SetSvcProvider(svc.BuildServiceProvider());
+		//App.SetSvcProvider(svc.BuildServiceProvider());
+		var serviceProvider = svc.BuildServiceProvider(new ServiceProviderOptions
+		{
+			ValidateOnBuild = false,
+			ValidateScopes = false
+		});
+
+		App.SetSvcProvider(serviceProvider);
 	}
 
 	// 关键修改6：调整 Avalonia 初始化时机，确保服务已注册

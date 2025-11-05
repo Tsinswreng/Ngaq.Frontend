@@ -1,11 +1,14 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 
 using Avalonia.Controls;
+using Avalonia.Threading;
+using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordSync;
 using K = Infra.I18n.ItemsUiI18n.SyncWord;
+
 public partial class ViewWordSync
 	:UserControl
 {
@@ -21,7 +24,7 @@ public partial class ViewWordSync
 		Render();
 	}
 
-	public  partial class Cls_{
+	public partial class Cls_{
 
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
@@ -36,11 +39,26 @@ public partial class ViewWordSync
 
 		});
 		Root.AddInit(_StackPanel(), Sp=>{
-			Sp.AddInit(_Button(), o=>{
-				o.Content = I[K.Push];
-				o.Click += (s,e)=>{
-					Ctx?.Push();
+
+			Sp.AddInit(new OpBtn(), op=>{
+				var o = op._Button;
+				op.FnExeAsy = (Ct)=>Ctx?.PushAsy(Ct)!;
+				op.FnOk = ()=>{
+					Dispatcher.UIThread.Post(()=>{
+						Ctx?.ShowMsg("Ok");
+					});
+					return NIL;
 				};
+				op.FnFail = (err)=>{
+					Dispatcher.UIThread.Post(()=>{
+						Ctx?.HandleErr(err);
+					});
+					return NIL;
+				};
+				o.Content = I[K.Push];
+				// o.Click += (s,e)=>{
+				// 	Ctx?.Push();
+				// };
 			})
 			.AddInit(_Button(), o=>{
 				o.Content = I[K.Pull];

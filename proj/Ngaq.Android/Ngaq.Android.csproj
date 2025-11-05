@@ -20,7 +20,9 @@
 		<PublishTrimmed>true</PublishTrimmed>
 		<TrimMode>link</TrimMode>
 	</PropertyGroup>
-
+	<ItemGroup>
+		<TrimmerRootDescriptor Include="ILLink.Descriptors.xml" />
+	</ItemGroup>
 	<ItemGroup>
 		<AndroidResource Include="Icon.png">
 			<Link>Resources\drawable\Icon.png</Link>

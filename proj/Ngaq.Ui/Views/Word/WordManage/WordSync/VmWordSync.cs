@@ -55,7 +55,7 @@ public partial class VmWordSync: ViewModelBase{
 
 
 	public CancellationTokenSource Cts = new();
-	public async Task<nil> PushAsy(CT Ct){
+	public async Task<nil> PushAsy(CT Ct=default){
 		if(ClientWordSync is null){
 			return NIL;
 		}
