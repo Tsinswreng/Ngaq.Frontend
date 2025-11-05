@@ -1,6 +1,6 @@
 ﻿#define Impl
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+namespace Ngaq.Ui.Infra;
+
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.I18n;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 
-namespace Ngaq.Ui.Infra;
+
 
 public class EvtArgMsg:EventArgs{
 
@@ -77,27 +77,11 @@ public partial class ViewModelBase
 	}
 	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
 	public nil ShowErr(IAppErr Err){
-		if(Err.Type is null){
-			return NIL;
-		}
-		var Str = I18n.Get(Err.Type.ToI18nKey(), Err.Args??[]);
-		ShowMsg(Str);
-		LogError(Err+"");
-		return NIL;
+		return MainView.Inst.ShowErr(Err);
 	}
 
 	public nil HandleErr(obj? Ex){
-		if(Ex is IAppErr Err){
-			ShowErr(Err);
-			return NIL;
-		}else{
-			ShowMsg("Unknown Error.");//TODO i18n
-			#if DEBUG||true
-			ShowMsg(Ex+"");
-			#endif
-			//TODO log
-		}
-		return NIL;
+		return MainView.Inst.HandleErr(Ex);
 	}
 
 	public nil HandleErr(Task T){

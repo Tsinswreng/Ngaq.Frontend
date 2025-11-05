@@ -14,6 +14,7 @@ using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
 
 using Ctx = VmLoginRegister;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Infra.Ctrls;
 
 public partial class ViewLogin
 	:UserControl
@@ -83,15 +84,14 @@ public partial class Cls_{
 			}
 			errMsgSclv.Content = _ErrorList();
 		})
-		.AddInit(new Button{}, (b)=>{
+		.AddInit(new OpBtn(), (o)=>{
+			var b = o._Button;
 			b.ContentInit(_TextBlock(), t=>{
 				t.Text = I[K.Login];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
 			b.HorizontalAlignment = HAlign.Stretch;
-			b.Click += (s,e)=>{
-				Ctx?.Login();
-			};
+			o.SetExt((Ct)=>Ctx?.LoginAsy(Ct));
 		});
 		return NIL;
 	}

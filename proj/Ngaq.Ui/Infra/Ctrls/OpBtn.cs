@@ -16,7 +16,7 @@ public partial class OpBtn: ContentControl{
 	public Button _Button{get;set;} = new();
 	public CancellationTokenSource Cts{get;set;} = new();
 
-	public Func<CT, Task<nil>>? FnExeAsy{get;set;} = async(Ct)=>NIL;
+	public Func<CT, Task<nil>?>? FnExeAsy{get;set;} = async(Ct)=>NIL;
 	public Func<obj?>? FnOk{get;set;}
 	public Func<Exception?, obj?>? FnFail{get;set;}
 	public Func<obj?>? FnCancel{get;set;}
@@ -48,19 +48,17 @@ public partial class OpBtn: ContentControl{
 		}
 	}
 
+	public obj? BtnContent{get=>_Button?.Content; set=>_Button.Content = value;}
+
 	public OpBtn(){
-		Content = Grid;
+		base.Content = Grid;
 		Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star),
 		]);
 		Grid.Children.Add(_Button);
 
-		var FnMkOverlay = ()=> new Grid {
-			Background = Brushes.Black,
-			Opacity = 0.5,
-			HorizontalAlignment = HAlign.Stretch,
-			VerticalAlignment = VAlign.Stretch,
-			IsHitTestVisible = false
+		var FnMkOverlay = ()=>{
+			return MkOverlay();
 		};
 		Overlay = FnMkOverlay();
 
@@ -73,7 +71,12 @@ public partial class OpBtn: ContentControl{
 			}
 
 			Start();
-			FnExeAsy(Cts.Token).ContinueWith(t=>{
+			var R = FnExeAsy(Cts.Token);
+			if(R is null){
+				End();
+				return;
+			}
+			R.ContinueWith(t=>{
 				if(t.IsCanceled){
 					FnCancel?.Invoke();
 				}else if(t.IsFaulted){
@@ -84,5 +87,31 @@ public partial class OpBtn: ContentControl{
 				End();
 			});
 		};
+	}
+
+	public Control MkOverlay(){
+		var R = new Grid {
+			Background = Brushes.Black,
+			Opacity = 0.5,
+			HorizontalAlignment = HAlign.Stretch,
+			VerticalAlignment = VAlign.Stretch,
+			IsHitTestVisible = false
+		};
+		var loading = new Grid{
+			Background = new SolidColorBrush(Colors.Black, 0.5),
+			IsVisible = false,
+			Children ={
+				new Viewbox{
+					Width = 60,
+					Height = 0,
+					Child = new ProgressBar{
+						IsIndeterminate = true,
+						Classes = { "Spinner" }   // 内置转圈样式
+					}
+				}
+			}
+		};
+		R.Children.Add(loading);
+		return R;
 	}
 }

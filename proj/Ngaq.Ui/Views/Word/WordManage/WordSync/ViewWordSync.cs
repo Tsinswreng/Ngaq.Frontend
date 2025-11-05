@@ -42,29 +42,12 @@ public partial class ViewWordSync
 
 			Sp.AddInit(new OpBtn(), op=>{
 				var o = op._Button;
-				op.FnExeAsy = (Ct)=>Ctx?.PushAsy(Ct)!;
-				op.FnOk = ()=>{
-					Dispatcher.UIThread.Post(()=>{
-						Ctx?.ShowMsg("Ok");
-					});
-					return NIL;
-				};
-				op.FnFail = (err)=>{
-					Dispatcher.UIThread.Post(()=>{
-						Ctx?.HandleErr(err);
-					});
-					return NIL;
-				};
+				op.SetExt((Ct)=>Ctx?.PushAsy(Ct)!);
 				o.Content = I[K.Push];
-				// o.Click += (s,e)=>{
-				// 	Ctx?.Push();
-				// };
 			})
-			.AddInit(_Button(), o=>{
-				o.Content = I[K.Pull];
-				o.Click += (s,e)=>{
-					Ctx?.Pull();
-				};
+			.AddInit(new OpBtn(), o=>{
+				o.BtnContent = I[K.Pull];
+				o.SetExt((Ct)=>Ctx?.PullAsy(Ct));
 			})
 			.AddInit(_TextBlock(), o=>{
 				o.Text = I[K.ExportPath];
@@ -72,11 +55,9 @@ public partial class ViewWordSync
 			.AddInit(_TextBox(), o=>{
 				o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.PathExport));
 			})
-			.AddInit(_Button(), o=>{
-				o.Content = I[K.Export];
-				o.Click += (s,e)=>{
-					Ctx?.ExportAsy();
-				};
+			.AddInit(new OpBtn(), o=>{
+				o.BtnContent = I[K.Export];
+				o.SetExt((Ct)=>Ctx?.ExportAsy(Ct));
 			})
 
 			.AddInit(_Border(), o=>{
@@ -89,11 +70,9 @@ public partial class ViewWordSync
 			.AddInit(_TextBox(), o=>{
 				o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.PathImport));
 			})
-			.AddInit(_Button(), o=>{
-				o.Content = I[K.Import];
-				o.Click += (s,e)=>{
-					Ctx?.ImportAsy();
-				};
+			.AddInit(new OpBtn(), o=>{
+				o.BtnContent = I[K.Import];
+				o.SetExt((Ct)=>Ctx?.ImportAsy(Ct));
 			})
 			;
 			// .AddInit(_Button(), o=>{
