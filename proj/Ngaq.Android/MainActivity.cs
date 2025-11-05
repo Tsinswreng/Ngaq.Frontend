@@ -104,7 +104,7 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		var BaseDir = BaseDirMgr.Inst;
 
 		var roCfgPath = BaseDir.Combine("Ngaq.jsonc");
-		var rwCfgPath = BaseDir.Combine("Ngaq.Gui.jsonc");
+		var dfltRwCfgPath = BaseDir.Combine("Ngaq.Rw.jsonc");
 		if(!File.Exists(roCfgPath)){
 			CopyAssetToDirectory("Ngaq.jsonc", externalFileDir);
 			ToolFile.EnsureFile(roCfgPath);
@@ -119,16 +119,16 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		roCfg.FromFile(roCfgPath);
 
 		// 2. 加载可读写配置
-		var guiCfgPath = ItemsAppCfg.GuiConfigPath.GetFrom(dualSrcCfg)??rwCfgPath;
-		guiCfgPath = BaseDir.Combine(guiCfgPath);
-		ToolFile.EnsureFile(guiCfgPath);
+		var rwCfgPath = ItemsClientCfg.RwCfgPath.GetFrom(dualSrcCfg)??dfltRwCfgPath;
+		rwCfgPath = BaseDir.Combine(rwCfgPath);
+		ToolFile.EnsureFile(rwCfgPath);
 
-		var guiCfg = new JsonFileCfgAccessor();
-		dualSrcCfg.RwCfg = guiCfg;
-		guiCfg.FromFile(guiCfgPath);
+		var rwCfg = new JsonFileCfgAccessor();
+		dualSrcCfg.RwCfg = rwCfg;
+		rwCfg.FromFile(rwCfgPath);
 
 		// 3. 初始化国际化配置
-		var lang = ItemsAppCfg.Lang.GetFrom(AppCfg.Inst) ?? "default";
+		var lang = ItemsClientCfg.Lang.GetFrom(AppCfg.Inst) ?? "default";
 		var i18nCfg = new JsonFileCfgAccessor();
 		I18n.Inst.CfgAccessor = i18nCfg;
 

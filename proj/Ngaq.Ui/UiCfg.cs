@@ -9,7 +9,7 @@ public  partial class UiCfg{
 	public static UiCfg Inst => _Inst??= new UiCfg();
 
 	public UiCfg(){
-		BaseFontSize = ItemsAppCfg.BaseFontSize.GetFrom(AppCfg.Inst);
+		BaseFontSize = ItemsClientCfg.BaseFontSize.GetFrom(AppCfg.Inst);
 	}
 
 	public f64 BaseFontSize { get; set; } = 16.0;

@@ -33,8 +33,8 @@ public partial class VmWordSync: ViewModelBase{
 		this.Cfg = Cfg;
 
 		if(Cfg is not null){
-			PathExport = Cfg.Get(ItemsAppCfg.Word.WordsPackExportPath)??"";
-			PathImport = Cfg.Get(ItemsAppCfg.Word.WordsPackImportPath)??"";
+			PathExport = Cfg.Get(ItemsClientCfg.Word.WordsPackExportPath)??"";
+			PathImport = Cfg.Get(ItemsClientCfg.Word.WordsPackImportPath)??"";
 		}
 
 	}
@@ -117,7 +117,7 @@ public partial class VmWordSync: ViewModelBase{
 			var bytes = textWithBlob.ToByteArr();
 			ToolFile.EnsureFile(PathExport);
 			await File.WriteAllBytesAsync(PathExport, bytes, Ct);
-			Cfg?.Set(ItemsAppCfg.Word.WordsPackExportPath, PathExport);
+			Cfg?.Set(ItemsClientCfg.Word.WordsPackExportPath, PathExport);
 			Cfg?.SaveAsy(default);
 		});
 		return NIL;
@@ -131,7 +131,7 @@ public partial class VmWordSync: ViewModelBase{
 			var bytes = await File.ReadAllBytesAsync(PathImport, Ct);
 			var textWithBlob = ToolTextWithBlob.Parse(bytes);
 			await SvcWord.SyncFromTextWithBlob(UserCtxMgr.GetUserCtx(), textWithBlob, Ct);
-			Cfg?.Set(ItemsAppCfg.Word.WordsPackImportPath, PathImport);
+			Cfg?.Set(ItemsClientCfg.Word.WordsPackImportPath, PathImport);
 			Cfg?.SaveAsy(default);
 		});
 		return NIL;
