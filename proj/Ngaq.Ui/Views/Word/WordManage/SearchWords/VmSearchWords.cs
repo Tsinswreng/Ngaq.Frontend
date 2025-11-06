@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Security.AccessControl;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
+using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Word.Models;
 using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Svc;
