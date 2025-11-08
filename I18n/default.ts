@@ -35,6 +35,14 @@ type Full = {
 			ConfirmPassword:TTemplate
 			__CannotBeEmpty:TTemplate
 		}
+		,Settings:{
+			UIConfig:TTemplate
+			About:TTemplate
+		}
+		,About:{
+			AppVersion:TTemplate
+			Website:TTemplate
+		}
 	}
 	//----Errors----
 	,Error:{

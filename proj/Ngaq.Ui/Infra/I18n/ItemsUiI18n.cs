@@ -55,6 +55,18 @@ public class SyncWord{
 	public static readonly K ImportPath = Mk(_R, [nameof(ImportPath)]);
 }
 
+public class Settings{
+	public static readonly K _R = Mk(View, [nameof(Settings)]);
+	public static readonly K UIConfig = Mk(_R, [nameof(UIConfig)]);
+	public static readonly K About = Mk(_R, [nameof(About)]);
+}
+
+public class About{
+	public static readonly K _R = Mk(View, [nameof(About)]);
+	public static readonly K AppVersion = Mk(_R, [nameof(AppVersion)]);
+	public static readonly K Website = Mk(_R, [nameof(Website)]);
+}
+
 }
 
 

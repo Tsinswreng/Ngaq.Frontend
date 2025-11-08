@@ -1,6 +1,7 @@
 namespace Xxx;
 
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
 using Ctx = VmXxx;
 public partial class ViewXxx
 	:AppViewBase
@@ -16,7 +17,7 @@ public partial class ViewXxx
 		Style();
 		Render();
 	}
-
+	public II18n I = I18n.Inst;
 	public partial class Cls_{
 
 	}

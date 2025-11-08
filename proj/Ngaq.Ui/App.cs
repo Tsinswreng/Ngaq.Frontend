@@ -69,13 +69,13 @@ public partial class App :Application
 		// );
 		// Styles.Add(StyBaseFontSize);
 
-		var StyBaseFontSize = new Style(x=>
-			x.Is<Control>()
-		).Set(
-			TextElement.FontFamilyProperty
-			//,new FontFamily("Times New Roman, STSong")
-			,new FontFamily("Times New Roman")
-		).Attach(Styles);
+		// var StyBaseFontSize = new Style(x=>
+		// 	x.Is<Control>()
+		// ).Set(
+		// 	TextElement.FontFamilyProperty
+		// 	//,new FontFamily("Times New Roman, STSong")
+		// 	,new FontFamily("Times New Roman")
+		// ).Attach(Styles);
 
 
 		//按鈕舒展
