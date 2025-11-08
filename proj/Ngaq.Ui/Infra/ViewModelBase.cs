@@ -44,22 +44,22 @@ public partial class ViewModelBase
 	// }
 
 	public nil LogInfo(str? Msg = null){
-		MainView.Inst.Logger.LogInformation(Msg??"");
+		App.Logger?.LogInformation(Msg??"");
 		return NIL;
 	}
 
 	public nil LogDebug(str? Msg = null){
-		MainView.Inst.Logger.LogDebug(Msg??"");
+		App.Logger?.LogDebug(Msg??"");
 		return NIL;
 	}
 
 	public nil LogWarn(str? Msg=null){
-		MainView.Inst.Logger.LogWarning(Msg??"");
+		App.Logger?.LogWarning(Msg??"");
 		return NIL;
 	}
 
 	public nil LogError(str? Msg = null){
-		MainView.Inst.Logger.LogError(Msg??"");
+		App.Logger?.LogError(Msg??"");
 		return NIL;
 	}
 

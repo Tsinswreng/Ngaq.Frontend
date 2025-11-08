@@ -1,11 +1,9 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 using System.Collections.ObjectModel;
-using Ngaq.Client.Svc;
 using Ngaq.Client.Word.Svc;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Shared.Kv.Svc;
-using Ngaq.Core.Shared.User.Svc;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Tools;
 using Ngaq.Core.Word.Svc;
@@ -56,31 +54,21 @@ public partial class VmWordSync: ViewModelBase{
 
 	public CancellationTokenSource Cts = new();
 	public async Task<nil> PushAsy(CT Ct=default){
-		if(ClientWordSync is null){
-			return NIL;
+		await Task.Run(async()=>{
+			if(ClientWordSync is null){
+			return;
 		}
-		await ClientWordSync.AllWordsToServerNonStream(Ct);
-		return NIL;
-	}
-
-	public nil Push(){
-		PushAsy(Cts.Token).ContinueWith(t=>{
-			HandleErr(t);
+			await ClientWordSync.AllWordsToServerNonStream(Ct);
 		});
 		return NIL;
 	}
 
 	public async Task<nil> PullAsy(CT Ct){
-		if(ClientWordSync is null){
-			return NIL;
-		}
-		await ClientWordSync.SaveAllWordsFromServerNonStream(Ct);
-		return NIL;
-	}
-
-	public nil Pull(){
-		PullAsy(Cts.Token).ContinueWith(t=>{
-			HandleErr(t);
+		await Task.Run(async()=>{
+			if(ClientWordSync is null){
+				return ;
+			}
+			await ClientWordSync.SaveAllWordsFromServerNonStream(Ct);
 		});
 		return NIL;
 	}

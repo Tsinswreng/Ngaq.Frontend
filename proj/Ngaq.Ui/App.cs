@@ -19,8 +19,7 @@ using Ngaq.Core.Infra.Errors;
 using Avalonia.Media;
 using Tsinswreng.AvlnTools.Dsl;
 using Live.Avalonia;
-
-
+using Microsoft.Extensions.Logging;
 
 public partial class App :Application
 #if DEBUG
@@ -28,10 +27,12 @@ public partial class App :Application
 #endif
 {
 
+	public static ILogger? Logger{get;protected set;} = null!;
 	public static T GetSvc<T>()
 		where T : class
 	{
-		System.Console.WriteLine("GetSvc: "+typeof(T));//t
+		Logger??=App.SvcProvider.GetRequiredService<ILogger>();
+		Logger?.LogInformation("GetSvc: "+typeof(T));
 		return App.SvcProvider.GetRequiredService<T>();
 	}
 

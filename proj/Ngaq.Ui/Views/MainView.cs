@@ -30,7 +30,7 @@ public static MainView Inst => _Inst??= new MainView();
 	public AutoGrid AutoGrid = new (IsRow: true);
 	public Grid Root{get{return AutoGrid.Grid;}}
 	public ViewNaviBase ViewNaviBase{get;} = new ();
-	public ILogger Logger{get;set;}
+	public ILogger? Logger{get;set;} = App.Logger;
 	public nil ShowMsg(str Msg){
 		Dispatcher.UIThread.Post(()=>{
 			var msgBox = new MsgBox();
@@ -71,12 +71,12 @@ public static MainView Inst => _Inst??= new MainView();
 		}
 		var Str = I18n.Get(Err.Type.ToI18nKey(), Err.Args??[]);
 		ShowMsg(Str);
-		Logger.LogError(Str+"\n"+str.Join("\n",Err.DebugArgs??[]));
+		Logger?.LogError(Str+"\n"+str.Join("\n",Err.DebugArgs??[]));
 		return NIL;
 	}
 
 	public nil HandleErr(obj? Ex){
-		Logger.LogError(Ex+"");
+		Logger?.LogError(Ex+"");
 		if(Ex is IAppErr Err){
 			ShowErr(Err);
 			return NIL;
@@ -99,16 +99,16 @@ Control? Test()
 
 	public MainView() {
 		Test();
-		using var loggerFactory = LoggerFactory.Create(b=>{
-			b.AddConsole()
-			#if DEBUG
-			.SetMinimumLevel(LogLevel.Debug)
-			#else
-			.SetMinimumLevel(LogLevel.Information)
-			#endif
-			;
-		});
-		Logger = loggerFactory.CreateLogger("GlobalLogger");
+		// using var loggerFactory = LoggerFactory.Create(b=>{
+		// 	b.AddConsole()
+		// 	#if DEBUG
+		// 	.SetMinimumLevel(LogLevel.Debug)
+		// 	#else
+		// 	.SetMinimumLevel(LogLevel.Information)
+		// 	#endif
+		// 	;
+		// });
+		// Logger = loggerFactory.CreateLogger("GlobalLogger");
 
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
