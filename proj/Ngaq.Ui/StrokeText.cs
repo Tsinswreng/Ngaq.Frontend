@@ -11,31 +11,68 @@ using Avalonia.Platform;
 
 public class StrokeTextEdit : Control {
 	/* -------------- 对外 bindable 字段 -------------- */
-	public static readonly DirectProperty<StrokeTextEdit, string> TextProperty =
-		AvaloniaProperty.RegisterDirect<StrokeTextEdit, string>(
-			nameof(Text), o => o.Text, (o, v) => o.Text = v);
+	// 改成 StyledProperty 就能绑
+	public static readonly StyledProperty<string> TextProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, string>(nameof(Text), "");
 
-	private string _text = "";
 	public string Text {
-		get => _text;
-		set {
-			if (SetAndRaise(TextProperty, ref _text, value ?? ""))
-				RebuildLayout();
-		}
+		get => GetValue(TextProperty);
+		set => SetValue(TextProperty, value);
 	}
+
+
+	// 注册三个可绑属性
+	public static readonly StyledProperty<IBrush> FillProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Fill), Brushes.Black);
+
+	public static readonly StyledProperty<IBrush> StrokeProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Stroke), Brushes.Black);
+
+	public static readonly StyledProperty<double> FontSizeProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(FontSize), 16d);
+
+	public IBrush Fill {
+		get => GetValue(FillProperty);
+		set => SetValue(FillProperty, value);
+	}
+
+	public IBrush Stroke {
+		get => GetValue(StrokeProperty);
+		set => SetValue(StrokeProperty, value);
+	}
+
+	public double FontSize {
+		get => GetValue(FontSizeProperty);
+		set => SetValue(FontSizeProperty, value);
+	}
+
+
+	public static readonly StyledProperty<double> StrokeThicknessProperty =
+	AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(StrokeThickness), 2.5);
+
+	public double StrokeThickness {
+		get => GetValue(StrokeThicknessProperty);
+		set => SetValue(StrokeThicknessProperty, value);
+	}
+
 
 	/* -------------- 内部状态 -------------- */
 	private readonly List<TextLine> _lines = new();
 	private int _caretIndex;
 	private Typeface _typeface;
-	private double _fontSize = 16;
-	private IBrush _fill = Brushes.White;
-	private IBrush _stroke = Brushes.Black;
 	private Pen _strokePen;
+
+	static StrokeTextEdit() {
+		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
+		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
+	}
+
+	private void UpdatePen() => _strokePen = new Pen(Stroke, StrokeThickness);
 
 	public StrokeTextEdit() {
 		_typeface = new Typeface("Microsoft YaHei");
-		_strokePen = new Pen(_stroke, 2.5);
+		_strokePen = new Pen(Stroke, StrokeThickness);
+		UpdatePen();
 
 		Focusable = true;
 		Cursor = new Cursor(StandardCursorType.Ibeam);
@@ -88,38 +125,36 @@ public class StrokeTextEdit : Control {
 
 	private FormattedText CreateFormattedText(string txt) =>
 		new(txt, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
-			_typeface, _fontSize, _fill);
+			_typeface, FontSize, Fill);
 
 	/* -------------- 渲染 -------------- */
 	public override void Render(DrawingContext dc) {
 		if (_lines.Count == 0) return;
 
-		double y = Padding.Top;
+		var y = Padding.Top;
 		foreach (var line in _lines) {
 			var fmt = CreateFormattedText(line.Text);
 			var origin = new Point(Padding.Left, y);
 
-			// 1. 描边：上下左右偏移
-			// 1. 描边：上下左右偏移
-			foreach (var offset in OutlineOffsets)
-				dc.DrawText(fmt, origin + offset);   // 先fmt后origin，不传Brush
+			// 1. 生成文字几何
+			var geo = fmt.BuildGeometry(origin);
 
-			// 2. 正文
+			// 2. 描边几何（只画一次）
+			dc.DrawGeometry(null, new Pen(Stroke, StrokeThickness), geo);
+
+			// 3. 正文填充
 			dc.DrawText(fmt, origin);
 
 			y += fmt.Height;
 		}
-
-		// 3. 光标
-		if (IsFocused)
-			DrawCaret(dc);
+		if (IsFocused) DrawCaret(dc);
 	}
 
-	private static readonly Vector[] OutlineOffsets =
-	{
-		new(-1, -1), new(1, -1), new(-1, 1), new(1, 1), new(0, 0)
-	};
-
+	private Vector[] OutlineOffsets =>
+		new[]{ new Vector(-StrokeThickness, -StrokeThickness),
+		   new Vector( StrokeThickness, -StrokeThickness),
+		   new Vector(-StrokeThickness,  StrokeThickness),
+		   new Vector( StrokeThickness,  StrokeThickness) };
 	private void DrawCaret(DrawingContext dc) {
 		var (line, off) = FindCaretLine();
 		if (line < 0) return;
@@ -127,7 +162,25 @@ public class StrokeTextEdit : Control {
 		double x = Padding.Left + fmt.Width;
 		double y = Padding.Top;
 		for (int i = 0; i < line; i++) y += CreateFormattedText(_lines[i].Text).Height;
-		dc.DrawLine(new Pen(_fill, 1), new Point(x, y), new Point(x, y + fmt.Height));
+		dc.DrawLine(new Pen(Fill, 1), new Point(x, y), new Point(x, y + fmt.Height));
+	}
+
+	protected override Size MeasureOverride(Size availableSize) {
+		if (_lines.Count == 0 && !string.IsNullOrEmpty(Text))
+			RebuildLayout();          // 确保第一次就有尺寸
+		var h = _lines.Sum(l => CreateFormattedText(l.Text).Height) + Padding.Top + Padding.Bottom;
+		return new Size(availableSize.Width, h);
+	}
+
+	private bool _first = true;
+
+	protected override Size ArrangeOverride(Size finalSize) {
+		if (_first) {
+			_first = false;
+			RebuildLayout();                 // 此时 Bounds 已确定
+			InvalidateMeasure();             // 立即重测一次
+		}
+		return finalSize;
 	}
 
 	/* -------------- 交互 -------------- */
@@ -186,4 +239,9 @@ public class StrokeTextEdit : Control {
 		public int Start { get; init; }
 		public int Length { get; init; }
 	}
+}
+
+
+public static class ExtnStrokeTextEdit {
+	public static StyledProperty<string> PropText_(this StrokeTextEdit z) => StrokeTextEdit.TextProperty;
 }

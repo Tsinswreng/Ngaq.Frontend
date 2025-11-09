@@ -8,36 +8,12 @@ using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordInfo;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
-using Avalonia.Controls.Primitives;
 using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 
 public partial class ViewWordInfo
 	:UserControl
 {
-
-	// public IValueConverter ConvMultiDictToList(str KeyWithoutNs){
-	// 	return new FnConvtr< IDictionary<str, IList<str>>, IList<str>>(
-	// 		x=>{
-	// 			var Key = ConstTokens.Inst.Concat(null, KeyWithoutNs);
-	// 			x.TryGetValue(Key, out var v);
-	// 			//return str.Join("\t",v??[]);
-	// 			return v??[];
-	// 		}
-	// 	);
-	// }
-
-	// public IValueConverter ConvMultiDictToStr(str KeyWithoutNs){
-	// 	return new FnConvtr< IDictionary<str, IList<str>>, IList<str>>(
-	// 		x=>{
-	// 			var Key = ConstTokens.Inst.Concat(null, KeyWithoutNs);
-	// 			x.TryGetValue(Key, out var v);
-	// 			return str.Join("\t",v??[]);
-	// 			//return v??[];
-	// 		}
-	// 	);
-	// }
-
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
@@ -82,49 +58,58 @@ public partial class ViewWordInfo
 
 	public AutoGrid Root{get;set;} = new(IsRow: true);
 
-	protected TextBox TxtBox(){
-		var R = new TextBox();
-		var S = R.Styles;
-		R.Classes.Add(Cls.TxtBox);
-		//R.BorderThickness = new Thickness(0);
-		R.IsReadOnly = true;
-		R.Focusable = false;
-		//R.IsEnabled = false;
-		R.Background = new SolidColorBrush(Colors.Transparent);
-		R.Foreground = new SolidColorBrush(Colors.White);
-		// var Menu = new ContextMenu();
-		// R.ContextMenu = Menu;
-		// {var o = Menu;
-		// 	o.Items.Add(new MenuItem{Header = "複製"});
-		// }
-		var flyout = new MenuFlyout();
-		FlyoutBase.SetAttachedFlyout(R, flyout);
-
-		S.Add(new Style().NoMargin().NoPadding());
-		R.MinHeight = 0;
-		var NoBdr = new Style(x=>
-			x.Is<TextBox>()
-			.Class(Cls.TxtBox)
-			//.Class(PsdCls.Inst.focus)
-			.Template()
-			.OfType<Border>()
-		).Set(
-			BorderThicknessProperty
-			,new Thickness(0)
-		).Attach(S);
-
-		var FocusNoBdr = new Style(x=>
-			x.Is<TextBox>()
-			.Class(PsdCls.Inst.focus)
-			.Template()
-			.OfType<Border>()
-		).Attach(S)
-		.Set(
-			BorderThicknessProperty
-			,new Thickness(0)
-		);
+	protected StrokeTextEdit TxtBox(){
+		var R = new StrokeTextEdit{
+			Fill = Brushes.White,
+			Stroke = Brushes.Black,
+			StrokeThickness = 5
+		};
 		return R;
 	}
+
+	// protected TextBox TxtBox(){
+	// 	var R = new TextBox();
+	// 	var S = R.Styles;
+	// 	R.Classes.Add(Cls.TxtBox);
+	// 	//R.BorderThickness = new Thickness(0);
+	// 	R.IsReadOnly = true;
+	// 	R.Focusable = false;
+	// 	//R.IsEnabled = false;
+	// 	R.Background = new SolidColorBrush(Colors.Transparent);
+	// 	R.Foreground = new SolidColorBrush(Colors.White);
+	// 	// var Menu = new ContextMenu();
+	// 	// R.ContextMenu = Menu;
+	// 	// {var o = Menu;
+	// 	// 	o.Items.Add(new MenuItem{Header = "複製"});
+	// 	// }
+	// 	var flyout = new MenuFlyout();
+	// 	FlyoutBase.SetAttachedFlyout(R, flyout);
+
+	// 	S.Add(new Style().NoMargin().NoPadding());
+	// 	R.MinHeight = 0;
+	// 	var NoBdr = new Style(x=>
+	// 		x.Is<TextBox>()
+	// 		.Class(Cls.TxtBox)
+	// 		//.Class(PsdCls.Inst.focus)
+	// 		.Template()
+	// 		.OfType<Border>()
+	// 	).Set(
+	// 		BorderThicknessProperty
+	// 		,new Thickness(0)
+	// 	).Attach(S);
+
+	// 	var FocusNoBdr = new Style(x=>
+	// 		x.Is<TextBox>()
+	// 		.Class(PsdCls.Inst.focus)
+	// 		.Template()
+	// 		.OfType<Border>()
+	// 	).Attach(S)
+	// 	.Set(
+	// 		BorderThicknessProperty
+	// 		,new Thickness(0)
+	// 	);
+	// 	return R;
+	// }
 
 	protected nil Render(){
 		this.ContentInit(Root.Grid, o=>{
@@ -172,11 +157,12 @@ public partial class ViewWordInfo
 			});
 
 			var Head = TxtBox();
+			//var Head = new TextBox();
 			BdrHead.Child = Head;
 			{var o = Head;
 				o.Styles.Add(new Style().NoMargin().NoPadding());
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
 						Mode = BindingMode.TwoWay
 					}
@@ -190,7 +176,7 @@ public partial class ViewWordInfo
 
 			Root.AddInit(TxtBox(), o=>{
 				o.Bind(
-					TextBlock.TextProperty
+					o.PropText_()
 					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 						//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 						Mode = BindingMode.OneWay

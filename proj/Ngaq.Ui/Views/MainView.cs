@@ -118,12 +118,26 @@ Control? Test()
 		]);
 		AutoGrid.Add(ViewNaviBase);
 
-		var w=new Window{Width=600,Height=400};
-		var ed=new StrokeTextEdit{
-			Text="Hello 描边自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行",
-			Padding=new Thickness(10)
+		var w=new Window{
+			Width=600,Height=400,
+			Background = Brushes.Blue,
+			Content = new StackPanel{
+				Children = {
+					new StrokeTextEdit{
+						Text="Hello 描边自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行",
+						FontSize = 40,
+						Fill = Brushes.White,
+						Stroke = Brushes.Black,
+						StrokeThickness = 10
+					},
+					new StrokeTextEdit{
+						Text="123456",
+						Fill = Brushes.White,
+						Stroke = Brushes.Black,
+					}
+				}
+			}
 		};
-		w.Content=ed;
 		w.Show();
 
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
