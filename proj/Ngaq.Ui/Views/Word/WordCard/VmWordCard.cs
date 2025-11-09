@@ -9,7 +9,6 @@ using Ctx = VmWordListCard;
 public partial class VmWordListCard
 	:ViewModelBase
 {
-
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmWordListCard(){
 		#if DEBUG
@@ -65,6 +64,8 @@ public partial class VmWordListCard
 		get{return WordForLearn;}
 		set{WordForLearn = value;}
 	}
+
+	
 
 
 	// protected JnWord? _JWord;

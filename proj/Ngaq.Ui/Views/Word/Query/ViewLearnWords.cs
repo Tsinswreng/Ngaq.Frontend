@@ -275,14 +275,22 @@ public partial class ViewLearnWords
 					);
 					Btn.Click += (s,e)=>{
 						if(o?.Ctx != null){
-							Ctx?.ClickVmWordCard(o.Ctx);
+							Ctx?.ClickWordCard(o.Ctx);
 						}
 					};
-					Btn.OnLongPressed += (s,e)=>{
-						if(o?.Ctx != null){
-							Ctx?.OnLongPressed(o.Ctx);
-						}
-					};
+					//觸屏旹 長按ʹ效ˋ不佳。scrollViewer上下滑動旹亦祘。璫只在靜止旹長按纔生效
+					// Btn.OnLongPressed += (s,e)=>{
+					// 	if(o?.Ctx != null){
+					// 		Ctx?.OnLongPressed(o.Ctx);
+					// 	}
+					// };
+					// Btn.OnSwipe += (s,e)=>{
+					// 	if(e.Direction == Tsinswreng.AvlnTools.Controls.IF.ISwipeBtn.SwipeDirection.Right){
+					// 		if(o?.Ctx != null){
+					// 			Ctx?.OnLongPressed(o.Ctx);
+					// 		}
+					// 	}
+					// };
 				}
 			}}//~Grid
 

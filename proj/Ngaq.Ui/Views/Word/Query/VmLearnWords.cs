@@ -101,9 +101,10 @@ public IImgGetter? SvcImg{get;set;}
 		set{SetProperty(ref _VmWordInfo, value);}
 	}
 
-	protected i64 _LearnOrUndo(VmWordListCard Vm, ELearn Learn){
+
+	protected ELearnOpRtn _LearnOrUndo(VmWordListCard Vm, ELearn Learn){
 		if(Vm.WordForLearn == null){
-			return (i64)MgrLearn.ELearnOpRtn.Invalid;
+			return ELearnOpRtn.Invalid;
 		}
 		var R = MgrLearn.LearnOrUndo(Vm.WordForLearn, Learn);
 		SetCurVmWord(Vm);
@@ -118,25 +119,44 @@ public IImgGetter? SvcImg{get;set;}
 	// 	}
 	// }
 
-	public nil ClickVmWordCard(
-		VmWordListCard Vm
-	){
-		if(_LearnOrUndo(Vm, ELearn.Rmb) == (i64)MgrLearn.ELearnOpRtn.Learn){
+	public nil ClickWordCard(VmWordListCard Vm){
+		var CurLearnRecord = Vm.WordForLearn?.GetLastUnsavedLearnRecord();
+		if(CurLearnRecord == null){
+			//->Rmg
+			_LearnOrUndo(Vm, ELearn.Rmb);
 			Vm.LearnedColor = Cfg.ColorRmb;
-		}else{
+		}else if(CurLearnRecord.Learn == ELearn.Rmb){
+			//-> Fgt
+			_LearnOrUndo(Vm, ELearn.Fgt);//Make it undo
+			_LearnOrUndo(Vm, ELearn.Fgt);//Make it be fgt
+			Vm.LearnedColor = Cfg.ColorFgt;
+		}else if(CurLearnRecord.Learn == ELearn.Fgt){
+			//->Clear
+			_LearnOrUndo(Vm, ELearn.Fgt);//Make it undo
 			Vm.LearnedColor = Cfg.ColorNone;
 		}
 		return NIL;
 	}
 
-	public nil OnLongPressed(VmWordListCard Vm){
-		if(_LearnOrUndo(Vm, ELearn.Fgt) == (i64)MgrLearn.ELearnOpRtn.Learn){
-			Vm.LearnedColor = Cfg.ColorFgt;
-		}else{
-			Vm.LearnedColor = Cfg.ColorNone;
-		}
-		return NIL;
-	}
+	// public nil ClickVmWordCard(
+	// 	VmWordListCard Vm
+	// ){
+	// 	if(_LearnOrUndo(Vm, ELearn.Rmb) == (i64)MgrLearn.ELearnOpRtn.Learn){
+	// 		Vm.LearnedColor = Cfg.ColorRmb;
+	// 	}else{
+	// 		Vm.LearnedColor = Cfg.ColorNone;
+	// 	}
+	// 	return NIL;
+	// }
+
+	// public nil OnLongPressed(VmWordListCard Vm){
+	// 	if(_LearnOrUndo(Vm, ELearn.Fgt) == (i64)MgrLearn.ELearnOpRtn.Learn){
+	// 		Vm.LearnedColor = Cfg.ColorFgt;
+	// 	}else{
+	// 		Vm.LearnedColor = Cfg.ColorNone;
+	// 	}
+	// 	return NIL;
+	// }
 
 	public nil SetCurVmWord(VmWordListCard Vm){
 		if(Vm.WordForLearn == null){
