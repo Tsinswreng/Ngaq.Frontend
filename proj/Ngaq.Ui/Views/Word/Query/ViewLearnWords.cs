@@ -216,6 +216,7 @@ public partial class ViewLearnWords
 		return Ans.Grid;
 	}
 
+	//TODO 分頁加載以代虛擬化
 	Control _ListWordCard(){
 		var Ans = new ItemsControl();
 		{var o = Ans;
@@ -243,7 +244,6 @@ public partial class ViewLearnWords
 				// 	o.ZIndex = 999;
 				// }
 				Cnt++;
-
 				var Btn = new SwipeLongPressBtn();
 				Grid.Children.Add(Btn);
 				{var o = Btn;
@@ -261,10 +261,7 @@ public partial class ViewLearnWords
 					StyBtnWordCard(o.Styles);
 				}
 
-
-				var Card = new ViewWordListCard{};
-				Btn.Content = Card;
-				{var o = Card;
+				Btn.ContentInit(new ViewWordListCard(VmWordCard), o=>{
 					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
 					o.Background = Brushes.Transparent;
 					o.Bind(
@@ -291,7 +288,7 @@ public partial class ViewLearnWords
 					// 		}
 					// 	}
 					// };
-				}
+				});
 			}}//~Grid
 
 			return Grid;
@@ -333,41 +330,6 @@ public partial class ViewLearnWords
 		return s;
 
 	}
-
-	// Styles _StyBtnWordCard(Styles s){
-	// 	var PC = PsdCls.Inst;
-	// 	var Hover = new Style(x=>
-	// 		x.Is<Button>()
-	// 		.Class(PC.pointerover)
-	// 		.Template()
-	// 		.OfType<ContentPresenter>()
-	// 	);
-	// 	s.Add(Hover);
-	// 	{var o = Hover;
-	// 		o.Set(
-	// 			BackgroundProperty
-	// 			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-	// 			//,Brushes.Transparent
-	// 		);
-	// 	}
-	// 	var Pressed = new Style(x=>
-	// 		x.Is<Button>()
-	// 		.Class(PC.pressed)
-	// 		.Template()
-	// 		.OfType<ContentPresenter>()
-	// 	);
-	// 	s.Add(Pressed);
-	// 	{var o = Pressed;
-	// 		o.Set(
-	// 			BackgroundProperty
-	// 			//,Brushes.Yellow
-	// 			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-	// 		);
-	// 	}
-
-	// 	return s;
-
-	// }
 }
 
 

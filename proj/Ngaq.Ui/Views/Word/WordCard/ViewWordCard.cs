@@ -17,6 +17,12 @@ public partial class ViewWordListCard
 		set{DataContext = value;}
 	}
 
+	public ViewWordListCard(Ctx Ctx){
+		this.Ctx = Ctx;
+		Style();
+		Render();
+	}
+
 	public ViewWordListCard(){
 		Ctx = new Ctx();
 		//Ctx = Ctx.Samples[0];
@@ -68,53 +74,54 @@ public partial class ViewWordListCard
 	}
 
 	protected nil Render(){
-
-		var RootGrid = Root.Grid;
-		Content = RootGrid;
-		RootGrid.RowDefinitions.AddRange([
-			new RowDef(4, GUT.Auto),
-			new RowDef(8, GUT.Auto),
-		]);
+		this.ContentInit(Root.Grid, o=>{
+			o.RowDefinitions.AddRange([
+				new RowDef(4, GUT.Auto),
+				new RowDef(8, GUT.Auto),
+			]);
+		});
 
 		var LangGrid = new AutoGrid(IsRow:false);
-		Root.Add(LangGrid.Grid);
-		{var o = LangGrid;
-			o.Grid.ColumnDefinitions.AddRange([
+		Root.AddInit(LangGrid.Grid, o=>{
+			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
-				new ColDef(2, GUT.Star),
+				new ColDef(1, GUT.Star),
+				new ColDef(4, GUT.Star),
+				new ColDef(13, GUT.Star),
 			]);
-		}
+		});
 		{{
-			var Lang = new TextBlock();
-			LangGrid.Add(Lang);
-			{var o = Lang;
+			LangGrid
+			.AddInit(new TextBlock(), o=>{
+				o.Bind(
+					o.PropText_()
+					,CBE.Mk<Ctx>(x=>x.Index)
+				);
+			})
+			.AddInit(new TextBlock(), o=>{
+				o.Text = "　";
+			})
+			.AddInit(new TextBlock(), o=>{
 				o.VerticalAlignment = VAlign.Center;
 				o.Bind(
 					o.PropText_()
 					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 				);
 				o.Foreground = Brushes.LightGray;
-			}
-
-			var InfoGrid = _InfoGrid();
-			LangGrid.Add(InfoGrid);
-			{var o = InfoGrid;
-				//o.HorizontalAlignment = HoriAlign.Right;
-			}
+			})
+			.AddInit(_InfoGrid());
 		}}//~Header
 
 
 		var HeadBox = new AutoGrid(IsRow:false);
-		Root.Add(HeadBox.Grid);
-		{
-			HeadBox.Grid.ColumnDefinitions.AddRange([
+		Root.AddInit(HeadBox.Grid, o=>{
+			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
 			]);
-		}
+		});
+
 		{{
-			var Head = new TextBlock();
-			HeadBox.Add(Head);
-			{var o = Head;
+			HeadBox.AddInit(new TextBlock(), o=>{
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.Bind(
@@ -125,10 +132,8 @@ public partial class ViewWordListCard
 					TextBlock.ForegroundProperty
 					,CBE.Mk<Ctx>(x=>x.FontColor)
 				);
-
-			}
+			});
 		}}
-
 		return NIL;
 	}
 
@@ -137,38 +142,43 @@ public partial class ViewWordListCard
 		{var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
 			o.ColumnDefinitions.AddRange([
-				new ColDef(1, GUT.Auto),//上次學習記錄
-				new ColDef(1, GUT.Auto),//add
-				new ColDef(1, GUT.Auto),//:
-				new ColDef(1, GUT.Auto),//rmb
-				new ColDef(1, GUT.Auto),//:
-				new ColDef(1, GUT.Auto),//fgt
-				new ColDef(1, GUT.Auto),//tab
-				new ColDef(1, GUT.Auto),//last review time
-				new ColDef(1, GUT.Auto),//tab
-				new ColDef(1, GUT.Auto),//weight
+				new ColDef(9, GUT.Star),
+				new ColDef(3, GUT.Star),//last review time
+				new ColDef(1, GUT.Star),//tab
+				new ColDef(7, GUT.Star),//weight
+				//Auto會對不齊故棄用
+				// new ColDef(1, GUT.Auto),//上次學習記錄
+				// new ColDef(1, GUT.Auto),//add
+				// new ColDef(1, GUT.Auto),//:
+				// new ColDef(1, GUT.Auto),//rmb
+				// new ColDef(1, GUT.Auto),//:
+				// new ColDef(1, GUT.Auto),//fgt
+				// new ColDef(1, GUT.Auto),//tab
+				// new ColDef(1, GUT.Auto),//last review time
+				// new ColDef(1, GUT.Auto),//tab
+				// new ColDef(1, GUT.Auto),//weight
 			]);
 		}
 		{{
-			var LastLearn = new TextBlock();
-			R.Add(LastLearn);
-			{var o = LastLearn;
-				o.Bind(
-					o.PropText_()
-					//LearnRecord不應潙空集合、緣添旹必得'add'
-					,CBE.Mk<Ctx>(x=>x.SavedLearnRecords
-						,Converter: new ParamFnConvtr<IList<ILearnRecord>, str>((x, p)=>{
-							if(x.Count > 0){
-								return Ctx.LearnToSymbol(x[^1].Learn);
-							}
-							return "";
-							// var Word = (Ctx)p!;
-							// throw new FatalLogicErr("No learn record found. Word:"+Word.Lang+":"+Word.Head);
-						})
-						,ConverterParameter: Ctx
-					)
-				);
-			}
+			// var LastLearn = new TextBlock();
+			// R.Add(LastLearn);
+			// {var o = LastLearn;
+			// 	o.Bind(
+			// 		o.PropText_()
+			// 		//LearnRecord不應潙空集合、緣添旹必得'add'
+			// 		,CBE.Mk<Ctx>(x=>x.SavedLearnRecords
+			// 			,Converter: new ParamFnConvtr<IList<ILearnRecord>, str>((x, p)=>{
+			// 				if(x.Count > 0){
+			// 					return Ctx.LearnToSymbol(x[^1].Learn);
+			// 				}
+			// 				return "";
+			// 				// var Word = (Ctx)p!;
+			// 				// throw new FatalLogicErr("No learn record found. Word:"+Word.Lang+":"+Word.Head);
+			// 			})
+			// 			,ConverterParameter: Ctx
+			// 		)
+			// 	);
+			// }
 
 			var RecordType = (ELearn Learn)=>{
 				var R = new TextBlock{};
@@ -183,17 +193,17 @@ public partial class ViewWordListCard
 			};
 			var Colon = ()=>new TextBlock(){Text = ":"};
 
-			var Add = RecordType(ELearn.Add);
-			R.Add(Add);
-
-			R.Add(Colon());
-			var Rmb = RecordType(ELearn.Rmb);
-			R.Add(Rmb);
-			R.Add(Colon());
-			var Fgt = RecordType(ELearn.Fgt);
-			R.Add(Fgt);
-
-			R.Add(new TextBlock{Text = "\t"});
+			R.AddInit(_TextBlock(), o=>{
+				//o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.ToLearnHistoryRepr()));
+				//o.Text = Ctx?.ToLearnHistoryRepr();
+				o.Bind(
+					o.PropText_()
+					,CBE.Mk<Ctx>(
+						x=>x
+						,Converter: new SimpleFnConvtr<Ctx, str>((x)=>x.ToLearnHistoryRepr())
+					)
+				);
+			});
 
 			var LastReviewTime = new TextBlock();
 			R.Add(LastReviewTime);
@@ -217,7 +227,7 @@ public partial class ViewWordListCard
 					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Weight
 						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
-							Ctx.FmtNum(x??0, 2)
+							Ctx.FmtNum(x??0, 1)
 						)
 						//,ConverterParameter: "Debug"//t
 					)

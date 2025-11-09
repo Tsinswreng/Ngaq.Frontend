@@ -65,7 +65,7 @@ public partial class VmWordListCard
 		set{WordForLearn = value;}
 	}
 
-	
+
 
 
 	// protected JnWord? _JWord;
@@ -227,9 +227,36 @@ public partial class VmWordListCard
 		int expNum = int.Parse(digits);
 
 		// 拼接指数，去掉多余的零，比如 "e+003" -> "e3"
-		string result = baseStr + "e" + (sign == '+' ? "+" : "-") + expNum.ToString();
+		string result = baseStr + "e" + (sign == '+' ? "" : "-") + expNum.ToString();
 
 		return result;
+	}
+
+	public str ToLearnHistoryRepr(){
+		var z = this;
+		if(z.Bo is null){
+			return "";
+		}
+		var R = new List<str>();
+		if(z.SavedLearnRecords?.Count > 0){
+			var LearnSymbol = LearnToSymbol(z.SavedLearnRecords[^1].Learn);
+			R.Add(LearnSymbol);
+		}
+
+		R.Add(GetValueOrDefault(z.Learn_Records!, ELearn.Add, null)?.Count+"");
+		R.Add(":");
+		R.Add(GetValueOrDefault(z.Learn_Records!, ELearn.Rmb, null)?.Count+"");
+		R.Add(":");
+		R.Add(GetValueOrDefault(z.Learn_Records!, ELearn.Fgt, null)?.Count+"");
+		return string.Join("",R);
+	}
+
+	public static TValue? GetValueOrDefault<TKey, TValue>(
+		IDictionary<TKey, TValue?> dict,
+		TKey key,
+		TValue defaultValue = default!
+	){
+		return dict.TryGetValue(key, out var v) ? v : defaultValue;
 	}
 
 
