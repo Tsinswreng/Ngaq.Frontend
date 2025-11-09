@@ -60,7 +60,7 @@ public partial class ViewLearnWords
 	Panel Menu;
 
 	protected IBrush Shade(IBrush originalBrush, ContentControl top){
-		var overlayBrush = new SolidColorBrush(Color.FromArgb(160, 0, 0, 0)); // 半透明黑，alpha可调
+		var overlayBrush = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)); // 半透明黑，alpha可调
 		var overlayGrid = new Grid{
 			Width = top.Bounds.Width,
 			Height = top.Bounds.Height,

@@ -18,6 +18,10 @@ public class StrokeTextEdit : Control {
 		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
 		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
 		FontSizeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
+		ForegroundProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) =>{
+		if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
+			x.Fill = x.Foreground;
+		});
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
@@ -31,6 +35,14 @@ public class StrokeTextEdit : Control {
 		set => SetValue(TextProperty, value);
 	}
 
+public static readonly StyledProperty<IBrush> ForegroundProperty =
+	AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Foreground), Brushes.Black);
+
+public IBrush Foreground
+{
+	get => GetValue(ForegroundProperty);
+	set => SetValue(ForegroundProperty, value);
+}
 
 	// 注册三个可绑属性
 	public static readonly StyledProperty<IBrush> FillProperty =

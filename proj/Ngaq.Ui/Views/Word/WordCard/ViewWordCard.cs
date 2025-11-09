@@ -30,6 +30,15 @@ public partial class ViewWordListCard
 		Render();
 	}
 
+	protected StrokeTextEdit TxtBox(){
+		var R = new StrokeTextEdit{
+			Fill = Brushes.White,
+			Stroke = Brushes.Black,
+			StrokeThickness = 5
+		};
+		return R;
+	}
+
 	public  partial class Cls_{
 		public str InInfoGrid = nameof(InInfoGrid);
 	}
@@ -92,16 +101,16 @@ public partial class ViewWordListCard
 		});
 		{{
 			LangGrid
-			.AddInit(new TextBlock(), o=>{
+			.AddInit(TxtBox(), o=>{
 				o.Bind(
 					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Index)
 				);
 			})
-			.AddInit(new TextBlock(), o=>{
+			.AddInit(TxtBox(), o=>{
 				o.Text = "　";
 			})
-			.AddInit(new TextBlock(), o=>{
+			.AddInit(TxtBox(), o=>{
 				o.VerticalAlignment = VAlign.Center;
 				o.Bind(
 					o.PropText_()
@@ -121,7 +130,7 @@ public partial class ViewWordListCard
 		});
 
 		{{
-			HeadBox.AddInit(new TextBlock(), o=>{
+			HeadBox.AddInit(TxtBox(), o=>{
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.Bind(
@@ -193,7 +202,7 @@ public partial class ViewWordListCard
 			};
 			var Colon = ()=>new TextBlock(){Text = ":"};
 
-			R.AddInit(_TextBlock(), o=>{
+			R.AddInit(TxtBox(), o=>{
 				//o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.ToLearnHistoryRepr()));
 				//o.Text = Ctx?.ToLearnHistoryRepr();
 				o.Bind(
@@ -205,7 +214,7 @@ public partial class ViewWordListCard
 				);
 			});
 
-			var LastReviewTime = new TextBlock();
+			var LastReviewTime = TxtBox();
 			R.Add(LastReviewTime);
 			{var o = LastReviewTime;
 				o.Bind(
@@ -220,7 +229,7 @@ public partial class ViewWordListCard
 				);
 			}
 			R.Add(new TextBlock{Text = "\t"});
-			var Weight = new TextBlock();
+			var Weight = TxtBox();
 			R.Add(Weight);
 			{var o = Weight;
 				o.Bind(
