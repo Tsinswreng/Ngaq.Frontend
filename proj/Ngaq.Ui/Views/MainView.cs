@@ -118,6 +118,14 @@ Control? Test()
 		]);
 		AutoGrid.Add(ViewNaviBase);
 
+		var w=new Window{Width=600,Height=400};
+		var ed=new StrokeTextEdit{
+			Text="Hello 描边自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行",
+			Padding=new Thickness(10)
+		};
+		w.Content=ed;
+		w.Show();
+
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
 				if(e.Key == Avalonia.Input.Key.Escape){
@@ -140,3 +148,5 @@ Control? Test()
 
 	}
 }
+
+

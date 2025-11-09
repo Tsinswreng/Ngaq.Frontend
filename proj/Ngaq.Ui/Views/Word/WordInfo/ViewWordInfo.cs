@@ -4,15 +4,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
 using Avalonia.Media;
-using Ngaq.Ui.ViewModels;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordInfo;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
-using Avalonia.Data.Converters;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
-using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 
@@ -180,7 +176,7 @@ public partial class ViewWordInfo
 			{var o = Head;
 				o.Styles.Add(new Style().NoMargin().NoPadding());
 				o.Bind(
-					o.PropText_()
+					TextBlock.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
 						Mode = BindingMode.TwoWay
 					}
@@ -194,7 +190,7 @@ public partial class ViewWordInfo
 
 			Root.AddInit(TxtBox(), o=>{
 				o.Bind(
-					o.PropText_()
+					TextBlock.TextProperty
 					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 						//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 						Mode = BindingMode.OneWay
@@ -261,9 +257,9 @@ public partial class ViewWordInfo
 			}
 			{{
 				Grid.AddInit(TxtBox(), o=>{
-					o.TextWrapping = TextWrapping.Wrap;
+					//o.TextWrapping = TextWrapping.Wrap;//TODO
 					o.Bind(
-						o.PropText_()
+						TextBlock.TextProperty
 						,CBE.Mk<str>(x=>x)
 					);
 				});

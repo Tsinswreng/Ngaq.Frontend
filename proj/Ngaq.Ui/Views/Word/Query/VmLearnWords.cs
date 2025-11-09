@@ -17,6 +17,8 @@ using Ngaq.Core.Shared.Word.Models;
 using Avalonia.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using Tsinswreng.CsCfg;
+using Ngaq.Core.Infra.Cfg;
 
 public partial class VmLearnWords
 	:ViewModelBase
@@ -34,7 +36,7 @@ public partial class VmLearnWords
 		public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(1*0xff), 0xff, 0, 0));
 	}
 
-	public Cfg_ Cfg = new();
+	public Cfg_ CfgUi = new();
 
 	// public VmWordQuery(){
 	// 	_Init();
@@ -44,16 +46,19 @@ public IFrontendUserCtxMgr UserCtxMgr;
 
 public MgrLearn MgrLearn{get;set;}
 public IImgGetter? SvcImg{get;set;}
+ICfgAccessor? Cfg;
 	public VmLearnWords(
 		ISvcWord SvcWord
 		,IFrontendUserCtxMgr UserCtxMgr
 		,MgrLearn MgrLearn
 		,IImgGetter? SvcImg
+		,ICfgAccessor? Cfg
 	){
 		this.SvcImg = SvcImg;
 		this.SvcWord = SvcWord;
 		this.UserCtxMgr = UserCtxMgr;
 		this.MgrLearn = MgrLearn;
+		this.Cfg = Cfg;
 		_Init();
 	}
 
@@ -124,16 +129,16 @@ public IImgGetter? SvcImg{get;set;}
 		if(CurLearnRecord == null){
 			//->Rmg
 			_LearnOrUndo(Vm, ELearn.Rmb);
-			Vm.LearnedColor = Cfg.ColorRmb;
+			Vm.LearnedColor = CfgUi.ColorRmb;
 		}else if(CurLearnRecord.Learn == ELearn.Rmb){
 			//-> Fgt
 			_LearnOrUndo(Vm, ELearn.Fgt);//Make it undo
 			_LearnOrUndo(Vm, ELearn.Fgt);//Make it be fgt
-			Vm.LearnedColor = Cfg.ColorFgt;
+			Vm.LearnedColor = CfgUi.ColorFgt;
 		}else if(CurLearnRecord.Learn == ELearn.Fgt){
 			//->Clear
 			_LearnOrUndo(Vm, ELearn.Fgt);//Make it undo
-			Vm.LearnedColor = Cfg.ColorNone;
+			Vm.LearnedColor = CfgUi.ColorNone;
 		}
 		return NIL;
 	}
@@ -194,8 +199,11 @@ public IImgGetter? SvcImg{get;set;}
 
 	public nil RenderWordList(){
 		WordCards.Clear();
+		var MaxDisplayedWordCount = Cfg?.Get(ItemsClientCfg.Word.MaxDisplayedWordCount)??50;
 		MgrLearn.State.WordsToLearn.Select(x=>{
-			WordCards.Add(new VmWordListCard().FromIWordForLearn(x));
+			if((u64)WordCards.Count < MaxDisplayedWordCount){
+				WordCards.Add(new VmWordListCard().FromIWordForLearn(x));
+			}
 			return 0;
 		}).ToList();
 		return NIL;

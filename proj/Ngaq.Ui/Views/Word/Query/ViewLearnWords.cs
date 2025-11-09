@@ -1,7 +1,4 @@
-using Ngaq.Ui.Infra.I18n;
-
 namespace Ngaq.Ui.Views.Word.Query;
-
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -18,7 +15,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmLearnWords;
-using K = ItemsUiI18n.LearnWord;
+using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LearnWord;
 public partial class ViewLearnWords
 	:UserControl
 {
@@ -224,6 +221,7 @@ public partial class ViewLearnWords
 		var Cnt = 1;
 		Ans.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 			return new VirtualizingStackPanel();
+			//return new StackPanel();
 		});
 		Ans.ItemTemplate = new FuncDataTemplate<VmWordListCard>((VmWordCard,b)=>{
 			var Grid = new Grid();
@@ -257,7 +255,7 @@ public partial class ViewLearnWords
 						,CBE.Mk<VmWordListCard>(x=>x.LearnedColor, Mode: BindingMode.OneWay)
 					);
 					o.BorderThickness = new Thickness(4,0,0,0);
-					o.LongPressDurationMs = Ctx?.Cfg.LongPressDurationMs??o.LongPressDurationMs;
+					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs??o.LongPressDurationMs;
 					StyBtnWordCard(o.Styles);
 				}
 

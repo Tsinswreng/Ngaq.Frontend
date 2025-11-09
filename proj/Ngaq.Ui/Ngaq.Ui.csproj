@@ -19,6 +19,7 @@
 		<PackageReference Include="Avalonia" />
 		<PackageReference Include="Avalonia.AvaloniaEdit" />
 		<PackageReference Include="Avalonia.Markup.Declarative" />
+		<PackageReference Include="Avalonia.Skia" />
 		<PackageReference Include="Avalonia.Themes.Fluent" />
 		<PackageReference Include="Avalonia.Fonts.Inter" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -38,6 +39,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
 		<PackageReference Include="ReactiveUI" />
 		<PackageReference Include="ReactiveUI.Fody" />
+		<PackageReference Include="SkiaSharp" />
 		<PackageReference Include="System.Reactive" />
 
 		<PackageReference Include="Irihi.Ursa" />

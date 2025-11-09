@@ -243,11 +243,11 @@ public partial class VmWordListCard
 			R.Add(LearnSymbol);
 		}
 
-		R.Add(GetValueOrDefault(z.Learn_Records!, ELearn.Add, null)?.Count+"");
+		R.Add(  (GetValueOrDefault(z.Learn_Records!, ELearn.Add, null)?.Count??0) + ""  );
 		R.Add(":");
-		R.Add(GetValueOrDefault(z.Learn_Records!, ELearn.Rmb, null)?.Count+"");
+		R.Add(  (GetValueOrDefault(z.Learn_Records!, ELearn.Rmb, null)?.Count??0) + ""  );
 		R.Add(":");
-		R.Add(GetValueOrDefault(z.Learn_Records!, ELearn.Fgt, null)?.Count+"");
+		R.Add(  (GetValueOrDefault(z.Learn_Records!, ELearn.Fgt, null)?.Count??0) + ""  );
 		return string.Join("",R);
 	}
 

@@ -85,7 +85,7 @@ public partial class ViewWordListCard
 		Root.AddInit(LangGrid.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
-				new ColDef(1, GUT.Star),
+				new ColDef(0.3, GUT.Star),
 				new ColDef(4, GUT.Star),
 				new ColDef(13, GUT.Star),
 			]);
