@@ -10,10 +10,21 @@ using Avalonia.Media;
 using Avalonia.Platform;
 
 public class StrokeTextEdit : Control {
+
+	// 静态构造里加回调
+	static StrokeTextEdit() {
+		TextProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
+		FillProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.InvalidateVisual());
+		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
+		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
+		FontSizeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
+	}
+
 	/* -------------- 对外 bindable 字段 -------------- */
 	// 改成 StyledProperty 就能绑
 	public static readonly StyledProperty<string> TextProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, string>(nameof(Text), "");
+	AvaloniaProperty.Register<StrokeTextEdit, string>(nameof(Text), defaultValue: "",
+		coerce: (_, v) => v ?? "");
 
 	public string Text {
 		get => GetValue(TextProperty);
@@ -55,6 +66,15 @@ public class StrokeTextEdit : Control {
 		set => SetValue(StrokeThicknessProperty, value);
 	}
 
+	public static readonly StyledProperty<VAlign> VerticalContentAlignmentProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, VAlign>(nameof(VerticalContentAlignment), VAlign.Center);
+
+	public VAlign VerticalContentAlignment {
+		get => GetValue(VerticalContentAlignmentProperty);
+		set => SetValue(VerticalContentAlignmentProperty, value);
+	}
+
+
 
 	/* -------------- 内部状态 -------------- */
 	private readonly List<TextLine> _lines = new();
@@ -62,10 +82,6 @@ public class StrokeTextEdit : Control {
 	private Typeface _typeface;
 	private Pen _strokePen;
 
-	static StrokeTextEdit() {
-		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
-		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
-	}
 
 	private void UpdatePen() => _strokePen = new Pen(Stroke, StrokeThickness);
 
@@ -127,22 +143,21 @@ public class StrokeTextEdit : Control {
 		new(txt, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
 			_typeface, FontSize, Fill);
 
+
+// 在类里补一行字段
+private double _topOffset = 0;
+
 	/* -------------- 渲染 -------------- */
 	public override void Render(DrawingContext dc) {
 		if (_lines.Count == 0) return;
 
-		var y = Padding.Top;
+		double y = _topOffset;                 // 不再直接 Padding.Top
 		foreach (var line in _lines) {
 			var fmt = CreateFormattedText(line.Text);
 			var origin = new Point(Padding.Left, y);
 
-			// 1. 生成文字几何
 			var geo = fmt.BuildGeometry(origin);
-
-			// 2. 描边几何（只画一次）
 			dc.DrawGeometry(null, new Pen(Stroke, StrokeThickness), geo);
-
-			// 3. 正文填充
 			dc.DrawText(fmt, origin);
 
 			y += fmt.Height;
@@ -165,23 +180,48 @@ public class StrokeTextEdit : Control {
 		dc.DrawLine(new Pen(Fill, 1), new Point(x, y), new Point(x, y + fmt.Height));
 	}
 
+	private bool _needsReLayout = true;
+
 	protected override Size MeasureOverride(Size availableSize) {
-		if (_lines.Count == 0 && !string.IsNullOrEmpty(Text))
-			RebuildLayout();          // 确保第一次就有尺寸
+		// 宽度未确定时先不测行，只返回最小高度
+		if (availableSize.Width <= 0 || double.IsInfinity(availableSize.Width))
+			return new Size(0, 20);
+
+		if (_needsReLayout) {
+			_needsReLayout = false;
+			RebuildLayout(availableSize.Width); // 把可用宽度传进去
+			InvalidateMeasure();                // 立即重新测量
+			return base.MeasureOverride(availableSize);
+		}
+
 		var h = _lines.Sum(l => CreateFormattedText(l.Text).Height) + Padding.Top + Padding.Bottom;
 		return new Size(availableSize.Width, h);
 	}
 
-	private bool _first = true;
-
 	protected override Size ArrangeOverride(Size finalSize) {
-		if (_first) {
-			_first = false;
-			RebuildLayout();                 // 此时 Bounds 已确定
-			InvalidateMeasure();             // 立即重测一次
+		if (finalSize.Width > 0 && _needsReLayout) {
+			_needsReLayout = false;
+			RebuildLayout(finalSize.Width);
+			InvalidateMeasure();
 		}
 		return finalSize;
 	}
+
+	private void RebuildLayout(double maxWidth) {
+		_lines.Clear();
+		if (string.IsNullOrEmpty(Text)) return;
+		maxWidth -= Padding.Left + Padding.Right;
+		if (maxWidth <= 0) return;
+
+		var text = Text.AsMemory();
+		int start = 0;
+		while (start < text.Length) {
+			int len = BreakLine(text.Slice(start), maxWidth);
+			_lines.Add(new TextLine { Text = text.Slice(start, len).ToString() });
+			start += len;
+		}
+	}
+
 
 	/* -------------- 交互 -------------- */
 	protected override void OnKeyDown(KeyEventArgs e) {

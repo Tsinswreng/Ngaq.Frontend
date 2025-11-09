@@ -156,8 +156,7 @@ public partial class ViewWordInfo
 				o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 			});
 
-			var Head = TxtBox();
-			//var Head = new TextBox();
+			var Head = TxtBox();//這個沒問題
 			BdrHead.Child = Head;
 			{var o = Head;
 				o.Styles.Add(new Style().NoMargin().NoPadding());
@@ -174,6 +173,7 @@ public partial class ViewWordInfo
 				//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
 			}
 
+			//這裏的字都沒顯示出來 都變成一條條細橫線了
 			Root.AddInit(TxtBox(), o=>{
 				o.Bind(
 					o.PropText_()
