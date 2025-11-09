@@ -57,6 +57,8 @@ public class StrokeTextEdit : Control {
 		set => SetValue(FontSizeProperty, value);
 	}
 
+	public TextWrapping TextWrapping = TextWrapping.Wrap;//尚不可用
+
 
 	public static readonly StyledProperty<double> StrokeThicknessProperty =
 	AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(StrokeThickness), 2.5);
@@ -170,6 +172,7 @@ private double _topOffset = 0;
 		   new Vector( StrokeThickness, -StrokeThickness),
 		   new Vector(-StrokeThickness,  StrokeThickness),
 		   new Vector( StrokeThickness,  StrokeThickness) };
+
 	private void DrawCaret(DrawingContext dc) {
 		var (line, off) = FindCaretLine();
 		if (line < 0) return;

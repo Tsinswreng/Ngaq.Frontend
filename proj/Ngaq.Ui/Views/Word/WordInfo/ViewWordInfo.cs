@@ -131,7 +131,7 @@ public partial class ViewWordInfo
 				o.Classes.Add(Cls.LightGray);//即o.Classes.Add("LightGray");
 			});
 			{{
-				LangId.AddInit(_SelectableTextBlock(), o=>{
+				LangId.AddInit(TxtBox(), o=>{
 					o.Bind(
 						o.PropText_()
 						,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
@@ -243,9 +243,9 @@ public partial class ViewWordInfo
 			}
 			{{
 				Grid.AddInit(TxtBox(), o=>{
-					//o.TextWrapping = TextWrapping.Wrap;//TODO
+					o.TextWrapping = TextWrapping.Wrap;
 					o.Bind(
-						TextBlock.TextProperty
+						o.PropText_()
 						,CBE.Mk<str>(x=>x)
 					);
 				});
