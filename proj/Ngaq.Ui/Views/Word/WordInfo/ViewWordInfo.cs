@@ -122,96 +122,90 @@ public partial class ViewWordInfo
 				RowDef(1, GUT.Star),
 			]);
 		});
+		var LangId = new AutoGrid(IsRow: false);
+		Root.AddInit(LangId.Grid, o=>{
+			o.ColumnDefinitions.AddRange([
+				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Auto),
+			]);
+			o.Classes.Add(Cls.LightGray);//即o.Classes.Add("LightGray");
+		});
 		{{
-			var LangId = new AutoGrid(IsRow: false);
-			Root.AddInit(LangId.Grid, o=>{
-				o.ColumnDefinitions.AddRange([
-					ColDef(1, GUT.Star),
-					ColDef(1, GUT.Auto),
-				]);
-				o.Classes.Add(Cls.LightGray);//即o.Classes.Add("LightGray");
-			});
-			{{
-				LangId.AddInit(TxtBox(), o=>{
-					o.Bind(
-						o.PropText_()
-						,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
-					);
-					o.HorizontalAlignment = HAlign.Left;
-					o.VerticalAlignment = VAlign.Center;
-				});
-				LangId.AddInit(_SelectableTextBlock(), o=>{
-					o.Bind(
-						o.PropText_()
-						,new CBE(CBE.Pth<Ctx>(x=>x.Id))
-					);
-					o.VerticalAlignment = VAlign.Center;
-					o.HorizontalAlignment = HAlign.Right;
-					o.TextAlignment = TxtAlign.Right;
-				});
-			}}//~LangId
-
-			var BdrHead = _Border();
-			Root.AddInit(BdrHead, o=>{
-				o.BorderThickness = new Thickness(0, 1, 0, 1);
-				o.BorderBrush = new SolidColorBrush(Colors.LightGray);
-			});
-
-			var Head = TxtBox();//這個沒問題
-			BdrHead.Child = Head;
-			{var o = Head;
-				o.Styles.Add(new Style().NoMargin().NoPadding());
+			LangId.AddInit(TxtBox(), o=>{
 				o.Bind(
 					o.PropText_()
-					,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
-						Mode = BindingMode.TwoWay
-					}
+					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 				);
-				o.VerticalAlignment = VAlign.Stretch;
-				//o.VerticalContentAlignment = VertAlign.Center;
-				//o.TextAlignment = TxtAlign.Right;
-				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
-				//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
-			}
-
-			//這裏的字都沒顯示出來 都變成一條條細橫線了
-			Root.AddInit(TxtBox(), o=>{
+				o.HorizontalAlignment = HAlign.Left;
+				o.VerticalAlignment = VAlign.Center;
+			});
+			LangId.AddInit(_SelectableTextBlock(), o=>{
 				o.Bind(
 					o.PropText_()
-					,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
-						//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
-						Mode = BindingMode.OneWay
-						,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str>(x=>{
-							var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.summary);
-							x.TryGetValue(Key, out var v);
-							return str.Join("\t",v??[]);
-						})//~Converter:
-					}//~new CBE
-				);//~Bind
-			});//~TxtBox
+					,new CBE(CBE.Pth<Ctx>(x=>x.Id))
+				);
+				o.VerticalAlignment = VAlign.Center;
+				o.HorizontalAlignment = HAlign.Right;
+				o.TextAlignment = TxtAlign.Right;
+			});
+		}}//~LangId
 
+		var BdrHead = _Border();
+		Root.AddInit(BdrHead, o=>{
+			o.BorderThickness = new Thickness(0, 1, 0, 1);
+			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
+		});
 
-			var BdrScr = new Border{};
-			Root.Add(BdrScr);
-
-			var ScrDescr = new ScrollViewer();
-			BdrScr.Child = ScrDescr;
-			{var o = ScrDescr;}
-			{{
-				var Description = _DescriptionList();
-				ScrDescr.Content = Description;
-				{var o = Description;
-
+		var Head = TxtBox();//這裏的字會被下面_DescriptionList的字覆蓋
+		BdrHead.Child = Head;
+		{var o = Head;
+			o.Styles.Add(new Style().NoMargin().NoPadding());
+			o.Bind(
+				o.PropText_()
+				,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
+					Mode = BindingMode.TwoWay
 				}
-			}}
-			Root.Add();
+			);
+			o.VerticalAlignment = VAlign.Stretch;
+			o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
+			//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
+		}
 
-		}}//~Root
+		Root.AddInit(TxtBox(), o=>{
+			o.Bind(
+				o.PropText_()
+				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
+					//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
+					Mode = BindingMode.OneWay
+					,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str>(x=>{
+						var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.summary);
+						x.TryGetValue(Key, out var v);
+						return str.Join("\t",v??[]);
+					})//~Converter:
+				}//~new CBE
+			);//~Bind
+		});//~TxtBox
+
+
+		var BdrScr = new Border{};
+		Root.Add(BdrScr);
+
+		var ScrDescr = new ScrollViewer();
+		BdrScr.Child = ScrDescr;
+		{var o = ScrDescr;}
+		{{
+			var Description = _DescriptionList();
+			ScrDescr.Content = Description;
+			{var o = Description;
+
+			}
+		}}
+		Root.Add();
 		return NIL;
 	}
 
 
-	Control _DescriptionList(){
+	Control _DescriptionList(){//這裏的字會覆蓋上面Head
 		var Items = new ItemsControl();
 		{var o = Items;
 			o.Bind(

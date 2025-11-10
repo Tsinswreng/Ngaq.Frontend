@@ -14,14 +14,16 @@ public partial class StrokeTextEdit : Control {
 
 	// 静态构造里加回调
 	static StrokeTextEdit() {
-		TextProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
+		TextProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) =>{
+			x.RebuildLayout();
+		});
 		FillProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.InvalidateVisual());
 		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
 		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
 		FontSizeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
 		ForegroundProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => {
-			if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
-				x.Fill = x.Foreground;
+			x.Fill = x.Foreground;
+			//if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
 		});
 	}
 
@@ -33,7 +35,9 @@ public partial class StrokeTextEdit : Control {
 
 	public string Text {
 		get => GetValue(TextProperty);
-		set => SetValue(TextProperty, value);
+		set{
+			SetValue(TextProperty, value);
+		}
 	}
 
 	public static readonly StyledProperty<IBrush> ForegroundProperty =
@@ -167,7 +171,9 @@ public partial class StrokeTextEdit : Control {
 
 	/* -------------- 渲染 -------------- */
 	public override void Render(DrawingContext dc) {
-		if (_lines.Count == 0) return;
+		if (_lines.Count == 0){
+			return;
+		}
 
 		double y = _topOffset;                 // 不再直接 Padding.Top
 		foreach (var line in _lines) {
@@ -191,11 +197,15 @@ public partial class StrokeTextEdit : Control {
 
 	private void DrawCaret(DrawingContext dc) {
 		var (line, off) = FindCaretLine();
-		if (line < 0) return;
+		if (line < 0){
+			return;
+		}
 		var fmt = CreateFormattedText(_lines[line].Text[..off]);
 		double x = Padding.Left + fmt.Width;
 		double y = Padding.Top;
-		for (int i = 0; i < line; i++) y += CreateFormattedText(_lines[i].Text).Height;
+		for (int i = 0; i < line; i++){
+			y += CreateFormattedText(_lines[i].Text).Height;
+		}
 		dc.DrawLine(new Pen(Fill, 1), new Point(x, y), new Point(x, y + fmt.Height));
 	}
 
@@ -209,10 +219,10 @@ public partial class StrokeTextEdit : Control {
 	protected override Size MeasureOverride(Size availableSize) {
 		// 宽度未确定时先不测行，只返回最小高度
 		if (availableSize.Width <= 0 || double.IsInfinity(availableSize.Width)) {
+			//斷點調試中 這條分支從未被進入過
 			return new Size(0, FontSize);
 			//return base.MeasureOverride(availableSize);
 		}
-
 
 		if (_needsReLayout) {
 			_needsReLayout = false;
@@ -221,8 +231,13 @@ public partial class StrokeTextEdit : Control {
 			//return base.MeasureOverride(availableSize);
 		}
 
-		var h = _lines.Sum(l => CreateFormattedText(l.Text).Height) + Padding.Top + Padding.Bottom;
-		return new Size(availableSize.Width, h);
+		// var h = _lines.Sum(l => CreateFormattedText(l.Text).Height) + Padding.Top + Padding.Bottom;
+		// return new Size(availableSize.Width, h);
+
+		var h = _lines.Count == 0
+		? CreateFormattedText("A").Height // ✅ 至少一行
+		: _lines.Sum(l => CreateFormattedText(l.Text).Height);
+		return new Size(availableSize.Width, h + Padding.Top + Padding.Bottom);
 	}
 
 	/*
