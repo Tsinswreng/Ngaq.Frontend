@@ -234,13 +234,6 @@ public partial class ViewLearnWords
 				if(Cnt > Ctx?.WordCards.Count){
 					Cnt = 1;
 				}
-				// var Index = new TextBlock();
-				// Grid.Children.Add(Index);
-				// {var o = Index;
-				// 	o.Text = Cnt+""; //TODO 虛擬化時此不準
-				// 	o.HorizontalAlignment = HoriAlign.Right;
-				// 	o.ZIndex = 999;
-				// }
 				Cnt++;
 				var Btn = new SwipeLongPressBtn();
 				Grid.Children.Add(Btn);

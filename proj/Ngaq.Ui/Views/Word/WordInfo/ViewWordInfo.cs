@@ -10,6 +10,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
+using Ngaq.Ui.StrokeText;
 
 public partial class ViewWordInfo
 	:UserControl

@@ -1,4 +1,5 @@
-namespace Ngaq.Ui;
+//高度測量不正確。不同控件實例的多行文字會重疊。我手動調窗口大小纔變正常。
+namespace Ngaq.Ui.StrokeText;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,7 +10,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Platform;
 
-public class StrokeTextEdit : Control {
+public partial class StrokeTextEdit : Control {
 
 	// 静态构造里加回调
 	static StrokeTextEdit() {
@@ -18,9 +19,9 @@ public class StrokeTextEdit : Control {
 		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
 		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
 		FontSizeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
-		ForegroundProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) =>{
-		if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
-			x.Fill = x.Foreground;
+		ForegroundProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => {
+			if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
+				x.Fill = x.Foreground;
 		});
 	}
 
@@ -35,14 +36,13 @@ public class StrokeTextEdit : Control {
 		set => SetValue(TextProperty, value);
 	}
 
-public static readonly StyledProperty<IBrush> ForegroundProperty =
-	AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Foreground), Brushes.Black);
+	public static readonly StyledProperty<IBrush> ForegroundProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Foreground), Brushes.Black);
 
-public IBrush Foreground
-{
-	get => GetValue(ForegroundProperty);
-	set => SetValue(ForegroundProperty, value);
-}
+	public IBrush Foreground {
+		get => GetValue(ForegroundProperty);
+		set => SetValue(ForegroundProperty, value);
+	}
 
 	// 注册三个可绑属性
 	public static readonly StyledProperty<IBrush> FillProperty =
@@ -89,7 +89,6 @@ public IBrush Foreground
 	}
 
 
-
 	/* -------------- 内部状态 -------------- */
 	private readonly List<TextLine> _lines = new();
 	private int _caretIndex;
@@ -107,7 +106,9 @@ public IBrush Foreground
 		Focusable = true;
 		Cursor = new Cursor(StandardCursorType.Ibeam);
 		this.GetPropertyChangedObservable(BoundsProperty)
-		.Subscribe(_ => RebuildLayout());
+		.Subscribe(
+			_ => RebuildLayout()
+		);
 	}
 
 	/* -------------- 布局+折行 -------------- */
@@ -119,7 +120,10 @@ public IBrush Foreground
 		}
 
 		var maxWidth = Bounds.Width - Padding.Left - Padding.Right;
-		if (maxWidth <= 0) return;
+		if (maxWidth <= 0) {
+			InvalidateVisual();
+			return;
+		}
 
 		var text = Text.AsMemory();
 		int start = 0;
@@ -158,8 +162,8 @@ public IBrush Foreground
 			_typeface, FontSize, Fill);
 
 
-// 在类里补一行字段
-private double _topOffset = 0;
+	// 在类里补一行字段
+	private double _topOffset = 0;
 
 	/* -------------- 渲染 -------------- */
 	public override void Render(DrawingContext dc) {
@@ -197,27 +201,40 @@ private double _topOffset = 0;
 
 	private bool _needsReLayout = true;
 
+	/*
+	告訴布局系統「我需要多大」
+	重寫 MeasureOverride(Size availableSize)，返回控件希望佔用的尺寸。
+	如果裡面還有子元素，記得遞歸調用 child.Measure(...)。
+	 */
 	protected override Size MeasureOverride(Size availableSize) {
 		// 宽度未确定时先不测行，只返回最小高度
-		if (availableSize.Width <= 0 || double.IsInfinity(availableSize.Width))
-			return new Size(0, 20);
+		if (availableSize.Width <= 0 || double.IsInfinity(availableSize.Width)) {
+			return new Size(0, FontSize);
+			//return base.MeasureOverride(availableSize);
+		}
+
 
 		if (_needsReLayout) {
 			_needsReLayout = false;
 			RebuildLayout(availableSize.Width); // 把可用宽度传进去
-			InvalidateMeasure();                // 立即重新测量
-			return base.MeasureOverride(availableSize);
+			//InvalidateMeasure(); // 立即重新测量  //恐觸死循環
+			//return base.MeasureOverride(availableSize);
 		}
 
 		var h = _lines.Sum(l => CreateFormattedText(l.Text).Height) + Padding.Top + Padding.Bottom;
 		return new Size(availableSize.Width, h);
 	}
 
+	/*
+	告訴布局系統「我怎麼擺」
+	重寫 ArrangeOverride(Size finalSize)，把子元素或自己的繪圖區域安排到最終矩形。
+	最後必須返回實際使用的 finalSize。
+	 */
 	protected override Size ArrangeOverride(Size finalSize) {
 		if (finalSize.Width > 0 && _needsReLayout) {
 			_needsReLayout = false;
 			RebuildLayout(finalSize.Width);
-			InvalidateMeasure();
+			//InvalidateMeasure(); //恐觸死循環
 		}
 		return finalSize;
 	}
@@ -238,37 +255,6 @@ private double _topOffset = 0;
 	}
 
 
-	/* -------------- 交互 -------------- */
-	protected override void OnKeyDown(KeyEventArgs e) {
-		switch (e.Key) {
-			case Key.Left when _caretIndex > 0:
-				_caretIndex--;
-				break;
-			case Key.Right when _caretIndex < Text.Length:
-				_caretIndex++;
-				break;
-			case Key.Back when _caretIndex > 0:
-				Text = Text.Remove(--_caretIndex, 1);
-				break;
-			case Key.Delete when _caretIndex < Text.Length:
-				Text = Text.Remove(_caretIndex, 1);
-				break;
-			case Key.Enter:
-				Text = Text.Insert(_caretIndex++, Environment.NewLine);
-				break;
-			default:
-				return;
-		}
-		InvalidateVisual();
-		e.Handled = true;
-	}
-
-	protected override void OnTextInput(TextInputEventArgs e) {
-		Text = Text.Insert(_caretIndex, e.Text);
-		_caretIndex += e.Text.Length;
-		InvalidateVisual();
-		e.Handled = true;
-	}
 
 	/* -------------- 光标定位 -------------- */
 	private (int line, int off) FindCaretLine() {

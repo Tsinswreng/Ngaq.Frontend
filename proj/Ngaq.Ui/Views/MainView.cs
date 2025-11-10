@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
 using Tsinswreng.AvlnTools.Controls;
@@ -139,6 +140,7 @@ Control? Test()
 			}
 		};
 		w.Show();
+		//return;
 
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
