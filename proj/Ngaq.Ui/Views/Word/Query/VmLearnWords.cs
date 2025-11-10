@@ -19,6 +19,10 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Tsinswreng.CsCfg;
 using Ngaq.Core.Infra.Cfg;
+using System.Diagnostics;
+using Tsinswreng.CsTools;
+using Ngaq.Core.Tools;
+using Avalonia.Logging;
 
 public partial class VmLearnWords
 	:ViewModelBase
@@ -172,6 +176,7 @@ ICfgAccessor? Cfg;
 	}
 
 	public async Task<nil> LoadEtStartAsy(CT Ct){
+		var sw = Stopwatch.StartNew();
 		await Task.Run(async()=>{
 				if(!MgrLearn.State.OperationStatus.Load){
 				var Page = await SvcWord.PageWord(
@@ -179,20 +184,26 @@ ICfgAccessor? Cfg;
 					,PageQry.SlctAll()
 					,Ct
 				);
-
-				IList<IJnWord> Words = (await Page.ToSyncPage(Ct)).Data??[];
-
-				MgrLearn.Load(Words);//
+				//須先DBʹ詞ˇ全載入內存後交予MgrLearn。否則算權重旹併發讀則使Sqlite出錯
+				var sw2 = Stopwatch.StartNew();
+				var loadedAll = await Page.ToSyncPage(Ct);
+				sw2.Stop();
+				LogInfo($"LoadAllWordFromDb: {sw2.ElapsedMilliseconds} ms");
+				var dataAsyE = (loadedAll.Data??[]).ToAsyncEnumerable();
+				//await MgrLearn.LoadEtCalcWeightAsy(Page.DataAsyE.OrEmpty(), Ct);
+				await MgrLearn.LoadEtCalcWeightAsy(dataAsyE, Ct);
 			}
 			await MgrLearn.StartAsy(Ct);
 		});
 		RenderWordList();
+		sw.Stop();
+		LogInfo($"LoadEtStartAsy: {sw.ElapsedMilliseconds} ms");
 		return NIL;
 	}
 
 	public async Task<nil> SaveEtRestartAsy(CT Ct){
 		await MgrLearn.SaveAsy(Ct);
-		await MgrLearn.StartAsy(Ct);
+		await MgrLearn.CalcWeightEtStartAsy(Ct);
 		RenderWordList();
 		return NIL;
 	}

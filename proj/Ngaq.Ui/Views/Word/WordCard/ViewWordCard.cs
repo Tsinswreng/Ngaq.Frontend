@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordCard;
 
 using Avalonia.Controls;
+using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Core.Shared.Word.Models.Learn_;
@@ -37,6 +38,8 @@ public partial class ViewWordListCard
 			Stroke = Brushes.Black,
 			StrokeThickness = 5
 		};
+		R.VerticalAlignment = VAlign.Center;
+		R.Styles.Add(new Style().NoMargin().NoPadding());
 		return R;
 	}
 

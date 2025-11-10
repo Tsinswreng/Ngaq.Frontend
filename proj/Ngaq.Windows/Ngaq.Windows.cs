@@ -1,5 +1,6 @@
 ﻿namespace Ngaq.Windows;
 
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Markup.Declarative;
 using Microsoft.Extensions.DependencyInjection;

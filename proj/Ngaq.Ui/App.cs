@@ -51,12 +51,13 @@ public partial class App :Application
 		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
 		_Style();
 
-//#if DEBUG && WINDOWS
-#if DEBUG && (WINDOWS || WIN32)
-		if(OperatingSystem.IsWindows()){
+		//只在windows下可用。在安卓中debug旹需手動註釋掉此。
+		//不能運行旹判斷平臺、緣無此符號則編譯不通
+		//增 && WINDOWS亦不效 緣Ngaq.Ui中無斯預處理ˉ符號
+		#if DEBUG
 			this.AttachDevTools();
-		}
-#endif
+		#endif
+
 	}
 
 	protected nil _Style(){
