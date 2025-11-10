@@ -69,13 +69,14 @@ public partial class App :Application
 		// );
 		// Styles.Add(StyBaseFontSize);
 
-		// var StyBaseFontSize = new Style(x=>
-		// 	x.Is<Control>()
-		// ).Set(
-		// 	TextElement.FontFamilyProperty
-		// 	//,new FontFamily("Times New Roman, STSong")
-		// 	,new FontFamily("Times New Roman")
-		// ).Attach(Styles);
+		var StyBaseFontSize = new Style(x=>
+			x.Is<Control>()
+		).Set(
+			TextElement.FontFamilyProperty
+			//,new FontFamily("Times New Roman, STSong")
+			//,new FontFamily("Times New Roman")
+			,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
+		).Attach(Styles);
 
 
 		//按鈕舒展

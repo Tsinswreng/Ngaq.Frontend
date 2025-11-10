@@ -1,4 +1,3 @@
-//高度測量不正確。不同控件實例的多行文字會重疊。我手動調窗口大小纔變正常。
 namespace Ngaq.Ui.StrokeText;
 using System;
 using System.Collections.Generic;
@@ -26,6 +25,10 @@ public partial class StrokeTextEdit : Control {
 			//if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
 		});
 		TextWrappingProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
+		/* 之前已有的监听保持不变，只追加下面三行 */
+		FontFamilyProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
+		FontStyleProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
+		FontWeightProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
@@ -40,6 +43,9 @@ public partial class StrokeTextEdit : Control {
 			SetValue(TextProperty, value);
 		}
 	}
+
+	public static readonly StyledProperty<FontStyle> FontStyleProperty
+	=AvaloniaProperty.Register<StrokeTextEdit, FontStyle>(nameof(FontStyle), FontStyle.Normal);
 
 	public static readonly StyledProperty<TextWrapping> TextWrappingProperty =
 		AvaloniaProperty.Register<StrokeTextEdit, TextWrapping>(nameof(Avalonia.Media.TextWrapping), Avalonia.Media.TextWrapping.NoWrap);
@@ -98,19 +104,53 @@ public partial class StrokeTextEdit : Control {
 		set => SetValue(VerticalContentAlignmentProperty, value);
 	}
 
+	public static readonly StyledProperty<FontFamily> FontFamilyProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, FontFamily>(nameof(FontFamily), FontFamily.Default);
+
+	public FontFamily FontFamily{
+		get => GetValue(FontFamilyProperty);
+		set => SetValue(FontFamilyProperty, value);
+	}
+
+	public static readonly StyledProperty<FontWeight> FontWeightProperty
+	=AvaloniaProperty.Register<StrokeTextEdit, FontWeight>(nameof(FontWeight), FontWeight.Normal);
+
+	private static readonly StyledProperty<Typeface> TypefaceProperty
+	=AvaloniaProperty.Register<StrokeTextEdit, Typeface>(nameof(Typeface), new Typeface(FontFamily.Default));
+
+
+
+	public FontWeight FontWeight{
+		get => GetValue(FontWeightProperty);
+		set => SetValue(FontWeightProperty, value);
+	}
+
+	public FontStyle FontStyle{
+		get => GetValue(FontStyleProperty);
+		set => SetValue(FontStyleProperty, value);
+	}
+
+	public Typeface Typeface{
+		get => GetValue(TypefaceProperty);
+		private set => SetValue(TypefaceProperty, value);
+	}
 
 	/* -------------- 内部状态 -------------- */
 	private readonly List<TextLine> _lines = new();
 	private int _caretIndex;
-	private Typeface _typeface;
+
 	private Pen _strokePen;
+
+	private void UpdateTypeface(){
+		Typeface = new Typeface(FontFamily, FontStyle.Normal, FontWeight.Normal);
+	}
 
 
 	private void UpdatePen() => _strokePen = new Pen(Stroke, StrokeThickness);
 
 	public StrokeTextEdit() {
 		//_typeface = new Typeface("Microsoft YaHei");
-		_typeface = new Typeface(FontFamily.Default);
+		Typeface = new Typeface(FontFamily.Default);
 		_strokePen = new Pen(Stroke, StrokeThickness);
 		UpdatePen();
 
@@ -120,6 +160,13 @@ public partial class StrokeTextEdit : Control {
 		.Subscribe(
 			_ => RebuildLayout()
 		);
+	}
+
+
+	private void RebuildTypeface(){
+		var z = this;
+		Typeface = new Typeface(FontFamily, z.FontStyle, FontWeight);
+		RebuildLayout();   // 布局依赖字形度量，必须刷新
 	}
 
 	/* -------------- 布局+折行 -------------- */
@@ -171,7 +218,7 @@ public partial class StrokeTextEdit : Control {
 
 	private FormattedText CreateFormattedText(string txt) =>
 		new(txt, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
-			_typeface, FontSize, Fill);
+			Typeface, FontSize, Fill);
 
 
 	// 在类里补一行字段
@@ -323,5 +370,5 @@ public static class ExtnStrokeTextEdit {
 	public static StyledProperty<VAlign> PropVerticalContentAlignment_(this StrokeTextEdit z) => StrokeTextEdit.VerticalContentAlignmentProperty;
 
 	public static StyledProperty<TextWrapping> PropTextWrapping_(this StrokeTextEdit z) => StrokeTextEdit.TextWrappingProperty;
-
+	public static StyledProperty<FontFamily> PropFontFamily_(this StrokeTextEdit z)=> StrokeTextEdit.FontFamilyProperty;
 }
