@@ -103,6 +103,7 @@ public partial class ViewWordListCard
 		{{
 			LangGrid
 			.AddInit(TxtBox(), o=>{
+				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
 				o.Bind(
 					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Index)
@@ -139,7 +140,7 @@ public partial class ViewWordListCard
 					,CBE.Mk<Ctx>(x=>x.Head)
 				);
 				o.Bind(
-					TextBlock.ForegroundProperty
+					o.PropForeground_()
 					,CBE.Mk<Ctx>(x=>x.FontColor)
 				);
 			});
@@ -156,17 +157,6 @@ public partial class ViewWordListCard
 				new ColDef(3, GUT.Star),//last review time
 				new ColDef(1, GUT.Star),//tab
 				new ColDef(7, GUT.Star),//weight
-				//Auto會對不齊故棄用
-				// new ColDef(1, GUT.Auto),//上次學習記錄
-				// new ColDef(1, GUT.Auto),//add
-				// new ColDef(1, GUT.Auto),//:
-				// new ColDef(1, GUT.Auto),//rmb
-				// new ColDef(1, GUT.Auto),//:
-				// new ColDef(1, GUT.Auto),//fgt
-				// new ColDef(1, GUT.Auto),//tab
-				// new ColDef(1, GUT.Auto),//last review time
-				// new ColDef(1, GUT.Auto),//tab
-				// new ColDef(1, GUT.Auto),//weight
 			]);
 		}
 		{{

@@ -11,6 +11,7 @@ using Avalonia.Data;
 using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui.StrokeText;
+using Avalonia.Controls.Primitives;
 
 public partial class ViewWordInfo
 	:UserControl
@@ -61,7 +62,7 @@ public partial class ViewWordInfo
 
 	protected StrokeTextEdit TxtBox(){
 		var R = new StrokeTextEdit{
-			Fill = Brushes.White,
+			Foreground = Brushes.White,
 			Stroke = Brushes.Black,
 			StrokeThickness = 5
 		};
@@ -117,7 +118,8 @@ public partial class ViewWordInfo
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//LangId
 				RowDef(3, GUT.Auto),//Head
-				RowDef(1, GUT.Auto),//Summary
+				//RowDef(1, GUT.Auto),//Summary
+				new RowDef(1, GUT.Auto){MinHeight = 0},
 				RowDef(100, GUT.Star),//Description
 				RowDef(1, GUT.Star),
 			]);
@@ -156,7 +158,7 @@ public partial class ViewWordInfo
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 		});
 
-		var Head = TxtBox();//這裏的字會被下面_DescriptionList的字覆蓋
+		var Head = TxtBox();
 		BdrHead.Child = Head;
 		{var o = Head;
 			o.Styles.Add(new Style().NoMargin().NoPadding());
@@ -171,6 +173,10 @@ public partial class ViewWordInfo
 			//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
 		}
 
+		//summary
+		//TODO 判斷Summary有內容旹纔示
+		Root.Add();
+		#if false
 		Root.AddInit(TxtBox(), o=>{
 			o.Bind(
 				o.PropText_()
@@ -185,6 +191,7 @@ public partial class ViewWordInfo
 				}//~new CBE
 			);//~Bind
 		});//~TxtBox
+		#endif
 
 
 		var BdrScr = new Border{};

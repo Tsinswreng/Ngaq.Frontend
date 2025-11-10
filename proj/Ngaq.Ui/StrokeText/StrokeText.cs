@@ -25,6 +25,7 @@ public partial class StrokeTextEdit : Control {
 			x.Fill = x.Foreground;
 			//if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
 		});
+		TextWrappingProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
@@ -38,6 +39,14 @@ public partial class StrokeTextEdit : Control {
 		set{
 			SetValue(TextProperty, value);
 		}
+	}
+
+	public static readonly StyledProperty<TextWrapping> TextWrappingProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, TextWrapping>(nameof(Avalonia.Media.TextWrapping), Avalonia.Media.TextWrapping.NoWrap);
+
+	public TextWrapping TextWrapping{
+		get => GetValue(TextWrappingProperty);
+		set => SetValue(TextWrappingProperty, value);
 	}
 
 	public static readonly StyledProperty<IBrush> ForegroundProperty =
@@ -73,9 +82,6 @@ public partial class StrokeTextEdit : Control {
 		set => SetValue(FontSizeProperty, value);
 	}
 
-	public TextWrapping TextWrapping = TextWrapping.Wrap;//尚不可用
-
-
 	public static readonly StyledProperty<double> StrokeThicknessProperty =
 	AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(StrokeThickness), 2.5);
 
@@ -103,7 +109,8 @@ public partial class StrokeTextEdit : Control {
 	private void UpdatePen() => _strokePen = new Pen(Stroke, StrokeThickness);
 
 	public StrokeTextEdit() {
-		_typeface = new Typeface("Microsoft YaHei");
+		//_typeface = new Typeface("Microsoft YaHei");
+		_typeface = new Typeface(FontFamily.Default);
 		_strokePen = new Pen(Stroke, StrokeThickness);
 		UpdatePen();
 
@@ -146,6 +153,7 @@ public partial class StrokeTextEdit : Control {
 	// 简单英文/中文断行，生产环境可换成 TextLayout
 	private int BreakLine(ReadOnlyMemory<char> slice, double maxWidth) {
 		if (slice.Length == 0) return 0;
+		if (TextWrapping == TextWrapping.NoWrap) return slice.Length;
 		var fmt = CreateFormattedText(slice.Span.ToString());
 		if (fmt.Width <= maxWidth) return slice.Length;
 
@@ -299,5 +307,21 @@ public partial class StrokeTextEdit : Control {
 
 
 public static class ExtnStrokeTextEdit {
+	/* 按照 PropText_() 的命名风格，把其余属性一次性补全 */
 	public static StyledProperty<string> PropText_(this StrokeTextEdit z) => StrokeTextEdit.TextProperty;
+
+	public static StyledProperty<IBrush> PropForeground_(this StrokeTextEdit z) => StrokeTextEdit.ForegroundProperty;
+
+	public static StyledProperty<IBrush> PropFill_(this StrokeTextEdit z) => StrokeTextEdit.FillProperty;
+
+	public static StyledProperty<IBrush> PropStroke_(this StrokeTextEdit z) => StrokeTextEdit.StrokeProperty;
+
+	public static StyledProperty<double> PropFontSize_(this StrokeTextEdit z) => StrokeTextEdit.FontSizeProperty;
+
+	public static StyledProperty<double> PropStrokeThickness_(this StrokeTextEdit z) => StrokeTextEdit.StrokeThicknessProperty;
+
+	public static StyledProperty<VAlign> PropVerticalContentAlignment_(this StrokeTextEdit z) => StrokeTextEdit.VerticalContentAlignmentProperty;
+
+	public static StyledProperty<TextWrapping> PropTextWrapping_(this StrokeTextEdit z) => StrokeTextEdit.TextWrappingProperty;
+
 }

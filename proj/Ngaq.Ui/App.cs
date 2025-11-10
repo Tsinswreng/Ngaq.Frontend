@@ -52,7 +52,7 @@ public partial class App :Application
 		_Style();
 
 //#if DEBUG && WINDOWS
-#if DEBUG
+#if DEBUG && (WINDOWS || WIN32)
 		if(OperatingSystem.IsWindows()){
 			this.AttachDevTools();
 		}
