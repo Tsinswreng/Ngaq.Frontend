@@ -8,6 +8,8 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.AvlnTools.Controls;
@@ -119,6 +121,7 @@ public partial class ViewLearnWords
 				ColDef(100, GUT.Star),
 				ColDef(100, GUT.Star),
 				ColDef(100, GUT.Star),
+				ColDef(100, GUT.Star),
 			]);
 		});
 		{{
@@ -136,9 +139,24 @@ public partial class ViewLearnWords
 				o.SetExt((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
 			}).AddInit(new OpBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o._Button.Content = "🔄"+I[K.Reset];
+				o._Button.Content = "🔄"+I[K.Clear];
 				o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
-			});
+			})
+			.AddInit(new OpBtn{}, o=>{
+				o.Classes.Add(Cls.MenuBtn);
+				o._Button.Content = "🔄"+I[K.Settings];
+				o._Button.Click += (s,e)=>{
+					Ctx?.ViewNavi?.GoTo(
+						ToolView.WithTitle(
+							I[K.LearnWordSettings]
+							,new ViewCfgLearnWord()
+						)
+					);
+				};
+				//o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
+			})
+
+			;
 		}}
 
 		return R.Grid;

@@ -25,6 +25,9 @@ type Full = {
 			Start: TTemplate
 			,Save: TTemplate
 			,Reset: TTemplate
+			,Clear: TTemplate
+			,Settings: TTemplate
+			,LearnWordSettings: TTemplate
 		}
 		,LoginRegister:{
 			Login:TTemplate

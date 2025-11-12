@@ -1,3 +1,4 @@
+namespace Ngaq.Ui.Tools;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Ngaq.Ui.Infra.Ctrls;
@@ -5,7 +6,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 
-namespace Ngaq.Ui.Tools;
+
 
 public partial class ToolView{
 

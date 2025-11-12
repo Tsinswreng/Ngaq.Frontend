@@ -24,6 +24,9 @@ public class LearnWord{
 	public static readonly K Start = Mk(_Root, [nameof(Start)]);
 	public static readonly K Save = Mk(_Root, [nameof(Save)]);
 	public static readonly K Reset = Mk(_Root, [nameof(Reset)]);
+	public static readonly K Clear = Mk(_Root, [nameof(Clear)]);
+	public static readonly K Settings = Mk(_Root, [nameof(Settings)]);
+	public static readonly K LearnWordSettings = Mk(_Root, [nameof(LearnWordSettings)]);
 }
 
 public class Library{
