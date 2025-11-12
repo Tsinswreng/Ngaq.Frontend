@@ -4,8 +4,8 @@ cd I18n
 mkdir -p Languages
 esno main.ts ./Languages
 cd ..
-mkdir -p ./proj/Ngaq.Windows/bin/Debug/net9.0/Languages
-cp -r ./I18n/Languages/* ./proj/Ngaq.Windows/bin/Debug/net9.0/Languages/
+mkdir -p ./proj/Ngaq.Windows/bin/Debug/net10.0/Languages
+cp -r ./I18n/Languages/* ./proj/Ngaq.Windows/bin/Debug/net10.0/Languages/
 */
 
 import { I18nForOne, I18nMgr, TI18nKv } from "./i18n"
