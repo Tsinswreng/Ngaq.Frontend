@@ -2,8 +2,11 @@ namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Input;
 using Avalonia.Media;
+using CommunityToolkit.Mvvm.Input;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
@@ -57,17 +60,22 @@ public partial class ViewSearchWords
 			]);
 		}
 		{{
+			var searchBtn = new OpBtn();
 			SearchGrid.AddInit(_TextBox(), o=>{
 				o.Bind(
 					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Input)
 				);
+				o.KeyBindings.Add(
+					new KeyBinding{
+						Gesture = new (Key.Enter),
+						Command = new RelayCommand(()=>searchBtn.PerformClick())
+					}
+				);
 			})
-			.AddInit(_Button(), o=>{
-				o.Content = "🔍";
-				o.Click += (s,e)=>{
-					Ctx?.InitSearch();
-				};
+			.AddInit(searchBtn, o=>{
+				o.BtnContent = "🔍";
+				o.SetExt((Ct)=>Ctx?.InitSearchAsy(Ct));
 			});
 		}}
 		Root.AddInit(_ScrollViewer(), scrl=>{

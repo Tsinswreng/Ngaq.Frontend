@@ -1,11 +1,8 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using System.Collections.ObjectModel;
-using System.Security.AccessControl;
+using Avalonia.Threading;
 using Ngaq.Core.Frontend.User;
-using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models.Dto;
-using Ngaq.Core.Word.Models;
-using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsPage;
@@ -56,49 +53,45 @@ public partial class VmSearchWords: ViewModelBase{
 		set{SetProperty(ref _GotWords, value);}
 	}
 
-	CancellationTokenSource Cts = new();
-	public nil InitSearch(){
+	public async Task<nil> InitSearchAsy(CT Ct){
 		PageIdx = 0;
-		return Search();
+		return await SearchAsy(Ct);
 	}
-	protected nil Search(){
-		if(SvcWord is null || IUserCtxMgr is null){
-			return NIL;
-		}
-		var UserCtx = IUserCtxMgr.GetUserCtx();
-		var Ct = Cts.Token;
-		var pageQry = new PageQry{
-			PageSize = 10
-			,PageIdx = PageIdx
-		};
-		var req = new ReqSearchWord{
-			RawStr = Input
-		};
-		if(UserCtx == null){
-			return NIL;
-		}
-		SvcWord.PageSearch(UserCtx, pageQry, req, Ct).ContinueWith(t=>{
-			if(t.IsFaulted){
-				HandleErr(t);
+	protected async Task<nil> SearchAsy(CT Ct=default){
+		await Task.Run(async()=>{
+			if(SvcWord is null || IUserCtxMgr is null){
 				return;
 			}
-			var R = t.Result;
-//虛列表渲染旹 若項數未變則
-// R.ItemTemplate = new FuncDataTemplate<JnWord>((jnWord, b)=>{} 中 jnWord 皆潙null
-			GotWords = [];//勿刪
-			GotWords = R.Data??[];
+			var UserCtx = IUserCtxMgr.GetUserCtx();
+			var pageQry = new PageQry{
+				PageSize = 10
+				,PageIdx = PageIdx
+			};
+			var req = new ReqSearchWord{
+				RawStr = Input
+			};
+			if(UserCtx == null){
+				return;
+			}
+			var R = await SvcWord.PageSearch(UserCtx, pageQry, req, Ct);
+			//虛列表渲染旹 若項數未變則
+			// R.ItemTemplate = new FuncDataTemplate<JnWord>((jnWord, b)=>{} 中 jnWord 皆潙null
+			Dispatcher.UIThread.Post(()=>{
+				GotWords = [];//勿刪
+				GotWords = R.Data??[];
+			});
 		});
 		return NIL;
 	}
 
 	public nil NextPage(){
 		PageIdx++;
-		return Search();
+		return SearchAsy();
 	}
 
 	public nil PrevPage(){
 		PageIdx--;
-		return Search();
+		return SearchAsy();
 	}
 
 

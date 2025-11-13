@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Infra.Ctrls;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Ngaq.Ui.Infra;
@@ -17,7 +18,6 @@ public partial class OpBtn: ContentControl{
 	}
 	public Button _Button{get;set;} = new();
 	public CancellationTokenSource Cts{get;set;} = new();
-
 	public Func<CT, Task<nil>?>? FnExeAsy{get;set;} = async(Ct)=>NIL;
 	public Func<obj?>? FnOk{get;set;}
 	public Func<Exception?, obj?>? FnFail{get;set;}
@@ -51,6 +51,12 @@ public partial class OpBtn: ContentControl{
 	}
 
 	public obj? BtnContent{get=>_Button?.Content; set=>_Button.Content = value;}
+
+	// 在 OpBtn 類內部加一行
+	public void PerformClick(){
+		// 把按鈕的 Click 事件手動拋出去
+		_Button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+	}
 
 	public OpBtn(){
 		base.Content = Grid;
