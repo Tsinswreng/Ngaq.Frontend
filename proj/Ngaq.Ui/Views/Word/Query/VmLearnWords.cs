@@ -13,7 +13,7 @@ using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Frontend.ImgBg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word;
-using Ngaq.Core.Shared.Word.Models;
+
 using Avalonia.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
@@ -33,6 +33,7 @@ public partial class VmLearnWords
 		/// 單詞條長按
 		/// </summary>
 		public i64 LongPressDurationMs = 200;
+		public IBrush ColorDflt = Brushes.Black;
 		public IBrush ColorNone = Brushes.Transparent;
 		// public IBrush ColorRmb = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 0, 80, 0));
 		// public IBrush ColorFgt = new SolidColorBrush(Color.FromArgb((u8)(0.8*0xff), 80, 0, 0));
@@ -98,17 +99,17 @@ ICfgAccessor? Cfg;
 		#endif
 	}
 
-	protected ObservableCollection<VmWordListCard> _WordCards = new();
+	//protected ObservableCollection<VmWordListCard> _WordCards = new();
 	public ObservableCollection<VmWordListCard> WordCards{
-		get{return _WordCards;}
-		set{SetProperty(ref _WordCards, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = new();
 
-	protected VmWordInfo _VmWordInfo = new();
+	//protected VmWordInfo _VmWordInfo = new();
 	public VmWordInfo CurWordInfo{
-		get{return _VmWordInfo;}
-		set{SetProperty(ref _VmWordInfo, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = new();
 
 
 	protected ELearnOpRtn _LearnOrUndo(VmWordListCard Vm, ELearn Learn){
@@ -222,6 +223,7 @@ ICfgAccessor? Cfg;
 
 	public async Task<nil> ResetAsy(CT Ct){
 		//MgrLearn = App.GetSvc<MgrLearn>();
+		BgBrush = CfgUi.ColorDflt;
 		MgrLearn.Reset();
 		WordCards = new();
 		return NIL;

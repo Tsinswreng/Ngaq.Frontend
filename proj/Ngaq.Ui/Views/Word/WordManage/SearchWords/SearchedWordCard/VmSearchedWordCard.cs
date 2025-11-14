@@ -74,9 +74,12 @@ public partial class VmSearchedWordCard
 			Learn_Records = Bo.Learn_Records;
 			SavedLearnRecords = Bo.LearnRecords;
 			LastLearnedTime = Bo.LastLearnedTime_();
-			FontColor = AddCntToFontColor(
-				(u64)Learn_Records[ELearn.Add].Count
-			);
+			if(Learn_Records.TryGetValue(ELearn.Add, out var AddRecords)){
+				FontColor = AddCntToFontColor(
+					(u64)AddRecords.Count
+				);
+			}
+
 			return NIL;
 		}catch(Exception e){
 			HandleErr(e);

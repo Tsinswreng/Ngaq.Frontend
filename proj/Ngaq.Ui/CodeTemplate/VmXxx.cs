@@ -23,11 +23,10 @@ public partial class VmXxx: ViewModelBase{
 	public CancellationTokenSource Cts = new();
 
 /*
-	protected str _YYY = "";
 	public str YYY{
-		get{return _YYY;}
-		set{SetProperty(ref _YYY, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	}="";
  */
 
 }

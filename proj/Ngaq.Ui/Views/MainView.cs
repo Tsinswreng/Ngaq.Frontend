@@ -23,15 +23,15 @@ public class ViewNaviBase:UserControl{
 
 
 public partial class MainView : UserControl {
-protected static MainView? _Inst = null;
-public static MainView Inst => _Inst??= new MainView();
+	protected static MainView? _Inst = null;
+	public static MainView Inst => _Inst??= new MainView();
 
 	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
 	public SvcPopup SvcPopup{get;set;}
 	public AutoGrid AutoGrid = new (IsRow: true);
 	public Grid Root{get{return AutoGrid.Grid;}}
 	public ViewNaviBase ViewNaviBase{get;} = new ();
-	public ILogger? Logger{get;set;} = App.Logger;
+	public ILogger? Logger{get=>App.Logger;set{}}
 	public nil ShowMsg(str Msg){
 		Dispatcher.UIThread.Post(()=>{
 			var msgBox = new MsgBox();
@@ -110,7 +110,6 @@ Control? Test()
 		// 	;
 		// });
 		// Logger = loggerFactory.CreateLogger("GlobalLogger");
-
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
 		this.ContentInit(AutoGrid.Grid);
@@ -119,28 +118,6 @@ Control? Test()
 		]);
 		AutoGrid.Add(ViewNaviBase);
 
-		// var w=new Window{
-		// 	Width=600,Height=400,
-		// 	Background = Brushes.Blue,
-		// 	Content = new StackPanel{
-		// 		Children = {
-		// 			new StrokeTextEdit{
-		// 				Text="Hello 描边自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行自动换行",
-		// 				FontSize = 40,
-		// 				Foreground = Brushes.Red,
-		// 				Stroke = Brushes.Black,
-		// 				StrokeThickness = 10
-		// 			},
-		// 			new StrokeTextEdit{
-		// 				Text="123456",
-		// 				Fill = Brushes.White,
-		// 				Stroke = Brushes.Black,
-		// 			}
-		// 		}
-		// 	}
-		// };
-		// w.Show();
-		// //return;
 
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
