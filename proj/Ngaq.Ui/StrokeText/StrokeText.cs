@@ -6,8 +6,11 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Platform;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
 
 public partial class StrokeTextEdit : Control {
 
@@ -29,6 +32,8 @@ public partial class StrokeTextEdit : Control {
 		FontFamilyProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		FontStyleProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		FontWeightProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
+
+
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
@@ -160,6 +165,12 @@ public partial class StrokeTextEdit : Control {
 		.Subscribe(
 			_ => RebuildLayout()
 		);
+
+		var DfltSty = new Style()
+		.Set(
+			FontSizeProperty
+			,new DynamicResourceExtension(KeysRsrc.ControlContentThemeFontSize)
+		).Attach(Styles);
 	}
 
 

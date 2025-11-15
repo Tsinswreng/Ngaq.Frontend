@@ -144,7 +144,7 @@ public partial class ViewLearnWords
 			})
 			.AddInit(new OpBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o._Button.Content = "🔄"+I[K.Settings];
+				o._Button.Content = "⚙"+I[K.Settings];
 				o._Button.Click += (s,e)=>{
 					Ctx?.ViewNavi?.GoTo(
 						ToolView.WithTitle(

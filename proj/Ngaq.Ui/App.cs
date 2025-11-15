@@ -48,7 +48,7 @@ public partial class App :Application
 		this.RequestedThemeVariant = ThemeVariant.Dark;
 		Styles.Add(MkrStyle.NoCornerRadius(Sty));
 		// 在 App 初始化时添加资源（如 App.axaml.cs 的构造函数）
-		App.Current?.Resources.Add(KeysRsrc.Inst.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
+		App.Current?.Resources.Add(KeysRsrc.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
 		_Style();
 
 		//只在windows下可用。在安卓中debug旹需手動註釋掉此。
@@ -107,12 +107,10 @@ public partial class App :Application
 			// 创建资源字典并添加资源
 			var resources = new ResourceDictionary();
 			resources.Add("ControlContentThemeFontSize", 14.0);
-
 			// 确保主资源字典存在
 			if (App.Current != null && App.Current.Resources == null){
 				App.Current.Resources = new ResourceDictionary();
 			}
-
 			// 合并新资源到全局字典
 			App.Current?.Resources.MergedDictionaries.Add(resources);
 			#endregion #region 全局基字體 2025-05-29T17:14:54.155+08:00_W22-4
