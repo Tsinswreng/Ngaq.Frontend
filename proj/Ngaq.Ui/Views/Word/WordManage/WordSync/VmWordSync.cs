@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 using System.Collections.ObjectModel;
+using Avalonia.Threading;
 using Ngaq.Client.Word.Svc;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Cfg;
@@ -90,10 +91,22 @@ public partial class VmWordSync: ViewModelBase{
 	}
 
 	public async Task<nil> ExportAsy(CT Ct=default){
+		if(File.Exists(PathExport)){
+			//TODO i18n
+			this.ShowMsg("File already exists. We won't overwrite it. Please change the path.");
+			return NIL;
+		}
 		await Task.Run(async()=>{
 			if(SvcWord is null
 				|| UserCtxMgr is null
 			){
+				return;
+			}
+			ToolFile.EnsureFile(PathExport);
+			if(!File.Exists(PathExport)){
+				Dispatcher.UIThread.Post(()=>{
+					this.ShowMsg("Invalid Path.");//TODO i18n
+				});
 				return;
 			}
 			var User = UserCtxMgr.GetUserCtx();
