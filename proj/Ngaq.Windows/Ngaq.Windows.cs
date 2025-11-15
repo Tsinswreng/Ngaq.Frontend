@@ -40,7 +40,7 @@ sealed class Program {
 	// yet and stuff might break.
 
 	[STAThread]
-	public static async Task Main(string[] args) {
+	public static void Main(string[] args) {
 		if(args.Length > 1 && args[0] == "--version"){
 			System.Console.WriteLine(1757779054280);
 		}
@@ -61,19 +61,19 @@ sealed class Program {
 			var CfgPath = GetCfgFilePath(args);
 			var RoCfg = new JsonFileCfgAccessor();
 			DualSrcCfg.RoCfg = RoCfg;
-			await RoCfg.FromFileAsy(CfgPath, Ct);
+			RoCfg.FromFile(CfgPath);
 
 			var GuiCfgPath = ItemsClientCfg.RwCfgPath.GetFrom(DualSrcCfg) ?? "";
 			ToolFile.EnsureFile(GuiCfgPath);
 			var GuiCfg = new JsonFileCfgAccessor();
 			DualSrcCfg.RwCfg = GuiCfg;
-			await GuiCfg.FromFileAsy(GuiCfgPath, Ct);
+			GuiCfg.FromFile(GuiCfgPath);
 
 			var Lang = ItemsClientCfg.Lang.GetFrom(AppCfg.Inst)??"default";
 
 			var I18nCfg = new JsonFileCfgAccessor();
 			I18n.Inst.CfgAccessor = I18nCfg;
-			await I18nCfg.FromFileAsy($"Languages/{Lang}.json", Ct);
+			I18nCfg.FromFile($"Languages/{Lang}.json");
 
 		} catch (System.Exception e) {
 			System.Console.Error.WriteLine("Failed to load config file: " + e);
@@ -103,9 +103,10 @@ sealed class Program {
 	}
 
 	// Avalonia configuration, don't remove; also used by visual designer.
-	public static AppBuilder BuildAvaloniaApp()
-		=> AppBuilder.Configure<App>()
+	public static AppBuilder BuildAvaloniaApp(){
+		return AppBuilder.Configure<App>()
 			.UsePlatformDetect()
 			//.WithInterFont()
 			.LogToTrace();
+	}
 }

@@ -203,7 +203,7 @@ public partial class ViewWordListCard
 					o.PropText_()
 					,CBE.Mk<Ctx>(
 						x=>x
-						,Converter: new SimpleFnConvtr<Ctx, str>((x)=>x.ToLearnHistoryRepr())
+						,Converter: new SimpleFnConvtr<Ctx?, str>((x)=>x?.ToLearnHistoryRepr()??"")
 					)
 				);
 			});

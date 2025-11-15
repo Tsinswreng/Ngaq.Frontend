@@ -100,16 +100,6 @@ Control? Test()
 
 	public MainView() {
 		Test();
-		// using var loggerFactory = LoggerFactory.Create(b=>{
-		// 	b.AddConsole()
-		// 	#if DEBUG
-		// 	.SetMinimumLevel(LogLevel.Debug)
-		// 	#else
-		// 	.SetMinimumLevel(LogLevel.Information)
-		// 	#endif
-		// 	;
-		// });
-		// Logger = loggerFactory.CreateLogger("GlobalLogger");
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
 		this.ContentInit(AutoGrid.Grid);
@@ -117,8 +107,6 @@ Control? Test()
 			RowDef(1, GUT.Star),
 		]);
 		AutoGrid.Add(ViewNaviBase);
-
-
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
 				if(e.Key == Avalonia.Input.Key.Escape){
