@@ -47,7 +47,7 @@ public partial class ViewCfgLearnWord
 					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 					o.Height = 100;
 					o.Bind(
-						o.PropText_()
+						o.PropText
 						,CBE.Mk<Ctx>(x=>x.LuaFilterExpr)
 					);
 				})

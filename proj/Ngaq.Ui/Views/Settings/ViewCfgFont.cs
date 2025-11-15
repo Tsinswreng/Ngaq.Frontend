@@ -40,7 +40,7 @@ public partial class ViewCfgFont
 		]);
 		R.AddInit(_TextBox(), o=>{
 			o.Bind(
-				o.PropText_()
+				o.PropText
 				,CBE.Mk<Ctx>(
 					x=>x.InputFontSize
 				)

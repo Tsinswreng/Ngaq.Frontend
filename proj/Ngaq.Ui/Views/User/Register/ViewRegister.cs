@@ -123,7 +123,7 @@ public partial class ViewRegister
 				o.Classes.Add(Cls.inputBox);
 				label.Target = o;
 				o.Bind(
-					o.PropText_()
+					o.PropText
 					,new CBE(pth){
 						Mode = BindingMode.TwoWay
 					}

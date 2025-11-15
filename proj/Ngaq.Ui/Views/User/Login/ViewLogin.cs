@@ -133,7 +133,7 @@ public partial class Cls_{
 				o.Classes.Add(Cls.InputBox);
 				label.Target = o;
 				o.Bind(
-					o.PropText_()
+					o.PropText
 					,new CBE(pth){
 						Mode = BindingMode.TwoWay
 					}

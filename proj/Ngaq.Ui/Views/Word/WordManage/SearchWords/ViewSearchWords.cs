@@ -63,7 +63,7 @@ public partial class ViewSearchWords
 			var searchBtn = new OpBtn();
 			SearchGrid.AddInit(_TextBox(), o=>{
 				o.Bind(
-					o.PropText_()
+					o.PropText
 					,CBE.Mk<Ctx>(x=>x.Input)
 				);
 				o.KeyBindings.Add(
@@ -144,7 +144,7 @@ public partial class ViewSearchWords
 		});
 		R.AddInit(_TextBox(), o=>{
 			o.Bind(
-				o.PropText_()
+				o.PropText
 				,CBE.Mk<Ctx>(
 					x=>x.PageIdx
 					,Converter: new ParamFnConvtr<u64, str>(

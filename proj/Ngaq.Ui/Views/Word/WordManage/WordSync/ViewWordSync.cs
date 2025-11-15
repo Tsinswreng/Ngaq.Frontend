@@ -53,7 +53,7 @@ public partial class ViewWordSync
 				o.Text = I[K.ExportPath];
 			})
 			.AddInit(_TextBox(), o=>{
-				o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.PathExport));
+				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.PathExport));
 			})
 			.AddInit(new OpBtn(), o=>{
 				o.BtnContent = I[K.Export];
@@ -68,7 +68,7 @@ public partial class ViewWordSync
 				o.Text = I[K.ImportPath];
 			})
 			.AddInit(_TextBox(), o=>{
-				o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.PathImport));
+				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.PathImport));
 			})
 			.AddInit(new OpBtn(), o=>{
 				o.BtnContent = I[K.Import];
