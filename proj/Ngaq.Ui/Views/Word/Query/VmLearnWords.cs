@@ -23,6 +23,7 @@ using System.Diagnostics;
 using Tsinswreng.CsTools;
 using Ngaq.Core.Tools;
 using Avalonia.Logging;
+using Ngaq.Core.Shared.Base.Models.Po;
 
 public partial class VmLearnWords
 	:ViewModelBase
@@ -214,7 +215,9 @@ ICfgAccessor? Cfg;
 		var MaxDisplayedWordCount = Cfg?.Get(ItemsClientCfg.Word.MaxDisplayedWordCount)??50;
 		MgrLearn.State.WordsToLearn.Select(x=>{
 			if((u64)WordCards.Count < MaxDisplayedWordCount){
-				WordCards.Add(new VmWordListCard().FromIWordForLearn(x));
+				var vm = new VmWordListCard();
+				vm.InitFromIWordForLearn(x);
+				WordCards.Add(vm);
 			}
 			return 0;
 		}).ToList();

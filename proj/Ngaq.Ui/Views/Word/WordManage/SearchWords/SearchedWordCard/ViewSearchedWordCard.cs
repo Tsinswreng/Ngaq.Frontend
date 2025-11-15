@@ -3,7 +3,10 @@ namespace Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Core.Shared.Base.Models.Po;
+using Ngaq.Core.Shared.User.Models.Po;
 using Ngaq.Core.Shared.Word.Models.Learn_;
+using Ngaq.Core.Tools;
 using Ngaq.Ui.Converters;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -24,7 +27,7 @@ public partial class ViewSearchedWordCard
 		Render();
 	}
 
-	public  partial class Cls_{
+	public partial class Cls_{
 		public str InInfoGrid = nameof(InInfoGrid);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
@@ -118,14 +121,22 @@ public partial class ViewSearchedWordCard
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.Bind(
-					o.PropText_()
+					o.PropTextDecorations
+					,CBE.Mk<Ctx>(x=>x.DelAt
+						,Converter: new SimpleFnConvtr<IdDel?, TextDecorationCollection?>((delAt)=>{
+							return delAt.IsNullOrDefault()
+							? null : TextDecorations.Strikethrough;
+						})
+					)
+				);
+				o.Bind(
+					o.PropText
 					,CBE.Mk<Ctx>(x=>x.Head)
 				);
 				o.Bind(
 					TextBlock.ForegroundProperty
 					,CBE.Mk<Ctx>(x=>x.FontColor)
 				);
-
 			}
 		}}
 
@@ -219,9 +230,7 @@ public partial class ViewSearchedWordCard
 						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
 							Ctx.FmtNum(x??0, 2)
 						)
-						//,ConverterParameter: "Debug"//t
 					)
-
 				);
 			}
 		}}
