@@ -12,6 +12,7 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
+using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
@@ -125,7 +126,9 @@ Control? Test()
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 		var Home = new ViewHome();
-		//var Home = new ViewEditWord();
+		// var Home = new ViewWordInfo{
+		// 	Ctx = VmWordInfo.Samples[0]
+		// };
 		Navi.GoTo(Home);
 
 	}

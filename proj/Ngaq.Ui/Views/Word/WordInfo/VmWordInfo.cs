@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Word.Models.Learn_;
+using Ngaq.Core.Word.Models.Samples;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
 
@@ -13,17 +14,13 @@ public partial class VmWordInfo
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmWordInfo(){
 		#if DEBUG
-		// var S = SampleWord.Inst;
-		// {
-		// 	var o = new Ctx();
-		// 	Samples.Add(o);
-		// 	o.FromBo(S.Samples[0]);
-		// }
-		// {
-		// 	var o = new Ctx();
-		// 	Samples.Add(o);
-		// 	o.FromBo(S.Samples[1]);
-		// }
+		{
+			var o = new Ctx();
+			Samples.Add(o);
+			o.FromIWordForLearn(
+				new WordForLearn(SampleWord.Inst.Samples[1])
+			);
+		}
 		#endif
 	}
 
@@ -67,33 +64,28 @@ public partial class VmWordInfo
 
 	//public JnWord? BoWord{get;set;}
 
-	protected str _Id = "";
 	public str Id{
-		get{return _Id;}
-		set{SetProperty(ref _Id, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
 
 
-	protected str _Head = "";
+
 	public str Head{
-		get{return _Head;}
-		set{SetProperty(ref _Head, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
 
-	protected str _Lang = "";
 	public str Lang{
-		get{return _Lang;}
-		set{SetProperty(ref _Lang, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
 
 
-	protected IDictionary<str, IList<str>> _StrProps = new Dictionary<str, IList<str>>(){
-		//[":summary"] = ["testWrong"]//t
-	};
 	public IDictionary<str, IList<str>> StrProps{
-		get{return _StrProps;}
-		set{SetProperty(ref _StrProps, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	}= new Dictionary<str, IList<str>>();
 
 
 

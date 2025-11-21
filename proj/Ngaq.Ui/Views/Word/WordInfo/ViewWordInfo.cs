@@ -173,25 +173,41 @@ public partial class ViewWordInfo
 			//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
 		}
 
-		//summary
-		//TODO 判斷Summary有內容旹纔示
-		Root.Add();
-		#if false
+		#if true
 		Root.AddInit(TxtBox(), o=>{
 			o.Bind(
 				o.PropText_()
 				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 					//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 					Mode = BindingMode.OneWay
-					,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str>(x=>{
+					,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str?>(x=>{
 						var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.summary);
 						x.TryGetValue(Key, out var v);
-						return str.Join("\t",v??[]);
+						var R = str.Join("\t",v??[]).Trim();
+						if(str.IsNullOrEmpty(R)){
+							return null;
+						}
+						return R;
 					})//~Converter:
 				}//~new CBE
 			);//~Bind
+
+			//annotation無內容旹則不顯
+			o.Bind(
+				StrokeTextEdit.HeightProperty
+				,CBE.Mk<StrokeTextEdit>(x=>x.Text
+					,Converter: new SimpleFnConvtr<str?, double>(x=>{
+						if(str.IsNullOrEmpty(x)){
+							return 0;
+						}
+						return double.NaN;
+					})
+					,Source: o
+				)
+			);
 		});//~TxtBox
 		#endif
+
 
 
 		var BdrScr = new Border{};
@@ -211,8 +227,7 @@ public partial class ViewWordInfo
 		return NIL;
 	}
 
-
-	Control _DescriptionList(){//這裏的字會覆蓋上面Head
+	Control _DescriptionList(){
 		var Items = new ItemsControl();
 		{var o = Items;
 			o.Bind(

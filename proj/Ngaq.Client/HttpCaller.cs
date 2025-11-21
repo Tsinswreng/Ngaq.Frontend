@@ -10,7 +10,7 @@ using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Errors;
 using Ngaq.Core.Tools;
 using Tsinswreng.CsErr;
-
+namespace Ngaq.Client;
 public interface IHttpCaller {
 	public Task<TResp?> Post<TReq, TResp>(
 		str RelaUrl,TReq Req,CT Ct
