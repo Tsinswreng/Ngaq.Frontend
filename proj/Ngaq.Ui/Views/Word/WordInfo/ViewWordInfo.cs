@@ -29,7 +29,7 @@ public partial class ViewWordInfo
 	}
 
 
-	public  partial class Cls_{
+	public partial class Cls_{
 		//o.Foreground = new SolidColorBrush(Colors.LightGray)
 		public str LightGray = nameof(LightGray);
 		public str TxtBox = nameof(TxtBox);

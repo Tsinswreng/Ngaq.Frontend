@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Infra.I18n;
 using Jeffijoe.MessageFormat;
 using Ngaq.Core.Infra.Errors;
 using Tsinswreng.CsCfg;
+using Tsinswreng.CsErr;
 
 public interface II18nKey:ICfgItem{
 

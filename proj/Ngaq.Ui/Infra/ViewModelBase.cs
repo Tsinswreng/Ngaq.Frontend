@@ -12,8 +12,7 @@ using Ngaq.Core.Infra.Errors;
 using Ngaq.Ui.Infra.I18n;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
-
-
+using Tsinswreng.CsErr;
 
 public class EvtArgMsg:EventArgs{
 

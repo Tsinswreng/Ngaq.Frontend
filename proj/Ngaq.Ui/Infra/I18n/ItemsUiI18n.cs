@@ -6,9 +6,9 @@ public static partial class ItemsUiI18n{
 	public static K? View = Mk(null, ["View"]);
 
 public class Common{
-	public static readonly K _Root = Mk(View, [nameof(Common)]);
-	public static readonly K Confirm = Mk(_Root, [nameof(Confirm)]);
-	public static readonly K Cancel = Mk(_Root, [nameof(Cancel)]);
+	public static readonly K _R = Mk(View, [nameof(Common)]);
+	public static readonly K Confirm = Mk(_R, [nameof(Confirm)]);
+	public static readonly K Cancel = Mk(_R, [nameof(Cancel)]);
 }
 
 public class Home{

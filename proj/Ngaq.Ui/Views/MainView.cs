@@ -16,6 +16,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsErr;
 
 public class ViewNaviBase:UserControl{
 
@@ -82,7 +83,7 @@ public partial class MainView : UserControl {
 			ShowErr(Err);
 			return NIL;
 		}else{
-			ShowMsg("Unknown Error.");//TODO i18n
+			ShowErr(ItemsErr.Common.UnknownErr.ToErr());
 			#if DEBUG||true
 			ShowMsg(Ex+"");
 			#endif

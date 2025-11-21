@@ -5,11 +5,11 @@ using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Tools.Json;
 using Tsinswreng.CsTools;
 using Ngaq.Core.Shared.User.Models.Req;
-using Ngaq.Core.Infra.Core;
 using Ngaq.Core.Shared.User.Models.Resp;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Errors;
 using Ngaq.Core.Tools;
+using Tsinswreng.CsErr;
 
 public interface IHttpCaller {
 	public Task<TResp?> Post<TReq, TResp>(
