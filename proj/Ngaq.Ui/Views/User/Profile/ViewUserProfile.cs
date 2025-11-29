@@ -1,12 +1,19 @@
 namespace Ngaq.Ui.Views.User.Profile;
 
 using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Ngaq.Ui.Controls;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.User.Login;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Ursa.Controls;
 using Ctx = VmXxx;
+
 public partial class ViewUserProfile
 	:AppViewBase
 {
@@ -43,16 +50,56 @@ public partial class ViewUserProfile
 				RowDef(1, GUT.Auto),
 			]);
 		});
-		Root.AddInit(TxtBox(), o=>{
+		Root.AddInit(new ScrollViewer(), sv=>{
+			var ContentGrid = new AutoGrid(IsRow: true);
+			sv.ContentInit(ContentGrid.Grid, o=>{
+				o.RowDefinitions.AddRange([
+					RowDef(4, GUT.Auto),
+					RowDef(4, GUT.Auto),
+					RowDef(1, GUT.Auto),
+				]);
 
-		});
+				ContentGrid
+				.AddInit(new CircleAvatar(), o=>{
+					try{
+						using var stream = File.OpenRead(
+@"E:\_\視聽\圖\甘城猫猫合集\完整图包\甘城猫猫合集，密码somo(1)\甘城猫猫合集，密码somo，后缀改为zip.adb\甘城主图\近期图\043.png"
+						);
+						o.Source = new Bitmap(stream);
+						o.VerticalAlignment = VAlign.Center;
+						o.HorizontalAlignment = HAlign.Center;
+						o.Width = 150;
+						o.Height = 150;
+					}catch{}
+					//o.Source = SolidImageGenerator.Create(100,100, Colors.Red);
+					// o.Bind(
+					// 	Avatar.SourceProperty
+					// 	,CBE.Mk<Ctx>(x=>x.Avatar)
+					// );
+				})
+				.AddInit(new TextBox(), o=>{
 
-		Root.AddInit(new OpBtn(), o=>{
-			o.BtnContent = "Logout"; //TODO i18n
-			o.SetExt((Ct)=>Ctx?.LogoutAsy(Ct));
+				})
+				.AddInit(new StackPanel(), Sp=>{
+					Sp
+						.AddInit(new Button(), o=>{
+						o.StretchCenter();
+						o.Content = "Change Account"; //TODO i18n
+						o.Click += (s,e)=>{
+							Ctx?.ViewNavi?.GoTo(
+								ToolView.WithTitle("Change Account", new ViewLoginRegister())
+							);
+						};
+					})
+					.AddInit(new OpBtn(), o=>{
+						o._Button.StretchCenter();
+						o.Background = Brushes.Red;
+						o.BtnContent = "Logout"; //TODO i18n
+						o.SetExt((Ct)=>Ctx?.LogoutAsy(Ct));
+					});
+				});
+			});
 		});
 		return NIL;
 	}
-
-
 }

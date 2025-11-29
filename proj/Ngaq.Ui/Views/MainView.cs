@@ -4,9 +4,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
+using Ngaq.Ui.Controls;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.StrokeText;
@@ -18,6 +20,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsErr;
+using Ursa.Controls;
 
 public class ViewNaviBase:UserControl{
 
@@ -97,6 +100,16 @@ public partial class MainView : UserControl {
 
 Control? Test()
 {
+	var o = new CircleAvatar();
+	o.Height = 100;
+	using var stream = File.OpenRead(
+@"E:\_\視聽\圖\甘城猫猫合集\完整图包\甘城猫猫合集，密码somo(1)\甘城猫猫合集，密码somo，后缀改为zip.adb\甘城主图\近期图\043.png"
+	);
+	var bitmap = new Bitmap(stream);
+	o.Source = bitmap;
+	new Window{
+		Content = new Image(){Source = bitmap},
+	}.Show();
 	return null;
 }
 
