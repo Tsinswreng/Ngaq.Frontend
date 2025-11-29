@@ -165,7 +165,7 @@ public class HttpCaller:IHttpCaller{
 		if(str.IsNullOrEmpty(User.RefreshToken)){
 			return R.AddErrStr("str.IsNullOrEmpty(User.RefreshToken)");
 		}
-		var Url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), ConstUrl.UrlUser.TokenRefresh]);
+		var Url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), ConstUrl.OpenUser.TokenRefresh]);
 		var Req = new ReqRefreshTheToken{
 			RefreshToken = User.RefreshToken
 		};

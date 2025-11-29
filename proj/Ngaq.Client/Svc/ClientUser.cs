@@ -14,6 +14,7 @@ using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Kv.Models;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Frontend.Kv;
+using Ngaq.Core.Infra;
 
 public partial class ClientUser
 	:ISvcUser
@@ -42,7 +43,7 @@ public partial class ClientUser
 		,CT Ct
 	){
 		await HttpCaller.Post<ReqAddUser, nil>(
-			ConstUrl.UrlOpenUser.AddUser
+			ConstUrl.OpenUser.AddUser
 			,Req
 			,Ct
 		);
@@ -55,7 +56,7 @@ public partial class ClientUser
 		,ReqLogin ReqLogin, CT Ct
 	){
 		var R = await HttpCaller.Post<ReqLogin, RespLogin>(
-			ConstUrl.UrlOpenUser.Login
+			ConstUrl.OpenUser.Login
 			,ReqLogin
 			,Ct
 		);
@@ -71,25 +72,47 @@ public partial class ClientUser
 		UserCtx.Props["PoUser"] = R.PoUser;
 		UserCtxMgr.SetUserCtx(UserCtx);
 		await SvcTokenStorage.SetRefreshToken(new ReqSetRefreshToken{
-			RefreshToken = R.RefreshToken
-			,RefreshTokenExpireAt = R.RefreshTokenExpireAt
+			RefreshToken = R.RefreshToken,
+			RefreshTokenExpireAt = R.RefreshTokenExpireAt,
+			LoginUserId = UserCtx.LoginUserId,
 		}, Ct);
-		await SvcKv.SetAsy(
-			new PoKv{Owner = IdUser.Zero}
-			.SetStrStr(KeysClientKv.CurLoginUserId, UserCtx.LoginUserId.ToString())
-			, Ct
-		);
-
 		return R;
 	}
 
-	[Impl]//TODO
+
+	[Impl]
 	public async Task<nil> Logout(IUserCtx User, ReqLogout ReqLogout, CT Ct){
+		await HttpCaller.Post<ReqLogout, nil>(
+			ConstUrl.ApiUser.Logout
+			,ReqLogout
+			,Ct
+		);
+		await FrontendLogout(Ct);
+		return NIL;
+	}
+
+	/// <summary>
+	/// 僅前端操作、未調後端登出接口
+	/// </summary>
+	/// <param name="User"></param>
+	/// <param name="ReqLogout"></param>
+	/// <param name="Ct"></param>
+	/// <returns></returns>
+	[Impl]
+	public async Task<nil> FrontendLogout(CT Ct){
 		var OldCtx = UserCtxMgr.GetUserCtx();
+		OldCtx.LoginUserId = IdUser.Zero;
+		OldCtx.RefreshToken = null;
+		OldCtx.RefreshTokenExpireAt = Tempus.Zero;
+		OldCtx.AccessToken = null;
+		OldCtx.AccessTokenExpireAt = Tempus.Zero;
 
-		// UserCtxMgr.SetUserCtx(
-
-		// )
+		await SvcTokenStorage.SetRefreshToken(new ReqSetRefreshToken{
+			RefreshToken = OldCtx.RefreshToken,
+			RefreshTokenExpireAt = OldCtx.RefreshTokenExpireAt,
+			LoginUserId = OldCtx.LoginUserId,
+		}, Ct);
+		UserCtxMgr.SetUserCtx(OldCtx);
 		return NIL;
 	}
 
