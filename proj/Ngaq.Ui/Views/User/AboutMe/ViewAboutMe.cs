@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings;
+using Ngaq.Ui.Views.User.Profile;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -59,6 +60,11 @@ public partial class ViewAboutMe
 		R.AddInit(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);
 			o.Content = "👤";
+			o.Click += (o, e) => {
+				Ctx?.ViewNavi?.GoTo(
+					ToolView.WithTitle("UserProfile", new ViewUserProfile())//TODO i18n
+				);
+			};
 		});
 		R.AddInit(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);

@@ -20,8 +20,6 @@ public partial class VmXxx: ViewModelBase{
 		#endif
 	}
 
-	public CancellationTokenSource Cts = new();
-
 /*
 	public str YYY{
 		get{return field;}
