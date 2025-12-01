@@ -16,6 +16,7 @@ using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Views.Word.WordManage.Statistics;
 
 public partial class ViewWordManage
 	:UserControl
@@ -51,11 +52,12 @@ public partial class ViewWordManage
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.AddInit(_StackPanel(), stk=>{
-			stk.AddInit(_Item(I[K.SearchWords], new ViewSearchWords()));
-			stk.AddInit(_Item(I[K.AddWords], new ViewAddWord()));
-			stk.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync()));
-			stk.AddInit(new OpBtn(), o=>{
+		Root.AddInit(_StackPanel(), Sp=>{
+			Sp.AddInit(_Item(I[K.SearchWords], new ViewSearchWords()));
+			Sp.AddInit(_Item(I[K.AddWords], new ViewAddWord()));
+			Sp.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync()));
+			Sp.AddInit(_Item("Statistics", new ViewStatistics()));//TODO i18n
+			Sp.AddInit(new OpBtn(), o=>{
 				o.SetExt(async(Ct)=>{
 					await Task.Run(async ()=>{
 						await Task.Delay(600000);

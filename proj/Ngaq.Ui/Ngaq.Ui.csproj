@@ -39,6 +39,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" />
 		<PackageReference Include="ReactiveUI" />
 		<PackageReference Include="ReactiveUI.Fody" />
+		<PackageReference Include="ScottPlot.Avalonia" />
 		<PackageReference Include="SkiaSharp" />
 		<PackageReference Include="System.Reactive" />
 

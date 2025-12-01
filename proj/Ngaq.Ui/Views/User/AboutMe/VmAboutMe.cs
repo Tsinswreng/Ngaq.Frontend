@@ -1,10 +1,11 @@
 namespace Ngaq.Ui.Views.User.AboutMe;
 using System.Collections.ObjectModel;
+using Avalonia.Media;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
-
+using Ngaq.Ui.User;
 using Ctx = VmAboutMe;
 public partial class VmAboutMe: ViewModelBase{
 	protected VmAboutMe(){}
@@ -46,5 +47,15 @@ public partial class VmAboutMe: ViewModelBase{
 		get{return _UserIdRepr;}
 		set{SetProperty(ref _UserIdRepr, value);}
 	}
+
+	protected IImage? _AvatarImg = DfltAvatar.Img;
+	public IImage? AvatarImg{
+		get{return _AvatarImg;}
+		set{SetProperty(ref _AvatarImg, value);}
+	}
+
+
+
+
 
 }

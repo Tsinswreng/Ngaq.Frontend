@@ -34,6 +34,7 @@ public partial class VmXxx: ViewModelBase{
 	}
 
 
+	
 
 /*
 	public str YYY{

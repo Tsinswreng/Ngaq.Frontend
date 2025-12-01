@@ -43,7 +43,7 @@ public partial class ViewWordListCard
 		return R;
 	}
 
-	public  partial class Cls_{
+	public partial class Cls_{
 		public str InInfoGrid = nameof(InInfoGrid);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();

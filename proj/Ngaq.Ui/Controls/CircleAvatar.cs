@@ -91,3 +91,21 @@ public class CircleAvatar : Control {
 		return new Bitmap(stream);
 	}
 }
+
+public static class ExtnCircleAvatar{
+/*
+public static readonly StyledProperty<double> BorderThicknessProperty =
+		AvaloniaProperty.Register<CircleAvatar, double>(nameof(BorderThickness), 0);
+
+	/// <summary>
+	/// 定义边框颜色属性。
+	/// </summary>
+	public static readonly StyledProperty<IBrush?> BorderBrushProperty =
+		AvaloniaProperty.Register<CircleAvatar, IBrush?>(nameof(BorderBrush));
+ */
+	extension(CircleAvatar z){
+		public StyledProperty<IImage?> PropSource => CircleAvatar.SourceProperty;
+		public StyledProperty<double> PropBorderThickness => CircleAvatar.BorderThicknessProperty;
+		public StyledProperty<IBrush?> PropBorderBrush => CircleAvatar.BorderBrushProperty;
+	}
+}

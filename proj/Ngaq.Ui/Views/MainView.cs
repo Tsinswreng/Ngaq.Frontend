@@ -15,6 +15,7 @@ using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
 using Ngaq.Ui.Views.Word.WordInfo;
+using ScottPlot.Avalonia;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
@@ -98,23 +99,21 @@ public partial class MainView : UserControl {
 
 
 
-Control? Test()
+Control? Try()
 {
-	var o = new CircleAvatar();
-	o.Height = 100;
-	using var stream = File.OpenRead(
-@"E:\_\視聽\圖\甘城猫猫合集\完整图包\甘城猫猫合集，密码somo(1)\甘城猫猫合集，密码somo，后缀改为zip.adb\甘城主图\近期图\043.png"
-	);
-	var bitmap = new Bitmap(stream);
-	o.Source = bitmap;
-	new Window{
-		Content = new Image(){Source = bitmap},
-	}.Show();
+	// double[] dataX = { 1, 2, 3, 4, 5 };
+	// double[] dataY = { 1, 4, 9, 16, 25 };
+	// var avaPlot1 = new AvaPlot();
+	// avaPlot1.Plot.Add.Scatter(dataX, dataY);
+	// avaPlot1.Refresh();
+	// new Window{
+	// 	Content = avaPlot1,
+	// }.Show();
 	return null;
 }
 
 	public MainView() {
-		Test();
+		Try();
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
 		this.ContentInit(AutoGrid.Grid);

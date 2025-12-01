@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Ui.Controls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings;
 using Ngaq.Ui.Views.User.Profile;
@@ -59,7 +60,11 @@ public partial class ViewAboutMe
 
 		R.AddInit(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);
-			o.Content = "👤";
+			o.ContentInit(new CircleAvatar(), o=>{
+				o.Width = UiCfg.Inst.BaseFontSize*1.5;
+				o.Height = UiCfg.Inst.BaseFontSize*1.5;
+				o.Bind(o.PropSource, CBE.Mk<Ctx>(x=>x.AvatarImg));
+			});
 			o.Click += (o, e) => {
 				Ctx?.ViewNavi?.GoTo(
 					ToolView.WithTitle("UserProfile", new ViewUserProfile())//TODO i18n

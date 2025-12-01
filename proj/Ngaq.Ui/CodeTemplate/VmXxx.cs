@@ -20,11 +20,11 @@ public partial class VmXxx: ViewModelBase{
 		#endif
 	}
 
-/*
+
 	public str YYY{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}="";
- */
+
 
 }
