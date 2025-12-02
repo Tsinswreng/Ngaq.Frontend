@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
 using Ngaq.Ui.Controls;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.StrokeText;
@@ -101,13 +102,8 @@ public partial class MainView : UserControl {
 
 Control? Try()
 {
-	// double[] dataX = { 1, 2, 3, 4, 5 };
-	// double[] dataY = { 1, 4, 9, 16, 25 };
-	// var avaPlot1 = new AvaPlot();
-	// avaPlot1.Plot.Add.Scatter(dataX, dataY);
-	// avaPlot1.Refresh();
-	// new Window{
-	// 	Content = avaPlot1,
+	// new Window(){
+	// 	Content = new GoBack()
 	// }.Show();
 	return null;
 }

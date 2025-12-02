@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Ui.Icons;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = ViewModelBase;
@@ -60,7 +61,7 @@ public partial class ViewTitle
 			});
 			{{
 				TitleBar.AddInit(_Button(), o=>{
-					o.Content = "←";
+					o.Content = Icon.FromSvg(Svgs.ArrowCircleLeftFill);
 					o.Click += (s,e)=>{
 						Ctx?.ViewNavi?.Back();
 					};

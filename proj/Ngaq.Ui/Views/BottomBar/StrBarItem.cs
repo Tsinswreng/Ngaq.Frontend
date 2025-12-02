@@ -1,13 +1,13 @@
+namespace Ngaq.Ui.Views.BottomBar;
+
 using Avalonia.Controls;
 using Avalonia.Media;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-namespace Ngaq.Ui.Views.BottomBar;
 
-
-public  partial class StrBarItem{
+public partial class StrBarItem{
 	protected static StrBarItem? _Inst = null;
 	public static StrBarItem Inst => _Inst??= new StrBarItem();
 

@@ -70,7 +70,7 @@ public partial class ViewBottomBar
 
 
 
-public  partial class UniformHorizontalPanel : Panel{
+public partial class UniformHorizontalPanel : Panel{
 	protected override Size MeasureOverride(Size availableSize){
 		f64 maxHeight = 0;
 		i32 count = Children.Count;
