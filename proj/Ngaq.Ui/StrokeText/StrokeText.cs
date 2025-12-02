@@ -12,6 +12,9 @@ using Avalonia.Platform;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
+/// <summary>
+/// TODO 設 默認字體大小 顏色等 隨主題
+/// </summary>
 public partial class StrokeTextEdit : Control {
 
 	// 静态构造里加回调
@@ -282,6 +285,27 @@ public partial class StrokeTextEdit : Control {
 	重寫 MeasureOverride(Size availableSize)，返回控件希望佔用的尺寸。
 	如果裡面還有子元素，記得遞歸調用 child.Measure(...)。
 	 */
+
+	protected override Size MeasureOverride(Size availableSize) {
+		double width = availableSize.Width;
+		if (double.IsInfinity(width)) {
+			width = 200; // ✅ 给一个默认宽度，或者根据文本估算
+		}
+
+		if (_needsReLayout) {
+			_needsReLayout = false;
+			RebuildLayout(width);
+		}
+
+		var height = _lines.Count == 0
+			? CreateFormattedText("A").Height
+			: _lines.Sum(l => CreateFormattedText(l.Text).Height);
+
+		return new Size(width, height + Padding.Top + Padding.Bottom);
+	}
+
+
+	#if false //放入StackPanel中不顯
 	protected override Size MeasureOverride(Size availableSize) {
 		// 宽度未确定时先不测行，只返回最小高度
 		if (availableSize.Width <= 0 || double.IsInfinity(availableSize.Width)) {
@@ -305,6 +329,7 @@ public partial class StrokeTextEdit : Control {
 		: _lines.Sum(l => CreateFormattedText(l.Text).Height);
 		return new Size(availableSize.Width, h + Padding.Top + Padding.Bottom);
 	}
+	#endif
 
 	/*
 	告訴布局系統「我怎麼擺」

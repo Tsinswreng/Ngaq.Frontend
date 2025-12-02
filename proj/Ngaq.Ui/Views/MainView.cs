@@ -13,6 +13,7 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.StrokeText;
+using Ngaq.Ui.Tools;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
 using Ngaq.Ui.Views.Word.WordInfo;
@@ -40,36 +41,43 @@ public partial class MainView : UserControl {
 	public ViewNaviBase ViewNaviBase{get;} = new ();
 	public ILogger? Logger{get=>App.Logger;set{}}
 	public nil ShowMsg(str Msg){
-		Dispatcher.UIThread.Post(()=>{
-			var msgBox = new MsgBox();
-			msgBox.MinHeight = UiCfg.Inst.WindowHeight*0.2;
-			msgBox.MinWidth = UiCfg.Inst.WindowWidth*0.5;
-			msgBox._Border.BorderThickness = new Avalonia.Thickness(1);
-			msgBox._Border.BorderBrush = Brushes.White;
-			msgBox._BdrTitle.Background = new SolidColorBrush(new Color(255, 40,40,40));
-			msgBox._BdrBody.MaxHeight = UiCfg.Inst.WindowHeight*0.8;
+		Dispatcher.UIThread.Post((Action)(()=>{
 			var SvcPopup = MainView.Inst.SvcPopup;
-			msgBox._CloseBtn.Click+=(s,e)=>{
-				SvcPopup.ClosePopup();
-			};
-			msgBox.HorizontalAlignment = HAlign.Center;
-			msgBox.VerticalAlignment = VAlign.Center;
-			// msgBox._Title.Content = new TextBlock{
-			// 	Text = "TestTitle"
-			// 	,FontSize = 26
-			// };
-			msgBox._Body.Content = new SelectableTextBlock{
-				Text=Msg,
-				HorizontalAlignment = HAlign.Center,
-				VerticalAlignment = VAlign.Center,
-				TextWrapping = TextWrapping.Wrap,
-			};
-			msgBox.Background = Brushes.Black;
-			var Bdr = new Border();
-			Bdr.Child = msgBox;
-			Bdr.Padding = new Avalonia.Thickness(40);
-			SvcPopup.ShowPopup(Bdr);
-		});
+			var msgBox = new MsgBox();
+			{var o = msgBox;
+				o._CloseBtn.Background = null;
+				o._CloseBtn.ContentInit(Icon.FromSvg(Svgs.XCircleFill), o=>{
+					o.Fill = Brushes.Red;
+				});
+				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
+				o.MinWidth = UiCfg.Inst.WindowWidth*0.5;
+				o._Border.BorderThickness = new Avalonia.Thickness(1);
+				o._Border.BorderBrush = Brushes.White;
+				o._BdrTitle.Background = new SolidColorBrush(new Color(255, 40,40,40));
+				o._BdrBody.MaxHeight = UiCfg.Inst.WindowHeight*0.8;
+
+				o._CloseBtn.Click+=(object? s,global::Avalonia.Interactivity.RoutedEventArgs e)=>{
+					SvcPopup.ClosePopup();
+				};
+				o.HorizontalAlignment = HAlign.Center;
+				o.VerticalAlignment = VAlign.Center;
+				// msgBox._Title.Content = new TextBlock{
+				// 	Text = "TestTitle"
+				// 	,FontSize = 26
+				// };
+				o._Body.Content = new SelectableTextBlock {
+					Text= Msg,
+					HorizontalAlignment = HAlign.Center,
+					VerticalAlignment = VAlign.Center,
+					TextWrapping = TextWrapping.Wrap,
+				};
+				o.Background = Brushes.Black;
+				var Bdr = new Border();
+				Bdr.Child = o;
+				Bdr.Padding = new Avalonia.Thickness(40);
+				SvcPopup.ShowPopup(Bdr);
+			}
+		}));
 		return NIL;
 	}
 
@@ -102,9 +110,18 @@ public partial class MainView : UserControl {
 
 Control? Try()
 {
-	// new Window(){
-	// 	Content = new GoBack()
-	// }.Show();
+	var sp = new StackPanel{
+		Orientation = Avalonia.Layout.Orientation.Horizontal
+	};
+	var stroke = new StrokeTextEdit{
+		Text="Start"
+		,Foreground = Brushes.White
+	};
+	sp.Children.Add(stroke);
+	new Window(){
+		Content = sp
+		//Content = stroke
+	}.Show();
 	return null;
 }
 

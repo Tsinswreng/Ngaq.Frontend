@@ -12,6 +12,8 @@ using Ngaq.Ui.Views.User.AboutMe;
 using Ngaq.Ui.Infra.I18n;
 
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Home;
+using Ngaq.Ui.Icons;
+
 public partial class ViewHome
 	:UserControl
 {
@@ -53,7 +55,7 @@ public partial class ViewHome
 
 			ViewBottomBar.Items.AddInitT(
 				new Btn_Control(
-					StrBarItem.Inst.BarItem(I[K.Learn], "📖")
+					StrBarItem.Inst.BarItem(I[K.Learn], Svgs.BookOpenTextFill.ToIcon())//📖
 					,ViewWordQuery
 				),
 				o=>{
@@ -61,11 +63,11 @@ public partial class ViewHome
 					o.Button.Background = Brushes.Transparent;
 				}
 			).AddInitT(new Btn_Control(
-				StrBarItem.Inst.BarItem(I[K.Library], "📚")
+				StrBarItem.Inst.BarItem(I[K.Library], Svgs.BookBookmarkFill.ToIcon())//📚
 				,new ViewWordManage()
 			))
 			.AddInitT(new Btn_Control(
-				StrBarItem.Inst.BarItem(I[K.Me], "👤")
+				StrBarItem.Inst.BarItem(I[K.Me], Svgs.UserCircleFill.ToIcon())//👤
 				,new ViewAboutMe()
 			));
 		});

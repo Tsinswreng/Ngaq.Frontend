@@ -13,7 +13,7 @@ public partial class StrBarItem{
 
 	public SwipeLongPressBtn BarItem(
 		str Title
-		,str IconStr
+		,Control Icon
 	){
 		var Ans = new SwipeLongPressBtn();
 		{
@@ -33,12 +33,8 @@ public partial class StrBarItem{
 				new RowDef(4, GUT.Star),
 			]);
 			{{
-				var Icon = new TextBlock{};
-				Grid.Add(Icon);
-				{
+				Grid.Add(Icon);{
 					var o = Icon;
-					o.Text = IconStr;
-					o.TextAlignment = TxtAlign.Center;
 					o.VerticalAlignment = VAlign.Center;
 				}
 

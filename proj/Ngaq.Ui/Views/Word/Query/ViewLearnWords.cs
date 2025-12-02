@@ -6,6 +6,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.StrokeText;
@@ -132,21 +133,33 @@ public partial class ViewLearnWords
 			]);
 		});
 		{{
+			var T = (str t)=>{
+				var R = new StrokeTextEdit{
+					Text = t,
+					FontSize = UiCfg.Inst.BaseFontSize*0.8,
+					Foreground = Brushes.White,
+				};
+				return R;
+			};
 			Row1.AddInit(new OpBtn{}, (o)=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o._Button.ContentInit(_Txt(), t=>{
-					t.Text = "▶️"+I[K.Start];
-				});
+				o._Button.ContentInit(HoriCloseCtrls.Mk(
+					Svgs.PlayCircle.ToIcon()//▶️
+					,T(I[K.Start])
+					,new TextBlock{Text = "2"}
+				), t=>{});
 				o.SetExt((Ct)=>Ctx?.LoadEtStartAsy(Ct));
 			}).AddInit(new OpBtn{}, o=>{ //📁
 				o.Classes.Add(Cls.MenuBtn);
 				o._Button.ContentInit(_Txt(), t=>{
+					//Svgs.FloppyDiskBackLight
 					t.Text = "💾"+I[K.Save];
 				});
 				o.SetExt((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
 			}).AddInit(new OpBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
 				o._Button.ContentInit(_Txt(), o=>{
+					//ArrowClockwiseBold
 					o.Text = "🔄"+I[K.Reset];
 				});
 				o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
@@ -154,6 +167,7 @@ public partial class ViewLearnWords
 			.AddInit(new OpBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
 				o._Button.ContentInit(_Txt(), o=>{
+					//Svgs.GearSix
 					o.Text = "⚙"+I[K.Settings];
 				});
 				o._Button.Click += (s,e)=>{
