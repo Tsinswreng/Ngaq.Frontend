@@ -13,6 +13,7 @@ using Ngaq.Ui.Infra.I18n;
 
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Home;
 using Ngaq.Ui.Icons;
+using Avalonia;
 
 public partial class ViewHome
 	:UserControl
@@ -50,12 +51,21 @@ public partial class ViewHome
 			]);
 		});
 
+		var BarItem = (str Title, Control Icon)=>{
+			var R = StrBarItem.Inst.BarItem(Title, Icon);
+			//不效
+			// if (R.Content is Grid grid && grid.Children.Count >= 2 && grid.Children[1] is Control ctrl){
+			// 	ctrl.Margin = new Thickness(0, 0, 0, 10); // 👈 關鍵：往下留少許空間，視覺上往上移
+			// }
+			return R;
+		};
+
 		Root.AddInit(new ViewBottomBar(), ViewBottomBar=>{
 			var ViewWordQuery = new ViewLearnWords();
 
 			ViewBottomBar.Items.AddInitT(
 				new Btn_Control(
-					StrBarItem.Inst.BarItem(I[K.Learn], Svgs.BookOpenTextFill.ToIcon())//📖
+					BarItem(I[K.Learn], Svgs.BookOpenTextFill.ToIcon())//📖
 					,ViewWordQuery
 				),
 				o=>{
@@ -63,11 +73,11 @@ public partial class ViewHome
 					o.Button.Background = Brushes.Transparent;
 				}
 			).AddInitT(new Btn_Control(
-				StrBarItem.Inst.BarItem(I[K.Library], Svgs.BookBookmarkFill.ToIcon())//📚
+				BarItem(I[K.Library], Svgs.BookBookmarkFill.ToIcon())//📚
 				,new ViewWordManage()
 			))
 			.AddInitT(new Btn_Control(
-				StrBarItem.Inst.BarItem(I[K.Me], Svgs.UserCircleFill.ToIcon())//👤
+				BarItem(I[K.Me], Svgs.UserCircleFill.ToIcon())//👤
 				,new ViewAboutMe()
 			));
 		});

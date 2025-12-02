@@ -118,10 +118,7 @@ Control? Try()
 		,Foreground = Brushes.White
 	};
 	sp.Children.Add(stroke);
-	new Window(){
-		Content = sp
-		//Content = stroke
-	}.Show();
+	
 	return null;
 }
 

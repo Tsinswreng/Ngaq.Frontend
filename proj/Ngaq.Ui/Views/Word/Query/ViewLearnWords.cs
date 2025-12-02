@@ -135,41 +135,55 @@ public partial class ViewLearnWords
 		{{
 			var T = (str t)=>{
 				var R = new StrokeTextEdit{
-					Text = t,
+					Text = " "+t,
 					FontSize = UiCfg.Inst.BaseFontSize*0.8,
 					Foreground = Brushes.White,
 				};
 				return R;
 			};
-			Row1.AddInit(new OpBtn{}, (o)=>{
-				o.Classes.Add(Cls.MenuBtn);
-				o._Button.ContentInit(HoriCloseCtrls.Mk(
-					Svgs.PlayCircle.ToIcon()//▶️
+			var Ic = (Svg s)=>{
+				var R = s.ToIcon();
+				R.Stroke = Brushes.Black;
+				R.StrokeThickness = 0.9;
+				return R;
+			};
+			var Hc = (params Control[] Ctrls)=>{
+				return HoriCloseCtrls.Mk(Ctrls);
+			};
+			var Btn = ()=>{
+				var R = new OpBtn{};
+				R.Classes.Add(Cls.MenuBtn);
+				R._Button.VerticalAlignment = VAlign.Stretch;
+				R._Button.VerticalContentAlignment = VAlign.Stretch;
+				R.Padding = R._Button.Margin = new Thickness(0);
+				return R;
+			};
+			Row1.AddInit(Btn(), (o)=>{
+				o._Button.ContentInit(Hc(
+					Ic(Svgs.PlayCircleFill)//▶️
 					,T(I[K.Start])
 					,new TextBlock{Text = "2"}
-				), t=>{});
+				));
+				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
 				o.SetExt((Ct)=>Ctx?.LoadEtStartAsy(Ct));
-			}).AddInit(new OpBtn{}, o=>{ //📁
-				o.Classes.Add(Cls.MenuBtn);
-				o._Button.ContentInit(_Txt(), t=>{
-					//Svgs.FloppyDiskBackLight
-					t.Text = "💾"+I[K.Save];
-				});
+			}).AddInit(Btn(), o=>{ //📁"💾"
+				o._Button.ContentInit(Hc(
+					Ic(Svgs.FloppyDiskBackFill)
+					,T(I[K.Save])
+				));
 				o.SetExt((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
-			}).AddInit(new OpBtn{}, o=>{
-				o.Classes.Add(Cls.MenuBtn);
-				o._Button.ContentInit(_Txt(), o=>{
-					//ArrowClockwiseBold
-					o.Text = "🔄"+I[K.Reset];
-				});
+			}).AddInit(Btn(), o=>{
+				o._Button.ContentInit(Hc(//🔄
+					Ic(Svgs.ArrowClockwiseBold)
+					,T(I[K.Reset])
+				));
 				o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
 			})
-			.AddInit(new OpBtn{}, o=>{
-				o.Classes.Add(Cls.MenuBtn);
-				o._Button.ContentInit(_Txt(), o=>{
-					//Svgs.GearSix
-					o.Text = "⚙"+I[K.Settings];
-				});
+			.AddInit(Btn(), o=>{
+				o._Button.ContentInit(Hc(//⚙
+					Ic(Svgs.GearFill)
+					,T(I[K.Settings])
+				));
 				o._Button.Click += (s,e)=>{
 					Ctx?.ViewNavi?.GoTo(
 						ToolView.WithTitle(

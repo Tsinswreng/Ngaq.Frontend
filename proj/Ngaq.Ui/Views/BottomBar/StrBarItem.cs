@@ -29,8 +29,10 @@ public partial class StrBarItem{
 			Ans.Content = Grid.Grid;
 			//Grid.Grid.Classes.Add(Cls.BarItem);
 			Grid.Grid.RowDefinitions.AddRange([
-				new RowDef(12, GUT.Star),
-				new RowDef(4, GUT.Star),
+				// new RowDef(12, GUT.Star),
+				// new RowDef(4, GUT.Star),
+				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Auto),
 			]);
 			{{
 				Grid.Add(Icon);{
