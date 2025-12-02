@@ -350,7 +350,7 @@ public partial class StrokeTextEdit : Control {
 	}
 
 	/* -------------- 简单 Padding -------------- */
-	private Thickness _padding = new(4);
+	private Thickness _padding = new(0);
 	public Thickness Padding {
 		get => _padding;
 		set { _padding = value; RebuildLayout(); }

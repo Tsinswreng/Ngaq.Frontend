@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
@@ -113,6 +114,12 @@ public partial class ViewLearnWords
 		return NIL;
 	}
 
+	StrokeTextEdit _Txt(){
+		var R = new StrokeTextEdit();
+		R.Foreground = Brushes.White;
+		return R;
+	}
+
 	protected Panel _Menu(){
 		var R = new AutoGrid(IsRow: true);
 		var Row1 = new AutoGrid(IsRow: false);
@@ -127,24 +134,28 @@ public partial class ViewLearnWords
 		{{
 			Row1.AddInit(new OpBtn{}, (o)=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o._Button.ContentInit(_TextBlock(), t=>{
+				o._Button.ContentInit(_Txt(), t=>{
 					t.Text = "▶️"+I[K.Start];
 				});
 				o.SetExt((Ct)=>Ctx?.LoadEtStartAsy(Ct));
 			}).AddInit(new OpBtn{}, o=>{ //📁
 				o.Classes.Add(Cls.MenuBtn);
-				o._Button.ContentInit(_TextBlock(), t=>{
+				o._Button.ContentInit(_Txt(), t=>{
 					t.Text = "💾"+I[K.Save];
 				});
 				o.SetExt((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
 			}).AddInit(new OpBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o._Button.Content = "🔄"+I[K.Clear];
+				o._Button.ContentInit(_Txt(), o=>{
+					o.Text = "🔄"+I[K.Reset];
+				});
 				o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
 			})
 			.AddInit(new OpBtn{}, o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o._Button.Content = "⚙"+I[K.Settings];
+				o._Button.ContentInit(_Txt(), o=>{
+					o.Text = "⚙"+I[K.Settings];
+				});
 				o._Button.Click += (s,e)=>{
 					Ctx?.ViewNavi?.GoTo(
 						ToolView.WithTitle(
@@ -174,7 +185,9 @@ public partial class ViewLearnWords
 			]);
 		});
 		{{
-			Root.AddInit(_Border(), o=>{
+			Root
+			.AddInit(_Border(), o=>{
+				//背景圖遮蔽
 				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
 				o.ZIndex = -1;
 			})
@@ -186,16 +199,15 @@ public partial class ViewLearnWords
 						,CBE.Mk<Ctx>(x=>x.WordCards, Mode: BindingMode.TwoWay)
 					);
 				});
-				Root.AddInit(_GridSplitter(), o=>{
-					o.Background = Brushes.Black;
-					o.BorderThickness = new Thickness(1);
-					o.BorderBrush = Brushes.LightGray;
-				}).AddInit(_WordInfo(), o=>{
-					o.Bind(o.PropDataContext_()
-						,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
-					);
-				});
-			});//~ScrollViewer
+			})//~ScrollViewer
+			.AddInit(new GridSplitter(), o=>{
+				o.GrayBarWith3Dots();
+			})
+			.AddInit(_WordInfo(), o=>{
+				o.Bind(o.PropDataContext_()
+					,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
+				);
+			});
 		}}
 		return NIL;
 	}
@@ -234,8 +246,6 @@ public partial class ViewLearnWords
 	//TODO 分頁加載以代虛擬化
 	Control _ListWordCard(){
 		var Ans = new ItemsControl();
-		{var o = Ans;
-		}
 		var Cnt = 1;
 		Ans.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 			return new VirtualizingStackPanel();

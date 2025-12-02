@@ -17,8 +17,12 @@
 	}
 	,"Ui":{
 		//"BaseFontSize": 18.0
-		
+
+	},
+	"Word":{
+		"MaxDisplayedWordCount": 999999
 	}
+
 
 }
 

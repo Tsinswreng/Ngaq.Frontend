@@ -10,7 +10,17 @@ using ScottPlot;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsPage;
 using Ctx = VmStatistics;
+
 public partial class VmStatistics: ViewModelBase{
+	public enum ETimeUnit{
+		Second,
+		Minute,
+		Hour,
+		Day,
+		Week,
+		Month,
+		Year,
+	}
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
 	protected VmStatistics(){}
 	public static Ctx Mk(){
@@ -56,9 +66,19 @@ public partial class VmStatistics: ViewModelBase{
 		set{SetProperty(ref field, value);}
 	}=new Tempus();
 
-	public Tempus TimeInterval{
+	public i64 IntervalNoUnit{
 		get{return field;}
 		set{SetProperty(ref field, value);}
+	}=1;
+
+	public ETimeUnit IntervalUnit{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	}=ETimeUnit.Day;
+
+	public Tempus TimeInterval{
+		get{return ValueUnitToTempus(IntervalNoUnit, IntervalUnit);}
+		//set{SetProperty(ref field, value);}
 	}
 
 	public str LearnResult{
@@ -76,6 +96,19 @@ public partial class VmStatistics: ViewModelBase{
 	// 	get{return field;}
 	// 	set{SetProperty(ref field, value);}
 	// }=[];
+
+	public static Tempus ValueUnitToTempus(i64 Value, ETimeUnit Unit){
+		return Unit switch{
+			ETimeUnit.Second => new Tempus(Value*InMillisecond.Second),
+			ETimeUnit.Minute => new Tempus(Value*InMillisecond.Minute),
+			ETimeUnit.Hour => new Tempus(Value*InMillisecond.Hour),
+			ETimeUnit.Day => new Tempus(Value*InMillisecond.Day),
+			ETimeUnit.Week => new Tempus(Value*InMillisecond.Week),
+			ETimeUnit.Month => new Tempus(Value*InMillisecond.Month),
+			ETimeUnit.Year => new Tempus(Value*InMillisecond.Year),
+			_ => throw new Exception("Invalid TimeUnit"),
+		};
+	}
 
 	public List<Coordinates> Points{
 		get{return field;}
