@@ -81,6 +81,9 @@ this.AttachDevTools();
 			//,new FontFamily("Times New Roman")
 			,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
 		).Attach(Styles);
+		// System.Console.WriteLine(
+		// 	TextElement.FontFamilyProperty == TextBlock.FontFamilyProperty
+		// );
 
 
 		//按鈕舒展

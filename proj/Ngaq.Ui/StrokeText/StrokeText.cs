@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
@@ -15,17 +17,21 @@ using Tsinswreng.AvlnTools.Tools;
 /// <summary>
 /// TODO 設 默認字體大小 顏色等 隨主題
 /// </summary>
-public partial class StrokeTextEdit : Control {
+public partial class StrokeTextEdit : Control, IScrollable{
 
 	// 静态构造里加回调
 	static StrokeTextEdit() {
 		TextProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) =>{
+			x.ClearFormattedTextCache();
 			x.RebuildLayout();
 		});
 		FillProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.InvalidateVisual());
 		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
 		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
-		FontSizeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
+		FontSizeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) =>{
+			x.ClearFormattedTextCache();
+			x.RebuildLayout();
+		});
 		ForegroundProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => {
 			x.Fill = x.Foreground;
 			//if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
@@ -35,7 +41,10 @@ public partial class StrokeTextEdit : Control {
 		FontFamilyProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		FontStyleProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		FontWeightProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
-		UseVirtualizedRenderProperty.Changed.AddClassHandler<StrokeTextEdit>((x,_)=>{});//TODO
+		UseVirtualizedRenderProperty.Changed.AddClassHandler<StrokeTextEdit>((x,_)=>{
+			x.InvalidateVisual();
+			x.RebuildLayout();
+		});
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
@@ -46,6 +55,17 @@ public partial class StrokeTextEdit : Control {
 		get => GetValue(UseVirtualizedRenderProperty);
 		set => SetValue(UseVirtualizedRenderProperty, value);
 	}
+
+
+	// 原50行：/* 可視區域（邏輯座標）*/
+	// 原51行：private Rect _viewport = new Rect();
+	// 新增行（51行后插入）：
+	/// <summary>垂直滚动偏移</summary>
+	private double _scrollOffsetY = 0;
+	/// <summary>缓存每行文本的高度</summary>
+	private readonly List<double> _lineHeights = new();
+	/// <summary>FormattedText缓存</summary>
+	private readonly Dictionary<string, FormattedText> _formattedTextCache = new();
 
 	/* 可視區域（邏輯座標）*/
 	private Rect _viewport = new Rect();
@@ -121,9 +141,10 @@ public partial class StrokeTextEdit : Control {
 		set => SetValue(VerticalContentAlignmentProperty, value);
 	}
 
+	// public static readonly StyledProperty<FontFamily> FontFamilyProperty =
+	// 	AvaloniaProperty.Register<StrokeTextEdit, FontFamily>(nameof(FontFamily), FontFamily.Default);
 	public static readonly StyledProperty<FontFamily> FontFamilyProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, FontFamily>(nameof(FontFamily), FontFamily.Default);
-
+		TextElement.FontFamilyProperty.AddOwner<StrokeTextEdit>();
 	public FontFamily FontFamily{
 		get => GetValue(FontFamilyProperty);
 		set => SetValue(FontFamilyProperty, value);
@@ -159,7 +180,8 @@ public partial class StrokeTextEdit : Control {
 	private Pen _strokePen;
 
 	private void UpdateTypeface(){
-		Typeface = new Typeface(FontFamily, FontStyle.Normal, FontWeight.Normal);
+		//Typeface = new Typeface(FontFamily, FontStyle.Normal, FontWeight.Normal);
+		Typeface = new Typeface(FontFamily, FontStyle, FontWeight);
 	}
 
 
@@ -174,9 +196,11 @@ public partial class StrokeTextEdit : Control {
 		Focusable = true;
 		Cursor = new Cursor(StandardCursorType.Ibeam);
 		this.GetPropertyChangedObservable(BoundsProperty)
-		.Subscribe(
-			_ => RebuildLayout()
-		);
+		.Subscribe(_ => {
+			_viewport = new Rect(Bounds.Size);
+			RebuildLayout();
+			Offset = new Vector(0, Math.Clamp(_scrollOffsetY, 0, Math.Max(0, TotalHeight - _viewport.Height)));
+		});
 
 		// var DfltSty = new Style()
 		// .Set(
@@ -191,7 +215,8 @@ public partial class StrokeTextEdit : Control {
 		//.Set(StrokeProperty, new DynamicResourceExtension("TextControlForeground"))
 		//.Set(StrokeProperty, new InvertForegroundBrushExtension())
 		.Set(StrokeThicknessProperty, 1.0)
-		.Set(FontFamilyProperty, new DynamicResourceExtension("ContentControlThemeFontFamily"))
+		//此會致安卓中 漢字變成方塊
+		//.Set(FontFamilyProperty, new DynamicResourceExtension("ContentControlThemeFontFamily"))
 		.Set(VerticalContentAlignmentProperty, VAlign.Center)
 		.Attach(Styles);
 		if(Application.Current?.Resources.TryGetValue("SystemControlForegroundBaseHighBrush", out var brush)??false){
@@ -205,12 +230,17 @@ public partial class StrokeTextEdit : Control {
 	private void RebuildTypeface(){
 		var z = this;
 		Typeface = new Typeface(FontFamily, z.FontStyle, FontWeight);
+		ClearFormattedTextCache(); // 新增
 		RebuildLayout();   // 布局依赖字形度量，必须刷新
 	}
 
 	/* -------------- 布局+折行 -------------- */
+	// 原212-237行：private void RebuildLayout() { ... }
+	// 修改后（仅改核心逻辑）：
 	private void RebuildLayout() {
 		_lines.Clear();
+		_lineHeights.Clear(); // 新增
+		ClearFormattedTextCache(); // 新增
 		if (string.IsNullOrEmpty(Text)) {
 			InvalidateVisual();
 			return;
@@ -226,12 +256,20 @@ public partial class StrokeTextEdit : Control {
 		int start = 0;
 		while (start < text.Length) {
 			int len = BreakLine(text.Slice(start), maxWidth);
+			var lineText = text.Slice(start, len).ToString(); // 新增
 			_lines.Add(new TextLine {
-				Text = text.Slice(start, len).ToString(),
+				Text = lineText, // 修改
 				Start = start,
 				Length = len
 			});
+			// 新增：缓存行高
+			_lineHeights.Add(CreateFormattedText(lineText).Height);
 			start += len;
+		}
+		// 新增：滚动偏移适配
+		if (_scrollOffsetY > TotalHeight - _viewport.Height)
+		{
+			Offset = new Vector(0, Math.Max(0, TotalHeight - _viewport.Height));
 		}
 		InvalidateVisual();
 	}
@@ -255,30 +293,92 @@ public partial class StrokeTextEdit : Control {
 		return low == 0 ? 1 : low;
 	}
 
-	private FormattedText CreateFormattedText(string txt) =>
-		new(txt, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
+	private FormattedText CreateFormattedText(string txt) {
+		var cacheKey = $"{txt}|{FontSize}|{Typeface}";
+		if (_formattedTextCache.TryGetValue(cacheKey, out var fmt))
+			return fmt;
+
+		fmt = new(txt, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
 			Typeface, FontSize, Fill);
+		_formattedTextCache[cacheKey] = fmt;
+		return fmt;
+	}
+
+
+	private (int startIndex, int endIndex) GetVisibleLineRange()
+	{
+		if (!UseVirtualizedRender || _lines.Count == 0 || _lineHeights.Count == 0)
+			return (0, _lines.Count - 1);
+
+		double viewportTop = _scrollOffsetY;
+		double viewportBottom = _scrollOffsetY + _viewport.Height;
+
+		double currentY = 0;
+		int startIndex = 0;
+		for (int i = 0; i < _lines.Count; i++)
+		{
+			double lineBottom = currentY + _lineHeights[i];
+			if (lineBottom > viewportTop)
+			{
+				startIndex = i;
+				break;
+			}
+			currentY = lineBottom;
+		}
+
+		currentY = 0;
+		int endIndex = _lines.Count - 1;
+		for (int i = 0; i < _lines.Count; i++)
+		{
+			if (currentY > viewportBottom)
+			{
+				endIndex = i - 1;
+				break;
+			}
+			currentY += _lineHeights[i];
+		}
+
+		startIndex = Math.Max(0, startIndex);
+		endIndex = Math.Min(_lines.Count - 1, endIndex);
+		return (startIndex, endIndex);
+	}
 
 
 	// 在类里补一行字段
 	private double _topOffset = 0;
 
 	/* -------------- 渲染 -------------- */
+	// 原267-284行：public override void Render(DrawingContext dc) { ... }
+	// 修改后：
 	public override void Render(DrawingContext dc) {
-		if (_lines.Count == 0){
+		if (_lines.Count == 0 || _lineHeights.Count == 0){
 			return;
 		}
 
-		double y = _topOffset;                 // 不再直接 Padding.Top
-		foreach (var line in _lines) {
+		var (startIdx, endIdx) = GetVisibleLineRange();
+		if (startIdx > endIdx) return;
+
+		// 计算可视第一行Y坐标
+		double currentY = 0;
+		for (int i = 0; i < startIdx; i++)
+		{
+			currentY += _lineHeights[i];
+		}
+		currentY = currentY - _scrollOffsetY + Padding.Top;
+
+		// 仅渲染可视行
+		for (int i = startIdx; i <= endIdx; i++)
+		{
+			var line = _lines[i];
+			double lineHeight = _lineHeights[i];
 			var fmt = CreateFormattedText(line.Text);
-			var origin = new Point(Padding.Left, y);
+			var origin = new Point(Padding.Left, currentY);
 
 			var geo = fmt.BuildGeometry(origin);
-			dc.DrawGeometry(null, new Pen(Stroke, StrokeThickness), geo);
+			dc.DrawGeometry(null, _strokePen, geo);
 			dc.DrawText(fmt, origin);
 
-			y += fmt.Height;
+			currentY += lineHeight;
 		}
 		if (IsFocused) DrawCaret(dc);
 	}
@@ -289,18 +389,27 @@ public partial class StrokeTextEdit : Control {
 		   new Vector(-StrokeThickness,  StrokeThickness),
 		   new Vector( StrokeThickness,  StrokeThickness) };
 
+	// 原292-304行：private void DrawCaret(DrawingContext dc) { ... }
+	// 修改后：
 	private void DrawCaret(DrawingContext dc) {
 		var (line, off) = FindCaretLine();
-		if (line < 0){
+		if (line < 0 || line >= _lines.Count || line >= _lineHeights.Count){
 			return;
 		}
-		var fmt = CreateFormattedText(_lines[line].Text[..off]);
-		double x = Padding.Left + fmt.Width;
+
+		// 计算光标Y坐标（适配滚动）
 		double y = Padding.Top;
 		for (int i = 0; i < line; i++){
-			y += CreateFormattedText(_lines[i].Text).Height;
+			y += _lineHeights[i];
 		}
-		dc.DrawLine(new Pen(Fill, 1), new Point(x, y), new Point(x, y + fmt.Height));
+		y -= _scrollOffsetY;
+
+		// 光标超出可视区不绘制
+		if (y < 0 || y > _viewport.Height) return;
+
+		var fmt = CreateFormattedText(_lines[line].Text[..off]);
+		double x = Padding.Left + fmt.Width;
+		dc.DrawLine(new Pen(Fill, 1), new Point(x, y), new Point(x, y + _lineHeights[line]));
 	}
 
 	private bool _needsReLayout = true;
@@ -330,31 +439,6 @@ public partial class StrokeTextEdit : Control {
 	}
 
 
-	#if false //放入StackPanel中不顯
-	protected override Size MeasureOverride(Size availableSize) {
-		// 宽度未确定时先不测行，只返回最小高度
-		if (availableSize.Width <= 0 || double.IsInfinity(availableSize.Width)) {
-			//斷點調試中 這條分支從未被進入過
-			return new Size(0, FontSize);
-			//return base.MeasureOverride(availableSize);
-		}
-
-		if (_needsReLayout) {
-			_needsReLayout = false;
-			RebuildLayout(availableSize.Width); // 把可用宽度传进去
-			//InvalidateMeasure(); // 立即重新测量  //恐觸死循環
-			//return base.MeasureOverride(availableSize);
-		}
-
-		// var h = _lines.Sum(l => CreateFormattedText(l.Text).Height) + Padding.Top + Padding.Bottom;
-		// return new Size(availableSize.Width, h);
-
-		var h = _lines.Count == 0
-		? CreateFormattedText("A").Height // ✅ 至少一行
-		: _lines.Sum(l => CreateFormattedText(l.Text).Height);
-		return new Size(availableSize.Width, h + Padding.Top + Padding.Bottom);
-	}
-	#endif
 
 	/*
 	告訴布局系統「我怎麼擺」
@@ -403,8 +487,51 @@ public partial class StrokeTextEdit : Control {
 	private Thickness _padding = new(0);
 	public Thickness Padding {
 		get => _padding;
-		set { _padding = value; RebuildLayout(); }
+		set { _padding = value; ClearFormattedTextCache(); RebuildLayout(); }
 	}
+
+	// 原154行：}
+	// 新增行（155行开始）：
+	#region IScrollable实现
+	public Vector Offset
+	{
+		get => new Vector(0, _scrollOffsetY);
+		set
+		{
+			double newY = Math.Clamp(value.Y, 0, Math.Max(0, TotalHeight - _viewport.Height));
+			if (Math.Abs(_scrollOffsetY - newY) < double.Epsilon) return;
+			_scrollOffsetY = newY;
+			InvalidateVisual();
+		}
+	}
+
+	public Size Extent => new Size(Bounds.Width, TotalHeight);
+	public Size Viewport
+	{
+		get => _viewport.Size;
+		set
+		{
+			if (_viewport.Size == value) return;
+			_viewport = new Rect(value);
+			InvalidateVisual();
+		}
+	}
+
+	/// <summary>总行高（含Padding）</summary>
+	public double TotalHeight
+	{
+		get
+		{
+			if (_lines.Count == 0)
+				return CreateFormattedText("A").Height + Padding.Top + Padding.Bottom;
+			return _lineHeights.Sum() + Padding.Top + Padding.Bottom;
+		}
+	}
+	#endregion
+
+// 原161行：private void UpdateTypeface(){
+// 新增行（160行后）：
+private void ClearFormattedTextCache() => _formattedTextCache.Clear();
 
 	private record TextLine {
 		public string Text { get; init; }

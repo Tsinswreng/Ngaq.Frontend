@@ -16,6 +16,12 @@ using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Views.Dictionary;
+using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.StrokeText;
+using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
 
 public partial class ViewWordManage
 	:UserControl
@@ -58,23 +64,48 @@ public partial class ViewWordManage
 			.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle.ToIcon()))
 			.AddInit(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))//TODO i18n
 
-			// .AddInit(new Button(), o=>{
-			// 	o.Content = "TestLog";
-			// 	o.Click += (s,e)=>{
-			// 		Ctx?.LogInfo("Info");
-			// 		Ctx?.LogDebug("Debug");
-			// 	};
-			// })
 			;
-			// Sp.AddInit(new OpBtn(), o=>{
-			// 	o.SetExt(async(Ct)=>{
-			// 		await Task.Run(async ()=>{
-			// 			await Task.Delay(600000);
-			// 		});
-			// 		return NIL;
-			// 	});
-			// 	o.BtnContent = "測試";
-			// });
+			var Txt = new StrokeTextEdit{
+				TextWrapping = TextWrapping.Wrap,
+				UseVirtualizedRender = true
+			};
+			// var Txt = new TextBox{
+			// 	AcceptsReturn = true,
+			// 	TextWrapping = TextWrapping.Wrap,
+			// };
+			var Log = App.GetSvc<ILogger>();
+			Sp.AddInit(new OpBtn(), o=>{
+				o.SetExt(async(Ct)=>{
+					var l = new List<str>();
+					for(var i = 0; i < 1000; i++){
+						l.Add(i+" ");
+					}
+					var t = str.Join("", l);
+					var sw = Stopwatch.StartNew();
+					Txt.Text=t;
+					sw.Stop();
+					Log.LogInformation("Long:"+sw.ElapsedMilliseconds);
+					return NIL;
+				});
+				o.BtnContent = "測試長";
+			})
+			.AddInit(new Button(), o=>{
+				o.Content = "測試短";
+				o.Click+= (s,e)=>{
+					var sw = Stopwatch.StartNew();
+					Txt.Text = "1234567890";
+					sw.Stop();
+					Log.LogInformation("Short:"+sw.ElapsedMilliseconds);
+				};
+			})
+			.AddInit(new ScrollViewer(), Sv=>{
+				Sv.ContentInit(new Border(), Bd=>{
+					Bd.Height = 300;
+					Bd.Child = Txt;
+				});
+			})
+			;
+			
 		});
 
 

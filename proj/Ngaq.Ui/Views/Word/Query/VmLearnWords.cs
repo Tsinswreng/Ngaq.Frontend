@@ -133,7 +133,7 @@ ICfgAccessor? Cfg;
 	public nil ClickWordCard(VmWordListCard Vm){
 		var CurLearnRecord = Vm.WordForLearn?.GetLastUnsavedLearnRecord();
 		if(CurLearnRecord == null){
-			//->Rmg
+			//->Rmb
 			_LearnOrUndo(Vm, ELearn.Rmb);
 			Vm.LearnedColor = CfgUi.ColorRmb;
 		}else if(CurLearnRecord.Learn == ELearn.Rmb){
