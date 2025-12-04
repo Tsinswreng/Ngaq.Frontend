@@ -35,12 +35,21 @@ public partial class StrokeTextEdit : Control {
 		FontFamilyProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		FontStyleProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		FontWeightProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
-
-
+		UseVirtualizedRenderProperty.Changed.AddClassHandler<StrokeTextEdit>((x,_)=>{});//TODO
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
-	// 改成 StyledProperty 就能绑
+	public static readonly StyledProperty<bool> UseVirtualizedRenderProperty =
+		AvaloniaProperty.Register<StrokeTextEdit, bool>(nameof(UseVirtualizedRender), false);
+
+	public bool UseVirtualizedRender{
+		get => GetValue(UseVirtualizedRenderProperty);
+		set => SetValue(UseVirtualizedRenderProperty, value);
+	}
+
+	/* 可視區域（邏輯座標）*/
+	private Rect _viewport = new Rect();
+
 	public static readonly StyledProperty<string> TextProperty =
 	AvaloniaProperty.Register<StrokeTextEdit, string>(nameof(Text), defaultValue: "",
 		coerce: (_, v) => v ?? "");

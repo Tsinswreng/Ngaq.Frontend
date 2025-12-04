@@ -64,7 +64,8 @@ public partial class ViewWordInfo
 		var R = new StrokeTextEdit{
 			Foreground = Brushes.White,
 			Stroke = Brushes.Black,
-			StrokeThickness = 5
+			StrokeThickness = 5,
+			UseVirtualizedRender = true,
 		};
 		return R;
 	}
