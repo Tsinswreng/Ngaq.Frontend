@@ -110,15 +110,6 @@ public partial class MainView : UserControl {
 
 Control? Try()
 {
-	var sp = new StackPanel{
-		Orientation = Avalonia.Layout.Orientation.Horizontal
-	};
-	var stroke = new StrokeTextEdit{
-		Text="Start"
-		,Foreground = Brushes.White
-	};
-	sp.Children.Add(stroke);
-	
 	return null;
 }
 

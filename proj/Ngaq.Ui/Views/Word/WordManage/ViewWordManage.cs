@@ -1,7 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage;
 
 using Ngaq.Ui.Infra.I18n;
-
 using Avalonia.Controls;
 
 
@@ -13,10 +12,10 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
-
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
-using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
+using Ngaq.Ui.Icons;
+using Ngaq.Ui.Views.Dictionary;
 
 public partial class ViewWordManage
 	:UserControl
@@ -34,7 +33,7 @@ public partial class ViewWordManage
 		Render();
 	}
 
-	public  partial class Cls_{
+	public partial class Cls_{
 
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
@@ -53,35 +52,67 @@ public partial class ViewWordManage
 			]);
 		});
 		Root.AddInit(_StackPanel(), Sp=>{
-			Sp.AddInit(_Item(I[K.SearchWords], new ViewSearchWords()));
-			Sp.AddInit(_Item(I[K.AddWords], new ViewAddWord()));
-			Sp.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync()));
-			Sp.AddInit(_Item("Statistics", new ViewStatistics()));//TODO i18n
-			Sp.AddInit(new OpBtn(), o=>{
-				o.SetExt(async(Ct)=>{
-					await Task.Run(async ()=>{
-						await Task.Delay(600000);
-					});
-					return NIL;
-				});
-				o.BtnContent = "測試";
-			});
+			Sp.AddInit(_Item("Dictionary", new ViewDictionary(), Svgs.BookA.ToIcon()))
+			.AddInit(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search.ToIcon()))
+			.AddInit(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add.ToIcon()))
+			.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle.ToIcon()))
+			.AddInit(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))//TODO i18n
+
+			// .AddInit(new Button(), o=>{
+			// 	o.Content = "TestLog";
+			// 	o.Click += (s,e)=>{
+			// 		Ctx?.LogInfo("Info");
+			// 		Ctx?.LogDebug("Debug");
+			// 	};
+			// })
+			;
+			// Sp.AddInit(new OpBtn(), o=>{
+			// 	o.SetExt(async(Ct)=>{
+			// 		await Task.Run(async ()=>{
+			// 			await Task.Delay(600000);
+			// 		});
+			// 		return NIL;
+			// 	});
+			// 	o.BtnContent = "測試";
+			// });
 		});
 
 
 		return NIL;
 	}
 
-	protected Control _Item(str Title, ContentControl Target){
+	protected Control _Item(
+		str Title
+		,ContentControl Target
+		,Control? Icon = null
+	){
 		var R = new SwipeLongPressBtn();
 		var titled = ToolView.WithTitle(Title, Target);
 		R.Click += (s,e)=>{
 			Ctx?.ViewNavi?.GoTo(titled);
 		};
 		R.HorizontalContentAlignment = HAlign.Left;
-		R.ContentInit(_TextBlock(), o=>{
-			o.Text = Title;
-		});
+		if(Icon is null){
+			R.ContentInit(_TextBlock(), o=>{
+				o.Text = Title;
+			});
+		}else{
+			var G = new AutoGrid(IsRow:false);
+			R.ContentInit(G.Grid, o=>{
+				o.ColumnDefinitions.AddRange([
+					ColDef(1, GUT.Auto),
+					ColDef(UiCfg.Inst.BaseFontSize, GUT.Pixel),
+					ColDef(1, GUT.Auto),
+				]);
+				G.AddInit(Icon);
+				G.Add();
+				G.AddInit(_TextBlock(), t=>{
+					t.Text = Title;
+					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				});
+			});
+		}
+
 		return R;
 	}
 

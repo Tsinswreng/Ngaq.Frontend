@@ -137,7 +137,9 @@ public partial class ViewLearnWords
 				var R = new StrokeTextEdit{
 					Text = " "+t,
 					FontSize = UiCfg.Inst.BaseFontSize*0.8,
-					Foreground = Brushes.White,
+					StrokeThickness = 2.0,
+
+					//Foreground = Brushes.White,
 				};
 				return R;
 			};
@@ -162,7 +164,6 @@ public partial class ViewLearnWords
 				o._Button.ContentInit(Hc(
 					Ic(Svgs.PlayCircleFill)//▶️
 					,T(I[K.Start])
-					,new TextBlock{Text = "2"}
 				));
 				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
 				o.SetExt((Ct)=>Ctx?.LoadEtStartAsy(Ct));
@@ -174,7 +175,7 @@ public partial class ViewLearnWords
 				o.SetExt((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
 			}).AddInit(Btn(), o=>{
 				o._Button.ContentInit(Hc(//🔄
-					Ic(Svgs.ArrowClockwiseBold)
+					Ic(Svgs.RotateCw)
 					,T(I[K.Reset])
 				));
 				o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));

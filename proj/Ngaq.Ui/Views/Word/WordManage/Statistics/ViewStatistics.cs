@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Ngaq.Ui.Converters;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
@@ -34,6 +35,12 @@ public partial class ViewStatistics
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
+		new Style(x=>
+			x.Is<TextBox>()
+		).Set(
+			BackgroundProperty
+			,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
+		).Attach(Styles);
 		return NIL;
 	}
 

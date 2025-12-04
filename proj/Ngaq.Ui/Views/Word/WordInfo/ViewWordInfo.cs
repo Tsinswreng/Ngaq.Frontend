@@ -181,7 +181,7 @@ public partial class ViewWordInfo
 					//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 					Mode = BindingMode.OneWay
 					,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, str?>(x=>{
-						var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.summary);
+						var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.note);
 						x.TryGetValue(Key, out var v);
 						var R = str.Join("\t",v??[]).Trim();
 						if(str.IsNullOrEmpty(R)){

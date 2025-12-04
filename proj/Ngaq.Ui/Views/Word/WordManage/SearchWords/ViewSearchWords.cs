@@ -5,6 +5,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
@@ -74,8 +75,10 @@ public partial class ViewSearchWords
 				);
 			})
 			.AddInit(searchBtn, o=>{
-				o.BtnContent = "🔍";
+				//o.BtnContent = "🔍";
+				o.BtnContent = Svgs.Search.ToIcon();
 				o.SetExt((Ct)=>Ctx?.InitSearchAsy(Ct));
+				o._Button.StretchCenter();
 			});
 		}}
 		Root.AddInit(_ScrollViewer(), scrl=>{

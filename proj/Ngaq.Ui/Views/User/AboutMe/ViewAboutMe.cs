@@ -5,6 +5,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Controls;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings;
 using Ngaq.Ui.Views.User.Profile;
@@ -98,7 +99,8 @@ public partial class ViewAboutMe
 		R.Orientation = Orientation.Horizontal;
 		{{
 			R.AddInit(_Button(), o=>{
-				o.Content = "⚙️";
+				//o.Content = "⚙️";
+				o.Content = Svgs.GearFill.ToIcon();
 				o.Click += (s,e)=>{
 					Ctx?.ViewNavi?.GoTo(
 						ToolView.WithTitle("Settings", new ViewSettings())

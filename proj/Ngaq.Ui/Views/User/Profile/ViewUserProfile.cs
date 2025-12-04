@@ -8,6 +8,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.User;
 using Ngaq.Ui.Views.User.Login;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -62,10 +63,7 @@ public partial class ViewUserProfile
 				ContentGrid
 				.AddInit(new CircleAvatar(), o=>{
 					try{
-						using var stream = File.OpenRead(
-@"E:\_\視聽\圖\甘城猫猫合集\完整图包\甘城猫猫合集，密码somo(1)\甘城猫猫合集，密码somo，后缀改为zip.adb\甘城主图\近期图\043.png"
-						);
-						o.Source = new Bitmap(stream);
+						o.Source = DfltAvatar.Img;//TODO
 						o.VerticalAlignment = VAlign.Center;
 						o.HorizontalAlignment = HAlign.Center;
 						o.Width = 150;

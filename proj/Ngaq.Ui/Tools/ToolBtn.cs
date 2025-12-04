@@ -14,6 +14,8 @@ public static class ToolBtn{
 			var o = z;
 			o.HorizontalAlignment = HAlign.Stretch;
 			o.HorizontalContentAlignment = HAlign.Center;
+			o.VerticalAlignment = VAlign.Stretch;
+			o.VerticalContentAlignment = VAlign.Center;
 			return o;
 		}
 	}

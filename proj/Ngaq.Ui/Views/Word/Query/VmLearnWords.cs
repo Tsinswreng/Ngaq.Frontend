@@ -188,7 +188,7 @@ ICfgAccessor? Cfg;
 				);
 				//須先DBʹ詞ˇ全載入內存後交予MgrLearn。否則算權重旹併發讀則使Sqlite出錯
 				var sw2 = Stopwatch.StartNew();
-				var loadedAll = await Page.ToSyncPage(Ct);
+				var loadedAll = await Page.ToListPage(Ct);
 				sw2.Stop();
 				LogInfo($"LoadAllWordFromDb: {sw2.ElapsedMilliseconds} ms");
 				var dataAsyE = (loadedAll.Data??[]).ToAsyncEnumerable();
@@ -204,9 +204,21 @@ ICfgAccessor? Cfg;
 	}
 
 	public async Task<nil> SaveEtRestartAsy(CT Ct){
-		await MgrLearn.SaveAsy(Ct);
-		await MgrLearn.CalcWeightEtStartAsy(Ct);
-		RenderWordList();
+		var sw = Stopwatch.StartNew();
+		await MgrLearn.SaveAsy(Ct);//只背一個單詞45ms于安卓
+		sw.Stop();
+		var t1 = sw.ElapsedMilliseconds;
+		sw = Stopwatch.StartNew();
+		await MgrLearn.CalcWeightEtStartAsy(Ct);//只背一個單詞567ms于安卓
+		sw.Stop();
+		var t2 = sw.ElapsedMilliseconds;
+		sw = Stopwatch.StartNew();
+		RenderWordList();////只背一個單詞104ms于安卓 限示50個單詞 虛渲染
+		sw.Stop();
+		var t3 = sw.ElapsedMilliseconds;
+		// Dispatcher.UIThread.Post(()=>{
+		// 	ShowMsg($"SaveEtRestartAsy: {t1}ms, CalcWeightEtStartAsy: {t2}ms, RenderWordList: {t3}ms");
+		// });
 		return NIL;
 	}
 

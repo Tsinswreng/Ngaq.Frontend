@@ -148,7 +148,8 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 			.SetupLocal()
 			.SetupLocalFrontend()
 			.SetupClient()
-			.SetupUi();
+			.SetupUi()
+			.SetupAndroid();
 		//App.SetSvcProvider(svc.BuildServiceProvider());
 		var serviceProvider = svc.BuildServiceProvider(new ServiceProviderOptions
 		{
@@ -185,10 +186,7 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		}
 	}
 
-
-
-
-/// <summary>
+	/// <summary>
 	/// 将 Assets 中的文件复制到指定目标路径
 	/// </summary>
 	/// <param name="assetFileName">Assets 中的文件名（含子路径，如 "configs/setting.json"）</param>

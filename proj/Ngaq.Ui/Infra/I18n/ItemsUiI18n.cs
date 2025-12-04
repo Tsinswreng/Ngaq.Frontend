@@ -32,6 +32,7 @@ public class LearnWord{
 public class Library{
 	public static readonly K R = Mk(View, [nameof(Library)]);
 	public static readonly K SearchWords = Mk(R, [nameof(SearchWords)]);
+	public static readonly K SearchMyWords = Mk(R, [nameof(SearchMyWords)]);
 	public static readonly K AddWords = Mk(R, [nameof(AddWords)]);
 	public static readonly K BackupEtSync = Mk(R, [nameof(BackupEtSync)]);
 }

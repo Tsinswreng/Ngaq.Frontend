@@ -169,11 +169,27 @@ public partial class StrokeTextEdit : Control {
 			_ => RebuildLayout()
 		);
 
+		// var DfltSty = new Style()
+		// .Set(
+		// 	FontSizeProperty
+		// 	,new DynamicResourceExtension(KeysRsrc.ControlContentThemeFontSize)
+		// ).Attach(Styles);
+		var a = new DynamicResourceExtension("TextControlForeground");
 		var DfltSty = new Style()
-		.Set(
-			FontSizeProperty
-			,new DynamicResourceExtension(KeysRsrc.ControlContentThemeFontSize)
-		).Attach(Styles);
+		.Set(FontSizeProperty, new DynamicResourceExtension("ControlContentThemeFontSize"))
+		.Set(ForegroundProperty, new DynamicResourceExtension("TextControlForeground"))
+		.Set(FillProperty, new DynamicResourceExtension("TextControlForeground"))
+		//.Set(StrokeProperty, new DynamicResourceExtension("TextControlForeground"))
+		//.Set(StrokeProperty, new InvertForegroundBrushExtension())
+		.Set(StrokeThicknessProperty, 1.0)
+		.Set(FontFamilyProperty, new DynamicResourceExtension("ContentControlThemeFontFamily"))
+		.Set(VerticalContentAlignmentProperty, VAlign.Center)
+		.Attach(Styles);
+		if(Application.Current?.Resources.TryGetValue("SystemControlForegroundBaseHighBrush", out var brush)??false){
+			if(brush is IBrush b){
+				DfltSty.Set(ForegroundProperty, b);
+			}
+		}
 	}
 
 
