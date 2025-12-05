@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
 using Avalonia.Platform;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -225,7 +226,7 @@ public partial class StrokeTextEdit : Control {
 			return;
 		}
 
-		var maxWidth = Bounds.Width - Padding.Left - Padding.Right;
+		double maxWidth = Bounds.Width - Padding.Left - Padding.Right;
 		if (maxWidth <= 0) {
 			InvalidateVisual();
 			return;
@@ -233,10 +234,28 @@ public partial class StrokeTextEdit : Control {
 
 		var text = Text.AsMemory();
 		int start = 0;
-		while (start < text.Length) {
-			int len = BreakLine(text.Slice(start), maxWidth);
+
+		// 用 TextLayout 一次性做完自动换行
+		var tl = new TextLayout(
+			text.Span.ToString(),
+			Typeface,
+			FontSize,
+			Fill,
+			TextAlignment.Left,
+			TextWrapping = this.TextWrapping
+		);
+
+		foreach (var tlLine in tl.TextLines) {
+			int len = 0;
+			foreach (var run in tlLine.TextRuns) {
+				if (run is ShapedTextRun strun)
+					len += strun.Length;
+			}
+			if (len <= 0 || start + len > text.Length) break;   // 加这一行
+
+			var slice = text.Slice(start, len);
 			_lines.Add(new TextLine {
-				Text = text.Slice(start, len).ToString(),
+				Text = slice.ToString(),
 				Start = start,
 				Length = len
 			});
@@ -244,6 +263,9 @@ public partial class StrokeTextEdit : Control {
 		}
 		InvalidateVisual();
 	}
+
+
+
 
 	// 简单英文/中文断行，生产环境可换成 TextLayout
 	private int BreakLine(ReadOnlyMemory<char> slice, double maxWidth) {
@@ -360,14 +382,36 @@ public partial class StrokeTextEdit : Control {
 	private void RebuildLayout(double maxWidth) {
 		_lines.Clear();
 		if (string.IsNullOrEmpty(Text)) return;
+
 		maxWidth -= Padding.Left + Padding.Right;
 		if (maxWidth <= 0) return;
 
 		var text = Text.AsMemory();
 		int start = 0;
-		while (start < text.Length) {
-			int len = BreakLine(text.Slice(start), maxWidth);
-			_lines.Add(new TextLine { Text = text.Slice(start, len).ToString() });
+
+		var tl = new TextLayout(
+			text.Span.ToString(),
+			Typeface,
+			FontSize,
+			Fill,
+			TextAlignment.Left,
+			TextWrapping = this.TextWrapping
+		);
+
+		foreach (var tlLine in tl.TextLines) {
+			int len = 0;
+			foreach (var run in tlLine.TextRuns) {
+				if (run is ShapedTextRun strun)
+					len += strun.Length;
+			}
+			if (len <= 0 || start + len > text.Length) break;   // 加这一行
+
+			var slice = text.Slice(start, len);
+			_lines.Add(new TextLine {
+				Text = slice.ToString(),
+				Start = start,
+				Length = len
+			});
 			start += len;
 		}
 	}
