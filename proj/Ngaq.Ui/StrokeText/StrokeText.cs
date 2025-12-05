@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.StrokeText;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using Avalonia;
@@ -36,6 +37,10 @@ public partial class StrokeTextEdit : Control {
 		FontStyleProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		FontWeightProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
 		UseVirtualizedRenderProperty.Changed.AddClassHandler<StrokeTextEdit>((x,_)=>{});//TODO
+		ViewportProperty.Changed.AddClassHandler<StrokeTextEdit>((x, e) =>{
+			x._viewport = (Rect)e.NewValue!;
+			x.InvalidateVisual();      // 只重绘，不重新排版
+		});
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
@@ -135,7 +140,11 @@ public partial class StrokeTextEdit : Control {
 	private static readonly StyledProperty<Typeface> TypefaceProperty
 	=AvaloniaProperty.Register<StrokeTextEdit, Typeface>(nameof(Typeface), new Typeface(FontFamily.Default));
 
+	internal static readonly AttachedProperty<Rect> ViewportProperty =
+		AvaloniaProperty.RegisterAttached<StrokeTextEdit, Control, Rect>("Viewport");
 
+	internal static void SetViewport(Control c, Rect r) => c.SetValue(ViewportProperty, r);
+	internal static Rect GetViewport(Control c) => c.GetValue(ViewportProperty);
 
 	public FontWeight FontWeight{
 		get => GetValue(FontWeightProperty);
@@ -263,8 +272,11 @@ public partial class StrokeTextEdit : Control {
 	// 在类里补一行字段
 	private double _topOffset = 0;
 
-	/* -------------- 渲染 -------------- */
 	public override void Render(DrawingContext dc) {
+		RenderAll(dc);
+	}
+
+	public void RenderAll(DrawingContext dc) {
 		if (_lines.Count == 0){
 			return;
 		}
@@ -386,25 +398,4 @@ public partial class StrokeTextEdit : Control {
 		public int Start { get; init; }
 		public int Length { get; init; }
 	}
-}
-
-
-public static class ExtnStrokeTextEdit {
-	/* 按照 PropText_() 的命名风格，把其余属性一次性补全 */
-	public static StyledProperty<string> PropText_(this StrokeTextEdit z) => StrokeTextEdit.TextProperty;
-
-	public static StyledProperty<IBrush> PropForeground_(this StrokeTextEdit z) => StrokeTextEdit.ForegroundProperty;
-
-	public static StyledProperty<IBrush> PropFill_(this StrokeTextEdit z) => StrokeTextEdit.FillProperty;
-
-	public static StyledProperty<IBrush> PropStroke_(this StrokeTextEdit z) => StrokeTextEdit.StrokeProperty;
-
-	public static StyledProperty<double> PropFontSize_(this StrokeTextEdit z) => StrokeTextEdit.FontSizeProperty;
-
-	public static StyledProperty<double> PropStrokeThickness_(this StrokeTextEdit z) => StrokeTextEdit.StrokeThicknessProperty;
-
-	public static StyledProperty<VAlign> PropVerticalContentAlignment_(this StrokeTextEdit z) => StrokeTextEdit.VerticalContentAlignmentProperty;
-
-	public static StyledProperty<TextWrapping> PropTextWrapping_(this StrokeTextEdit z) => StrokeTextEdit.TextWrappingProperty;
-	public static StyledProperty<FontFamily> PropFontFamily_(this StrokeTextEdit z)=> StrokeTextEdit.FontFamilyProperty;
 }

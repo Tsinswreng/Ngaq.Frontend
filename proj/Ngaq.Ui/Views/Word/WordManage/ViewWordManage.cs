@@ -66,7 +66,7 @@ public partial class ViewWordManage
 
 			;
 			var Txt = new StrokeTextEdit{
-				TextWrapping = TextWrapping.Wrap,
+				//TextWrapping = TextWrapping.Wrap,
 				UseVirtualizedRender = true
 			};
 			// var Txt = new TextBox{
@@ -74,20 +74,20 @@ public partial class ViewWordManage
 			// 	TextWrapping = TextWrapping.Wrap,
 			// };
 			var Log = App.GetSvc<ILogger>();
-			Sp.AddInit(new OpBtn(), o=>{
-				o.SetExt(async(Ct)=>{
+			Sp.AddInit(new Button(), o=>{
+				o.Click += ((s,e)=>{
 					var l = new List<str>();
-					for(var i = 0; i < 1000; i++){
-						l.Add(i+" ");
+					for(var i = 0; i < 5000; i++){
+						l.Add("0");
 					}
 					var t = str.Join("", l);
 					var sw = Stopwatch.StartNew();
 					Txt.Text=t;
 					sw.Stop();
 					Log.LogInformation("Long:"+sw.ElapsedMilliseconds);
-					return NIL;
+					return ;
 				});
-				o.BtnContent = "測試長";
+				o.Content = "測試長";
 			})
 			.AddInit(new Button(), o=>{
 				o.Content = "測試短";
@@ -105,7 +105,7 @@ public partial class ViewWordManage
 				});
 			})
 			;
-			
+
 		});
 
 
