@@ -2,9 +2,9 @@ using Avalonia;
 using Avalonia.Media;
 
 namespace Ngaq.Ui.StrokeText;
-public partial class StrokeTextEdit{
+public partial class StrokeTextBlock{
 	public static readonly StyledProperty<bool> UseVirtualizedRenderProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, bool>(nameof(UseVirtualizedRender), false);
+		AvaloniaProperty.Register<StrokeTextBlock, bool>(nameof(UseVirtualizedRender), false);
 
 	public bool UseVirtualizedRender{
 		get => GetValue(UseVirtualizedRenderProperty);
@@ -12,7 +12,7 @@ public partial class StrokeTextEdit{
 	}
 
 public static readonly StyledProperty<string> TextProperty =
-	AvaloniaProperty.Register<StrokeTextEdit, string>(nameof(Text), defaultValue: "",
+	AvaloniaProperty.Register<StrokeTextBlock, string>(nameof(Text), defaultValue: "",
 		coerce: (_, v) => v ?? "");
 
 	public string Text {
@@ -23,10 +23,10 @@ public static readonly StyledProperty<string> TextProperty =
 	}
 
 	public static readonly StyledProperty<FontStyle> FontStyleProperty
-	=AvaloniaProperty.Register<StrokeTextEdit, FontStyle>(nameof(FontStyle), FontStyle.Normal);
+	=AvaloniaProperty.Register<StrokeTextBlock, FontStyle>(nameof(FontStyle), FontStyle.Normal);
 
 	public static readonly StyledProperty<TextWrapping> TextWrappingProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, TextWrapping>(nameof(Avalonia.Media.TextWrapping), Avalonia.Media.TextWrapping.NoWrap);
+		AvaloniaProperty.Register<StrokeTextBlock, TextWrapping>(nameof(Avalonia.Media.TextWrapping), Avalonia.Media.TextWrapping.NoWrap);
 
 	public TextWrapping TextWrapping{
 		get => GetValue(TextWrappingProperty);
@@ -34,7 +34,7 @@ public static readonly StyledProperty<string> TextProperty =
 	}
 
 	public static readonly StyledProperty<IBrush> ForegroundProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Foreground), Brushes.Black);
+		AvaloniaProperty.Register<StrokeTextBlock, IBrush>(nameof(Foreground), Brushes.Black);
 
 	public IBrush Foreground {
 		get => GetValue(ForegroundProperty);
@@ -43,13 +43,13 @@ public static readonly StyledProperty<string> TextProperty =
 
 	// 注册三个可绑属性
 	public static readonly StyledProperty<IBrush> FillProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Fill), Brushes.Black);
+		AvaloniaProperty.Register<StrokeTextBlock, IBrush>(nameof(Fill), Brushes.Black);
 
 	public static readonly StyledProperty<IBrush> StrokeProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Stroke), Brushes.Black);
+		AvaloniaProperty.Register<StrokeTextBlock, IBrush>(nameof(Stroke), Brushes.Black);
 
 	public static readonly StyledProperty<double> FontSizeProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(FontSize), 16d);
+		AvaloniaProperty.Register<StrokeTextBlock, double>(nameof(FontSize), 16d);
 
 	public IBrush Fill {
 		get => GetValue(FillProperty);
@@ -67,7 +67,7 @@ public static readonly StyledProperty<string> TextProperty =
 	}
 
 	public static readonly StyledProperty<double> StrokeThicknessProperty =
-	AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(StrokeThickness), 2.5);
+	AvaloniaProperty.Register<StrokeTextBlock, double>(nameof(StrokeThickness), 2.5);
 
 	public double StrokeThickness {
 		get => GetValue(StrokeThicknessProperty);
@@ -75,7 +75,7 @@ public static readonly StyledProperty<string> TextProperty =
 	}
 
 	public static readonly StyledProperty<VAlign> VerticalContentAlignmentProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, VAlign>(nameof(VerticalContentAlignment), VAlign.Center);
+		AvaloniaProperty.Register<StrokeTextBlock, VAlign>(nameof(VerticalContentAlignment), VAlign.Center);
 
 	public VAlign VerticalContentAlignment {
 		get => GetValue(VerticalContentAlignmentProperty);
@@ -83,7 +83,7 @@ public static readonly StyledProperty<string> TextProperty =
 	}
 
 	public static readonly StyledProperty<FontFamily> FontFamilyProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, FontFamily>(nameof(FontFamily), FontFamily.Default);
+		AvaloniaProperty.Register<StrokeTextBlock, FontFamily>(nameof(FontFamily), FontFamily.Default);
 
 	public FontFamily FontFamily{
 		get => GetValue(FontFamilyProperty);
@@ -91,10 +91,10 @@ public static readonly StyledProperty<string> TextProperty =
 	}
 
 	public static readonly StyledProperty<FontWeight> FontWeightProperty
-	=AvaloniaProperty.Register<StrokeTextEdit, FontWeight>(nameof(FontWeight), FontWeight.Normal);
+	=AvaloniaProperty.Register<StrokeTextBlock, FontWeight>(nameof(FontWeight), FontWeight.Normal);
 
 	private static readonly StyledProperty<Typeface> TypefaceProperty
-	=AvaloniaProperty.Register<StrokeTextEdit, Typeface>(nameof(Typeface), new Typeface(FontFamily.Default));
+	=AvaloniaProperty.Register<StrokeTextBlock, Typeface>(nameof(Typeface), new Typeface(FontFamily.Default));
 
 	public FontWeight FontWeight{
 		get => GetValue(FontWeightProperty);

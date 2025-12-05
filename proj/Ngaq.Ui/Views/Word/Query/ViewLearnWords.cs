@@ -115,8 +115,8 @@ public partial class ViewLearnWords
 		return NIL;
 	}
 
-	StrokeTextEdit _Txt(){
-		var R = new StrokeTextEdit();
+	StrokeTextBlock _Txt(){
+		var R = new StrokeTextBlock();
 		R.Foreground = Brushes.White;
 		return R;
 	}
@@ -134,7 +134,7 @@ public partial class ViewLearnWords
 		});
 		{{
 			var T = (str t)=>{
-				var R = new StrokeTextEdit{
+				var R = new StrokeTextBlock{
 					Text = " "+t,
 					FontSize = UiCfg.Inst.BaseFontSize*0.8,
 					StrokeThickness = 2.0,

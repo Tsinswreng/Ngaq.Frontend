@@ -65,7 +65,7 @@ public partial class ViewWordManage
 			.AddInit(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))//TODO i18n
 
 			;
-			var Txt = new StrokeTextEdit{
+			var Txt = new StrokeTextBlock{// //TextBlock
 				TextWrapping = TextWrapping.Wrap,
 				//UseVirtualizedRender = true
 			};
@@ -78,7 +78,7 @@ public partial class ViewWordManage
 				o.Click += ((s,e)=>{
 					var l = new List<str>();
 					for(var i = 0; i < 5000; i++){
-						l.Add("0");
+						l.Add("7");
 					}
 					var t = str.Join("", l);
 					var sw = Stopwatch.StartNew();
@@ -98,11 +98,13 @@ public partial class ViewWordManage
 					Log.LogInformation("Short:"+sw.ElapsedMilliseconds);
 				};
 			})
-			.AddInit(new ScrollViewer(), Sv=>{
-				Sv.ContentInit(new Border(), Bd=>{
-					Bd.Height = 300;
-					Bd.Child = Txt;
-				});
+			.AddInit(new Border(), Bd=>{
+				Bd.Height = 300;
+				var Sv = new ScrollViewer();
+				Bd.Child = Sv;
+				{{
+					Sv.ContentInit(Txt);
+				}}
 			})
 			;
 

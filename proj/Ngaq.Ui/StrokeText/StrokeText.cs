@@ -15,30 +15,31 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
 /// <summary>
-/// TODO 設 默認字體大小 顏色等 隨主題
+/// TODO 直ᵈ把StrokeTextEdit置于ScrollViewer中旹 未顯者則直被裁掉 亦無法滾動
+/// 這個控件直接放到ScrollViewer中滾動不生效、先套在別的佈局容器裏再放ScrollViewer裏滾動纔生效
 /// </summary>
-public partial class StrokeTextEdit : Control {
+public partial class StrokeTextBlock : Control {
 
 	// 静态构造里加回调
-	static StrokeTextEdit() {
-		TextProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) =>{
+	static StrokeTextBlock() {
+		TextProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) =>{
 			x.RebuildLayout();
 		});
-		FillProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.InvalidateVisual());
-		StrokeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
-		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.UpdatePen());
-		FontSizeProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
-		ForegroundProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => {
+		FillProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.InvalidateVisual());
+		StrokeProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.UpdatePen());
+		StrokeThicknessProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.UpdatePen());
+		FontSizeProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.RebuildLayout());
+		ForegroundProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => {
 			x.Fill = x.Foreground;
 			//if (!x.IsSet(FillProperty))   // 用户未显式设 Fill 才同步
 		});
-		TextWrappingProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildLayout());
+		TextWrappingProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.RebuildLayout());
 		/* 之前已有的监听保持不变，只追加下面三行 */
-		FontFamilyProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
-		FontStyleProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
-		FontWeightProperty.Changed.AddClassHandler<StrokeTextEdit>((x, _) => x.RebuildTypeface());
-		UseVirtualizedRenderProperty.Changed.AddClassHandler<StrokeTextEdit>((x,_)=>{});//TODO
-		ViewportProperty.Changed.AddClassHandler<StrokeTextEdit>((x, e) =>{
+		FontFamilyProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.RebuildTypeface());
+		FontStyleProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.RebuildTypeface());
+		FontWeightProperty.Changed.AddClassHandler<StrokeTextBlock>((x, _) => x.RebuildTypeface());
+		UseVirtualizedRenderProperty.Changed.AddClassHandler<StrokeTextBlock>((x,_)=>{});//TODO
+		ViewportProperty.Changed.AddClassHandler<StrokeTextBlock>((x, e) =>{
 			x._viewport = (Rect)e.NewValue!;
 			x.InvalidateVisual();      // 只重绘，不重新排版
 		});
@@ -52,7 +53,7 @@ public partial class StrokeTextEdit : Control {
 
 
 	internal static readonly AttachedProperty<Rect> ViewportProperty =
-		AvaloniaProperty.RegisterAttached<StrokeTextEdit, Control, Rect>("Viewport");
+		AvaloniaProperty.RegisterAttached<StrokeTextBlock, Control, Rect>("Viewport");
 
 	internal static void SetViewport(Control c, Rect r) => c.SetValue(ViewportProperty, r);
 	internal static Rect GetViewport(Control c) => c.GetValue(ViewportProperty);
@@ -72,7 +73,7 @@ public partial class StrokeTextEdit : Control {
 
 	private void UpdatePen() => _strokePen = new Pen(Stroke, StrokeThickness);
 
-	public StrokeTextEdit() {
+	public StrokeTextBlock() {
 		//_typeface = new Typeface("Microsoft YaHei");
 		Typeface = new Typeface(FontFamily.Default);
 		_strokePen = new Pen(Stroke, StrokeThickness);
@@ -176,10 +177,10 @@ public partial class StrokeTextEdit : Control {
 	如果裡面還有子元素，記得遞歸調用 child.Measure(...)。
 	 */
 
-	protected override Size MeasureOverride(Size availableSize) {
+	protected override Size MeasureOverride(Size availableSize){
 		double width = availableSize.Width;
 		if (double.IsInfinity(width)) {
-			width = 200; // ✅ 给一个默认宽度，或者根据文本估算
+			width = 1; // ✅ 给一个默认宽度，或者根据文本估算
 		}
 
 		if (_needsReLayout) {

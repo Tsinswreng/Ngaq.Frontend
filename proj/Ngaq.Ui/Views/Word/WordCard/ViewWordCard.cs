@@ -32,8 +32,8 @@ public partial class ViewWordListCard
 		Render();
 	}
 
-	protected StrokeTextEdit TxtBox(){
-		var R = new StrokeTextEdit{
+	protected StrokeTextBlock TxtBox(){
+		var R = new StrokeTextBlock{
 			Fill = Brushes.White,
 			Stroke = Brushes.Black,
 			StrokeThickness = 5

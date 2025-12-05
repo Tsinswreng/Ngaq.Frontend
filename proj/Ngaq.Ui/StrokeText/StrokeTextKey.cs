@@ -1,6 +1,6 @@
 namespace Ngaq.Ui.StrokeText;
 using Avalonia.Input;
-public partial class StrokeTextEdit{
+public partial class StrokeTextBlock{
 	/* -------------- 交互 -------------- */
 	protected override void OnKeyDown(KeyEventArgs e) {
 		switch (e.Key) {

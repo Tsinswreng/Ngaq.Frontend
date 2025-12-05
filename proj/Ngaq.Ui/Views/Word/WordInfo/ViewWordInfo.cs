@@ -60,8 +60,8 @@ public partial class ViewWordInfo
 
 	public AutoGrid Root{get;set;} = new(IsRow: true);
 
-	protected StrokeTextEdit TxtBox(){
-		var R = new StrokeTextEdit{
+	protected StrokeTextBlock TxtBox(){
+		var R = new StrokeTextBlock{
 			Foreground = Brushes.White,
 			Stroke = Brushes.Black,
 			StrokeThickness = 5,
@@ -195,8 +195,8 @@ public partial class ViewWordInfo
 
 			//annotation無內容旹則不顯
 			o.Bind(
-				StrokeTextEdit.HeightProperty
-				,CBE.Mk<StrokeTextEdit>(x=>x.Text
+				StrokeTextBlock.HeightProperty
+				,CBE.Mk<StrokeTextBlock>(x=>x.Text
 					,Converter: new SimpleFnConvtr<str?, double>(x=>{
 						if(str.IsNullOrEmpty(x)){
 							return 0;

@@ -1,8 +1,9 @@
+using Avalonia;
 using Avalonia.Media.TextFormatting;
 
 namespace Ngaq.Ui.StrokeText;
 
-public partial class StrokeTextEdit{
+public partial class StrokeTextBlock{
 /* -------------- 布局+折行 -------------- */
 	//有時未能自動換行
 	private void RebuildLayoutTextLayout() {
