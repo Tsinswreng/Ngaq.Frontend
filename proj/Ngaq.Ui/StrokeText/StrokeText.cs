@@ -115,51 +115,7 @@ public partial class StrokeTextEdit : Control {
 		RebuildLayout();   // 布局依赖字形度量，必须刷新
 	}
 
-	/* -------------- 布局+折行 -------------- */
-	private void RebuildLayout() {
-		_lines.Clear();
-		if (string.IsNullOrEmpty(Text)) {
-			InvalidateVisual();
-			return;
-		}
 
-		double maxWidth = Bounds.Width - Padding.Left - Padding.Right;
-		if (maxWidth <= 0) {
-			InvalidateVisual();
-			return;
-		}
-
-		var text = Text.AsMemory();
-		int start = 0;
-
-		// 用 TextLayout 一次性做完自动换行
-		var tl = new TextLayout(
-			text.Span.ToString(),
-			Typeface,
-			FontSize,
-			Fill,
-			TextAlignment.Left,
-			TextWrapping = this.TextWrapping
-		);
-
-		foreach (var tlLine in tl.TextLines) {
-			int len = 0;
-			foreach (var run in tlLine.TextRuns) {
-				if (run is ShapedTextRun strun)
-					len += strun.Length;
-			}
-			if (len <= 0 || start + len > text.Length) break;   // 加这一行
-
-			var slice = text.Slice(start, len);
-			_lines.Add(new TextLine {
-				Text = slice.ToString(),
-				Start = start,
-				Length = len
-			});
-			start += len;
-		}
-		InvalidateVisual();
-	}
 
 	private FormattedText CreateFormattedText(string txt) =>
 		new(txt, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
@@ -254,44 +210,48 @@ public partial class StrokeTextEdit : Control {
 		return finalSize;
 	}
 
-	private void RebuildLayout(double maxWidth) {
-		_lines.Clear();
-		if (string.IsNullOrEmpty(Text)) return;
 
-		maxWidth -= Padding.Left + Padding.Right;
-		if (maxWidth <= 0) return;
+	private void RebuildLayout() {
+		_lines.Clear();
+		if (string.IsNullOrEmpty(Text)) {
+			InvalidateVisual();
+			return;
+		}
+
+		var maxWidth = Bounds.Width - Padding.Left - Padding.Right;
+		if (maxWidth <= 0) {
+			InvalidateVisual();
+			return;
+		}
 
 		var text = Text.AsMemory();
 		int start = 0;
-
-		var tl = new TextLayout(
-			text.Span.ToString(),
-			Typeface,
-			FontSize,
-			Fill,
-			TextAlignment.Left,
-			TextWrapping = this.TextWrapping
-		);
-
-		foreach (var tlLine in tl.TextLines) {
-			int len = 0;
-			foreach (var run in tlLine.TextRuns) {
-				if (run is ShapedTextRun strun)
-					len += strun.Length;
-			}
-			if (len <= 0 || start + len > text.Length) break;   // 加这一行
-
-			var slice = text.Slice(start, len);
+		while (start < text.Length) {
+			int len = BreakLine(text.Slice(start), maxWidth);
 			_lines.Add(new TextLine {
-				Text = slice.ToString(),
+				Text = text.Slice(start, len).ToString(),
 				Start = start,
 				Length = len
 			});
 			start += len;
 		}
+		InvalidateVisual();
 	}
 
+	private void RebuildLayout(double maxWidth) {
+		_lines.Clear();
+		if (string.IsNullOrEmpty(Text)) return;
+		maxWidth -= Padding.Left + Padding.Right;
+		if (maxWidth <= 0) return;
 
+		var text = Text.AsMemory();
+		int start = 0;
+		while (start < text.Length) {
+			int len = BreakLine(text.Slice(start), maxWidth);
+			_lines.Add(new TextLine { Text = text.Slice(start, len).ToString() });
+			start += len;
+		}
+	}
 
 	/* -------------- 光标定位 -------------- */
 	private (int line, int off) FindCaretLine() {
