@@ -66,7 +66,7 @@ public partial class ViewWordManage
 
 			;
 			var Txt = new StrokeTextEdit{
-				//TextWrapping = TextWrapping.Wrap,
+				TextWrapping = TextWrapping.Wrap,
 				UseVirtualizedRender = true
 			};
 			// var Txt = new TextBox{

@@ -33,4 +33,23 @@ public partial class StrokeTextEdit{
 		e.Handled = true;
 	}
 
+	// 简单英文/中文断行，生产环境可换成 TextLayout
+	private int BreakLine(ReadOnlyMemory<char> slice, double maxWidth) {
+		if (slice.Length == 0) return 0;
+		if (TextWrapping == Avalonia.Media.TextWrapping.NoWrap) return slice.Length;
+		var fmt = CreateFormattedText(slice.Span.ToString());
+		if (fmt.Width <= maxWidth) return slice.Length;
+
+		int low = 0, high = slice.Length;
+		while (low < high) {
+			int mid = low + high + 1 >> 1;
+			fmt = CreateFormattedText(slice.Span.Slice(0, mid).ToString());
+			if (fmt.Width <= maxWidth)
+				low = mid;
+			else
+				high = mid - 1;
+		}
+		return low == 0 ? 1 : low;
+	}
+
 }

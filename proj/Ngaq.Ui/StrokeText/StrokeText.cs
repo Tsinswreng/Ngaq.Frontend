@@ -45,101 +45,11 @@ public partial class StrokeTextEdit : Control {
 	}
 
 	/* -------------- 对外 bindable 字段 -------------- */
-	public static readonly StyledProperty<bool> UseVirtualizedRenderProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, bool>(nameof(UseVirtualizedRender), false);
 
-	public bool UseVirtualizedRender{
-		get => GetValue(UseVirtualizedRenderProperty);
-		set => SetValue(UseVirtualizedRenderProperty, value);
-	}
 
 	/* 可視區域（邏輯座標）*/
 	private Rect _viewport = new Rect();
 
-	public static readonly StyledProperty<string> TextProperty =
-	AvaloniaProperty.Register<StrokeTextEdit, string>(nameof(Text), defaultValue: "",
-		coerce: (_, v) => v ?? "");
-
-	public string Text {
-		get => GetValue(TextProperty);
-		set{
-			SetValue(TextProperty, value);
-		}
-	}
-
-	public static readonly StyledProperty<FontStyle> FontStyleProperty
-	=AvaloniaProperty.Register<StrokeTextEdit, FontStyle>(nameof(FontStyle), FontStyle.Normal);
-
-	public static readonly StyledProperty<TextWrapping> TextWrappingProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, TextWrapping>(nameof(Avalonia.Media.TextWrapping), Avalonia.Media.TextWrapping.NoWrap);
-
-	public TextWrapping TextWrapping{
-		get => GetValue(TextWrappingProperty);
-		set => SetValue(TextWrappingProperty, value);
-	}
-
-	public static readonly StyledProperty<IBrush> ForegroundProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Foreground), Brushes.Black);
-
-	public IBrush Foreground {
-		get => GetValue(ForegroundProperty);
-		set => SetValue(ForegroundProperty, value);
-	}
-
-	// 注册三个可绑属性
-	public static readonly StyledProperty<IBrush> FillProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Fill), Brushes.Black);
-
-	public static readonly StyledProperty<IBrush> StrokeProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, IBrush>(nameof(Stroke), Brushes.Black);
-
-	public static readonly StyledProperty<double> FontSizeProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(FontSize), 16d);
-
-	public IBrush Fill {
-		get => GetValue(FillProperty);
-		set => SetValue(FillProperty, value);
-	}
-
-	public IBrush Stroke {
-		get => GetValue(StrokeProperty);
-		set => SetValue(StrokeProperty, value);
-	}
-
-	public double FontSize {
-		get => GetValue(FontSizeProperty);
-		set => SetValue(FontSizeProperty, value);
-	}
-
-	public static readonly StyledProperty<double> StrokeThicknessProperty =
-	AvaloniaProperty.Register<StrokeTextEdit, double>(nameof(StrokeThickness), 2.5);
-
-	public double StrokeThickness {
-		get => GetValue(StrokeThicknessProperty);
-		set => SetValue(StrokeThicknessProperty, value);
-	}
-
-	public static readonly StyledProperty<VAlign> VerticalContentAlignmentProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, VAlign>(nameof(VerticalContentAlignment), VAlign.Center);
-
-	public VAlign VerticalContentAlignment {
-		get => GetValue(VerticalContentAlignmentProperty);
-		set => SetValue(VerticalContentAlignmentProperty, value);
-	}
-
-	public static readonly StyledProperty<FontFamily> FontFamilyProperty =
-		AvaloniaProperty.Register<StrokeTextEdit, FontFamily>(nameof(FontFamily), FontFamily.Default);
-
-	public FontFamily FontFamily{
-		get => GetValue(FontFamilyProperty);
-		set => SetValue(FontFamilyProperty, value);
-	}
-
-	public static readonly StyledProperty<FontWeight> FontWeightProperty
-	=AvaloniaProperty.Register<StrokeTextEdit, FontWeight>(nameof(FontWeight), FontWeight.Normal);
-
-	private static readonly StyledProperty<Typeface> TypefaceProperty
-	=AvaloniaProperty.Register<StrokeTextEdit, Typeface>(nameof(Typeface), new Typeface(FontFamily.Default));
 
 	internal static readonly AttachedProperty<Rect> ViewportProperty =
 		AvaloniaProperty.RegisterAttached<StrokeTextEdit, Control, Rect>("Viewport");
@@ -147,20 +57,7 @@ public partial class StrokeTextEdit : Control {
 	internal static void SetViewport(Control c, Rect r) => c.SetValue(ViewportProperty, r);
 	internal static Rect GetViewport(Control c) => c.GetValue(ViewportProperty);
 
-	public FontWeight FontWeight{
-		get => GetValue(FontWeightProperty);
-		set => SetValue(FontWeightProperty, value);
-	}
 
-	public FontStyle FontStyle{
-		get => GetValue(FontStyleProperty);
-		set => SetValue(FontStyleProperty, value);
-	}
-
-	public Typeface Typeface{
-		get => GetValue(TypefaceProperty);
-		private set => SetValue(TypefaceProperty, value);
-	}
 
 	/* -------------- 内部状态 -------------- */
 	private readonly List<TextLine> _lines = new();
@@ -264,28 +161,6 @@ public partial class StrokeTextEdit : Control {
 		InvalidateVisual();
 	}
 
-
-
-
-	// 简单英文/中文断行，生产环境可换成 TextLayout
-	private int BreakLine(ReadOnlyMemory<char> slice, double maxWidth) {
-		if (slice.Length == 0) return 0;
-		if (TextWrapping == TextWrapping.NoWrap) return slice.Length;
-		var fmt = CreateFormattedText(slice.Span.ToString());
-		if (fmt.Width <= maxWidth) return slice.Length;
-
-		int low = 0, high = slice.Length;
-		while (low < high) {
-			int mid = low + high + 1 >> 1;
-			fmt = CreateFormattedText(slice.Span.Slice(0, mid).ToString());
-			if (fmt.Width <= maxWidth)
-				low = mid;
-			else
-				high = mid - 1;
-		}
-		return low == 0 ? 1 : low;
-	}
-
 	private FormattedText CreateFormattedText(string txt) =>
 		new(txt, CultureInfo.CurrentCulture, FlowDirection.LeftToRight,
 			Typeface, FontSize, Fill);
@@ -318,10 +193,10 @@ public partial class StrokeTextEdit : Control {
 	}
 
 	private Vector[] OutlineOffsets =>
-		new[]{ new Vector(-StrokeThickness, -StrokeThickness),
-		   new Vector( StrokeThickness, -StrokeThickness),
-		   new Vector(-StrokeThickness,  StrokeThickness),
-		   new Vector( StrokeThickness,  StrokeThickness) };
+		new Vector[]{ new(-StrokeThickness, -StrokeThickness),
+		new( StrokeThickness, -StrokeThickness),
+		new(-StrokeThickness,  StrokeThickness),
+		new( StrokeThickness,  StrokeThickness) };
 
 	private void DrawCaret(DrawingContext dc) {
 		var (line, off) = FindCaretLine();
@@ -437,9 +312,11 @@ public partial class StrokeTextEdit : Control {
 		set { _padding = value; RebuildLayout(); }
 	}
 
-	private record TextLine {
-		public string Text { get; init; }
-		public int Start { get; init; }
-		public int Length { get; init; }
-	}
+}
+
+
+ record TextLine {
+	public string Text { get; init; }
+	public int Start { get; init; }
+	public int Length { get; init; }
 }
