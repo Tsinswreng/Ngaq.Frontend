@@ -14,6 +14,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
+using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;

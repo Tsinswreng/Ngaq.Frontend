@@ -2,8 +2,27 @@ namespace Ngaq.Ui.StrokeText;
 
 using Avalonia;
 using Avalonia.Media;
+using Tsinswreng.Avln.StrokeText;
 
-public static class ExtnStrokeTextEdit {
+public static class ExtnStrokeTextBlock {
+	extension(StrokeTextBlock z){
+		public StyledProperty<string> PropText => StrokeTextBlock.TextProperty;
+
+		public StyledProperty<IBrush> PropForeground => StrokeTextBlock.ForegroundProperty;
+
+		public StyledProperty<IBrush> PropFill => StrokeTextBlock.FillProperty;
+
+		public StyledProperty<IBrush> PropStroke => StrokeTextBlock.StrokeProperty;
+
+		public StyledProperty<double> PropFontSize => StrokeTextBlock.FontSizeProperty;
+
+		public StyledProperty<double> PropStrokeThickness => StrokeTextBlock.StrokeThicknessProperty;
+
+		public StyledProperty<VAlign> PropVerticalContentAlignment => StrokeTextBlock.VerticalContentAlignmentProperty;
+
+		public StyledProperty<TextWrapping> PropTextWrapping => StrokeTextBlock.TextWrappingProperty;
+		public StyledProperty<FontFamily> PropFontFamily => StrokeTextBlock.FontFamilyProperty;
+	}
 	/* 按照 PropText_() 的命名风格，把其余属性一次性补全 */
 	public static StyledProperty<string> PropText_(this StrokeTextBlock z) => StrokeTextBlock.TextProperty;
 

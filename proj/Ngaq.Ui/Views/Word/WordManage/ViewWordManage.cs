@@ -22,6 +22,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
+using Tsinswreng.Avln.StrokeText;
 
 public partial class ViewWordManage
 	:UserControl

@@ -12,6 +12,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui.StrokeText;
 using Avalonia.Controls.Primitives;
+using Tsinswreng.Avln.StrokeText;
 
 public partial class ViewWordInfo
 	:UserControl
@@ -136,7 +137,7 @@ public partial class ViewWordInfo
 		{{
 			LangId.AddInit(TxtBox(), o=>{
 				o.Bind(
-					o.PropText_()
+					o.PropText
 					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
 				);
 				o.HorizontalAlignment = HAlign.Left;

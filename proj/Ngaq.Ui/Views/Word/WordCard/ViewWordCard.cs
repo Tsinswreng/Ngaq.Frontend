@@ -9,6 +9,7 @@ using Ngaq.Ui.Converters;
 using Ngaq.Ui.StrokeText;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.Avln.StrokeText;
 using Ctx = VmWordListCard;
 public partial class ViewWordListCard
 	:UserControl
