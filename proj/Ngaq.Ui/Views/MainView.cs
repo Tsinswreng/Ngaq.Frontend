@@ -1,10 +1,7 @@
 namespace Ngaq.Ui.Views;
-
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
@@ -16,8 +13,6 @@ using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
-using Ngaq.Ui.Views.Word.WordInfo;
-using ScottPlot.Avalonia;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
@@ -110,6 +105,7 @@ public partial class MainView : UserControl {
 
 Control? Try()
 {
+
 	return null;
 }
 

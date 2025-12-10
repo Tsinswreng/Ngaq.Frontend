@@ -1,8 +1,11 @@
 namespace Ngaq.Ui.Views.Settings.LearnWord;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmCfgLearnWord;
@@ -16,7 +19,7 @@ public partial class ViewCfgLearnWord
 	}
 
 	public ViewCfgLearnWord(){
-		Ctx = Ctx.Mk();
+		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
 	}
@@ -40,7 +43,27 @@ public partial class ViewCfgLearnWord
 		});
 		Root.AddInit(new ScrollViewer(), sc=>{
 			sc.ContentInit(new StackPanel(), sp=>{
-				sp.AddInit(new TextBlock(), o=>{
+				sp
+				.AddInit(new CheckBox(), o=>{
+					//o.Tag = new TextBlock{Text = "Enable Random Background"};
+					o.Content = "Enable Random Background";
+					o.Bind(
+						o.PropIsChecked
+						,CBE.Mk<Ctx>(x=>x.EnableRandomBackground)
+					);
+				})
+				.AddInit(new TextBlock(), o=>{
+					o.Text = "Language Filter(One per line)";// TODO i18n
+				})
+				.AddInit(new TextBox(), o=>{
+					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
+					o.Height = 100;
+					o.Bind(
+						o.PropText
+						,CBE.Mk<Ctx>(x=>x.LanguageFilterExpr)
+					);
+				})
+				.AddInit(new TextBlock(), o=>{
 					o.Text = "Lua Filter";// TODO i18n
 				})
 				.AddInit(new TextBox(), o=>{
@@ -54,10 +77,12 @@ public partial class ViewCfgLearnWord
 				;
 			});
 		})
-		.AddInit(new Button(), o=>{
-			o.VerticalAlignment = VAlign.Bottom;
-			o.Content = "Save";//TODO i18n
+		.AddInit(new OpBtn(), o=>{
 			DockPanel.SetDock(o, Dock.Bottom);
+			o._Button.StretchCenter();
+			o.VerticalAlignment = VAlign.Bottom;
+			o.BtnContent = "Save";//TODO i18n
+			o.SetExt((Ct)=>Ctx?.SaveAsy(Ct));
 		});
 
 		;

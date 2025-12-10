@@ -1,5 +1,6 @@
 namespace Xxx;
 
+using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ctx = VmXxx;
@@ -13,7 +14,7 @@ public partial class ViewXxx
 	}
 
 	public ViewXxx(){
-		Ctx = Ctx.Mk();
+		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
 	}

@@ -24,6 +24,7 @@ using Tsinswreng.CsTools;
 using Ngaq.Core.Tools;
 using Avalonia.Logging;
 using Ngaq.Core.Shared.Base.Models.Po;
+using Ngaq.Core.Shared.Word.Models;
 
 public partial class VmLearnWords
 	:ViewModelBase
@@ -177,6 +178,18 @@ ICfgAccessor? Cfg;
 		return NIL;
 	}
 
+	//臨時。篩ʹ理則ˋ宜作獨立模塊、後集于MgrLearn 洏不璫于視圖模型
+	public IAsyncEnumerable<IJnWord> FilterWord(
+		IAsyncEnumerable<IJnWord> Words
+	){
+		var langs = Cfg.Get(ItemsClientCfg.Word.FilterLanguage)??[];
+		if(langs.Count == 0){
+			return Words;
+		}
+		var langSet = new HashSet<str>(langs.Select(x=>x+""));
+		return Words.Where(x=>langSet.Contains(x.Lang));
+	}
+
 	public async Task<nil> LoadEtStartAsy(CT Ct){
 		var sw = Stopwatch.StartNew();
 		await Task.Run(async()=>{
@@ -193,6 +206,7 @@ ICfgAccessor? Cfg;
 				LogInfo($"LoadAllWordFromDb: {sw2.ElapsedMilliseconds} ms");
 				var dataAsyE = (loadedAll.Data??[]).ToAsyncEnumerable();
 				//await MgrLearn.LoadEtCalcWeightAsy(Page.DataAsyE.OrEmpty(), Ct);
+				dataAsyE = FilterWord(dataAsyE);
 				await MgrLearn.LoadEtCalcWeightAsy(dataAsyE, Ct);
 			}
 			await MgrLearn.StartAsy(Ct);
@@ -291,6 +305,10 @@ ICfgAccessor? Cfg;
 	public async Task<nil> ChangeBg()
 	{
 		try{
+			var EnableRandomBackground = Cfg.Get(ItemsClientCfg.Word.EnableRandomBackground);
+			if(!EnableRandomBackground){
+				return NIL;
+			}
 			await Task.Run(()=>{
 	/* 1. 缓存有就拿一张用 */
 				if (_bgCache.Count > 0){

@@ -1,9 +1,12 @@
 namespace Ngaq.Ui.Views.Settings.LearnWord;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Infra.Cfg;
+using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Ui.Infra;
-
+using Tsinswreng.CsCfg;
+using Tsinswreng.CsCore;
 using Ctx = VmCfgLearnWord;
-public partial class VmCfgLearnWord: ViewModelBase{
+public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
 	protected VmCfgLearnWord(){}
 	public static Ctx Mk(){
@@ -20,12 +23,51 @@ public partial class VmCfgLearnWord: ViewModelBase{
 		#endif
 	}
 
-	public CancellationTokenSource Cts = new();
+	//ISvcKv? SvcKv;
+	ICfgAccessor? Cfg;
+	public VmCfgLearnWord(
+		ICfgAccessor? Cfg
+	){
+		var z = this;
+		z.Cfg = Cfg;
 
-	protected str _LuaFilterExpr = "";
+		Init();
+	}
+
+	void Init(){
+		EnableRandomBackground = Cfg.Get(ItemsClientCfg.Word.EnableRandomBackground);
+		var langs = Cfg.Get(ItemsClientCfg.Word.FilterLanguage) as IList<obj>;
+		LanguageFilterExpr = str.Join("\n", langs??[]);
+
+		// var lua = Cfg.Get(ItemsClientCfg.Word.LuaFilterExpr);
+		// LuaFilterExpr = lua??"";
+	}
+
+	public bool EnableRandomBackground{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = false;
+
 	public str LuaFilterExpr{
-		get{return _LuaFilterExpr;}
-		set{SetProperty(ref _LuaFilterExpr, value);}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
+	public str LanguageFilterExpr{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
+
+	public async Task<nil> SaveAsy(CT Ct){
+		if(AnyNull(Cfg)){
+			return NIL;
+		}
+		var langs = LanguageFilterExpr.Split('\n').AsOrToList();
+		Cfg.Set(ItemsClientCfg.Word.FilterLanguage, langs);
+		Cfg.Set(ItemsClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
+		await Cfg.SaveAsy(Ct);
+		return NIL;
 	}
 
 

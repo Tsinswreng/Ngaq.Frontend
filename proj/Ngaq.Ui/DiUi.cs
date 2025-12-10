@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.User;
 using Ngaq.Ui.Views.User.AboutMe;
 using Ngaq.Ui.Views.Word.Query;
@@ -28,6 +29,8 @@ public static class DiUi{
 		z.AddTransient<VmAboutMe>();
 		z.AddTransient<VmWordSync>();
 		z.AddTransient<VmStatistics>();
+		z.AddTransient<VmCfgLearnWord>();
+
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}

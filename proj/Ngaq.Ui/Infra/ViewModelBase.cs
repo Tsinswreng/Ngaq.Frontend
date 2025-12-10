@@ -18,13 +18,22 @@ public class EvtArgMsg:EventArgs{
 
 }
 
+public interface IMk<T>{
+	public static abstract T Mk();
+}
+
 public partial class ViewModelBase
 	:ObservableObject
+	,IMk<ViewModelBase>
 	,IViewModel
 	,I_ViewNavi
 	,I_Arg
 	,I_ForceSetProp
 {
+
+	static ViewModelBase IMk<ViewModelBase>.Mk(){
+		return new ViewModelBase();
+	}
 
 	public ViewModelBase(){
 		ViewNavi = MgrViewNavi.Inst.ViewNavi;

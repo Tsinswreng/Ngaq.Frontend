@@ -21,6 +21,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Live.Avalonia;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
+using Ngaq.Ui.Infra;
 
 public partial class App :Application
 #if DEBUG
@@ -35,6 +36,20 @@ public partial class App :Application
 		Logger??=App.SvcProvider.GetRequiredService<ILogger>();
 		Logger?.LogInformation("GetSvc: "+typeof(T));
 		return App.SvcProvider.GetRequiredService<T>();
+	}
+
+	public static T DiOrNew<T>()
+		where T : class, new()
+	{
+		var Svc = App.SvcProvider?.GetService<T>();
+		return Svc ?? new T();
+	}
+
+	public static T DiOrMk<T>()
+		where T : class, IMk<T>
+	{
+		var Svc = App.SvcProvider?.GetService<T>();
+		return Svc ?? T.Mk();
 	}
 
 	public static IServiceProvider SvcProvider { get; private set; } = null!;
