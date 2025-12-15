@@ -57,23 +57,36 @@ public partial class ViewCfgLearnWord
 				})
 				.AddInit(new TextBox(), o=>{
 					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
+					o.AcceptsReturn = true;
 					o.Height = 100;
 					o.Bind(
 						o.PropText
 						,CBE.Mk<Ctx>(x=>x.LanguageFilterExpr)
 					);
 				})
-				.AddInit(new TextBlock(), o=>{
-					o.Text = "Lua Filter";// TODO i18n
+				.AddInit(new TextBlock{
+					Text = "Lua Filter",// TODO i18n
 				})
-				.AddInit(new TextBox(), o=>{
-					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
-					o.Height = 100;
-					o.Bind(
+				.AddInit(new TextBox{
+					TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+					AcceptsReturn = true,
+					Height = 100,
+					//Bind = (o.PropText, CBE.Mk<Ctx>(x=>x.LuaFilterExpr)),
+					Init=o=>{o.Bind(
 						o.PropText
 						,CBE.Mk<Ctx>(x=>x.LuaFilterExpr)
-					);
+					);},
 				})
+
+				// .AddInit(new TextBox(), o=>{
+				// 	o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
+				// 	o.AcceptsReturn = true;
+				// 	o.Height = 100;
+				// 	o.Bind(
+				// 		o.PropText
+				// 		,CBE.Mk<Ctx>(x=>x.LuaFilterExpr)
+				// 	);
+				// })
 				;
 			});
 		})
@@ -85,6 +98,7 @@ public partial class ViewCfgLearnWord
 			o.SetExt((Ct)=>Ctx?.SaveAsy(Ct));
 		});
 
+
 		;
 
 		return NIL;
@@ -92,3 +106,4 @@ public partial class ViewCfgLearnWord
 
 
 }
+

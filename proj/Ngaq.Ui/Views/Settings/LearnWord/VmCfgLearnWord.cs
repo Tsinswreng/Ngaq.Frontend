@@ -63,10 +63,16 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 		if(AnyNull(Cfg)){
 			return NIL;
 		}
-		var langs = LanguageFilterExpr.Split('\n').AsOrToList();
-		Cfg.Set(ItemsClientCfg.Word.FilterLanguage, langs);
-		Cfg.Set(ItemsClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
-		await Cfg.SaveAsy(Ct);
+		//var langs = LanguageFilterExpr.Split('\n').AsOrToList();
+		IList<str>? langs = null;
+		if(!str.IsNullOrEmpty(LanguageFilterExpr)){
+			langs = LanguageFilterExpr.Split('\n').AsOrToList();
+		}
+		await Task.Run(async()=>{
+			Cfg.Set(ItemsClientCfg.Word.FilterLanguage, langs);
+			Cfg.Set(ItemsClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
+			await Cfg.SaveAsy(Ct);
+		});
 		return NIL;
 	}
 
