@@ -6,6 +6,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Dictionary.DictionaryApi;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmDictionary;
@@ -24,10 +25,7 @@ public partial class ViewDictionary
 		Render();
 	}
 	public II18n I = I18n.Inst;
-	public partial class Cls_{
-
-	}
-	public Cls_ Cls{get;set;} = new Cls_();
+	public partial class Cls{}
 
 	protected nil Style(){
 		return NIL;
@@ -63,9 +61,15 @@ public partial class ViewDictionary
 			;
 
 		}}
+		// Root
+		// .AddInit(new ViewDictionaryApi{
+
+		// });
 
 		return NIL;
 	}
+
+	
 
 
 }

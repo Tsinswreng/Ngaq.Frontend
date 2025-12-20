@@ -1,28 +1,25 @@
 namespace Ngaq.Ui.Views.Word.WordManage;
 
-using Ngaq.Ui.Infra.I18n;
+using System.Diagnostics;
 using Avalonia.Controls;
-
-
+using Avalonia.Media;
+using Microsoft.Extensions.Logging;
+using Ngaq.Ui.Icons;
+using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Dictionary;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
+using Ngaq.Ui.Views.Word.WordManage.Statistics;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.WordSync;
+using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
-using Ngaq.Ui.Views.Word.WordManage.Statistics;
-using Ngaq.Ui.Icons;
-using Ngaq.Ui.Views.Dictionary;
-using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.StrokeText;
-using System.Diagnostics;
-using Microsoft.Extensions.Logging;
-using Avalonia.Media;
-using Avalonia.Media.TextFormatting;
-using Tsinswreng.Avln.StrokeText;
 
 public partial class ViewWordManage
 	:UserControl
@@ -59,12 +56,13 @@ public partial class ViewWordManage
 			]);
 		});
 		Root.AddInit(_StackPanel(), Sp=>{
+			Todo.I18n();
 			Sp.AddInit(_Item("Dictionary", new ViewDictionary(), Svgs.BookA.ToIcon()))
 			.AddInit(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search.ToIcon()))
 			.AddInit(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add.ToIcon()))
+			.AddInit(_Item("Study Plan", new ViewStudyPlan(), Svgs.Schema.ToIcon()))//plan
 			.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle.ToIcon()))
-			.AddInit(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))//TODO i18n
-
+			.AddInit(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))
 			;
 			var Txt = new StrokeTextBlock{// //TextBlock
 				TextWrapping = TextWrapping.Wrap,

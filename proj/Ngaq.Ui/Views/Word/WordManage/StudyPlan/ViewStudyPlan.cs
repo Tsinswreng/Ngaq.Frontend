@@ -1,11 +1,11 @@
-namespace Xxx;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmXxx;
-public partial class ViewXxx
+using Ctx = VmStudyPlan;
+public partial class ViewStudyPlan
 	:AppViewBase
 {
 
@@ -14,7 +14,7 @@ public partial class ViewXxx
 		set{DataContext = value;}
 	}
 
-	public ViewXxx(){
+	public ViewStudyPlan(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
@@ -29,14 +29,11 @@ public partial class ViewXxx
 		return NIL;
 	}
 
-
 	AutoGrid Root = new(IsRow: true);
 	protected nil Render(){
-		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-		]);
+
 		return NIL;
 	}
-}
 
+
+}

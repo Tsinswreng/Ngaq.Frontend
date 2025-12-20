@@ -4,6 +4,7 @@ Avalonia前端代碼規範
 命名規則
 - 視圖: ViewXxx
 - 視圖模型: VmXxx
+保留原有代碼風格
 #endif
 
 //Render寫法:
@@ -61,7 +62,7 @@ public partial class ViewSpec:AppViewBase{
 		set{DataContext = value;}
 	}
 	//大多數場景下我們用AutoGrid作爲視圖的根節點。
-	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例
+	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號
 	AutoGrid Root = new(IsRow: true);//IsRow: true 表示行佈局
 	//視圖的初始化羅輯寫在Render裏
 	public void Render(){
@@ -104,7 +105,7 @@ public partial class ViewSpec:AppViewBase{
 				Ctx?.Click1();
 			};
 		})
-		//第二套寫法(更加新 更推薦)
+		//第二套寫法(不推薦)
 		.AddInit(new TextBox{
 			AcceptsReturn = true,
 			//對于[無法用屬性初始化賦值語法來初始化]的部分、可在Init函數中初始化
@@ -114,7 +115,6 @@ public partial class ViewSpec:AppViewBase{
 		})
 		.AddInit(new Button{
 			Content = "按鈕二",
-
 			Init=o=>{
 				o.Click+=(s,e)=>{
 					Ctx?.Click2();
@@ -124,7 +124,7 @@ public partial class ViewSpec:AppViewBase{
 		;
 	}
 	#region Style
-	//樣式示例(非必選)
+	//樣式(非必選)示例
 	//樣式簡單旹建議直接和控件一起初始化。有[需批量設置樣式]等需求旹再用Style
 	public partial class Cls{//類名枚舉
 		public const string MenuBtn = nameof(MenuBtn);
@@ -148,3 +148,5 @@ public partial class ViewSpec:AppViewBase{
 其他建議:
 當View中縮進層次過多旹、可將Render中的部分代碼抽到一個單獨的函數中、把控件返回出去、再在Render中調用
 #endif
+
+

@@ -1,11 +1,10 @@
-namespace Xxx;
+namespace Ngaq.Ui.Views.Word.WordEdit;
 
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
-using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmXxx;
-public partial class ViewXxx
+using Ctx = VmWordEdit;
+public partial class ViewWordEdit
 	:AppViewBase
 {
 
@@ -14,7 +13,7 @@ public partial class ViewXxx
 		set{DataContext = value;}
 	}
 
-	public ViewXxx(){
+	public ViewWordEdit(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
@@ -29,14 +28,9 @@ public partial class ViewXxx
 		return NIL;
 	}
 
-
-	AutoGrid Root = new(IsRow: true);
 	protected nil Render(){
-		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-		]);
 		return NIL;
 	}
-}
 
+
+}
