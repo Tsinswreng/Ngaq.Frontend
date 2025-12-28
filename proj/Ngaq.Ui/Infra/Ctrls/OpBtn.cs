@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Infra.Ctrls;
 
+using System.Reactive.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -124,8 +125,15 @@ public partial class OpBtn: ContentControl{
 			p.Margin = new Thickness(0, 0, 0, 0);
 			p.Padding = new Thickness(0, 0, 0, 0);
 			p.VerticalAlignment = VAlign.Bottom;
-			p[!WidthProperty] = _Button[!WidthProperty];
+			//p[!WidthProperty] = _Button[!WidthProperty];
 			//p.Classes.Add("Spinner");   // 内置转圈样式;
+			p.Bind(
+				WidthProperty
+				,_Button.GetObservable(BoundsProperty).Select(b=>b.Width)
+			);
+			p.IsHitTestVisible = false;
+			p.Height = 0;
+			p.Width = 10;
 			return p;
 		};
 		//半透明黑遮罩
@@ -135,7 +143,7 @@ public partial class OpBtn: ContentControl{
 			R.HorizontalAlignment = HAlign.Stretch;
 			R.VerticalAlignment = VAlign.Stretch;
 			R.IsHitTestVisible = false;
-			R[!WidthProperty] = _Button[!WidthProperty];
+			//R[WidthProperty] = _Button[!WidthProperty];
 			//R.Width = _Button.Width;
 		}
 		R.AddInit(mkBar());
@@ -155,4 +163,9 @@ public partial class OpBtn: ContentControl{
 		// });
 		return R;
 	}
+}
+
+class ZeroDecorator : Decorator{
+    protected override Size MeasureOverride(Size availableSize)
+        => new Size(0, 0);   // 永遠報 0×0，父級就不會被撐開
 }

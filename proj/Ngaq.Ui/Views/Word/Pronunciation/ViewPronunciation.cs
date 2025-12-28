@@ -45,7 +45,9 @@ public partial class ViewPronunciation
 			ColDef(1, GUT.Auto),
 		]);
 		Root.AddInit(new OpBtn(), o=>{
-			o.BtnContent = Svgs.VolHigh.ToIcon();
+			var icon = Svgs.VolHigh.ToIcon();
+			icon.Height = icon.Width = UiCfg.Inst.BaseFontSize*0.8;
+			o.BtnContent = icon;
 			o.SetExe(Ct=>Ctx?.TryDelay(Ct));
 		})
 		.AddInit(Txt(), o=>{
