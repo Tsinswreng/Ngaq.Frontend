@@ -81,7 +81,7 @@ public partial class ViewRegister
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
 			b.HorizontalAlignment = HAlign.Stretch;
-			o.SetExt((Ct)=>Ctx?.RegisterAsy(Ct));
+			o.SetExe((Ct)=>Ctx?.RegisterAsy(Ct));
 		});
 
 		return NIL;

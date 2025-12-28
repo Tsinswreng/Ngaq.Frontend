@@ -95,7 +95,7 @@ public partial class ViewCfgLearnWord
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;
 			o.BtnContent = "Save";//TODO i18n
-			o.SetExt((Ct)=>Ctx?.SaveAsy(Ct));
+			o.SetExe((Ct)=>Ctx?.SaveAsy(Ct));
 		});
 
 

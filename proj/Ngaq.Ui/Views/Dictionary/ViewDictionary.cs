@@ -7,6 +7,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.DictionaryApi;
+using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmDictionary;
@@ -37,6 +38,11 @@ public partial class ViewDictionary
 			Root.RowDefs.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),
+				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Auto),
+
 			]);
 		});
 		var SearchGrid = new AutoGrid(IsRow: false);
@@ -56,12 +62,22 @@ public partial class ViewDictionary
 				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
 				o._Button.Content = Svgs.Search.ToIcon();
-				o.SetExt(Ct=>Ctx?.SearchAsy(Ct));
+				o.SetExe(Ct=>Ctx?.SearchAsy(Ct));
 			})
 			;
 
 		}}
-		
+		Root.AddInit(new ViewSimpleWord{Ctx = VmSimpleWord.Samples[0]})
+		.AddInit(new OpBtn(), o=>{
+			o._Button.HorizontalAlignment = HAlign.Stretch;
+			o.BtnContent = "TestLongBtn";
+			o.SetExe(async(Ct)=>{
+				await Task.Delay(60000, Ct);
+				return Task.FromResult(NIL);
+			});
+		})
+		;
+
 		// Root
 		// .AddInit(new ViewDictionaryApi{
 

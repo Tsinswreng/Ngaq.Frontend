@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Infra.Ctrls;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Ngaq.Ui.Infra;
@@ -30,24 +31,40 @@ public partial class OpBtn: ContentControl{
 	void Start(){
 		Cts = new();
 		State = EState.Working;
-		Grid.Children.Add(Overlay);
+		SetupOverlay();
 	}
 
 	void End(){
 		Dispatcher.UIThread.Post(()=>{
 			State = EState.Ready;
-			RemoveOverlay();
+			SetdownOverlay();
 		});
 	}
 
 	void Cancel(){
 		Cts.Cancel();
-		RemoveOverlay();
+		SetdownOverlay();
 	}
 
-	void RemoveOverlay(){
+	void SetdownOverlay(){
+		// if(Grid.Children.Count > 1){
+		// 	Grid.Children.RemoveAt(Grid.Children.Count-1);
+		// }
 		if(Grid.Children.Count > 1){
-			Grid.Children.RemoveAt(Grid.Children.Count-1);
+			var overlay = Grid.Children[1];
+			overlay.IsVisible = false;
+		}
+	}
+
+	void SetupOverlay(){
+		//
+		if(Grid.Children.Count > 1){
+			var overlay = Grid.Children[1];
+			overlay.IsVisible = true;
+		}else{
+			Overlay.IsVisible = true;
+			Grid.Children.Add(Overlay);
+			//Grid.SetRow(Overlay, 1);
 		}
 	}
 
@@ -63,6 +80,7 @@ public partial class OpBtn: ContentControl{
 		base.Content = Grid;
 		Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star),
+			//RowDef(1, GUT.Auto),
 		]);
 		Grid.Children.Add(_Button);
 
@@ -98,29 +116,43 @@ public partial class OpBtn: ContentControl{
 		};
 	}
 
+
 	public Control MkOverlay(){
-		var R = new Grid {
-			Background = Brushes.Black,
-			Opacity = 0.5,
-			HorizontalAlignment = HAlign.Stretch,
-			VerticalAlignment = VAlign.Stretch,
-			IsHitTestVisible = false,
-			Width = 0,
-			Height = _Button.Height,
+		var mkBar = ()=>{
+			var p = new ProgressBar();
+			p.IsIndeterminate = true;
+			p.Margin = new Thickness(0, 0, 0, 0);
+			p.Padding = new Thickness(0, 0, 0, 0);
+			p.VerticalAlignment = VAlign.Bottom;
+			p[!WidthProperty] = _Button[!WidthProperty];
+			//p.Classes.Add("Spinner");   // 内置转圈样式;
+			return p;
 		};
-		R.AddInit(new Grid(), g=>{
-			g.Background = new SolidColorBrush(Colors.Black, 0.5);
-			g.IsVisible = true;
-			g.VerticalAlignment = VAlign.Bottom;
-			g.HorizontalAlignment = HAlign.Stretch;
-			g.Margin = new Thickness(0, 0, 0, 0);
-			g.AddInit(new ProgressBar(), p=>{
-				p.IsIndeterminate = true;
-				p.Margin = new Thickness(0, 0, 0, 0);
-				p.Padding = new Thickness(0, 0, 0, 0);
-				p.Classes.Add("Spinner");   // 内置转圈样式;
-			});
-		});
+		//半透明黑遮罩
+		var R = new Grid {};{
+			R.Background = Brushes.Black;
+			R.Opacity = 0.3;
+			R.HorizontalAlignment = HAlign.Stretch;
+			R.VerticalAlignment = VAlign.Stretch;
+			R.IsHitTestVisible = false;
+			R[!WidthProperty] = _Button[!WidthProperty];
+			//R.Width = _Button.Width;
+		}
+		R.AddInit(mkBar());
+		// R.AddInit(new Grid(), g=>{
+		// 	g.Background = new SolidColorBrush(Colors.Black, 0.5);
+		// 	g.IsVisible = true;
+		// 	g.VerticalAlignment = VAlign.Bottom;
+		// 	g.HorizontalAlignment = HAlign.Stretch;
+		// 	g.Margin = new Thickness(0, 0, 0, 0);
+		// 	g.AddInit(new ProgressBar(), p=>{
+				// p.IsIndeterminate = true;
+				// p.Margin = new Thickness(0, 0, 0, 0);
+				// p.Padding = new Thickness(0, 0, 0, 0);
+				// p.Classes.Add("Spinner");   // 内置转圈样式;
+				// p.Width = 10;
+		// 	});
+		// });
 		return R;
 	}
 }

@@ -118,7 +118,7 @@ public partial class ViewStatistics
 		.AddInit(new OpBtn(), o=>{
 			o._Button.StretchCenter();
 			o.BtnContent = "Count";//TODO i18n
-			o.SetExt((Ct)=>Ctx?.GetDataAsy(Ct));
+			o.SetExe((Ct)=>Ctx?.GetDataAsy(Ct));
 		});
 	}
 

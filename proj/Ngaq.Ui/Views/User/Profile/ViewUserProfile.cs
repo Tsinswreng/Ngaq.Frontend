@@ -93,7 +93,7 @@ public partial class ViewUserProfile
 						o._Button.StretchCenter();
 						o.Background = Brushes.Red;
 						o.BtnContent = "Logout"; //TODO i18n
-						o.SetExt((Ct)=>Ctx?.LogoutAsy(Ct));
+						o.SetExe((Ct)=>Ctx?.LogoutAsy(Ct));
 					});
 				});
 			});

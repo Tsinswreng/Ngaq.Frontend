@@ -167,19 +167,19 @@ public partial class ViewLearnWords
 					,T(I[K.Start])
 				));
 				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
-				o.SetExt((Ct)=>Ctx?.LoadEtStartAsy(Ct));
+				o.SetExe((Ct)=>Ctx?.LoadEtStartAsy(Ct));
 			}).AddInit(Btn(), o=>{ //📁"💾"
 				o._Button.ContentInit(Hc(
 					Ic(Svgs.FloppyDiskBackFill)
 					,T(I[K.Save])
 				));
-				o.SetExt((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
+				o.SetExe((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
 			}).AddInit(Btn(), o=>{
 				o._Button.ContentInit(Hc(//🔄
 					Ic(Svgs.RotateCw)
 					,T(I[K.Reset])
 				));
-				o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
+				o.SetExe((Ct)=>Ctx?.ResetAsy(Ct));
 			})
 			.AddInit(Btn(), o=>{
 				o._Button.ContentInit(Hc(//⚙

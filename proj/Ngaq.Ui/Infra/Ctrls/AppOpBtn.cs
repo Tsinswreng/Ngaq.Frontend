@@ -3,7 +3,7 @@ using Avalonia.Threading;
 using Ngaq.Ui.Views;
 
 public static class ExtnAppOpBtn{
-	public static OpBtn SetExt(
+	public static OpBtn SetExe(
 		this OpBtn z
 		,Func<CT, Task<nil>?>? FnExeAsy
 	){

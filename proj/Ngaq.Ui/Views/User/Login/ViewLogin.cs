@@ -91,7 +91,7 @@ public partial class Cls_{
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});
 			b.HorizontalAlignment = HAlign.Stretch;
-			o.SetExt((Ct)=>Ctx?.LoginAsy(Ct));
+			o.SetExe((Ct)=>Ctx?.LoginAsy(Ct));
 		});
 		return NIL;
 	}
