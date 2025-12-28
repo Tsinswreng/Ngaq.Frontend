@@ -57,5 +57,10 @@ public partial class VmPronunciation: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
+	public async Task<nil> TryDelay(CT Ct){
+		await Task.Delay(50000, Ct);
+		return NIL;
+	}
+
 
 }

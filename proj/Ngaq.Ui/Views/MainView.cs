@@ -136,11 +136,8 @@ Control? Try()
 		MgrViewNavi.Inst.ViewNavi = new ViewNavi(ViewNaviBase);
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
-		//var Home = new ViewHome();
-		var Home = new ViewPronunciation();
-		// var Home = new ViewWordInfo{
-		// 	Ctx = VmWordInfo.Samples[0]
-		// };
+		// var Home = new ViewSimpleWord();
+		var Home = new ViewHome();
 		Navi.GoTo(Home);
 
 

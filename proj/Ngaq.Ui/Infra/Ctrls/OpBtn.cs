@@ -25,6 +25,7 @@ public partial class OpBtn: ContentControl{
 	public EState State{get;set;}
 
 	public Grid Grid = new();
+
 	public Control Overlay;
 	void Start(){
 		Cts = new();
@@ -103,7 +104,9 @@ public partial class OpBtn: ContentControl{
 			Opacity = 0.5,
 			HorizontalAlignment = HAlign.Stretch,
 			VerticalAlignment = VAlign.Stretch,
-			IsHitTestVisible = false
+			IsHitTestVisible = false,
+			Width = 0,
+			Height = _Button.Height,
 		};
 		R.AddInit(new Grid(), g=>{
 			g.Background = new SolidColorBrush(Colors.Black, 0.5);

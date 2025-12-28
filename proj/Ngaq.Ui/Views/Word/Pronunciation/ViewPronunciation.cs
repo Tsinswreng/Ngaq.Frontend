@@ -46,7 +46,7 @@ public partial class ViewPronunciation
 		]);
 		Root.AddInit(new OpBtn(), o=>{
 			o.BtnContent = Svgs.VolHigh.ToIcon();
-			o.SetExt(Ct=>Ctx?.Play(Ct));
+			o.SetExt(Ct=>Ctx?.TryDelay(Ct));
 		})
 		.AddInit(Txt(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Text));

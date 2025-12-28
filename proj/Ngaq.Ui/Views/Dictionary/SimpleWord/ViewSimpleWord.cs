@@ -1,9 +1,13 @@
 namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Templates;
+using Avalonia.Layout;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Views.Word.Pronunciation_;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSimpleWord;
@@ -48,8 +52,8 @@ public partial class ViewSimpleWord
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.5;
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Head));
 		})
-		.AddInit(Txt(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Pronunciation));
+		.AddInit(PronunciationList(), o=>{
+
 		})
 		.AddInit(Txt(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Description));
@@ -59,7 +63,24 @@ public partial class ViewSimpleWord
 	}
 
 
-	
+	Control PronunciationList(){
+		var R = new ItemsControl();
+		R.Bind(
+			R.PropItemsSource, CBE.Mk<Ctx>(x=>x.Pronunciations)
+		);
+
+
+		R.SetItemTemplate<Pronunciation>((p,b)=>{
+			var R = new ViewPronunciation();
+			R.Ctx!.FromPronunciation(p);
+			return R;
+		});
+		R.SetItemsPanel(()=>{
+			return new StackPanel{Orientation = Orientation.Horizontal};
+		});
+
+		return R;
+	}
 
 
 }

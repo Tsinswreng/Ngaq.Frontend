@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Models.DictionaryApi;
 using Ngaq.Ui.Infra;
 
@@ -18,7 +19,7 @@ public partial class VmSimpleWord: ViewModelBase, IMk<Ctx>{
 			var o = new Ctx();
 			Samples.Add(o);
 			o.Head = "word";
-			o.Pronunciation = "wɜːd";
+			o.Pronunciations = [Pronunciation.Sample.Samples[0]];
 			o.Description =
 """
 n.	詞；單詞；字；消息
@@ -37,11 +38,16 @@ int.	說得對
 		set{SetProperty(ref field, value);}
 	}="";
 
-	//可有多個
-	public str Pronunciation{
+	// //可有多個
+	// public str Pronunciation{
+	// 	get{return field;}
+	// 	set{SetProperty(ref field, value);}
+	// }="";
+
+	public IList<Pronunciation> Pronunciations{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}="";
+	}=[];
 
 
 	public str Description{
