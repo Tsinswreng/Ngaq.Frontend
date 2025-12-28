@@ -5,7 +5,7 @@ using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.Word.Req;
-using Ngaq.Core.Stream;
+using Ngaq.Core.Iter;
 using Ngaq.Core.Tools.Io;
 using Ngaq.Core.Word.Models.Dto;
 using Ngaq.Core.Word.Svc;

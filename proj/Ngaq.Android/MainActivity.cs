@@ -171,7 +171,7 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 				// 	throw new TimeoutException("服务初始化超时");
 				// }
 				// 初始化 AppIniter（等待完成，避免异步遗漏）
-				AppIniter.Inst.SvcProvider = App.SvcProvider;
+				AppIniter.Inst.Sp = App.SvcProvider;
 				await AppIniter.Inst.Init(_cts.Token);
 			});
 	}

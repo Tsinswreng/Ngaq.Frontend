@@ -23,11 +23,11 @@ public partial class VmDictionary: ViewModelBase{
 		#endif
 	}
 
-	IFrontendUserCtxMgr FrontendUserCtxMgr;
+	IFrontendUserCtxMgr? FrontendUserCtxMgr;
 	ISvcDictionary? SvcDictionary;
 	public VmDictionary(
 		ISvcDictionary? SvcDictionary
-		,IFrontendUserCtxMgr FrontendUserCtxMgr
+		,IFrontendUserCtxMgr? FrontendUserCtxMgr
 	){
 		this.SvcDictionary = SvcDictionary;
 		this.FrontendUserCtxMgr = FrontendUserCtxMgr;

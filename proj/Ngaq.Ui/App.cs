@@ -23,6 +23,7 @@ using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Ngaq.Ui.Infra;
 
+
 public partial class App :Application
 #if DEBUG
 	,ILiveView

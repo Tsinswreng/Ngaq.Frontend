@@ -1,13 +1,15 @@
-namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
+namespace Ngaq.Ui.Views.Word.Pronunciation_;
 
 using Avalonia.Controls;
 using Ngaq.Ui;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmSimpleWord;
-public partial class ViewSimpleWord
+using Ctx = VmPronunciation;
+public partial class ViewPronunciation
 	:AppViewBase
 {
 
@@ -16,7 +18,7 @@ public partial class ViewSimpleWord
 		set{DataContext = value;}
 	}
 
-	public ViewSimpleWord(){
+	public ViewPronunciation(){
 		//Ctx = App.DiOrMk<Ctx>();
 		Ctx = Ctx.Samples[0];
 		Style();
@@ -32,34 +34,25 @@ public partial class ViewSimpleWord
 		return NIL;
 	}
 
-	AutoGrid Root = new (IsRow: true);
 	SelectableTextBlock Txt(){
 		return new SelectableTextBlock();
 	}
+	AutoGrid Root = new(IsRow: false);
 	protected nil Render(){
-		Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+		this.Content = Root.Grid;
+		Root.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Auto),
+			ColDef(1, GUT.Auto),
 		]);
-		Root
-		.AddInit(Txt(), o=>{
-			o.FontSize = UiCfg.Inst.BaseFontSize*1.5;
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Head));
+		Root.AddInit(new OpBtn(), o=>{
+			o.BtnContent = Svgs.VolHigh.ToIcon();
+			o.SetExt(Ct=>Ctx?.Play(Ct));
 		})
 		.AddInit(Txt(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Pronunciation));
-		})
-		.AddInit(Txt(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Description));
+			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Text));
 		})
 		;
 		return NIL;
 	}
-
-
-	
-
-
 }
+

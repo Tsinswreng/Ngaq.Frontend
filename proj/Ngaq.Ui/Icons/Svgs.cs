@@ -62,6 +62,10 @@ public class Svgs{
 
 	//<iconPacks:PackIconMaterialDesign Kind="Schema" />
 	public static Svg Schema => "m 14,9 v 2 H 11 V 9 H 8.5 V 7 H 11 V 1 H 4 V 7 H 6.5 V 9 H 4 v 6 h 2.5 v 2 H 4 v 6 h 7 V 17 H 8.5 V 15 H 11 v -2 h 3 v 2 h 7 V 9 Z";
+
+	//<iconPacks:PackIconMicrons Kind="VolHigh" />
+
+	public static Svg VolHigh => "M260 378l0 42q70-9 114-59 45-50 46-121-1-71-46-121-44-50-114-59l0 42q53 9 86 47 33 38 34 91-1 53-34 91-33 38-86 47l0 0z m-200-58l60 0 100 100 0-360-100 100-60 0 0 160z m200 19q35-8 57-36 22-27 23-63-1-36-23-63-22-28-57-36l0 198z";
 	//public static Svg
 
 

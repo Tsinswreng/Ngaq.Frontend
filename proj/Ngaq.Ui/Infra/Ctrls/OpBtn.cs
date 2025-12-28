@@ -118,21 +118,6 @@ public partial class OpBtn: ContentControl{
 				p.Classes.Add("Spinner");   // 内置转圈样式;
 			});
 		});
-		// var loading = new Grid{
-		// 	//Margin = new Thickness(0, 0, 0, -60), // ✅ 向下偏移，避免遮挡按钮
-		// 	Children ={
-		// 		new Viewbox{
-		// 			Stretch = Stretch.Fill,
-		// 			Width = 100, //條ʹ粗度
-		// 			Height = 1, //上下ʹ空白ʹ高。
-		// 			Margin = new Thickness(0, 0, 0, 0),
-		// 			Child = new ProgressBar{
-
-		// 			}
-		// 		}
-		// 	}
-		// };
-		// //R.Children.Add(loading);
 		return R;
 	}
 }

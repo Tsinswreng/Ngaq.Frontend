@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Shared.Word.Models.DictionaryApi;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmSimpleWord;
@@ -16,9 +17,19 @@ public partial class VmSimpleWord: ViewModelBase, IMk<Ctx>{
 		{
 			var o = new Ctx();
 			Samples.Add(o);
+			o.Head = "word";
+			o.Pronunciation = "wɜːd";
+			o.Description =
+"""
+n.	詞；單詞；字；消息
+v.	措辭；用詞
+int.	說得對
+网絡	話；一個字；文字處理
+""";
 		}
 		#endif
 	}
+
 
 
 	public str Head{
@@ -38,7 +49,7 @@ public partial class VmSimpleWord: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	}="";
 
-	
+
 
 
 

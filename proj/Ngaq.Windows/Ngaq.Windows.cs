@@ -16,6 +16,7 @@ using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
+using MediaManager;
 
 
 
@@ -45,7 +46,6 @@ sealed class Program {
 			System.Console.WriteLine(1757779054280);
 		}
 		BaseDirMgr.Inst._BaseDir = Directory.GetCurrentDirectory();
-		CT Ct = new();
 		try {
 /*
 改潙勿合併配置字典
@@ -86,6 +86,7 @@ sealed class Program {
 			.SetupLocalFrontend()
 			.SetupClient()
 			.SetupUi()
+			.SetupWindows()
 		;
 		var svcProvider = svc.BuildServiceProvider();
 		BuildAvaloniaApp()
@@ -95,7 +96,7 @@ sealed class Program {
 #endif
 			.AfterSetup(e => {
 				App.SetSvcProvider(svcProvider);
-				AppIniter.Inst.SvcProvider = svcProvider;
+				AppIniter.Inst.Sp = svcProvider;
 				_ = AppIniter.Inst.Init(default).Result;
 			})
 			.StartWithClassicDesktopLifetime(args)
