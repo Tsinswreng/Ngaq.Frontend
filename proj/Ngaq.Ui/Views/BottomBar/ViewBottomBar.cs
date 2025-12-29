@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.BottomBar;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using Avalonia.Controls.Templates;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -24,7 +25,7 @@ public partial class ViewBottomBar
 		Render();
 	}
 
-	public  partial class Cls_{
+	public partial class Cls_{
 		public str BarItem = nameof(BarItem);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
@@ -38,6 +39,9 @@ public partial class ViewBottomBar
 	public ItemsControl ItemsControl{get;set;} = new ItemsControl();
 
 	public ContentControl Cur{get; protected set;} = new ContentControl();
+
+	// 缓存用于高亮的主题画刷
+	protected IBrush? ThemeBrush{get; set;} = null;
 
 
 	protected nil Render(){
@@ -58,12 +62,64 @@ public partial class ViewBottomBar
 					var Ans = Btn_Control.Button;
 					Ans.Click += (s,e)=>{
 						Cur.Content = Btn_Control.Control;
+						UpdateSelectedHighlight();
 					};
+					// 初始時綁定 DataContext 方便查找
+					Ans.DataContext = Btn_Control;
 					return Ans;
 				});
 			});
+			// 當 Cur.Content 改變時更新高亮
+			Cur.GetObservable(ContentControl.ContentProperty)
+				.Subscribe(_=>{
+					UpdateSelectedHighlight();
+				});
+			// 取得主題畫刷
+			ThemeBrush = ResolveThemeBrush();
+			// 初次刷新
+			UpdateSelectedHighlight();
 		}}
 		return NIL;
+	}
+
+	protected void UpdateSelectedHighlight(){
+		if (Items == null) return;
+		foreach(var it in Items){
+			var b = it.Button;
+			if (it.Control == Cur.Content){
+				if (ThemeBrush != null){
+					b.Background = ThemeBrush;
+					b.Foreground = Brushes.White;
+				} else {
+					// 若無主題畫刷，回退到淺藍高亮
+					b.Background = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x78, 0xD4));
+					b.Foreground = Brushes.White;
+				}
+			} else {
+				// 恢復為預設（清除本地值以回退樣式）
+				b.ClearValue(Button.BackgroundProperty);
+				b.ClearValue(Button.ForegroundProperty);
+			}
+		}
+	}
+
+	protected IBrush? ResolveThemeBrush(){
+		var app = Application.Current;
+		if (app == null) return null;
+		// 嘗試幾個常見的主題資源鍵
+		var keys = new[] {
+			"SystemControlHighlightAccentBrush",
+			"SystemControlForegroundBaseHighBrush",
+			"SystemAccentColorBrush",
+			"AccentBrush",
+			"AccentColorBrush",
+		};
+		foreach(var k in keys){
+			if (app.Resources.TryGetValue(k, out var val) && val is IBrush b){
+				return b;
+			}
+		}
+		return null;
 	}
 
 }
