@@ -2,6 +2,8 @@ namespace Ngaq.Ui.Views.BottomBar;
 
 using Avalonia;
 using Avalonia.Controls;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Avalonia.Media;
 using Avalonia.Controls.Templates;
 using Tsinswreng.AvlnTools.Dsl;
@@ -16,13 +18,31 @@ public partial class ViewBottomBar
 		set{DataContext = value;}
 	}
 
-	public IList<Btn_Control> Items{get;set;} = new List<Btn_Control>();
+	public ObservableCollection<Btn_Control> Items{get;set;} = new ObservableCollection<Btn_Control>();
 
 
 	public ViewBottomBar(){
 		Ctx = new Ctx();
 		Style();
 		Render();
+		InitConstructedHandlers();
+	}
+
+	protected void InitConstructedHandlers(){
+		// 當 Items 被添加時，如果尚未選中則預設選中第一個
+		Items.CollectionChanged += (s, e) =>{
+			if (Cur.Content == null && Items.Count > 0){
+				Cur.Content = Items[0].Control;
+			}
+			UpdateSelectedHighlight();
+		};
+		// 當控件加入視覺樹時再嘗試設置初始選中（保險）
+		this.AttachedToVisualTree += (s,e)=>{
+			if (Cur.Content == null && Items.Count > 0){
+				Cur.Content = Items[0].Control;
+			}
+			UpdateSelectedHighlight();
+		};
 	}
 
 	public partial class Cls_{
