@@ -95,7 +95,7 @@ public partial class ViewBottomBar
 					UpdateSelectedHighlight();
 				});
 			// 取得主題畫刷
-			ThemeBrush = ResolveThemeBrush();
+			ThemeBrush = UiCfg.Inst.MainColor;
 			// 初次刷新
 			UpdateSelectedHighlight();
 		}}
@@ -123,24 +123,6 @@ public partial class ViewBottomBar
 		}
 	}
 
-	protected IBrush? ResolveThemeBrush(){
-		var app = Application.Current;
-		if (app == null) return null;
-		// 嘗試幾個常見的主題資源鍵
-		var keys = new[] {
-			"SystemControlHighlightAccentBrush",
-			"SystemControlForegroundBaseHighBrush",
-			"SystemAccentColorBrush",
-			"AccentBrush",
-			"AccentColorBrush",
-		};
-		foreach(var k in keys){
-			if (app.Resources.TryGetValue(k, out var val) && val is IBrush b){
-				return b;
-			}
-		}
-		return null;
-	}
 
 }
 
