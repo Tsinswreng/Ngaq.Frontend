@@ -35,6 +35,9 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 	}
 
 	void Init(){
+		if(AnyNull(Cfg)){
+			return;
+		}
 		EnableRandomBackground = Cfg.Get(ItemsClientCfg.Word.EnableRandomBackground);
 		var langs = Cfg.Get(ItemsClientCfg.Word.FilterLanguage) as IList<obj>;
 		LanguageFilterExpr = str.Join("\n", langs??[]);

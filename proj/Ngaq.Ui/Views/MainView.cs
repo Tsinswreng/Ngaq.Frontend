@@ -12,15 +12,13 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.ViewModels;
-using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Home;
-using Ngaq.Ui.Views.Word.Pronunciation_;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsErr;
-using Ursa.Controls;
+
 
 public class ViewNaviBase:UserControl{
 

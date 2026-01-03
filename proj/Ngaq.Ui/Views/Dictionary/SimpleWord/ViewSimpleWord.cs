@@ -1,13 +1,12 @@
 namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 
 using Avalonia.Controls;
-using Avalonia.Controls.Templates;
 using Avalonia.Layout;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
-using Ngaq.Ui.Views.Word.Pronunciation_;
+using Ngaq.Ui.Views.Word.Pronunciation;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSimpleWord;

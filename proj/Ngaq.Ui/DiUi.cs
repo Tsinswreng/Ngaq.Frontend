@@ -4,7 +4,7 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.User;
 using Ngaq.Ui.Views.User.AboutMe;
-using Ngaq.Ui.Views.Word.Pronunciation_;
+using Ngaq.Ui.Views.Word.Pronunciation;
 using Ngaq.Ui.Views.Word.Query;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;

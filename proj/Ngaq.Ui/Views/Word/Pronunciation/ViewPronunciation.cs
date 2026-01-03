@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.Pronunciation_;
+namespace Ngaq.Ui.Views.Word.Pronunciation;
 
 using Avalonia.Controls;
 using Ngaq.Ui;
@@ -48,7 +48,7 @@ public partial class ViewPronunciation
 			var icon = Svgs.VolHigh.ToIcon();
 			icon.Height = icon.Width = UiCfg.Inst.BaseFontSize*0.8;
 			o.BtnContent = icon;
-			o.SetExe(Ct=>Ctx?.TryDelay(Ct));
+			o.SetExe(Ct=>Ctx?.Play(Ct));
 		})
 		.AddInit(Txt(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Text));
@@ -57,4 +57,5 @@ public partial class ViewPronunciation
 		return NIL;
 	}
 }
+
 

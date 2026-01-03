@@ -69,7 +69,6 @@ ICfgAccessor? Cfg;
 		_Init();
 	}
 
-
 	nil _Init(){
 		return _InitLearnMgr();
 	}
@@ -101,17 +100,20 @@ ICfgAccessor? Cfg;
 		#endif
 	}
 
-	//protected ObservableCollection<VmWordListCard> _WordCards = new();
+
 	public ObservableCollection<VmWordListCard> WordCards{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = new();
 
-	//protected VmWordInfo _VmWordInfo = new();
+
 	public VmWordInfo CurWordInfo{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = new();
+
+	/// 權重參數
+	public IKvNode? WeightArg {get;set;}
 
 
 	protected ELearnOpRtn _LearnOrUndo(VmWordListCard Vm, ELearn Learn){
@@ -190,8 +192,19 @@ ICfgAccessor? Cfg;
 		return Words.Where(x=>langSet.Contains(x.Lang));
 	}
 
+	/// <summary>
+	/// 須呼于UI線程
+	/// </summary>
+	void _AssignWeightArg(){
+		if(AnyNull(MgrLearn)){
+			return;
+		}
+		MgrLearn.WeightArg = WeightArg;
+	}
+
 	public async Task<nil> LoadEtStartAsy(CT Ct){
 		var sw = Stopwatch.StartNew();
+		_AssignWeightArg();
 		await Task.Run(async()=>{
 				if(!MgrLearn.State.OperationStatus.Load){
 				var Page = await SvcWord.PageWord(
@@ -219,6 +232,7 @@ ICfgAccessor? Cfg;
 
 	public async Task<nil> SaveEtRestartAsy(CT Ct){
 		var sw = Stopwatch.StartNew();
+		_AssignWeightArg();
 		await MgrLearn.SaveAsy(Ct);//只背一個單詞45ms于安卓
 		sw.Stop();
 		var t1 = sw.ElapsedMilliseconds;

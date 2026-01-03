@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.Pronunciation_;
+namespace Ngaq.Ui.Views.Word.Pronunciation;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Audio;
 using Ngaq.Core.Shared.Word.Models;

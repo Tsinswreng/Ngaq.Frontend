@@ -8,7 +8,7 @@ using Avalonia.Media;
 using Avalonia.Controls.Templates;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = Vm_BottomBar;
+using Ctx = VmBottomBar;
 public partial class ViewBottomBar
 	:UserControl
 {
