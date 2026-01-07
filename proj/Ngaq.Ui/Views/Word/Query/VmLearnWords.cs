@@ -113,7 +113,7 @@ ICfgAccessor? Cfg;
 	} = new();
 
 	/// 權重參數
-	public IKvNode? WeightArg {get;set;}
+	public IJsonNode? WeightArg {get;set;}
 
 
 	protected ELearnOpRtn _LearnOrUndo(VmWordListCard Vm, ELearn Learn){

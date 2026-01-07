@@ -5,6 +5,8 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
+using Ngaq.Ui.Components.KvMap;
+using Ngaq.Ui.Components.KvMap.JsonMap;
 using Ngaq.Ui.Controls;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -134,8 +136,9 @@ Control? Try()
 		MgrViewNavi.Inst.ViewNavi = new ViewNavi(ViewNaviBase);
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
-		// var Home = new ViewSimpleWord();
-		var Home = new ViewHome();
+
+		//var Home = new ViewHome();
+		var Home = new ViewJsonMap();
 		Navi.GoTo(Home);
 
 

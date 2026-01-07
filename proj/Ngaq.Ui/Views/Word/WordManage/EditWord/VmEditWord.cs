@@ -55,7 +55,7 @@ public partial class VmEditWord: ViewModelBase{
 
 		// string pretty = System.Text.Json.JsonSerializer.Serialize(doc.RootElement, options);
 		// return pretty;
-		JsonNode? node = JsonNode.Parse(uglyJson);
+		System.Text.Json.Nodes.JsonNode? node = System.Text.Json.Nodes.JsonNode.Parse(uglyJson);
 		string pretty = node!.ToJsonString(new JsonSerializerOptions {
 			WriteIndented = true
 			,Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping // 允許原樣輸出
