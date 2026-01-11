@@ -23,22 +23,16 @@ public partial class VmJsonMapItem: ViewModelBase, IMk<Ctx>{
 		#endif
 	}
 
-	public UiJsonMap? Root{
-		get{return field;}
-		set{SetProperty(ref field, value);}
-	}
-
-	public UiJsonMapItem? UiMapItem{
+	public IUiJsonMapItem? UiMapItem{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}
 
 
-	public Ctx FromBo(UiJsonMap Root, UiJsonMapItem Cur){
+	public Ctx FromBo(IUiJsonMapItem Cur){
 		var z = this;
-		z.Root = Root;
 		z.UiMapItem = Cur;
-
+		var Root = Cur.Root;
 
 		if(EUiTextType.RawText.Eq(Cur.DisplayName?.Type)){
 			z.DisplayName = Cur.DisplayName?.Data??"";
@@ -63,20 +57,17 @@ public partial class VmJsonMapItem: ViewModelBase, IMk<Ctx>{
 	}
 
 	obj? GetData(){
-		if(AnyNull(UiMapItem, Root)){
+		if(AnyNull(UiMapItem)){
 			return null;
 		}
-		if(UiMapItem.TryGetValue(Root, out var R)){
-			return R;
-		}
-		return null;
+		return UiMapItem.FnGet();
 	}
 
-	bool SetData(obj? Data){
-		if(AnyNull(UiMapItem, Root)){
+	obj? SetData(obj? Data){
+		if(AnyNull(UiMapItem)){
 			return false;
 		}
-		return UiMapItem.SetValue(Root, Data);
+		return UiMapItem.FnSet(Data);
 	}
 
 	public obj? Data{

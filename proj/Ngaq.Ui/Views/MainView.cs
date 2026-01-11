@@ -137,8 +137,8 @@ Control? Try()
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 
-		//var Home = new ViewHome();
-		var Home = new ViewJsonMap();
+		// var Home = new ViewHome();
+		var Home = new ViewUiJsonMap();
 		Navi.GoTo(Home);
 
 

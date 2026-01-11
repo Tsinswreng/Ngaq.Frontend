@@ -21,7 +21,6 @@ public partial class ViewJsonMapItem
 
 	public ViewJsonMapItem(){
 		Ctx = App.DiOrMk<Ctx>();
-		Ctx.FromBo(SampleJsonMap.Inst.UiJsonMap, SampleJsonMap.Inst.ItemUser);
 		Style();
 		Render();
 	}
@@ -55,10 +54,14 @@ public partial class ViewJsonMapItem
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Descr));
 			o.FontSize = UiCfg.Inst.BaseFontSize * 0.8;
 			o.Foreground = Brushes.LightGray;
+			//TODO 處理文字過多
 		})
 		.AddInit(new TextBox(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.RawInput));
+
 		})
+		//TODO 增一詳情頁、即把只一項置全屏㕥編輯、中ʸ用大ʹ可換行ʹTextBox作輸入框。
+
 
 		;
 		return NIL;

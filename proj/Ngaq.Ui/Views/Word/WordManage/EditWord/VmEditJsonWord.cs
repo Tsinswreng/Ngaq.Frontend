@@ -11,16 +11,16 @@ using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.CsTools;
-using Ctx = VmEditWord;
-public partial class VmEditWord: ViewModelBase{
+using Ctx = VmEditJsonWord;
+public partial class VmEditJsonWord: ViewModelBase{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
-	protected VmEditWord(){}
+	protected VmEditJsonWord(){}
 	public static Ctx Mk(){
 		return new Ctx();
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmEditWord(){
+	static VmEditJsonWord(){
 		#if DEBUG
 		{
 			var o = new Ctx();
@@ -29,7 +29,7 @@ public partial class VmEditWord: ViewModelBase{
 		#endif
 	}
 
-	public VmEditWord(
+	public VmEditJsonWord(
 		ISvcWord? SvcWord
 		,IJsonSerializer? JsonSerializer
 		,IFrontendUserCtxMgr? UserCtxMgr

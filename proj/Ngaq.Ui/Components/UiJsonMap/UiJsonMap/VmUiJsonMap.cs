@@ -3,38 +3,37 @@ using System.Collections.ObjectModel;
 using Ngaq.Core.Tools.JsonMap;
 using Ngaq.Ui.Infra;
 
-using Ctx = VmJsonMap;
+using Ctx = VmUiJsonMap;
 //using Bo = Ngaq.Core.Tools.JsonMap.UiJsonMap;
-public partial class VmJsonMap: ViewModelBase, IMk<Ctx>{
+public partial class VmUiJsonMap: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
-	protected VmJsonMap(){}
+	protected VmUiJsonMap(){}
 	public static Ctx Mk(){
 		return new Ctx();
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmJsonMap(){
+	static VmUiJsonMap(){
 		#if DEBUG
 		{
 			var o = new Ctx();
-			o.FromBo(SampleJsonMap.Inst.UiJsonMap);
 			Samples.Add(o);
 		}
 		#endif
 	}
 
-	public UiJsonMap? UiJsonMap{get;set;}
+	public IUiJsonMap? UiJsonMap{get;set;}
 
-	public void FromBo(UiJsonMap Bo){
+	public void FromBo(IUiJsonMap Bo){
 		this.UiJsonMap = Bo;
 		if(Bo.PathToUiMap is null){
 			ItemVms = new();
 			return;
 		}
-		ItemVms = new(Bo.PathToUiMap.Select((kv)=>{
+		ItemVms = new(Bo.PathToUiMap.Select((item)=>{
 			var vm = VmJsonMapItem.Mk();
-			kv.Value.Path = kv.Key;
-			vm.FromBo(Bo, kv.Value);
+			item.Value.PathStr = item.Key;
+			vm.FromBo(item.Value);
 			return vm;
 		}));
 	}
@@ -45,6 +44,7 @@ public partial class VmJsonMap: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	}=[];
 
+	/// 調用UpdData纔實際寫入內ʹ值
 	public void UpdData(){
 		foreach(var vm in ItemVms){
 			vm.UpdData();

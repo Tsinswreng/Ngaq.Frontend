@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
+using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Icons;
@@ -194,6 +195,11 @@ public partial class ViewLearnWords
 						)
 					);
 				};
+				// var ctxMenu = new ContextMenu();
+				// ctxMenu.Items.AddInit(new TextBox(), o=>{
+				// 	o.Text = "122";
+				// });
+				// o._Button.ContextMenu = ctxMenu;
 				//o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
 			})
 
@@ -273,6 +279,20 @@ public partial class ViewLearnWords
 		return Ans.Grid;
 	}
 
+	ContextMenu mkWordCardCtxMenu(){
+		var R = new ContextMenu();
+		R.Items.AddInit(new MenuItem(), o=>{
+			Todo.I18n();
+			o.Header =
+			HoriCloseCtrls.Mk(
+				Svgs.CreateMD.ToIcon()
+				,new TextBlock{Text = "Edit"}
+			);
+
+		});
+		return R;
+	}
+
 	//TODO 分頁加載以代虛擬化
 	Control _ListWordCard(){
 		var Ans = new ItemsControl();
@@ -307,6 +327,11 @@ public partial class ViewLearnWords
 					);
 					o.BorderThickness = new Thickness(4,0,0,0);
 					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs??o.LongPressDurationMs;
+					o.ContextMenu = mkWordCardCtxMenu();
+					o.OnLongPressed += (s,e)=>{
+						o.ContextMenu.Open();
+					};
+					o.LongPressDurationMs = 500;
 					StyBtnWordCard(o.Styles);
 				}
 

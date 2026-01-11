@@ -5,7 +5,7 @@ using AvaloniaEdit;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmEditWord;
+using Ctx = VmEditJsonWord;
 
 #if false //TODO 寫到Ui㕥示用戶
 
@@ -15,7 +15,7 @@ using Ctx = VmEditWord;
 
 #endif
 
-public partial class ViewEditWord
+public partial class ViewEditJsonWord
 	:AppViewBase
 {
 
@@ -24,7 +24,7 @@ public partial class ViewEditWord
 		set{DataContext = value;}
 	}
 
-	public ViewEditWord(){
+	public ViewEditJsonWord(){
 		Ctx = Ctx.Mk();
 		Style();
 		Render();
@@ -66,6 +66,7 @@ public partial class ViewEditWord
 			BottomBtnGrid
 			.AddInit(_Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
+				Todo.I18n();
 				o.Content = "Save";
 				o.Click += (s,e)=>{
 					Ctx?.Save();
@@ -73,6 +74,7 @@ public partial class ViewEditWord
 			})
 			.AddInit(_Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
+				Todo.I18n();
 				o.Content = "Delete";
 				o.Click += (s,e)=>{
 					Ctx?.Delete();

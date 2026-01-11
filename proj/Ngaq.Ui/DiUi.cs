@@ -26,7 +26,7 @@ public static class DiUi{
 		z.AddTransient<VmLearnWords>();
 		z.AddTransient<VmLoginRegister>();
 		z.AddTransient<VmSearchWords>();
-		z.AddTransient<VmEditWord>();
+		z.AddTransient<VmEditJsonWord>();
 		z.AddTransient<VmAboutMe>();
 		z.AddTransient<VmWordSync>();
 		z.AddTransient<VmStatistics>();

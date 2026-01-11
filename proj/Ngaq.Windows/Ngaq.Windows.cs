@@ -73,7 +73,12 @@ sealed class Program {
 
 			var I18nCfg = new JsonFileCfgAccessor();
 			I18n.Inst.CfgAccessor = I18nCfg;
-			I18nCfg.FromFile($"Languages/{Lang}.json");
+			try{
+				I18nCfg.FromFile($"Languages/{Lang}.json");
+			}catch{
+				System.Console.Error.WriteLine($"Failed to load language file: {Lang}");
+			}
+
 
 		} catch (System.Exception e) {
 			System.Console.Error.WriteLine("Failed to load config file: " + e);

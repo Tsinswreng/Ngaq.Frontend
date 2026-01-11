@@ -114,8 +114,8 @@ public partial class ViewSearchWords
 			R.Content = View;
 			//R.HorizontalContentAlignment = HAlign.Left;
 			R.Click += (s,e)=>{
-				var Target = new ViewEditWord();
-				Target.Ctx = App.GetSvc<VmEditWord>();
+				var Target = new ViewEditJsonWord();
+				Target.Ctx = App.GetSvc<VmEditJsonWord>();
 				Target.Ctx?.FromTypedObj(typedObj);
 				var jnWord = VmSearchedWordCard.GetJnWordFromTypedObj(typedObj);
 				var titleStr = jnWord.Head;

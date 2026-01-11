@@ -1,13 +1,14 @@
 namespace Ngaq.Ui.Components.KvMap.JsonMap;
 
+using System.ComponentModel;
 using Avalonia.Controls;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmJsonMap;
-public partial class ViewJsonMap
+using Ctx = VmUiJsonMap;
+public partial class ViewUiJsonMap
 	:AppViewBase
 {
 
@@ -16,7 +17,7 @@ public partial class ViewJsonMap
 		set{DataContext = value;}
 	}
 
-	public ViewJsonMap(){
+	public ViewUiJsonMap(){
 		//Ctx = App.DiOrMk<Ctx>();
 		Ctx = Ctx.Samples[0];
 		Style();
