@@ -18,8 +18,8 @@ public partial class ViewUiJsonMap
 	}
 
 	public ViewUiJsonMap(){
-		//Ctx = App.DiOrMk<Ctx>();
-		Ctx = Ctx.Samples[0];
+		Ctx = App.DiOrMk<Ctx>();
+		//Ctx = Ctx.Samples[0];
 		Style();
 		Render();
 	}

@@ -143,7 +143,7 @@ this.AttachDevTools();
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
 			singleViewPlatform.MainView = MainView.Inst;
 		}
-
+		
 		base.OnFrameworkInitializationCompleted();
 	}
 
@@ -157,6 +157,7 @@ this.AttachDevTools();
 			BindingPlugins.DataValidators.Remove(plugin);
 		}
 	}
+
 
 	public Window MkWindow(){
 		var Cfg = UiCfg.Inst;

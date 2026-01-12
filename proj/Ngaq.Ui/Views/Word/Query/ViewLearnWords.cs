@@ -7,6 +7,7 @@ using Avalonia.Data;
 using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
@@ -14,7 +15,9 @@ using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
+using Ngaq.Ui.Views.Word.WordEdit;
 using Ngaq.Ui.Views.Word.WordInfo;
+using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
@@ -279,7 +282,7 @@ public partial class ViewLearnWords
 		return Ans.Grid;
 	}
 
-	ContextMenu mkWordCardCtxMenu(){
+	ContextMenu mkWordCardCtxMenu(IJnWord? JnWord){
 		var R = new ContextMenu();
 		R.Items.AddInit(new MenuItem(), o=>{
 			Todo.I18n();
@@ -288,6 +291,17 @@ public partial class ViewLearnWords
 				Svgs.CreateMD.ToIcon()
 				,new TextBlock{Text = "Edit"}
 			);
+			o.Click += (s,e)=>{
+				if(AnyNull(JnWord)){
+					Todo.I18n();
+					Ctx?.ShowMsg("No word selected");//TODO
+					return;
+				}
+				var editView = new ViewWordEdit{};
+
+				editView.Ctx?.FromBo(JnWord);
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
+			};
 
 		});
 		return R;
@@ -327,7 +341,7 @@ public partial class ViewLearnWords
 					);
 					o.BorderThickness = new Thickness(4,0,0,0);
 					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs??o.LongPressDurationMs;
-					o.ContextMenu = mkWordCardCtxMenu();
+					o.ContextMenu = mkWordCardCtxMenu(VmWordCard?.WordForLearn?.JnWord);
 					o.OnLongPressed += (s,e)=>{
 						o.ContextMenu.Open();
 					};

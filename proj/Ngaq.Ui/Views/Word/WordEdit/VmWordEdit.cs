@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordEdit;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmWordEdit;
@@ -20,11 +21,15 @@ public partial class VmWordEdit: ViewModelBase, IMk<Ctx>{
 		#endif
 	}
 
+	public void FromBo(IJnWord JnWord){
+		this.JnWord = JnWord;
+	}
 
-	public str YYY{
+
+	public IJnWord? JnWord{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}="";
+	}=null;
 
 
 }
