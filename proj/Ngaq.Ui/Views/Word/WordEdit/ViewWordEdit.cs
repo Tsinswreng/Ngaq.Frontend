@@ -10,6 +10,7 @@ using Ngaq.Ui.Components.KvMap.JsonMap;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -46,7 +47,8 @@ public partial class ViewWordEdit
 					return;
 				}
 				vj.Ctx.FromJnWord(Ctx.JnWord);
-				Ctx?.ViewNavi?.GoTo(vj);
+
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", vj));
 			};
 		});
 		return R;

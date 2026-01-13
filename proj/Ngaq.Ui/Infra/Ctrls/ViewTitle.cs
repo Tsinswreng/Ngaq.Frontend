@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Infra.Ctrls;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Icons;
@@ -73,29 +74,35 @@ public partial class ViewTitle
 				};
 				o.Background = Brushes.Transparent;
 			})
-			.AddInit(Title);
-			TitleBar.AddInit(_Button(), o=>{
+			.AddInit(Title)
+			.AddInit(_Button(), o=>{
 				o.IsVisible = false;
 				o.Content = Svgs.DotsHorizontalCircleOutline.ToIcon();
 				o.Background = Brushes.Transparent;
-				var CtxMenu = new ContextMenu();
-				o.ContextMenu = new ContextMenu{};
+				var popup = new Popup(){
+					PlacementTarget = o,
+					Placement = PlacementMode.Bottom,
+					HorizontalOffset = -10,
+					VerticalOffset = 5
+				};
+				var menuPanel = new StackPanel();
+				popup.Child = menuPanel;
+				Root.AddInit(popup);  // 添加到可视化树
+
 				Body.PropertyChanged += (sender, e) =>{
 					if (e.Property == ContentControl.ContentProperty){
 						// 调用自定义业务函数，传入 旧值/新值
 						if(Body.Content is I_MkTitleMenu mk){
-							o.ContextMenu.Items.Clear();
+							menuPanel.Children.Clear();
 							var TitleMenu = mk.MkTitleMenu();
-							o.ContextMenu.Items.AddInit(TitleMenu);
+							menuPanel.Children.Add(TitleMenu);
 							o.IsVisible = true;
 							o.Click += (s,e)=>{
-								o.ContextMenu.Open();
+								popup.IsOpen = !popup.IsOpen;
 							};
 						}
 					}
 				};
-
-
 			});
 
 
@@ -106,3 +113,5 @@ public partial class ViewTitle
 
 
 }
+
+
