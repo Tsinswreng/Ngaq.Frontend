@@ -36,7 +36,9 @@ public partial class ViewWordEdit
 	}
 
 	public Control MkTitleMenu(){
+		return new TextBox();
 		var R = new ContextMenu();
+		R.Styles.Add(new Style().NoMargin().NoPadding());
 		R.Items.AddInit(new MenuItem(), o=>{
 			o.Header = "To Json View";
 			o.Click += (s,e)=>{

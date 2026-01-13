@@ -1,9 +1,11 @@
 namespace Ngaq.Ui.Infra.Ctrls;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Styling;
+using DynamicData.Binding;
 using Ngaq.Ui.Icons;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -76,33 +78,36 @@ public partial class ViewTitle
 			})
 			.AddInit(Title)
 			.AddInit(_Button(), o=>{
+
 				o.IsVisible = false;
 				o.Content = Svgs.DotsHorizontalCircleOutline.ToIcon();
 				o.Background = Brushes.Transparent;
-				var popup = new Popup(){
-					PlacementTarget = o,
-					Placement = PlacementMode.Bottom,
-					HorizontalOffset = -10,
-					VerticalOffset = 5
-				};
-				var menuPanel = new StackPanel();
-				popup.Child = menuPanel;
-				Root.AddInit(popup);  // 添加到可视化树
+				var CtxMenu = new ContextMenu(){
+					Init=o=>{
 
+					}
+				};
+				new Style()
+					.NoMargin().NoPadding()
+					.Set(BackgroundProperty, Brushes.Transparent)
+				.AddTo(CtxMenu.Styles);
+
+				o.ContextMenu = CtxMenu;
+				o.Click += (s,e)=>{
+					o.ContextMenu.Open();
+				};
 				Body.PropertyChanged += (sender, e) =>{
 					if (e.Property == ContentControl.ContentProperty){
 						// 调用自定义业务函数，传入 旧值/新值
 						if(Body.Content is I_MkTitleMenu mk){
-							menuPanel.Children.Clear();
+							CtxMenu.Items.Clear();
 							var TitleMenu = mk.MkTitleMenu();
-							menuPanel.Children.Add(TitleMenu);
+							CtxMenu.Items.Add(TitleMenu);
 							o.IsVisible = true;
-							o.Click += (s,e)=>{
-								popup.IsOpen = !popup.IsOpen;
-							};
 						}
 					}
 				};
+				//TODO 顯示popup旹 把按鈕的背景設置成 和他被點擊時的背景 一樣
 			});
 
 
@@ -113,5 +118,3 @@ public partial class ViewTitle
 
 
 }
-
-
