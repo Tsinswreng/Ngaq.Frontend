@@ -11,9 +11,42 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.Avln.StrokeText;
 using Ctx = VmWordListCard;
+using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Icons;
+using Ngaq.Ui.Views.Word.WordEdit;
+using Ngaq.Ui.Infra;
+
 public partial class ViewWordListCard
 	:UserControl
 {
+
+	public static ContextMenu MkWordCardCtxMenu(
+		ViewModelBase? Ctx
+		,IJnWord? JnWord
+	){
+		var R = new ContextMenu();
+		R.Items.AddInit(new MenuItem(), o=>{
+			Todo.I18n();
+			o.Header =
+			HoriCloseCtrls.Mk(
+				Svgs.CreateMD.ToIcon()
+				,new TextBlock{Text = "Edit"}
+			);
+			o.Click += (s,e)=>{
+				if(AnyNull(JnWord)){
+					Todo.I18n();
+					MainView.Inst.ShowMsg("No word selected");//TODO
+					return;
+				}
+				var editView = new ViewWordEdit{};
+
+				editView.Ctx?.FromBo(JnWord);
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
+			};
+		});
+		return R;
+	}
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}

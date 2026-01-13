@@ -21,6 +21,7 @@ public partial class ToolView{
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 		});
 		titled.BdrTitle.Background = new SolidColorBrush(Color.FromRgb(32, 32, 32));
+
 		return titled;
 	}
 

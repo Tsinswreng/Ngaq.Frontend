@@ -9,6 +9,8 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordCard;
+using Ngaq.Ui.Views.Word.WordEdit;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.AvlnTools.Dsl;
@@ -31,10 +33,9 @@ public partial class ViewSearchWords
 		Render();
 	}
 
-	public partial class Cls_{
+	public partial class Cls{
 
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
 		return NIL;
@@ -113,11 +114,19 @@ public partial class ViewSearchWords
 			View.Ctx.FromTypedObj(typedObj);
 			R.Content = View;
 			//R.HorizontalContentAlignment = HAlign.Left;
+			if(!AnyNull(View.Ctx.WordForLearn?.JnWord)){
+				R.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, View.Ctx.WordForLearn.JnWord);
+			}else{
+				Todo.I18n();
+				Ctx?.ShowMsg("Word not found.");//TODO
+			}
 			R.Click += (s,e)=>{
-				var Target = new ViewEditJsonWord();
-				Target.Ctx = App.GetSvc<VmEditJsonWord>();
-				Target.Ctx?.FromTypedObj(typedObj);
+				// var Target = new ViewEditJsonWord();
+				// Target.Ctx?.FromTypedObj(typedObj);
+
+				var Target = new ViewWordEdit();
 				var jnWord = VmSearchedWordCard.GetJnWordFromTypedObj(typedObj);
+				Target.Ctx?.FromBo(jnWord);
 				var titleStr = jnWord.Head;
 				var titled = ToolView.WithTitle(titleStr, Target);
 				Ctx?.ViewNavi?.GoTo(titled);

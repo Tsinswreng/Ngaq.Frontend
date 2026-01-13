@@ -12,7 +12,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.CsTools;
 using Ctx = VmEditJsonWord;
-public partial class VmEditJsonWord: ViewModelBase{
+public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
 	protected VmEditJsonWord(){}
 	public static Ctx Mk(){
@@ -68,7 +68,7 @@ public partial class VmEditJsonWord: ViewModelBase{
 		return FromJnWord(JnWord);
 	}
 
-	public nil FromJnWord(JnWord JnWord){
+	public nil FromJnWord(IJnWord JnWord){
 		this.Bo = JnWord;
 		IJnWord simple = JnWord;
 		this.Json = JsonSerializer?.Stringify(simple)??"";
@@ -77,10 +77,9 @@ public partial class VmEditJsonWord: ViewModelBase{
 	}
 
 
-	protected JnWord? _Bo;
-	public JnWord? Bo{
-		get{return _Bo;}
-		set{SetProperty(ref _Bo, value);}
+	public IJnWord? Bo{
+		get{return field;}
+		set{SetProperty(ref field, value);}
 	}
 
 

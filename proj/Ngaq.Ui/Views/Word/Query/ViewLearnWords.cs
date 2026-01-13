@@ -282,31 +282,6 @@ public partial class ViewLearnWords
 		return Ans.Grid;
 	}
 
-	ContextMenu mkWordCardCtxMenu(IJnWord? JnWord){
-		var R = new ContextMenu();
-		R.Items.AddInit(new MenuItem(), o=>{
-			Todo.I18n();
-			o.Header =
-			HoriCloseCtrls.Mk(
-				Svgs.CreateMD.ToIcon()
-				,new TextBlock{Text = "Edit"}
-			);
-			o.Click += (s,e)=>{
-				if(AnyNull(JnWord)){
-					Todo.I18n();
-					Ctx?.ShowMsg("No word selected");//TODO
-					return;
-				}
-				var editView = new ViewWordEdit{};
-
-				editView.Ctx?.FromBo(JnWord);
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
-			};
-
-		});
-		return R;
-	}
-
 	//TODO 分頁加載以代虛擬化
 	Control _ListWordCard(){
 		var Ans = new ItemsControl();
@@ -341,7 +316,7 @@ public partial class ViewLearnWords
 					);
 					o.BorderThickness = new Thickness(4,0,0,0);
 					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs??o.LongPressDurationMs;
-					o.ContextMenu = mkWordCardCtxMenu(VmWordCard?.WordForLearn?.JnWord);
+					o.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, VmWordCard?.WordForLearn?.JnWord);
 					o.OnLongPressed += (s,e)=>{
 						o.ContextMenu.Open();
 					};

@@ -25,7 +25,7 @@ public partial class ViewEditJsonWord
 	}
 
 	public ViewEditJsonWord(){
-		Ctx = Ctx.Mk();
+		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
 	}

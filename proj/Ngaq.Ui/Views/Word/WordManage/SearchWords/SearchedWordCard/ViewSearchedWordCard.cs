@@ -27,10 +27,10 @@ public partial class ViewSearchedWordCard
 		Render();
 	}
 
-	public partial class Cls_{
-		public str InInfoGrid = nameof(InInfoGrid);
+	public partial class Cls{
+		public static str InInfoGrid = nameof(InInfoGrid);
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
+
 	public AutoGrid Root{get;set;} = new AutoGrid(IsRow:true);
 
 	protected nil Style(){
