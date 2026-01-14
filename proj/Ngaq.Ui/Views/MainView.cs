@@ -1,10 +1,16 @@
 namespace Ngaq.Ui.Views;
+
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
+using Ngaq.Ui.CodeTemplate.Sample;
 using Ngaq.Ui.Components.KvMap;
 using Ngaq.Ui.Components.KvMap.JsonMap;
 using Ngaq.Ui.Controls;
@@ -107,7 +113,28 @@ public partial class MainView : UserControl {
 
 Control? Try()
 {
+	new Window{
+		Init=o=>{
+			o.ContentInit(new Button(), o=>{
+				o.ContextMenu = new ContextMenu(){
+					Margin = new Avalonia.Thickness(0),
+					Padding = new Avalonia.Thickness(0),
+				};
 
+				o.ContextMenu.Styles.Add(
+					new Style(x=>x.OfType<ContextMenu>()
+						.Template()
+						.OfType<Popup>()
+					)
+					.Set(PaddingProperty, new Thickness(0))
+				);
+
+				o.ContextMenu.Items.Add(new TextBox());
+
+			});
+		}
+	};
+	//.Show();
 	return null;
 }
 
@@ -137,8 +164,9 @@ Control? Try()
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 
-		var Home = new ViewHome();
+		//var Home = new ViewHome();
 		// var Home = new ViewUiJsonMap();
+		var Home = new ViewSample();
 		Navi.GoTo(Home);
 
 

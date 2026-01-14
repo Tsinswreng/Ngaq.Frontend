@@ -36,7 +36,11 @@ public partial class ViewWordEdit
 	}
 
 	public Control MkTitleMenu(){
-		return new TextBox();
+		return new TextBox(){
+			Init=o=>{
+				o.Styles.Add(new Style().NoMargin().NoPadding());
+			}
+		};
 		var R = new ContextMenu();
 		R.Styles.Add(new Style().NoMargin().NoPadding());
 		R.Items.AddInit(new MenuItem(), o=>{

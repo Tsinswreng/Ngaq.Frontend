@@ -1,0 +1,122 @@
+namespace Ngaq.Ui.CodeTemplate.Sample;
+
+using Avalonia.Controls;
+using Avalonia.Styling;
+using Ngaq.Ui;
+using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Infra.I18n;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
+using Ctx = VmSample;
+public partial class ViewSample
+	:AppViewBase
+{
+
+	public Ctx? Ctx{
+		get{return DataContext as Ctx;}
+		set{DataContext = value;}
+	}
+
+	public ViewSample(){
+		Ctx = App.DiOrMk<Ctx>();
+		Style();
+		Render();
+	}
+	public II18n I = I18n.Inst;
+
+	//大多數場景下我們用AutoGrid作爲視圖的根節點。
+	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號
+	AutoGrid Root = new(IsRow: true);//IsRow: true 表示行佈局
+	//視圖的初始化羅輯寫在Render裏
+	public void Render(){
+		this.Content = Root.Grid;
+		Root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto), //GUT成員有Star,Auto,Pixel
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Auto),
+			//....略
+		]);
+		//AutoGrid 與 所有的Panel都有AddInit<TControl>(TControl C, Action<TControl>? FnInit=null)擴展方法。
+		//常規寫法一
+		Root
+		//可鏈式調用
+		.AddInit(new TextBox(), o=>{
+			o.AcceptsReturn = true;
+			o.Bind(
+				o.PropText
+//靜態綁定寫法。不准用new Binding(字符串)
+				,CBE.Mk<Ctx>(
+					x=>x.Cnt1
+					#if false
+					可加其他可選命名參數如:
+					,Converter:
+					,ConverterParameter:
+					,Mode:
+					#endif
+				)
+			);
+//參數不複雜時可只寫一句 o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Cnt));
+//優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
+		})
+
+		.AddInit(new Button(), o=>{
+			o.ContentInit(new TextBlock(), t=>{
+				t.Text = "按鈕一";
+			});
+//你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
+//按鈕綁定事件的寫法
+			o.Click += (s,e)=>{
+				Ctx?.Click1();
+			};
+		})
+		.AddInit(new ScrollViewer(), Sv=>{
+			Sv.ContentInit(new StackPanel(), Sp=>{
+				Sp.AddInit(new OpBtn(), o=>{
+					Todo.I18n(); //UI中硬編碼的字符串都要這樣寫Todo
+					o._Button.Content = "調用後端服務";
+					o.SetExe(Ct=>Ctx?.CallService(Ct));
+				});
+				Sp.AddInit(MkList());
+			});
+		})
+		;
+	}
+
+//列表示例
+//當View中縮進層次過多旹、可將Render中的部分代碼抽到一個單獨的函數中、把控件返回出去、再在Render中調用
+	ItemsControl MkList(){
+		var R = new ItemsControl();
+		R.SetItemTemplate<str>((ele, ns)=>{
+			return new TextBox{Text=ele};
+		});
+		R.SetItemsPanel(()=>{
+			return new VirtualizingStackPanel();
+		});
+		R.Bind(R.PropItemsSource, CBE.Mk<Ctx>(x=>x.List));
+		return R;
+	}
+
+	#region Style
+	//樣式(非必選)示例
+	//樣式簡單旹建議直接和控件一起初始化。有[需批量設置樣式]等需求旹再用Style
+	public partial class Cls{//類名枚舉
+		public const string MenuBtn = nameof(MenuBtn);
+	}
+	public void Style(){
+		var S = this.Styles;
+
+		var SomeStyle = new Style(x=>
+			x.Is<Control>()
+			.Class(Cls.MenuBtn)//禁止硬編碼字符串作類名
+		).Set(
+			VerticalAlignmentProperty
+			,VAlign.Stretch
+		).AddTo(S);
+		;
+	}
+
+	#endregion Style
+
+
+}

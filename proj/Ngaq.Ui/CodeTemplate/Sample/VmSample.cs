@@ -1,16 +1,7 @@
-#if false
-Avalonia前端代碼規範
-- 使用純c\# 不用任何xaml
-命名規則
-- 視圖: ViewXxx
-- 視圖模型: VmXxx
-保留原有代碼風格
-#endif
-
-//Render寫法:
 using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
@@ -18,17 +9,17 @@ using Tsinswreng.AvlnTools.Tools;
 
 namespace Ngaq.Ui.CodeTemplate;
 
-using Ctx = Ngaq.Ui.CodeTemplate.VmSpec;
+using Ctx = Ngaq.Ui.CodeTemplate.VmSample;
 
-public partial class VmSpec:ViewModelBase, IMk<Ctx>{
+public partial class VmSample:ViewModelBase, IMk<Ctx>{
 	//無參構造器聲明爲protected
-	protected VmSpec(){}
+	protected VmSample(){}
 	//另置靜態無參工廠函數
 	public static Ctx Mk(){
 		return new Ctx();
 	}
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmSpec(){
+	static VmSample(){
 		#if DEBUG//放示例 便于調試樣式
 		{
 			var o = new Ctx();
@@ -49,7 +40,7 @@ public partial class VmSpec:ViewModelBase, IMk<Ctx>{
 	ISvcSample? SvcSample;
 	IUserCtxMgr? UserCtxMgr;
 	//公開的有參構造器用于依賴注入。
-	public VmSpec(
+	public VmSample(
 		ISvcSample? SvcSample
 		,IUserCtxMgr? UserCtxMgr
 	){
@@ -64,37 +55,44 @@ public partial class VmSpec:ViewModelBase, IMk<Ctx>{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}=0;
+	public str Input{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	}="";
 
+	public ObservableCollection<str> List{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	}=["a","b","c"];
+
+//給普通按鈕綁定的函數、無參非異步、只涉及ViewModel內部狀態的修改 無耗時操作
 	public void Click1(){
 		Cnt1++;
 	}
-	public int Cnt2{
-		get{return field;}
-		set{SetProperty(ref field, value);}
-	}=0;
 
-	public void Click2(){
-		Cnt1++;
+
+//在ViewModel中調用後端服務示例
+// 聲明爲異步函數、函數名不需特殊後綴、參數設爲CT Ct即可。
+// 此函數用于給OpBtn綁定
+	public async Task<nil> CallService(CT Ct){
+//由于注入的依賴都是可空類型、調用時需先判空。
+		if(AnyNull(SvcSample)){
+			return NIL;
+		}
+//另開Task.Run來執行服務、防止UI卡頓
+		await Task.Run(async ()=>{
+			var R = await SvcSample.Serve(null, Ct);
+//示例: 如果要在子線程中修改UI，須這樣寫
+			Dispatcher.UIThread.Post(()=>{
+				this.Input += R+"";
+			});
+		},Ct);
+		return NIL;
 	}
 
 }
 
-
-/*
-//第二套寫法(不推薦)
-		.AddInit(new TextBox{
-			AcceptsReturn = true,
-			//對于[無法用屬性初始化賦值語法來初始化]的部分、可在Init函數中初始化
-			Init=o=>{
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Cnt2));
-			}
-		})
-		.AddInit(new Button{
-			Content = "按鈕二",
-			Init=o=>{
-				o.Click+=(s,e)=>{
-					Ctx?.Click2();
-				};
-			}
-		})
- */
+//模擬的服務類接口
+public interface ISvcSample{
+	public Task<obj?> Serve(obj? O, CT Ct);
+}

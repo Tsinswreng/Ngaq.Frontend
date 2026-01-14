@@ -44,13 +44,6 @@ public partial class ViewModelBase
 	//跳轉傳參
 	public ITypedObj? Arg{get;set;}
 
-	//public event EventHandler<EventArgs>? EvtMsg;
-	// public nil OnMsg(obj? E = null){
-	// 	E??=EventArgs.Empty;
-	// 	EvtMsg?.Invoke(this, E);
-	// 	return NIL;
-	// }
-
 	public nil LogInfo(str? Msg = null){
 		App.Logger?.LogInformation(Msg??"");
 		return NIL;
@@ -71,11 +64,7 @@ public partial class ViewModelBase
 		return NIL;
 	}
 
-	/// <summary>
 	/// 彈窗ʹ抽象。調用方宜無需知其內ʹ叶
-	/// </summary>
-	/// <param name="Msg"></param>
-	/// <returns></returns>
 	public nil ShowMsg(str Msg){
 		LogInfo(nameof(ShowMsg)+": "+Msg);
 		Dispatcher.UIThread.Post(()=>{
@@ -103,14 +92,7 @@ public partial class ViewModelBase
 		return NIL;
 	}
 
-	/// <summary>
 	/// 地址未變但內容ˋ變旹 適用此
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	/// <param name="Field"></param>
-	/// <param name="newValue"></param>
-	/// <param name="propertyName"></param>
-	/// <returns></returns>
 	[Impl]
 	public bool ForceSetProp<T>(
 		[NotNullIfNotNull(nameof(newValue))] ref T Field
@@ -128,7 +110,4 @@ public partial class ViewModelBase
 	;
 #endif
 
-	// void test(){
-	// 	ForceSetProperty(ref _IsShowMsg, true);
-	// }
 }
