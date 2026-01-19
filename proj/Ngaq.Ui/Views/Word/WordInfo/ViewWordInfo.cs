@@ -116,7 +116,7 @@ public partial class ViewWordInfo
 	// }
 
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//LangId
 				RowDef(3, GUT.Auto),//Head
@@ -136,18 +136,12 @@ public partial class ViewWordInfo
 		});
 		{{
 			LangId.AddInit(TxtBox(), o=>{
-				o.Bind(
-					o.PropText
-					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
-				);
+				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Lang));
 				o.HorizontalAlignment = HAlign.Left;
 				o.VerticalAlignment = VAlign.Center;
 			});
 			LangId.AddInit(_SelectableTextBlock(), o=>{
-				o.Bind(
-					o.PropText_()
-					,new CBE(CBE.Pth<Ctx>(x=>x.Id))
-				);
+				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Id));
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Right;
 				o.TextAlignment = TxtAlign.Right;
@@ -161,15 +155,9 @@ public partial class ViewWordInfo
 		});
 
 		var Head = TxtBox();
-		BdrHead.Child = Head;
 		{var o = Head;
 			o.Styles.Add(new Style().NoMargin().NoPadding());
-			o.Bind(
-				o.PropText_()
-				,new CBE(CBE.Pth<Ctx>(x=>x.Head)){
-					Mode = BindingMode.TwoWay
-				}
-			);
+			o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay));
 			o.VerticalAlignment = VAlign.Stretch;
 			o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
 			//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
@@ -210,21 +198,13 @@ public partial class ViewWordInfo
 		});//~TxtBox
 		#endif
 
+		Root.AddInit(new Border(), BdrScr=>{
+			BdrScr.InitChild(new ScrollViewer(), ScrDescr=>{
+				var Description = _DescriptionList();
+				ScrDescr.Content = Description;
+			});
+		});
 
-
-		var BdrScr = new Border{};
-		Root.Add(BdrScr);
-
-		var ScrDescr = new ScrollViewer();
-		BdrScr.Child = ScrDescr;
-		{var o = ScrDescr;}
-		{{
-			var Description = _DescriptionList();
-			ScrDescr.Content = Description;
-			{var o = Description;
-
-			}
-		}}
 		Root.Add();
 		return NIL;
 	}

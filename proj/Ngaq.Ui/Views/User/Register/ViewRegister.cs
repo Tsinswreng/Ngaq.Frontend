@@ -53,7 +53,7 @@ public partial class ViewRegister
 
 	AutoGrid Root = new(IsRow: true);
 	protected nil _Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),
 				RowDef(1, GUT.Star),
@@ -76,7 +76,7 @@ public partial class ViewRegister
 		})
 		.AddInit(new OpBtn(), o=>{
 			var b = o._Button;
-			b.ContentInit(_TextBlock(), t=>{
+			b.InitContent(_TextBlock(), t=>{
 				t.Text = I[K.Register];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});

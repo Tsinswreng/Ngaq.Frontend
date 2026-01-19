@@ -45,7 +45,7 @@ public partial class ViewHome
 	AutoGrid Root = new(IsRow:true);
 
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(20, GUT.Star),
 			]);

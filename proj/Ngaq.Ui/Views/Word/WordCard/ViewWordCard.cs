@@ -121,7 +121,7 @@ public partial class ViewWordListCard
 	}
 
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				new RowDef(4, GUT.Auto),
 				new RowDef(8, GUT.Auto),

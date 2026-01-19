@@ -120,10 +120,10 @@ public partial class VmJsonMapItem: ViewModelBase, IMk<Ctx>{
 
 
 	public obj? RawInputToData(){
-		if(EJsonValueType.String.Eq(UiMapItem?.Type)){
+		if(EJsonValueType.String.Eq(UiMapItem?.JsonValueType)){
 			return RawInput;
 		}
-		if(EJsonValueType.Number.Eq(UiMapItem?.Type)){
+		if(EJsonValueType.Number.Eq(UiMapItem?.JsonValueType)){
 			return Convert.ToDouble(RawInput);//TODO
 		}
 		return null;//TODO 宜抛异常

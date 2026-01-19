@@ -49,7 +49,7 @@ public partial class ViewWordManage
 	public AutoGrid Root = new(IsRow:true);
 
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(9999, GUT.Star),
 				RowDef(1, GUT.Star),
@@ -102,7 +102,7 @@ public partial class ViewWordManage
 				var Sv = new ScrollViewer();
 				Bd.Child = Sv;
 				{{
-					Sv.ContentInit(Txt);
+					Sv.InitContent(Txt);
 				}}
 			})
 			;
@@ -125,12 +125,12 @@ public partial class ViewWordManage
 		};
 		R.HorizontalContentAlignment = HAlign.Left;
 		if(Icon is null){
-			R.ContentInit(_TextBlock(), o=>{
+			R.InitContent(_TextBlock(), o=>{
 				o.Text = Title;
 			});
 		}else{
 			var G = new AutoGrid(IsRow:false);
-			R.ContentInit(G.Grid, o=>{
+			R.InitContent(G.Grid, o=>{
 				o.ColumnDefinitions.AddRange([
 					ColDef(1, GUT.Auto),
 					ColDef(UiCfg.Inst.BaseFontSize, GUT.Pixel),

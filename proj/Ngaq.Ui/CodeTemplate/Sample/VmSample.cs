@@ -7,9 +7,9 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-namespace Ngaq.Ui.CodeTemplate;
+namespace Ngaq.Ui.CodeTemplate.Sample;
 
-using Ctx = Ngaq.Ui.CodeTemplate.VmSample;
+using Ctx = VmSample;
 
 public partial class VmSample:ViewModelBase, IMk<Ctx>{
 	//無參構造器聲明爲protected

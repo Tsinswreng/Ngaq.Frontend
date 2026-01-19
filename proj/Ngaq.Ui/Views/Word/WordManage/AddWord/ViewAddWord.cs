@@ -57,7 +57,7 @@ public partial class ViewAddWord
 
 	protected nil Render(){
 		var Root = new AutoGrid(IsRow:true);
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//Popup
 				RowDef(1, GUT.Auto),//empty

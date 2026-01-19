@@ -46,7 +46,7 @@ public partial class ViewSearchWords
 
 
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),
@@ -83,7 +83,7 @@ public partial class ViewSearchWords
 			});
 		}}
 		Root.AddInit(_ScrollViewer(), scrl=>{
-			scrl.ContentInit(_ListWordCard(), o=>{
+			scrl.InitContent(_ListWordCard(), o=>{
 				o.Bind(
 					ItemsControl.ItemsSourceProperty
 					,CBE.Mk<Ctx>(

@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Controls;
 using Avalonia.Styling;
 using Ngaq.Core.Shared.User.UserCtx;
+using Ngaq.Ui.CodeTemplate.Sample;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;

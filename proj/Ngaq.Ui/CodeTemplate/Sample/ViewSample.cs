@@ -61,7 +61,7 @@ public partial class ViewSample
 		})
 
 		.AddInit(new Button(), o=>{
-			o.ContentInit(new TextBlock(), t=>{
+			o.InitContent(new TextBlock(), t=>{
 				t.Text = "按鈕一";
 			});
 //你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
@@ -71,7 +71,7 @@ public partial class ViewSample
 			};
 		})
 		.AddInit(new ScrollViewer(), Sv=>{
-			Sv.ContentInit(new StackPanel(), Sp=>{
+			Sv.InitContent(new StackPanel(), Sp=>{
 				Sp.AddInit(new OpBtn(), o=>{
 					Todo.I18n(); //UI中硬編碼的字符串都要這樣寫Todo
 					o._Button.Content = "調用後端服務";

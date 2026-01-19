@@ -6,7 +6,7 @@ using Tsinswreng.AvlnTools.Dsl;
 public class HoriCloseCtrls:ContentControl{
 	public static HoriCloseCtrls Mk(params Control[] Ctrls){
 		var z = new HoriCloseCtrls();
-		z.ContentInit(new StackPanel(), Sp=>{
+		z.InitContent(new StackPanel(), Sp=>{
 			Sp.Orientation = Orientation.Horizontal;
 			foreach(Control c in Ctrls){
 				Sp.AddInit(c);

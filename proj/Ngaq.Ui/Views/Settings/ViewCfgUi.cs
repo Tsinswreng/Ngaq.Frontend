@@ -30,7 +30,7 @@ public partial class ViewCfgUi
 
 	protected nil Render(){
 		var _Item = ViewSettings.FnSettingItem(Ctx?.ViewNavi);
-		this.ContentInit(_StackPanel(), S=>{
+		this.InitContent(_StackPanel(), S=>{
 			S.AddInit(_Item("Font Size", new ViewCfgFont()));
 		});
 		return NIL;

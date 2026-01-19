@@ -34,7 +34,7 @@ public partial class ViewDictionary
 
 	AutoGrid Root = new(IsRow:true);
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			Root.RowDefs.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),

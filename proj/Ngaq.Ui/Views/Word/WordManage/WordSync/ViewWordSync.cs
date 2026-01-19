@@ -37,7 +37,7 @@ public partial class ViewWordSync
 
 	public AutoGrid Root = new(IsRow:true);
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 
 		});
 		Root.AddInit(_StackPanel(), Sp=>{

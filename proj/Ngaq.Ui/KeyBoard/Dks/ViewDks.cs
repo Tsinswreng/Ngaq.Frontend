@@ -36,7 +36,7 @@ public partial class ViewDks
 
 	AutoGrid Root = new (IsRow: true);
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				..Repeat(()=>RowDef(1, GUT.Auto), 6)
 			]);

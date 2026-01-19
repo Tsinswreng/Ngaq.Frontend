@@ -35,14 +35,14 @@ public partial class ViewCfgLearnWord
 
 	AutoGrid Root = new AutoGrid(IsRow:true);
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),
 				RowDef(1, GUT.Star),
 			]);
 		});
 		Root.AddInit(new ScrollViewer(), sc=>{
-			sc.ContentInit(new StackPanel(), sp=>{
+			sc.InitContent(new StackPanel(), sp=>{
 				sp
 				.AddInit(new CheckBox(), o=>{
 					//o.Tag = new TextBlock{Text = "Enable Random Background"};

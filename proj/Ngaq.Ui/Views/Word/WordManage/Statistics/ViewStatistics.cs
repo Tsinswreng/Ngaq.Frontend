@@ -159,7 +159,7 @@ if (Ctx is null){return;}
 
 	AutoGrid Root = new(IsRow: true);
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),//cfgPanel
 				RowDef(1, GUT.Auto),//splitter
@@ -168,7 +168,7 @@ if (Ctx is null){return;}
 		});
 		Root.AddInit(new ScrollViewer(), Sv=>{
 			var grid = new AutoGrid(IsRow:true);
-			Sv.ContentInit(grid.Grid, o=>{
+			Sv.InitContent(grid.Grid, o=>{
 				o.RowDefinitions.AddRange([
 					RowDef(1, GUT.Auto),
 				]);

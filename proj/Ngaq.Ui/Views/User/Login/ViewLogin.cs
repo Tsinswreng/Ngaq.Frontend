@@ -62,7 +62,7 @@ public partial class Cls_{
 	}
 
 	protected nil _Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),
 				RowDef(1, GUT.Star),
@@ -86,7 +86,7 @@ public partial class Cls_{
 		})
 		.AddInit(new OpBtn(), (o)=>{
 			var b = o._Button;
-			b.ContentInit(_TextBlock(), t=>{
+			b.InitContent(_TextBlock(), t=>{
 				t.Text = I[K.Login];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});

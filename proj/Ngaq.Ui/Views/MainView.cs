@@ -21,6 +21,7 @@ using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
+using Ngaq.Ui.Views.User.ChangePassword;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
@@ -49,7 +50,7 @@ public partial class MainView : UserControl {
 			var msgBox = new MsgBox();
 			{var o = msgBox;
 				o._CloseBtn.Background = null;
-				o._CloseBtn.ContentInit(Icon.FromSvg(Svgs.XCircleFill), o=>{
+				o._CloseBtn.InitContent(Icon.FromSvg(Svgs.XCircleFill), o=>{
 					o.Fill = Brushes.Red;
 				});
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
@@ -115,7 +116,7 @@ Control? Try()
 {
 	new Window{
 		Init=o=>{
-			o.ContentInit(new Button(), o=>{
+			o.InitContent(new Button(), o=>{
 				o.ContextMenu = new ContextMenu(){
 					Margin = new Avalonia.Thickness(0),
 					Padding = new Avalonia.Thickness(0),
@@ -142,7 +143,7 @@ Control? Try()
 		Try();
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
-		this.ContentInit(AutoGrid.Grid);
+		this.InitContent(AutoGrid.Grid);
 		AutoGrid.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star),
 		]);
@@ -164,13 +165,11 @@ Control? Try()
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 
-		//var Home = new ViewHome();
+		var Home = new ViewHome();
 		// var Home = new ViewUiJsonMap();
-		var Home = new ViewSample();
+		//var Home = new ViewSample();
+		//var Home = new ViewChangePassword();
 		Navi.GoTo(Home);
-
-
-
 	}
 }
 

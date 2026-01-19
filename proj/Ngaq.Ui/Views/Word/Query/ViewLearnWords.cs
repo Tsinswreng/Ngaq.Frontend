@@ -166,27 +166,27 @@ public partial class ViewLearnWords
 				return R;
 			};
 			Row1.AddInit(Btn(), (o)=>{
-				o._Button.ContentInit(Hc(
+				o._Button.InitContent(Hc(
 					Ic(Svgs.PlayCircleFill)//▶️
 					,T(I[K.Start])
 				));
 				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
 				o.SetExe((Ct)=>Ctx?.LoadEtStartAsy(Ct));
 			}).AddInit(Btn(), o=>{ //📁"💾"
-				o._Button.ContentInit(Hc(
+				o._Button.InitContent(Hc(
 					Ic(Svgs.FloppyDiskBackFill)
 					,T(I[K.Save])
 				));
 				o.SetExe((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
 			}).AddInit(Btn(), o=>{
-				o._Button.ContentInit(Hc(//🔄
+				o._Button.InitContent(Hc(//🔄
 					Ic(Svgs.RotateCw)
 					,T(I[K.Reset])
 				));
 				o.SetExe((Ct)=>Ctx?.ResetAsy(Ct));
 			})
 			.AddInit(Btn(), o=>{
-				o._Button.ContentInit(Hc(//⚙
+				o._Button.InitContent(Hc(//⚙
 					Ic(Svgs.GearFill)
 					,T(I[K.Settings])
 				));
@@ -214,7 +214,7 @@ public partial class ViewLearnWords
 
 
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//overlay
 				RowDef(1, GUT.Auto),
@@ -232,7 +232,7 @@ public partial class ViewLearnWords
 			})
 			.AddInit(_Menu())
 			.AddInit(_ScrollViewer(), Scr=>{
-				Scr.ContentInit(_ListWordCard(), o=>{
+				Scr.InitContent(_ListWordCard(), o=>{
 					o.Bind(
 						ItemsControl.ItemsSourceProperty
 						,CBE.Mk<Ctx>(x=>x.WordCards, Mode: BindingMode.TwoWay)
@@ -324,7 +324,7 @@ public partial class ViewLearnWords
 					StyBtnWordCard(o.Styles);
 				}
 
-				Btn.ContentInit(new ViewWordListCard(VmWordCard), o=>{
+				Btn.InitContent(new ViewWordListCard(VmWordCard), o=>{
 					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
 					o.Background = Brushes.Transparent;
 					o.Bind(

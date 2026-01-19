@@ -45,7 +45,7 @@ public partial class ViewUserProfile
 	}
 
 	protected nil Render(){
-		this.ContentInit(Root.Grid, o=>{
+		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),
@@ -53,7 +53,7 @@ public partial class ViewUserProfile
 		});
 		Root.AddInit(new ScrollViewer(), sv=>{
 			var ContentGrid = new AutoGrid(IsRow: true);
-			sv.ContentInit(ContentGrid.Grid, o=>{
+			sv.InitContent(ContentGrid.Grid, o=>{
 				o.RowDefinitions.AddRange([
 					RowDef(4, GUT.Auto),
 					RowDef(4, GUT.Auto),

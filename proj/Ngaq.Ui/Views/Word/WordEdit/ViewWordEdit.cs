@@ -36,11 +36,11 @@ public partial class ViewWordEdit
 	}
 
 	public Control MkTitleMenu(){
-		return new TextBox(){
-			Init=o=>{
-				o.Styles.Add(new Style().NoMargin().NoPadding());
-			}
-		};
+		// return new TextBox(){
+		// 	Init=o=>{
+		// 		o.Styles.Add(new Style().NoMargin().NoPadding());
+		// 	}
+		// };
 		var R = new ContextMenu();
 		R.Styles.Add(new Style().NoMargin().NoPadding());
 		R.Items.AddInit(new MenuItem(), o=>{
@@ -80,13 +80,13 @@ public partial class ViewWordEdit
 		]);
 
 		Root.AddInit(new ScrollViewer(), Sv=>{
-			Sv.ContentInit(new StackPanel(), root2=>{
+			Sv.InitContent(new StackPanel(), root2=>{
 				root2.AddInit(_Expander(), Ex=>{
 					Todo.I18n();
 					Ex.Header = "Word Core";
 					Ex.IsExpanded = true;
-					Ex.ContentInit(new ScrollViewer(), Sv=>{
-						Sv.ContentInit(new ViewUiJsonMap(), jm=>{
+					Ex.InitContent(new ScrollViewer(), Sv=>{
+						Sv.InitContent(new ViewUiJsonMap(), jm=>{
 							Ctx?.WhenPropertyChanged(x=>x.JnWord).Subscribe(propValue=>{
 								var currentJnWord = propValue.Value;
 								if (currentJnWord == null) return;
