@@ -22,7 +22,6 @@ public partial class ViewSearchedWordCard
 
 	public ViewSearchedWordCard(){
 		Ctx = new Ctx();
-		//Ctx = Ctx.Samples[0];
 		Style();
 		Render();
 	}

@@ -20,8 +20,7 @@ public partial class ViewSimpleWord
 	}
 
 	public ViewSimpleWord(){
-		//Ctx = App.DiOrMk<Ctx>();
-		Ctx = Ctx.Samples[0];
+		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
 	}

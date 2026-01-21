@@ -114,27 +114,27 @@ public partial class MainView : UserControl {
 
 Control? Try()
 {
-	new Window{
-		Init=o=>{
-			o.InitContent(new Button(), o=>{
-				o.ContextMenu = new ContextMenu(){
-					Margin = new Avalonia.Thickness(0),
-					Padding = new Avalonia.Thickness(0),
-				};
+	// new Window{
+	// 	Init=o=>{
+	// 		o.InitContent(new Button(), o=>{
+	// 			o.ContextMenu = new ContextMenu(){
+	// 				Margin = new Avalonia.Thickness(0),
+	// 				Padding = new Avalonia.Thickness(0),
+	// 			};
 
-				o.ContextMenu.Styles.Add(
-					new Style(x=>x.OfType<ContextMenu>()
-						.Template()
-						.OfType<Popup>()
-					)
-					.Set(PaddingProperty, new Thickness(0))
-				);
+	// 			o.ContextMenu.Styles.Add(
+	// 				new Style(x=>x.OfType<ContextMenu>()
+	// 					.Template()
+	// 					.OfType<Popup>()
+	// 				)
+	// 				.Set(PaddingProperty, new Thickness(0))
+	// 			);
 
-				o.ContextMenu.Items.Add(new TextBox());
+	// 			o.ContextMenu.Items.Add(new TextBox());
 
-			});
-		}
-	};
+	// 		});
+	// 	}
+	// };
 	//.Show();
 	return null;
 }

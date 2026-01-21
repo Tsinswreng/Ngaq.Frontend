@@ -24,7 +24,6 @@ public partial class ViewWordInfo
 
 	public ViewWordInfo(){
 		Ctx = new Ctx();
-		//Ctx = Ctx.Samples[0];
 		Style();
 		Render();
 	}
@@ -148,20 +147,17 @@ public partial class ViewWordInfo
 			});
 		}}//~LangId
 
-		var BdrHead = _Border();
-		Root.AddInit(BdrHead, o=>{
+		Root.AddInit(_Border(), o=>{
 			o.BorderThickness = new Thickness(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
+			o.InitChild(TxtBox(), o=>{
+				o.Styles.Add(new Style().NoMargin().NoPadding());
+				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay));
+				o.VerticalAlignment = VAlign.Stretch;
+				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
+				//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.
+			});
 		});
-
-		var Head = TxtBox();
-		{var o = Head;
-			o.Styles.Add(new Style().NoMargin().NoPadding());
-			o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay));
-			o.VerticalAlignment = VAlign.Stretch;
-			o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
-			//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.5; //?
-		}
 
 		#if true
 		Root.AddInit(TxtBox(), o=>{

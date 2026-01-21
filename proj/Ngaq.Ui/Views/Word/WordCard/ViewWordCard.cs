@@ -61,7 +61,6 @@ public partial class ViewWordListCard
 
 	public ViewWordListCard(){
 		Ctx = new Ctx();
-		//Ctx = Ctx.Samples[0];
 		Style();
 		Render();
 	}

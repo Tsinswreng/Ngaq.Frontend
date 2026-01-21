@@ -19,8 +19,7 @@ public partial class ViewDictionaryApi
 	}
 
 	public ViewDictionaryApi() {
-		//Ctx = App.DiOrMk<Ctx>();
-		Ctx = Ctx.Samples[0];
+		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
 	}

@@ -37,8 +37,6 @@ public partial class ViewLearnWords
 	}
 
 	public ViewLearnWords(){
-		//Ctx = new Ctx();
-		//Ctx = Ctx.Samples[0];
 		Ctx = App.GetSvc<Ctx>();
 		Style();
 		Menu = _Menu();
