@@ -78,6 +78,7 @@ ICfgAccessor? Cfg;
 			HandleErr(e.Err);
 		};
 		MgrLearn.OnLearnOrUndo += (s,e)=>{
+			OnPropertyChanged(nameof(HasUnsavedChanges));
 			ChangeBg().ContinueWith(t=>{
 				if(t.IsFaulted){
 					HandleErr(t.Exception);
@@ -312,6 +313,10 @@ ICfgAccessor? Cfg;
 	public IBrush BgBrush{
 		get{return _BgBrush;}
 		set{SetProperty(ref _BgBrush, value);}
+	}
+
+	public bool HasUnsavedChanges{
+		get{return MgrLearn.State.MgrLearnedWords.GetLearnedWords().Any(w => w.UnsavedLearnRecords.Any());}
 	}
 
 

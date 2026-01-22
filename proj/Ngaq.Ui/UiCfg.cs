@@ -12,14 +12,17 @@ public  partial class UiCfg{
 
 	public UiCfg(){
 		BaseFontSize = ItemsClientCfg.BaseFontSize.GetFrom(AppCfg.Inst);
-		MainColor = ResolveThemeBrush();
+		var got = ResolveThemeBrush();
+		if(got != null){
+			MainColor = got;
+		}
 	}
 
 
 	public f64 BaseFontSize { get; set; } = 16.0;
 	public f64 WindowWidth {get;set;}= 400;
 	public f64 WindowHeight {get;set;}= 700;
-	public IBrush? MainColor {get;set;}= Brushes.Blue;
+	public IBrush MainColor {get;set;}= Brushes.Blue;
 	public IBrush ForegroundColor {get;set;}= Brushes.White;
 	public IBrush BackgroundColor {get;set;}= Brushes.Black;
 

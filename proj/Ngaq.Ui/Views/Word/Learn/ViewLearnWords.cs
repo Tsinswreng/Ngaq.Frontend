@@ -176,6 +176,22 @@ public partial class ViewLearnWords
 					,T(I[K.Save])
 				));
 				o.SetExe((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
+				o._Button.Styles.Add(
+					new Style(
+						x=>x.Is<Button>().Template().OfType<ContentPresenter>()
+					).Set(
+						BackgroundProperty
+						,CBE.Mk<Ctx>(x=>x.HasUnsavedChanges
+							,Converter: new SimpleFnConvtr<bool, IBrush?>((b)=>{
+								if(b){
+									return UiCfg.Inst.MainColor;
+								}
+								return o._Button.Background;
+							})
+						)
+					)
+				);
+
 			}).AddInit(Btn(), o=>{
 				o._Button.InitContent(Hc(//🔄
 					Ic(Svgs.RotateCw)
