@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.Query;
+namespace Ngaq.Ui.Views.Word.Learn;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -24,7 +24,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmLearnWords;
-using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LearnWord;
+using K = Infra.I18n.ItemsUiI18n.LearnWord;
 public partial class ViewLearnWords
 	:UserControl
 {

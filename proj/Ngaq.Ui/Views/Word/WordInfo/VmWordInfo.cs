@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Word.Models.Learn_;
+using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Word.Models.Samples;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
@@ -30,35 +31,41 @@ public partial class VmWordInfo
 		Lang = Word.Lang;
 		var NeoStrProps = new Dictionary<str, IList<str>>();
 		foreach(var (strKey, props) in Word.StrKey_Props){
-			foreach(var prop in props){
-				NeoStrProps!.AddInValues(strKey, prop.VStr);
+			if(strKey == KeysProp.Inst.description){
+				Descrs = props.Select(prop => prop.VStr).ToList();
+			}else{
+				foreach(var prop in props){
+					NeoStrProps!.AddInValues(strKey, prop.VStr);
+				}
 			}
 		}
 		StrProps = NeoStrProps;
 		return this;
 	}
 
-	// [Obsolete]
-	// public Ctx FromBo(JnWord BoWord){
-	// 	//this.BoWord = BoWord;
-	// 	Id = BoWord.Id.ToString();
-	// 	Head = BoWord.PoWord.Head;
-	// 	Lang = BoWord.PoWord.Lang;
+	public nil SetPrompt(){
+		Descrs = [
+			"• Click on a word card above to start learning a word.",
+			"",
+			"• Top menu buttons:",
+			"  - ▶️ Start: Load and begin learning words.",
+			"  - 💾 Save: Save your learning progress.",
+			"  - 🔄 Reset: Clear all progress and start over.",
+			"  - ⚙️ Settings: Configure learning preferences.",
+			"",
+			"• Learning a word:",
+			"  - Click a word card to mark as remembered (green).",
+			"  - Click again to mark as forgotten (red).",
+			"  - Click once more to clear the mark (transparent).",
+			"",
+			"• Other operations:",
+			"  - Long-press a word card for context menu options.",
+			"  - Use the settings button to edit or add words.",
+			"  - Save progress regularly to avoid data loss."
+		];
+		return NIL;
+	}
 
-	// 	var NeoStrProps = new Dictionary<str, IList<str>>();
-	// 	foreach(var Prop in BoWord.Props){
-	// 		if(Prop.KType == (i64)EKvType.Str
-	// 			&& Prop.VType == (i64)EKvType.Str
-	// 		){
-	// 			NeoStrProps.AddInValues(Prop.KStr, Prop.VStr);
-	// 		}
-	// 	}
-	// 	//斯集合未叶INotifyPropertyChanged、故唯當地址變旹纔緟渲染Ui
-	// 	// 直ᵈ 不變地址ᵈ 改StrProps之內容則不效
-	// 	// 改內容後汶SetProperty(ref _StrProps, StrProps);亦不效
-	// 	this.StrProps = NeoStrProps;
-	// 	return this;
-	// }
 
 	public IWordForLearn? WordForLearn{get;set;}
 
@@ -80,6 +87,12 @@ public partial class VmWordInfo
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
+
+
+	public IList<str> Descrs{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = [];
 
 
 	public IDictionary<str, IList<str>> StrProps{

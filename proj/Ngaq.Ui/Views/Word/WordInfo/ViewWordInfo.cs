@@ -210,16 +210,8 @@ public partial class ViewWordInfo
 		{var o = Items;
 			o.Bind(
 				ItemsControl.ItemsSourceProperty
-				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
+				,new CBE(CBE.Pth<Ctx>(x=>x.Descrs)){
 					Mode = BindingMode.OneWay
-					//,Converter = ConvMultiDictToList(KeysProp.Inst.description)
-					,Converter = new SimpleFnConvtr<IDictionary<str, IList<str>>, IList<str>>(
-						x=>{
-							var Key = ConstTokens.Inst.Concat(null, KeysProp.Inst.description);
-							x.TryGetValue(Key, out var v);
-							return v??[];
-						}
-					)
 				}
 			);
 		}

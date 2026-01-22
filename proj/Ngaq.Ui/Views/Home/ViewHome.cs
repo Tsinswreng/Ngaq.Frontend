@@ -3,7 +3,6 @@ namespace Ngaq.Ui.Views.Home;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Ngaq.Ui.Views.BottomBar;
-using Ngaq.Ui.Views.Word.Query;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmHome;
@@ -14,6 +13,7 @@ using Ngaq.Ui.Infra.I18n;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Home;
 using Ngaq.Ui.Icons;
 using Avalonia;
+using Ngaq.Ui.Views.Word.Learn;
 
 public partial class ViewHome
 	:UserControl

@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.Query;
+namespace Ngaq.Ui.Views.Word.Learn;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -66,6 +66,7 @@ ICfgAccessor? Cfg;
 		this.UserCtxMgr = UserCtxMgr;
 		this.MgrLearn = MgrLearn;
 		this.Cfg = Cfg;
+		CurWordInfo.SetPrompt();
 		_Init();
 	}
 
