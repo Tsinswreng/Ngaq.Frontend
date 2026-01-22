@@ -66,7 +66,7 @@ ICfgAccessor? Cfg;
 		this.UserCtxMgr = UserCtxMgr;
 		this.MgrLearn = MgrLearn;
 		this.Cfg = Cfg;
-		CurWordInfo.SetPrompt();
+		CurWordInfo.SetPromptBeforeStart();
 		_Init();
 	}
 
@@ -226,6 +226,8 @@ ICfgAccessor? Cfg;
 			await MgrLearn.StartAsy(Ct);
 		});
 		RenderWordList();
+		// After starting learning but before any word clicks
+		CurWordInfo.SetPromptAfterStart();
 		sw.Stop();
 		LogInfo($"LoadEtStartAsy: {sw.ElapsedMilliseconds} ms");
 		return NIL;
