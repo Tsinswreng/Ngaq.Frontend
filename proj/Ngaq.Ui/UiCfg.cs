@@ -6,7 +6,7 @@ using Tsinswreng.CsCfg;
 namespace Ngaq.Ui;
 
 
-public  partial class UiCfg{
+public partial class UiCfg{
 	protected static UiCfg? _Inst = null;
 	public static UiCfg Inst => _Inst??= new UiCfg();
 

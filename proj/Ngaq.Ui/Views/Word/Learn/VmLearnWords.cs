@@ -78,7 +78,7 @@ ICfgAccessor? Cfg;
 			HandleErr(e.Err);
 		};
 		MgrLearn.OnLearnOrUndo += (s,e)=>{
-			OnPropertyChanged(nameof(HasUnsavedChanges));
+			OnPropertyChanged(nameof(IsSaved));
 			ChangeBg().ContinueWith(t=>{
 				if(t.IsFaulted){
 					HandleErr(t.Exception);
@@ -222,9 +222,9 @@ ICfgAccessor? Cfg;
 				var dataAsyE = (loadedAll.Data??[]).ToAsyncEnumerable();
 				//await MgrLearn.LoadEtCalcWeightAsy(Page.DataAsyE.OrEmpty(), Ct);
 				dataAsyE = FilterWord(dataAsyE);
-				await MgrLearn.LoadEtCalcWeightAsy(dataAsyE, Ct);
+				await MgrLearn.LoadEtCalcWeight(dataAsyE, Ct);
 			}
-			await MgrLearn.StartAsy(Ct);
+			await MgrLearn.Start(Ct);
 		});
 		RenderWordList();
 		// After starting learning but before any word clicks
@@ -234,20 +234,13 @@ ICfgAccessor? Cfg;
 		return NIL;
 	}
 
-	public async Task<nil> SaveEtRestartAsy(CT Ct){
-		var sw = Stopwatch.StartNew();
+	public async Task<nil> SaveEtRestart(CT Ct){
+
 		_AssignWeightArg();
-		await MgrLearn.SaveAsy(Ct);//只背一個單詞45ms于安卓
-		sw.Stop();
-		var t1 = sw.ElapsedMilliseconds;
-		sw = Stopwatch.StartNew();
-		await MgrLearn.CalcWeightEtStartAsy(Ct);//只背一個單詞567ms于安卓
-		sw.Stop();
-		var t2 = sw.ElapsedMilliseconds;
-		sw = Stopwatch.StartNew();
+		await MgrLearn.Save(Ct);//只背一個單詞45ms于安卓
+		await MgrLearn.CalcWeightEtStart(Ct);//只背一個單詞567ms于安卓
 		RenderWordList();////只背一個單詞104ms于安卓 限示50個單詞 虛渲染
-		sw.Stop();
-		var t3 = sw.ElapsedMilliseconds;
+		OnPropertyChanged(nameof(IsSaved));
 		// Dispatcher.UIThread.Post(()=>{
 		// 	ShowMsg($"SaveEtRestartAsy: {t1}ms, CalcWeightEtStartAsy: {t2}ms, RenderWordList: {t3}ms");
 		// });
@@ -303,7 +296,7 @@ ICfgAccessor? Cfg;
 
 	public nil Save(){
 		CT Ct = default;
-		MgrLearn.SaveAsy(Ct).ContinueWith(t=>{
+		MgrLearn.Save(Ct).ContinueWith(t=>{
 			HandleErr(t);
 		});
 		return NIL;
@@ -315,8 +308,9 @@ ICfgAccessor? Cfg;
 		set{SetProperty(ref _BgBrush, value);}
 	}
 
-	public bool HasUnsavedChanges{
-		get{return MgrLearn.State.MgrLearnedWords.GetLearnedWords().Any(w => w.UnsavedLearnRecords.Any());}
+	public bool IsSaved{
+		//get{return MgrLearn.State.MgrLearnedWords.GetLearnedWords().Any(w => w.UnsavedLearnRecords.Any());}
+		get{return MgrLearn.State.OperationStatus.Save;}
 	}
 
 
@@ -324,8 +318,10 @@ ICfgAccessor? Cfg;
 	// 类级字段（只加这一行）
 	private readonly ConcurrentQueue<Bitmap> _bgCache = new();
 
-	public async Task<nil> ChangeBg()
-	{
+	public async Task<nil> ChangeBg(){
+		if(AnyNull(Cfg)){
+			return NIL;
+		}
 		try{
 			var EnableRandomBackground = Cfg.Get(ItemsClientCfg.Word.EnableRandomBackground);
 			if(!EnableRandomBackground){

@@ -7,6 +7,7 @@ using Avalonia.Data;
 using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
+using DynamicData.Binding;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra.Ctrls;
@@ -175,15 +176,27 @@ public partial class ViewLearnWords
 					Ic(Svgs.FloppyDiskBackFill)
 					,T(I[K.Save])
 				));
-				o.SetExe((Ct)=>Ctx?.SaveEtRestartAsy(Ct));
-				o._Button.Styles.Add(
+
+				o.SetExe((Ct)=>Ctx?.SaveEtRestart(Ct));
+/*
+				Ctx?.WhenPropertyChanged(x=>x.IsSaved).Subscribe(x=>{
+					if(!Ctx.IsSaved){
+						o._Button.Background = UiCfg.Inst.MainColor;
+					}else{
+						o._Button.Background = (new Button()).Background;
+					}
+
+				});
+ */
+ 				o._Button.Styles.Add(
 					new Style(
-						x=>x.Is<Button>().Template().OfType<ContentPresenter>()
+						//x=>x.OfType<Button>().Template().OfType<ContentPresenter>() //改僞類樣式旹纔需此
+						x=>x.Is<Button>()
 					).Set(
 						BackgroundProperty
-						,CBE.Mk<Ctx>(x=>x.HasUnsavedChanges
+						,CBE.Mk<Ctx>(x=>x.IsSaved
 							,Converter: new SimpleFnConvtr<bool, IBrush?>((b)=>{
-								if(b){
+								if(!b){
 									return UiCfg.Inst.MainColor;
 								}
 								return o._Button.Background;
