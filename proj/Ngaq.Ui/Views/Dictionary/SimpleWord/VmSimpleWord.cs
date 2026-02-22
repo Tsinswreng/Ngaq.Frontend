@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Models.DictionaryApi;
 using Ngaq.Ui.Infra;
@@ -32,17 +33,20 @@ int.	說得對
 	}
 
 
+	public nil FromRespLlmDict(RespLlmDict Resp){
+		Head = Resp.Head;
+		// 讀音先不管
+		// Pronunciations = ...
+		Description = string.Join("\n", Resp.Descrs);
+		return NIL;
+	}
+
+
 
 	public str Head{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}="";
-
-	// //可有多個
-	// public str Pronunciation{
-	// 	get{return field;}
-	// 	set{SetProperty(ref field, value);}
-	// }="";
 
 	public IList<Pronunciation> Pronunciations{
 		get{return field;}
@@ -54,9 +58,5 @@ int.	說得對
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}="";
-
-
-
-
 
 }

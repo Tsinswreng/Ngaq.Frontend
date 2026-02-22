@@ -270,7 +270,7 @@ public partial class ViewLearnWords
 				o.GrayBarWith3Dots();
 			})
 			.AddInit(_WordInfo(), o=>{
-				o.Bind(o.PropDataContext_()
+				o.Bind(o.PropDataContext
 					,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
 				);
 			});

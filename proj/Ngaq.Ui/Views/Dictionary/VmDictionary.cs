@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Dictionary;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Shared.Dictionary.Svc;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
@@ -40,15 +41,11 @@ public partial class VmDictionary: ViewModelBase{
 	}="";
 
 
-	public async Task<nil> SearchAsy(CT Ct){
+	public async Task<nil> Lookup(CT Ct){
 		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
 			return NIL;
 		}
 		var User = FrontendUserCtxMgr.GetUserCtx();
-		var req = new ReqLookup{
-			SearchText = Input
-		};
-		var resp = await SvcDictionary.LookupAsy(User, req, Ct);
 
 
 		return NIL;

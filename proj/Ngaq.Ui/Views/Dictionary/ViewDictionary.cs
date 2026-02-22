@@ -62,7 +62,7 @@ public partial class ViewDictionary
 				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
 				o._Button.Content = Svgs.Search.ToIcon();
-				o.SetExe(Ct=>Ctx?.SearchAsy(Ct));
+				o.SetExe(Ct=>Ctx?.Lookup(Ct));
 			})
 			;
 
