@@ -88,6 +88,7 @@ public partial class VmSample:ViewModelBase, IMk<Ctx>{
 			});
 		},Ct);
 		return NIL;
+		//需要異常處理則用this.HandleErr(Ex)
 	}
 
 }

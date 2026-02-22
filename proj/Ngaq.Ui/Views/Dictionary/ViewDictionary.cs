@@ -21,7 +21,7 @@ public partial class ViewDictionary
 	}
 
 	public ViewDictionary(){
-		Ctx = Ctx.Mk();
+		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
 	}
@@ -67,7 +67,9 @@ public partial class ViewDictionary
 			;
 
 		}}
-		Root.AddInit(new ViewSimpleWord())//new ViewSimpleWord{Ctx = VmSimpleWord.Samples[0]}
+		Root.AddInit(new ViewSimpleWord(), o=>{
+			o.Bind(o.PropDataContext, CBE.Mk<Ctx>(x=>x.Result));
+		})
 		.AddInit(new OpBtn(), o=>{
 			o._Button.HorizontalAlignment = HAlign.Stretch;
 			o.BtnContent = "TestLongBtn";
