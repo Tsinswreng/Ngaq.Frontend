@@ -117,13 +117,16 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
 
+		IList<LangInfo> TgtLangs = [SelectedTgtLanguage?.LangInfo ?? new LangInfo{ Iso639_1 = "zh", Variety = "tw", Script = "hant" }];
+
 		var Req = new ReqLlmDictEvt{
 			Query = new Query{
 				Term = Input.Trim(),
 			},
+
 			OptLang = new OptLang{
 				SrcLang = SelectedSrcLanguage?.LangInfo ?? new LangInfo{ Iso639_1 = "en" },
-				TgtLangs = [SelectedTgtLanguage?.LangInfo ?? new LangInfo{ Iso639_1 = "zh", Variety = "tw", Script = "hant" }],
+				TgtLangs = TgtLangs,
 			},
 			// 流式回调：收到新片段时更新 UI
 			OnNewSeg = (dto, ct) => {
