@@ -35,8 +35,10 @@ int.	說得對
 
 	public nil FromRespLlmDict(IRespLlmDict Resp){
 		Head = Resp.Head;
-		// 讀音先不管
-		// Pronunciations = ...
+		Pronunciations = Resp.Pronunciations.Select(p => new Pronunciation{
+			TextType = p.TextType,
+			Text = p.Text,
+		}).ToList();
 		Description = string.Join("\n", Resp.Descrs);
 		return NIL;
 	}
