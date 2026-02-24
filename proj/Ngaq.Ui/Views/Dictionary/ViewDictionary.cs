@@ -37,14 +37,51 @@ public partial class ViewDictionary
 		this.InitContent(Root.Grid, o=>{
 			Root.RowDefs.AddRange([
 				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Star),
 				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Star),
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),
 
 			]);
 		});
+
+		// 語言選擇行
+		var LangGrid = new AutoGrid(IsRow: false);
+		Root.AddInit(LangGrid.Grid, o=>{
+			LangGrid.ColDefs.AddRange([
+				ColDef(1, GUT.Auto),
+				ColDef(3, GUT.Star),
+				ColDef(1, GUT.Auto),
+				ColDef(3, GUT.Star),
+			]);
+		});
+		{{
+			// 源語言標籤
+			LangGrid.AddInit(new TextBlock(), o=>{
+				o.Text = "源語言：";
+				o.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
+			});
+			// 源語言選擇
+			LangGrid.AddInit(new ComboBox(), o=>{
+				o.Bind(o.PropItemsSource, CBE.Mk<Ctx>(x=>x.AvailableSrcLanguages));
+				o.Bind(o.PropSelectedItem, CBE.Mk<Ctx>(x=>x.SelectedSrcLanguage));
+				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
+			});
+			// 目標語言標籤
+			LangGrid.AddInit(new TextBlock(), o=>{
+				o.Text = "目標語言：";
+				o.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
+			});
+			// 目標語言選擇
+			LangGrid.AddInit(new ComboBox(), o=>{
+				o.Bind(o.PropItemsSource, CBE.Mk<Ctx>(x=>x.AvailableTgtLanguages));
+				o.Bind(o.PropSelectedItem, CBE.Mk<Ctx>(x=>x.SelectedTgtLanguage));
+				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
+			});
+		}}
+
+		// 搜索行
 		var SearchGrid = new AutoGrid(IsRow: false);
 		Root.AddInit(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs.AddRange([
