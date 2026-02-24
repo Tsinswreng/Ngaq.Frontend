@@ -48,7 +48,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	public VmSimpleWord? Result{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}
+	} = App.DiOrMk<VmSimpleWord>();
 
 
 	public async Task<nil> Lookup(CT Ct){
@@ -60,7 +60,11 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		}
 		var User = FrontendUserCtxMgr.GetUserCtx();
 
-		var Req = new ReqLlmDict{
+		// 初始化 Result 并开始流式查询
+		Result ??= App.DiOrMk<VmSimpleWord>();
+		Result.StartStreaming(Input.Trim());
+
+		var Req = new ReqLlmDictEvt{
 			Query = new Query{
 				Term = Input.Trim(),
 			},
@@ -68,11 +72,20 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				SrcLang = new LangInfo{ Iso639_1 = "en" },
 				TgtLangs = [new LangInfo{ Iso639_1 = "zh", Variety = "tw", Script = "hant" }],
 			},
+			// 流式回调：收到新片段时更新 UI
+			OnNewSeg = (dto, ct) => {
+				Result.GotNewSeg(dto);
+				return 0;
+			},
+			// 流结束回调
+			OnDone = (dto, ct) => {
+				return 0;
+			},
 		};
 
 		try{
 			var Resp = await SvcDictionary.Lookup(User, Req, Ct);
-			Result = App.DiOrMk<VmSimpleWord>();
+			// 收到完整响应后，按原来的方式处理
 			Result.FromRespLlmDict(Resp);
 		}catch(Exception ex){
 			HandleErr(ex);

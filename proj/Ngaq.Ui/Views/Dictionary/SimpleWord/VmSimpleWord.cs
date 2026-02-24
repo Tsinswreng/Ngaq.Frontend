@@ -41,6 +41,23 @@ int.	說得對
 		return NIL;
 	}
 
+	/// <summary>
+	/// 開始新的流式查詢，重置狀態
+	/// </summary>
+	public nil StartStreaming(string QueryTerm){
+		Head = QueryTerm;
+		Description = "";
+		return NIL;
+	}
+
+	/// <summary>
+	/// 接收流式響應的新片段
+	/// </summary>
+	public nil GotNewSeg(DtoOnNewSeg NewSeg){
+		Description += NewSeg.NewSeg;
+		return NIL;
+	}
+
 
 
 	public str Head{
