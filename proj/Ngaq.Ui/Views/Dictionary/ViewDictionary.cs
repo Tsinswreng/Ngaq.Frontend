@@ -70,20 +70,8 @@ public partial class ViewDictionary
 		Root.AddInit(new ViewSimpleWord(), o=>{
 			o.Bind(o.PropDataContext, CBE.Mk<Ctx>(x=>x.Result));
 		})
-		.AddInit(new OpBtn(), o=>{
-			o._Button.HorizontalAlignment = HAlign.Stretch;
-			o.BtnContent = "TestLongBtn";
-			o.SetExe(async(Ct)=>{
-				await Task.Delay(60000, Ct);
-				return Task.FromResult(NIL);
-			});
-		})
+
 		;
-
-		// Root
-		// .AddInit(new ViewDictionaryApi{
-
-		// });
 
 		return NIL;
 	}

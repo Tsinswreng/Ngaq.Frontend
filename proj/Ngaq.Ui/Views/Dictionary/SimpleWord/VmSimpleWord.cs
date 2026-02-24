@@ -33,7 +33,7 @@ int.	說得對
 	}
 
 
-	public nil FromRespLlmDict(RespLlmDict Resp){
+	public nil FromRespLlmDict(IRespLlmDict Resp){
 		Head = Resp.Head;
 		// 讀音先不管
 		// Pronunciations = ...

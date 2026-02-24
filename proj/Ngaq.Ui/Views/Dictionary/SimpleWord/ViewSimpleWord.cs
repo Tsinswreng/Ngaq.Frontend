@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 
 using Avalonia.Controls;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
@@ -36,7 +37,9 @@ public partial class ViewSimpleWord
 
 	AutoGrid Root = new (IsRow: true);
 	SelectableTextBlock Txt(){
-		return new SelectableTextBlock();
+		var R = new SelectableTextBlock();
+		R.TextWrapping = TextWrapping.Wrap;
+		return R;
 	}
 	protected nil Render(){
 		Content = Root.Grid;
