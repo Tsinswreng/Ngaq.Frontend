@@ -26,6 +26,9 @@ public partial class ViewDictionary
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
+		this.Loaded += (s, e) => {
+			_searchTextBox?.Focus();
+		};
 	}
 	public II18n I = I18n.Inst;
 	public partial class Cls{}
@@ -35,6 +38,7 @@ public partial class ViewDictionary
 	}
 
 	AutoGrid Root = new(IsRow:true);
+	TextBox _searchTextBox = new();//主查詢輸入框
 	protected nil Render(){
 		this.InitContent(Root.Grid, o=>{
 			Root.RowDefs.AddRange([
@@ -106,7 +110,7 @@ public partial class ViewDictionary
 		{{
 			var searchBtn = new OpBtn();
 			SearchGrid
-			.AddInit(new TextBox(), o=>{
+			.AddInit(_searchTextBox, o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Input));
 				o.KeyBindings.Add(
 					new KeyBinding{
