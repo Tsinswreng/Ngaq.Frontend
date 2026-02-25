@@ -50,34 +50,38 @@ public partial class ViewDictionary
 		var LangGrid = new AutoGrid(IsRow: false);
 		Root.AddInit(LangGrid.Grid, o=>{
 			LangGrid.ColDefs.AddRange([
+				ColDef(5, GUT.Star),
 				ColDef(1, GUT.Auto),
-				ColDef(3, GUT.Star),
-				ColDef(1, GUT.Auto),
-				ColDef(3, GUT.Star),
+				ColDef(5, GUT.Star),
 			]);
 		});
 		{{
-			// 源語言標籤
-			LangGrid.AddInit(new TextBlock(), o=>{
-				o.Text = "源語言：";
-				o.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
-			});
 			// 源語言選擇
 			LangGrid.AddInit(new ComboBox(), o=>{
 				o.Bind(o.PropItemsSource, CBE.Mk<Ctx>(x=>x.AvailableSrcLanguages));
 				o.Bind(o.PropSelectedItem, CBE.Mk<Ctx>(x=>x.SelectedSrcLanguage));
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
-			});
-			// 目標語言標籤
-			LangGrid.AddInit(new TextBlock(), o=>{
-				o.Text = "目標語言：";
-				o.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
-			});
+				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
+			})
+			// 切換按鈕
+			.AddInit(new Button(), o=>{
+				o.Content = "⇄";
+				o.VerticalAlignment = VAlign.Center;
+				o.HorizontalAlignment = HAlign.Center;
+				o.Click += (s, e) => {
+					var tmp = Ctx?.SelectedSrcLanguage;
+					if(Ctx != null) {
+						Ctx.SelectedSrcLanguage = Ctx.SelectedTgtLanguage;
+						Ctx.SelectedTgtLanguage = tmp;
+					}
+				};
+			})
 			// 目標語言選擇
-			LangGrid.AddInit(new ComboBox(), o=>{
+			.AddInit(new ComboBox(), o=>{
 				o.Bind(o.PropItemsSource, CBE.Mk<Ctx>(x=>x.AvailableTgtLanguages));
 				o.Bind(o.PropSelectedItem, CBE.Mk<Ctx>(x=>x.SelectedTgtLanguage));
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
+				o.FontSize = 12;
 			});
 		}}
 
