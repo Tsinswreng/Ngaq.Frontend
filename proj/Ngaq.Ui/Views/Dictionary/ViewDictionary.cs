@@ -60,14 +60,19 @@ public partial class ViewDictionary
 			LangGrid.AddInit(new TextBox(), o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.SrcLang));
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
-				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
+				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
+				o.FontSize = UiCfg.Inst.BaseFontSize*0.7;
 				o.Watermark = "en";
+				o.MinHeight = 24;
+				o.Padding = new Avalonia.Thickness(0);
 			})
 			// 切換按鈕
 			.AddInit(new Button(), o=>{
 				o.Content = "⇄";
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Center;
+				o.MinHeight = 24;
+				o.Padding = new Avalonia.Thickness(0);
 				o.Click += (s, e) => {
 					if(Ctx != null) {
 						var tmp = Ctx.SrcLang;
@@ -80,8 +85,11 @@ public partial class ViewDictionary
 			.AddInit(new TextBox(), o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.TgtLang));
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
-				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
+				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
+				o.FontSize = UiCfg.Inst.BaseFontSize*0.7;
 				o.Watermark = "zh";
+				o.MinHeight = 24;
+				o.Padding = new Avalonia.Thickness(0);
 			});
 		}}
 
