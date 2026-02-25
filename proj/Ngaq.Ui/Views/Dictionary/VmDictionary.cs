@@ -54,52 +54,20 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	#region 語言選擇
 
 	/// <summary>
-	/// 可選的源語言列表
+	/// 源語言（ISO 639-1 代碼，如 "en", "zh", "ja"）
 	/// </summary>
-	public IList<LanguageOption> AvailableSrcLanguages{
-		get;
-	} = LanguageOptions.SourceLanguages;
-
-	/// <summary>
-	/// 當前選中的源語言
-	/// </summary>
-	public LanguageOption? SelectedSrcLanguage{
-		get{return field;}
-		set{
-			if(SetProperty(ref field, value)){
-				UpdateTargetLanguages();
-			}
-		}
-	} = LanguageOptions.DefaultSourceLanguage;
-
-	/// <summary>
-	/// 可選的目標語言列表
-	/// </summary>
-	public IList<LanguageOption> AvailableTgtLanguages{
+	public str SrcLang{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = LanguageOptions.GetTargetLanguages(LanguageOptions.DefaultSourceLanguage);
+	} = "en";
 
 	/// <summary>
-	/// 當前選中的目標語言
+	/// 目標語言（ISO 639-1 代碼，如 "en", "zh", "ja"）
 	/// </summary>
-	public LanguageOption? SelectedTgtLanguage{
+	public str TgtLang{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = LanguageOptions.DefaultTargetLanguage;
-
-	/// <summary>
-	/// 更新目標語言列表（當源語言改變時調用）
-	/// </summary>
-	private nil UpdateTargetLanguages(){
-		var newTgtLangs = LanguageOptions.GetTargetLanguages(SelectedSrcLanguage);
-		AvailableTgtLanguages = newTgtLangs;
-		// 如果當前選中的目標語言不在新列表中，則選擇第一個
-		if(SelectedTgtLanguage == null || !newTgtLangs.Any(l => l.LangInfo.Iso639_1 == SelectedTgtLanguage.LangInfo.Iso639_1)){
-			SelectedTgtLanguage = newTgtLangs.FirstOrDefault();
-		}
-		return NIL;
-	}
+	} = "zh";
 
 	#endregion
 
@@ -117,7 +85,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
 
-		IList<LangInfo> TgtLangs = [SelectedTgtLanguage?.LangInfo ?? new LangInfo{ Iso639_1 = "zh", Variety = "tw", Script = "hant" }];
+		IList<LangInfo> TgtLangs = [new LangInfo{ Iso639_1 = TgtLang }];
 
 		var Req = new ReqLlmDictEvt{
 			Query = new Query{
@@ -125,7 +93,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			},
 
 			OptLang = new OptLang{
-				SrcLang = SelectedSrcLanguage?.LangInfo ?? new LangInfo{ Iso639_1 = "en" },
+				SrcLang = new LangInfo{ Iso639_1 = SrcLang },
 				TgtLangs = TgtLangs,
 			},
 			// 流式回调：收到新片段时更新 UI
