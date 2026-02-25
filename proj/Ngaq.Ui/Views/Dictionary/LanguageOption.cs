@@ -2,18 +2,14 @@ namespace Ngaq.Ui.Views.Dictionary;
 
 using Ngaq.Core.Shared.Dictionary.Models;
 
-/// <summary>
 /// 語言選項，用於 ComboBox 顯示
-/// </summary>
 public class LanguageOption {
-	/// <summary>
+
 	/// 顯示名稱（如 "English", "中文"）
-	/// </summary>
 	public string DisplayName { get; set; } = "";
 
-	/// <summary>
+
 	/// 語言信息
-	/// </summary>
 	public LangInfo LangInfo { get; set; } = new();
 
 	public LanguageOption() { }
@@ -30,13 +26,10 @@ public class LanguageOption {
 	public override string ToString() => DisplayName;
 }
 
-/// <summary>
 /// 常用語言選項列表
-/// </summary>
 public static class LanguageOptions {
-	/// <summary>
+
 	/// 源語言列表
-	/// </summary>
 	public static List<LanguageOption> SourceLanguages { get; } = [
 		new LanguageOption("English", "en"),
 		new LanguageOption("中文", "zh"),
@@ -49,9 +42,8 @@ public static class LanguageOptions {
 		new LanguageOption("Русский", "ru"),
 	];
 
-	/// <summary>
+
 	/// 根據源語言獲取可選的目標語言列表
-	/// </summary>
 	public static List<LanguageOption> GetTargetLanguages(LanguageOption? sourceLang) {
 		if (sourceLang == null) {
 			return DefaultTargetLanguages;
@@ -82,9 +74,8 @@ public static class LanguageOptions {
 		};
 	}
 
-	/// <summary>
+
 	/// 默認目標語言列表
-	/// </summary>
 	public static List<LanguageOption> DefaultTargetLanguages { get; } = [
 		new LanguageOption("中文（繁體）", "zh", "tw", "hant"),
 		new LanguageOption("中文（简体）", "zh", "cn", "hans"),
@@ -92,13 +83,11 @@ public static class LanguageOptions {
 		new LanguageOption("日本語", "ja"),
 	];
 
-	/// <summary>
+
 	/// 默認源語言（English）
-	/// </summary>
 	public static LanguageOption DefaultSourceLanguage => SourceLanguages[0]; // English
 
-	/// <summary>
+
 	/// 默認目標語言（中文繁體）
-	/// </summary>
 	public static LanguageOption DefaultTargetLanguage => DefaultTargetLanguages[0]; // 中文繁體
 }

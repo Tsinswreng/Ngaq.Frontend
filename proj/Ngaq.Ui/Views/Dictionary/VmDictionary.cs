@@ -77,7 +77,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// </summary>
 	public IList<LanguageOption> AvailableTgtLanguages{
 		get{return field;}
-		private set{SetProperty(ref field, value);}
+		set{SetProperty(ref field, value);}
 	} = LanguageOptions.GetTargetLanguages(LanguageOptions.DefaultSourceLanguage);
 
 	/// <summary>
