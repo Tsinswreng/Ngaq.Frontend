@@ -1,6 +1,8 @@
 namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
+using Avalonia.Input;
+using CommunityToolkit.Mvvm.Input;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
@@ -102,11 +104,18 @@ public partial class ViewDictionary
 			]);
 		});
 		{{
+			var searchBtn = new OpBtn();
 			SearchGrid
 			.AddInit(new TextBox(), o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Input));
+				o.KeyBindings.Add(
+					new KeyBinding{
+						Gesture = new(Key.Enter),
+						Command = new RelayCommand(()=>searchBtn.PerformClick())
+					}
+				);
 			})
-			.AddInit(new OpBtn(), o=>{
+			.AddInit(searchBtn, o=>{
 				Todo.I18n();
 				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
