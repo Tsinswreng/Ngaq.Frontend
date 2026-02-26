@@ -23,7 +23,7 @@ public partial class ViewAboutMe
 	}
 
 	public ViewAboutMe(){
-		Ctx = App.GetSvc<Ctx>();
+		Ctx = App.GetRSvc<Ctx>();
 		Style();
 		Render();
 	}

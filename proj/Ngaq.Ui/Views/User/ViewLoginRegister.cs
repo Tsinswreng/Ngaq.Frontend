@@ -18,7 +18,7 @@ public partial class ViewLoginRegister
 
 	public ViewLoginRegister(){
 		//Ctx = new Ctx();
-		Ctx=App.GetSvc<Ctx>();
+		Ctx=App.GetRSvc<Ctx>();
 		Style();
 		Render();
 	}

@@ -28,7 +28,7 @@ public partial class ViewSearchWords
 
 	public ViewSearchWords(){
 		//Ctx = Ctx.Mk();
-		Ctx = App.GetSvc<Ctx>();
+		Ctx = App.GetRSvc<Ctx>();
 		Style();
 		Render();
 	}

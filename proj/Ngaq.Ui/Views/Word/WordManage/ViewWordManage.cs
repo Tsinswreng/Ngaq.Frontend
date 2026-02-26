@@ -72,7 +72,7 @@ public partial class ViewWordManage
 			// 	AcceptsReturn = true,
 			// 	TextWrapping = TextWrapping.Wrap,
 			// };
-			var Log = App.GetSvc<ILogger>();
+			var Log = App.GetRSvc<ILogger>();
 			Sp.AddInit(new Button(), o=>{
 				o.Click += ((s,e)=>{
 					var l = new List<str>();

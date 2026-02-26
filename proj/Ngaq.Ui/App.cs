@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Ngaq.Ui.Infra;
 using Ngaq.Core.Frontend.Hotkey;
+using Ngaq.Ui.Infra.Hotkey;
 
 namespace Ngaq.Ui;
 
@@ -33,12 +34,19 @@ public partial class App :Application
 {
 
 	public static ILogger? Logger{get;protected set;} = null!;
-	public static T GetSvc<T>()
+	public static T GetRSvc<T>()
 		where T : class
 	{
 		Logger??=App.SvcProvider.GetRequiredService<ILogger>();
-		Logger?.LogInformation("GetSvc: "+typeof(T));
+		Logger?.LogInformation("GetRSvc: "+typeof(T));
 		return App.SvcProvider.GetRequiredService<T>();
+	}
+	public static T? GetSvc<T>()
+		where T : class
+	{
+		Logger??=App.SvcProvider.GetRequiredService<ILogger>();
+		Logger?.LogInformation("GetRSvc: "+typeof(T));
+		return App.SvcProvider.GetService<T>();
 	}
 
 	public static T DiOrNew<T>()
@@ -144,9 +152,11 @@ this.AttachDevTools();
 			// liveViewHost.Show();
 
 			// 注册全局快捷键 (仅在 Windows 平台)
-			if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
-				RegisterGlobalHotkeys();
-			}
+			// if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
+			// 	RegisterGlobalHotkeys();
+			// }
+			var RegisterGlobalHotkeys = App.GetSvc<I_RegisterGlobalHotKeys>();
+			RegisterGlobalHotkeys?.RegisterGlobalHotKeys();
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
 			singleViewPlatform.MainView = MainView.Inst;
 		}
@@ -156,7 +166,7 @@ this.AttachDevTools();
 
 	private nil RegisterGlobalHotkeys(){
 		try{
-			var HotkeyListener = App.GetSvc<IHotkeyListener>();
+			var HotkeyListener = App.GetRSvc<IHotkeyListener>();
 
 			// 注册测试快捷键: Ctrl+Shift+T
 			_ = HotkeyListener.Register(

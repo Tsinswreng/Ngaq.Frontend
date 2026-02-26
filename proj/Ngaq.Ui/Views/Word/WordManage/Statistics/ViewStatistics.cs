@@ -24,7 +24,7 @@ public partial class ViewStatistics
 
 	public ViewStatistics(){
 		//Ctx = Ctx.Mk();
-		Ctx = App.GetSvc<Ctx>();
+		Ctx = App.GetRSvc<Ctx>();
 		Style();
 		Render();
 	}

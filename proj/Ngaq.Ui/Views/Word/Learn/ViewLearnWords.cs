@@ -38,7 +38,7 @@ public partial class ViewLearnWords
 	}
 
 	public ViewLearnWords(){
-		Ctx = App.GetSvc<Ctx>();
+		Ctx = App.GetRSvc<Ctx>();
 		Style();
 		Menu = _Menu();
 		//Menu.IsVisible = false;
