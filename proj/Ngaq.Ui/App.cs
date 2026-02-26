@@ -1,4 +1,3 @@
-namespace Ngaq.Ui;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
@@ -22,6 +21,9 @@ using Live.Avalonia;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Ngaq.Ui.Infra;
+using Ngaq.Core.Frontend.Hotkey;
+
+namespace Ngaq.Ui;
 
 
 public partial class App :Application
@@ -140,11 +142,39 @@ this.AttachDevTools();
 			// var liveViewHost = new LiveViewHost(this, Console.WriteLine);
 			// liveViewHost.StartWatchingSourceFilesForHotReloading();
 			// liveViewHost.Show();
+
+			// 注册全局快捷键 (仅在 Windows 平台)
+			if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
+				RegisterGlobalHotkeys();
+			}
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
 			singleViewPlatform.MainView = MainView.Inst;
 		}
 
 		base.OnFrameworkInitializationCompleted();
+	}
+
+	private nil RegisterGlobalHotkeys(){
+		try{
+			var HotkeyListener = App.GetSvc<IHotkeyListener>();
+
+			// 注册测试快捷键: Ctrl+Shift+T
+			_ = HotkeyListener.Register(
+				HotkeyId: "test_hotkey_1",
+				Modifiers: EHotkeyModifiers.Ctrl | EHotkeyModifiers.Shift,
+				Key: EHotkeyKey.T,
+				OnHotkey: async (Ct) => {
+					System.Console.WriteLine("🎉 [Global Hotkey] Ctrl+Shift+T triggered! 全局快捷键被触发了!");
+					await Task.CompletedTask;
+				},
+				Ct: default
+			).ConfigureAwait(false);
+
+			Logger?.LogInformation("Global hotkeys registered successfully");
+		}catch(System.Exception Ex){
+			Logger?.LogError(Ex, "Failed to register global hotkeys");
+		}
+		return NIL;
 	}
 
 	private void DisableAvaloniaDataAnnotationValidation() {
