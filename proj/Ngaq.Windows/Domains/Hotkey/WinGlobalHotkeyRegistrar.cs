@@ -6,10 +6,9 @@ using Ngaq.Core.Frontend.Hotkey;
 using Microsoft.Extensions.Logging;
 using Ngaq.Ui.Infra.Hotkey;
 
-/// <summary>
+
 /// Windows 专用的全局快捷键注册器
 /// 负责在 Windows 平台启动时为应用统一注册所有需要的快捷键
-/// </summary>
 public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 	private readonly IHotkeyListener _hotkeyListener;
 	private readonly ILogger _logger;
