@@ -20,7 +20,7 @@ public class WinHotkeyListener : IHotkeyListener{
 	private class HotkeyRegistration{
 		public int Id { get; set; }
 		public str HotkeyId { get; set; } = "";
-		public Func<CT, Task> OnHotkey { get; set; } = null!;
+		public FnOnHotKey OnHotkey { get; set; } = null!;
 	}
 
 	public WinHotkeyListener(ILogger Logger){
@@ -48,11 +48,14 @@ public class WinHotkeyListener : IHotkeyListener{
 
 	#endregion
 
-	public Task<bool> Register(str HotkeyId, EHotkeyModifiers Modifiers, EHotkeyKey Key, Func<CT, Task> OnHotkey, CT Ct){
+	public bool Register(
+		str HotkeyId, EHotkeyModifiers Modifiers, EHotkeyKey Key
+		, FnOnHotKey OnHotkey
+	){
 		try{
 			if(RegisteredHotkeys.ContainsKey(HotkeyId)){
 				Logger?.LogWarning("Hotkey {HotkeyId} already registered", HotkeyId);
-				return Task.FromResult(false);
+				return (false);
 			}
 
 			int Id = NextId++;
@@ -72,43 +75,43 @@ public class WinHotkeyListener : IHotkeyListener{
 				};
 				RegisteredHotkeys[HotkeyId] = Registration;
 				Logger?.LogInformation("Hotkey {HotkeyId} registered successfully with id {Id}", HotkeyId, Id);
-				return Task.FromResult(true);
+				return (true);
 			}else{
 				Logger?.LogError("Failed to register hotkey {HotkeyId}", HotkeyId);
-				return Task.FromResult(false);
+				return (false);
 			}
 		}catch(System.Exception Ex){
 			Logger?.LogError(Ex, "Exception during hotkey registration {HotkeyId}", HotkeyId);
-			return Task.FromResult(false);
+			return (false);
 		}
 	}
 
-	public Task<bool> Unregister(str HotkeyId, CT Ct){
+	public bool Unregister(str HotkeyId){
 		try{
 			if(!RegisteredHotkeys.TryGetValue(HotkeyId, out var Registration)){
 				Logger?.LogWarning("Hotkey {HotkeyId} not found", HotkeyId);
-				return Task.FromResult(false);
+				return false;
 			}
 
 			bool Success = UnregisterHotKey(IntPtr.Zero, Registration.Id);
 			if(Success){
 				RegisteredHotkeys.Remove(HotkeyId);
 				Logger?.LogInformation("Hotkey {HotkeyId} unregistered successfully", HotkeyId);
-				return Task.FromResult(true);
+				return (true);
 			}else{
 				Logger?.LogError("Failed to unregister hotkey {HotkeyId}", HotkeyId);
-				return Task.FromResult(false);
+				return (false);
 			}
 		}catch(System.Exception Ex){
 			Logger?.LogError(Ex, "Exception during hotkey unregistration {HotkeyId}", HotkeyId);
-			return Task.FromResult(false);
+			return (false);
 		}
 	}
 
-	public async Task Cleanup(CT Ct){
+	public async void Cleanup(){
 		var HotkeyIds = new List<str>(RegisteredHotkeys.Keys);
 		foreach(var HotkeyId in HotkeyIds){
-			await Unregister(HotkeyId, Ct);
+			Unregister(HotkeyId);
 		}
 		Logger?.LogInformation("All hotkeys cleaned up");
 	}

@@ -24,17 +24,21 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 
 	public nil RegisterGlobalHotKeys(){
 		try{
-			// 示例：注册测试快捷键 Ctrl+Shift+T
-			_ = _hotkeyListener.Register(
-				HotkeyId: "test_hotkey_1",
-				Modifiers: EHotkeyModifiers.Ctrl | EHotkeyModifiers.Shift,
-				Key: EHotkeyKey.T,
-				OnHotkey: async (Ct) => {
-					System.Console.WriteLine("🎉 [Global Hotkey] Ctrl+Shift+T triggered! 全局快捷键被触发了!");
-					await Task.CompletedTask;
-				},
-				Ct: default
-			).ConfigureAwait(false);
+			// 示例：注册快捷键 Alt+W
+			var success = _hotkeyListener.Register(
+				HotkeyId: "alt_w",
+				Modifiers: EHotkeyModifiers.Alt,
+				Key: EHotkeyKey.W,
+				OnHotkey: async (Req, Ct) => {
+					System.Console.WriteLine("🎉 [Global Hotkey] Alt+W triggered! 快捷键 Alt+W 触发。");
+					return null;
+				}
+			);
+			if(!success){
+				_logger?.LogWarning("Alt+W registration failed (可能被系统占用)");
+			}else{
+				_logger?.LogInformation("Alt+W registered successfully");
+			}
 
 			_logger?.LogInformation("Windows global hotkeys registered successfully");
 		}catch(Exception ex){
