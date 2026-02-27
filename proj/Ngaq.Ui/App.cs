@@ -22,7 +22,6 @@ using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Ngaq.Ui.Infra;
 using Ngaq.Core.Frontend.Hotkey;
-using Ngaq.Ui.Infra.Hotkey;
 
 namespace Ngaq.Ui;
 

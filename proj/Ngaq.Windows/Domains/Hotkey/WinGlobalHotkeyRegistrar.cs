@@ -4,7 +4,6 @@ using System;
 using System.Threading.Tasks;
 using Ngaq.Core.Frontend.Hotkey;
 using Microsoft.Extensions.Logging;
-using Ngaq.Ui.Infra.Hotkey;
 
 
 /// Windows 专用的全局快捷键注册器

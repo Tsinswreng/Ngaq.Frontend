@@ -1,9 +1,9 @@
 namespace Ngaq.Android;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Frontend.Hotkey;
 using Ngaq.Android.Domains.Hotkey;
-using Ngaq.Ui.Infra.Hotkey;
 
 public static class DiAndroid{
 	public static IServiceCollection SetupAndroid(this IServiceCollection z){
