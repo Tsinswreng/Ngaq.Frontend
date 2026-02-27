@@ -1,5 +1,5 @@
 namespace Ngaq.Windows.Domains.Hotkey;
-
+using Tsinswreng.CsErr;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -56,7 +56,8 @@ public class WinHotkeyListener : IHotkeyListener{
 
 	#endregion
 
-	public bool Register(IHotKey HotKey){
+	public IAnswer<obj?> Register(IHotKey HotKey){
+		var answer = new Answer<obj?>();
 		// ensure the message thread is running so work queue will be handled
 		EnsureMessageThreadRunning();
 		var tcs = new TaskCompletionSource<bool>();
@@ -90,13 +91,18 @@ public class WinHotkeyListener : IHotkeyListener{
 			}
 			tcs.SetResult(success);
 		});
-		return tcs.Task.Result;
+		bool ok = tcs.Task.Result;
+		if(!ok)answer.AddErr("registration failed");
+		else answer.Ok = true;
+		return answer;
 	}
 
-	public bool Unregister(str HotkeyId){
+	public IAnswer<obj?> Unregister(str HotkeyId){
+		var ans = new Answer<obj?>();
 		if(!RegisteredHotkeys.TryGetValue(HotkeyId, out var Registration)){
 			Logger?.LogWarning("Hotkey {HotkeyId} not found", HotkeyId);
-			return false;
+			ans.AddErr("not found");
+			return ans;
 		}
 		// perform on message thread to match registration
 		EnsureMessageThreadRunning();
@@ -118,15 +124,24 @@ public class WinHotkeyListener : IHotkeyListener{
 			}
 			tcs.SetResult(success);
 		});
-		return tcs.Task.Result;
+		bool ok = tcs.Task.Result;
+		if(!ok) ans.AddErr("unregister failed");
+		else ans.Ok = true;
+		return ans;
 	}
 
-	public async void Cleanup(){
+	public IAnswer<obj?> Cleanup(){
+		var ans = new Answer<obj?>();
 		var HotkeyIds = new List<str>(RegisteredHotkeys.Keys);
 		foreach(var HotkeyId in HotkeyIds){
-			Unregister(HotkeyId);
+			var r = Unregister(HotkeyId);
+			if(!r.Ok){
+				ans.AddErr("failed cleanup");
+			}
 		}
 		Logger?.LogInformation("All hotkeys cleaned up");
+		if(ans.Ok==false) ans.Ok=true; // success even if no entries
+		return ans;
 	}
 
 	private void EnsureMessageThreadRunning(){

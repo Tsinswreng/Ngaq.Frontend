@@ -32,9 +32,9 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 					return null;
 				}
 			};
-			var success = _hotkeyListener.Register(hotkey);
-			if(!success){
-				_logger?.LogWarning("Alt+W registration failed (可能被系统占用)");
+			var result = _hotkeyListener.Register(hotkey);
+			if(!result.Ok){
+				_logger?.LogWarning("Alt+W registration failed (可能被系统占用)\n"+string.Join(";", result.Errors ?? new[]{""}));
 			}else{
 				_logger?.LogInformation("Alt+W registered successfully");
 			}
