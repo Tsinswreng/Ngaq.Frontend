@@ -15,12 +15,20 @@ using Microsoft.Extensions.Logging;
 public class WinHotkeyListener : IHotkeyListener{
 	private ILogger Logger;
 	private Dictionary<str, HotkeyRegistration> RegisteredHotkeys = [];
+	// additional map for quick lookup by numeric id
+	private Dictionary<int, HotkeyRegistration> _idMap = [];
 	private int NextId = 1;
+
+	// thread used to pump Windows messages for hotkey notifications
+	private Thread? _msgThread;
+	private uint _msgThreadId;
+	private const int WM_HOTKEY = 0x0312;
+	// queue for operations that must run on the message thread
+	private readonly System.Collections.Concurrent.BlockingCollection<Action> _workQueue = new System.Collections.Concurrent.BlockingCollection<Action>();
 
 	private class HotkeyRegistration{
 		public int Id { get; set; }
-		public str HotkeyId { get; set; } = "";
-		public FnOnHotKey OnHotkey { get; set; } = null!;
+		public IHotKey HotKey { get; set; } = null!;
 	}
 
 	public WinHotkeyListener(ILogger Logger){
@@ -48,64 +56,69 @@ public class WinHotkeyListener : IHotkeyListener{
 
 	#endregion
 
-	public bool Register(
-		str HotkeyId, EHotkeyModifiers Modifiers, EHotkeyKey Key
-		, FnOnHotKey OnHotkey
-	){
-		try{
-			if(RegisteredHotkeys.ContainsKey(HotkeyId)){
-				Logger?.LogWarning("Hotkey {HotkeyId} already registered", HotkeyId);
-				return (false);
+	public bool Register(IHotKey HotKey){
+		// ensure the message thread is running so work queue will be handled
+		EnsureMessageThreadRunning();
+		var tcs = new TaskCompletionSource<bool>();
+		_workQueue.Add(() => {
+			bool success = false;
+			try{
+				if(RegisteredHotkeys.ContainsKey(HotKey.Id)){
+					Logger?.LogWarning("Hotkey {HotkeyId} already registered", HotKey.Id);
+					success = false;
+				} else {
+					int Id = NextId++;
+					uint ModifiersCode = ConvertModifiers(HotKey.Modifiers);
+					uint KeyCode = ConvertKey(HotKey.Key);
+					// register on the message thread
+					success = RegisterHotKey(IntPtr.Zero, Id, ModifiersCode, KeyCode);
+					if(success){
+						var Registration = new HotkeyRegistration{
+							Id = Id,
+							HotKey = HotKey
+						};
+						RegisteredHotkeys[HotKey.Id] = Registration;
+						_idMap[Id] = Registration;
+						Logger?.LogInformation("Hotkey {HotkeyId} registered successfully with id {Id}", HotKey.Id, Id);
+					} else {
+						Logger?.LogError("Failed to register hotkey {HotkeyId}", HotKey.Id);
+					}
+				}
+			}catch(Exception ex){
+				Logger?.LogError(ex, "Exception during hotkey registration {HotkeyId}", HotKey.Id);
+				success = false;
 			}
-
-			int Id = NextId++;
-			uint ModifiersCode = ConvertModifiers(Modifiers);
-			uint KeyCode = ConvertKey(Key);
-
-			// 注册全局快捷键到当前线程窗口
-			// 注意：在 Windows 中，RegisterHotKey 需要一个窗口句柄
-			// 对于无窗口应用，我们使用隐藏窗口或在 UI 线程中注册
-			bool Success = RegisterHotKey(IntPtr.Zero, Id, ModifiersCode, KeyCode);
-
-			if(Success){
-				var Registration = new HotkeyRegistration{
-					Id = Id,
-					HotkeyId = HotkeyId,
-					OnHotkey = OnHotkey
-				};
-				RegisteredHotkeys[HotkeyId] = Registration;
-				Logger?.LogInformation("Hotkey {HotkeyId} registered successfully with id {Id}", HotkeyId, Id);
-				return (true);
-			}else{
-				Logger?.LogError("Failed to register hotkey {HotkeyId}", HotkeyId);
-				return (false);
-			}
-		}catch(System.Exception Ex){
-			Logger?.LogError(Ex, "Exception during hotkey registration {HotkeyId}", HotkeyId);
-			return (false);
-		}
+			tcs.SetResult(success);
+		});
+		return tcs.Task.Result;
 	}
 
 	public bool Unregister(str HotkeyId){
-		try{
-			if(!RegisteredHotkeys.TryGetValue(HotkeyId, out var Registration)){
-				Logger?.LogWarning("Hotkey {HotkeyId} not found", HotkeyId);
-				return false;
-			}
-
-			bool Success = UnregisterHotKey(IntPtr.Zero, Registration.Id);
-			if(Success){
-				RegisteredHotkeys.Remove(HotkeyId);
-				Logger?.LogInformation("Hotkey {HotkeyId} unregistered successfully", HotkeyId);
-				return (true);
-			}else{
-				Logger?.LogError("Failed to unregister hotkey {HotkeyId}", HotkeyId);
-				return (false);
-			}
-		}catch(System.Exception Ex){
-			Logger?.LogError(Ex, "Exception during hotkey unregistration {HotkeyId}", HotkeyId);
-			return (false);
+		if(!RegisteredHotkeys.TryGetValue(HotkeyId, out var Registration)){
+			Logger?.LogWarning("Hotkey {HotkeyId} not found", HotkeyId);
+			return false;
 		}
+		// perform on message thread to match registration
+		EnsureMessageThreadRunning();
+		var tcs = new TaskCompletionSource<bool>();
+		_workQueue.Add(()=>{
+			bool success = false;
+			try{
+				success = UnregisterHotKey(IntPtr.Zero, Registration.Id);
+				if(success){
+					RegisteredHotkeys.Remove(HotkeyId);
+					_idMap.Remove(Registration.Id);
+					Logger?.LogInformation("Hotkey {HotkeyId} unregistered successfully", HotkeyId);
+				} else {
+					Logger?.LogError("Failed to unregister hotkey {HotkeyId}", HotkeyId);
+				}
+			}catch(Exception ex){
+				Logger?.LogError(ex, "Exception during hotkey unregistration {HotkeyId}", HotkeyId);
+				success=false;
+			}
+			tcs.SetResult(success);
+		});
+		return tcs.Task.Result;
 	}
 
 	public async void Cleanup(){
@@ -115,6 +128,62 @@ public class WinHotkeyListener : IHotkeyListener{
 		}
 		Logger?.LogInformation("All hotkeys cleaned up");
 	}
+
+	private void EnsureMessageThreadRunning(){
+		if(_msgThread != null && _msgThread.IsAlive) return;
+		_msgThread = new Thread(MessageLoop){IsBackground=true};
+		_msgThread.Start();
+	}
+
+	private void MessageLoop(){
+		// record our thread ID so other threads can post messages to wake us
+		_msgThreadId = GetCurrentThreadId();
+		try{
+			while(true){
+				// process any pending work items first
+				while(_workQueue.TryTake(out var work, TimeSpan.Zero)){
+					try{ work(); }catch(Exception ex){ Logger?.LogError(ex, "hotkey work queue item failed"); }
+				}
+				MSG msg;
+				int ret = GetMessage(out msg, IntPtr.Zero, 0, 0);
+				if(ret == 0) break; // WM_QUIT
+				if(ret == -1) break;
+				if(msg.message == WM_HOTKEY){
+					int id = (int)msg.wParam;
+					if(_idMap.TryGetValue(id, out var reg)){
+						// fire callback on threadpool
+						_ = Task.Run(()=> reg.HotKey.OnHotkey(null, default));
+					}
+				}
+				TranslateMessage(ref msg);
+				DispatchMessage(ref msg);
+			}
+		}catch(Exception ex){
+			Logger?.LogError(ex, "Hotkey message loop exception");
+		}
+	}
+
+	[DllImport("user32.dll")]
+	private static extern int GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+	[DllImport("user32.dll")]
+	private static extern bool TranslateMessage([In] ref MSG lpMsg);
+	[DllImport("user32.dll")]
+	private static extern IntPtr DispatchMessage([In] ref MSG lpMsg);
+
+	[DllImport("user32.dll", SetLastError = true)]
+	private static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
+
+	[StructLayout(LayoutKind.Sequential)]
+	private struct MSG{
+		public IntPtr hwnd;
+		public uint message;
+		public UIntPtr wParam;
+		public IntPtr lParam;
+		public uint time;
+		public POINT pt;
+	}
+	[StructLayout(LayoutKind.Sequential)]
+	private struct POINT{public int x; public int y;}
 
 	/// <summary>
 	/// 将修饰符枚举转换为 Win32 API 代码

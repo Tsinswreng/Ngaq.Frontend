@@ -23,15 +23,16 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 	public nil RegisterGlobalHotKeys(){
 		try{
 			// 示例：注册快捷键 Alt+W
-			var success = _hotkeyListener.Register(
-				HotkeyId: "alt_w",
-				Modifiers: EHotkeyModifiers.Alt,
-				Key: EHotkeyKey.W,
-				OnHotkey: async (Req, Ct) => {
+			var hotkey = new HotKey{
+				Id = "alt_w",
+				Modifiers = EHotkeyModifiers.Alt,
+				Key = EHotkeyKey.W,
+				OnHotkey = async (Req, Ct) => {
 					System.Console.WriteLine("🎉 [Global Hotkey] Alt+W triggered! 快捷键 Alt+W 触发。");
 					return null;
 				}
-			);
+			};
+			var success = _hotkeyListener.Register(hotkey);
 			if(!success){
 				_logger?.LogWarning("Alt+W registration failed (可能被系统占用)");
 			}else{
