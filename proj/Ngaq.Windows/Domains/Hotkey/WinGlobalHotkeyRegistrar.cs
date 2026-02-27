@@ -4,6 +4,7 @@ using System;
 using System.Threading.Tasks;
 using Ngaq.Core.Frontend.Hotkey;
 using Microsoft.Extensions.Logging;
+using Tsinswreng.CsErr;
 
 
 /// Windows 专用的全局快捷键注册器
@@ -20,7 +21,8 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 		_logger = logger;
 	}
 
-	public nil RegisterGlobalHotKeys(){
+	public IAnswer<obj?> RegisterGlobalHotKeys(){
+		var R = new Answer<obj?>();
 		try{
 			// 示例：注册快捷键 Alt+W
 			var hotkey = new HotKey{
@@ -40,9 +42,9 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 			}
 
 			_logger?.LogInformation("Windows global hotkeys registered successfully");
+			return R.OkWith(NIL);
 		}catch(Exception ex){
-			_logger?.LogError(ex, "Failed to register Windows global hotkeys");
+			return R.AddErr(ex);
 		}
-		return NIL;
 	}
 }
