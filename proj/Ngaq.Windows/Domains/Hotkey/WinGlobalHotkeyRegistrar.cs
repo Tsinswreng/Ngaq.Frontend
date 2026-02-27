@@ -13,9 +13,8 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary;
 using Tsinswreng.CsErr;
 
-/// <summary>
 /// Windows 专用的全局快捷键注册器
-/// </summary>
+/// TODO 把查詞快捷键之註冊邏輯放到新文件中、然後在此文件中調用
 public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 	private readonly IHotkeyListener _hotkeyListener;
 	private readonly ISvcClipboard _svcClipboard;
@@ -46,11 +45,9 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 							var view = new ViewDictionary();
 							MgrViewNavi.Inst.GetViewNavi().GoTo(ToolView.WithTitle("Dictionary", view));
 
-							var vm = view.Ctx;
 							var clipText = _svcClipboard.GetText(Ct)?.Trim();
-							if(vm != null && !string.IsNullOrWhiteSpace(clipText)){
-								vm.Input = clipText;
-								await vm.Lookup(Ct);
+							if(!string.IsNullOrWhiteSpace(clipText)){
+								view.ClickLookupBtn();
 							}
 						}catch(Exception ex){
 							_logger?.LogError(ex, "Alt+E hotkey handler failed");

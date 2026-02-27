@@ -27,7 +27,7 @@ public partial class ViewDictionary
 		Style();
 		Render();
 		this.Loaded += (s, e) => {
-			_searchTextBox?.Focus();
+			SearchTextBox?.Focus();
 		};
 	}
 	public II18n I = I18n.Inst;
@@ -38,7 +38,8 @@ public partial class ViewDictionary
 	}
 
 	AutoGrid Root = new(IsRow:true);
-	TextBox _searchTextBox = new();//主查詢輸入框
+	public TextBox SearchTextBox = new();//主查詢輸入框
+	public OpBtn SearchBtn = new();
 	protected nil Render(){
 		this.InitContent(Root.Grid, o=>{
 			Root.RowDefs.AddRange([
@@ -108,18 +109,18 @@ public partial class ViewDictionary
 			]);
 		});
 		{{
-			var searchBtn = new OpBtn();
+
 			SearchGrid
-			.AddInit(_searchTextBox, o=>{
+			.AddInit(SearchTextBox, o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Input));
 				o.KeyBindings.Add(
 					new KeyBinding{
 						Gesture = new(Key.Enter),
-						Command = new RelayCommand(()=>searchBtn.PerformClick())
+						Command = new RelayCommand(()=>SearchBtn.PerformClick())
 					}
 				);
 			})
-			.AddInit(searchBtn, o=>{
+			.AddInit(SearchBtn, o=>{
 				Todo.I18n();
 				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
@@ -136,6 +137,13 @@ public partial class ViewDictionary
 		;
 
 		return NIL;
+	}
+
+	public void ClickLookupBtn(str? SearchText = null){
+		if(SearchText != null){
+			SearchTextBox.Text = SearchText;
+		}
+		SearchBtn.PerformClick();
 	}
 
 
