@@ -211,7 +211,7 @@ ICfgAccessor? Cfg;
 				if(!MgrLearn.State.OperationStatus.Load){
 				var Page = await SvcWord.PageWord(
 					UserCtxMgr.GetUserCtx()
-					,PageQry.SlctAll()
+					,PageQry.SlctI64Max()
 					,Ct
 				);
 				//須先DBʹ詞ˇ全載入內存後交予MgrLearn。否則算權重旹併發讀則使Sqlite出錯
