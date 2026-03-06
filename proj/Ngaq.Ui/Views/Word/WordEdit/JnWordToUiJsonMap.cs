@@ -1,9 +1,9 @@
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
-using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Shared.Base.Models.Po;
 using Ngaq.Core.Shared.User.Models.Po;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Tools.JsonMap;
 using Tsinswreng.CsTools;
 

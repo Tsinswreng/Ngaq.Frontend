@@ -3,7 +3,6 @@ namespace Ngaq.Client.Word.Svc;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Infra;
-using Ngaq.Core.Model.Po.Word;
 using Ngaq.Core.Model.Word.Req;
 using Ngaq.Core.Iter;
 using Ngaq.Core.Tools.Io;
