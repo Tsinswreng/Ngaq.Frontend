@@ -48,12 +48,12 @@ public partial class VmLearnWords
 	// public VmWordQuery(){
 	// 	_Init();
 	// }
-public ISvcWord SvcWord;
-public IFrontendUserCtxMgr UserCtxMgr;
+	ISvcWord SvcWord;
+	IFrontendUserCtxMgr UserCtxMgr;
 
-public MgrLearn MgrLearn{get;set;}
-public IImgGetter? SvcImg{get;set;}
-ICfgAccessor? Cfg;
+	MgrLearn MgrLearn;
+	IImgGetter? SvcImg;
+	ICfgAccessor? Cfg;
 	public VmLearnWords(
 		ISvcWord SvcWord
 		,IFrontendUserCtxMgr UserCtxMgr

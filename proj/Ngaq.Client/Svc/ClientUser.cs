@@ -15,6 +15,7 @@ using Ngaq.Core.Shared.Kv.Models;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Frontend.Kv;
 using Ngaq.Core.Infra;
+using Ngaq.Core.Infra.IF;
 
 public partial class ClientUser
 	:ISvcUser

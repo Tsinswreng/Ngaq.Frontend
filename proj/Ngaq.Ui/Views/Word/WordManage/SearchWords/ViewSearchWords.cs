@@ -5,6 +5,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;

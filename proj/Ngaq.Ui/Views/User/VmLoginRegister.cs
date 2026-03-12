@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Ngaq.Core.Frontend.Kv;
 using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Infra.IF;
 using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Shared.User.Models.Po.Device;
 using Ngaq.Core.Shared.User.Models.Po.User;
