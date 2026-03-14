@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using NAudio.Wave;
 
 namespace Ngaq.Windows.Domains.Audio;
-/// <summary>基于 NAudio 的简单实现</summary>
+基于 NAudio 的简单实现</summary>
 public class NAudioPlayer : IAudioPlayer {
 	public async Task<IPlayState?> Play(Stream s, EAudioType type, CT Ct) {
 		// 在后台线程播放，避免阻塞调用方

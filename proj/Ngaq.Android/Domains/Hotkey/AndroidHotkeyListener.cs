@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Ngaq.Core.Frontend.Hotkey;
 using Microsoft.Extensions.Logging;
 
-/// <summary>
+
 /// Android 平台的全局快捷键监听器实现
-/// </summary>
+
 // public class AndroidHotkeyListener : IHotkeyListener{
 
 // }

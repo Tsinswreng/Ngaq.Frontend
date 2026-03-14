@@ -6,9 +6,9 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
 public static class SolidImageGenerator {
-	/// <summary>
+
 	/// 生成一张纯色 WriteableBitmap（Rgba8888 格式）。
-	/// </summary>
+
 	public static WriteableBitmap Create(int width, int height, Color color) {
 		var bmp = new WriteableBitmap(
 			new PixelSize(width, height),

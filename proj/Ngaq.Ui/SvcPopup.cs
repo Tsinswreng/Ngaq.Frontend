@@ -25,9 +25,9 @@ public class SvcPopup {
 		}
 	}
 
-	/// <summary>
+
 	/// Ctrl勿多次傳同一實例、除非先關彈窗
-	/// </summary>
+
 	/// <param name="Ctrl"></param>
 	public void ShowPopup(Control Ctrl){
 		try{

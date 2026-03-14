@@ -43,9 +43,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	}="";
 
-	/// <summary>
 	/// 查詢結果
-	/// </summary>
 	public VmSimpleWord? Result{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -53,17 +51,13 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	#region 語言選擇
 
-	/// <summary>
 	/// 源語言（ISO 639-1 代碼，如 "en", "zh", "ja"）
-	/// </summary>
 	public str SrcLang{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "en";
 
-	/// <summary>
 	/// 目標語言（ISO 639-1 代碼，如 "en", "zh", "ja"）
-	/// </summary>
 	public str TgtLang{
 		get{return field;}
 		set{SetProperty(ref field, value);}

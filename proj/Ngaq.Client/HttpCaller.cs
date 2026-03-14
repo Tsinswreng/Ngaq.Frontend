@@ -91,10 +91,10 @@ public class HttpCaller:IHttpCaller{
 		return resp;
 	}
 
-	/// <summary>
+
 	/// 發送 POST 請求並把回應反序列化成 TResp。
 	/// 若 TResp 是 nil 可直接當作「不需回應」處理。
-	/// </summary>
+
 	public async Task<TResp?> Post<TReq, TResp>(
 		str RelaUrl
 		,TReq Req,
@@ -128,9 +128,9 @@ public class HttpCaller:IHttpCaller{
 		return Ans.Data;
 	}
 
-	/// <summary>
+
 	/// 發送 POST 請求並把回應反序列化成 TResp。
-	/// </summary>
+
 	public async Task<TResp?> PostByteStream<TReq, TResp>(
 		str RelaUrl,u8[] Req,CT Ct
 	) {

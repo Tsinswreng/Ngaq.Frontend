@@ -6,25 +6,17 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 
-/// <summary>
 /// 圆形头像控件，纯 C#，无 XAML。
-/// </summary>
 public class CircleAvatar : Control {
-	/// <summary>
 	/// 定义图片来源属性。
-	/// </summary>
 	public static readonly StyledProperty<IImage?> SourceProperty =
 		AvaloniaProperty.Register<CircleAvatar, IImage?>(nameof(Source));
 
-	/// <summary>
 	/// 定义边框粗细属性。
-	/// </summary>
 	public static readonly StyledProperty<double> BorderThicknessProperty =
 		AvaloniaProperty.Register<CircleAvatar, double>(nameof(BorderThickness), 0);
 
-	/// <summary>
 	/// 定义边框颜色属性。
-	/// </summary>
 	public static readonly StyledProperty<IBrush?> BorderBrushProperty =
 		AvaloniaProperty.Register<CircleAvatar, IBrush?>(nameof(BorderBrush));
 
@@ -83,9 +75,7 @@ public class CircleAvatar : Control {
 		}
 	}
 
-	/// <summary>
 	/// 从文件快速加载头像（可选辅助方法）。
-	/// </summary>
 	public static Bitmap LoadFromFile(string path) {
 		using var stream = System.IO.File.OpenRead(path);
 		return new Bitmap(stream);
@@ -97,9 +87,7 @@ public static class ExtnCircleAvatar{
 public static readonly StyledProperty<double> BorderThicknessProperty =
 		AvaloniaProperty.Register<CircleAvatar, double>(nameof(BorderThickness), 0);
 
-	/// <summary>
 	/// 定义边框颜色属性。
-	/// </summary>
 	public static readonly StyledProperty<IBrush?> BorderBrushProperty =
 		AvaloniaProperty.Register<CircleAvatar, IBrush?>(nameof(BorderBrush));
  */

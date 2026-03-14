@@ -121,9 +121,9 @@ public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-/// <summary>
+
 /// 注意: 改Props或Learns之內容旹 需刪原ʹ時間、否則diff不到
-/// </summary>
+
 /// <returns></returns>
 	public nil Save(){
 		if(SvcWord is null || UserCtxMgr is null){

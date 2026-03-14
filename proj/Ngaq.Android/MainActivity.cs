@@ -186,9 +186,9 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		}
 	}
 
-	/// <summary>
+
 	/// 将 Assets 中的文件复制到指定目标路径
-	/// </summary>
+
 	/// <param name="assetFileName">Assets 中的文件名（含子路径，如 "configs/setting.json"）</param>
 	/// <param name="targetDir">目标目录绝对路径（如外部存储的应用私有目录）</param>
 	/// <returns>是否复制成功</returns>

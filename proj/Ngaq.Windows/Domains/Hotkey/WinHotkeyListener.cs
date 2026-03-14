@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 using Ngaq.Core.Frontend.Hotkey;
 using Microsoft.Extensions.Logging;
 
-/// <summary>
 /// Windows 平台的全局快捷键监听器实现
 /// 使用 Win32 API RegisterHotKey 实现全局快捷键
-/// </summary>
 public class WinHotkeyListener : IHotkeyListener{
 	private ILogger Logger;
 	private Dictionary<str, HotkeyRegistration> RegisteredHotkeys = [];
@@ -200,9 +198,8 @@ public class WinHotkeyListener : IHotkeyListener{
 	[StructLayout(LayoutKind.Sequential)]
 	private struct POINT{public int x; public int y;}
 
-	/// <summary>
+
 	/// 将修饰符枚举转换为 Win32 API 代码
-	/// </summary>
 	private uint ConvertModifiers(EHotkeyModifiers Modifiers){
 		uint Code = 0;
 		if((Modifiers & EHotkeyModifiers.Ctrl) != 0) Code |= MOD_CTRL;
@@ -212,9 +209,8 @@ public class WinHotkeyListener : IHotkeyListener{
 		return Code;
 	}
 
-	/// <summary>
+
 	/// 将快捷键枚举转换为 Win32 虚拟键代码
-	/// </summary>
 	private uint ConvertKey(EHotkeyKey Key){
 		return Key switch{
 			// 字母键 A-Z: 0x41-0x5A

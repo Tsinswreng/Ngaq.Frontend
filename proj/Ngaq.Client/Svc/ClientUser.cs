@@ -92,9 +92,9 @@ public partial class ClientUser
 		return NIL;
 	}
 
-	/// <summary>
+
 	/// 僅前端操作、未調後端登出接口
-	/// </summary>
+
 	/// <param name="User"></param>
 	/// <param name="ReqLogout"></param>
 	/// <param name="Ct"></param>

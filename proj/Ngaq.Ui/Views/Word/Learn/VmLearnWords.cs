@@ -32,9 +32,9 @@ public partial class VmLearnWords
 {
 
 	public partial class Cfg_{
-		/// <summary>
+
 		/// 單詞條長按
-		/// </summary>
+		
 		public i64 LongPressDurationMs = 200;
 		public IBrush ColorDflt = Brushes.Black;
 		public IBrush ColorNone = Brushes.Transparent;
@@ -195,9 +195,9 @@ public partial class VmLearnWords
 		return Words.Where(x=>langSet.Contains(x.Lang));
 	}
 
-	/// <summary>
+
 	/// 須呼于UI線程
-	/// </summary>
+	
 	void _AssignWeightArg(){
 		if(AnyNull(MgrLearn)){
 			return;

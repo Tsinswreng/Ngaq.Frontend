@@ -4,9 +4,9 @@ using System.Runtime.CompilerServices;
 namespace Ngaq.Ui.Infra;
 
 public interface I_ForceSetProp{
-	/// <summary>
+
 	/// 地址未變但內容ˋ變旹 適用此
-	/// </summary>
+
 	/// <typeparam name="T"></typeparam>
 	/// <param name="field"></param>
 	/// <param name="newValue"></param>
