@@ -1,9 +1,10 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
+
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word.Models.Dto;
-using Ngaq.Core.Word.Svc;
+using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsPage;
 using Tsinswreng.CsTools;

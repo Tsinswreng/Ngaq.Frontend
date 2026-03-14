@@ -1,4 +1,5 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
+
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using Ngaq.Client.Word.Svc;
@@ -6,8 +7,8 @@ using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Core.Shared.Word.Models.Dto;
+using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Core.Tools;
-using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;

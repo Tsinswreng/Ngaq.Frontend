@@ -4,8 +4,8 @@ using System.Text;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Shared.Word.Models.Dto;
+using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Core.Tools;
-using Ngaq.Core.Word.Svc;
 
 public class ClientWordSync{
 	IHttpCaller HttpCaller;

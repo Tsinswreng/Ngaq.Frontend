@@ -5,8 +5,8 @@ using System.Runtime.CompilerServices;
 using MethodTimer;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Core.Tools;
-using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 
 

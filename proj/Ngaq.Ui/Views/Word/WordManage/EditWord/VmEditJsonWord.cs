@@ -1,4 +1,5 @@
 namespace Ngaq.Ui.Views.Word.WordManage.EditWord;
+
 using System.Collections.ObjectModel;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -6,8 +7,8 @@ using System.Text.Json.Nodes;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Core.Tools.Json;
-using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.CsTools;

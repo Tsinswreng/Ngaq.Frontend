@@ -1,10 +1,11 @@
 namespace Ngaq.Ui.Views.Word.WordManage.Statistics;
+
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Shared.Word.Models.Learn_;
-using Ngaq.Core.Word.Svc;
+using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using ScottPlot;
 using Tsinswreng.CsCore;

@@ -1,8 +1,8 @@
 namespace Ngaq.Ui.Views.Word.Learn;
+
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Ngaq.Core.Word.Svc;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.CsPage;
@@ -25,6 +25,7 @@ using Ngaq.Core.Tools;
 using Avalonia.Logging;
 using Ngaq.Core.Shared.Base.Models.Po;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Svc;
 
 public partial class VmLearnWords
 	:ViewModelBase
