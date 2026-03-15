@@ -45,7 +45,7 @@ int.	說得對
 
 
 	/// 開始新的流式查詢，重置狀態
-	
+
 	public nil StartStreaming(string QueryTerm){
 		Head = QueryTerm;
 		Description = "";
@@ -54,7 +54,7 @@ int.	說得對
 
 
 	/// 接收流式響應的新片段
-	
+
 	public nil GotNewSeg(DtoOnNewSeg NewSeg){
 		Description += NewSeg.NewSeg;
 		return NIL;

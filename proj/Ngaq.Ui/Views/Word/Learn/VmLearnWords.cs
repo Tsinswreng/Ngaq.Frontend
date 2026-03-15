@@ -34,7 +34,7 @@ public partial class VmLearnWords
 	public partial class Cfg_{
 
 		/// 單詞條長按
-		
+
 		public i64 LongPressDurationMs = 200;
 		public IBrush ColorDflt = Brushes.Black;
 		public IBrush ColorNone = Brushes.Transparent;
@@ -197,7 +197,7 @@ public partial class VmLearnWords
 
 
 	/// 須呼于UI線程
-	
+
 	void _AssignWeightArg(){
 		if(AnyNull(MgrLearn)){
 			return;
