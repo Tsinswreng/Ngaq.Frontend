@@ -7,14 +7,14 @@ namespace Ngaq.Ui.User {
 
 public interface IUserProfile{
 	public IdUser UserId{get;set;}
-	public str? UniqueName{get;set;}
+	public str? UniqName{get;set;}
 	public str? NickName{get;set;}
 	public str? Email{get;set;}
 	public str? AvatarUrl{get;set;}
 	public IImage? AvatarImg{get;set;}
 	public void Clear(){
 		UserId = default;
-		UniqueName = null;
+		UniqName = null;
 		NickName = null;
 		Email = null;
 		AvatarUrl = null;
@@ -27,7 +27,7 @@ public class UserProfile:ObservableObject, IUserProfile {
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}
-	public str? UniqueName{
+	public str? UniqName{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}
