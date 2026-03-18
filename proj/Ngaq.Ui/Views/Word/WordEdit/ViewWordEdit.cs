@@ -14,6 +14,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsStrAcc;
 using Ctx = VmWordEdit;
 public partial class ViewWordEdit
 	:AppViewBase
@@ -91,7 +92,7 @@ public partial class ViewWordEdit
 								var currentJnWord = propValue.Value;
 								if (currentJnWord == null) return;
 								var poWord = JnWordToUiJsonMap.MkPoWord(
-									CoreDictMapper.Inst.ToDictShallowT(currentJnWord.Word)
+									CoreDictMapper.Inst.PropAccessorMgr.ToPropDict(currentJnWord.Word)
 								);
 								jm.Ctx!.FromBo(poWord);
 							});
