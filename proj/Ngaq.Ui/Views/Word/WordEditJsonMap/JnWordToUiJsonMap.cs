@@ -7,7 +7,7 @@ using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Tools.JsonMap;
 using Tsinswreng.CsTools;
 
-namespace Ngaq.Ui.Views.Word.WordEdit;
+namespace Ngaq.Ui.Views.Word.WordEditJsonMap;
 using W = Ngaq.Core.Shared.Word.Models.Po.Word.PoWord;
 public class JnWordToUiJsonMap{
 	public static IUiJsonMap MkPoWord(IDictionary<str, obj?> Dict){

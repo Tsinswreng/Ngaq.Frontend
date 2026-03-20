@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage;
 using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Microsoft.Extensions.Logging;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra.I18n;
@@ -43,6 +44,10 @@ public partial class ViewWordManage
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
+		var S = Styles;
+		new Style(x=>x.Is<Button>())
+		.Set(Button.BackgroundProperty, Brushes.Transparent)
+		.AddTo(S);
 		return NIL;
 	}
 

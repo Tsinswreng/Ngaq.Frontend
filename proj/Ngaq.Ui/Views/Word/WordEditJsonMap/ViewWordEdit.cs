@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordEdit;
+namespace Ngaq.Ui.Views.Word.WordEditJsonMap;
 
 using System.Linq.Expressions;
 using Avalonia.Controls;
@@ -37,11 +37,6 @@ public partial class ViewWordEdit
 	}
 
 	public Control MkTitleMenu(){
-		// return new TextBox(){
-		// 	Init=o=>{
-		// 		o.Styles.Add(new Style().NoMargin().NoPadding());
-		// 	}
-		// };
 		var R = new ContextMenu();
 		R.Styles.Add(new Style().NoMargin().NoPadding());
 		R.Items.AddInit(new MenuItem(), o=>{

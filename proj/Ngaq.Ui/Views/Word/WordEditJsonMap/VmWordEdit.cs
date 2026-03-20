@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordEdit;
+namespace Ngaq.Ui.Views.Word.WordEditJsonMap;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Infra;

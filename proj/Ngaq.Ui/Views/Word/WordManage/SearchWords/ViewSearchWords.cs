@@ -11,7 +11,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordCard;
-using Ngaq.Ui.Views.Word.WordEdit;
+using Ngaq.Ui.Views.Word.WordEditJsonMap;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.AvlnTools.Dsl;

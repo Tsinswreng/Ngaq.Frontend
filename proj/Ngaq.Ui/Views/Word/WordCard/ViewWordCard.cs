@@ -14,7 +14,7 @@ using Ctx = VmWordListCard;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Icons;
-using Ngaq.Ui.Views.Word.WordEdit;
+using Ngaq.Ui.Views.Word.WordEditJsonMap;
 using Ngaq.Ui.Infra;
 
 public partial class ViewWordListCard

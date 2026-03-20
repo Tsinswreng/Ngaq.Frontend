@@ -16,7 +16,7 @@ using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
-using Ngaq.Ui.Views.Word.WordEdit;
+using Ngaq.Ui.Views.Word.WordEditJsonMap;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.Avln.StrokeText;
