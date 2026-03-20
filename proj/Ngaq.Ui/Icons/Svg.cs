@@ -11,4 +11,5 @@ public record struct Svg(str V){
 	public override string ToString() {
 		return Value;
 	}
+	
 }

@@ -6,7 +6,9 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Ngaq.Ui;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
@@ -26,7 +28,19 @@ public partial class ViewWordEditV2: AppViewBase {
 		Render();
 	}
 
+	public partial class Cls{
+		public static str MainBtn = nameof(MainBtn);
+	}
 	protected nil Style() {
+		var S = Styles;
+		new Style(
+			x=>x.Is<Control>()
+			.Class(Cls.MainBtn)
+		).Set(
+			BackgroundProperty
+			,UiCfg.Inst.MainColor
+		).AddTo(S)
+		;
 		return NIL;
 	}
 
@@ -50,6 +64,19 @@ public partial class ViewWordEditV2: AppViewBase {
 		return NIL;
 	}
 
+	Button MkRmBtn(){
+		var o = new Button();
+		o.Content = Svgs.DeleteForeverSharp.ToIcon().WithText("Remove");
+		o.HorizontalAlignment = HorizontalAlignment.Right;
+		o.Background = Brushes.Red;
+		return o;
+	}
+	Button MkBtnAddItem(){
+		var o = new Button();
+		o.Margin = new Thickness(10, 10, 10, 4);
+		o.Content = Svgs.Add.ToIcon().WithText(" Add Item");
+		return o;
+	}
 	Control MkHeader() {
 		var bdr = new Border {
 			Padding = new Thickness(12, 10),
@@ -78,7 +105,10 @@ public partial class ViewWordEditV2: AppViewBase {
 
 	Control MkTabs() {
 		var tab = new TabControl();
-		tab.Bind(TabControl.SelectedIndexProperty, CBE.Mk<Ctx>(x => x.TabIndex, Mode: BindingMode.TwoWay));
+		tab.Bind(
+			tab.PropSelectedIndex
+			,CBE.Mk<Ctx>(x => x.TabIndex, Mode: BindingMode.TwoWay)
+		);
 
 		tab.Items.AddInit(new TabItem(), o => {
 			o.Header = "Basic";
@@ -122,16 +152,11 @@ public partial class ViewWordEditV2: AppViewBase {
 			RowDef(9, GUT.Star),
 		]);
 
-		root.AddInit(new OpBtn(), add => {
-			add.Margin = new Thickness(10, 10, 10, 4);
-			add.BtnContent = "Add Prop";
-			add.FnExeAsy = (ct) => {
+		root.AddInit(MkBtnAddItem(), o => {
+			o.Click += (s,e) => {
 				Ctx?.AddPropRow();
-				return Task.FromResult(NIL);
 			};
-		});
-
-		root.AddInit(new ScrollViewer(), sv => {
+		}).AddInit(new ScrollViewer(), sv => {
 			sv.Margin = new Thickness(10, 4, 10, 10);
 			var list = new ItemsControl();
 			list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x => x.PropRows, Mode: BindingMode.OneWay));
@@ -141,7 +166,6 @@ public partial class ViewWordEditV2: AppViewBase {
 					Padding = new Thickness(8),
 					BorderBrush = Brushes.DimGray,
 					BorderThickness = new Thickness(1),
-					CornerRadius = new CornerRadius(6)
 				};
 				var sp = new StackPanel { Spacing = 6 };
 				bdr.Child = sp;
@@ -150,13 +174,12 @@ public partial class ViewWordEditV2: AppViewBase {
 				sp.AddInit(MkBoundInput("Key", CBE.Mk<VmWordPropRow>(x => x.KeyText, Mode: BindingMode.TwoWay)));
 				sp.AddInit(MkBoundInput("VType", CBE.Mk<VmWordPropRow>(x => x.VTypeText, Mode: BindingMode.TwoWay)));
 				sp.AddInit(MkBoundInput("Value", CBE.Mk<VmWordPropRow>(x => x.ValueText, Mode: BindingMode.TwoWay)));
+				sp.AddInit(MkRmBtn(), o=>{
+					o.Click += (s, e) => Ctx?.RemovePropRow(row);
+				});
 
-				var rm = new Button {
-					Content = "Remove",
-					HorizontalAlignment = HorizontalAlignment.Right
-				};
-				rm.Click += (s, e) => Ctx?.RemovePropRow(row);
-				sp.Children.Add(rm);
+
+
 				return bdr;
 			});
 			sv.Content = list;
@@ -172,12 +195,9 @@ public partial class ViewWordEditV2: AppViewBase {
 			RowDef(9, GUT.Star),
 		]);
 
-		root.AddInit(new OpBtn(), add => {
-			add.Margin = new Thickness(10, 10, 10, 4);
-			add.BtnContent = "Add Learn";
-			add.FnExeAsy = (ct) => {
+		root.AddInit(MkBtnAddItem(), o => {
+			o.Click += (s,e)=> {
 				Ctx?.AddLearnRow();
-				return Task.FromResult(NIL);
 			};
 		});
 
@@ -194,20 +214,15 @@ public partial class ViewWordEditV2: AppViewBase {
 					Padding = new Thickness(8),
 					BorderBrush = Brushes.DimGray,
 					BorderThickness = new Thickness(1),
-					CornerRadius = new CornerRadius(6)
 				};
 				var sp = new StackPanel { Spacing = 6 };
 				bdr.Child = sp;
 
 				sp.AddInit(MkBoundInput("LearnResult(Add/Rmb/Fgt)", CBE.Mk<VmWordLearnRow>(x => x.LearnResultText, Mode: BindingMode.TwoWay)));
 				sp.AddInit(MkBoundInput("BizCreatedAt(ISO)", CBE.Mk<VmWordLearnRow>(x => x.BizCreatedAtIso, Mode: BindingMode.TwoWay)));
-
-				var rm = new Button {
-					Content = "Remove",
-					HorizontalAlignment = HorizontalAlignment.Right
-				};
-				rm.Click += (s, e) => Ctx?.RemoveLearnRow(row);
-				sp.Children.Add(rm);
+				sp.AddInit(MkRmBtn(), o=>{
+					o.Click += (s, e) => Ctx?.RemoveLearnRow(row);
+				});
 				return bdr;
 			});
 			sv.Content = list;
@@ -280,7 +295,9 @@ public partial class ViewWordEditV2: AppViewBase {
 			o.Content = "Reset";
 			o.Click += (s, e) => Ctx?.ResetFromSource();
 		}).AddInit(new OpBtn(), o => {
-			o.BtnContent = "Save";
+			//o.Classes.Add(Cls.MainBtn);
+			o.Background = UiCfg.Inst.MainColor;
+			o.BtnContent = Svgs.FloppyDiskBackFill.ToIcon().WithText(" Save");
 			o.Bind(IsEnabledProperty, CBE.Mk<Ctx>(x => x.IsDirty, Mode: BindingMode.OneWay));
 			o.SetExe(ct => Ctx?.Save(ct));
 		});

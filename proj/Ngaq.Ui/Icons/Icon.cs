@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Icons;
 
 using Avalonia.Controls;
 using Avalonia.Media;
+using Ngaq.Ui.Tools;
 using SPath = Avalonia.Controls.Shapes.Path;
 public class Icon:SPath{
 	//AI曰SVG 的原生坐标系 Y 轴向下，而 Avalonia 的 Geometry 坐标系 Y 轴向上
@@ -15,4 +16,13 @@ public class Icon:SPath{
 		R.Stretch = Stretch.Uniform;   // 让图形自动缩放到控件大小
 		return R;
 	}
+}
+
+public static class ExtnIcon{
+	extension(Icon z){
+		public HoriCloseCtrls WithText(str Text){
+			return HoriCloseCtrls.Mk(z, new TextBlock{Text=Text});
+		}
+	}
+
 }

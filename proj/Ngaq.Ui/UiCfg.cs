@@ -22,7 +22,7 @@ public partial class UiCfg{
 	public IBrush? MainColor {get;set;}= DfltMainColor;
 	public IBrush ForegroundColor {get;set;}= Brushes.White;
 	public IBrush BackgroundColor {get;set;}= Brushes.Black;
-	public static IBrush DfltMainColor = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x78, 0xD4));
+	public static IBrush DfltMainColor = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x78, 0xD7));
 
 	protected IBrush ResolveThemeBrush(){
 		var app = Application.Current;

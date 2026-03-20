@@ -22,6 +22,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
 using Ngaq.Ui.Views.User.ChangePassword;
+using Ngaq.Ui.Views.Word.WordEditV2;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
@@ -144,10 +145,9 @@ Control? Try()
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 
-		var Home = new ViewHome();
-		// var Home = new ViewUiJsonMap();
-		//var Home = new ViewSample();
-		//var Home = new ViewChangePassword();
+		//var Home = new ViewHome();
+		var Home = new ViewWordEditV2();
+
 		Navi.GoTo(Home);
 	}
 }
