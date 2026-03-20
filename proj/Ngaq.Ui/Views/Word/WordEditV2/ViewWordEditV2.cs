@@ -1,0 +1,330 @@
+namespace Ngaq.Ui.Views.Word.WordEditV2;
+
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Layout;
+using Avalonia.Markup.Declarative;
+using Avalonia.Media;
+using Ngaq.Ui;
+using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
+
+using Ctx = VmWordEditV2;
+
+public partial class ViewWordEditV2: AppViewBase {
+	public Ctx? Ctx {
+		get { return DataContext as Ctx; }
+		set { DataContext = value; }
+	}
+
+	public ViewWordEditV2() {
+		Ctx = App.DiOrMk<Ctx>();
+		Style();
+		Render();
+	}
+
+	protected nil Style() {
+		return NIL;
+	}
+
+	AutoGrid Root = new(IsRow: true);
+
+	protected nil Render() {
+		Content = Root.Grid;
+		Root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(8, GUT.Star),
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Auto),
+		]);
+
+		Root
+		.AddInit(MkHeader(), o => { })
+		.AddInit(MkTabs(), o => { })
+		.AddInit(MkErrBar(), o => { })
+		.AddInit(MkBottomBar(), o => { });
+
+		return NIL;
+	}
+
+	Control MkHeader() {
+		var bdr = new Border {
+			Padding = new Thickness(12, 10),
+			BorderBrush = Brushes.Gray,
+			BorderThickness = new Thickness(0, 0, 0, 1),
+		};
+		var box = new StackPanel {
+			Orientation = Orientation.Vertical,
+			Spacing = 4
+		};
+		bdr.Child = box;
+
+		var title = new TextBlock {
+			FontSize = UiCfg.Inst.BaseFontSize * 1.15,
+			FontWeight = FontWeight.SemiBold
+		};
+		title.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(x => x.Head, Mode: BindingMode.OneWay));
+
+		var sub = new TextBlock {
+			FontSize = UiCfg.Inst.BaseFontSize * 0.9,
+			Foreground = Brushes.LightGray
+		};
+		sub.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(x => x.Lang, Mode: BindingMode.OneWay));
+
+		box.Children.Add(title);
+		box.Children.Add(sub);
+		return bdr;
+	}
+
+	Control MkTabs() {
+		var tab = new TabControl();
+		tab.Bind(TabControl.SelectedIndexProperty, CBE.Mk<Ctx>(x => x.TabIndex, Mode: BindingMode.TwoWay));
+
+		tab.Items.AddInit(new TabItem(), o => {
+			o.Header = "Basic";
+			o.Content = MkBasicTab();
+		});
+		tab.Items.AddInit(new TabItem(), o => {
+			o.Header = "Props";
+			o.Content = MkPropsTab();
+		});
+		tab.Items.AddInit(new TabItem(), o => {
+			o.Header = "Learns";
+			o.Content = MkLearnsTab();
+		});
+		tab.Items.AddInit(new TabItem(), o => {
+			o.Header = "JSON";
+			o.Content = MkJsonTab();
+		});
+
+		return tab;
+	}
+
+	Control MkBasicTab() {
+		var sv = new ScrollViewer();
+		var sp = new StackPanel {
+			Spacing = 8,
+			Margin = new Thickness(10)
+		};
+		sv.Content = sp;
+
+		sp.Children.Add(MkReadOnlyRow("WordId", nameof(Ctx.WordIdText)));
+		sp.Children.Add(MkReadOnlyRow("Owner", nameof(Ctx.OwnerText)));
+		sp.Children.Add(MkInputRow("Head", nameof(Ctx.Head)));
+		sp.Children.Add(MkInputRow("Lang", nameof(Ctx.Lang)));
+		sp.Children.Add(MkInputRow("StoredAt(ISO)", nameof(Ctx.StoredAtIso)));
+		sp.Children.Add(MkInputRow("DelAt(unix ms)", nameof(Ctx.DelAtUnixMs)));
+
+		return sv;
+	}
+
+	Control MkPropsTab() {
+		var root = new AutoGrid(IsRow: true);
+		root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(9, GUT.Star),
+		]);
+
+		root.AddInit(new OpBtn(), add => {
+			add.Margin = new Thickness(10, 10, 10, 4);
+			add.BtnContent = "Add Prop";
+			add.FnExeAsy = (ct) => {
+				Ctx?.AddPropRow();
+				return Task.FromResult(NIL);
+			};
+		});
+
+		root.AddInit(new ScrollViewer(), sv => {
+			sv.Margin = new Thickness(10, 4, 10, 10);
+			var list = new ItemsControl();
+			list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x => x.PropRows, Mode: BindingMode.OneWay));
+			list.SetItemsPanel(() => new StackPanel { Spacing = 8 });
+			list.SetItemTemplate<VmWordPropRow>((row, ns) => {
+				var bdr = new Border {
+					Padding = new Thickness(8),
+					BorderBrush = Brushes.DimGray,
+					BorderThickness = new Thickness(1),
+					CornerRadius = new CornerRadius(6)
+				};
+				var sp = new StackPanel { Spacing = 6 };
+				bdr.Child = sp;
+
+				sp.Children.Add(MkBoundInput("KType", row, nameof(VmWordPropRow.KTypeText)));
+				sp.Children.Add(MkBoundInput("Key", row, nameof(VmWordPropRow.KeyText)));
+				sp.Children.Add(MkBoundInput("VType", row, nameof(VmWordPropRow.VTypeText)));
+				sp.Children.Add(MkBoundInput("Value", row, nameof(VmWordPropRow.ValueText)));
+
+				var rm = new Button {
+					Content = "Remove",
+					HorizontalAlignment = HorizontalAlignment.Right
+				};
+				rm.Click += (s, e) => Ctx?.RemovePropRow(row);
+				sp.Children.Add(rm);
+				return bdr;
+			});
+			sv.Content = list;
+		});
+
+		return root.Grid;
+	}
+
+	Control MkLearnsTab() {
+		var root = new AutoGrid(IsRow: true);
+		root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(9, GUT.Star),
+		]);
+
+		root.AddInit(new OpBtn(), add => {
+			add.Margin = new Thickness(10, 10, 10, 4);
+			add.BtnContent = "Add Learn";
+			add.FnExeAsy = (ct) => {
+				Ctx?.AddLearnRow();
+				return Task.FromResult(NIL);
+			};
+		});
+
+		root.AddInit(new ScrollViewer(), sv => {
+			sv.Margin = new Thickness(10, 4, 10, 10);
+			var list = new ItemsControl();
+			list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x => x.LearnRows, Mode: BindingMode.OneWay));
+			list.SetItemsPanel(() => new StackPanel { Spacing = 8 });
+			list.SetItemTemplate<VmWordLearnRow>((row, ns) => {
+				var bdr = new Border {
+					Padding = new Thickness(8),
+					BorderBrush = Brushes.DimGray,
+					BorderThickness = new Thickness(1),
+					CornerRadius = new CornerRadius(6)
+				};
+				var sp = new StackPanel { Spacing = 6 };
+				bdr.Child = sp;
+
+				sp.Children.Add(MkBoundInput("LearnResult(Add/Rmb/Fgt)", row, nameof(VmWordLearnRow.LearnResultText)));
+				sp.Children.Add(MkBoundInput("BizCreatedAt(ISO)", row, nameof(VmWordLearnRow.BizCreatedAtIso)));
+
+				var rm = new Button {
+					Content = "Remove",
+					HorizontalAlignment = HorizontalAlignment.Right
+				};
+				rm.Click += (s, e) => Ctx?.RemoveLearnRow(row);
+				sp.Children.Add(rm);
+				return bdr;
+			});
+			sv.Content = list;
+		});
+
+		return root.Grid;
+	}
+
+	Control MkJsonTab() {
+		var root = new AutoGrid(IsRow: true);
+		root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(8, GUT.Star),
+		]);
+
+		root.AddInit(MkJsonOps(), o => { });
+		root.AddInit(new TextBox(), tb => {
+			tb.Margin = new Thickness(10, 4, 10, 10);
+			tb.AcceptsReturn = true;
+			tb.TextWrapping = TextWrapping.Wrap;
+			tb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+			tb.Bind(TextBox.TextProperty, CBE.Mk<Ctx>(x => x.JsonText, Mode: BindingMode.TwoWay));
+		});
+		return root.Grid;
+	}
+
+	Control MkJsonOps() {
+		var g = new AutoGrid(IsRow: false);
+		g.Grid.Margin = new Thickness(10, 10, 10, 2);
+		g.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Star),
+		]);
+
+		g.AddInit(new Button(), o => {
+			o.Content = "Sync Form -> Json";
+			o.Click += (s, e) => Ctx?.SyncJsonFromDraft();
+		});
+		g.AddInit(new Button(), o => {
+			o.Content = "Apply Json -> Form";
+			o.Click += (s, e) => Ctx?.ApplyJsonToForm();
+		});
+		return g.Grid;
+	}
+
+	Control MkErrBar() {
+		var b = new Border {
+			Background = new SolidColorBrush(Color.FromArgb(70, 180, 20, 20)),
+			Padding = new Thickness(10, 6),
+			IsVisible = false
+		};
+		b.Bind(IsVisibleProperty, CBE.Mk<Ctx>(x => x.HasError, Mode: BindingMode.OneWay));
+		var txt = new TextBlock {
+			Foreground = Brushes.White
+		};
+		txt.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(x => x.LastError, Mode: BindingMode.OneWay));
+		b.Child = txt;
+		return b;
+	}
+
+	Control MkBottomBar() {
+		var g = new AutoGrid(IsRow: false);
+		g.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Star),
+		]);
+		g.Grid.Margin = new Thickness(10, 8, 10, 10);
+
+		g.AddInit(new Button(), o => {
+			o.Content = "Reset";
+			o.Click += (s, e) => Ctx?.ResetFromSource();
+		});
+		g.AddInit(new OpBtn(), o => {
+			o.BtnContent = "Save";
+			o.Bind(IsEnabledProperty, CBE.Mk<Ctx>(x => x.IsDirty, Mode: BindingMode.OneWay));
+			o.SetExe(ct => Ctx?.SaveAsy(ct));
+		});
+		return g.Grid;
+	}
+
+	Control MkInputRow(str Label, str Path) {
+		var sp = new StackPanel {
+			Orientation = Orientation.Vertical,
+			Spacing = 3
+		};
+		sp.Children.Add(new TextBlock { Text = Label });
+		var tb = new TextBox();
+		tb.Bind(TextBox.TextProperty, new CBE(Path) { Mode = BindingMode.TwoWay });
+		sp.Children.Add(tb);
+		return sp;
+	}
+
+	Control MkReadOnlyRow(str Label, str Path) {
+		var sp = new StackPanel {
+			Orientation = Orientation.Vertical,
+			Spacing = 3
+		};
+		sp.Children.Add(new TextBlock { Text = Label });
+		var tb = new TextBox { IsReadOnly = true };
+		tb.Bind(TextBox.TextProperty, new CBE(Path) { Mode = BindingMode.OneWay });
+		sp.Children.Add(tb);
+		return sp;
+	}
+
+	Control MkBoundInput(str Label, obj Src, str Path) {
+		var sp = new StackPanel {
+			Orientation = Orientation.Vertical,
+			Spacing = 3
+		};
+		sp.Children.Add(new TextBlock { Text = Label, FontSize = UiCfg.Inst.BaseFontSize * 0.9 });
+		var tb = new TextBox();
+		tb.Bind(TextBox.TextProperty, new CBE(Path) { Source = Src, Mode = BindingMode.TwoWay });
+		sp.Children.Add(tb);
+		return sp;
+	}
+}

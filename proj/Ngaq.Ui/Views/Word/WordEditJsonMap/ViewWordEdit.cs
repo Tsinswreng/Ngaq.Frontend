@@ -11,6 +11,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -51,6 +52,18 @@ public partial class ViewWordEdit
 				vj.Ctx.FromJnWord(Ctx.JnWord);
 
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", vj));
+			};
+		});
+		R.Items.AddInit(new MenuItem(), o=>{
+			o.Header = "To New Form View";
+			o.Click += (s,e)=>{
+				var v2 = new ViewWordEditV2();
+				if(AnyNull(v2.Ctx, Ctx?.JnWord)){
+					Ctx?.ShowMsg("No Word or Ctx");
+					return;
+				}
+				v2.Ctx.FromJnWord(Ctx.JnWord);
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", v2));
 			};
 		});
 		return R;
