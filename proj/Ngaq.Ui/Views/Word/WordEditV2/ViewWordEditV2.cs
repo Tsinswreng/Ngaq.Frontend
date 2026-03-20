@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
-using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
@@ -112,12 +111,12 @@ public partial class ViewWordEditV2: AppViewBase {
 		};
 		sv.Content = sp;
 
-		sp.Children.Add(MkReadOnlyRow("WordId", nameof(Ctx.WordIdText)));
-		sp.Children.Add(MkReadOnlyRow("Owner", nameof(Ctx.OwnerText)));
-		sp.Children.Add(MkInputRow("Head", nameof(Ctx.Head)));
-		sp.Children.Add(MkInputRow("Lang", nameof(Ctx.Lang)));
-		sp.Children.Add(MkInputRow("StoredAt(ISO)", nameof(Ctx.StoredAtIso)));
-		sp.Children.Add(MkInputRow("DelAt(unix ms)", nameof(Ctx.DelAtUnixMs)));
+		sp.Children.Add(MkReadOnlyRow("WordId", CBE.Mk<Ctx>(x => x.WordIdText, Mode: BindingMode.OneWay)));
+		sp.Children.Add(MkReadOnlyRow("Owner", CBE.Mk<Ctx>(x => x.OwnerText, Mode: BindingMode.OneWay)));
+		sp.Children.Add(MkInputRow("Head", CBE.Mk<Ctx>(x => x.Head, Mode: BindingMode.TwoWay)));
+		sp.Children.Add(MkInputRow("Lang", CBE.Mk<Ctx>(x => x.Lang, Mode: BindingMode.TwoWay)));
+		sp.Children.Add(MkInputRow("StoredAt(ISO)", CBE.Mk<Ctx>(x => x.StoredAtIso, Mode: BindingMode.TwoWay)));
+		sp.Children.Add(MkInputRow("DelAt(unix ms)", CBE.Mk<Ctx>(x => x.DelAtUnixMs, Mode: BindingMode.TwoWay)));
 
 		return sv;
 	}
@@ -153,10 +152,10 @@ public partial class ViewWordEditV2: AppViewBase {
 				var sp = new StackPanel { Spacing = 6 };
 				bdr.Child = sp;
 
-				sp.Children.Add(MkBoundInput("KType", row, nameof(VmWordPropRow.KTypeText)));
-				sp.Children.Add(MkBoundInput("Key", row, nameof(VmWordPropRow.KeyText)));
-				sp.Children.Add(MkBoundInput("VType", row, nameof(VmWordPropRow.VTypeText)));
-				sp.Children.Add(MkBoundInput("Value", row, nameof(VmWordPropRow.ValueText)));
+				sp.Children.Add(MkBoundInput("KType", CBE.Mk<VmWordPropRow>(x => x.KTypeText, Mode: BindingMode.TwoWay)));
+				sp.Children.Add(MkBoundInput("Key", CBE.Mk<VmWordPropRow>(x => x.KeyText, Mode: BindingMode.TwoWay)));
+				sp.Children.Add(MkBoundInput("VType", CBE.Mk<VmWordPropRow>(x => x.VTypeText, Mode: BindingMode.TwoWay)));
+				sp.Children.Add(MkBoundInput("Value", CBE.Mk<VmWordPropRow>(x => x.ValueText, Mode: BindingMode.TwoWay)));
 
 				var rm = new Button {
 					Content = "Remove",
@@ -203,8 +202,8 @@ public partial class ViewWordEditV2: AppViewBase {
 				var sp = new StackPanel { Spacing = 6 };
 				bdr.Child = sp;
 
-				sp.Children.Add(MkBoundInput("LearnResult(Add/Rmb/Fgt)", row, nameof(VmWordLearnRow.LearnResultText)));
-				sp.Children.Add(MkBoundInput("BizCreatedAt(ISO)", row, nameof(VmWordLearnRow.BizCreatedAtIso)));
+				sp.Children.Add(MkBoundInput("LearnResult(Add/Rmb/Fgt)", CBE.Mk<VmWordLearnRow>(x => x.LearnResultText, Mode: BindingMode.TwoWay)));
+				sp.Children.Add(MkBoundInput("BizCreatedAt(ISO)", CBE.Mk<VmWordLearnRow>(x => x.BizCreatedAtIso, Mode: BindingMode.TwoWay)));
 
 				var rm = new Button {
 					Content = "Remove",
@@ -232,7 +231,7 @@ public partial class ViewWordEditV2: AppViewBase {
 			tb.Margin = new Thickness(10, 4, 10, 10);
 			tb.AcceptsReturn = true;
 			tb.TextWrapping = TextWrapping.Wrap;
-			tb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+			tb.SetValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
 			tb.Bind(TextBox.TextProperty, CBE.Mk<Ctx>(x => x.JsonText, Mode: BindingMode.TwoWay));
 		});
 		return root.Grid;
@@ -292,38 +291,38 @@ public partial class ViewWordEditV2: AppViewBase {
 		return g.Grid;
 	}
 
-	Control MkInputRow(str Label, str Path) {
+	Control MkInputRow(str Label, IBinding Binding) {
 		var sp = new StackPanel {
 			Orientation = Orientation.Vertical,
 			Spacing = 3
 		};
 		sp.Children.Add(new TextBlock { Text = Label });
 		var tb = new TextBox();
-		tb.Bind(TextBox.TextProperty, new CBE(Path) { Mode = BindingMode.TwoWay });
+		tb.Bind(TextBox.TextProperty, Binding);
 		sp.Children.Add(tb);
 		return sp;
 	}
 
-	Control MkReadOnlyRow(str Label, str Path) {
+	Control MkReadOnlyRow(str Label, IBinding Binding) {
 		var sp = new StackPanel {
 			Orientation = Orientation.Vertical,
 			Spacing = 3
 		};
 		sp.Children.Add(new TextBlock { Text = Label });
 		var tb = new TextBox { IsReadOnly = true };
-		tb.Bind(TextBox.TextProperty, new CBE(Path) { Mode = BindingMode.OneWay });
+		tb.Bind(TextBox.TextProperty, Binding);
 		sp.Children.Add(tb);
 		return sp;
 	}
 
-	Control MkBoundInput(str Label, obj Src, str Path) {
+	Control MkBoundInput(str Label, IBinding Binding) {
 		var sp = new StackPanel {
 			Orientation = Orientation.Vertical,
 			Spacing = 3
 		};
 		sp.Children.Add(new TextBlock { Text = Label, FontSize = UiCfg.Inst.BaseFontSize * 0.9 });
 		var tb = new TextBox();
-		tb.Bind(TextBox.TextProperty, new CBE(Path) { Source = Src, Mode = BindingMode.TwoWay });
+		tb.Bind(TextBox.TextProperty, Binding);
 		sp.Children.Add(tb);
 		return sp;
 	}
