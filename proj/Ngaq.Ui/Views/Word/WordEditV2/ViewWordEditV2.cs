@@ -282,7 +282,7 @@ public partial class ViewWordEditV2: AppViewBase {
 		}).AddInit(new OpBtn(), o => {
 			o.BtnContent = "Save";
 			o.Bind(IsEnabledProperty, CBE.Mk<Ctx>(x => x.IsDirty, Mode: BindingMode.OneWay));
-			o.SetExe(ct => Ctx?.SaveAsy(ct));
+			o.SetExe(ct => Ctx?.Save(ct));
 		});
 		return g.Grid;
 	}

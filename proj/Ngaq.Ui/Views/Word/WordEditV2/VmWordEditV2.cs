@@ -32,6 +32,10 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx> {
 		return new Ctx();
 	}
 
+	ISvcWord? SvcWord;
+	IJsonSerializer? JsonSerializer;
+	IFrontendUserCtxMgr? UserCtxMgr;
+
 	public VmWordEditV2(
 		ISvcWord? SvcWord
 		,IJsonSerializer? JsonSerializer
@@ -43,9 +47,6 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx> {
 		InitRowEvents();
 	}
 
-	ISvcWord? SvcWord;
-	IJsonSerializer? JsonSerializer;
-	IFrontendUserCtxMgr? UserCtxMgr;
 
 	bool _isHydrating = false;
 
@@ -301,7 +302,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx> {
 		return NIL;
 	}
 
-	public async Task<nil> SaveAsy(CT Ct) {
+	public async Task<nil> Save(CT Ct) {
 		if (SvcWord is null || UserCtxMgr is null) {
 			ShowMsg("Service not ready");
 			return NIL;
