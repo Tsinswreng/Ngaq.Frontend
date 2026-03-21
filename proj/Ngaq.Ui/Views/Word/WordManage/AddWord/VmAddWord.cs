@@ -85,7 +85,7 @@ public partial class VmAddWord
 
 
 	[Time]
-	public async Task<nil> ConfirmAsy(CT Ct){
+	public async Task<nil> Confirm(CT Ct){
 		if(SvcWord is null){
 			return NIL;
 		}

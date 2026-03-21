@@ -7,9 +7,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 
 
-
 public partial class ToolView{
-
 	public static Control WithTitle(str Title, Control Target){
 		var titled = new ViewTitle();
 		titled.Body.Content = Target;

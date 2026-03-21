@@ -134,7 +134,7 @@ public partial class ViewAddWord
 				o.BtnContent = "Submit";
 				o.HorizontalAlignment = HAlign.Center;
 				o.HorizontalContentAlignment = HAlign.Center;
-				o.SetExe((Ct)=>Ctx?.ConfirmAsy(Ct));
+				o.SetExe((Ct)=>Ctx?.Confirm(Ct));
 			});
 		}}//~IndexGrid
 		return NIL;
