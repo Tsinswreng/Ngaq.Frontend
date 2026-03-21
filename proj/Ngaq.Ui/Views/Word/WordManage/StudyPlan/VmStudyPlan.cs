@@ -1,7 +1,6 @@
 ﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using System.Collections.ObjectModel;
-using System.Text.Encodings.Web;
-using System.Text.Json;
+using Ngaq.Core.Tools;
 using Ngaq.Core.Tools.JsonMap;
 using Ngaq.Ui.Components.KvMap.JsonMap;
 using Ngaq.Ui.Infra;
@@ -273,23 +272,13 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		LastError = "";
-		JsonText = JsonSerializer.Serialize(
-			dto,
-			new JsonSerializerOptions{
-				WriteIndented = true,
-				Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-			}
-		);
+		JsonText = DictJson.ToJson(DtoToDict(dto!));
 		return NIL;
 	}
 
 	public nil ApplyJsonToForm(){
 		try{
-			var dto = JsonSerializer.Deserialize<PlanDto>(JsonText);
-			if(dto is null){
-				LastError = "Json parse failed.";
-				return NIL;
-			}
+			var dto = DictToDto(DictJson.FromJson(JsonText));
 			FillFormFromDto(dto);
 			LastError = "";
 			IsDirty = true;
@@ -463,6 +452,54 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		public str? PreFilterJson{get;set;}
 		public str? WeightCalculatorJson{get;set;}
 		public Dictionary<str, object?>? WeightArgRaw{get;set;}
+	}
+
+	static Dictionary<str, object?> DtoToDict(PlanDto dto){
+		return new Dictionary<str, object?>{
+			[nameof(PlanDto.Id)] = dto.Id,
+			[nameof(PlanDto.UniqName)] = dto.UniqName,
+			[nameof(PlanDto.Descr)] = dto.Descr,
+			[nameof(PlanDto.PreFilterId)] = dto.PreFilterId,
+			[nameof(PlanDto.WeightCalculatorId)] = dto.WeightCalculatorId,
+			[nameof(PlanDto.WeightArgId)] = dto.WeightArgId,
+			[nameof(PlanDto.PreFilterJson)] = dto.PreFilterJson,
+			[nameof(PlanDto.WeightCalculatorJson)] = dto.WeightCalculatorJson,
+			[nameof(PlanDto.WeightArgRaw)] = dto.WeightArgRaw ?? MkDefaultWeightArgDict(),
+		};
+	}
+
+	static PlanDto DictToDto(IDictionary<str, object?> dict){
+		str? GetStr(str key){
+			if(!dict.TryGetValue(key, out var v) || v is null){
+				return null;
+			}
+			return v.ToString();
+		}
+
+		Dictionary<str, object?> GetObjDict(str key){
+			if(!dict.TryGetValue(key, out var v) || v is null){
+				return MkDefaultWeightArgDict();
+			}
+			if(v is IDictionary<str, object?> d1){
+				return d1.ToDictionary(x=>x.Key, x=>x.Value);
+			}
+			if(v is IDictionary<string, object?> d2){
+				return d2.ToDictionary(x=>x.Key, x=>x.Value);
+			}
+			return MkDefaultWeightArgDict();
+		}
+
+		return new PlanDto{
+			Id = GetStr(nameof(PlanDto.Id)),
+			UniqName = GetStr(nameof(PlanDto.UniqName)),
+			Descr = GetStr(nameof(PlanDto.Descr)),
+			PreFilterId = GetStr(nameof(PlanDto.PreFilterId)),
+			WeightCalculatorId = GetStr(nameof(PlanDto.WeightCalculatorId)),
+			WeightArgId = GetStr(nameof(PlanDto.WeightArgId)),
+			PreFilterJson = GetStr(nameof(PlanDto.PreFilterJson)),
+			WeightCalculatorJson = GetStr(nameof(PlanDto.WeightCalculatorJson)),
+			WeightArgRaw = GetObjDict(nameof(PlanDto.WeightArgRaw)),
+		};
 	}
 
 	public partial class PlanDraft: ViewModelBase{

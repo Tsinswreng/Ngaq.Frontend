@@ -43,6 +43,7 @@ public partial class ViewStudyPlan
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Auto),
 			RowDef(8, GUT.Star),
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Auto),
@@ -50,6 +51,7 @@ public partial class ViewStudyPlan
 
 		Root
 		.AddInit(MkTopBar(), o=>{})
+		.AddInit(MkCurrentBar(), o=>{})
 		.AddInit(MkBody(), o=>{})
 		.AddInit(MkErrBar(), o=>{})
 		.AddInit(MkBottomBar(), o=>{})
@@ -59,25 +61,27 @@ public partial class ViewStudyPlan
 	}
 
 	Control MkTopBar(){
-		var g = new AutoGrid(IsRow:false);
-		g.Grid.Margin = new Thickness(8, 8, 8, 4);
-		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Star),
-			ColDef(2, GUT.Star),
-		]);
-		g
-		.AddInit(MkBtn("New"), o=>{ o.Click += (s,e)=>Ctx?.NewPlan(); })
-		.AddInit(MkBtn("Clone"), o=>{ o.Click += (s,e)=>Ctx?.CloneSelected(); })
-		.AddInit(MkBtn("Delete"), o=>{ o.Click += (s,e)=>Ctx?.DeleteSelected(); })
-		.AddInit(MkBtn("Set Current"), o=>{ o.Click += (s,e)=>Ctx?.SetCurrentSelected(); })
-		.AddInit(MkBtn("Save Draft"), o=>{ o.Click += (s,e)=>Ctx?.SaveFormToSelected(); })
-		.AddInit(MkSearch(), o=>{});
-		return g.Grid;
+		var sp = new StackPanel{
+			Orientation = Orientation.Vertical,
+			Spacing = 6,
+			Margin = new Thickness(8, 8, 8, 4),
+		};
+		sp.Children.Add(MkSearch());
+		sp.Children.Add(MkActionWrap());
+		return sp;
+	}
+
+	Control MkActionWrap(){
+		var wrap = new WrapPanel{
+			Orientation = Orientation.Horizontal,
+			HorizontalAlignment = HAlign.Left,
+		};
+		var b1 = MkBtn("New", true); b1.Click += (s,e)=>Ctx?.NewPlan(); wrap.Children.Add(b1);
+		var b2 = MkBtn("Clone", true); b2.Click += (s,e)=>Ctx?.CloneSelected(); wrap.Children.Add(b2);
+		var b3 = MkBtn("Delete", true); b3.Click += (s,e)=>Ctx?.DeleteSelected(); wrap.Children.Add(b3);
+		var b4 = MkBtn("Set Current", true); b4.Click += (s,e)=>Ctx?.SetCurrentSelected(); wrap.Children.Add(b4);
+		var b5 = MkBtn("Save Draft", true); b5.Click += (s,e)=>Ctx?.SaveFormToSelected(); wrap.Children.Add(b5);
+		return wrap;
 	}
 
 	Control MkSearch(){
@@ -87,12 +91,25 @@ public partial class ViewStudyPlan
 		return tb;
 	}
 
+	Control MkCurrentBar(){
+		var b = new Border{
+			BorderBrush = Brushes.Gray,
+			BorderThickness = new Thickness(1),
+			Padding = new Thickness(8,4),
+			Margin = new Thickness(8,0,8,4),
+		};
+		var txt = new TextBlock();
+		txt.Bind(txt.PropText, CBE.Mk<Ctx>(x=>x.CurPlanId, Converter: new SimpleFnConvtr<str, str>(v=>$"Current Plan: {v}")));
+		b.Child = txt;
+		return b;
+	}
+
 	Control MkBody(){
-		var g = new AutoGrid(IsRow:false);
+		var g = new AutoGrid(IsRow:true);
 		g.Grid.Margin = new Thickness(8, 2, 8, 2);
-		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(3, GUT.Star),
-			ColDef(7, GUT.Star),
+		g.Grid.RowDefinitions.AddRange([
+			RowDef(3, GUT.Star),
+			RowDef(7, GUT.Star),
 		]);
 		g
 		.AddInit(MkPlanList(), o=>{})
@@ -107,15 +124,18 @@ public partial class ViewStudyPlan
 			BorderThickness = new Thickness(1),
 			Padding = new Thickness(6),
 		};
-		var list = new ListBox();
+		var root = new StackPanel{ Spacing = 4 };
+		root.Children.Add(new TextBlock{ Text = "Plans" });
+		var list = new ListBox{ MaxHeight = 200 };
 		list.Bind(list.PropItemsSource, CBE.Mk<Ctx>(x=>x.FilteredPlans));
 		list.Bind(list.PropSelectedItem, CBE.Mk<Ctx>(x=>x.SelectedPlan, Mode:BindingMode.TwoWay));
 		list.SetItemTemplate<Ctx.PlanDraft>((item, ns)=>{
-			var txt = new TextBlock();
+			var txt = new TextBlock{ TextWrapping = TextWrapping.Wrap };
 			txt.Bind(txt.PropText, CBE.Mk<Ctx.PlanDraft>(x=>x.DisplayName));
 			return txt;
 		});
-		b.Child = list;
+		root.Children.Add(list);
+		b.Child = root;
 		return b;
 	}
 
@@ -200,8 +220,8 @@ public partial class ViewStudyPlan
 			ColDef(1, GUT.Star),
 		]);
 		g
-		.AddInit(MkBtn("Sync Form -> Json"), o=>{ o.Click += (s,e)=>Ctx?.SyncJsonFromForm(); })
-		.AddInit(MkBtn("Apply Json -> Form"), o=>{ o.Click += (s,e)=>Ctx?.ApplyJsonToForm(); })
+		.AddInit(MkBtn("Sync Form -> Json", true), o=>{ o.Click += (s,e)=>Ctx?.SyncJsonFromForm(); })
+		.AddInit(MkBtn("Apply Json -> Form", true), o=>{ o.Click += (s,e)=>Ctx?.ApplyJsonToForm(); })
 		;
 		return g.Grid;
 	}
@@ -214,33 +234,33 @@ public partial class ViewStudyPlan
 			IsVisible = false,
 		};
 		b.Bind(IsVisibleProperty, CBE.Mk<Ctx>(x=>x.HasError, Mode:BindingMode.OneWay));
-		var txt = new TextBlock{ Foreground = Brushes.White };
+		var txt = new TextBlock{ Foreground = Brushes.White, TextWrapping = TextWrapping.Wrap };
 		txt.Bind(txt.PropText, CBE.Mk<Ctx>(x=>x.LastError, Mode:BindingMode.OneWay));
 		b.Child = txt;
 		return b;
 	}
 
 	Control MkBottomBar(){
-		var g = new AutoGrid(IsRow:false);
-		g.Grid.Margin = new Thickness(8, 2, 8, 8);
-		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
-		]);
-		g
-		.AddInit(MkBtn("Save Form"), o=>{ o.Click += (s,e)=>Ctx?.SaveFormToSelected(); })
-		.AddInit(MkBtn("Sync Form -> Json"), o=>{ o.Click += (s,e)=>Ctx?.SyncJsonFromForm(); })
-		.AddInit(MkBtn("Apply Json -> Form"), o=>{ o.Click += (s,e)=>Ctx?.ApplyJsonToForm(); })
-		.AddInit(new TextBlock(), o=>{
+		var sp = new StackPanel{
+			Orientation = Orientation.Vertical,
+			Spacing = 6,
+			Margin = new Thickness(8, 2, 8, 8),
+		};
+		var action = new WrapPanel{
+			Orientation = Orientation.Horizontal,
+			HorizontalAlignment = HAlign.Left,
+		};
+		var b1 = MkBtn("Save Form", true); b1.Click += (s,e)=>Ctx?.SaveFormToSelected(); action.Children.Add(b1);
+		var b2 = MkBtn("Sync Form -> Json", true); b2.Click += (s,e)=>Ctx?.SyncJsonFromForm(); action.Children.Add(b2);
+		var b3 = MkBtn("Apply Json -> Form", true); b3.Click += (s,e)=>Ctx?.ApplyJsonToForm(); action.Children.Add(b3);
+		sp.Children.Add(action);
+		sp.AddInit(new TextBlock(), o=>{
 			o.VerticalAlignment = VAlign.Center;
 			o.Text = "Dirty";
 			o.Foreground = Brushes.Orange;
 			o.Bind(IsVisibleProperty, CBE.Mk<Ctx>(x=>x.IsDirty, Mode:BindingMode.OneWay));
-		})
-		;
-		return g.Grid;
+		});
+		return sp;
 	}
 
 	Control MkInputRow(str label, IBinding binding){
@@ -285,7 +305,12 @@ public partial class ViewStudyPlan
 		return sp;
 	}
 
-	Button MkBtn(str text){
-		return new Button{ Content = text, Margin = new Thickness(0,0,8,0) };
+	Button MkBtn(str text, bool mobile = false){
+		return new Button{
+			Content = text,
+			Margin = new Thickness(0,0,8,6),
+			MinHeight = mobile ? 36 : 0,
+			MinWidth = mobile ? 96 : 0,
+		};
 	}
 }
