@@ -145,8 +145,8 @@ Control? Try()
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 
-		//var Home = new ViewHome();
-		var Home = new ViewWordEditV2();
+		var Home = new ViewHome();
+		// var Home = new ViewWordEditV2();
 
 		Navi.GoTo(Home);
 	}

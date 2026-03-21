@@ -166,6 +166,8 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx> {
 		set { SetProperty(ref field, value); }
 	} = "";
 
+	//TODO 缺字段 更新時間 等
+
 	public ObservableCollection<VmWordPropRow> PropRows {
 		get { return field; }
 		set { SetProperty(ref field, value); }

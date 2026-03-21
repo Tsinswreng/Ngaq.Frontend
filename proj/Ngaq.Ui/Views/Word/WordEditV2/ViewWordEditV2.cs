@@ -49,14 +49,14 @@ public partial class ViewWordEditV2: AppViewBase {
 	protected nil Render() {
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
+			//RowDef(1, GUT.Auto),
 			RowDef(8, GUT.Star),
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Auto),
 		]);
 
 		Root
-		.AddInit(MkHeader(), o => { })
+		//.AddInit(MkHeader(), o => { })
 		.AddInit(MkTabs(), o => { })
 		.AddInit(MkErrBar(), o => { })
 		.AddInit(MkBottomBar(), o => { });
