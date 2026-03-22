@@ -1,11 +1,11 @@
-namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanRow;
 
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmStudyPlan;
-public partial class ViewStudyPlan
+using Ctx = VmStudyPlanRow;
+public partial class ViewStudyPlanRow
 	:AppViewBase
 {
 
@@ -14,7 +14,7 @@ public partial class ViewStudyPlan
 		set{DataContext = value;}
 	}
 
-	public ViewStudyPlan(){
+	public ViewStudyPlanRow(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
@@ -40,10 +40,3 @@ public partial class ViewStudyPlan
 	}
 }
 
-/*
-
-StudyPlanCard:
-表頭:
-`序號(在UI中顯示的序號、從1開始、不是id)	名稱	`
-
- */

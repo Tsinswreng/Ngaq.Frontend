@@ -15,7 +15,7 @@ using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.CsStrAcc;
+using Tsinswreng.Srefl;
 using Ctx = VmWordEdit;
 public partial class ViewWordEdit
 	:AppViewBase
