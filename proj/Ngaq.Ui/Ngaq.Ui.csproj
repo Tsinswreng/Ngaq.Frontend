@@ -21,6 +21,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" />
+		<PackageReference Include="Avalonia.Controls.TreeDataGrid" />
 		<PackageReference Include="Avalonia.AvaloniaEdit" />
 		<PackageReference Include="Avalonia.Markup.Declarative" />
 		<PackageReference Include="Avalonia.Skia" />
