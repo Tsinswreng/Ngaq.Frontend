@@ -78,14 +78,14 @@ public partial class ViewLearnWords
 			}
 		};
 		// 动态监听窗口大小变化，保持同步
-		// top.GetObservable(TopLevel.BoundsProperty).Subscribe(bounds => //无法将 lambda 表达式 转换为类型“IObserver<Rect>”，原因是它不是委托类型CS1660
+		// top.GetObservable(TopLevel.BoundsProperty).Subscribe(bounds => //无法?lambda 表达?转换为类型“IObserver<Rect>”，原因是它不是委托类型CS1660
 		// {
 		// 	originalBrush.Stretch = Stretch.Uniform;
 		// 	overlayGrid.Width = bounds.Width;
 		// 	overlayGrid.Height = bounds.Height;
 		// });
 
-		// 用 VisualBrush 包裹 overlayGrid
+		// ?VisualBrush 包裹 overlayGrid
 		var combinedBrush = new VisualBrush{
 			Visual = overlayGrid,
 			Stretch = Stretch.Fill
@@ -111,7 +111,7 @@ public partial class ViewLearnWords
 			// 触发 Background 的刷新或重设，保证ImageBrush用UniformToFill渲染
 			if(Ctx==null){return;}
 			if(top.Background is TileBrush tb){
-				tb.Stretch = Stretch.UniformToFill; //TODO與Ctx中ʹ配置 持一
+				tb.Stretch = Stretch.UniformToFill; //TODO與Ctx中ʹ配?持一
 			}
 			//Background = Shade(Ctx.BgBrush, top);
 			//top.Background.Stretch = Stretch.Uniform;
@@ -190,7 +190,7 @@ public partial class ViewLearnWords
  */
  				o._Button.Styles.Add(
 					new Style(
-						//x=>x.OfType<Button>().Template().OfType<ContentPresenter>() //改僞類樣式旹纔需此
+						//x=>x.OfType<Button>().Template().OfType<ContentPresenter>() //改僞類樣式旹纔需?
 						x=>x.Is<Button>()
 					).Set(
 						BackgroundProperty
@@ -213,7 +213,7 @@ public partial class ViewLearnWords
 				o.SetExe((Ct)=>Ctx?.ResetAsy(Ct));
 			})
 			.A(Btn(), o=>{
-				o._Button.InitContent(Hc(//⚙
+				o._Button.InitContent(Hc(//?
 					Ic(Svgs.GearFill)
 					,T(I[K.Settings])
 				));
@@ -253,26 +253,24 @@ public partial class ViewLearnWords
 		{{
 			Root
 			.A(_Border(), o=>{
-				//背景圖遮蔽
+				//背景圖遮?
 				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
 				o.ZIndex = -1;
 			})
 			.A(_Menu())
 			.A(_ScrollViewer(), Scr=>{
 				Scr.InitContent(_ListWordCard(), o=>{
-					o.Bind(
+					o.CBind<Ctx>(
 						ItemsControl.ItemsSourceProperty
-						,CBE.Mk<Ctx>(x=>x.WordCards, Mode: BindingMode.TwoWay)
-					);
+						,x=>x.WordCards, Mode: BindingMode.TwoWay);
 				});
 			})//~ScrollViewer
 			.A(new GridSplitter(), o=>{
 				o.GrayBarWith3Dots();
 			})
 			.A(_WordInfo(), o=>{
-				o.Bind(o.PropDataContext
-					,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
-				);
+				o.CBind<Ctx>(o.PropDataContext
+					,x=>x.CurWordInfo, Mode: BindingMode.TwoWay);
 			});
 		}}
 		return NIL;
@@ -309,7 +307,7 @@ public partial class ViewLearnWords
 		return Ans.Grid;
 	}
 
-	//TODO 分頁加載以代虛擬化
+	//TODO 分頁加載以代虛擬?
 	Control _ListWordCard(){
 		var Ans = new ItemsControl();
 		var Cnt = 1;
@@ -336,11 +334,10 @@ public partial class ViewLearnWords
 					o.HorizontalContentAlignment = HAlign.Stretch;
 					o.Styles.Add(new Style().NoMargin().NoPadding());
 					o.Background = Brushes.Transparent;
-					o.Bind(
+					o.CBind<VmWordListCard>(
 						//Button.BackgroundProperty
 						BorderBrushProperty
-						,CBE.Mk<VmWordListCard>(x=>x.LearnedColor, Mode: BindingMode.OneWay)
-					);
+						,x=>x.LearnedColor, Mode: BindingMode.OneWay);
 					o.BorderThickness = new Thickness(4,0,0,0);
 					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs??o.LongPressDurationMs;
 					o.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, VmWordCard?.WordForLearn?.JnWord);
@@ -354,18 +351,17 @@ public partial class ViewLearnWords
 				Btn.InitContent(new ViewWordListCard(VmWordCard), o=>{
 					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
 					o.Background = Brushes.Transparent;
-					o.Bind(
+					o.CBind<VmWordListCard>(
 						o.PropDataContext_()
-						,CBE.Mk<VmWordListCard>(x=>x
+						,x=>x
 							,Mode: BindingMode.OneWay
-						)
-					);
+						);
 					Btn.Click += (s,e)=>{
 						if(o?.Ctx != null){
 							Ctx?.ClickWordCard(o.Ctx);
 						}
 					};
-					//觸屏旹 長按ʹ效ˋ不佳。scrollViewer上下滑動旹亦祘。璫只在靜止旹長按纔生效
+					//觸屏?長按ʹ效ˋ不佳。scrollViewer上下滑動旹亦祘。璫只在靜止旹長按纔生效
 					// Btn.OnLongPressed += (s,e)=>{
 					// 	if(o?.Ctx != null){
 					// 		Ctx?.OnLongPressed(o.Ctx);

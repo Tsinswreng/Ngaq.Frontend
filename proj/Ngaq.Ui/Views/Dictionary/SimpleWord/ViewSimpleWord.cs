@@ -51,13 +51,13 @@ public partial class ViewSimpleWord
 		Root
 		.A(Txt(), o=>{
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.5;
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Head));
+			o.CBind<Ctx>(o.PropText,x=>x.Head);
 		})
 		.A(PronunciationList(), o=>{
 
 		})
 		.A(Txt(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Description));
+			o.CBind<Ctx>(o.PropText,x=>x.Description);
 		})
 		;
 		return NIL;

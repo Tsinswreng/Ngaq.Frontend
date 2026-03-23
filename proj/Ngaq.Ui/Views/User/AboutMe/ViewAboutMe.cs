@@ -64,7 +64,7 @@ public partial class ViewAboutMe
 			o.InitContent(new CircleAvatar(), o=>{
 				o.Width = UiCfg.Inst.BaseFontSize*1.5;
 				o.Height = UiCfg.Inst.BaseFontSize*1.5;
-				o.Bind(o.PropSource, CBE.Mk<Ctx>(x=>x.AvatarImg));
+				o.CBind<Ctx>(o.PropSource,x=>x.AvatarImg);
 			});
 			o.Click += (o, e) => {
 				Ctx?.ViewNavi?.GoTo(

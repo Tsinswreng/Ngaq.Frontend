@@ -65,7 +65,7 @@ public partial class ViewDictionary
 		{{
 			// 源語言輸入
 			LangGrid.A(new TextBox(), o=>{
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.SrcLang));
+				o.CBind<Ctx>(o.PropText,x=>x.SrcLang);
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
 				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.7;
@@ -90,7 +90,7 @@ public partial class ViewDictionary
 			})
 			// 目標語言輸入
 			.A(new TextBox(), o=>{
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.TgtLang));
+				o.CBind<Ctx>(o.PropText,x=>x.TgtLang);
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
 				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.7;
@@ -100,7 +100,7 @@ public partial class ViewDictionary
 			});
 		}}
 
-		// 搜索行
+		// 搜索?
 		var SearchGrid = new AutoGrid(IsRow: false);
 		Root.A(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs.AddRange([
@@ -112,7 +112,7 @@ public partial class ViewDictionary
 
 			SearchGrid
 			.A(SearchTextBox, o=>{
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Input));
+				o.CBind<Ctx>(o.PropText,x=>x.Input);
 				o.KeyBindings.Add(
 					new KeyBinding{
 						Gesture = new(Key.Enter),
@@ -131,7 +131,7 @@ public partial class ViewDictionary
 
 		}}
 		Root.A(new ViewSimpleWord(), o=>{
-			o.Bind(o.PropDataContext, CBE.Mk<Ctx>(x=>x.Result));
+			o.CBind<Ctx>(o.PropDataContext,x=>x.Result);
 		})
 
 		;

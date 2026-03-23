@@ -48,19 +48,19 @@ public partial class ViewJsonMapItem
 		]);
 		Root
 		.A(Txt(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.DisplayName));
+			o.CBind<Ctx>(o.PropText,x=>x.DisplayName);
 		})
 		.A(Txt(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Descr));
+			o.CBind<Ctx>(o.PropText,x=>x.Descr);
 			o.FontSize = UiCfg.Inst.BaseFontSize * 0.8;
 			o.Foreground = Brushes.LightGray;
 			//TODO 處理文字過多
 		})
 		.A(new TextBox(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.RawInput));
+			o.CBind<Ctx>(o.PropText,x=>x.RawInput);
 
 		})
-		//TODO 增一詳情頁、即把只一項置全屏㕥編輯、中ʸ用大ʹ可換行ʹTextBox作輸入框。
+		//TODO 增一詳情頁、即把只一項置全屏㕥編輯、中ʸ用大ʹ可換行ʹTextBox作輸入框?
 
 
 		;

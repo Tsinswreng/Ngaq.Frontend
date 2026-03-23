@@ -76,7 +76,7 @@ public partial class Cls_{
 			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password));
 			//formItem("Confirm Password", CBE.pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
-			//TODO 用popup彈出框
+			//TODO 用popup彈出�?
 			var errMsgSclv = new ScrollViewer{};
 			Stk.Children.Add(errMsgSclv);
 			{

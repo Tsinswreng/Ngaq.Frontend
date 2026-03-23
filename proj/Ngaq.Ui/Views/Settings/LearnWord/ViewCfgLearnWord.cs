@@ -47,10 +47,9 @@ public partial class ViewCfgLearnWord
 				.A(new CheckBox(), o=>{
 					//o.Tag = new TextBlock{Text = "Enable Random Background"};
 					o.Content = "Enable Random Background";
-					o.Bind(
+					o.CBind<Ctx>(
 						o.PropIsChecked
-						,CBE.Mk<Ctx>(x=>x.EnableRandomBackground)
-					);
+						,x=>x.EnableRandomBackground);
 				})
 				.A(new TextBlock(), o=>{
 					o.Text = "Language Filter(One per line)";// TODO i18n
@@ -59,10 +58,9 @@ public partial class ViewCfgLearnWord
 					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 					o.AcceptsReturn = true;
 					o.Height = 100;
-					o.Bind(
+					o.CBind<Ctx>(
 						o.PropText
-						,CBE.Mk<Ctx>(x=>x.LanguageFilterExpr)
-					);
+						,x=>x.LanguageFilterExpr);
 				})
 				.A(new TextBlock{
 					Text = "Lua Filter",// TODO i18n
@@ -72,17 +70,16 @@ public partial class ViewCfgLearnWord
 					AcceptsReturn = true,
 					Height = 100,
 					//Bind = (o.PropText, CBE.Mk<Ctx>(x=>x.LuaFilterExpr)),
-					Init=o=>{o.Bind(
+					Init=o=>{o.CBind<Ctx>(
 						o.PropText
-						,CBE.Mk<Ctx>(x=>x.LuaFilterExpr)
-					);},
+						,x=>x.LuaFilterExpr);},
 				})
 
 				// .AddInit(new TextBox(), o=>{
 				// 	o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 				// 	o.AcceptsReturn = true;
 				// 	o.Height = 100;
-				// 	o.Bind(
+				// 	o.CBind(
 				// 		o.PropText
 				// 		,CBE.Mk<Ctx>(x=>x.LuaFilterExpr)
 				// 	);

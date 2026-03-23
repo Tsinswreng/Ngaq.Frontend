@@ -58,7 +58,7 @@ public partial class ViewSearchedWordCard
 		// );
 		// Styles.Add(InfoGridColor);
 		// {var o = InfoGridColor;
-		// 	o.Bind(
+		// 	o.CBind(
 		// 		TextBlock.ForegroundProperty
 		// 		,CBE.Mk<Ctx>(x=>x.LearnedColor,
 		// 			Mode: BindingMode.OneWay
@@ -116,23 +116,20 @@ public partial class ViewSearchedWordCard
 			{var o = Head;
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
-				o.Bind(
+				o.CBind<Ctx>(
 					o.PropTextDecorations
-					,CBE.Mk<Ctx>(x=>x.DelAt
+					,x=>x.DelAt
 						,Converter: new SimpleFnConvtr<IdDel?, TextDecorationCollection?>((delAt)=>{
 							return delAt.IsNullOrDefault()
 							? null : TextDecorations.Strikethrough;
 						})
-					)
-				);
-				o.Bind(
+					);
+				o.CBind<Ctx>(
 					o.PropText
-					,CBE.Mk<Ctx>(x=>x.Head)
-				);
-				o.Bind(
+					,x=>x.Head);
+				o.CBind<Ctx>(
 					TextBlock.ForegroundProperty
-					,CBE.Mk<Ctx>(x=>x.FontColor)
-				);
+					,x=>x.FontColor);
 			}
 		}}
 
@@ -160,10 +157,10 @@ public partial class ViewSearchedWordCard
 			var LastLearn = new TextBlock();
 			R.Add(LastLearn);
 			{var o = LastLearn;
-				o.Bind(
+				o.CBind<Ctx>(
 					o.PropText_()
 					//LearnRecord不應潙空集合、緣添旹必得'add'
-					,CBE.Mk<Ctx>(x=>x.SavedLearnRecords
+					,x=>x.SavedLearnRecords
 						,Converter: new ParamFnConvtr<IList<ILearnRecord>, str>((x, p)=>{
 							if(x.Count > 0){
 								return Ctx.LearnToSymbol(x[^1].Learn);
@@ -173,8 +170,7 @@ public partial class ViewSearchedWordCard
 							// throw new FatalLogicErr("No learn record found. Word:"+Word.Lang+":"+Word.Head);
 						})
 						,ConverterParameter: Ctx
-					)
-				);
+					);
 			}
 
 			var RecordType = (ELearn Learn)=>{
@@ -205,29 +201,27 @@ public partial class ViewSearchedWordCard
 			var LastReviewTime = new TextBlock();
 			R.Add(LastReviewTime);
 			{var o = LastReviewTime;
-				o.Bind(
+				o.CBind<Ctx>(
 					o.PropText_()
-					,CBE.Mk<Ctx>(x=>x.LastLearnedTime
+					,x=>x.LastLearnedTime
 						,Converter: new SimpleFnConvtr<i64, str>(x=>{
 							var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 							var Diff = Now - x;
 							return Ctx.FormatUnixMsDiff(Diff);
 						})
-					)
-				);
+					);
 			}
 			R.Add(new TextBlock{Text = "\t"});
 			var Weight = new TextBlock();
 			R.Add(Weight);
 			{var o = Weight;
-				o.Bind(
+				o.CBind<Ctx>(
 					o.PropText_()
-					,CBE.Mk<Ctx>(x=>x.Weight
+					,x=>x.Weight
 						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
 							Ctx.FmtNum(x??0, 2)
 						)
-					)
-				);
+					);
 			}
 		}}
 

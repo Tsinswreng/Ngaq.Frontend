@@ -50,7 +50,7 @@ public partial class ViewPronunciation
 			o.SetExe(Ct=>Ctx?.Play(Ct));
 		})
 		.A(Txt(), o=>{
-			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Text));
+			o.CBind<Ctx>(o.PropText,x=>x.Text);
 		})
 		;
 		return NIL;

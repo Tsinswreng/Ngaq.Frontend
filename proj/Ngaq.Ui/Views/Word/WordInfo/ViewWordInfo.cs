@@ -178,10 +178,10 @@ public partial class ViewWordInfo
 				}//~new CBE
 			);//~Bind
 
-			//annotation無內容旹則不顯
-			o.Bind(
+			//annotation無內容旹則不?
+			o.CBind<StrokeTextBlock>(
 				StrokeTextBlock.HeightProperty
-				,CBE.Mk<StrokeTextBlock>(x=>x.Text
+				,x=>x.Text
 					,Converter: new SimpleFnConvtr<str?, double>(x=>{
 						if(str.IsNullOrEmpty(x)){
 							return 0;
@@ -189,8 +189,7 @@ public partial class ViewWordInfo
 						return double.NaN;
 					})
 					,Source: o
-				)
-			);
+				);
 		});//~TxtBox
 		#endif
 

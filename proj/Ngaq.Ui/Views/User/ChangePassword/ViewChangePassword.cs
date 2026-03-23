@@ -46,7 +46,7 @@ public partial class ViewChangePassword
 			})
 			.A(new TextBox(), o=>{
 				o.PasswordChar = '*';
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.OldPassword));
+				o.CBind<Ctx>(o.PropText,x=>x.OldPassword);
 				o.VerticalAlignment = VAlign.Center;
 			})
 			.A(new TextBlock(), o=>{
@@ -55,7 +55,7 @@ public partial class ViewChangePassword
 			})
 			.A(new TextBox(), o=>{
 				o.PasswordChar = '*';
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.NewPassword));
+				o.CBind<Ctx>(o.PropText,x=>x.NewPassword);
 				o.VerticalAlignment = VAlign.Center;
 			})
 			.A(new TextBlock(), o=>{
@@ -64,7 +64,7 @@ public partial class ViewChangePassword
 			})
 			.A(new TextBox(), o=>{
 				o.PasswordChar = '*';
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.ConfirmPassword));
+				o.CBind<Ctx>(o.PropText,x=>x.ConfirmPassword);
 				o.VerticalAlignment = VAlign.Center;
 			})
 			.A(new OpBtn(), o=>{

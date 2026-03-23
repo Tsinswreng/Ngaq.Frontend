@@ -9,9 +9,9 @@ using Ctx = VmEditJsonWord;
 
 #if false //TODO 寫到Ui㕥示用戶
 
-改詞旹 需改聚合根ʹ BizUpdatedAt 及 所改ʹ條目ʹBizUpdatedAt、
-務必使新BizUpdatedAt值足夠大、任設一值芝大於原者即可。後端自動取當前ʹ時㕥潙其值
-于新增ʹ條目 如 Props或Learns、設其Id爲"0"即可、後端自動替換成新生成ʹId
+改詞?需改聚合根ʹ BizUpdatedAt ?所改ʹ條目ʹBizUpdatedAt?
+務必使新BizUpdatedAt值足夠大、任設一值芝大於原者即可。後端自動取當前ʹ時㕥潙其?
+于新增ʹ條??Props或Learns、設其Id?0"即可、後端自動替換成新生成ʹId
 
 #endif
 
@@ -49,10 +49,9 @@ public partial class ViewEditJsonWord
 		});
 		Root.A(_TextBox(), o=>{
 			o.AcceptsReturn = true;
-			o.Bind(
+			o.CBind<Ctx>(
 				o.PropText
-				,CBE.Mk<Ctx>(x=>x.Json)
-			);
+				,x=>x.Json);
 		});
 		var BottomBtnGrid = new AutoGrid(IsRow: false);
 		Root.Add(BottomBtnGrid.Grid);

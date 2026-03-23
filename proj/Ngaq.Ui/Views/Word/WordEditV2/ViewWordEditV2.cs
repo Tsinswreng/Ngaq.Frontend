@@ -91,12 +91,12 @@ public partial class ViewWordEditV2: AppViewBase {
 			box.A(new TextBlock(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize * 1.15;
 				o.FontWeight = FontWeight.SemiBold;
-				o.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(x => x.Head, Mode: BindingMode.OneWay));
+				o.CBind<Ctx>(TextBlock.TextProperty,x => x.Head, Mode: BindingMode.OneWay);
 			})
 			.A(new TextBlock(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
 				o.Foreground = Brushes.LightGray;
-				o.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(x => x.Lang, Mode: BindingMode.OneWay));
+				o.CBind<Ctx>(TextBlock.TextProperty,x => x.Lang, Mode: BindingMode.OneWay);
 			})
 			;
 		});
@@ -298,7 +298,7 @@ public partial class ViewWordEditV2: AppViewBase {
 			//o.Classes.Add(Cls.MainBtn);
 			o.Background = UiCfg.Inst.MainColor;
 			o.BtnContent = Svgs.FloppyDiskBackFill.ToIcon().WithText(" Save");
-			o.Bind(IsEnabledProperty, CBE.Mk<Ctx>(x => x.IsDirty, Mode: BindingMode.OneWay));
+			o.CBind<Ctx>(IsEnabledProperty,x => x.IsDirty, Mode: BindingMode.OneWay);
 			o.SetExe(ct => Ctx?.Save(ct));
 		});
 		return g.Grid;

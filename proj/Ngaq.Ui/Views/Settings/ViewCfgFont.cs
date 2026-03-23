@@ -39,12 +39,11 @@ public partial class ViewCfgFont
 			ColDef(1, GUT.Auto),
 		]);
 		R.A(_TextBox(), o=>{
-			o.Bind(
+			o.CBind<Ctx>(
 				o.PropText
-				,CBE.Mk<Ctx>(
+				,
 					x=>x.InputFontSize
-				)
-			);
+				);
 		});
 		// .AddInit(new SwipeLongPressBtn(), o=>{
 
@@ -81,10 +80,9 @@ public partial class ViewCfgFont
 		.A(_TextBlock(), o=>{
 			o.Text = SampleText;
 			o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
-			o.Bind(
+			o.CBind<Ctx>(
 				o.PropFontSize_()
-				,CBE.Mk<Ctx>(x=>x.FontSize)
-			);
+				,x=>x.FontSize);
 		});
 
 		return NIL;
@@ -97,8 +95,8 @@ You need to relaunch the application after changing the font size.
 ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`
 abcdefghijklmnopqrstuvwxyz{|}~
  ¡¢£¤¥¦§¨©ª«
-一去二三里  煙村亖五家
-亭臺六七座  八九十枝花
+一去二三里  煙村亖五?
+亭臺六七? 八九十枝?
 """;
 
 }

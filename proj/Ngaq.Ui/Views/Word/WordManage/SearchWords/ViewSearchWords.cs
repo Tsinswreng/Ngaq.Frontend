@@ -65,10 +65,9 @@ public partial class ViewSearchWords
 		{{
 			var searchBtn = new OpBtn();
 			SearchGrid.A(_TextBox(), o=>{
-				o.Bind(
+				o.CBind<Ctx>(
 					o.PropText
-					,CBE.Mk<Ctx>(x=>x.Input)
-				);
+					,x=>x.Input);
 				o.KeyBindings.Add(
 					new KeyBinding{
 						Gesture = new (Key.Enter),
@@ -85,13 +84,12 @@ public partial class ViewSearchWords
 		}}
 		Root.A(_ScrollViewer(), scrl=>{
 			scrl.InitContent(_ListWordCard(), o=>{
-				o.Bind(
+				o.CBind<Ctx>(
 					ItemsControl.ItemsSourceProperty
-					,CBE.Mk<Ctx>(
+					,
 						x=>x.GotWords
 						,Mode: BindingMode.OneWay
-					)
-				);
+					);
 			});
 		});
 		Root.A(_PageBar(), o=>{
@@ -134,7 +132,7 @@ public partial class ViewSearchWords
 			};
 			R.Styles.Add(new Style().Set(
 				BackgroundProperty
-				,Brushes.Transparent//背景設潙空則影響點擊判定範圍、點到空處則視潙未點、故用透明㕥代空背景
+				,Brushes.Transparent//背景設潙空則影響點擊判定範圍、點到空處則視潙未點、故用透明㕥代空背?
 			));
 			R.Styles.Add(new Style().NoMargin().NoPadding());
 			return R;
@@ -156,9 +154,9 @@ public partial class ViewSearchWords
 			};
 		});
 		R.A(_TextBox(), o=>{
-			o.Bind(
+			o.CBind<Ctx>(
 				o.PropText
-				,CBE.Mk<Ctx>(
+				,
 					x=>x.PageIdx
 					,Converter: new ParamFnConvtr<u64, str>(
 						(idx, arg)=>(idx+1).ToString()
@@ -170,8 +168,7 @@ public partial class ViewSearchWords
 						}
 					)
 					,Mode: BindingMode.TwoWay
-				)
-			);
+				);
 		});
 		R.A(_Button(), o=>{
 			o.Content = ">";

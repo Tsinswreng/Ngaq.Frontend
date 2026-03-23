@@ -120,10 +120,9 @@ public partial class ViewWordListCard
 			LangGrid
 			.A(TxtBox(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
-				o.Bind(
+				o.CBind<Ctx>(
 					o.PropText
-					,CBE.Mk<Ctx>(x=>x.Index)
-				);
+					,x=>x.Index);
 			})
 			.A(TxtBox(), o=>{
 				o.Text = "　";

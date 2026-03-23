@@ -30,16 +30,16 @@ public partial class VmSpec:ViewModelBase, IMk<Ctx>{
 	}
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmSpec(){
-		#if DEBUG//放示例 便于調試樣式
+		#if DEBUG//放示?便于調試樣式
 		{
 			var o = new Ctx();
 			Samples.Add(o);
-			//此處可 o.Foo = Bar
+			//此處?o.Foo = Bar
 		}
-		{//又一組示例
+		{//又一組示?
 			var o = new Ctx();
 			Samples.Add(o);
-			//此處可 o.Foo = Bar
+			//此處?o.Foo = Bar
 		}
 		//...
 		#endif
@@ -49,7 +49,7 @@ public partial class VmSpec:ViewModelBase, IMk<Ctx>{
 	//依賴字段聲明成這樣。全部聲明爲可空類型
 	ISvcSample? SvcSample;
 	IUserCtxMgr? UserCtxMgr;
-	//公開的有參構造器用于依賴注入。
+	//公開的有參構造器用于依賴注入?
 	public VmSpec(
 		ISvcSample? SvcSample
 		,IUserCtxMgr? UserCtxMgr
@@ -60,7 +60,7 @@ public partial class VmSpec:ViewModelBase, IMk<Ctx>{
 	#endregion 依賴注入
 
 
-	//可綁定字段必須定義成這樣、無特殊情況(如轉發其他屬性)必須使用filed關鍵字
+	//可綁定字段必須定義成這樣、無特殊情況(如轉發其他屬?必須使用filed關鍵?
 	public int Cnt1{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -82,16 +82,16 @@ public partial class VmSpec:ViewModelBase, IMk<Ctx>{
 
 
 /*
-//第二套寫法(不推薦)
+//第二套寫?不推?
 		.AddInit(new TextBox{
 			AcceptsReturn = true,
 			//對于[無法用屬性初始化賦值語法來初始化]的部分、可在Init函數中初始化
 			Init=o=>{
-				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Cnt2));
+				o.CBind<Ctx>(o.PropText,x=>x.Cnt2);
 			}
 		})
 		.AddInit(new Button{
-			Content = "按鈕二",
+			Content = "按鈕?,
 			Init=o=>{
 				o.Click+=(s,e)=>{
 					Ctx?.Click2();

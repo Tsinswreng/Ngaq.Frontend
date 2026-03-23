@@ -70,7 +70,7 @@ public partial class ViewUserProfile
 						o.Height = 150;
 					}catch{}
 					//o.Source = SolidImageGenerator.Create(100,100, Colors.Red);
-					// o.Bind(
+					// o.CBind(
 					// 	Avatar.SourceProperty
 					// 	,CBE.Mk<Ctx>(x=>x.Avatar)
 					// );
