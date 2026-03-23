@@ -121,7 +121,7 @@ public partial class ViewWordListCard
 			.A(TxtBox(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
 				o.Bind(
-					o.PropText_()
+					o.PropText
 					,CBE.Mk<Ctx>(x=>x.Index)
 				);
 			})
@@ -130,10 +130,7 @@ public partial class ViewWordListCard
 			})
 			.A(TxtBox(), o=>{
 				o.VerticalAlignment = VAlign.Center;
-				o.Bind(
-					o.PropText_()
-					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
-				);
+				o.CBind<Ctx>(o.PropText, x=>x.Lang);
 				o.Foreground = Brushes.LightGray;
 			})
 			.A(_InfoGrid());
@@ -147,20 +144,12 @@ public partial class ViewWordListCard
 			]);
 		});
 
-		{{
-			HeadBox.A(TxtBox(), o=>{
-				o.VerticalAlignment = VAlign.Center;
-				o.FontSize = UiCfg.Inst.BaseFontSize+8;
-				o.Bind(
-					o.PropText_()
-					,CBE.Mk<Ctx>(x=>x.Head)
-				);
-				o.Bind(
-					o.PropForeground_()
-					,CBE.Mk<Ctx>(x=>x.FontColor)
-				);
-			});
-		}}
+		HeadBox.A(TxtBox(), o=>{
+			o.VerticalAlignment = VAlign.Center;
+			o.FontSize = UiCfg.Inst.BaseFontSize+8;
+			o.CBind<Ctx>(o.PropText, x=>x.Head);
+			o.CBind<Ctx>(o.PropForeground,x=>x.FontColor);
+		});
 		return NIL;
 	}
 
@@ -176,51 +165,42 @@ public partial class ViewWordListCard
 			]);
 		}
 		{{
-
 			var RecordType = (ELearn Learn)=>{
 				var R = new TextBlock{};
-				R.Bind(
-					TextBlock.TextProperty
-					,CBE.Mk<Ctx>(x=>x.Learn_Records
-						,Converter: new ConvMultiDictValueCnt<ELearn, ILearnRecord>()
-						,ConverterParameter: Learn
-					)
+				R.CBind<Ctx>(
+					R.PropText
+					,x=>x.Learn_Records
+					,Converter: new ConvMultiDictValueCnt<ELearn, ILearnRecord>()
+					,ConverterParameter: Learn
 				);
 				return R;
 			};
 			var Colon = ()=>new TextBlock(){Text = ":"};
 
 			R.A(TxtBox(), o=>{
-				o.Bind(
-					o.PropText_()
-					,CBE.Mk<Ctx>(
-						x=>x
-						,Converter: new SimpleFnConvtr<Ctx?, str>((x)=>x?.ToLearnHistoryRepr()??"")
-					)
+				o.CBind<Ctx>(
+					o.PropText,x=>x
+					,Converter: new SimpleFnConvtr<Ctx?, str>((x)=>x?.ToLearnHistoryRepr()??"")
 				);
 			});
 
 			//LastReviewTime
 			R.A(TxtBox(), o=>{
-				o.Bind(
-					o.PropText_()
-					,CBE.Mk<Ctx>(x=>x.LastLearnedTime
-						,Converter: new SimpleFnConvtr<i64, str>(x=>{
-							var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-							var Diff = Now - x;
-							return Ctx.FormatUnixMsDiff(Diff);
-						})
-					)
+				o.CBind<Ctx>(
+					o.PropText,x=>x.LastLearnedTime
+					,Converter: new SimpleFnConvtr<i64, str>(x=>{
+						var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+						var Diff = Now - x;
+						return Ctx.FormatUnixMsDiff(Diff);
+					})
 				);
 			})
 			.A(new TextBlock{Text = "\t"})
 			.A(TxtBox(), o=>{
-				o.Bind(
-					o.PropText_()
-					,CBE.Mk<Ctx>(x=>x.Weight
-						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
-							Ctx.FmtNum(x??0, 1)
-						)
+				o.CBind<Ctx>(
+					o.PropText,x=>x.Weight
+					,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
+						Ctx.FmtNum(x??0, 1)
 					)
 				);
 			});//Weight

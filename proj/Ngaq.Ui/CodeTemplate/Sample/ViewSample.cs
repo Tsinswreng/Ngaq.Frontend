@@ -26,7 +26,7 @@ public partial class ViewSample
 	public II18n I = I18n.Inst;
 
 	//大多數場景下我們用AutoGrid作爲視圖的根節點。
-	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號
+	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號 因此不要手動設計行/列號
 	AutoGrid Root = new(IsRow: true);//IsRow: true 表示行佈局
 	//視圖的初始化羅輯寫在Render裏
 	public void Render(){
@@ -37,29 +37,25 @@ public partial class ViewSample
 			RowDef(1, GUT.Auto),
 			//....略
 		]);
-		//AutoGrid 與 所有的Panel都有AddInit<TControl>(TControl C, Action<TControl>? FnInit=null)擴展方法。
+		//AutoGrid 與 所有的Panel都有 A<TControl>(TControl C, Action<TControl>? FnInit=null)擴展方法。
 		//常規寫法一
 		Root
 		//可鏈式調用
 		.A(new TextBox(), o=>{
 			o.AcceptsReturn = true;
-			o.Bind(
-				o.PropText
-//靜態綁定寫法。不准用new Binding(字符串)
-				,CBE.Mk<Ctx>(
-					x=>x.Cnt1
-					#if false
-					可加其他可選命名參數如:
-					,Converter:
-					,ConverterParameter:
-					,Mode:
-					#endif
-				)
+			//靜態綁定寫法。不准用new Binding(字符串)
+			o.CBind<Ctx>(
+				o.PropText,x=>x.Cnt1
+				#if false
+				可加其他可選命名參數如:
+				,Converter:
+				,ConverterParameter:
+				,Mode:
+				#endif
 			);
-//參數不複雜時可只寫一句 o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Cnt));
+//參數不複雜時可只寫一句 o.Bind<Ctx>(o.PropText, x=>x.Cnt);
 //優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
 		})
-
 		.A(new Button(), o=>{
 			o.InitContent(new TextBlock(), t=>{
 				t.Text = "按鈕一";
@@ -117,6 +113,5 @@ public partial class ViewSample
 	}
 
 	#endregion Style
-
 
 }
