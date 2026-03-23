@@ -1,27 +1,22 @@
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
-using Avalonia.Data.Core.Plugins;
-using System.Linq;
-using Avalonia.Markup.Xaml;
-using Ngaq.Ui.ViewModels;
-using Ngaq.Ui.Views;
-using Avalonia.Themes.Fluent;
-using Microsoft.Extensions.DependencyInjection;
-using Semi.Avalonia;
-using Avalonia.Styling;
 using Avalonia.Controls;
-using Tsinswreng.AvlnTools.Tools;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
-using Ngaq.Core.Infra.Errors;
+using Avalonia.Data.Core.Plugins;
+using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Tsinswreng.AvlnTools.Dsl;
+using Avalonia.Styling;
+using Avalonia.Themes.Fluent;
 using Live.Avalonia;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Runtime.InteropServices;
-using Ngaq.Ui.Infra;
 using Ngaq.Core.Frontend.Hotkey;
+using Ngaq.Ui.Infra;
+using Ngaq.Ui.ViewModels;
+using Ngaq.Ui.Views;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
 
 namespace Ngaq.Ui;
 
@@ -106,11 +101,6 @@ this.AttachDevTools();
 			//,new FontFamily("Times New Roman")
 			,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
 		).Attach(Styles);
-		// System.Console.WriteLine(
-		// 	TextElement.FontFamilyProperty == TextBlock.FontFamilyProperty
-		// );
-
-
 		//按鈕舒展
 		var Button = new Style(x=>
 			x.Is<Button>()

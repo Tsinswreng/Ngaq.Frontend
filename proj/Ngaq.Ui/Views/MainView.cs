@@ -117,7 +117,6 @@ public partial class MainView : UserControl {
 	}
 
 	void Try(){
-		new TryTreeDataGrid().Try();
 	}
 
 	public MainView() {

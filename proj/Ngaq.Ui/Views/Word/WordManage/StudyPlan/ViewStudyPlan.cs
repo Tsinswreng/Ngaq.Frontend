@@ -40,13 +40,3 @@ public partial class ViewStudyPlan
 	}
 }
 
-/*
-
-StudyPlan:
-表頭:
-`序號(在UI中顯示的序號、從1開始、不是id)	名稱	`
-ScrollViewer{
-	StudyPlanRow{}
-}
-
- */

@@ -14,16 +14,18 @@ public class TryTreeDataGrid {
 			return null;
 		}
 
-		var demoItems = new List<TreeRow>{
-		new("Root A", "folder", new List<TreeRow>{ new("A-1", "leaf"), new("A-2", "leaf") }),
-		new("Root B", "folder", new List<TreeRow>{ new("B-1", "leaf"), new("B-2", "leaf"), new("B-3", "leaf") }),
+		var demoItems = new List<MyTreeRow>{
+		new("Root A", "folder", new List<MyTreeRow>{ new("A-1", "leaf"), new("A-2", "leaf") }),
+		new("Root B", "folder", new List<MyTreeRow>{ new("B-1", "leaf"), new("B-2", "leaf"), new("B-3", "leaf") }),
 	};
 
-		var source = new HierarchicalTreeDataGridSource<TreeRow>(demoItems) {
+		var source = new HierarchicalTreeDataGridSource<MyTreeRow>(demoItems) {
 			Columns = {
-			new HierarchicalExpanderColumn<TreeRow>(new TextColumn<TreeRow, string>("Name", x=>x.Name), x=>x.Children),
-			new TextColumn<TreeRow, string>("Type", x=>x.Type),
-		},
+				new HierarchicalExpanderColumn<MyTreeRow>(
+					new TextColumn<MyTreeRow, string>("Name", x=>x.Name), x=>x.Children
+				),
+				new TextColumn<MyTreeRow, string>("Type", x=>x.Type),
+			},
 		};
 
 		var treeDataGrid = new TreeDataGrid {
@@ -58,12 +60,12 @@ public class TryTreeDataGrid {
 		return treeDataGrid;
 	}
 
-	private sealed class TreeRow {
+	private sealed class MyTreeRow {
 		public string Name { get; }
 		public string Type { get; }
-		public IReadOnlyList<TreeRow> Children { get; }
+		public IReadOnlyList<MyTreeRow> Children { get; }
 
-		public TreeRow(string name, string type, IReadOnlyList<TreeRow>? children = null) {
+		public MyTreeRow(string name, string type, IReadOnlyList<MyTreeRow>? children = null) {
 			Name = name;
 			Type = type;
 			Children = children ?? [];
