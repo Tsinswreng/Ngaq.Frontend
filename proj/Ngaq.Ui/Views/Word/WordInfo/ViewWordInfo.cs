@@ -135,12 +135,12 @@ public partial class ViewWordInfo
 		});
 		{{
 			LangId.A(TxtBox(), o=>{
-				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Lang));
+				o.CBind<Ctx>(o.PropText,x=>x.Lang);
 				o.HorizontalAlignment = HAlign.Left;
 				o.VerticalAlignment = VAlign.Center;
 			});
 			LangId.A(_SelectableTextBlock(), o=>{
-				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Id));
+				o.CBind<Ctx>(o.PropText,x=>x.Id);
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Right;
 				o.TextAlignment = TxtAlign.Right;
@@ -152,7 +152,7 @@ public partial class ViewWordInfo
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 			o.InitChild(TxtBox(), o=>{
 				o.Styles.Add(new Style().NoMargin().NoPadding());
-				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay));
+				o.CBind<Ctx>(o.PropText,x=>x.Head, Mode: BindingMode.TwoWay);
 				o.VerticalAlignment = VAlign.Stretch;
 				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
 				//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.
@@ -162,7 +162,7 @@ public partial class ViewWordInfo
 		#if true
 		Root.A(TxtBox(), o=>{
 			o.Bind(
-				o.PropText_()
+				o.PropText
 				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
 					//Converter = ConvMultiDictToList(KeysProp.Inst.summary)
 					Mode = BindingMode.OneWay
@@ -206,16 +206,12 @@ public partial class ViewWordInfo
 	}
 
 	Control _DescriptionList(){
-		var Items = new ItemsControl();
-		{var o = Items;
-			o.Bind(
-				ItemsControl.ItemsSourceProperty
-				,new CBE(CBE.Pth<Ctx>(x=>x.Descrs)){
-					Mode = BindingMode.OneWay
-				}
-			);
-		}
-		Items.ItemTemplate = new FuncDataTemplate<str>((Descr,b)=>{
+		var o = new ItemsControl();
+		o.CBind<Ctx>(
+			o.PropItemsSource,x=>x.Descrs
+			,Mode : BindingMode.OneWay
+		);
+		o.ItemTemplate = new FuncDataTemplate<str>((Descr,b)=>{
 			var Ans = new Border();
 			{var o = Ans;
 				o.BorderThickness = new Thickness(0, 1, 0, 0);
@@ -231,14 +227,11 @@ public partial class ViewWordInfo
 			{{
 				Grid.A(TxtBox(), o=>{
 					o.TextWrapping = TextWrapping.Wrap;
-					o.Bind(
-						o.PropText_()
-						,CBE.Mk<str>(x=>x)
-					);
+					o.CBind<str>(o.PropText,x=>x);
 				});
 			}}
 			return Ans;
 		});
-		return Items;
+		return o;
 	}
 }

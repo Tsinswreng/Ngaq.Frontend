@@ -50,28 +50,19 @@ public partial class ViewStatistics
 			o.Text = "StartTime:";//TODO i18n
 		})
 		.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,CBE.Mk<Ctx>(x=>x.TimeStart, Converter: ConvtrTempus.Inst.Iso)
-			);
+			o.CBind<Ctx>(o.PropText,x=>x.TimeStart, Converter: ConvtrTempus.Inst.Iso);
 		})
 		.A(new TextBlock(), o=>{
 			o.Text = "EndTime:";//TODO i18n
 		})
 		.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,CBE.Mk<Ctx>(x=>x.TimeEnd, Converter: ConvtrTempus.Inst.Iso)
-			);
+			o.CBind<Ctx>(o.PropText,x=>x.TimeEnd, Converter: ConvtrTempus.Inst.Iso);
 		})
 		.A(new TextBlock(), o=>{
 			o.Text = "Interval:";//TODO i18n
 		})
 		.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,CBE.Mk<Ctx>(x=>x.IntervalNoUnit)
-			);
+			o.CBind<Ctx>(o.PropText,x=>x.IntervalNoUnit);
 		})
 		.A(new TextBlock(), o=>{
 			o.Text = "Unit";//TODO i18n
@@ -85,35 +76,26 @@ public partial class ViewStatistics
 			o.Items.Add("Month");//TODO i18n
 			o.Items.Add("Year");//TODO i18n
 			o.SelectedIndex = (i32)Ctx.ETimeUnit.Day;
-			o.Bind(o.PropSelectedIndex, CBE.Mk<Ctx>(x=>x.IntervalUnit));
+			o.CBind<Ctx>(o.PropSelectedIndex, x=>x.IntervalUnit);
 		})
 
 		.A(new TextBlock(), o=>{
 			o.Text = "Learn Result";//TODO i18n
 		})
 		.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,CBE.Mk<Ctx>(x=>x.LearnResult)
-			);
+			o.CBind<Ctx>(o.PropText,x=>x.LearnResult);
 		})
 		.A(new TextBlock(), o=>{
 			o.Text = "PageIndex";
 		})
 		.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,CBE.Mk<Ctx>(x=>x.PageIdx)
-			);
+			o.CBind<Ctx>(o.PropText,x=>x.PageIdx);
 		})
 		.A(new TextBlock(), o=>{
 			o.Text = "PageSize";
 		})
 		.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,CBE.Mk<Ctx>(x=>x.PageSize)
-			);
+			o.CBind<Ctx>(o.PropText,x=>x.PageSize);
 		})
 		.A(new OpBtn(), o=>{
 			o._Button.StretchCenter();

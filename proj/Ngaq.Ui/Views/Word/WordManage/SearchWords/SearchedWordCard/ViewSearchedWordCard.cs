@@ -91,10 +91,7 @@ public partial class ViewSearchedWordCard
 			LangGrid.Add(Lang);
 			{var o = Lang;
 				o.VerticalAlignment = VAlign.Center;
-				o.Bind(
-					o.PropText_()
-					,new CBE(CBE.Pth<Ctx>(x=>x.Lang))
-				);
+				o.CBind<Ctx>(o.PropText,x=>x.Lang);
 				o.Foreground = Brushes.LightGray;
 			}
 
