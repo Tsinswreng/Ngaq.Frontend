@@ -41,7 +41,7 @@ public partial class ViewSample
 		//常規寫法一
 		Root
 		//可鏈式調用
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.AcceptsReturn = true;
 			o.Bind(
 				o.PropText
@@ -60,7 +60,7 @@ public partial class ViewSample
 //優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
 		})
 
-		.AddInit(new Button(), o=>{
+		.A(new Button(), o=>{
 			o.InitContent(new TextBlock(), t=>{
 				t.Text = "按鈕一";
 			});
@@ -70,14 +70,14 @@ public partial class ViewSample
 				Ctx?.Click1();
 			};
 		})
-		.AddInit(new ScrollViewer(), Sv=>{
+		.A(new ScrollViewer(), Sv=>{
 			Sv.InitContent(new StackPanel(), Sp=>{
-				Sp.AddInit(new OpBtn(), o=>{
+				Sp.A(new OpBtn(), o=>{
 					Todo.I18n(); //UI中硬編碼的字符串都要這樣寫Todo
 					o._Button.Content = "調用後端服務";
 					o.SetExe(Ct=>Ctx?.CallService(Ct));
 				});
-				Sp.AddInit(MkList());
+				Sp.A(MkList());
 			});
 		})
 		;

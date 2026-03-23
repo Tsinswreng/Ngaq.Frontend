@@ -41,10 +41,10 @@ public partial class ViewCfgLearnWord
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.AddInit(new ScrollViewer(), sc=>{
+		Root.A(new ScrollViewer(), sc=>{
 			sc.InitContent(new StackPanel(), sp=>{
 				sp
-				.AddInit(new CheckBox(), o=>{
+				.A(new CheckBox(), o=>{
 					//o.Tag = new TextBlock{Text = "Enable Random Background"};
 					o.Content = "Enable Random Background";
 					o.Bind(
@@ -52,10 +52,10 @@ public partial class ViewCfgLearnWord
 						,CBE.Mk<Ctx>(x=>x.EnableRandomBackground)
 					);
 				})
-				.AddInit(new TextBlock(), o=>{
+				.A(new TextBlock(), o=>{
 					o.Text = "Language Filter(One per line)";// TODO i18n
 				})
-				.AddInit(new TextBox(), o=>{
+				.A(new TextBox(), o=>{
 					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 					o.AcceptsReturn = true;
 					o.Height = 100;
@@ -64,10 +64,10 @@ public partial class ViewCfgLearnWord
 						,CBE.Mk<Ctx>(x=>x.LanguageFilterExpr)
 					);
 				})
-				.AddInit(new TextBlock{
+				.A(new TextBlock{
 					Text = "Lua Filter",// TODO i18n
 				})
-				.AddInit(new TextBox{
+				.A(new TextBox{
 					TextWrapping = Avalonia.Media.TextWrapping.Wrap,
 					AcceptsReturn = true,
 					Height = 100,
@@ -90,7 +90,7 @@ public partial class ViewCfgLearnWord
 				;
 			});
 		})
-		.AddInit(new OpBtn(), o=>{
+		.A(new OpBtn(), o=>{
 			DockPanel.SetDock(o, Dock.Bottom);
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;

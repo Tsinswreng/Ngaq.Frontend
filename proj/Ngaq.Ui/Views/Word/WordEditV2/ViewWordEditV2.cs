@@ -57,9 +57,9 @@ public partial class ViewWordEditV2: AppViewBase {
 
 		Root
 		//.AddInit(MkHeader(), o => { })
-		.AddInit(MkTabs(), o => { })
-		.AddInit(MkErrBar(), o => { })
-		.AddInit(MkBottomBar(), o => { });
+		.A(MkTabs(), o => { })
+		.A(MkErrBar(), o => { })
+		.A(MkBottomBar(), o => { });
 
 		return NIL;
 	}
@@ -88,12 +88,12 @@ public partial class ViewWordEditV2: AppViewBase {
 			o.Orientation = Orientation.Vertical;
 			o.Spacing = 4;
 			var box = o;
-			box.AddInit(new TextBlock(), o=>{
+			box.A(new TextBlock(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize * 1.15;
 				o.FontWeight = FontWeight.SemiBold;
 				o.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(x => x.Head, Mode: BindingMode.OneWay));
 			})
-			.AddInit(new TextBlock(), o=>{
+			.A(new TextBlock(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
 				o.Foreground = Brushes.LightGray;
 				o.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(x => x.Lang, Mode: BindingMode.OneWay));
@@ -110,16 +110,16 @@ public partial class ViewWordEditV2: AppViewBase {
 			,CBE.Mk<Ctx>(x => x.TabIndex, Mode: BindingMode.TwoWay)
 		);
 
-		tab.Items.AddInit(new TabItem(), o => {
+		tab.Items.A(new TabItem(), o => {
 			o.Header = "Basic";
 			o.Content = MkBasicTab();
-		}).AddInit(new TabItem(), o => {
+		}).A(new TabItem(), o => {
 			o.Header = "Props";
 			o.Content = MkPropsTab();
-		}).AddInit(new TabItem(), o => {
+		}).A(new TabItem(), o => {
 			o.Header = "Learns";
 			o.Content = MkLearnsTab();
-		}).AddInit(new TabItem(), o => {
+		}).A(new TabItem(), o => {
 			o.Header = "JSON";
 			o.Content = MkJsonTab();
 		});
@@ -135,12 +135,12 @@ public partial class ViewWordEditV2: AppViewBase {
 		};
 		sv.Content = sp;
 
-		sp.AddInit(MkReadOnlyRow("WordId", CBE.Mk<Ctx>(x => x.WordIdText, Mode: BindingMode.OneWay)));
-		sp.AddInit(MkReadOnlyRow("Owner", CBE.Mk<Ctx>(x => x.OwnerText, Mode: BindingMode.OneWay)));
-		sp.AddInit(MkInputRow("Head", CBE.Mk<Ctx>(x => x.Head, Mode: BindingMode.TwoWay)));
-		sp.AddInit(MkInputRow("Lang", CBE.Mk<Ctx>(x => x.Lang, Mode: BindingMode.TwoWay)));
-		sp.AddInit(MkInputRow("StoredAt(ISO)", CBE.Mk<Ctx>(x => x.StoredAtIso, Mode: BindingMode.TwoWay)));
-		sp.AddInit(MkInputRow("DelAt(unix ms)", CBE.Mk<Ctx>(x => x.DelAtUnixMs, Mode: BindingMode.TwoWay)));
+		sp.A(MkReadOnlyRow("WordId", CBE.Mk<Ctx>(x => x.WordIdText, Mode: BindingMode.OneWay)));
+		sp.A(MkReadOnlyRow("Owner", CBE.Mk<Ctx>(x => x.OwnerText, Mode: BindingMode.OneWay)));
+		sp.A(MkInputRow("Head", CBE.Mk<Ctx>(x => x.Head, Mode: BindingMode.TwoWay)));
+		sp.A(MkInputRow("Lang", CBE.Mk<Ctx>(x => x.Lang, Mode: BindingMode.TwoWay)));
+		sp.A(MkInputRow("StoredAt(ISO)", CBE.Mk<Ctx>(x => x.StoredAtIso, Mode: BindingMode.TwoWay)));
+		sp.A(MkInputRow("DelAt(unix ms)", CBE.Mk<Ctx>(x => x.DelAtUnixMs, Mode: BindingMode.TwoWay)));
 
 		return sv;
 	}
@@ -152,11 +152,11 @@ public partial class ViewWordEditV2: AppViewBase {
 			RowDef(9, GUT.Star),
 		]);
 
-		root.AddInit(MkBtnAddItem(), o => {
+		root.A(MkBtnAddItem(), o => {
 			o.Click += (s,e) => {
 				Ctx?.AddPropRow();
 			};
-		}).AddInit(new ScrollViewer(), sv => {
+		}).A(new ScrollViewer(), sv => {
 			sv.Margin = new Thickness(10, 4, 10, 10);
 			var list = new ItemsControl();
 			list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x => x.PropRows, Mode: BindingMode.OneWay));
@@ -170,11 +170,11 @@ public partial class ViewWordEditV2: AppViewBase {
 				var sp = new StackPanel { Spacing = 6 };
 				bdr.Child = sp;
 
-				sp.AddInit(MkBoundInput("KType", CBE.Mk<VmWordPropRow>(x => x.KTypeText, Mode: BindingMode.TwoWay)));
-				sp.AddInit(MkBoundInput("Key", CBE.Mk<VmWordPropRow>(x => x.KeyText, Mode: BindingMode.TwoWay)));
-				sp.AddInit(MkBoundInput("VType", CBE.Mk<VmWordPropRow>(x => x.VTypeText, Mode: BindingMode.TwoWay)));
-				sp.AddInit(MkBoundInput("Value", CBE.Mk<VmWordPropRow>(x => x.ValueText, Mode: BindingMode.TwoWay)));
-				sp.AddInit(MkRmBtn(), o=>{
+				sp.A(MkBoundInput("KType", CBE.Mk<VmWordPropRow>(x => x.KTypeText, Mode: BindingMode.TwoWay)));
+				sp.A(MkBoundInput("Key", CBE.Mk<VmWordPropRow>(x => x.KeyText, Mode: BindingMode.TwoWay)));
+				sp.A(MkBoundInput("VType", CBE.Mk<VmWordPropRow>(x => x.VTypeText, Mode: BindingMode.TwoWay)));
+				sp.A(MkBoundInput("Value", CBE.Mk<VmWordPropRow>(x => x.ValueText, Mode: BindingMode.TwoWay)));
+				sp.A(MkRmBtn(), o=>{
 					o.Click += (s, e) => Ctx?.RemovePropRow(row);
 				});
 
@@ -195,13 +195,13 @@ public partial class ViewWordEditV2: AppViewBase {
 			RowDef(9, GUT.Star),
 		]);
 
-		root.AddInit(MkBtnAddItem(), o => {
+		root.A(MkBtnAddItem(), o => {
 			o.Click += (s,e)=> {
 				Ctx?.AddLearnRow();
 			};
 		});
 
-		root.AddInit(new ScrollViewer(), sv => {
+		root.A(new ScrollViewer(), sv => {
 			sv.Margin = new Thickness(10, 4, 10, 10);
 			var list = new ItemsControl();
 			list.Bind(
@@ -218,9 +218,9 @@ public partial class ViewWordEditV2: AppViewBase {
 				var sp = new StackPanel { Spacing = 6 };
 				bdr.Child = sp;
 
-				sp.AddInit(MkBoundInput("LearnResult(Add/Rmb/Fgt)", CBE.Mk<VmWordLearnRow>(x => x.LearnResultText, Mode: BindingMode.TwoWay)));
-				sp.AddInit(MkBoundInput("BizCreatedAt(ISO)", CBE.Mk<VmWordLearnRow>(x => x.BizCreatedAtIso, Mode: BindingMode.TwoWay)));
-				sp.AddInit(MkRmBtn(), o=>{
+				sp.A(MkBoundInput("LearnResult(Add/Rmb/Fgt)", CBE.Mk<VmWordLearnRow>(x => x.LearnResultText, Mode: BindingMode.TwoWay)));
+				sp.A(MkBoundInput("BizCreatedAt(ISO)", CBE.Mk<VmWordLearnRow>(x => x.BizCreatedAtIso, Mode: BindingMode.TwoWay)));
+				sp.A(MkRmBtn(), o=>{
 					o.Click += (s, e) => Ctx?.RemoveLearnRow(row);
 				});
 				return bdr;
@@ -238,8 +238,8 @@ public partial class ViewWordEditV2: AppViewBase {
 			RowDef(8, GUT.Star),
 		]);
 
-		root.AddInit(MkJsonOps(), o => { });
-		root.AddInit(new TextBox(), tb => {
+		root.A(MkJsonOps(), o => { });
+		root.A(new TextBox(), tb => {
 			tb.Margin = new Thickness(10, 4, 10, 10);
 			tb.AcceptsReturn = true;
 			tb.TextWrapping = TextWrapping.Wrap;
@@ -257,11 +257,11 @@ public partial class ViewWordEditV2: AppViewBase {
 			ColDef(1, GUT.Star),
 		]);
 
-		g.AddInit(new Button(), o => {
+		g.A(new Button(), o => {
 			o.Content = "Sync Form -> Json";
 			o.Click += (s, e) => Ctx?.SyncJsonFromDraft();
 		});
-		g.AddInit(new Button(), o => {
+		g.A(new Button(), o => {
 			o.Content = "Apply Json -> Form";
 			o.Click += (s, e) => Ctx?.ApplyJsonToForm();
 		});
@@ -291,10 +291,10 @@ public partial class ViewWordEditV2: AppViewBase {
 		]);
 		g.Grid.Margin = new Thickness(10, 8, 10, 10);
 
-		g.AddInit(new Button(), o => {
+		g.A(new Button(), o => {
 			o.Content = "Reset";
 			o.Click += (s, e) => Ctx?.ResetFromSource();
-		}).AddInit(new OpBtn(), o => {
+		}).A(new OpBtn(), o => {
 			//o.Classes.Add(Cls.MainBtn);
 			o.Background = UiCfg.Inst.MainColor;
 			o.BtnContent = Svgs.FloppyDiskBackFill.ToIcon().WithText(" Save");

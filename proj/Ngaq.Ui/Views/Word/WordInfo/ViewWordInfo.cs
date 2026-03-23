@@ -126,7 +126,7 @@ public partial class ViewWordInfo
 			]);
 		});
 		var LangId = new AutoGrid(IsRow: false);
-		Root.AddInit(LangId.Grid, o=>{
+		Root.A(LangId.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				ColDef(1, GUT.Star),
 				ColDef(1, GUT.Auto),
@@ -134,12 +134,12 @@ public partial class ViewWordInfo
 			o.Classes.Add(Cls.LightGray);//即o.Classes.Add("LightGray");
 		});
 		{{
-			LangId.AddInit(TxtBox(), o=>{
+			LangId.A(TxtBox(), o=>{
 				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Lang));
 				o.HorizontalAlignment = HAlign.Left;
 				o.VerticalAlignment = VAlign.Center;
 			});
-			LangId.AddInit(_SelectableTextBlock(), o=>{
+			LangId.A(_SelectableTextBlock(), o=>{
 				o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.Id));
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Right;
@@ -147,7 +147,7 @@ public partial class ViewWordInfo
 			});
 		}}//~LangId
 
-		Root.AddInit(_Border(), o=>{
+		Root.A(_Border(), o=>{
 			o.BorderThickness = new Thickness(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 			o.InitChild(TxtBox(), o=>{
@@ -160,7 +160,7 @@ public partial class ViewWordInfo
 		});
 
 		#if true
-		Root.AddInit(TxtBox(), o=>{
+		Root.A(TxtBox(), o=>{
 			o.Bind(
 				o.PropText_()
 				,new CBE(CBE.Pth<Ctx>(x=>x.StrProps)){
@@ -194,7 +194,7 @@ public partial class ViewWordInfo
 		});//~TxtBox
 		#endif
 
-		Root.AddInit(new Border(), BdrScr=>{
+		Root.A(new Border(), BdrScr=>{
 			BdrScr.InitChild(new ScrollViewer(), ScrDescr=>{
 				var Description = _DescriptionList();
 				ScrDescr.Content = Description;
@@ -229,7 +229,7 @@ public partial class ViewWordInfo
 				]);
 			}
 			{{
-				Grid.AddInit(TxtBox(), o=>{
+				Grid.A(TxtBox(), o=>{
 					o.TextWrapping = TextWrapping.Wrap;
 					o.Bind(
 						o.PropText_()

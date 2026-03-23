@@ -35,7 +35,7 @@ public partial class ViewSearchedWordCard
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
 
-		Styles.AddInit(
+		Styles.A(
 			new Style(x=>
 				x.Is<TextBlock>()
 			)

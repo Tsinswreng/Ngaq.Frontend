@@ -40,18 +40,18 @@ public partial class ViewAbout
 				RowDef(1, GUT.Auto),
 			]);
 		});
-		Root.AddInit(_StackPanel(), sp=>{
-			sp.AddInit(new SelectableTextBlock(), o=>{
+		Root.A(_StackPanel(), sp=>{
+			sp.A(new SelectableTextBlock(), o=>{
 				o.Text = I[K.AppVersion];
 			})
-			.AddInit(new SelectableTextBlock(), o=>{
+			.A(new SelectableTextBlock(), o=>{
 				o.Text = AppVer.Inst.Ver+"";
 			})
-			.AddInit(new Separator())
-			.AddInit(new SelectableTextBlock(), o=>{
+			.A(new Separator())
+			.A(new SelectableTextBlock(), o=>{
 				o.Text = I[K.Website];
 			})
-			.AddInit(new SelectableTextBlock(), o=>{
+			.A(new SelectableTextBlock(), o=>{
 				o.Text = "https://github.com/Tsinswreng/CsNgaq";
 			});
 		});

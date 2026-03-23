@@ -40,7 +40,7 @@ public partial class ViewUiJsonMap
 			RowDef(1, GUT.Star),
 		]);
 		Root
-		.AddInit(new ScrollViewer(), sv=>{
+		.A(new ScrollViewer(), sv=>{
 			sv.Content = mkList();
 		});
 

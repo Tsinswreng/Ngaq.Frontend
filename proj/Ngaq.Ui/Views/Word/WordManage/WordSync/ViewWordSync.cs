@@ -40,9 +40,9 @@ public partial class ViewWordSync
 		this.InitContent(Root.Grid, o=>{
 
 		});
-		Root.AddInit(_StackPanel(), Sp=>{
+		Root.A(_StackPanel(), Sp=>{
 
-			Sp.AddInit(new OpBtn(), op=>{
+			Sp.A(new OpBtn(), op=>{
 				var o = op._Button;
 				op.SetExe((Ct)=>Ctx?.PushAsy(Ct)!);
 				//o.Content = I[K.Push];
@@ -51,20 +51,20 @@ public partial class ViewWordSync
 					,I[K.Push]
 				);
 			})
-			.AddInit(new OpBtn(), o=>{
+			.A(new OpBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PullAsy(Ct));
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Svgs.CloudDownload.ToIcon()
 					,I[K.Pull]
 				);
 			})
-			.AddInit(_TextBlock(), o=>{
+			.A(_TextBlock(), o=>{
 				o.Text = I[K.ExportPath];
 			})
-			.AddInit(_TextBox(), o=>{
+			.A(_TextBox(), o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.PathExport));
 			})
-			.AddInit(new OpBtn(), o=>{
+			.A(new OpBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Svgs.DatabaseExport.ToIcon()
 					,I[K.Export]
@@ -72,17 +72,17 @@ public partial class ViewWordSync
 				o.SetExe((Ct)=>Ctx?.ExportAsy(Ct));
 			})
 
-			.AddInit(_Border(), o=>{
+			.A(_Border(), o=>{
 				o.Height = 10;
 			})
 
-			.AddInit(_TextBlock(), o=>{
+			.A(_TextBlock(), o=>{
 				o.Text = I[K.ImportPath];
 			})
-			.AddInit(_TextBox(), o=>{
+			.A(_TextBox(), o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.PathImport));
 			})
-			.AddInit(new OpBtn(), o=>{
+			.A(new OpBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Svgs.DatabaseImport.ToIcon()
 					,I[K.Import]

@@ -105,7 +105,7 @@ public partial class ViewAddWord
 			// });
 			Root.Add();
 			Root.Add();
-			Root.AddInit(_TabControl(), Tab=>{
+			Root.A(_TabControl(), Tab=>{
 				Tab.Bind(
 					TabControl.SelectedIndexProperty
 					,CBE.Mk<Ctx>(
@@ -113,24 +113,24 @@ public partial class ViewAddWord
 						,Mode: BindingMode.TwoWay
 					)
 				);
-				Tab.Items.AddInit(_TabItem(), o=>{
+				Tab.Items.A(_TabItem(), o=>{
 					o.Header = "Word Txt File";
 					o.Content = ByFile();
 				});
-				Tab.Items.AddInit(_TabItem(), o=>{
+				Tab.Items.A(_TabItem(), o=>{
 					o.Header = "Jsons File";
 					o.Content = ByJsonFile();
 				});
-				Tab.Items.AddInit(_TabItem(), o=>{
+				Tab.Items.A(_TabItem(), o=>{
 					o.Header = "Text";
 					o.Content = ByText();
 				});
-				Tab.Items.AddInit(_TabItem(), o=>{
+				Tab.Items.A(_TabItem(), o=>{
 					o.Header = "Json";
 					o.Content = ByJson();
 				});
 			});
-			Root.AddInit(new OpBtn(), o=>{
+			Root.A(new OpBtn(), o=>{
 				o.BtnContent = "Submit";
 				o.HorizontalAlignment = HAlign.Center;
 				o.HorizontalContentAlignment = HAlign.Center;
@@ -151,14 +151,14 @@ public partial class ViewAddWord
 			Ans.Add();
 
 			var Path = new AutoGrid(IsRow:false);
-			Ans.AddInit(Path.Grid, o=>{
+			Ans.A(Path.Grid, o=>{
 				o.ColumnDefinitions.AddRange([
 					ColDef(2, GUT.Auto),
 					ColDef(8, GUT.Star),
 				]);
 			});
 			{{
-				Path.AddInit(_Button(), o=>{
+				Path.A(_Button(), o=>{
 					o.Content = "Browse";
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.HorizontalContentAlignment = HAlign.Stretch;
@@ -170,7 +170,7 @@ public partial class ViewAddWord
 					);
 					//o.UseLayoutRounding = true;
 				});
-				Path.AddInit(_TextBox(), o=>{
+				Path.A(_TextBox(), o=>{
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.Bind(
 						o.PropText
@@ -196,14 +196,14 @@ public partial class ViewAddWord
 			Ans.Add();
 
 			var Path = new AutoGrid(IsRow:false);
-			Ans.AddInit(Path.Grid, o=>{
+			Ans.A(Path.Grid, o=>{
 				o.ColumnDefinitions.AddRange([
 					ColDef(2, GUT.Auto),
 					ColDef(8, GUT.Star),
 				]);
 			});
 			{{
-				Path.AddInit(_Button(), o=>{
+				Path.A(_Button(), o=>{
 					o.Content = "Browse";
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.HorizontalContentAlignment = HAlign.Stretch;
@@ -215,7 +215,7 @@ public partial class ViewAddWord
 					);
 					//o.UseLayoutRounding = true;
 				});
-				Path.AddInit(_TextBox(), o=>{
+				Path.A(_TextBox(), o=>{
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.Bind(
 						o.PropText
@@ -241,7 +241,7 @@ public partial class ViewAddWord
 
 		Ans.Add();
 
-		Ans.AddInit(_TextBox(), o=>{
+		Ans.A(_TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,new CBE(CBE.Pth<Ctx>(x=>x.Text)){Mode=BindingMode.TwoWay}
@@ -263,7 +263,7 @@ public partial class ViewAddWord
 
 		R.Add();
 
-		R.AddInit(_TextBox(), o=>{
+		R.A(_TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,new CBE(CBE.Pth<Ctx>(x=>x.Json)){Mode=BindingMode.TwoWay}

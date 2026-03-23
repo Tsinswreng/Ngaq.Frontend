@@ -60,7 +60,7 @@ public partial class ViewHome
 			return R;
 		};
 
-		Root.AddInit(new ViewBottomBar(), ViewBottomBar=>{
+		Root.A(new ViewBottomBar(), ViewBottomBar=>{
 			var ViewWordQuery = new ViewLearnWords();
 
 			ViewBottomBar.Items.AddInitT(

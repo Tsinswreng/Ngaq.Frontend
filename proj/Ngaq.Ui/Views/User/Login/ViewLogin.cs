@@ -68,7 +68,7 @@ public partial class Cls_{
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.AddInit(_StackPanel(), Stk=>{
+		Root.A(_StackPanel(), Stk=>{
 			Stk.Spacing = 4.0;
 
 			var formItem = FnAddLabelBox(Stk);
@@ -84,7 +84,7 @@ public partial class Cls_{
 			}
 			errMsgSclv.Content = _ErrorList();
 		})
-		.AddInit(new OpBtn(), (o)=>{
+		.A(new OpBtn(), (o)=>{
 			var b = o._Button;
 			b.InitContent(_TextBlock(), t=>{
 				t.Text = I[K.Login];

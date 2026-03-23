@@ -60,14 +60,14 @@ public partial class ViewWordManage
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.AddInit(_StackPanel(), Sp=>{
+		Root.A(_StackPanel(), Sp=>{
 			Todo.I18n();
-			Sp.AddInit(_Item("Dictionary", new ViewDictionary(), Svgs.BookA.ToIcon()))
-			.AddInit(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search.ToIcon()))
-			.AddInit(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add.ToIcon()))
-			.AddInit(_Item("Study Plan", new ViewStudyPlan(), Svgs.Schema.ToIcon()))//plan
-			.AddInit(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle.ToIcon()))
-			.AddInit(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))
+			Sp.A(_Item("Dictionary", new ViewDictionary(), Svgs.BookA.ToIcon()))
+			.A(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search.ToIcon()))
+			.A(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add.ToIcon()))
+			.A(_Item("Study Plan", new ViewStudyPlan(), Svgs.Schema.ToIcon()))//plan
+			.A(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle.ToIcon()))
+			.A(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))
 			;
 			var Txt = new StrokeTextBlock{// //TextBlock
 				TextWrapping = TextWrapping.Wrap,
@@ -78,7 +78,7 @@ public partial class ViewWordManage
 			// 	TextWrapping = TextWrapping.Wrap,
 			// };
 			var Log = App.GetRSvc<ILogger>();
-			Sp.AddInit(new Button(), o=>{
+			Sp.A(new Button(), o=>{
 				o.Click += ((s,e)=>{
 					var l = new List<str>();
 					for(var i = 0; i < 5000; i++){
@@ -93,7 +93,7 @@ public partial class ViewWordManage
 				});
 				o.Content = "測試長";
 			})
-			.AddInit(new Button(), o=>{
+			.A(new Button(), o=>{
 				o.Content = "測試短";
 				o.Click+= (s,e)=>{
 					var sw = Stopwatch.StartNew();
@@ -102,7 +102,7 @@ public partial class ViewWordManage
 					Log.LogInformation("Short:"+sw.ElapsedMilliseconds);
 				};
 			})
-			.AddInit(new Border(), Bd=>{
+			.A(new Border(), Bd=>{
 				Bd.Height = 300;
 				var Sv = new ScrollViewer();
 				Bd.Child = Sv;
@@ -141,9 +141,9 @@ public partial class ViewWordManage
 					ColDef(UiCfg.Inst.BaseFontSize, GUT.Pixel),
 					ColDef(1, GUT.Auto),
 				]);
-				G.AddInit(Icon);
+				G.A(Icon);
 				G.Add();
-				G.AddInit(_TextBlock(), t=>{
+				G.A(_TextBlock(), t=>{
 					t.Text = Title;
 					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				});

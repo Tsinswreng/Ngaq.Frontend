@@ -26,13 +26,9 @@ public partial class ViewWordListCard
 		,IJnWord? JnWord
 	){
 		var R = new ContextMenu();
-		R.Items.AddInit(new MenuItem(), o=>{
+		R.Items.A(new MenuItem(), o=>{
 			Todo.I18n();
-			o.Header =
-			HoriCloseCtrls.Mk(
-				Svgs.CreateMD.ToIcon()
-				,new TextBlock{Text = "Edit"}
-			);
+			o.Header = Svgs.CreateMD.ToIcon().WithText(" Edit");
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
 					Todo.I18n();
@@ -84,8 +80,7 @@ public partial class ViewWordListCard
 
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
-
-		Styles.AddInit(
+		Styles.A(
 			new Style(x=>
 				x.Is<TextBlock>()
 			)
@@ -101,21 +96,6 @@ public partial class ViewWordListCard
 				});
 			}
 		);
-
-		// var InfoGridColor = new Style(x=>
-		// 	x.Is<TextBlock>()
-		// 	.Class(Cls.InInfoGrid)
-		// );
-		// Styles.Add(InfoGridColor);
-		// {var o = InfoGridColor;
-		// 	o.Bind(
-		// 		TextBlock.ForegroundProperty
-		// 		,CBE.Mk<Ctx>(x=>x.LearnedColor,
-		// 			Mode: BindingMode.OneWay
-		// 			,Source: Ctx
-		// 		)
-		// 	);
-		// }
 		return NIL;
 	}
 
@@ -128,7 +108,7 @@ public partial class ViewWordListCard
 		});
 
 		var LangGrid = new AutoGrid(IsRow:false);
-		Root.AddInit(LangGrid.Grid, o=>{
+		Root.A(LangGrid.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
 				new ColDef(0.3, GUT.Star),
@@ -138,17 +118,17 @@ public partial class ViewWordListCard
 		});
 		{{
 			LangGrid
-			.AddInit(TxtBox(), o=>{
+			.A(TxtBox(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
 				o.Bind(
 					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Index)
 				);
 			})
-			.AddInit(TxtBox(), o=>{
+			.A(TxtBox(), o=>{
 				o.Text = "　";
 			})
-			.AddInit(TxtBox(), o=>{
+			.A(TxtBox(), o=>{
 				o.VerticalAlignment = VAlign.Center;
 				o.Bind(
 					o.PropText_()
@@ -156,19 +136,19 @@ public partial class ViewWordListCard
 				);
 				o.Foreground = Brushes.LightGray;
 			})
-			.AddInit(_InfoGrid());
+			.A(_InfoGrid());
 		}}//~Header
 
 
 		var HeadBox = new AutoGrid(IsRow:false);
-		Root.AddInit(HeadBox.Grid, o=>{
+		Root.A(HeadBox.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
 			]);
 		});
 
 		{{
-			HeadBox.AddInit(TxtBox(), o=>{
+			HeadBox.A(TxtBox(), o=>{
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.Bind(
@@ -196,25 +176,6 @@ public partial class ViewWordListCard
 			]);
 		}
 		{{
-			// var LastLearn = new TextBlock();
-			// R.Add(LastLearn);
-			// {var o = LastLearn;
-			// 	o.Bind(
-			// 		o.PropText_()
-			// 		//LearnRecord不應潙空集合、緣添旹必得'add'
-			// 		,CBE.Mk<Ctx>(x=>x.SavedLearnRecords
-			// 			,Converter: new ParamFnConvtr<IList<ILearnRecord>, str>((x, p)=>{
-			// 				if(x.Count > 0){
-			// 					return Ctx.LearnToSymbol(x[^1].Learn);
-			// 				}
-			// 				return "";
-			// 				// var Word = (Ctx)p!;
-			// 				// throw new FatalLogicErr("No learn record found. Word:"+Word.Lang+":"+Word.Head);
-			// 			})
-			// 			,ConverterParameter: Ctx
-			// 		)
-			// 	);
-			// }
 
 			var RecordType = (ELearn Learn)=>{
 				var R = new TextBlock{};
@@ -229,9 +190,7 @@ public partial class ViewWordListCard
 			};
 			var Colon = ()=>new TextBlock(){Text = ":"};
 
-			R.AddInit(TxtBox(), o=>{
-				//o.Bind(o.PropText_(), CBE.Mk<Ctx>(x=>x.ToLearnHistoryRepr()));
-				//o.Text = Ctx?.ToLearnHistoryRepr();
+			R.A(TxtBox(), o=>{
 				o.Bind(
 					o.PropText_()
 					,CBE.Mk<Ctx>(
@@ -241,9 +200,8 @@ public partial class ViewWordListCard
 				);
 			});
 
-			var LastReviewTime = TxtBox();
-			R.Add(LastReviewTime);
-			{var o = LastReviewTime;
+			//LastReviewTime
+			R.A(TxtBox(), o=>{
 				o.Bind(
 					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.LastLearnedTime
@@ -254,22 +212,18 @@ public partial class ViewWordListCard
 						})
 					)
 				);
-			}
-			R.Add(new TextBlock{Text = "\t"});
-			var Weight = TxtBox();
-			R.Add(Weight);
-			{var o = Weight;
+			})
+			.A(new TextBlock{Text = "\t"})
+			.A(TxtBox(), o=>{
 				o.Bind(
 					o.PropText_()
 					,CBE.Mk<Ctx>(x=>x.Weight
 						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
 							Ctx.FmtNum(x??0, 1)
 						)
-						//,ConverterParameter: "Debug"//t
 					)
-
 				);
-			}
+			});//Weight
 		}}
 
 		return R.Grid;

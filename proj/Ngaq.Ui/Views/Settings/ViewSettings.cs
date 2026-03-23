@@ -38,8 +38,8 @@ public partial class ViewSettings
 	protected nil Render(){
 		var _Item = FnSettingItem(Ctx?.ViewNavi);
 		this.InitContent(_StackPanel(), S=>{
-			S.AddInit(_Item(I[K.About], new ViewAbout()));
-			S.AddInit(_Item(I[K.UIConfig], new ViewCfgUi()));
+			S.A(_Item(I[K.About], new ViewAbout()));
+			S.A(_Item(I[K.UIConfig], new ViewCfgUi()));
 		});
 		return NIL;
 	}

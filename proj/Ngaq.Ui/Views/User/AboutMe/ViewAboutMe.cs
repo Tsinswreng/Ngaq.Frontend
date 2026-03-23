@@ -44,8 +44,8 @@ public partial class ViewAboutMe
 				RowDef(2, GUT.Auto),
 			]);
 		});
-		Root.AddInit(_ToolBar(), o=>{});
-		Root.AddInit(_UserCard());
+		Root.A(_ToolBar(), o=>{});
+		Root.A(_UserCard());
 		return NIL;
 	}
 
@@ -59,7 +59,7 @@ public partial class ViewAboutMe
 		// 	RowDef(1, GUT.Auto)
 		// ]);
 
-		R.AddInit(new SwipeLongPressBtn(), o=>{
+		R.A(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);
 			o.InitContent(new CircleAvatar(), o=>{
 				o.Width = UiCfg.Inst.BaseFontSize*1.5;
@@ -72,7 +72,7 @@ public partial class ViewAboutMe
 				);
 			};
 		});
-		R.AddInit(new SwipeLongPressBtn(), o=>{
+		R.A(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);
 			o.InitContent(_TextBlock(), t=>{
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
@@ -98,7 +98,7 @@ public partial class ViewAboutMe
 		var R = new StackPanel();
 		R.Orientation = Orientation.Horizontal;
 		{{
-			R.AddInit(_Button(), o=>{
+			R.A(_Button(), o=>{
 				//o.Content = "⚙️";
 				o.Content = Svgs.GearFill.ToIcon();
 				o.Click += (s,e)=>{

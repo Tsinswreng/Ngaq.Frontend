@@ -61,7 +61,7 @@ public partial class ViewRegister
 		});
 
 
-		Root.AddInit(_StackPanel(), Stk=>{
+		Root.A(_StackPanel(), Stk=>{
 			Stk.Spacing = 4.0;
 			var formItem = _fn_addLabelBox(Stk);
 
@@ -74,7 +74,7 @@ public partial class ViewRegister
 
 			errMsgSclv.Content = _ErrorList();
 		})
-		.AddInit(new OpBtn(), o=>{
+		.A(new OpBtn(), o=>{
 			var b = o._Button;
 			b.InitContent(_TextBlock(), t=>{
 				t.Text = I[K.Register];

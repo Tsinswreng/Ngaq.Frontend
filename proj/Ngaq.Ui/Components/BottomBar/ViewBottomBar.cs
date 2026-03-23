@@ -72,8 +72,8 @@ public partial class ViewBottomBar
 			]);
 		});
 		{{
-			Root.AddInit(Cur)
-			.AddInit(_ItemsControl(), o=>{
+			Root.A(Cur)
+			.A(_ItemsControl(), o=>{
 				o.ItemsSource = Items;
 				o.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 					return new UniformHorizontalPanel();

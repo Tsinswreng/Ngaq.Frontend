@@ -46,14 +46,14 @@ public partial class ViewDictionaryApi
 		this.Content = Root.Grid;
 
 		// ListBox 綁定 Words
-		Root.AddInit(new ListBox(), lst => {
+		Root.A(new ListBox(), lst => {
 			lst.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x => x.Words));
 			// 每條目自己長什麼樣
 			lst.ItemTemplate = new FuncDataTemplate<DictionaryApiWord>((word, _) => {
 				var itemPanel = new AutoGrid(IsRow: true);
 
 				// 單詞 + 音標
-				itemPanel.AddInit(Txt(), o=>{
+				itemPanel.A(Txt(), o=>{
 					o.FontSize = 20;
 					o.FontWeight = Avalonia.Media.FontWeight.Bold;
 					o.Foreground = Brushes.DarkCyan;
@@ -62,14 +62,14 @@ public partial class ViewDictionaryApi
 
 				// 每個 meaning
 				foreach (var m in word.meanings ?? new List<Meaning>()) {
-					itemPanel.AddInit(Txt(), o=>{
+					itemPanel.A(Txt(), o=>{
 						o.FontWeight = FontWeight.SemiBold;
 						o.Margin = new(0, 6, 0, 0);
 						o.Text = m.partOfSpeech ?? "" ;
 					});
 
 					foreach (var d in m.definitions ?? new List<Definition>()) {
-						itemPanel.AddInit(Txt(), o=>{
+						itemPanel.A(Txt(), o=>{
 							o.TextWrapping = TextWrapping.Wrap;
 							o.Text = $"• {d.definition}" +
 								(string.IsNullOrEmpty(d.example) ? "" : $"\n    E.g. {d.example}");

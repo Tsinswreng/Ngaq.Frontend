@@ -55,7 +55,7 @@ public partial class ViewDictionary
 
 		// 語言選擇行
 		var LangGrid = new AutoGrid(IsRow: false);
-		Root.AddInit(LangGrid.Grid, o=>{
+		Root.A(LangGrid.Grid, o=>{
 			LangGrid.ColDefs.AddRange([
 				ColDef(5, GUT.Star),
 				ColDef(1, GUT.Auto),
@@ -64,7 +64,7 @@ public partial class ViewDictionary
 		});
 		{{
 			// 源語言輸入
-			LangGrid.AddInit(new TextBox(), o=>{
+			LangGrid.A(new TextBox(), o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.SrcLang));
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
 				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
@@ -74,7 +74,7 @@ public partial class ViewDictionary
 				o.Padding = new Avalonia.Thickness(0);
 			})
 			// 切換按鈕
-			.AddInit(new Button(), o=>{
+			.A(new Button(), o=>{
 				o.Content = "⇄";
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Center;
@@ -89,7 +89,7 @@ public partial class ViewDictionary
 				};
 			})
 			// 目標語言輸入
-			.AddInit(new TextBox(), o=>{
+			.A(new TextBox(), o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.TgtLang));
 				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
 				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
@@ -102,7 +102,7 @@ public partial class ViewDictionary
 
 		// 搜索行
 		var SearchGrid = new AutoGrid(IsRow: false);
-		Root.AddInit(SearchGrid.Grid, o=>{
+		Root.A(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs.AddRange([
 				ColDef(10, GUT.Star),
 				ColDef(2, GUT.Star),
@@ -111,7 +111,7 @@ public partial class ViewDictionary
 		{{
 
 			SearchGrid
-			.AddInit(SearchTextBox, o=>{
+			.A(SearchTextBox, o=>{
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Input));
 				o.KeyBindings.Add(
 					new KeyBinding{
@@ -120,7 +120,7 @@ public partial class ViewDictionary
 					}
 				);
 			})
-			.AddInit(SearchBtn, o=>{
+			.A(SearchBtn, o=>{
 				Todo.I18n();
 				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
@@ -130,7 +130,7 @@ public partial class ViewDictionary
 			;
 
 		}}
-		Root.AddInit(new ViewSimpleWord(), o=>{
+		Root.A(new ViewSimpleWord(), o=>{
 			o.Bind(o.PropDataContext, CBE.Mk<Ctx>(x=>x.Result));
 		})
 

@@ -54,7 +54,7 @@ public partial class ViewLearnWords
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
-		Styles.AddInit(new Style(x=>
+		Styles.A(new Style(x=>
 			x.Is<Control>()
 			.Class(Cls.MenuBtn)
 		).Set(
@@ -128,7 +128,7 @@ public partial class ViewLearnWords
 	protected Panel _Menu(){
 		var R = new AutoGrid(IsRow: true);
 		var Row1 = new AutoGrid(IsRow: false);
-		R.AddInit(Row1.Grid, (o)=>{
+		R.A(Row1.Grid, (o)=>{
 			o.ColumnDefinitions.AddRange([
 				ColDef(100, GUT.Star),
 				ColDef(100, GUT.Star),
@@ -164,14 +164,14 @@ public partial class ViewLearnWords
 				R.Padding = R._Button.Margin = new Thickness(0);
 				return R;
 			};
-			Row1.AddInit(Btn(), (o)=>{
+			Row1.A(Btn(), (o)=>{
 				o._Button.InitContent(Hc(
 					Ic(Svgs.PlayCircleFill)//▶️
 					,T(I[K.Start])
 				));
 				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
 				o.SetExe((Ct)=>Ctx?.LoadEtStartAsy(Ct));
-			}).AddInit(Btn(), o=>{ //📁"💾"
+			}).A(Btn(), o=>{ //📁"💾"
 				o._Button.InitContent(Hc(
 					Ic(Svgs.FloppyDiskBackFill)
 					,T(I[K.Save])
@@ -205,14 +205,14 @@ public partial class ViewLearnWords
 					)
 				);
 
-			}).AddInit(Btn(), o=>{
+			}).A(Btn(), o=>{
 				o._Button.InitContent(Hc(//🔄
 					Ic(Svgs.RotateCw)
 					,T(I[K.Reset])
 				));
 				o.SetExe((Ct)=>Ctx?.ResetAsy(Ct));
 			})
-			.AddInit(Btn(), o=>{
+			.A(Btn(), o=>{
 				o._Button.InitContent(Hc(//⚙
 					Ic(Svgs.GearFill)
 					,T(I[K.Settings])
@@ -252,13 +252,13 @@ public partial class ViewLearnWords
 		});
 		{{
 			Root
-			.AddInit(_Border(), o=>{
+			.A(_Border(), o=>{
 				//背景圖遮蔽
 				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
 				o.ZIndex = -1;
 			})
-			.AddInit(_Menu())
-			.AddInit(_ScrollViewer(), Scr=>{
+			.A(_Menu())
+			.A(_ScrollViewer(), Scr=>{
 				Scr.InitContent(_ListWordCard(), o=>{
 					o.Bind(
 						ItemsControl.ItemsSourceProperty
@@ -266,10 +266,10 @@ public partial class ViewLearnWords
 					);
 				});
 			})//~ScrollViewer
-			.AddInit(new GridSplitter(), o=>{
+			.A(new GridSplitter(), o=>{
 				o.GrayBarWith3Dots();
 			})
-			.AddInit(_WordInfo(), o=>{
+			.A(_WordInfo(), o=>{
 				o.Bind(o.PropDataContext
 					,CBE.Mk<Ctx>(x=>x.CurWordInfo, Mode: BindingMode.TwoWay)
 				);

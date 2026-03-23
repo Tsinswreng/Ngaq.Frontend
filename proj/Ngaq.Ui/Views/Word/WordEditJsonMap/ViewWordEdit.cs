@@ -40,7 +40,7 @@ public partial class ViewWordEdit
 	public Control MkTitleMenu(){
 		var R = new ContextMenu();
 		R.Styles.Add(new Style().NoMargin().NoPadding());
-		R.Items.AddInit(new MenuItem(), o=>{
+		R.Items.A(new MenuItem(), o=>{
 			o.Header = "To Json View";
 			o.Click += (s,e)=>{
 				var vj = new ViewEditJsonWord();
@@ -54,7 +54,7 @@ public partial class ViewWordEdit
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", vj));
 			};
 		});
-		R.Items.AddInit(new MenuItem(), o=>{
+		R.Items.A(new MenuItem(), o=>{
 			o.Header = "To New Form View";
 			o.Click += (s,e)=>{
 				var v2 = new ViewWordEditV2();
@@ -88,9 +88,9 @@ public partial class ViewWordEdit
 			RowDef(1, GUT.Auto),
 		]);
 
-		Root.AddInit(new ScrollViewer(), Sv=>{
+		Root.A(new ScrollViewer(), Sv=>{
 			Sv.InitContent(new StackPanel(), root2=>{
-				root2.AddInit(_Expander(), Ex=>{
+				root2.A(_Expander(), Ex=>{
 					Todo.I18n();
 					Ex.Header = "Word Core";
 					Ex.IsExpanded = true;
@@ -100,7 +100,7 @@ public partial class ViewWordEdit
 								var currentJnWord = propValue.Value;
 								if (currentJnWord == null) return;
 								var poWord = JnWordToUiJsonMap.MkPoWord(
-									CoreDictMapper.Inst.PropAccessorMgr.ToPropDict(currentJnWord.Word)
+									CoreDictMapper.Inst.PropAccessorReg.ToPropDict(currentJnWord.Word)
 								);
 								jm.Ctx!.FromBo(poWord);
 							});
@@ -110,7 +110,7 @@ public partial class ViewWordEdit
 			});
 		});
 
-		Root.AddInit(new OpBtn(), o=>{
+		Root.A(new OpBtn(), o=>{
 			Todo.I18n();
 			o.BtnContent = "Save";
 		});

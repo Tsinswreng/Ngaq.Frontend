@@ -9,7 +9,7 @@ public class HoriCloseCtrls:ContentControl{
 		z.InitContent(new StackPanel(), Sp=>{
 			Sp.Orientation = Orientation.Horizontal;
 			foreach(Control c in Ctrls){
-				Sp.AddInit(c);
+				Sp.A(c);
 			}
 		});
 		return z;

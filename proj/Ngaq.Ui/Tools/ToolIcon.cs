@@ -14,9 +14,9 @@ public class ToolIcon{
 			ColDef(UiCfg.Inst.BaseFontSize, GUT.Pixel),
 			ColDef(1, GUT.Auto),
 		]);
-		R.AddInit(Icon);
+		R.A(Icon);
 		R.Add();
-		R.AddInit(new TextBlock(), t=>{t.Text = Title;});
+		R.A(new TextBlock(), t=>{t.Text = Title;});
 		return R.Grid;
 	}
 }

@@ -42,7 +42,7 @@ public partial class ViewDks
 			]);
 		});
 		var Fx = new AutoGrid(IsRow: false);
-		Root.AddInit(Fx.Grid, o=>{
+		Root.A(Fx.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				..Repeat(()=>ColDef(KeyLen, GUT.Pixel), 6),
 				ColDef(KeyLen/2, GUT.Pixel),
@@ -51,24 +51,24 @@ public partial class ViewDks
 			]);
 			var K = FnAddKey(Fx);
 			K("Esc");
-			Fx.AddInit(Blank());
+			Fx.A(Blank());
 			K("F1");
 			K("F2");
 			K("F3");
 			K("F4");
-			Fx.AddInit(Blank());
+			Fx.A(Blank());
 			K("F5");
 			K("F6");
 			K("F7");
 			K("F8");
-			Fx.AddInit(Blank());
+			Fx.A(Blank());
 			K("F9");
 			K("F10");
 			K("F11");
 			K("F12");
 		});
 		var Num = new AutoGrid(IsRow: false);
-		Root.AddInit(Num.Grid, o=>{
+		Root.A(Num.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				..Repeat(()=>ColDef(KeyLen, GUT.Pixel), 13),
 				ColDef(KeyLen*2, GUT.Pixel),//backspace
@@ -90,7 +90,7 @@ public partial class ViewDks
 			K("⌫", "");
 		});
 		var Qwe = new AutoGrid(IsRow: false);
-		Root.AddInit(Qwe.Grid, o=>{
+		Root.A(Qwe.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				ColDef(KeyLen*1.4, GUT.Pixel),//tab
 				..Repeat(()=>ColDef(KeyLen*1.5, GUT.Pixel), 12),
@@ -114,7 +114,7 @@ public partial class ViewDks
 			K2("\\", "|");
 		});
 		var Asd = new AutoGrid(IsRow: false);
-		Root.AddInit(Asd.Grid, o=>{
+		Root.A(Asd.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				ColDef(KeyLen*1.7, GUT.Pixel),//caps
 				..Repeat(()=>ColDef(KeyLen*1.5, GUT.Pixel), 11),
@@ -137,7 +137,7 @@ public partial class ViewDks
 			K("↲");
 		});
 		var Zxc = new AutoGrid(IsRow: false);
-		Root.AddInit(Zxc.Grid, o=>{
+		Root.A(Zxc.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				ColDef(KeyLen*2, GUT.Pixel),//Shift
 				..Repeat(()=>ColDef(KeyLen, GUT.Pixel), 10),
@@ -158,7 +158,7 @@ public partial class ViewDks
 			K("Shift");
 		});
 		var Ctrl = new AutoGrid(IsRow: false);
-		Root.AddInit(Ctrl.Grid, o=>{
+		Root.A(Ctrl.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				..Repeat(()=>ColDef(KeyLen*1.2, GUT.Pixel), 3)
 				,ColDef(KeyLen*6, GUT.Pixel)//sapce
@@ -180,7 +180,7 @@ public partial class ViewDks
 
 	Func<str, nil> FnAddKey(AutoGrid Target){
 		var R = (str Title)=>{
-			Target.AddInit(Key(Title));
+			Target.A(Key(Title));
 			return NIL;
 		};
 		return R;
@@ -188,7 +188,7 @@ public partial class ViewDks
 
 	Func<str,str, nil> FnAddKey2(AutoGrid Target){
 		var R = (str Title, str Shift)=>{
-			Target.AddInit(Key(Title));
+			Target.A(Key(Title));
 			return NIL;
 		};
 		return R;

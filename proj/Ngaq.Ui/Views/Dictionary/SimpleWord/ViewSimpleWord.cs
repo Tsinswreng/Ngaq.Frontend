@@ -49,14 +49,14 @@ public partial class ViewSimpleWord
 			RowDef(1, GUT.Auto),
 		]);
 		Root
-		.AddInit(Txt(), o=>{
+		.A(Txt(), o=>{
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.5;
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Head));
 		})
-		.AddInit(PronunciationList(), o=>{
+		.A(PronunciationList(), o=>{
 
 		})
-		.AddInit(Txt(), o=>{
+		.A(Txt(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Description));
 		})
 		;

@@ -55,7 +55,7 @@ public partial class ViewSearchWords
 			]);
 		});
 		var SearchGrid = new AutoGrid(IsRow: false);
-		Root.AddInit(SearchGrid.Grid);
+		Root.A(SearchGrid.Grid);
 		{var o = SearchGrid;
 			o.Grid.ColumnDefinitions.AddRange([
 				ColDef(7, GUT.Star),
@@ -64,7 +64,7 @@ public partial class ViewSearchWords
 		}
 		{{
 			var searchBtn = new OpBtn();
-			SearchGrid.AddInit(_TextBox(), o=>{
+			SearchGrid.A(_TextBox(), o=>{
 				o.Bind(
 					o.PropText
 					,CBE.Mk<Ctx>(x=>x.Input)
@@ -76,14 +76,14 @@ public partial class ViewSearchWords
 					}
 				);
 			})
-			.AddInit(searchBtn, o=>{
+			.A(searchBtn, o=>{
 				//o.BtnContent = "🔍";
 				o.BtnContent = Svgs.Search.ToIcon();
 				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
 				o._Button.StretchCenter();
 			});
 		}}
-		Root.AddInit(_ScrollViewer(), scrl=>{
+		Root.A(_ScrollViewer(), scrl=>{
 			scrl.InitContent(_ListWordCard(), o=>{
 				o.Bind(
 					ItemsControl.ItemsSourceProperty
@@ -94,7 +94,7 @@ public partial class ViewSearchWords
 				);
 			});
 		});
-		Root.AddInit(_PageBar(), o=>{
+		Root.A(_PageBar(), o=>{
 			o.HorizontalAlignment = HAlign.Center;
 		});
 
@@ -149,13 +149,13 @@ public partial class ViewSearchWords
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 		]);
-		R.AddInit(_Button(), o=>{
+		R.A(_Button(), o=>{
 			o.Content = "<";
 			o.Click += (s,e)=>{
 				Ctx?.PrevPage();
 			};
 		});
-		R.AddInit(_TextBox(), o=>{
+		R.A(_TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(
@@ -173,7 +173,7 @@ public partial class ViewSearchWords
 				)
 			);
 		});
-		R.AddInit(_Button(), o=>{
+		R.A(_Button(), o=>{
 			o.Content = ">";
 			o.Click += (s,e)=>{
 				Ctx?.NextPage();

@@ -51,7 +51,7 @@ public partial class ViewUserProfile
 				RowDef(1, GUT.Auto),
 			]);
 		});
-		Root.AddInit(new ScrollViewer(), sv=>{
+		Root.A(new ScrollViewer(), sv=>{
 			var ContentGrid = new AutoGrid(IsRow: true);
 			sv.InitContent(ContentGrid.Grid, o=>{
 				o.RowDefinitions.AddRange([
@@ -61,7 +61,7 @@ public partial class ViewUserProfile
 				]);
 
 				ContentGrid
-				.AddInit(new CircleAvatar(), o=>{
+				.A(new CircleAvatar(), o=>{
 					try{
 						o.Source = DfltAvatar.Img;//TODO
 						o.VerticalAlignment = VAlign.Center;
@@ -75,12 +75,12 @@ public partial class ViewUserProfile
 					// 	,CBE.Mk<Ctx>(x=>x.Avatar)
 					// );
 				})
-				.AddInit(new TextBox(), o=>{
+				.A(new TextBox(), o=>{
 
 				})
-				.AddInit(new StackPanel(), Sp=>{
+				.A(new StackPanel(), Sp=>{
 					Sp
-						.AddInit(new Button(), o=>{
+						.A(new Button(), o=>{
 						o.StretchCenter();
 						o.Content = "Change Account"; //TODO i18n
 						o.Click += (s,e)=>{
@@ -89,7 +89,7 @@ public partial class ViewUserProfile
 							);
 						};
 					})
-					.AddInit(new OpBtn(), o=>{
+					.A(new OpBtn(), o=>{
 						o._Button.StretchCenter();
 						o.Background = Brushes.Red;
 						o.BtnContent = "Logout"; //TODO i18n

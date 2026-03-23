@@ -38,7 +38,7 @@ public partial class ViewCfgFont
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
 		]);
-		R.AddInit(_TextBox(), o=>{
+		R.A(_TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(
@@ -62,23 +62,23 @@ public partial class ViewCfgFont
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.AddInit(_TextBlock(), o=>{
+		Root.A(_TextBlock(), o=>{
 			o.Text = "Base Font Size";
 		});
-		Root.AddInit(InputFontSize())
-		.AddInit(new SwipeLongPressBtn(), o=>{
+		Root.A(InputFontSize())
+		.A(new SwipeLongPressBtn(), o=>{
 			o.Content = "Try";
 			o.Click += (s,e)=>{
 				Ctx?.TryNeoFontSize();
 			};
 		})
-		.AddInit(new SwipeLongPressBtn(), o=>{
+		.A(new SwipeLongPressBtn(), o=>{
 			o.Content = "Apply";
 			o.Click += (s,e)=>{
 				Ctx?.ApplyNeoFontSize();
 			};
 		})
-		.AddInit(_TextBlock(), o=>{
+		.A(_TextBlock(), o=>{
 			o.Text = SampleText;
 			o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 			o.Bind(

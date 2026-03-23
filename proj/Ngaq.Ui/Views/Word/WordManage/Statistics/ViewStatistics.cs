@@ -46,37 +46,37 @@ public partial class ViewStatistics
 
 
 	void InitOptPanel(Panel P){
-		P.AddInit(new TextBlock(), o=>{
+		P.A(new TextBlock(), o=>{
 			o.Text = "StartTime:";//TODO i18n
 		})
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(x=>x.TimeStart, Converter: ConvtrTempus.Inst.Iso)
 			);
 		})
-		.AddInit(new TextBlock(), o=>{
+		.A(new TextBlock(), o=>{
 			o.Text = "EndTime:";//TODO i18n
 		})
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(x=>x.TimeEnd, Converter: ConvtrTempus.Inst.Iso)
 			);
 		})
-		.AddInit(new TextBlock(), o=>{
+		.A(new TextBlock(), o=>{
 			o.Text = "Interval:";//TODO i18n
 		})
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(x=>x.IntervalNoUnit)
 			);
 		})
-		.AddInit(new TextBlock(), o=>{
+		.A(new TextBlock(), o=>{
 			o.Text = "Unit";//TODO i18n
 		})
-		.AddInit(new ComboBox(), o=>{
+		.A(new ComboBox(), o=>{
 			o.Items.Add("Second");//TODO i18n
 			o.Items.Add("Minute");//TODO i18n
 			o.Items.Add("Hour");//TODO i18n
@@ -88,34 +88,34 @@ public partial class ViewStatistics
 			o.Bind(o.PropSelectedIndex, CBE.Mk<Ctx>(x=>x.IntervalUnit));
 		})
 
-		.AddInit(new TextBlock(), o=>{
+		.A(new TextBlock(), o=>{
 			o.Text = "Learn Result";//TODO i18n
 		})
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(x=>x.LearnResult)
 			);
 		})
-		.AddInit(new TextBlock(), o=>{
+		.A(new TextBlock(), o=>{
 			o.Text = "PageIndex";
 		})
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(x=>x.PageIdx)
 			);
 		})
-		.AddInit(new TextBlock(), o=>{
+		.A(new TextBlock(), o=>{
 			o.Text = "PageSize";
 		})
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.Bind(
 				o.PropText
 				,CBE.Mk<Ctx>(x=>x.PageSize)
 			);
 		})
-		.AddInit(new OpBtn(), o=>{
+		.A(new OpBtn(), o=>{
 			o._Button.StretchCenter();
 			o.BtnContent = "Count";//TODO i18n
 			o.SetExe((Ct)=>Ctx?.GetDataAsy(Ct));
@@ -166,7 +166,7 @@ if (Ctx is null){return;}
 				RowDef(1, GUT.Star),//graph
 			]);
 		});
-		Root.AddInit(new ScrollViewer(), Sv=>{
+		Root.A(new ScrollViewer(), Sv=>{
 			var grid = new AutoGrid(IsRow:true);
 			Sv.InitContent(grid.Grid, o=>{
 				o.RowDefinitions.AddRange([
@@ -174,14 +174,14 @@ if (Ctx is null){return;}
 				]);
 			});
 			grid
-			.AddInit(new StackPanel(), Sp=>{
+			.A(new StackPanel(), Sp=>{
 				InitOptPanel(Sp);
 			});
 		})
-		.AddInit(new GridSplitter(), o=>{
+		.A(new GridSplitter(), o=>{
 			o.GrayBarWith3Dots();
 		})
-		.AddInit(new AvaPlot(), o=>{
+		.A(new AvaPlot(), o=>{
 			//o.MinHeight = 200;
 			//不雅。未慮況芝Ctx引用變
 			Ctx?.GraphChanged += (s,e)=>{

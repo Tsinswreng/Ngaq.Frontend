@@ -39,35 +39,35 @@ public partial class ViewChangePassword
 		Root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star)
 		]);
-		Root.AddInit(new StackPanel(), Sp=>{
-			Sp.AddInit(new TextBlock(), o=>{
+		Root.A(new StackPanel(), Sp=>{
+			Sp.A(new TextBlock(), o=>{
 				o.Text = "舊密碼";
 				o.VerticalAlignment = VAlign.Center;
 			})
-			.AddInit(new TextBox(), o=>{
+			.A(new TextBox(), o=>{
 				o.PasswordChar = '*';
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.OldPassword));
 				o.VerticalAlignment = VAlign.Center;
 			})
-			.AddInit(new TextBlock(), o=>{
+			.A(new TextBlock(), o=>{
 				o.Text = "新密碼";
 				o.VerticalAlignment = VAlign.Center;
 			})
-			.AddInit(new TextBox(), o=>{
+			.A(new TextBox(), o=>{
 				o.PasswordChar = '*';
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.NewPassword));
 				o.VerticalAlignment = VAlign.Center;
 			})
-			.AddInit(new TextBlock(), o=>{
+			.A(new TextBlock(), o=>{
 				o.Text = "確認新密碼";
 				o.VerticalAlignment = VAlign.Center;
 			})
-			.AddInit(new TextBox(), o=>{
+			.A(new TextBox(), o=>{
 				o.PasswordChar = '*';
 				o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.ConfirmPassword));
 				o.VerticalAlignment = VAlign.Center;
 			})
-			.AddInit(new OpBtn(), o=>{
+			.A(new OpBtn(), o=>{
 				o._Button.Content = "修改密碼";
 				o.SetExe(Ct=>Ctx?.ChangePassword(Ct));
 			})

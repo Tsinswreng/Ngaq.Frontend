@@ -43,13 +43,13 @@ public partial class ViewPronunciation
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 		]);
-		Root.AddInit(new OpBtn(), o=>{
+		Root.A(new OpBtn(), o=>{
 			var icon = Svgs.VolHigh.ToIcon();
 			icon.Height = icon.Width = UiCfg.Inst.BaseFontSize*0.8;
 			o.BtnContent = icon;
 			o.SetExe(Ct=>Ctx?.Play(Ct));
 		})
-		.AddInit(Txt(), o=>{
+		.A(Txt(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Text));
 		})
 		;

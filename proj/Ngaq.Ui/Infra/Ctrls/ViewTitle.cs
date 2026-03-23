@@ -67,17 +67,17 @@ public partial class ViewTitle
 				ColDef(1, GUT.Auto),//Menu Btn
 			]);
 		}
-		Root.AddInit(BdrTitle, o=>{});
+		Root.A(BdrTitle, o=>{});
 		{{
-			TitleBar.AddInit(_Button(), o=>{
+			TitleBar.A(_Button(), o=>{
 				o.Content = Svgs.ArrowCircleLeftFill.ToIcon();
 				o.Click += (s,e)=>{
 					Ctx?.ViewNavi?.Back();
 				};
 				o.Background = Brushes.Transparent;
 			})
-			.AddInit(Title)
-			.AddInit(_Button(), o=>{
+			.A(Title)
+			.A(_Button(), o=>{
 
 				o.IsVisible = false;
 				o.Content = Svgs.DotsHorizontalCircleOutline.ToIcon();
@@ -112,7 +112,7 @@ public partial class ViewTitle
 
 
 		}}//TitleBar
-		Root.AddInit(Body);
+		Root.A(Body);
 		return NIL;
 	}
 

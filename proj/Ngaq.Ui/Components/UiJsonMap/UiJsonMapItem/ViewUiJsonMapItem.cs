@@ -47,16 +47,16 @@ public partial class ViewJsonMapItem
 			RowDef(1, GUT.Auto),
 		]);
 		Root
-		.AddInit(Txt(), o=>{
+		.A(Txt(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.DisplayName));
 		})
-		.AddInit(Txt(), o=>{
+		.A(Txt(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.Descr));
 			o.FontSize = UiCfg.Inst.BaseFontSize * 0.8;
 			o.Foreground = Brushes.LightGray;
 			//TODO 處理文字過多
 		})
-		.AddInit(new TextBox(), o=>{
+		.A(new TextBox(), o=>{
 			o.Bind(o.PropText, CBE.Mk<Ctx>(x=>x.RawInput));
 
 		})
