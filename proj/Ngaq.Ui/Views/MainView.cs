@@ -22,6 +22,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Try;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
 using Ngaq.Ui.Views.User.ChangePassword;
@@ -116,7 +117,7 @@ public partial class MainView : UserControl {
 	}
 
 	void Try(){
-		
+		new TryTreeDataGrid().Try();
 	}
 
 	public MainView() {

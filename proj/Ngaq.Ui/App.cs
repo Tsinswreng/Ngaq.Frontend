@@ -68,7 +68,7 @@ public partial class App :Application
 	}
 
 	public override void Initialize() {
-		//AvaloniaXamlLoader.Load(this);
+		AvaloniaXamlLoader.Load(this);
 		var Sty = MkrStyle.MkStyForAnyControl();
 		Styles.Add(new FluentTheme());
 		this.RequestedThemeVariant = ThemeVariant.Dark;

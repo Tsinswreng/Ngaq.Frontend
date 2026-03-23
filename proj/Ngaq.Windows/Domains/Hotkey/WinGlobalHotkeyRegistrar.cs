@@ -30,8 +30,12 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 		_logger = logger;
 	}
 
+	//TODO 叶 ˋ有蠹、AOT編譯後運行即卡住不動、頁面不出
 	public IAnswer<obj?> RegisterGlobalHotKeys(){
 		var R = new Answer<obj?>();
+		R.AddErr("Not implemented");
+		return R;
+		
 		try{
 			var hotkey = new HotKey{
 				Id = "alt_e",

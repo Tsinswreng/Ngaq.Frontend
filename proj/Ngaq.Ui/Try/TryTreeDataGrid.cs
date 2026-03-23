@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
@@ -10,8 +9,10 @@ namespace Ngaq.Ui.Try;
 
 public class TryTreeDataGrid {
 	private static Window? _TreeDemoWnd;
-	Control? Try() {
-		EnsureTreeDataGridTheme();
+	public Control? Try() {
+		if (Application.Current is null) {
+			return null;
+		}
 
 		var demoItems = new List<TreeRow>{
 		new("Root A", "folder", new List<TreeRow>{ new("A-1", "leaf"), new("A-2", "leaf") }),
@@ -55,25 +56,6 @@ public class TryTreeDataGrid {
 		}, DispatcherPriority.Background);
 
 		return treeDataGrid;
-	}
-
-
-
-	private static void EnsureTreeDataGridTheme() {
-		var app = Application.Current;
-		if (app is null) {
-			return;
-		}
-
-		foreach (var style in app.Styles) {
-			if (style is StyleInclude si && si.Source?.ToString()?.Contains("Avalonia.Controls.TreeDataGrid", StringComparison.OrdinalIgnoreCase) == true) {
-				return;
-			}
-		}
-
-		app.Styles.Add(new StyleInclude(new Uri("avares://Avalonia.Controls.TreeDataGrid/")) {
-			Source = new Uri("avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"),
-		});
 	}
 
 	private sealed class TreeRow {
