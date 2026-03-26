@@ -6,19 +6,23 @@ using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Core.Tools;
+using Ngaq.Core.Tools.Json;
 
 public class ClientWordSync{
 	IHttpCaller HttpCaller;
 	IFrontendUserCtxMgr UserCtxMgr;
 	ISvcWord SvcWord;
+	IJsonSerializer JsonS;
 	public ClientWordSync(
 		IHttpCaller HttpCaller
 		,IFrontendUserCtxMgr UserCtxMgr
 		,ISvcWord SvcUser
+		,IJsonSerializer JsonS
 	){
 		this.HttpCaller = HttpCaller;
 		this.UserCtxMgr = UserCtxMgr;
 		this.SvcWord = SvcUser;
+		this.JsonS = JsonS;
 	}
 	public async Task<nil> AllWordsToServerNonStream(CT Ct){
 		var User = UserCtxMgr.GetUserCtx();
@@ -43,7 +47,7 @@ public class ClientWordSync{
 		};
 		using var resp = await HttpCaller.SendWithRetry(
 			ConstUrl.UrlWord.Pull
-			,JSON.stringify(Req)
+			,JsonS.Stringify(Req)
 			,(json)=>new StringContent(
 				json
 				,Encoding.UTF8

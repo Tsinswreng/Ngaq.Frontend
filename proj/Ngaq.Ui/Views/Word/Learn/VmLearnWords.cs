@@ -26,6 +26,7 @@ using Avalonia.Logging;
 using Ngaq.Core.Shared.Base.Models.Po;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Svc;
+using Ngaq.Core.Infra;
 
 public partial class VmLearnWords
 	:ViewModelBase
@@ -49,21 +50,24 @@ public partial class VmLearnWords
 	// public VmWordQuery(){
 	// 	_Init();
 	// }
-	ISvcWord SvcWord;
+	ISvcWord SvcWordV1;
+	ISvcWordV2 SvcWordV2;
 	IFrontendUserCtxMgr UserCtxMgr;
 
 	MgrLearn MgrLearn;
-	IImgGetter? SvcImg;
-	ICfgAccessor? Cfg;
+	IImgGetter SvcImg;
+	ICfgAccessor Cfg;
 	public VmLearnWords(
 		ISvcWord SvcWord
+		,ISvcWordV2 SvcWordV2
 		,IFrontendUserCtxMgr UserCtxMgr
 		,MgrLearn MgrLearn
-		,IImgGetter? SvcImg
-		,ICfgAccessor? Cfg
+		,IImgGetter SvcImg
+		,ICfgAccessor Cfg
 	){
 		this.SvcImg = SvcImg;
-		this.SvcWord = SvcWord;
+		this.SvcWordV1 = SvcWord;
+		this.SvcWordV2 = SvcWordV2;
 		this.UserCtxMgr = UserCtxMgr;
 		this.MgrLearn = MgrLearn;
 		this.Cfg = Cfg;
@@ -75,6 +79,7 @@ public partial class VmLearnWords
 		return _InitLearnMgr();
 	}
 	nil _InitLearnMgr(){
+		if(AnyNull(MgrLearn)){return NIL;}
 		MgrLearn.OnErr += (s,e)=>{
 			HandleErr(e.Err);
 		};
@@ -120,6 +125,7 @@ public partial class VmLearnWords
 
 
 	protected ELearnOpRtn _LearnOrUndo(VmWordListCard Vm, ELearn Learn){
+		if(AnyNull(MgrLearn)){return ELearnOpRtn.Invalid;}
 		if(Vm.WordForLearn == null){
 			return ELearnOpRtn.Invalid;
 		}
@@ -184,6 +190,7 @@ public partial class VmLearnWords
 	}
 
 	//臨時。篩ʹ理則ˋ宜作獨立模塊、後集于MgrLearn 洏不璫于視圖模型
+	[Obsolete("")]
 	public IAsyncEnumerable<IJnWord> FilterWord(
 		IAsyncEnumerable<IJnWord> Words
 	){
@@ -202,28 +209,29 @@ public partial class VmLearnWords
 		if(AnyNull(MgrLearn)){
 			return;
 		}
-		MgrLearn.WeightArg = WeightArg;
+		MgrLearn.WeightArgOld = WeightArg;
 	}
 
 	public async Task<nil> LoadEtStartAsy(CT Ct){
 		var sw = Stopwatch.StartNew();
 		_AssignWeightArg();
 		await Task.Run(async()=>{
-				if(!MgrLearn.State.OperationStatus.Load){
-				var Page = await SvcWord.PageWord(
-					UserCtxMgr.GetUserCtx()
-					,PageQry.SlctI64Max()
-					,Ct
-				);
+			if(!MgrLearn.State.OperationStatus.Load){
+				// var Page = await SvcWordV1.PageWord(
+				// 	UserCtxMgr.GetUserCtx()
+				// 	,PageQry.SlctI64Max()
+				// 	,Ct
+				// );
 				//須先DBʹ詞ˇ全載入內存後交予MgrLearn。否則算權重旹併發讀則使Sqlite出錯
+				var wordsAsyE = SvcWordV2.GetWordsToLearn(UserCtxMgr.GetDbUserCtx(), Ct);
 				var sw2 = Stopwatch.StartNew();
-				var loadedAll = await Page.ToListPage(Ct);
+				var wordList = await wordsAsyE.ToListAsync(Ct);
 				sw2.Stop();
-				LogInfo($"LoadAllWordFromDb: {sw2.ElapsedMilliseconds} ms");
-				var dataAsyE = (loadedAll.Data??[]).ToAsyncEnumerable();
+				LogInfo($"{nameof(SvcWordV2)}.{nameof(SvcWordV2.GetWordsToLearn)}: {sw2.ElapsedMilliseconds} ms");
+				//var dataAsyE = (loadedAll.Data??[]).ToAsyncEnumerable();
 				//await MgrLearn.LoadEtCalcWeightAsy(Page.DataAsyE.OrEmpty(), Ct);
-				dataAsyE = FilterWord(dataAsyE);
-				await MgrLearn.LoadEtCalcWeight(dataAsyE, Ct);
+				//dataAsyE = FilterWord(dataAsyE);
+				await MgrLearn.LoadEtCalcWeight(ToolAsyE.ToAsyE(wordList), Ct);
 			}
 			await MgrLearn.Start(Ct);
 		});

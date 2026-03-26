@@ -105,7 +105,7 @@ public partial class VmAddWord
 				eTabIdx == ETabIdx.Json
 				&& !str.IsNullOrEmpty(Json)
 			){
-				var JnWords = JSON.parse<IList<JnWord>>(Json);// 測AOT兼容
+				var JnWords = JSON.Parse<IList<JnWord>>(Json);// 測AOT兼容
 				if(JnWords == null){
 					HandleErr("Json parse error.");//TODO i18n
 					// ErrStr = "Json parse error.";
