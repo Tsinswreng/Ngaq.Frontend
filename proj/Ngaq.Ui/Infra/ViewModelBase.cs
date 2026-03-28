@@ -73,10 +73,6 @@ public partial class ViewModelBase
 		return NIL;
 	}
 	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
-	public nil ShowErr(IAppErr Err){
-		return MainView.Inst.ShowErr(Err);
-	}
-
 	public nil HandleErr(obj? Ex){
 		return MainView.Inst.HandleErr(Ex);
 	}

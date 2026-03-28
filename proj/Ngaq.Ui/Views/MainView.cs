@@ -93,30 +93,31 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
-	[Doc(@$"彈窗報錯")]
-	public nil ShowErr(IAppErr Err){
-		if(Err.Type is null){
-			return NIL;
-		}
-		var Str = I18n.Get(Err.Type.ToI18nKey(), Err.Args??[]);
-		ShowMsg(Str);
-		Logger?.LogError(Str+"\n"+str.Join("\n",Err.DebugArgs??[]));
-		return NIL;
-	}
 
 	[Doc(@$"前端拿到異常後處理之")]
 	public nil HandleErr(obj? Ex){
-		Logger?.LogError(Ex+"");
+		str? toLog = null;
 		if(Ex is IAppErr Err){
-			ShowErr(Err);
-			return NIL;
-		}else{
-			ShowErr(ItemsErr.Common.UnknownErr.ToErr());
-			#if DEBUG||true
-			ShowMsg(Ex+"");
-			#endif
-			//TODO log
+			if(Err.Type is not null){
+				var Str = I18n.Get(Err.Type.ToI18nKey(), Err.Args??[]);
+				ShowMsg(Str);
+				toLog += "\n"+Str+"\n"+str.Join("\n",Err.DebugArgs??[]);
+			}
+			toLog += "\n"+Err;
 		}
+		else if(Ex is Exception Exception){
+			toLog = Exception+"";
+		}
+		else{//非Exception 非 IAppErr
+			toLog??="";
+			toLog += "\n"+Ex+"";
+			var err = ItemsErr.Common.UnknownErr.ToErr();
+			if(err.Type is not null){
+				var Str = I18n.Get(err.Type.ToI18nKey(), err.Args??[]);
+				ShowMsg(Str);
+			}
+		}
+		Logger?.LogError(toLog);
 		return NIL;
 	}
 
