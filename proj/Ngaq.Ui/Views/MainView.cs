@@ -31,6 +31,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsCore;
 using Tsinswreng.CsErr;
 
 
@@ -40,7 +41,7 @@ public class ViewNaviBase:UserControl{
 
 
 public partial class MainView : UserControl {
-	
+
 	protected static MainView? _Inst = null;
 	public static MainView Inst => _Inst??= new MainView();
 
@@ -50,6 +51,7 @@ public partial class MainView : UserControl {
 	public Grid Root{get{return AutoGrid.Grid;}}
 	public ViewNaviBase ViewNaviBase{get;} = new ();
 	public ILogger? Logger{get=>App.Logger;set{}}
+	[Doc(@$"可關閉彈窗")]
 	public nil ShowMsg(str Msg){
 		Dispatcher.UIThread.Post((Action)(()=>{
 			var SvcPopup = MainView.Inst.SvcPopup;
@@ -91,6 +93,7 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
+	[Doc(@$"彈窗報錯")]
 	public nil ShowErr(IAppErr Err){
 		if(Err.Type is null){
 			return NIL;
@@ -101,6 +104,7 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
+	[Doc(@$"前端拿到異常後處理之")]
 	public nil HandleErr(obj? Ex){
 		Logger?.LogError(Ex+"");
 		if(Ex is IAppErr Err){

@@ -52,7 +52,7 @@ public class I18n:II18n{
 			}
 		}
 		//TODO handle Dict {type: "xxx", data: ""}
-		throw new NotImplementedException();
+		throw new NotSupportedException();
 	}
 
 	public str this[II18nKey Key]{get{
