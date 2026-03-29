@@ -80,7 +80,7 @@ public partial class ViewTitle
 			.A(_Button(), o=>{
 
 				o.IsVisible = false;
-				o.Content = Svgs.DotsHorizontalCircleOutline.ToIcon();
+				o.Content = Svgs.DotsHorizontalCircleOutline().ToIcon();
 				o.Background = Brushes.Transparent;
 				var CtxMenu = new ContextMenu(){
 					Init=o=>{

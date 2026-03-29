@@ -60,7 +60,7 @@ public partial class ViewAboutMe
 		// ]);
 
 		R.A(new SwipeLongPressBtn(), o=>{
-			o.VAlign(VAlign.Stretch);
+			o.VAlign(x=>x.Stretch);
 			o.InitContent(new CircleAvatar(), o=>{
 				o.Width = UiCfg.Inst.BaseFontSize*1.5;
 				o.Height = UiCfg.Inst.BaseFontSize*1.5;

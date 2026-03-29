@@ -1,6 +1,9 @@
 namespace Ngaq.Ui.Components.PageBar;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Markup.Declarative;
 using Avalonia.Styling;
 using Ngaq.Ui;
@@ -62,11 +65,22 @@ public partial class ViewPageBar
 		return R;
 	}
 
+	IValueConverter ConvU64Str(u64 Dflt){
+		var r = new ParamFnConvtr<u64, str>(
+			(x, p)=>x.ToString()
+			,(text, p)=>{
+				if(u64.TryParse(text, out var value)){
+					return value;
+				}
+				return Dflt;
+			}
+		);
+		return r;
+	}
 	AutoGrid Root = new(IsRow: false);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
@@ -80,30 +94,78 @@ public partial class ViewPageBar
 			o.SetExe((Ct)=>Ctx?.FnPrevPage?.Invoke(Ctx, Ct));
 		})
 		.A(_TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText, x=>x.PageNumStr);
+			o.CBind<Ctx>(
+				o.PropText
+				,x=>x.PageNum
+				,Converter: ConvU64Str(1)
+				,Mode: BindingMode.TwoWay
+			);
 			o.BorderBrush = null;
 		})
 		.A(_TextBlock(), o=>{
 			o.Text = " / ";
 		})
-		.A(_TextBlock(), o=>{
+		.A(_TextBox(), o=>{
 			// o.CBind<Ctx>(o.PropIsVisible, x=>x.TotCnt,
 			// 	Converter: new ParamFnConvtr<u64?, bool>((x,p)=>x is not null)
 			// );
-			o.CBind<Ctx>(o.PropText, x=>x.TotPageCntStr);
+			o.IsReadOnly = true;
+			o.BorderBrush = null;
+			o.CBind<Ctx>(
+				o.PropText
+				,x=>x.TotPageCnt
+				,Converter: new ParamFnConvtr<u64?, str>((x, p)=>x?.ToString()??"")
+				,Mode: BindingMode.OneWay
+			);
 		})
 		.A(MkPageBtn(), o=>{
 			o.BtnContent = Svgs.ArrowCircleRightFill().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnNextPage?.Invoke(Ctx, Ct));
 		})
-		.A(_TextBlock(), o=>{
-			o.Text = Todo.I18n("Page Size:");
-		})
-		.A(_TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText, x=>x.PageSizeStr);
-		})
+		.A(MkPageSizeMenuBtn())
 		;
 		return NIL;
+	}
+
+	Button MkPageSizeMenuBtn(){
+		var flyout = new Flyout();{
+			var panel = new StackPanel(){
+				Init = o=>{
+					flyout.Content = o;
+					o.Spacing = 6;
+				}
+			};
+
+			panel.A(new TextBlock(), o=>{
+				o.Text = Todo.I18n("Page Size:");
+			})
+			.A(new ComboBox(), o=>{
+				o.IsEditable = true;
+				o.MinWidth = 96;
+				o.ItemsSource = new str[]{"10", "20", "50"};
+				o.CBind<Ctx>(
+					ComboBox.TextProperty
+					,x=>x.PageSize
+					,Converter: ConvU64Str(10)
+					,Mode: BindingMode.TwoWay
+				);
+			});
+		}
+
+		var btn = new Button(){
+			Init =o=>{
+				o.Content = Svgs.DotsHorizontalCircleOutline().ToIcon();
+				o.HAlign(x=>x.Center);
+				o.HCAlign(x=>x.Center);
+				o.VAlign(x=>x.Center);
+				o.VCAlign(x=>x.Center);
+			}
+		};
+		FlyoutBase.SetAttachedFlyout(btn, flyout);
+		btn.Click += (s,e)=>{
+			FlyoutBase.ShowAttachedFlyout(btn);
+		};
+		return btn;
 	}
 
 	OpBtn MkPageBtn(){
