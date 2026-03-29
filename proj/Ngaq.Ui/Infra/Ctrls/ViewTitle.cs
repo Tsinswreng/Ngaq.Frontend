@@ -70,7 +70,7 @@ public partial class ViewTitle
 		Root.A(BdrTitle, o=>{});
 		{{
 			TitleBar.A(_Button(), o=>{
-				o.Content = Svgs.ArrowCircleLeftFill.ToIcon();
+				o.Content = Svgs.ArrowCircleLeftFill().ToIcon();
 				o.Click += (s,e)=>{
 					Ctx?.ViewNavi?.Back();
 				};

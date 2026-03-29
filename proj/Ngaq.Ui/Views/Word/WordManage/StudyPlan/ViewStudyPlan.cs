@@ -130,7 +130,7 @@ public partial class ViewStudyPlan
 		]);
 		page.Grid.ColumnSpacing = 8;
 		page.A(_Button(), o=>{
-			o.Content = Svgs.ArrowCircleLeftFill.ToIcon();
+			o.Content = Svgs.ArrowCircleLeftFill().ToIcon();
 			o.Click += (s,e)=>Ctx?.PrevPage();
 		});
 		var goBtn = new Button();
@@ -150,7 +150,7 @@ public partial class ViewStudyPlan
 			o.Click += (s,e)=>Ctx?.GoInputPage();
 		});
 		page.A(_Button(), o=>{
-			o.Content = Svgs.ArrowCircleRightFill.ToIcon();
+			o.Content = Svgs.ArrowCircleRightFill().ToIcon();
 			o.Click += (s,e)=>Ctx?.NextPage();
 		});
 		page.A(_TextBlock(), o=>{

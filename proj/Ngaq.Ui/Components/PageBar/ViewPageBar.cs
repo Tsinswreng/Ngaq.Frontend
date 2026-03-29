@@ -62,7 +62,7 @@ public partial class ViewPageBar
 		]);
 		Root
 		.A(MkPageBtn(), o=>{
-			o.BtnContent = Svgs.ArrowCircleLeftFill.ToIcon();
+			o.BtnContent = Svgs.ArrowCircleLeftFill().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnPrefPage?.Invoke(Ctx, Ct));
 		})
 		.A(new TextBox(), o=>{
@@ -84,7 +84,7 @@ public partial class ViewPageBar
 			o.CBind<Ctx>(o.PropText, x=>x.PageSize);
 		})
 		.A(MkPageBtn(), o=>{
-			o.BtnContent = Svgs.ArrowCircleRightFill.ToIcon();
+			o.BtnContent = Svgs.ArrowCircleRightFill().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnNextPage?.Invoke(Ctx, Ct));
 		})
 		;

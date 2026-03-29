@@ -66,7 +66,7 @@ public partial class ViewWordEditV2: AppViewBase {
 
 	Button MkRmBtn(){
 		var o = new Button();
-		o.Content = Svgs.DeleteForeverSharp.ToIcon().WithText("Remove");
+		o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText("Remove");
 		o.HorizontalAlignment = HorizontalAlignment.Right;
 		o.Background = Brushes.Red;
 		return o;
