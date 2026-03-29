@@ -4,13 +4,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Ui;
+using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
@@ -42,7 +42,7 @@ public partial class ViewStudyPlan
 
 	protected nil Style(){
 		var S = Styles;
-		var FullStretch = new Style(
+		new Style(
 			x=>x.Is<Control>()
 			.Class(Cls.FullStretch)
 		)
@@ -67,7 +67,7 @@ public partial class ViewStudyPlan
 
 		Root.A(MkTopBar());
 		Root.A(MkGridHost());
-		Root.A(MkPageBar());
+		Root.A(MkPageBarHost());
 		return NIL;
 	}
 
@@ -93,7 +93,7 @@ public partial class ViewStudyPlan
 			o.Classes.Add(Cls.FullStretch);
 			o.BtnContent = Svgs.Search.ToIcon();
 			o.Background = UiCfg.Inst.MainColor;
-			o.SetExe((Ct)=>Ctx?.InitSearch(Ct));
+			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
 		.A(_Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
@@ -119,49 +119,12 @@ public partial class ViewStudyPlan
 		return WeightArgGrid;
 	}
 
-	protected Control MkPageBar(){
-		var page = new AutoGrid(IsRow:false);
-		page.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-		]);
-		page.Grid.ColumnSpacing = 8;
-		page.A(_Button(), o=>{
-			o.Content = Svgs.ArrowCircleLeftFill().ToIcon();
-			o.Click += (s,e)=>Ctx?.PrevPage();
-		});
-		var goBtn = new Button();
-		page.A(_TextBox(), o=>{
-			o.CBind<Ctx>(
-				o.PropText,
-				x=>x.CurPageInput,
-				Mode: BindingMode.TwoWay
-			);
-			o.KeyBindings.Add(new KeyBinding{
-				Gesture = new KeyGesture(Key.Enter),
-				Command = new RelayCommand(()=>goBtn.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent))),
-			});
-		});
-		page.A(goBtn, o=>{
-			o.Content = "跳轉";
-			o.Click += (s,e)=>Ctx?.GoInputPage();
-		});
-		page.A(_Button(), o=>{
-			o.Content = Svgs.ArrowCircleRightFill().ToIcon();
-			o.Click += (s,e)=>Ctx?.NextPage();
-		});
-		page.A(_TextBlock(), o=>{
-			o.CBind<Ctx>(
-				TextBlock.TextProperty,
-				x=>x.TotalPageText,
-				Converter: new ParamFnConvtr<str, str>((x,arg)=>$"共 {x} 頁", (x,arg)=>x)
-			);
-			o.VerticalAlignment = VAlign.Center;
-		});
-		return page.Grid;
+	protected Control MkPageBarHost(){
+		var pageBar = new ViewPageBar();
+		if(Ctx is not null){
+			pageBar.Ctx = Ctx.PageBar;
+		}
+		return pageBar;
 	}
 
 	protected nil InitDataGrid(){

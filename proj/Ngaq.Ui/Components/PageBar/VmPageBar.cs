@@ -40,7 +40,7 @@ public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 		return R;
 	}
 
-	public Func<VmPageBar, CT, Task<nil>>? FnPrefPage{get;set;}
+	public Func<VmPageBar, CT, Task<nil>>? FnPrevPage{get;set;}
 	public Func<VmPageBar, CT, Task<nil>>? FnNextPage{get;set;}
 
 

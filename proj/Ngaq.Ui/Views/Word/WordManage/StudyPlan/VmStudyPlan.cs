@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
+using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
@@ -9,6 +10,10 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Ctx = VmStudyPlan;
 public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 	protected VmStudyPlan(){
+		PageBar = VmPageBar.Mk();
+		PageBar.PageSize = 10;
+		PageBar.FnPrevPage = OnPrevPage;
+		PageBar.FnNextPage = OnNextPage;
 		InitDemoData();
 	}
 	public static Ctx Mk(){
@@ -25,33 +30,12 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		#endif
 	}
 
+	public VmPageBar PageBar{get;set;}
+
 	public str Input{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}="";
-
-	public str CurPageInput{
-		get{return field;}
-		set{SetProperty(ref field, value);}
-	} = "1";
-
-	public str TotalPageText{
-		get{return field;}
-		set{SetProperty(ref field, value);}
-	} = "1";
-
-	public u64 PageSize{get;set;} = 10;
-
-	public u64 PageIdx{
-		get{return field;}
-		set{
-			if(SetProperty(ref field, value)){
-				OnPropertyChanged(nameof(PageDisplay));
-			}
-		}
-	}
-
-	public str PageDisplay => (PageIdx+1).ToString();
 
 	public ObservableCollection<RowWeightArg> Rows{get;set;} = [];
 
@@ -91,13 +75,14 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 	}
 
 	protected nil CalcTotalPage(u64 totalCount){
-		var totalPage = totalCount == 0 ? 1 : (totalCount + PageSize - 1) / PageSize;
-		TotalPageText = totalPage.ToString();
+		var pageSize = PageBar.PageSize == 0 ? 10 : PageBar.PageSize;
+		var totalPage = totalCount == 0 ? 1 : (totalCount + pageSize - 1) / pageSize;
+		PageBar.TotPageCnt = totalPage;
 		return NIL;
 	}
 
 	public async Task<nil> InitSearch(CT Ct = default){
-		PageIdx = 0;
+		PageBar.PageNum = 1;
 		return await Search(Ct);
 	}
 
@@ -107,8 +92,10 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		if(!str.IsNullOrWhiteSpace(Input)){
 			q = q.Where(x=>(x.UniqName??"").Contains(Input, StringComparison.OrdinalIgnoreCase));
 		}
-		var start = PageIdx*PageSize;
-		var end = start + PageSize;
+		var pageNum = PageBar.PageNum <= 1 ? 1 : PageBar.PageNum;
+		var pageSize = PageBar.PageSize == 0 ? 10 : PageBar.PageSize;
+		var start = (pageNum - 1) * pageSize;
+		var end = start + pageSize;
 		u64 idx = 0;
 		var onePage = new List<PoWeightArg>();
 		foreach(var po in q){
@@ -118,57 +105,52 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 			idx++;
 		}
 		CalcTotalPage(idx);
-		var totalPage = u64.Parse(TotalPageText);
-		if(PageIdx >= totalPage){
-			PageIdx = totalPage - 1;
+		var totalPage = PageBar.TotPageCnt ?? 1;
+		if(pageNum > totalPage){
+			PageBar.PageNum = totalPage;
 			return await Search(Ct);
 		}
 		Rows.Clear();
 		for(var i = 0; i < onePage.Count; i++){
 			var po = onePage[i];
+			var uiIdx = start + (u64)i + 1;
 			Rows.Add(new RowWeightArg{
-				UiIdx = start + (u64)i + 1,
-				UiIdxText = (start + (u64)i + 1).ToString(),
+				UiIdx = uiIdx,
+				UiIdxText = uiIdx.ToString(),
 				Name = po.UniqName ?? "",
 				ModifiedTime = FormatBizTime(po),
 				Raw = po,
 			});
 		}
-		CurPageInput = (PageIdx+1).ToString();
 		return NIL;
 	}
 
-	public nil PrevPage(){
-		if(PageIdx == 0){
+	protected async Task<nil> OnPrevPage(VmPageBar pageBar, CT Ct){
+		if(pageBar.PageNum <= 1){
+			pageBar.PageNum = 1;
 			return NIL;
 		}
-		PageIdx--;
-		_ = Search();
-		return NIL;
+		pageBar.PageNum--;
+		return await Search(Ct);
 	}
 
-	public nil NextPage(){
-		var totalPage = u64.TryParse(TotalPageText, out var parsed) ? parsed : 1;
-		if(PageIdx + 1 >= totalPage){
+	protected async Task<nil> OnNextPage(VmPageBar pageBar, CT Ct){
+		var totalPage = pageBar.TotPageCnt ?? 1;
+		if(pageBar.PageNum >= totalPage){
 			return NIL;
 		}
-		PageIdx++;
-		_ = Search();
-		return NIL;
+		pageBar.PageNum++;
+		return await Search(Ct);
 	}
 
-	public nil GoInputPage(){
-		if(!u64.TryParse(CurPageInput, out var pageNo)){
-			return NIL;
+	protected async Task<nil> OnGoPage(VmPageBar pageBar, CT Ct){
+		var totalPage = pageBar.TotPageCnt ?? 1;
+		var target = pageBar.PageNum <= 1 ? 1 : pageBar.PageNum;
+		if(target > totalPage){
+			target = totalPage;
 		}
-		if(pageNo <= 1){
-			PageIdx = 0;
-			_ = Search();
-			return NIL;
-		}
-		PageIdx = pageNo - 1;
-		_ = Search();
-		return NIL;
+		pageBar.PageNum = target;
+		return await Search(Ct);
 	}
 
 	public nil OpenDetail(RowWeightArg? row = null){
@@ -178,6 +160,4 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		ViewNavi?.GoTo(titled);
 		return NIL;
 	}
-
-
 }

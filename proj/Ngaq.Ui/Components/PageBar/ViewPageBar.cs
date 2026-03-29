@@ -63,7 +63,7 @@ public partial class ViewPageBar
 		Root
 		.A(MkPageBtn(), o=>{
 			o.BtnContent = Svgs.ArrowCircleLeftFill().ToIcon();
-			o.SetExe((Ct)=>Ctx?.FnPrefPage?.Invoke(Ctx, Ct));
+			o.SetExe((Ct)=>Ctx?.FnPrevPage?.Invoke(Ctx, Ct));
 		})
 		.A(new TextBox(), o=>{
 			o.Classes.A(Cls.CenterInput);
