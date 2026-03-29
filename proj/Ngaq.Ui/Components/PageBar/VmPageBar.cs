@@ -4,6 +4,9 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsPage;
 using Ctx = VmPageBar;
+[Doc(@$"have page size and page number,
+may not suitable for cursor pagination.
+")]
 public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
 	protected VmPageBar(){}
@@ -21,25 +24,54 @@ public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 		#endif
 	}
 
+	public void FromPageResultInfo(IPageResultInfo PageResultInfo){
+		var z = this; var p = PageResultInfo;
+		z.PageNum = p.PageIdx+1;
+		z.PageSize = p.PageSize;
+		z.TotCnt = p.TotCnt;
+		z.TotPageCnt = (u64)(z.TotCnt/z.PageSize+(u64)(z.TotCnt%z.PageSize!=0?1:0));
+	}
+
+	public IPageQry ToPageQry(){
+		var z = this;
+		var R = new PageQry();
+		R.PageIdx = z.PageNum-1;
+		R.PageSize = z.PageSize;
+		return R;
+	}
+
+	public Func<VmPageBar, CT, Task<nil>>? FnPrefPage{get;set;}
+	public Func<VmPageBar, CT, Task<nil>>? FnNextPage{get;set;}
+
+
 
 	[Doc(@$"Page number shown in GUI.
 	ususally starts from 1,
 	unlike {nameof(IPageQry.PageIdx)} which starts from 0.
 	")]
 	public u64 PageNum{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=0;
 
 	public u64 PageSize{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
-	}=0;
+	}=10;
 
-	// public u64 PageSize{
-	// 	get;
-	// 	set{SetProperty(ref field, value);}
-	// }=0;
+	[Doc(@$"Total count of items (not count of pages).
+	backend may not provide this information,
+	in this case, set to null, and not show it in GUI.
+	")]
+	public u64? TotCnt{
+		get;
+		set{SetProperty(ref field, value);}
+	}=null;
+
+	public u64? TotPageCnt{
+		get;
+		set{SetProperty(ref field, value);}
+	}=null;
 
 
 
