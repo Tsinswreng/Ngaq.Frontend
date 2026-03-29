@@ -31,7 +31,7 @@ public partial class ViewStudyPlan
 		Style();
 		Render();
 		InitDataGrid();
-		_ = Ctx?.InitSearchAsy();
+		_ = Ctx?.InitSearch();
 	}
 	public II18n I = I18n.Inst;
 	public partial class Cls{
@@ -82,7 +82,7 @@ public partial class ViewStudyPlan
 		})
 		.A(searchBtn, o=>{
 			o.BtnContent = "搜索";
-			o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct)!);
+			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
 		.A(_Button(), o=>{
 			o.Content = "添加";

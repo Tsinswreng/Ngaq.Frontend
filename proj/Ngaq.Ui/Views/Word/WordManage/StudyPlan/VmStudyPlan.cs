@@ -8,7 +8,6 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 
 using Ctx = VmStudyPlan;
 public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
-	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
 	protected VmStudyPlan(){
 		InitDemoData();
 	}
@@ -25,7 +24,6 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		}
 		#endif
 	}
-
 
 	public str Input{
 		get{return field;}
@@ -98,12 +96,12 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	public async Task<nil> InitSearchAsy(CT Ct = default){
+	public async Task<nil> InitSearch(CT Ct = default){
 		PageIdx = 0;
-		return await SearchAsy(Ct);
+		return await Search(Ct);
 	}
 
-	public async Task<nil> SearchAsy(CT Ct = default){
+	public async Task<nil> Search(CT Ct = default){
 		await Task.Yield();
 		IEnumerable<PoWeightArg> q = AllWeightArg;
 		if(!str.IsNullOrWhiteSpace(Input)){
@@ -123,7 +121,7 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		var totalPage = u64.Parse(TotalPageText);
 		if(PageIdx >= totalPage){
 			PageIdx = totalPage - 1;
-			return await SearchAsy(Ct);
+			return await Search(Ct);
 		}
 		Rows.Clear();
 		for(var i = 0; i < onePage.Count; i++){
@@ -145,7 +143,7 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		PageIdx--;
-		_ = SearchAsy();
+		_ = Search();
 		return NIL;
 	}
 
@@ -155,7 +153,7 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		PageIdx++;
-		_ = SearchAsy();
+		_ = Search();
 		return NIL;
 	}
 
@@ -165,11 +163,11 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 		}
 		if(pageNo <= 1){
 			PageIdx = 0;
-			_ = SearchAsy();
+			_ = Search();
 			return NIL;
 		}
 		PageIdx = pageNo - 1;
-		_ = SearchAsy();
+		_ = Search();
 		return NIL;
 	}
 

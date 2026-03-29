@@ -59,7 +59,7 @@ public partial class ViewSample
 		})
 		.A(new Button(), o=>{
 			o.InitContent(new TextBlock(), t=>{
-				t.Text = "按鈕一";
+				t.Text = Todo.I18n("按鈕一");
 			});
 //你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
 //按鈕綁定事件的寫法
@@ -70,8 +70,8 @@ public partial class ViewSample
 		.A(new ScrollViewer(), Sv=>{
 			Sv.InitContent(new StackPanel(), Sp=>{
 				Sp.A(new OpBtn(), o=>{
-					Todo.I18n(); //UI中硬編碼的字符串都要這樣寫Todo
-					o._Button.Content = "調用後端服務";
+					//UI中硬編碼的字符串都要這樣寫Todo
+					o._Button.Content = Todo.I18n("調用後端服務");
 					o.SetExe(Ct=>Ctx?.CallService(Ct));
 				});
 				Sp.A(MkList());
