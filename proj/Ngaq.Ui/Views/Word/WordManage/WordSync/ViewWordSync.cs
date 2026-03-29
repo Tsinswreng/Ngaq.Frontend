@@ -47,14 +47,14 @@ public partial class ViewWordSync
 				op.SetExe((Ct)=>Ctx?.PushAsy(Ct)!);
 				//o.Content = I[K.Push];
 				o.Content = ToolIcon.IconWithTitle(
-					Svgs.CloudUpload.ToIcon()
+					Svgs.CloudUpload().ToIcon()
 					,I[K.Push]
 				);
 			})
 			.A(new OpBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PullAsy(Ct));
 				o.BtnContent = ToolIcon.IconWithTitle(
-					Svgs.CloudDownload.ToIcon()
+					Svgs.CloudDownload().ToIcon()
 					,I[K.Pull]
 				);
 			})
@@ -66,7 +66,7 @@ public partial class ViewWordSync
 			})
 			.A(new OpBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
-					Svgs.DatabaseExport.ToIcon()
+					Svgs.DatabaseExport().ToIcon()
 					,I[K.Export]
 				);
 				o.SetExe((Ct)=>Ctx?.ExportAsy(Ct));
@@ -84,7 +84,7 @@ public partial class ViewWordSync
 			})
 			.A(new OpBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
-					Svgs.DatabaseImport.ToIcon()
+					Svgs.DatabaseImport().ToIcon()
 					,I[K.Import]
 				);
 				o.SetExe((Ct)=>Ctx?.ImportAsy(Ct));

@@ -110,6 +110,7 @@ public partial class ViewPageBar
 			// 	Converter: new ParamFnConvtr<u64?, bool>((x,p)=>x is not null)
 			// );
 			o.IsReadOnly = true;
+			o.Focusable = false;
 			o.BorderBrush = null;
 			o.CBind<Ctx>(
 				o.PropText
@@ -155,10 +156,7 @@ public partial class ViewPageBar
 		var btn = new Button(){
 			Init =o=>{
 				o.Content = Svgs.DotsHorizontalCircleOutline().ToIcon();
-				o.HAlign(x=>x.Center);
-				o.HCAlign(x=>x.Center);
-				o.VAlign(x=>x.Center);
-				o.VCAlign(x=>x.Center);
+				StyleBtn(o);
 			}
 		};
 		FlyoutBase.SetAttachedFlyout(btn, flyout);
@@ -170,9 +168,14 @@ public partial class ViewPageBar
 
 	OpBtn MkPageBtn(){
 		var r = new OpBtn();
-		r._Button.HorizontalAlignment = HAlign.Stretch;
-		r._Button.VerticalAlignment = VAlign.Stretch;
+		StyleBtn(r._Button);
 		return r;
+	}
+
+	void StyleBtn(Button b){
+		b.HAlign(x=>x.Stretch);
+		b.VAlign(x=>x.Stretch);
+		b.Background = null;
 	}
 }
 
