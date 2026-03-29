@@ -91,13 +91,13 @@ public partial class ViewStudyPlan
 		})
 		.A(searchBtn, o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = Svgs.Search.ToIcon();
+			o.BtnContent = Svgs.Search().ToIcon();
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
 		.A(_Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.Content = Svgs.Add.ToIcon();
+			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;

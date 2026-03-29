@@ -59,7 +59,7 @@ public partial class MainView : UserControl {
 			var msgBox = new MsgBox();
 			{var o = msgBox;
 				o._CloseBtn.Background = null;
-				o._CloseBtn.InitContent(Icon.FromSvg(Svgs.XCircleFill), o=>{
+				o._CloseBtn.InitContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
 					o.Fill = Brushes.Red;
 				});
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;

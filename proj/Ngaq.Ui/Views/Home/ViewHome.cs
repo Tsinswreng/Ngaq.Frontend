@@ -65,7 +65,7 @@ public partial class ViewHome
 
 			ViewBottomBar.Items.AddInitT(
 				new Btn_Control(
-					BarItem(I[K.Learn], Svgs.BookOpenTextFill.ToIcon())//📖
+					BarItem(I[K.Learn], Svgs.BookOpenTextFill().ToIcon())//📖
 					,ViewWordQuery
 				),
 				o=>{
@@ -73,11 +73,11 @@ public partial class ViewHome
 					o.Button.Background = Brushes.Transparent;
 				}
 			).AddInitT(new Btn_Control(
-				BarItem(I[K.Library], Svgs.BookBookmarkFill.ToIcon())//📚
+				BarItem(I[K.Library], Svgs.BookBookmarkFill().ToIcon())//📚
 				,new ViewWordManage()
 			))
 			.AddInitT(new Btn_Control(
-				BarItem(I[K.Me], Svgs.UserCircleFill.ToIcon())//👤
+				BarItem(I[K.Me], Svgs.UserCircleFill().ToIcon())//👤
 				,new ViewAboutMe()
 			));
 		});

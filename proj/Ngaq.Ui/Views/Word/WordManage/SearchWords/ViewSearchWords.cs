@@ -77,7 +77,7 @@ public partial class ViewSearchWords
 			})
 			.A(searchBtn, o=>{
 				//o.BtnContent = "🔍";
-				o.BtnContent = Svgs.Search.ToIcon();
+				o.BtnContent = Svgs.Search().ToIcon();
 				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
 				o._Button.StretchCenter();
 			});

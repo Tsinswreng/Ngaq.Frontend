@@ -74,7 +74,7 @@ public partial class ViewWordEditV2: AppViewBase {
 	Button MkBtnAddItem(){
 		var o = new Button();
 		o.Margin = new Thickness(10, 10, 10, 4);
-		o.Content = Svgs.Add.ToIcon().WithText(" Add Item");
+		o.Content = Svgs.Add().ToIcon().WithText(" Add Item");
 		return o;
 	}
 	Control MkHeader() {
@@ -297,7 +297,7 @@ public partial class ViewWordEditV2: AppViewBase {
 		}).A(new OpBtn(), o => {
 			//o.Classes.Add(Cls.MainBtn);
 			o.Background = UiCfg.Inst.MainColor;
-			o.BtnContent = Svgs.FloppyDiskBackFill.ToIcon().WithText(" Save");
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(" Save");
 			o.CBind<Ctx>(IsEnabledProperty,x => x.IsDirty, Mode: BindingMode.OneWay);
 			o.SetExe(ct => Ctx?.Save(ct));
 		});

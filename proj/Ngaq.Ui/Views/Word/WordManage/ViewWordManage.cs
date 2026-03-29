@@ -62,12 +62,12 @@ public partial class ViewWordManage
 		});
 		Root.A(_StackPanel(), Sp=>{
 			Todo.I18n();
-			Sp.A(_Item("Dictionary", new ViewDictionary(), Svgs.BookA.ToIcon()))
-			.A(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search.ToIcon()))
-			.A(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add.ToIcon()))
-			.A(_Item("Study Plan", new ViewStudyPlan(), Svgs.Schema.ToIcon()))//plan
-			.A(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle.ToIcon()))
-			.A(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill.ToIcon()))
+			Sp.A(_Item("Dictionary", new ViewDictionary(), Svgs.BookA().ToIcon()))
+			.A(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search().ToIcon()))
+			.A(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add().ToIcon()))
+			.A(_Item("Study Plan", new ViewStudyPlan(), Svgs.Schema().ToIcon()))//plan
+			.A(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle().ToIcon()))
+			.A(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()))
 			;
 			var Txt = new StrokeTextBlock{// //TextBlock
 				TextWrapping = TextWrapping.Wrap,

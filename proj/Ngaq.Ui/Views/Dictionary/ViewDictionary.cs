@@ -124,7 +124,7 @@ public partial class ViewDictionary
 				Todo.I18n();
 				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
-				o._Button.Content = Svgs.Search.ToIcon();
+				o._Button.Content = Svgs.Search().ToIcon();
 				o.SetExe(Ct=>Ctx?.Lookup(Ct));
 			})
 			;
