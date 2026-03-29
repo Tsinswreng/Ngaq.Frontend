@@ -1,9 +1,14 @@
 ﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
@@ -90,6 +95,15 @@ public partial class ViewStudyPlan
 		WeightArgGrid = new TreeDataGrid{
 			MinHeight = 280,
 		};
+		WeightArgGrid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+		);
+		WeightArgGrid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+		);
+		WeightArgGrid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
 		return WeightArgGrid;
 	}
 
@@ -156,14 +170,28 @@ public partial class ViewStudyPlan
 				new TextColumn<Ctx.RowWeightArg, str>("修改時間", x=>x.ModifiedTime),
 			},
 		};
-		GridSource.RowSelection?.SelectionChanged += (s,e)=>{
-			var row = GridSource.RowSelection?.SelectedItem;
-			if(row is null){
-				return;
-			}
-			Ctx?.OpenDetail(row);
-		};
 		WeightArgGrid.Source = GridSource;
 		return NIL;
+	}
+
+	protected void OnGridTapped(object? sender, TappedEventArgs e){
+		if(Ctx is null || WeightArgGrid is null){
+			return;
+		}
+		if(e.Source is not StyledElement src){
+			return;
+		}
+		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
+			if(cur is ToggleButton){
+				return;
+			}
+			if(cur is TreeDataGridRow row){
+				if(row.DataContext is Ctx.RowWeightArg vmRow){
+					Ctx.OpenDetail(vmRow);
+					e.Handled = true;
+				}
+				return;
+			}
+		}
 	}
 }
