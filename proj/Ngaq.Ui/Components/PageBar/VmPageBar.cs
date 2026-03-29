@@ -52,12 +52,30 @@ public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 	public u64 PageNum{
 		get;
 		set{SetProperty(ref field, value);}
-	}=0;
+	}=1;
+
+	public str PageNumStr{
+		get=>PageNum+"";
+		set{
+			if(u64.TryParse(value, out var v)){
+				PageNum = v;
+			}
+		}
+	}
 
 	public u64 PageSize{
 		get;
 		set{SetProperty(ref field, value);}
 	}=10;
+
+	public str PageSizeStr{
+		get=>PageSize+"";
+		set{
+			if(u64.TryParse(value, out var v)){
+				PageSize = v;
+			}
+		}
+	}
 
 	[Doc(@$"Total count of items (not count of pages).
 	backend may not provide this information,

@@ -52,6 +52,7 @@ public partial class ViewPageBar
 	TextBox _TextBox(){
 		var R = new TextBox();
 		R.Classes.A(Cls.CenterInput);
+		R.MinWidth = 0;
 		return R;
 	}
 
@@ -79,7 +80,8 @@ public partial class ViewPageBar
 			o.SetExe((Ct)=>Ctx?.FnPrevPage?.Invoke(Ctx, Ct));
 		})
 		.A(_TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText, x=>x.PageNum);
+			o.CBind<Ctx>(o.PropText, x=>x.PageNumStr);
+			o.BorderBrush = null;
 		})
 		.A(_TextBlock(), o=>{
 			o.Text = " / ";
@@ -98,7 +100,7 @@ public partial class ViewPageBar
 			o.Text = Todo.I18n("Page Size:");
 		})
 		.A(_TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText, x=>x.PageSize);
+			o.CBind<Ctx>(o.PropText, x=>x.PageSizeStr);
 		})
 		;
 		return NIL;
