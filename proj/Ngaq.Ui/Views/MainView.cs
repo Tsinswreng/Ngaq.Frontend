@@ -16,6 +16,7 @@ using Ngaq.Core.Infra.Errors;
 using Ngaq.Ui.CodeTemplate.Sample;
 using Ngaq.Ui.Components.KvMap;
 using Ngaq.Ui.Components.KvMap.JsonMap;
+using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Controls;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -150,8 +151,9 @@ public partial class MainView : UserControl {
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 
-		var Home = new ViewHome();
+		//var Home = new ViewHome();
 		// var Home = new ViewWordEditV2();
+		var Home = new ViewPageBar();
 
 		Navi.GoTo(Home);
 	}

@@ -50,18 +50,18 @@ public partial class VmSample:ViewModelBase, IMk<Ctx>{
 	#endregion 依賴注入
 
 
-	//可綁定字段必須定義成這樣、無特殊情況(如轉發其他屬性)必須使用filed關鍵字
+	//可綁定字段必須定義成這樣、無特殊情況(如轉發其他屬性)必須使用field關鍵字
 	public int Cnt1{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=0;
 	public str Input{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 
 	public ObservableCollection<str> List{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=["a","b","c"];
 

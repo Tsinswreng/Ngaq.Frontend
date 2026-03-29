@@ -22,7 +22,7 @@ public partial class VmXxx: ViewModelBase, IMk<Ctx>{
 
 
 	public str YYY{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 
