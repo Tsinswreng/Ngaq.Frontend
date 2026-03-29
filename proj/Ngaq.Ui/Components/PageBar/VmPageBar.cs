@@ -73,6 +73,17 @@ public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	}=null;
 
+	public str TotPageCntStr{
+		get{
+			return TotPageCnt+"";
+		}
+		set{
+			if(u64.TryParse(value, out var v)){
+				TotPageCnt = v;
+			}
+		}
+	}
+
 
 
 

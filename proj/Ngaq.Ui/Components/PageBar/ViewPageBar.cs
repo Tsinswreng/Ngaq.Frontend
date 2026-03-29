@@ -49,11 +49,24 @@ public partial class ViewPageBar
 		return NIL;
 	}
 
+	TextBox _TextBox(){
+		var R = new TextBox();
+		R.Classes.A(Cls.CenterInput);
+		return R;
+	}
+
+	TextBlock _TextBlock(){
+		var R = new TextBlock();
+		R.Classes.A(Cls.CenterText);
+		return R;
+	}
 
 	AutoGrid Root = new(IsRow: false);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Auto),
+			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
@@ -65,27 +78,27 @@ public partial class ViewPageBar
 			o.BtnContent = Svgs.ArrowCircleLeftFill().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnPrevPage?.Invoke(Ctx, Ct));
 		})
-		.A(new TextBox(), o=>{
-			o.Classes.A(Cls.CenterInput);
+		.A(_TextBox(), o=>{
 			o.CBind<Ctx>(o.PropText, x=>x.PageNum);
 		})
-
-		.A(new TextBlock(), o=>{
-			o.Classes.A(Cls.CenterText);
-			o.CBind<Ctx>(o.PropIsVisible, x=>x.TotCnt,
-				Converter: new ParamFnConvtr<u64?, bool>((x,p)=>x is not null)
-			);
-			o.CBind<Ctx>(o.PropText, x=>x.TotPageCnt,
-			Converter: new ParamFnConvtr<u64?, str>((x,p)=>$"/{x}")
-			);
+		.A(_TextBlock(), o=>{
+			o.Text = " / ";
 		})
-		.A(new TextBox(), o=>{
-			o.Classes.A(Cls.CenterInput);
-			o.CBind<Ctx>(o.PropText, x=>x.PageSize);
+		.A(_TextBlock(), o=>{
+			// o.CBind<Ctx>(o.PropIsVisible, x=>x.TotCnt,
+			// 	Converter: new ParamFnConvtr<u64?, bool>((x,p)=>x is not null)
+			// );
+			o.CBind<Ctx>(o.PropText, x=>x.TotPageCntStr);
 		})
 		.A(MkPageBtn(), o=>{
 			o.BtnContent = Svgs.ArrowCircleRightFill().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnNextPage?.Invoke(Ctx, Ct));
+		})
+		.A(_TextBlock(), o=>{
+			o.Text = Todo.I18n("Page Size:");
+		})
+		.A(_TextBox(), o=>{
+			o.CBind<Ctx>(o.PropText, x=>x.PageSize);
 		})
 		;
 		return NIL;
