@@ -151,7 +151,7 @@ public partial class ViewStudyPlan
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightArg>(Ctx.Rows){
 			Columns = {
 				new CheckBoxColumn<Ctx.RowWeightArg>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
-				new TextColumn<Ctx.RowWeightArg, str>("序號", x=>x.UiIdx.ToString()),
+				new TextColumn<Ctx.RowWeightArg, str>("序號", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowWeightArg, str>("名稱", x=>x.Name),
 				new TextColumn<Ctx.RowWeightArg, str>("修改時間", x=>x.ModifiedTime),
 			},

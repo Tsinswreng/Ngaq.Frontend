@@ -62,6 +62,7 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 	public class RowWeightArg{
 		public bool IsChecked{get;set;} = false;
 		public u64 UiIdx{get;set;}
+		public str UiIdxText{get;set;} = "";
 		public str Name{get;set;} = "";
 		public str ModifiedTime{get;set;} = "";
 		public PoWeightArg? Raw{get;set;} = null;
@@ -129,6 +130,7 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 			var po = onePage[i];
 			Rows.Add(new RowWeightArg{
 				UiIdx = start + (u64)i + 1,
+				UiIdxText = (start + (u64)i + 1).ToString(),
 				Name = po.UniqName ?? "",
 				ModifiedTime = FormatBizTime(po),
 				Raw = po,
