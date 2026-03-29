@@ -90,8 +90,6 @@ public partial class OpBtn : ContentControl {
 		};
 		Overlay = FnMkOverlay();
 
-
-
 		_Button.Click += (s, e) => {
 			if (State == EState.Working) {
 				Cancel();
@@ -116,7 +114,6 @@ public partial class OpBtn : ContentControl {
 			});
 		};
 	}
-
 
 	public Control MkOverlay() {
 		// 1. 還是你原來的 ProgressBar，啥也不改

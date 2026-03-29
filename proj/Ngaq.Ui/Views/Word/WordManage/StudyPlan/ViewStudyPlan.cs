@@ -11,6 +11,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Ui;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
@@ -35,11 +36,19 @@ public partial class ViewStudyPlan
 	}
 	public II18n I = I18n.Inst;
 	public partial class Cls{
-
+		public static str FullStretch = nameof(FullStretch);
 	}
 
 
 	protected nil Style(){
+		var S = Styles;
+		var FullStretch = new Style(
+			x=>x.Is<Control>()
+			.Class(Cls.FullStretch)
+		)
+		.Set(HorizontalAlignmentProperty, HAlign.Stretch)
+		.Set(VerticalAlignmentProperty, VAlign.Stretch)
+		.AddTo(S);
 		return NIL;
 	}
 
@@ -81,11 +90,14 @@ public partial class ViewStudyPlan
 			});
 		})
 		.A(searchBtn, o=>{
-			o.BtnContent = "搜索";
-			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
+			o.Classes.Add(Cls.FullStretch);
+			o.BtnContent = Svgs.Search.ToIcon();
+			o.Background = UiCfg.Inst.MainColor;
+			o.SetExe((Ct)=>Ctx?.InitSearch(Ct));
 		})
 		.A(_Button(), o=>{
-			o.Content = "添加";
+			o.Classes.Add(Cls.FullStretch);
+			o.Content = Svgs.Add.ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
@@ -115,20 +127,14 @@ public partial class ViewStudyPlan
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
 		]);
 		page.Grid.ColumnSpacing = 8;
 		page.A(_Button(), o=>{
-			o.Content = "上一頁";
+			o.Content = Svgs.ArrowCircleLeftFill.ToIcon();
 			o.Click += (s,e)=>Ctx?.PrevPage();
-		});
-		page.A(_TextBlock(), o=>{
-			o.Text = "當前頁";
-			o.VerticalAlignment = VAlign.Center;
 		});
 		var goBtn = new Button();
 		page.A(_TextBox(), o=>{
-			o.Width = 70;
 			o.CBind<Ctx>(
 				o.PropText,
 				x=>x.CurPageInput,
@@ -144,7 +150,7 @@ public partial class ViewStudyPlan
 			o.Click += (s,e)=>Ctx?.GoInputPage();
 		});
 		page.A(_Button(), o=>{
-			o.Content = "下一頁";
+			o.Content = Svgs.ArrowCircleRightFill.ToIcon();
 			o.Click += (s,e)=>Ctx?.NextPage();
 		});
 		page.A(_TextBlock(), o=>{
@@ -165,9 +171,9 @@ public partial class ViewStudyPlan
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightArg>(Ctx.Rows){
 			Columns = {
 				new CheckBoxColumn<Ctx.RowWeightArg>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
-				new TextColumn<Ctx.RowWeightArg, str>("序號", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowWeightArg, str>("名稱", x=>x.Name),
-				new TextColumn<Ctx.RowWeightArg, str>("修改時間", x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n("序號"), x=>x.UiIdxText),
+				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n("名稱"), x=>x.Name),
+				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
 			},
 		};
 		WeightArgGrid.Source = GridSource;

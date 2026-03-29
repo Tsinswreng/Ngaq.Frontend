@@ -3,6 +3,9 @@ namespace Ngaq.Ui.Icons;
 public class Svgs{
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleLeftFill" />
 	public static Svg ArrowCircleLeftFill => "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm40,112H107.31l18.35,18.34a8,8,0,0,1-11.32,11.32l-32-32a8,8,0,0,1,0-11.32l32-32a8,8,0,0,1,11.32,11.32L107.31,120H168a8,8,0,0,1,0,16Z";
+	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleRightFill" />
+	public static Svg ArrowCircleRightFill => "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,109.66-32,32a8,8,0,0,1-11.32-11.32L148.69,136H88a8,8,0,0,1,0-16h60.69l-18.35-18.34a8,8,0,0,1,11.32-11.32l32,32A8,8,0,0,1,173.66,133.66Z";
+
 	//<iconPacks:PackIconPhosphorIcons Kind="PlayCircle" />
 	public static Svg PlayCircle => "M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm48.24-94.78-64-40A8,8,0,0,0,100,88v80a8,8,0,0,0,12.24,6.78l64-40a8,8,0,0,0,0-13.56ZM116,153.57V102.43L156.91,128Z";
 	//<iconPacks:PackIconPhosphorIcons Kind="PlayCircleFill" />
