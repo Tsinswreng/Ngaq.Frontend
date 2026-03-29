@@ -6,6 +6,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSample;
@@ -113,5 +114,12 @@ public partial class ViewSample
 	}
 
 	#endregion Style
+
+	//導航示例
+	public void SampleNavi(Control TargetView){
+		//帶標題跳轉
+		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle("頂欄標題", TargetView));
+		//若不要標題就直接傳進Goto
+	}
 
 }
