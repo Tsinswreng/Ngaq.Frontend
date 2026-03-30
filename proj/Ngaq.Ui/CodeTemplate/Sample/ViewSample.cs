@@ -3,6 +3,7 @@ namespace Ngaq.Ui.CodeTemplate.Sample;
 using Avalonia.Controls;
 using Avalonia.Styling;
 using Ngaq.Ui;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
@@ -120,6 +121,18 @@ public partial class ViewSample
 		//帶標題跳轉
 		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle("頂欄標題", TargetView));
 		//若不要標題就直接傳進Goto
+	}
+
+	public void SampleIcon(){
+		//基礎示例
+		Avalonia.Controls.Shapes.Path addIcon = Svgs.Add().ToIcon();
+		var b1 = new Button();
+		b1.Content = addIcon;
+// Svgs下 可用的圖標 在 Ngaq.Frontend/proj/Ngaq.Ui/Icons/Svgs.Decl.cs
+// 禁止閱讀 Svgs.Impl.cs !!!!
+		//圖標接文字示例:
+		var b2 = new Button();
+		b2.Content = Svgs.Add().ToIcon().WithText("Add");
 	}
 
 }

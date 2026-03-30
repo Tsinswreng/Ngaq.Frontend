@@ -146,6 +146,8 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
+	//TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
+	//檢查 VmWeightArgPage是否有同樣問題。
 	public nil OpenDetail(RowPreFilter? row = null){
 		var view = new ViewStudyPlanEdit();
 		var title = row?.Name ?? "新增預篩選器";
