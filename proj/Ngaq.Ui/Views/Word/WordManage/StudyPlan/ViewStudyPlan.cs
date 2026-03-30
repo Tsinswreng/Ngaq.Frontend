@@ -40,7 +40,7 @@ public partial class ViewStudyPlan
 		Root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star),
 		]);
-		//Root.A(_S());
+		Root.A(_S());
 		return NIL;
 	}
 

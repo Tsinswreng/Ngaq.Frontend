@@ -42,9 +42,7 @@ public class ViewNaviBase:UserControl{
 
 
 public partial class MainView : UserControl {
-
-	protected static MainView? _Inst = null;
-	public static MainView Inst => _Inst??= new MainView();
+	public static MainView Inst{get;protected set;} =new();
 
 	[Doc(@$"造按鈕、點後跳到目標視圖")]
 	public Func<Control, Button> MkFnBtnToView(){
@@ -65,7 +63,7 @@ public partial class MainView : UserControl {
 	[Doc(@$"可關閉彈窗")]
 	public nil ShowMsg(str Msg){
 		Dispatcher.UIThread.Post((Action)(()=>{
-			var SvcPopup = MainView.Inst.SvcPopup;
+			var SvcPopup = this.SvcPopup;
 			var msgBox = new MsgBox();
 			{var o = msgBox;
 				o._CloseBtn.Background = null;
@@ -136,6 +134,7 @@ public partial class MainView : UserControl {
 	}
 
 	public MainView() {
+		Inst ??= this;
 		Try();
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
