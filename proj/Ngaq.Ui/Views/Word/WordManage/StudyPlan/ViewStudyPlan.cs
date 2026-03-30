@@ -5,6 +5,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -49,8 +50,8 @@ public partial class ViewStudyPlan
 		//var toView = MainView.Inst.MkFnBtnToView();
 		var toView = MainView.Inst.MkBtnToView;
 		o.A(
-			toView(new ViewWeightArgPage(),Todo.I18n("Weigth Arg"))
-		)
+			toView(new ViewPreFilterPage(),Todo.I18n("PreFilter"))
+		).A(toView(new ViewWeightArgPage(),Todo.I18n("Weigth Arg")))
 		;
 		return o;
 	}

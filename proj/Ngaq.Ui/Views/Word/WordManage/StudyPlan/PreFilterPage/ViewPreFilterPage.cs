@@ -1,0 +1,127 @@
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
+
+using Avalonia.Controls;
+using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Input;
+using Avalonia.Styling;
+using CommunityToolkit.Mvvm.Input;
+using Ngaq.Ui;
+using Ngaq.Ui.Components.PageBar;
+using Ngaq.Ui.Icons;
+using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Infra.I18n;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
+using Ctx = VmPreFilterPage;
+public partial class ViewPreFilterPage
+	:AppViewBase
+{
+
+	public Ctx? Ctx{
+		get{return DataContext as Ctx;}
+		set{DataContext = value;}
+	}
+
+	public ViewPreFilterPage(){
+		Ctx = App.DiOrMk<Ctx>();
+		Style();
+		Render();
+		InitDataGrid();
+		_ = Ctx?.InitSearch();
+	}
+	public II18n I = I18n.Inst;
+	public partial class Cls{
+		public static str FullStretch = nameof(FullStretch);
+	}
+
+
+	protected nil Style(){
+		var S = Styles;
+		new Style(
+			x=>x.Is<Control>()
+			.Class(Cls.FullStretch)
+		)
+		.Set(HorizontalAlignmentProperty, HAlign.Stretch)
+		.Set(VerticalAlignmentProperty, VAlign.Stretch)
+		.AddTo(S);
+		return NIL;
+	}
+
+
+	AutoGrid Root = new(IsRow: true);
+	TreeDataGrid? PreFilterGrid;
+	FlatTreeDataGridSource<Ctx.RowPreFilter>? GridSource;
+
+	protected nil Render(){
+		this.Content = Root.Grid;
+		Root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Star),
+			RowDef(1, GUT.Auto),
+		]);
+
+		Root.A(MkTopBar());
+		Root.A(MkGridHost());
+		Root.A(MkPageBarHost());
+		return NIL;
+	}
+
+	protected Control MkTopBar(){
+		var top = new AutoGrid(IsRow:false);
+		top.Grid.ColumnDefinitions.AddRange([
+			ColDef(7, GUT.Star),
+			ColDef(1, GUT.Star),
+		]);
+		var searchBtn = new OpBtn();
+		top.A(_TextBox(), o=>{
+			o.CBind<Ctx>(
+				o.PropText,
+				x=>x.Input
+			);
+			o.KeyBindings.Add(new KeyBinding{
+				Gesture = new KeyGesture(Key.Enter),
+				Command = new RelayCommand(()=>searchBtn.PerformClick()),
+			});
+		})
+		.A(searchBtn, o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.BtnContent = Svgs.Search().ToIcon();
+			o.Background = UiCfg.Inst.MainColor;
+			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
+		});
+		return top.Grid;
+	}
+
+	protected Control MkGridHost(){
+		PreFilterGrid = new TreeDataGrid{
+			MinHeight = 280,
+		};
+		return PreFilterGrid;
+	}
+
+	protected Control MkPageBarHost(){
+		var pageBar = new ViewPageBar();
+		if(Ctx is not null){
+			pageBar.Ctx = Ctx.PageBar;
+		}
+		return pageBar;
+	}
+
+	protected nil InitDataGrid(){
+		if(Ctx is null || PreFilterGrid is null){
+			return NIL;
+		}
+		GridSource = new FlatTreeDataGridSource<Ctx.RowPreFilter>(Ctx.Rows){
+			Columns = {
+				new CheckBoxColumn<Ctx.RowPreFilter>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
+				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n(""), x=>x.UiIdxText),
+				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("名稱"), x=>x.Name),
+				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("類型"), x=>x.Type),
+				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
+			},
+		};
+		PreFilterGrid.Source = GridSource;
+		return NIL;
+	}
+}
