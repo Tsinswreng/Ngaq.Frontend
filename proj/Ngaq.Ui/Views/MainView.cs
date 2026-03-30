@@ -46,6 +46,16 @@ public partial class MainView : UserControl {
 	protected static MainView? _Inst = null;
 	public static MainView Inst => _Inst??= new MainView();
 
+	[Doc(@$"造按鈕、點後跳到目標視圖")]
+	public Func<Control, Button> MkFnBtnToView(){
+		return (Target)=>{
+			var btn = new Button();
+			btn.Click += (s,e)=>{
+				MgrViewNavi.Inst.ViewNavi?.GoTo(Target);
+			};
+			return btn;
+		};
+	}
 	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
 	public SvcPopup SvcPopup{get;set;}
 	public AutoGrid AutoGrid = new (IsRow: true);

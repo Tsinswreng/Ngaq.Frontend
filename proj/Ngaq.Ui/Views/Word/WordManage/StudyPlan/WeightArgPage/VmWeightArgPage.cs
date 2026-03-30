@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
@@ -7,9 +7,9 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 
-using Ctx = VmStudyPlan;
-public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
-	protected VmStudyPlan(){
+using Ctx = VmWeightArgPage;
+public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
+	protected VmWeightArgPage(){
 		PageBar = VmPageBar.Mk();
 		PageBar.PageSize = 10;
 		PageBar.FnPrevPage = OnPrevPage;
@@ -21,7 +21,7 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmStudyPlan(){
+	static VmWeightArgPage(){
 		#if DEBUG
 		{
 			var o = new Ctx();

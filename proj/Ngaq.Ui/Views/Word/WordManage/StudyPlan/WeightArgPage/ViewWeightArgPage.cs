@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -17,8 +17,8 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmStudyPlan;
-public partial class ViewStudyPlan
+using Ctx = VmWeightArgPage;
+public partial class ViewWeightArgPage
 	:AppViewBase
 {
 
@@ -27,7 +27,7 @@ public partial class ViewStudyPlan
 		set{DataContext = value;}
 	}
 
-	public ViewStudyPlan(){
+	public ViewWeightArgPage(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();

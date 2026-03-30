@@ -2,12 +2,12 @@ using Tsinswreng.AvlnTools.Navigation;
 
 namespace Ngaq.Ui.Infra;
 
-public  partial interface I_GetViewNavi{
+public partial interface I_GetViewNavi{
 	public IViewNavi? GetViewNavi();
 }
 
 
-public  partial class MgrViewNavi:I_GetViewNavi{
+public partial class MgrViewNavi:I_GetViewNavi{
 	protected static MgrViewNavi? _Inst = null;
 	public static MgrViewNavi Inst => _Inst??= new MgrViewNavi();
 
