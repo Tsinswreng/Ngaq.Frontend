@@ -1,8 +1,12 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Ui;
@@ -72,6 +76,7 @@ public partial class ViewPreFilterPage
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(7, GUT.Star),
 			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
 		top.A(_TextBox(), o=>{
@@ -89,6 +94,11 @@ public partial class ViewPreFilterPage
 			o.BtnContent = Svgs.Search().ToIcon();
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
+		})
+		.A(_Button(), o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.Content = Svgs.Add().ToIcon();
+			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
 	}
@@ -97,6 +107,15 @@ public partial class ViewPreFilterPage
 		PreFilterGrid = new TreeDataGrid{
 			MinHeight = 280,
 		};
+		PreFilterGrid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+		);
+		PreFilterGrid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+		);
+		PreFilterGrid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
 		return PreFilterGrid;
 	}
 
@@ -123,5 +142,26 @@ public partial class ViewPreFilterPage
 		};
 		PreFilterGrid.Source = GridSource;
 		return NIL;
+	}
+
+	protected void OnGridTapped(object? sender, TappedEventArgs e){
+		if(Ctx is null || PreFilterGrid is null){
+			return;
+		}
+		if(e.Source is not StyledElement src){
+			return;
+		}
+		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
+			if(cur is ToggleButton){
+				return;
+			}
+			if(cur is TreeDataGridRow row){
+				if(row.DataContext is Ctx.RowPreFilter vmRow){
+					Ctx.OpenDetail(vmRow);
+					e.Handled = true;
+				}
+				return;
+			}
+		}
 	}
 }

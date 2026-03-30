@@ -4,6 +4,8 @@ using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 
 using Ctx = VmPreFilterPage;
 public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
@@ -142,5 +144,13 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		}
 		pageBar.PageNum++;
 		return await Search(Ct);
+	}
+
+	public nil OpenDetail(RowPreFilter? row = null){
+		var view = new ViewStudyPlanEdit();
+		var title = row?.Name ?? "新增預篩選器";
+		var titled = ToolView.WithTitle(title, view);
+		ViewNavi?.GoTo(titled);
+		return NIL;
 	}
 }
