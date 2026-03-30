@@ -12,6 +12,7 @@ using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.WordSync;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 using Tsinswreng.AvlnTools.Navigation;
 
 namespace Ngaq.Ui;
@@ -34,6 +35,7 @@ public static class DiUi{
 		z.AddTransient<VmCfgLearnWord>();
 		z.AddTransient<VmPronunciation>();
 		z.AddTransient<VmDictionary>();
+		z.AddTransient<VmPreFilterEdit>();
 
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;

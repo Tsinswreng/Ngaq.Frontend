@@ -120,9 +120,7 @@ public partial class ViewWordListCard
 			LangGrid
 			.A(TxtBox(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
-				o.CBind<Ctx>(
-					o.PropText
-					,x=>x.Index);
+				o.CBind<Ctx>(o.PropText,x=>x.Index);
 			})
 			.A(TxtBox(), o=>{
 				o.Text = "　";
@@ -145,7 +143,7 @@ public partial class ViewWordListCard
 
 		HeadBox.A(TxtBox(), o=>{
 			o.VerticalAlignment = VAlign.Center;
-			o.FontSize = UiCfg.Inst.BaseFontSize+8;
+			o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			o.CBind<Ctx>(o.PropText, x=>x.Head);
 			o.CBind<Ctx>(o.PropForeground,x=>x.FontColor);
 		});

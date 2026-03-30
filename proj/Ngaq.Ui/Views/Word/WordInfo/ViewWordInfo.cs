@@ -70,50 +70,6 @@ public partial class ViewWordInfo
 		return R;
 	}
 
-	// protected TextBox TxtBox(){
-	// 	var R = new TextBox();
-	// 	var S = R.Styles;
-	// 	R.Classes.Add(Cls.TxtBox);
-	// 	//R.BorderThickness = new Thickness(0);
-	// 	R.IsReadOnly = true;
-	// 	R.Focusable = false;
-	// 	//R.IsEnabled = false;
-	// 	R.Background = new SolidColorBrush(Colors.Transparent);
-	// 	R.Foreground = new SolidColorBrush(Colors.White);
-	// 	// var Menu = new ContextMenu();
-	// 	// R.ContextMenu = Menu;
-	// 	// {var o = Menu;
-	// 	// 	o.Items.Add(new MenuItem{Header = "複製"});
-	// 	// }
-	// 	var flyout = new MenuFlyout();
-	// 	FlyoutBase.SetAttachedFlyout(R, flyout);
-
-	// 	S.Add(new Style().NoMargin().NoPadding());
-	// 	R.MinHeight = 0;
-	// 	var NoBdr = new Style(x=>
-	// 		x.Is<TextBox>()
-	// 		.Class(Cls.TxtBox)
-	// 		//.Class(PsdCls.Inst.focus)
-	// 		.Template()
-	// 		.OfType<Border>()
-	// 	).Set(
-	// 		BorderThicknessProperty
-	// 		,new Thickness(0)
-	// 	).Attach(S);
-
-	// 	var FocusNoBdr = new Style(x=>
-	// 		x.Is<TextBox>()
-	// 		.Class(PsdCls.Inst.focus)
-	// 		.Template()
-	// 		.OfType<Border>()
-	// 	).Attach(S)
-	// 	.Set(
-	// 		BorderThicknessProperty
-	// 		,new Thickness(0)
-	// 	);
-	// 	return R;
-	// }
-
 	protected nil Render(){
 		this.InitContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
@@ -154,8 +110,7 @@ public partial class ViewWordInfo
 				o.Styles.Add(new Style().NoMargin().NoPadding());
 				o.CBind<Ctx>(o.PropText,x=>x.Head, Mode: BindingMode.TwoWay);
 				o.VerticalAlignment = VAlign.Stretch;
-				o.FontSize += UiCfg.Inst.BaseFontSize*1.5;
-				//o.ContentFontSize += UiCfg.Inst.BaseFontSize*1.
+				o.FontSize = UiCfg.Inst.BaseFontSize*1.4;
 			});
 		});
 
@@ -180,7 +135,7 @@ public partial class ViewWordInfo
 
 			//annotation無內容旹則不?
 			o.CBind<StrokeTextBlock>(
-				StrokeTextBlock.HeightProperty
+				o.PropHeight
 				,x=>x.Text
 					,Converter: new SimpleFnConvtr<str?, double>(x=>{
 						if(str.IsNullOrEmpty(x)){
