@@ -43,6 +43,7 @@ public partial class VmStudyPlan: ViewModelBase, IMk<Ctx>{
 
 	public class RowWeightArg{
 		public bool IsChecked{get;set;} = false;
+		//GUI中之序號、非Id
 		public u64 UiIdx{get;set;}
 		public str UiIdxText{get;set;} = "";
 		public str Name{get;set;} = "";
