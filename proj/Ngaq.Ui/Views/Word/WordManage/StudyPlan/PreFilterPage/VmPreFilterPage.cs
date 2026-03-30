@@ -5,7 +5,7 @@ using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 
 using Ctx = VmPreFilterPage;
 public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
@@ -149,7 +149,8 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	//TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
 	//檢查 VmWeightArgPage是否有同樣問題。
 	public nil OpenDetail(RowPreFilter? row = null){
-		var view = new ViewStudyPlanEdit();
+		var view = new ViewPreFilterEdit();
+		view.Ctx?.FromPoPreFilter(row?.Raw);
 		var title = row?.Name ?? "新增預篩選器";
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
