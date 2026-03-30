@@ -45,14 +45,21 @@ public partial class MainView : UserControl {
 	public static MainView Inst{get;protected set;} =new();
 
 	[Doc(@$"造按鈕、點後跳到目標視圖")]
-	public Func<Control, Button> MkFnBtnToView(){
-		return (Target)=>{
-			var btn = new Button();
-			btn.Click += (s,e)=>{
-				MgrViewNavi.Inst.ViewNavi?.GoTo(Target);
-			};
-			return btn;
+	public Button MkBtnToView(
+		Control Target
+		,str? Title = null
+	){
+		var RealTarget = Target;
+		var btn = new Button();
+		if(Title is not null){
+			RealTarget = ToolView.WithTitle(Title, Target);
+			btn.Content = Title;
+		}
+
+		btn.Click += (s,e)=>{
+			MgrViewNavi.Inst.ViewNavi?.GoTo(RealTarget);
 		};
+		return btn;
 	}
 	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
 	public SvcPopup SvcPopup{get;set;}

@@ -46,13 +46,11 @@ public partial class ViewStudyPlan
 
 	StackPanel _S(){
 		var o = new StackPanel();
-		var toView = MainView.Inst.MkFnBtnToView();
-		o.A(toView(ToolView.WithTitle(
-			Todo.I18n("Weigth Arg Page")
-			,new ViewWeightArgPage()
-		)),o=>{
-
-		})
+		//var toView = MainView.Inst.MkFnBtnToView();
+		var toView = MainView.Inst.MkBtnToView;
+		o.A(
+			toView(new ViewWeightArgPage(),Todo.I18n("Weigth Arg"))
+		)
 		;
 		return o;
 	}
