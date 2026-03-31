@@ -1,11 +1,10 @@
 using System.Collections.ObjectModel;
-using Avalonia.Controls;
-using Avalonia.Styling;
 using Avalonia.Threading;
+using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Ui.Infra;
-using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsCore;
 
 namespace Ngaq.Ui.CodeTemplate.Sample;
 
@@ -36,13 +35,13 @@ public partial class VmSample:ViewModelBase, IMk<Ctx>{
 	}
 
 	#region 依賴注入
-	//依賴字段聲明成這樣。全部聲明爲可空類型
+	//依賴字段聲明成這樣。全部聲明爲可空類型。方便在臨時調試前端頁面時不需要注入依賴
 	ISvcSample? SvcSample;
-	IUserCtxMgr? UserCtxMgr;
+	IFrontendUserCtxMgr? UserCtxMgr;
 	//公開的有參構造器用于依賴注入。
 	public VmSample(
 		ISvcSample? SvcSample
-		,IUserCtxMgr? UserCtxMgr
+		,IFrontendUserCtxMgr? UserCtxMgr
 	){
 		this.SvcSample = SvcSample;
 		this.UserCtxMgr = UserCtxMgr;
@@ -75,25 +74,38 @@ public partial class VmSample:ViewModelBase, IMk<Ctx>{
 // 聲明爲異步函數、函數名不需特殊後綴、參數設爲CT Ct即可。
 // 此函數用于給OpBtn綁定
 	public async Task<nil> CallService(CT Ct){
-//由于注入的依賴都是可空類型、調用時需先判空。
-		if(AnyNull(SvcSample)){
+		//由于注入的依賴都是可空類型、調用時需先判空。
+		if(AnyNull(SvcSample, UserCtxMgr)){
 			return NIL;
 		}
 //另開Task.Run來執行服務、防止UI卡頓
-		await Task.Run(async ()=>{
-			var R = await SvcSample.Serve(null, Ct);
-//示例: 如果要在子線程中修改UI，須這樣寫
-			Dispatcher.UIThread.Post(()=>{
-				this.Input += R+"";
-			});
-		},Ct);
+		try{
+			await Task.Run(async ()=>{
+				var R = await SvcSample.ServeApi1(UserCtxMgr.GetUserCtx(), Ct);
+_ = @$"後端的interface 的API 函數一般有兩種類型、
+一種是 首個參數潙 {nameof(IUserCtx)}的、
+這種情況下就直接傳入 {nameof(IFrontendUserCtxMgr.GetUserCtx)}即可;
+如果是 第一個函數接收 {nameof(IDbUserCtx)} 的  就用 {nameof(IFrontendUserCtxMgr)}.GetDbUserCtx (這是擴展方法)
+";
+				var sample2 = await SvcSample.ServeApi2(UserCtxMgr.GetDbUserCtx(), Ct);
+	//示例: 如果要在子線程中修改UI，須這樣寫
+				Dispatcher.UIThread.Post(()=>{
+					this.Input += R+"";
+				});
+			},Ct);
+		}
+		catch (Exception e){
+			this.HandleErr(e);
+		}
 		return NIL;
-		//需要異常處理則用this.HandleErr(Ex)
 	}
 
 }
 
 //模擬的服務類接口
 public interface ISvcSample{
-	public Task<obj?> Serve(obj? O, CT Ct);
+
+	public Task<obj?> ServeApi1(IUserCtx User, CT Ct);
+	public Task<obj?> ServeApi2(IDbUserCtx Ctx, CT Ct);
+
 }
