@@ -63,9 +63,9 @@ public partial class ViewWordManage
 		var menuGrid = new Grid{
 			ColumnDefinitions = new ColumnDefinitions("*,*"),
 			RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
-			ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.6,
+			ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.4,
 			RowSpacing = UiCfg.Inst.BaseFontSize * 0.6,
-			Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.6),
+			Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.4),
 		};
 
 		void addItem(Control item, int row, int col){
@@ -115,9 +115,9 @@ public partial class ViewWordManage
 
 		var titleText = _TextBlock();
 		titleText.Text = Title;
-		titleText.FontSize = UiCfg.Inst.BaseFontSize * 1.5;
+		titleText.FontSize = UiCfg.Inst.BaseFontSize * 1.1;
 		titleText.TextAlignment = TextAlignment.Center;
-		titleText.FontWeight = FontWeight.SemiBold;
+		//titleText.FontWeight = FontWeight.SemiBold;
 		content.Children.Add(titleText);
 
 		R.Content = new Border{
@@ -125,7 +125,6 @@ public partial class ViewWordManage
 				UiCfg.Inst.BaseFontSize * 0.7,
 				UiCfg.Inst.BaseFontSize * 0.55
 			),
-			CornerRadius = new CornerRadius(UiCfg.Inst.BaseFontSize * 0.4),
 			BorderThickness = new Thickness(1.5),
 			BorderBrush = Brushes.Gray,
 			Background = new SolidColorBrush(Color.FromArgb(28, 255, 255, 255)),
