@@ -1,13 +1,10 @@
 namespace Ngaq.Ui.Views.Word.WordManage;
 
-using System.Diagnostics;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Microsoft.Extensions.Logging;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra.I18n;
-using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
@@ -60,59 +57,15 @@ public partial class ViewWordManage
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.A(_StackPanel(), (Action<StackPanel>?)(Sp=>{
-			Todo.I18n();
-			Sp.A(_Item("Dictionary", new ViewDictionary(), Svgs.BookA().ToIcon()))
+		Root.A(_StackPanel(), Sp=>{
+			Sp.A(_Item(Todo.I18n("Dictionary"), new ViewDictionary(), Svgs.BookA().ToIcon()))
 			.A(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search().ToIcon()))
 			.A(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add().ToIcon()))
-			.A(_Item("Study Plan", new ViewStudyPlan(), Svgs.Schema().ToIcon()))//plan
+			.A(_Item(Todo.I18n("Study Plan"), new ViewStudyPlan(), Svgs.Schema().ToIcon()))
 			.A(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle().ToIcon()))
-			.A(_Item("Statistics", new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()))
+			.A(_Item(Todo.I18n("Statistics"), new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()))
 			;
-			var Txt = new StrokeTextBlock {// //TextBlock
-				TextWrapping = TextWrapping.Wrap,
-				//UseVirtualizedRender = true
-			};
-			// var Txt = new TextBox{
-			// 	AcceptsReturn = true,
-			// 	TextWrapping = TextWrapping.Wrap,
-			// };
-			var Log = App.GetRSvc<ILogger>();
-			Sp.A(new Button(), o=>{
-				o.Click += ((object? s, Avalonia.Interactivity.RoutedEventArgs e)=>{
-					var l = new List<str>();
-					for(var i = 0; i < 5000; i++){
-						l.Add("7");
-					}
-					var t = str.Join("", l);
-					var sw = Stopwatch.StartNew();
-					Txt.Text= t;
-					sw.Stop();
-					Log.LogInformation("Long:"+ sw.ElapsedMilliseconds);
-					return ;
-				});
-				o.Content = "測試長";
-			})
-			.A(new Button(), o=>{
-				o.Content = "測試短";
-				o.Click+= (object? s, Avalonia.Interactivity.RoutedEventArgs e)=>{
-					var sw = Stopwatch.StartNew();
-					Txt.Text = "1234567890";
-					sw.Stop();
-					Log.LogInformation("Short:"+ sw.ElapsedMilliseconds);
-				};
-			})
-			.A(new Border(), Bd=>{
-				Bd.Height = 300;
-				var Sv = new ScrollViewer();
-				Bd.Child = Sv;
-				{{
-					Sv.InitContent(Txt);
-				}}
-			})
-			;
-
-		}));
+		});
 
 
 		return NIL;
@@ -128,7 +81,7 @@ public partial class ViewWordManage
 		R.Click += (s,e)=>{
 			Ctx?.ViewNavi?.GoTo(titled);
 		};
-		R.HorizontalContentAlignment = HAlign.Left;
+		R.HCAlign(x=>x.Left);
 		if(Icon is null){
 			R.InitContent(_TextBlock(), o=>{
 				o.Text = Title;
