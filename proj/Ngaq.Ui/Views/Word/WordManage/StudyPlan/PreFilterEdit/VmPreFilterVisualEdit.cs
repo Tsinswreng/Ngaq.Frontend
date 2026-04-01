@@ -20,10 +20,8 @@ using Tsinswreng.CsTools;
 using Ctx = VmPreFilterVisualEdit;
 using Ngaq.Core.Infra.IF;
 
-/// <summary>
 /// PreFilter GUI 主編輯 ViewModel。
 /// 僅負責 GUI 視圖，不承載 JSON 視圖狀態。
-/// </summary>
 public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	protected VmPreFilterVisualEdit(){
 		InitRowEvents();
@@ -48,9 +46,8 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	IJsonSerializer JsonSerializer{get;set;} = AppJsonSerializer.Inst;
 	bool _isHydrating = false;
 
-	/// <summary>
+
 	/// 依賴注入構造器。
-	/// </summary>
 	public VmPreFilterVisualEdit(
 		ISvcStudyPlan? SvcStudyPlan
 		,IFrontendUserCtxMgr? UserCtxMgr
@@ -64,9 +61,8 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		SyncFromBo();
 	}
 
-	/// <summary>
+
 	/// GUI 子頁列表中的單條過濾條件。
-	/// </summary>
 	public class VmFilterItemRow: ViewModelBase{
 		public i32 OperationIndex{
 			get{return field;}
@@ -84,9 +80,8 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		} = "";
 	}
 
-	/// <summary>
+
 	/// GUI 子頁中的一組 Fields + Filters。
-	/// </summary>
 	public class VmFieldsFilterRow: ViewModelBase{
 		public str FieldsText{
 			get{return field;}
@@ -96,9 +91,8 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		public ObservableCollection<VmFilterItemRow> Items{get;set;} = [];
 	}
 
-	/// <summary>
+
 	/// TreeDataGrid 顯示行。
-	/// </summary>
 	public class RowFieldsFilterCard{
 		public u64 UiIdx{get;set;}
 		public str UiIdxText{get;set;} = "";
@@ -108,17 +102,15 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		public VmFieldsFilterRow? Raw{get;set;}
 	}
 
-	/// <summary>
+
 	/// 當前編輯中的業務模型。
-	/// </summary>
 	public BoPreFilter BoPreFilter{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = MkEmptyBoPreFilter();
 
-	/// <summary>
+
 	/// GUI 主頁展示的 Text 預覽，只顯示前段內容。
-	/// </summary>
 	public str PoTextPreview{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -222,9 +214,8 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		RefreshFieldsFilterCards();
 	}
 
-	/// <summary>
+
 	/// 刷新 Core/Prop 的列表卡片預覽。
-	/// </summary>
 	public nil RefreshFieldsFilterCards(){
 		CoreFilterCards.Clear();
 		for(u64 i = 0; i < (u64)CoreFilterRows.Count; i++){
@@ -253,9 +244,8 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
+
 	/// 由列表頁傳入 Po 實體初始化 GUI 主頁。
-	/// </summary>
 	public nil FromPoPreFilter(PoPreFilter? PoPreFilter){
 		var bo = MkEmptyBoPreFilter();
 		if(PoPreFilter is not null){
@@ -264,18 +254,16 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return FromBoPreFilter(bo);
 	}
 
-	/// <summary>
+
 	/// 由既有業務模型初始化 GUI 主頁。
-	/// </summary>
 	public nil FromBoPreFilter(BoPreFilter? BoPreFilter){
 		this.BoPreFilter = BoPreFilter ?? MkEmptyBoPreFilter();
 		SyncFromBo();
 		return NIL;
 	}
 
-	/// <summary>
+
 	/// 導航到 JSON 專用編輯視圖。
-	/// </summary>
 	public nil OpenJsonEditor(){
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
@@ -293,18 +281,16 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
+
 	/// 導航到 PreFilter（無 Po）GUI 子編輯頁。
-	/// </summary>
 	public nil OpenPreFilterDataEditor(){
 		var view = new ViewPreFilterDataEdit(this);
 		ViewNavi?.GoTo(ToolView.WithTitle("PreFilter", view));
 		return NIL;
 	}
 
-	/// <summary>
+
 	/// 保存 GUI 子編輯頁變更到本 VM（不寫庫）。
-	/// </summary>
 	public bool CommitPreFilterDataDraft(){
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
@@ -321,13 +307,11 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return true;
 	}
 
-	/// <summary>
+
 	/// 保存到後端。
 	/// 新建時調 BatAddPreFilter，編輯時調 BatUpdPreFilter。
-	/// </summary>
 	public async Task<nil> Save(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
-			ShowMsg("Service not ready");
 			return NIL;
 		}
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
@@ -357,12 +341,10 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
+
 	/// 軟刪除當前 PreFilter。
-	/// </summary>
 	public async Task<nil> Delete(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
-			ShowMsg(Todo.I18n("Service not ready"));
 			return NIL;
 		}
 		try{

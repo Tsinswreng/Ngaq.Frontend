@@ -306,7 +306,6 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx> {
 
 	public async Task<nil> Save(CT Ct) {
 		if (SvcWord is null || UserCtxMgr is null) {
-			ShowMsg("Service not ready");
 			return NIL;
 		}
 		if (!TryApplyFormToDraft(out var err)) {

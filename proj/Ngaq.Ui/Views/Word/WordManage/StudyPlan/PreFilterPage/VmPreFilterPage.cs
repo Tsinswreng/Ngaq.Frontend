@@ -13,10 +13,8 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 
 using Ctx = VmPreFilterPage;
 
-/// <summary>
 /// PreFilter 列表頁 ViewModel。
-/// 使用後端接口分頁讀取，不再使用假數據。
-/// </summary>
+/// 使用後端接口分頁讀取，不再使用假數據
 public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	protected VmPreFilterPage(){
 		PageBar = VmPageBar.Mk();
@@ -42,9 +40,7 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	ISvcStudyPlan? SvcStudyPlan{get;set;}
 	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
 
-	/// <summary>
 	/// 依賴注入構造器。
-	/// </summary>
 	public VmPreFilterPage(
 		ISvcStudyPlan? SvcStudyPlan
 		,IFrontendUserCtxMgr? UserCtxMgr
@@ -62,9 +58,7 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 
 	public ObservableCollection<RowPreFilter> Rows{get;set;} = [];
 
-	/// <summary>
 	/// 列表行模型。
-	/// </summary>
 	public class RowPreFilter{
 		public bool IsChecked{get;set;} = false;
 		public u64 UiIdx{get;set;}
@@ -88,12 +82,9 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
-	/// <summary>
 	/// 根據輸入條件查詢後端分頁，並回填 UI 列表。
-	/// </summary>
 	public async Task<nil> Search(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
-			ShowMsg("Service not ready");
 			return NIL;
 		}
 		try{

@@ -12,10 +12,8 @@ using Tsinswreng.CsTools;
 
 using Ctx = VmPreFilterJsonEdit;
 
-/// <summary>
 /// PoPreFilter JSON 專用編輯 ViewModel。
 /// 與 GUI 編輯 ViewModel 分離，不做雙向同步。
-/// </summary>
 public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 	protected VmPreFilterJsonEdit(){}
 
@@ -54,17 +52,13 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
-	/// <summary>
 	/// 唯一 JSON 編輯字段。
-	/// </summary>
 	public str PoPreFilterJson{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
 
-	/// <summary>
 	/// 從已有 Po 實體初始化 JSON 文本。
-	/// </summary>
 	public nil FromPoPreFilter(PoPreFilter? PoPreFilter){
 		var po = PoPreFilter ?? new PoPreFilter{
 			Type = EPreFilterType.Json,
@@ -75,12 +69,9 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
 	/// 解析 JSON 並保存到後端。
-	/// </summary>
 	public async Task<nil> Save(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
-			ShowMsg("Service not ready");
 			return NIL;
 		}
 		if(!TryParsePo(out var po, out var err)){
@@ -107,12 +98,9 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
 	/// 軟刪除當前 JSON 實體。
-	/// </summary>
 	public async Task<nil> Delete(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
-			ShowMsg("Service not ready");
 			return NIL;
 		}
 		if(!TryParsePo(out var po, out var err)){
