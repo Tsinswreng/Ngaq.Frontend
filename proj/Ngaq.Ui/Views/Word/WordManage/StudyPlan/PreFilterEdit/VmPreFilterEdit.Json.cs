@@ -39,7 +39,8 @@ public partial class VmPreFilterEdit{
 				return false;
 			}
 			po.DataSchemaVer = pre.Version;
-			po.Data = System.Text.Encoding.UTF8.GetBytes(JsonSerializer.Stringify(pre));
+			po.Text = JsonSerializer.Stringify(pre);
+			po.Binary = null;
 			Bo = new BoPreFilter{
 				PoPreFilter = po,
 				PreFilter = pre,

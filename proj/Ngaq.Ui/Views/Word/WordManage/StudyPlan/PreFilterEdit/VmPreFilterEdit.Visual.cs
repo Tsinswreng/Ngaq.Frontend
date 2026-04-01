@@ -122,7 +122,8 @@ public partial class VmPreFilterEdit{
 			}
 
 			po.DataSchemaVer = pre.Version;
-			po.Data = System.Text.Encoding.UTF8.GetBytes(JsonSerializer.Stringify(pre));
+			po.Text = JsonSerializer.Stringify(pre);
+			po.Binary = null;
 
 			Bo = new BoPreFilter{
 				PoPreFilter = po,
@@ -149,7 +150,8 @@ public partial class VmPreFilterEdit{
 			Descr = src.Descr,
 			Type = src.Type,
 			DataSchemaVer = src.DataSchemaVer,
-			Data = src.Data?.ToArray() ?? [],
+			Text = src.Text,
+			Binary = src.Binary?.ToArray() ?? [],
 		};
 	}
 
