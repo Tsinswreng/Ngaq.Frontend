@@ -123,6 +123,15 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
+	/// <summary>
+	/// 當前頁面是否爲「新增」模式。
+	/// true: 新增；false: 編輯既有實體。
+	/// </summary>
+	public bool IsCreateMode{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = true;
+
 	public ObservableCollection<VmFieldsFilterRow> CoreFilterRows{get;set;} = [];
 	public ObservableCollection<VmFieldsFilterRow> PropFilterRows{get;set;} = [];
 
@@ -248,6 +257,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	/// 由列表頁傳入 Po 實體初始化 GUI 主頁。
 	public nil FromPoPreFilter(PoPreFilter? PoPreFilter){
 		var bo = MkEmptyBoPreFilter();
+		IsCreateMode = PoPreFilter is null;
 		if(PoPreFilter is not null){
 			bo.FromPoPreFilter(PoPreFilter);
 		}
@@ -259,6 +269,14 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	public nil FromBoPreFilter(BoPreFilter? BoPreFilter){
 		this.BoPreFilter = BoPreFilter ?? MkEmptyBoPreFilter();
 		SyncFromBo();
+		return NIL;
+	}
+
+	/// <summary>
+	/// 顯式設置當前編輯模式，供列表頁跳轉時調用。
+	/// </summary>
+	public nil SetCreateMode(bool IsCreate){
+		this.IsCreateMode = IsCreate;
 		return NIL;
 	}
 
@@ -324,12 +342,14 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			var po = bo.PoPreFilter;
-			if(po.Id == IdPreFilter.Zero){
+			if(IsCreateMode){
 				await SvcStudyPlan.BatAddPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
 				await SvcStudyPlan.BatUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 
+			// 新增成功後，後續保存應切到更新模式，避免重複走 Add。
+			IsCreateMode = false;
 			BoPreFilter = bo;
 			SyncFromBo();
 			LastError = "";
@@ -349,10 +369,11 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		}
 		try{
 			var po = BoPreFilter?.PoPreFilter ?? new PoPreFilter();
-			if(po.Id != IdPreFilter.Zero){
+			if(!IsCreateMode){
 				await SvcStudyPlan.BatSoftDelPreFilter(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			BoPreFilter = MkEmptyBoPreFilter();
+			IsCreateMode = true;
 			SyncFromBo();
 			LastError = Todo.I18n("");
 			OnPropertyChanged(nameof(HasError));

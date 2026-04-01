@@ -143,6 +143,7 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	// 檢查 VmWeightArgPage是否有同樣問題。
 	public nil OpenDetail(RowPreFilter? row = null){
 		var view = new ViewPreFilterVisualEdit();
+		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoPreFilter(row?.Raw);
 		var title = row?.Name ?? "新增預篩選器";
 		var titled = ToolView.WithTitle(title, view);
