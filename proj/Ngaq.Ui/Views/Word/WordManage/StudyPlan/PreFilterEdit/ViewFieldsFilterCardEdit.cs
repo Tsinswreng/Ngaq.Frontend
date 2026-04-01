@@ -60,7 +60,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		var list = new ItemsControl();
 		list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.Items, Mode: BindingMode.OneWay));
 		list.SetItemsPanel(()=>new StackPanel{Spacing = 8});
-		list.SetItemTemplate<VmPreFilterEdit.VmFilterItemRow>((item, ns)=>{
+		list.SetItemTemplate<VmPreFilterVisualEdit.VmFilterItemRow>((item, ns)=>{
 			var bdr = new Border{
 				BorderBrush = Brushes.DimGray,
 				BorderThickness = new Thickness(1),
@@ -68,9 +68,9 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			};
 			var sp = new StackPanel{Spacing = 6};
 			bdr.Child = sp;
-			sp.Children.Add(MkComboRow("Operation", Ctx?.OperationOptions ?? [], CBE.Mk<VmPreFilterEdit.VmFilterItemRow>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)));
-			sp.Children.Add(MkComboRow("Value Type", Ctx?.ValueTypeOptions ?? [], CBE.Mk<VmPreFilterEdit.VmFilterItemRow>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)));
-			sp.Children.Add(MkInputRow("Values (comma/newline separated)", CBE.Mk<VmPreFilterEdit.VmFilterItemRow>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true));
+			sp.Children.Add(MkComboRow("Operation", Ctx?.OperationOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)));
+			sp.Children.Add(MkComboRow("Value Type", Ctx?.ValueTypeOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)));
+			sp.Children.Add(MkInputRow("Values (comma/newline separated)", CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true));
 			var rm = new Button{
 				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(" Remove Item"),
 				Background = new SolidColorBrush(Color.FromRgb(210, 56, 56)),

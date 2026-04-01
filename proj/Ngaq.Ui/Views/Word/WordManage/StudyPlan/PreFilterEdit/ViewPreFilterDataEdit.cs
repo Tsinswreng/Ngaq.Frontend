@@ -1,14 +1,13 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 
-using System;
 using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui;
@@ -16,24 +15,42 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmPreFilterEdit;
 
-public partial class ViewPreFilterEdit{
+using Ctx = VmPreFilterVisualEdit;
+
+/// <summary>
+/// PreFilter（無 Po 字段）GUI 子編輯頁。
+/// </summary>
+public class ViewPreFilterDataEdit: AppViewBase{
+	public Ctx? Ctx{
+		get{return DataContext as Ctx;}
+		set{DataContext = value;}
+	}
+
+	public ViewPreFilterDataEdit(Ctx Ctx){
+		this.Ctx = Ctx;
+		Render();
+		InitVisualGridSource();
+	}
+
 	TreeDataGrid? CoreGrid;
 	TreeDataGrid? PropGrid;
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? CoreGridSource;
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? PropGridSource;
+	AutoGrid Root = new(IsRow: true);
 
-	protected TabItem MkVisualTab(){
-		var tab = new TabItem{
-			Header = "Visual",
-		};
-		tab.Content = MkVisualEditor();
-		InitVisualGridSource();
-		return tab;
+	protected nil Render(){
+		Content = Root.Grid;
+		Root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Star),
+			RowDef(1, GUT.Auto),
+		]);
+		Root.A(MkBody());
+		Root.A(MkBottomBar());
+		return NIL;
 	}
 
-	protected Control MkVisualEditor(){
+	Control MkBody(){
 		var sv = new ScrollViewer();
 		var root = new StackPanel{
 			Spacing = 10,
@@ -41,11 +58,9 @@ public partial class ViewPreFilterEdit{
 		};
 		sv.Content = root;
 		root.Children.Add(MkErrorBar());
-		root.Children.Add(MkPoSection());
 		root.Children.Add(MkPreFilterMetaSection());
 		root.Children.Add(MkFieldsFilterGridSection(true));
 		root.Children.Add(MkFieldsFilterGridSection(false));
-		root.Children.Add(MkSwitchToJsonBar());
 		return sv;
 	}
 
@@ -73,7 +88,7 @@ public partial class ViewPreFilterEdit{
 		};
 	}
 
-	protected Control MkErrorBar(){
+	Control MkErrorBar(){
 		var b = new Border{
 			Background = new SolidColorBrush(Color.FromArgb(80, 180, 30, 30)),
 			Padding = new Thickness(10, 6),
@@ -88,28 +103,7 @@ public partial class ViewPreFilterEdit{
 		return b;
 	}
 
-	protected Control MkPoSection(){
-		var bdr = new Border{
-			BorderBrush = Brushes.DimGray,
-			BorderThickness = new Thickness(1),
-			Padding = new Thickness(10),
-		};
-		var sp = new StackPanel{Spacing = 8};
-		bdr.Child = sp;
-
-		sp.Children.Add(new TextBlock{
-			Text = "PoPreFilter",
-			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
-			FontWeight = FontWeight.SemiBold,
-		});
-		sp.Children.Add(MkInputRow("Id", CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true));
-		sp.Children.Add(MkInputRow("Name", CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)));
-		sp.Children.Add(MkInputRow("Description", CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true));
-		sp.Children.Add(MkComboRow("Type", Ctx?.PoTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay)));
-		return bdr;
-	}
-
-	protected Control MkPreFilterMetaSection(){
+	Control MkPreFilterMetaSection(){
 		var bdr = new Border{
 			BorderBrush = Brushes.DimGray,
 			BorderThickness = new Thickness(1),
@@ -126,7 +120,7 @@ public partial class ViewPreFilterEdit{
 		return bdr;
 	}
 
-	protected Control MkFieldsFilterGridSection(bool IsCore){
+	Control MkFieldsFilterGridSection(bool IsCore){
 		var box = new Border{
 			BorderBrush = Brushes.DimGray,
 			BorderThickness = new Thickness(1),
@@ -218,20 +212,37 @@ public partial class ViewPreFilterEdit{
 		}
 	}
 
-	protected Control MkSwitchToJsonBar(){
-		var g = new AutoGrid(IsRow: false);
+	Control MkBottomBar(){
+		var g = new AutoGrid(IsRow:false);
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = "Open PoPreFilter JSON";
-			o.Click += (s,e)=>Ctx?.GoToPoJson();
+			o.Content = "Back";
+			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
-			o.Content = "Open PreFilter JSON";
-			o.Click += (s,e)=>Ctx?.GoToPreFilterJson();
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(" Save Draft");
+			o.Background = UiCfg.Inst.MainColor;
+			o.Click += (s,e)=>{
+				if(Ctx?.CommitPreFilterDataDraft() == true){
+					Ctx.ViewNavi?.Back();
+				}
+			};
 		});
 		return g.Grid;
+	}
+
+	Control MkInputRow(str Label, IBinding Binding, bool AcceptsReturn = false){
+		var sp = new StackPanel{Spacing = 3};
+		sp.Children.Add(new TextBlock{Text = Label});
+		var tb = new TextBox{
+			AcceptsReturn = AcceptsReturn,
+			TextWrapping = AcceptsReturn ? TextWrapping.Wrap : TextWrapping.NoWrap,
+		};
+		tb.Bind(TextBox.TextProperty, Binding);
+		sp.Children.Add(tb);
+		return sp;
 	}
 }

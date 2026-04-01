@@ -35,7 +35,8 @@ public static class DiUi{
 		z.AddTransient<VmCfgLearnWord>();
 		z.AddTransient<VmPronunciation>();
 		z.AddTransient<VmDictionary>();
-		z.AddTransient<VmPreFilterEdit>();
+		z.AddTransient<VmPreFilterVisualEdit>();
+		z.AddTransient<VmPreFilterJsonEdit>();
 
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;

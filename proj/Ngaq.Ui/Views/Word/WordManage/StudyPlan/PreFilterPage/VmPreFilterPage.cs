@@ -1,21 +1,30 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
+
 using System.Collections.ObjectModel;
+using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
+using Ngaq.Core.Shared.StudyPlan.Models.Req;
+using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 
 using Ctx = VmPreFilterPage;
+
+/// <summary>
+/// PreFilter 列表頁 ViewModel。
+/// 使用後端接口分頁讀取，不再使用假數據。
+/// </summary>
 public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	protected VmPreFilterPage(){
 		PageBar = VmPageBar.Mk();
 		PageBar.PageSize = 10;
 		PageBar.FnPrevPage = OnPrevPage;
 		PageBar.FnNextPage = OnNextPage;
-		InitDemoData();
 	}
+
 	public static Ctx Mk(){
 		return new Ctx();
 	}
@@ -30,17 +39,32 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		#endif
 	}
 
+	ISvcStudyPlan? SvcStudyPlan{get;set;}
+	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
+
+	/// <summary>
+	/// 依賴注入構造器。
+	/// </summary>
+	public VmPreFilterPage(
+		ISvcStudyPlan? SvcStudyPlan
+		,IFrontendUserCtxMgr? UserCtxMgr
+	):this(){
+		this.SvcStudyPlan = SvcStudyPlan;
+		this.UserCtxMgr = UserCtxMgr;
+	}
+
 	public VmPageBar PageBar{get;set;}
 
 	public str Input{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}="";
+	} = "";
 
 	public ObservableCollection<RowPreFilter> Rows{get;set;} = [];
 
-	protected IList<PoPreFilter> AllPreFilter{get;set;} = [];
-
+	/// <summary>
+	/// 列表行模型。
+	/// </summary>
 	public class RowPreFilter{
 		public bool IsChecked{get;set;} = false;
 		public u64 UiIdx{get;set;}
@@ -51,36 +75,12 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		public PoPreFilter? Raw{get;set;} = null;
 	}
 
-	protected nil InitDemoData(){
-		var now = Tempus.Now();
-		var l = new List<PoPreFilter>();
-		for(var i = 1; i <= 45; i++){
-			var created = (Tempus)(now.Value - i*InMillisecond.Hour);
-			var updated = i % 3 == 0 ? Tempus.Zero : (Tempus)(created.Value + 10*InMillisecond.Minute);
-			l.Add(new PoPreFilter{
-				UniqName = $"PreFilter_{i:000}",
-				Type = EPreFilterType.Json,
-				BizCreatedAt = created,
-				BizUpdatedAt = updated,
-			});
-		}
-		AllPreFilter = l;
-		return NIL;
-	}
-
-	protected static str FormatBizTime(PoPreFilter po){
-		var updated = po.BizUpdatedAt == Tempus.Zero ? po.BizCreatedAt : po.BizUpdatedAt;
+	static str FormatBizTime(PoPreFilter Po){
+		var updated = Po.BizUpdatedAt == Tempus.Zero ? Po.BizCreatedAt : Po.BizUpdatedAt;
 		if(updated == Tempus.Zero){
 			return "-";
 		}
 		return updated.ToIso();
-	}
-
-	protected nil CalcTotalPage(u64 totalCount){
-		var pageSize = PageBar.PageSize == 0 ? 10 : PageBar.PageSize;
-		var totalPage = totalCount == 0 ? 1 : (totalCount + pageSize - 1) / pageSize;
-		PageBar.TotPageCnt = totalPage;
-		return NIL;
 	}
 
 	public async Task<nil> InitSearch(CT Ct = default){
@@ -88,42 +88,44 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
+	/// <summary>
+	/// 根據輸入條件查詢後端分頁，並回填 UI 列表。
+	/// </summary>
 	public async Task<nil> Search(CT Ct = default){
-		await Task.Yield();
-		IEnumerable<PoPreFilter> q = AllPreFilter;
-		if(!str.IsNullOrWhiteSpace(Input)){
-			q = q.Where(x=>(x.UniqName??"").Contains(Input, StringComparison.OrdinalIgnoreCase));
+		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
+			ShowMsg("Service not ready");
+			return NIL;
 		}
-		var pageNum = PageBar.PageNum <= 1 ? 1 : PageBar.PageNum;
-		var pageSize = PageBar.PageSize == 0 ? 10 : PageBar.PageSize;
-		var start = (pageNum - 1) * pageSize;
-		var end = start + pageSize;
-		u64 idx = 0;
-		var onePage = new List<PoPreFilter>();
-		foreach(var po in q){
-			if(idx >= start && idx < end){
-				onePage.Add(po);
+		try{
+			var pageQry = PageBar.ToPageQry();
+			pageQry.WantTotCnt = true;
+			var req = new ReqPagePreFilter{
+				PageQry = pageQry,
+				UniqNameSearch = str.IsNullOrWhiteSpace(Input) ? null : Input.Trim(),
+			};
+
+			var page = await SvcStudyPlan.PagePreFilter(UserCtxMgr.GetDbUserCtx(), req, Ct);
+			PageBar.FromPageResultInfo(page);
+
+			Rows.Clear();
+			var startUiIdx = page.PageIdx * page.PageSize;
+			var localIdx = 0UL;
+			if(page.DataAsyE is not null){
+				await foreach(var po in page.DataAsyE){
+					localIdx++;
+					var uiIdx = startUiIdx + localIdx;
+					Rows.Add(new RowPreFilter{
+						UiIdx = uiIdx,
+						UiIdxText = uiIdx.ToString(),
+						Name = po.UniqName ?? "",
+						Type = po.Type.ToString(),
+						ModifiedTime = FormatBizTime(po),
+						Raw = po,
+					});
+				}
 			}
-			idx++;
-		}
-		CalcTotalPage(idx);
-		var totalPage = PageBar.TotPageCnt ?? 1;
-		if(pageNum > totalPage){
-			PageBar.PageNum = totalPage;
-			return await Search(Ct);
-		}
-		Rows.Clear();
-		for(var i = 0; i < onePage.Count; i++){
-			var po = onePage[i];
-			var uiIdx = start + (u64)i + 1;
-			Rows.Add(new RowPreFilter{
-				UiIdx = uiIdx,
-				UiIdxText = uiIdx.ToString(),
-				Name = po.UniqName ?? "",
-				Type = po.Type.ToString(),
-				ModifiedTime = FormatBizTime(po),
-				Raw = po,
-			});
+		}catch(Exception e){
+			HandleErr(e);
 		}
 		return NIL;
 	}
@@ -146,10 +148,10 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
-	//TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
-	//檢查 VmWeightArgPage是否有同樣問題。
+	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
+	// 檢查 VmWeightArgPage是否有同樣問題。
 	public nil OpenDetail(RowPreFilter? row = null){
-		var view = new ViewPreFilterEdit();
+		var view = new ViewPreFilterVisualEdit();
 		view.Ctx?.FromPoPreFilter(row?.Raw);
 		var title = row?.Name ?? "新增預篩選器";
 		var titled = ToolView.WithTitle(title, view);

@@ -13,8 +13,8 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return new Ctx();
 	}
 
-	VmPreFilterEdit? Owner{get;set;}
-	VmPreFilterEdit.VmFieldsFilterRow? Target{get;set;}
+	VmPreFilterVisualEdit? Owner{get;set;}
+	VmPreFilterVisualEdit.VmFieldsFilterRow? Target{get;set;}
 	bool IsCore{get;set;}
 	u64 RowIdx{get;set;}
 
@@ -23,14 +23,14 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "";
 
-	public ObservableCollection<VmPreFilterEdit.VmFilterItemRow> Items{get;set;} = [];
+	public ObservableCollection<VmPreFilterVisualEdit.VmFilterItemRow> Items{get;set;} = [];
 
 	public IReadOnlyList<str> OperationOptions => Owner?.OperationOptions ?? [];
 	public IReadOnlyList<str> ValueTypeOptions => Owner?.ValueTypeOptions ?? [];
 
 	public nil Load(
-		VmPreFilterEdit Owner,
-		VmPreFilterEdit.VmFieldsFilterRow Target,
+		VmPreFilterVisualEdit Owner,
+		VmPreFilterVisualEdit.VmFieldsFilterRow Target,
 		bool IsCore,
 		u64 RowIdx
 	){
@@ -44,7 +44,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 			Items.Add(CloneItem(item));
 		}
 		if(Items.Count == 0){
-			Items.Add(new VmPreFilterEdit.VmFilterItemRow{
+			Items.Add(new VmPreFilterVisualEdit.VmFilterItemRow{
 				OperationIndex = 1,
 				ValueTypeIndex = 1,
 				ValuesText = "",
@@ -56,7 +56,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public nil AddItem(){
-		Items.Add(new VmPreFilterEdit.VmFilterItemRow{
+		Items.Add(new VmPreFilterVisualEdit.VmFilterItemRow{
 			OperationIndex = 1,
 			ValueTypeIndex = 1,
 			ValuesText = "",
@@ -64,10 +64,10 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	public nil RemoveItem(VmPreFilterEdit.VmFilterItemRow Item){
+	public nil RemoveItem(VmPreFilterVisualEdit.VmFilterItemRow Item){
 		Items.Remove(Item);
 		if(Items.Count == 0){
-			Items.Add(new VmPreFilterEdit.VmFilterItemRow{
+			Items.Add(new VmPreFilterVisualEdit.VmFilterItemRow{
 				OperationIndex = 1,
 				ValueTypeIndex = 1,
 				ValuesText = "",
@@ -92,8 +92,8 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	static VmPreFilterEdit.VmFilterItemRow CloneItem(VmPreFilterEdit.VmFilterItemRow Src){
-		return new VmPreFilterEdit.VmFilterItemRow{
+	static VmPreFilterVisualEdit.VmFilterItemRow CloneItem(VmPreFilterVisualEdit.VmFilterItemRow Src){
+		return new VmPreFilterVisualEdit.VmFilterItemRow{
 			OperationIndex = Src.OperationIndex,
 			ValueTypeIndex = Src.ValueTypeIndex,
 			ValuesText = Src.ValuesText,

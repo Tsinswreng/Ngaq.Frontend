@@ -1,6 +1,8 @@
 namespace Ngaq.Ui.Views.Word.WordManage;
 
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Icons;
@@ -57,15 +59,29 @@ public partial class ViewWordManage
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.A(_StackPanel(), Sp=>{
-			Sp.A(_Item(Todo.I18n("Dictionary"), new ViewDictionary(), Svgs.BookA().ToIcon()))
-			.A(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search().ToIcon()))
-			.A(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add().ToIcon()))
-			.A(_Item(Todo.I18n("Study Plan"), new ViewStudyPlan(), Svgs.Schema().ToIcon()))
-			.A(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle().ToIcon()))
-			.A(_Item(Todo.I18n("Statistics"), new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()))
-			;
-		});
+
+		var menuGrid = new Grid{
+			ColumnDefinitions = new ColumnDefinitions("*,*"),
+			RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
+			ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.6,
+			RowSpacing = UiCfg.Inst.BaseFontSize * 0.6,
+			Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.6),
+		};
+
+		void addItem(Control item, int row, int col){
+			Grid.SetRow(item, row);
+			Grid.SetColumn(item, col);
+			menuGrid.Children.Add(item);
+		}
+
+		addItem(_Item(Todo.I18n("Dictionary"), new ViewDictionary(), Svgs.BookA().ToIcon()), 0, 0);
+		addItem(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search().ToIcon()), 0, 1);
+		addItem(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add().ToIcon()), 1, 0);
+		addItem(_Item(Todo.I18n("Study Plan"), new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
+		addItem(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
+		addItem(_Item(Todo.I18n("Statistics"), new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
+
+		Root.A(menuGrid);
 
 
 		return NIL;
@@ -81,27 +97,40 @@ public partial class ViewWordManage
 		R.Click += (s,e)=>{
 			Ctx?.ViewNavi?.GoTo(titled);
 		};
-		R.HCAlign(x=>x.Left);
-		if(Icon is null){
-			R.InitContent(_TextBlock(), o=>{
-				o.Text = Title;
-			});
-		}else{
-			var G = new AutoGrid(IsRow:false);
-			R.InitContent(G.Grid, o=>{
-				o.ColumnDefinitions.AddRange([
-					ColDef(1, GUT.Auto),
-					ColDef(UiCfg.Inst.BaseFontSize, GUT.Pixel),
-					ColDef(1, GUT.Auto),
-				]);
-				G.A(Icon);
-				G.Add();
-				G.A(_TextBlock(), t=>{
-					t.Text = Title;
-					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
-				});
-			});
+		R.HorizontalContentAlignment = HAlign.Stretch;
+		R.MinHeight = UiCfg.Inst.BaseFontSize * 4.8;
+
+		var content = new StackPanel{
+			Orientation = Orientation.Vertical,
+			Spacing = UiCfg.Inst.BaseFontSize * 0.35,
+			HorizontalAlignment = HorizontalAlignment.Center,
+			VerticalAlignment = VerticalAlignment.Center,
+		};
+
+		if(Icon is not null){
+			Icon.Width = UiCfg.Inst.BaseFontSize * 2.0;
+			Icon.Height = UiCfg.Inst.BaseFontSize * 2.0;
+			content.Children.Add(Icon);
 		}
+
+		var titleText = _TextBlock();
+		titleText.Text = Title;
+		titleText.FontSize = UiCfg.Inst.BaseFontSize * 1.5;
+		titleText.TextAlignment = TextAlignment.Center;
+		titleText.FontWeight = FontWeight.SemiBold;
+		content.Children.Add(titleText);
+
+		R.Content = new Border{
+			Padding = new Thickness(
+				UiCfg.Inst.BaseFontSize * 0.7,
+				UiCfg.Inst.BaseFontSize * 0.55
+			),
+			CornerRadius = new CornerRadius(UiCfg.Inst.BaseFontSize * 0.4),
+			BorderThickness = new Thickness(1.5),
+			BorderBrush = Brushes.Gray,
+			Background = new SolidColorBrush(Color.FromArgb(28, 255, 255, 255)),
+			Child = content,
+		};
 
 		return R;
 	}
