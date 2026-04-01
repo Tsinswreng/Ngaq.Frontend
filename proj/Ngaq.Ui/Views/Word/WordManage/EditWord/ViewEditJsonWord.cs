@@ -65,16 +65,14 @@ public partial class ViewEditJsonWord
 			BottomBtnGrid
 			.A(_Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
-				Todo.I18n();
-				o.Content = "Save";
+				o.Content = Todo.I18n("Save");
 				o.Click += (s,e)=>{
 					Ctx?.Save();
 				};
 			})
 			.A(_Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
-				Todo.I18n();
-				o.Content = "Delete";
+				o.Content = Todo.I18n("Delete");
 				o.Click += (s,e)=>{
 					Ctx?.Delete();
 				};

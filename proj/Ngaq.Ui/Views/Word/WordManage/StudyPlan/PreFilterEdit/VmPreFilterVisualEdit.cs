@@ -18,6 +18,7 @@ using Ngaq.Ui.Tools;
 using Tsinswreng.CsTools;
 
 using Ctx = VmPreFilterVisualEdit;
+using Ngaq.Core.Infra.IF;
 
 /// <summary>
 /// PreFilter GUI 主編輯 ViewModel。
@@ -349,7 +350,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg("Saved");
+			ShowMsg(Todo.I18n("Saved"));
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -361,7 +362,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	/// </summary>
 	public async Task<nil> Delete(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
-			ShowMsg("Service not ready");
+			ShowMsg(Todo.I18n("Service not ready"));
 			return NIL;
 		}
 		try{
@@ -371,9 +372,9 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			}
 			BoPreFilter = MkEmptyBoPreFilter();
 			SyncFromBo();
-			LastError = "";
+			LastError = Todo.I18n("");
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg("Deleted");
+			ShowMsg(Todo.I18n("Deleted"));
 		}catch(Exception e){
 			HandleErr(e);
 		}

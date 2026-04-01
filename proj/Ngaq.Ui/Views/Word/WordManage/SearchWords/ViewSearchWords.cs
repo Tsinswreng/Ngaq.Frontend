@@ -116,8 +116,8 @@ public partial class ViewSearchWords
 			if(!AnyNull(View.Ctx.WordForLearn?.JnWord)){
 				R.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, View.Ctx.WordForLearn.JnWord);
 			}else{
-				Todo.I18n();
-				Ctx?.ShowMsg("Word not found.");//TODO
+
+				Ctx?.ShowMsg(Todo.I18n("Word not found."));
 			}
 			R.Click += (s,e)=>{
 				// var Target = new ViewEditJsonWord();

@@ -27,12 +27,12 @@ public partial class ViewWordListCard
 	){
 		var R = new ContextMenu();
 		R.Items.A(new MenuItem(), o=>{
-			Todo.I18n();
-			o.Header = Svgs.CreateMD().ToIcon().WithText(" Edit");
+
+			o.Header = Svgs.CreateMD().ToIcon().WithText(Todo.I18n("Edit"));
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
-					Todo.I18n();
-					MainView.Inst.ShowMsg("No word selected");//TODO
+
+					MainView.Inst.ShowMsg(Todo.I18n("No word selected"));
 					return;
 				}
 				var editView = new ViewWordEdit{};

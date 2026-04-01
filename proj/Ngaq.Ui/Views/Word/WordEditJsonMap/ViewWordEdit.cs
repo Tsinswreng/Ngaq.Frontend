@@ -45,8 +45,7 @@ public partial class ViewWordEdit
 			o.Click += (s,e)=>{
 				var vj = new ViewEditJsonWord();
 				if(AnyNull(vj.Ctx, Ctx?.JnWord)){
-					Todo.I18n();
-					Ctx?.ShowMsg("No Word or Ctx");
+					Ctx?.ShowMsg(Todo.I18n("No Word or Ctx"));
 					return;
 				}
 				vj.Ctx.FromJnWord(Ctx.JnWord);
@@ -91,8 +90,7 @@ public partial class ViewWordEdit
 		Root.A(new ScrollViewer(), Sv=>{
 			Sv.InitContent(new StackPanel(), root2=>{
 				root2.A(_Expander(), Ex=>{
-					Todo.I18n();
-					Ex.Header = "Word Core";
+					Ex.Header = Todo.I18n("Word Core");
 					Ex.IsExpanded = true;
 					Ex.InitContent(new ScrollViewer(), Sv=>{
 						Sv.InitContent(new ViewUiJsonMap(), jm=>{
@@ -111,8 +109,7 @@ public partial class ViewWordEdit
 		});
 
 		Root.A(new OpBtn(), o=>{
-			Todo.I18n();
-			o.BtnContent = "Save";
+			o.BtnContent = Todo.I18n("Save");
 		});
 
 		return NIL;

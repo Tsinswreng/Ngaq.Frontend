@@ -121,7 +121,6 @@ public partial class ViewDictionary
 				);
 			})
 			.A(SearchBtn, o=>{
-				Todo.I18n();
 				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
 				o._Button.Content = Svgs.Search().ToIcon();

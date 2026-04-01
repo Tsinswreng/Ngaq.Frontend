@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
+using Ngaq.Core.Infra.IF;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Core.Tools.Json;
