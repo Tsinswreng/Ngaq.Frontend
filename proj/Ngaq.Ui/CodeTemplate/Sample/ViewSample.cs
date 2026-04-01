@@ -60,7 +60,7 @@ public partial class ViewSample
 		})
 		.A(new Button(), o=>{
 			o.InitContent(new TextBlock(), t=>{
-				t.Text = Todo.I18n("按鈕一");
+				t.Text = Todo.I18n("按鈕一");//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
 			});
 //你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
 //按鈕綁定事件的寫法
@@ -119,7 +119,7 @@ public partial class ViewSample
 	//導航示例
 	public void SampleNavi(Control TargetView){
 		//帶標題跳轉
-		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle("頂欄標題", TargetView));
+		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("頂欄標題"), TargetView));
 		//若不要標題就直接傳進Goto
 	}
 
