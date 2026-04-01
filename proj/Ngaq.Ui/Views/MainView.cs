@@ -123,6 +123,7 @@ public partial class MainView : UserControl {
 		}
 		else if(Ex is Exception Exception){
 			toLog = Exception+"";
+			ShowMsg(Todo.I18n("Unknown Error"));
 		}
 		else{//非Exception 非 IAppErr
 			toLog??="";

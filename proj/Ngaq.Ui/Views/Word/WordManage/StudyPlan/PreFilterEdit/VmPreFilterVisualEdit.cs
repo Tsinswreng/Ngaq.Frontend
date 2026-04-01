@@ -123,10 +123,9 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
-	/// <summary>
+
 	/// 當前頁面是否爲「新增」模式。
 	/// true: 新增；false: 編輯既有實體。
-	/// </summary>
 	public bool IsCreateMode{
 		get{return field;}
 		set{SetProperty(ref field, value);}

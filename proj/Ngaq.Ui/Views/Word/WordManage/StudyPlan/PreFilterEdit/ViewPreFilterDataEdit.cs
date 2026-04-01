@@ -18,9 +18,8 @@ using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = VmPreFilterVisualEdit;
 
-/// <summary>
+
 /// PreFilter（無 Po 字段）GUI 子編輯頁。
-/// </summary>
 public class ViewPreFilterDataEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
