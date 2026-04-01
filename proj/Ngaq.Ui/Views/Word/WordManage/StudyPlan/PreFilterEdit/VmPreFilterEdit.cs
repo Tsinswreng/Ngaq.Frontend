@@ -10,6 +10,7 @@ using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Models.PreFilter;
 using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Tools;
 
 using Ctx = VmPreFilterEdit;
 
@@ -74,6 +75,15 @@ public partial class VmPreFilterEdit: ViewModelBase, IMk<Ctx>{
 		public ObservableCollection<VmFilterItemRow> Items{get;set;} = [];
 	}
 
+	public class RowFieldsFilterCard{
+		public u64 UiIdx{get;set;}
+		public str UiIdxText{get;set;} = "";
+		public str Kind{get;set;} = "";
+		public str FieldsPreview{get;set;} = "";
+		public str FilterCountText{get;set;} = "";
+		public VmFieldsFilterRow? Raw{get;set;}
+	}
+
 	public BoPreFilter BoPreFilter{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -93,6 +103,9 @@ public partial class VmPreFilterEdit: ViewModelBase, IMk<Ctx>{
 
 	public ObservableCollection<VmFieldsFilterRow> CoreFilterRows{get;set;} = [];
 	public ObservableCollection<VmFieldsFilterRow> PropFilterRows{get;set;} = [];
+
+	public ObservableCollection<RowFieldsFilterCard> CoreFilterCards{get;set;} = [];
+	public ObservableCollection<RowFieldsFilterCard> PropFilterCards{get;set;} = [];
 
 	public IReadOnlyList<str> PoTypeOptions{get;} = Enum.GetNames<EPreFilterType>();
 	public IReadOnlyList<str> OperationOptions{get;} = Enum.GetNames<EFilterOperationMode>();
@@ -151,6 +164,54 @@ public partial class VmPreFilterEdit: ViewModelBase, IMk<Ctx>{
 		if(_isHydrating){
 			return;
 		}
+		RefreshFieldsFilterCards();
+	}
+
+	public nil RefreshFieldsFilterCards(){
+		CoreFilterCards.Clear();
+		for(u64 i = 0; i < (u64)CoreFilterRows.Count; i++){
+			var row = CoreFilterRows[(i32)i];
+			CoreFilterCards.Add(new RowFieldsFilterCard{
+				UiIdx = i + 1,
+				UiIdxText = (i + 1).ToString(),
+				Kind = "Core",
+				FieldsPreview = str.IsNullOrWhiteSpace(row.FieldsText) ? "-" : row.FieldsText,
+				FilterCountText = (row.Items?.Count ?? 0).ToString(),
+				Raw = row,
+			});
+		}
+		PropFilterCards.Clear();
+		for(u64 i = 0; i < (u64)PropFilterRows.Count; i++){
+			var row = PropFilterRows[(i32)i];
+			PropFilterCards.Add(new RowFieldsFilterCard{
+				UiIdx = i + 1,
+				UiIdxText = (i + 1).ToString(),
+				Kind = "Prop",
+				FieldsPreview = str.IsNullOrWhiteSpace(row.FieldsText) ? "-" : row.FieldsText,
+				FilterCountText = (row.Items?.Count ?? 0).ToString(),
+				Raw = row,
+			});
+		}
+		return NIL;
+	}
+
+	public nil OpenCoreFilterCard(RowFieldsFilterCard? Card){
+		return OpenFieldsFilterCard(Card, true);
+	}
+
+	public nil OpenPropFilterCard(RowFieldsFilterCard? Card){
+		return OpenFieldsFilterCard(Card, false);
+	}
+
+	nil OpenFieldsFilterCard(RowFieldsFilterCard? Card, bool IsCore){
+		if(Card?.Raw is null){
+			return NIL;
+		}
+		var view = new ViewFieldsFilterCardEdit();
+		view.Ctx?.Load(this, Card.Raw, IsCore, Card.UiIdx);
+		var title = $"{(IsCore?"Core":"Prop")} Filter #{Card.UiIdx}";
+		ViewNavi?.GoTo(ToolView.WithTitle(title, view));
+		return NIL;
 	}
 
 	public nil FromPoPreFilter(PoPreFilter? PoPreFilter){
@@ -294,31 +355,37 @@ public partial class VmPreFilterEdit: ViewModelBase, IMk<Ctx>{
 
 	public nil AddCoreGroup(){
 		CoreFilterRows.Add(MkFieldsFilterRow());
+		RefreshFieldsFilterCards();
 		return NIL;
 	}
 
 	public nil RemoveCoreGroup(VmFieldsFilterRow Row){
 		CoreFilterRows.Remove(Row);
+		RefreshFieldsFilterCards();
 		return NIL;
 	}
 
 	public nil AddPropGroup(){
 		PropFilterRows.Add(MkFieldsFilterRow());
+		RefreshFieldsFilterCards();
 		return NIL;
 	}
 
 	public nil RemovePropGroup(VmFieldsFilterRow Row){
 		PropFilterRows.Remove(Row);
+		RefreshFieldsFilterCards();
 		return NIL;
 	}
 
 	public nil AddFilterItem(VmFieldsFilterRow Row){
 		Row.Items.Add(MkFilterItemRow());
+		RefreshFieldsFilterCards();
 		return NIL;
 	}
 
 	public nil RemoveFilterItem(VmFieldsFilterRow Row, VmFilterItemRow Item){
 		Row.Items.Remove(Item);
+		RefreshFieldsFilterCards();
 		return NIL;
 	}
 
@@ -346,6 +413,7 @@ public partial class VmPreFilterEdit: ViewModelBase, IMk<Ctx>{
 
 	void SyncAllFromBo(){
 		SyncVisualFromBo();
+		RefreshFieldsFilterCards();
 		SyncJsonFromBo();
 	}
 }
