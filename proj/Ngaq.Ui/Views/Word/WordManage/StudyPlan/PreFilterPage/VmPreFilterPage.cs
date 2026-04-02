@@ -135,8 +135,9 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	}
 
 	protected async Task<nil> OnNextPage(VmPageBar pageBar, CT Ct){
-		var totalPage = pageBar.TotPageCnt ?? 1;
-		if(pageBar.PageNum >= totalPage){
+		// TotPageCnt == null means backend does not provide total pages.
+		// In this case, do not block paging forward by a fake "1 page" limit.
+		if(pageBar.TotPageCnt is u64 totalPage && pageBar.PageNum >= totalPage){
 			return NIL;
 		}
 		pageBar.PageNum++;
