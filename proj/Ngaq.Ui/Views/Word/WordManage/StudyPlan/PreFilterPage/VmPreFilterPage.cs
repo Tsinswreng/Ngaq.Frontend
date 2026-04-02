@@ -16,11 +16,14 @@ using Ctx = VmPreFilterPage;
 /// PreFilter 列表頁 ViewModel。
 /// 使用後端接口分頁讀取，不再使用假數據
 public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
-	protected VmPreFilterPage(){
+	void Init(){
 		PageBar = VmPageBar.Mk();
 		PageBar.PageSize = 10;
 		PageBar.FnPrevPage = OnPrevPage;
 		PageBar.FnNextPage = OnNextPage;
+	}
+	protected VmPreFilterPage(){
+		Init();
 	}
 
 	public static Ctx Mk(){
@@ -47,9 +50,10 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	):this(){
 		this.SvcStudyPlan = SvcStudyPlan;
 		this.UserCtxMgr = UserCtxMgr;
+		Init();
 	}
 
-	public VmPageBar PageBar{get;set;}
+	public VmPageBar PageBar{get;set;} = null!;
 
 	public str Input{
 		get{return field;}

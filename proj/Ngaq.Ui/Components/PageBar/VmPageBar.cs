@@ -86,6 +86,7 @@ public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	}=null;
 
+	[Doc(@$"#See{nameof(TotCnt)}")]
 	public u64? TotPageCnt{
 		get;
 		set{SetProperty(ref field, value);}
