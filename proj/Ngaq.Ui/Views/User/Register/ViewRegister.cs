@@ -47,13 +47,13 @@ public partial class ViewRegister
 		).Set(
 			BackgroundProperty
 			,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
-		).Attach(Styles);
+		).AddTo(Styles);
 		return NIL;
 	}
 
 	AutoGrid Root = new(IsRow: true);
 	protected nil _Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),
 				RowDef(1, GUT.Star),
@@ -76,7 +76,7 @@ public partial class ViewRegister
 		})
 		.A(new OpBtn(), o=>{
 			var b = o._Button;
-			b.InitContent(_TextBlock(), t=>{
+			b.SetContent(_TextBlock(), t=>{
 				t.Text = I[K.Register];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});

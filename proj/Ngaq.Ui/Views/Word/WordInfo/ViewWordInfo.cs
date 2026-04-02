@@ -47,14 +47,14 @@ public partial class ViewWordInfo
 		).Set(
 			ForegroundProperty
 			,new SolidColorBrush(Gray)
-		).Attach(Styles);
+		).AddTo(Styles);
 
 		var InputBoxNoBorder = new Style(x=>
 			x.Is<TextBlock>()
 		).Set(
 			BorderThicknessProperty
 			,new Thickness(0)
-		).Attach(Styles);
+		).AddTo(Styles);
 		return NIL;
 	}
 
@@ -71,7 +71,7 @@ public partial class ViewWordInfo
 	}
 
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//LangId
 				RowDef(3, GUT.Auto),//Head
@@ -106,7 +106,7 @@ public partial class ViewWordInfo
 		Root.A(_Border(), o=>{
 			o.BorderThickness = new Thickness(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
-			o.InitChild(TxtBox(), o=>{
+			o.SetChild(TxtBox(), o=>{
 				o.Styles.Add(new Style().NoMargin().NoPadding());
 				o.CBind<Ctx>(o.PropText,x=>x.Head, Mode: BindingMode.TwoWay);
 				o.VerticalAlignment = VAlign.Stretch;
@@ -149,7 +149,7 @@ public partial class ViewWordInfo
 		#endif
 
 		Root.A(new Border(), BdrScr=>{
-			BdrScr.InitChild(new ScrollViewer(), ScrDescr=>{
+			BdrScr.SetChild(new ScrollViewer(), ScrDescr=>{
 				var Description = _DescriptionList();
 				ScrDescr.Content = Description;
 			});

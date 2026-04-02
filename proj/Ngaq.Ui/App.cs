@@ -100,7 +100,7 @@ this.AttachDevTools();
 			//,new FontFamily("Times New Roman, STSong")
 			//,new FontFamily("Times New Roman")
 			,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
-		).Attach(Styles);
+		).AddTo(Styles);
 		//按鈕舒展
 		var Button = new Style(x=>
 			x.Is<Button>()

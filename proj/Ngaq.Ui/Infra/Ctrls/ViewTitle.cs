@@ -51,7 +51,7 @@ public partial class ViewTitle
 
 	AutoGrid Root = new(IsRow: true);
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//Title
 				RowDef(1, GUT.Star),//Content

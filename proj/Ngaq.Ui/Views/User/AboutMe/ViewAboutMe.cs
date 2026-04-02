@@ -38,7 +38,7 @@ public partial class ViewAboutMe
 	}
 
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(2, GUT.Auto),
@@ -61,7 +61,7 @@ public partial class ViewAboutMe
 
 		R.A(new SwipeLongPressBtn(), o=>{
 			o.VAlign(x=>x.Stretch);
-			o.InitContent(new CircleAvatar(), o=>{
+			o.SetContent(new CircleAvatar(), o=>{
 				o.Width = UiCfg.Inst.BaseFontSize*1.5;
 				o.Height = UiCfg.Inst.BaseFontSize*1.5;
 				o.CBind<Ctx>(o.PropSource,x=>x.AvatarImg);
@@ -74,7 +74,7 @@ public partial class ViewAboutMe
 		});
 		R.A(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);
-			o.InitContent(_TextBlock(), t=>{
+			o.SetContent(_TextBlock(), t=>{
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				t.Bind(
 					t.PropText_()

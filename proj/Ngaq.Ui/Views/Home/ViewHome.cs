@@ -45,7 +45,7 @@ public partial class ViewHome
 	AutoGrid Root = new(IsRow:true);
 
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(20, GUT.Star),
 			]);
@@ -62,9 +62,7 @@ public partial class ViewHome
 
 		Root.A(new ViewBottomBar(), ViewBottomBar=>{
 			var ViewWordQuery = new ViewLearnWords();
-
-			ViewBottomBar.Items.AddInitT(
-				new Btn_Control(
+			ViewBottomBar.Items.A(new Btn_Control(
 					BarItem(I[K.Learn], Svgs.BookOpenTextFill().ToIcon())//📖
 					,ViewWordQuery
 				),
@@ -72,14 +70,36 @@ public partial class ViewHome
 					ViewBottomBar.Cur.Content = o.Control;
 					o.Button.Background = Brushes.Transparent;
 				}
-			).AddInitT(new Btn_Control(
-				BarItem(I[K.Library], Svgs.BookBookmarkFill().ToIcon())//📚
-				,new ViewWordManage()
-			))
-			.AddInitT(new Btn_Control(
-				BarItem(I[K.Me], Svgs.UserCircleFill().ToIcon())//👤
-				,new ViewAboutMe()
-			));
+			).A(
+				new Btn_Control(
+					BarItem(I[K.Library], Svgs.BookBookmarkFill().ToIcon())//📚
+					,new ViewWordManage()
+				)
+			).A(
+				new Btn_Control(
+					BarItem(I[K.Me], Svgs.UserCircleFill().ToIcon())//👤
+					,new ViewAboutMe()
+				)
+			)
+			;
+
+			// ViewBottomBar.Items.AddInitT(
+			// 	new Btn_Control(
+			// 		BarItem(I[K.Learn], Svgs.BookOpenTextFill().ToIcon())//📖
+			// 		,ViewWordQuery
+			// 	),
+			// 	o=>{
+			// 		ViewBottomBar.Cur.Content = o.Control;
+			// 		o.Button.Background = Brushes.Transparent;
+			// 	}
+			// ).AddInitT(new Btn_Control(
+			// 	BarItem(I[K.Library], Svgs.BookBookmarkFill().ToIcon())//📚
+			// 	,new ViewWordManage()
+			// ))
+			// .AddInitT(new Btn_Control(
+			// 	BarItem(I[K.Me], Svgs.UserCircleFill().ToIcon())//👤
+			// 	,new ViewAboutMe()
+			// ));
 		});
 
 		return NIL;

@@ -62,7 +62,7 @@ public partial class Cls_{
 	}
 
 	protected nil _Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),
 				RowDef(1, GUT.Star),
@@ -76,7 +76,7 @@ public partial class Cls_{
 			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password));
 			//formItem("Confirm Password", CBE.pth<Ctx>(x=>x.ConfirmPassword));
 			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
-			//TODO 用popup彈出�?
+			//TODO 用popup彈出�?
 			var errMsgSclv = new ScrollViewer{};
 			Stk.Children.Add(errMsgSclv);
 			{
@@ -86,7 +86,7 @@ public partial class Cls_{
 		})
 		.A(new OpBtn(), (o)=>{
 			var b = o._Button;
-			b.InitContent(_TextBlock(), t=>{
+			b.SetContent(_TextBlock(), t=>{
 				t.Text = I[K.Login];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});

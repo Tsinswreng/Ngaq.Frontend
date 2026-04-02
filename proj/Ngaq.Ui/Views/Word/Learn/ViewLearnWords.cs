@@ -165,14 +165,14 @@ public partial class ViewLearnWords
 				return R;
 			};
 			Row1.A(Btn(), (o)=>{
-				o._Button.InitContent(Hc(
+				o._Button.SetContent(Hc(
 					Ic(Svgs.PlayCircleFill())//▶️
 					,T(I[K.Start])
 				));
 				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
 				o.SetExe((Ct)=>Ctx?.LoadEtStartAsy(Ct));
 			}).A(Btn(), o=>{ //📁"💾"
-				o._Button.InitContent(Hc(
+				o._Button.SetContent(Hc(
 					Ic(Svgs.FloppyDiskBackFill())
 					,T(I[K.Save])
 				));
@@ -206,14 +206,14 @@ public partial class ViewLearnWords
 				);
 
 			}).A(Btn(), o=>{
-				o._Button.InitContent(Hc(//🔄
+				o._Button.SetContent(Hc(//🔄
 					Ic(Svgs.RotateCw())
 					,T(I[K.Reset])
 				));
 				o.SetExe((Ct)=>Ctx?.ResetAsy(Ct));
 			})
 			.A(Btn(), o=>{
-				o._Button.InitContent(Hc(//?
+				o._Button.SetContent(Hc(//?
 					Ic(Svgs.GearFill())
 					,T(I[K.Settings])
 				));
@@ -241,7 +241,7 @@ public partial class ViewLearnWords
 
 
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),//overlay
 				RowDef(1, GUT.Auto),
@@ -259,7 +259,7 @@ public partial class ViewLearnWords
 			})
 			.A(_Menu())
 			.A(_ScrollViewer(), Scr=>{
-				Scr.InitContent(_ListWordCard(), o=>{
+				Scr.SetContent(_ListWordCard(), o=>{
 					o.CBind<Ctx>(
 						ItemsControl.ItemsSourceProperty
 						,x=>x.WordCards, Mode: BindingMode.TwoWay);
@@ -348,7 +348,7 @@ public partial class ViewLearnWords
 					StyBtnWordCard(o.Styles);
 				}
 
-				Btn.InitContent(new ViewWordListCard(VmWordCard), o=>{
+				Btn.SetContent(new ViewWordListCard(VmWordCard), o=>{
 					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
 					o.Background = Brushes.Transparent;
 					o.CBind<VmWordListCard>(
@@ -398,7 +398,7 @@ public partial class ViewLearnWords
 			BorderBrushProperty
 			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
 			//,Brushes.Transparent
-		).Attach(s);
+		).AddTo(s);
 
 
 		var Pressed = new Style(x=>
@@ -410,7 +410,7 @@ public partial class ViewLearnWords
 			BorderBrushProperty
 			//,Brushes.Yellow
 			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-		).Attach(s);
+		).AddTo(s);
 
 
 		return s;

@@ -74,7 +74,7 @@ public partial class MainView : UserControl {
 			var msgBox = new MsgBox();
 			{var o = msgBox;
 				o._CloseBtn.Background = null;
-				o._CloseBtn.InitContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
+				o._CloseBtn.SetContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
 					o.Fill = Brushes.Red;
 				});
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
@@ -146,7 +146,7 @@ public partial class MainView : UserControl {
 		Try();
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
-		this.InitContent(AutoGrid.Grid);
+		this.SetContent(AutoGrid.Grid);
 		AutoGrid.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star),
 		]);

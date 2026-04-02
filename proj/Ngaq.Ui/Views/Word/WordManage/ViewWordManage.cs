@@ -53,7 +53,7 @@ public partial class ViewWordManage
 	public AutoGrid Root = new(IsRow:true);
 
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(9999, GUT.Star),
 				RowDef(1, GUT.Star),

@@ -41,7 +41,7 @@ public partial class ViewDictionary
 	public TextBox SearchTextBox = new();//主查詢輸入框
 	public OpBtn SearchBtn = new();
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			Root.RowDefs.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),

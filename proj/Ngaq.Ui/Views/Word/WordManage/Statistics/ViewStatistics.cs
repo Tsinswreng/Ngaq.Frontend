@@ -40,7 +40,7 @@ public partial class ViewStatistics
 		).Set(
 			BackgroundProperty
 			,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
-		).Attach(Styles);
+		).AddTo(Styles);
 		return NIL;
 	}
 
@@ -141,7 +141,7 @@ if (Ctx is null){return;}
 
 	AutoGrid Root = new(IsRow: true);
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),//cfgPanel
 				RowDef(1, GUT.Auto),//splitter
@@ -150,7 +150,7 @@ if (Ctx is null){return;}
 		});
 		Root.A(new ScrollViewer(), Sv=>{
 			var grid = new AutoGrid(IsRow:true);
-			Sv.InitContent(grid.Grid, o=>{
+			Sv.SetContent(grid.Grid, o=>{
 				o.RowDefinitions.AddRange([
 					RowDef(1, GUT.Auto),
 				]);

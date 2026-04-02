@@ -52,7 +52,7 @@ public partial class ViewCfgFont
 	}
 
 	protected nil Render(){
-		this.InitContent(Root.Grid, o=>{
+		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),

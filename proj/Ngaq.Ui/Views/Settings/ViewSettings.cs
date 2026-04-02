@@ -37,7 +37,7 @@ public partial class ViewSettings
 
 	protected nil Render(){
 		var _Item = FnSettingItem(Ctx?.ViewNavi);
-		this.InitContent(_StackPanel(), S=>{
+		this.SetContent(_StackPanel(), S=>{
 			S.A(_Item(I[K.About], new ViewAbout()));
 			S.A(_Item(I[K.UIConfig], new ViewCfgUi()));
 		});
@@ -55,7 +55,7 @@ public partial class ViewSettings
 			var R = new SwipeLongPressBtn();
 			var titled = ToolView.WithTitle(Title, Target);
 			R.HorizontalContentAlignment = HAlign.Left;
-			R.InitContent(_TextBlock(), o=>{
+			R.SetContent(_TextBlock(), o=>{
 				o.Text = Title;
 				o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});

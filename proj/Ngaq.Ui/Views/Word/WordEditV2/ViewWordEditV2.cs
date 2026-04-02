@@ -84,7 +84,7 @@ public partial class ViewWordEditV2: AppViewBase {
 			BorderThickness = new Thickness(0, 0, 0, 1),
 		};
 
-		bdr.InitChild(new StackPanel(), o=>{
+		bdr.SetChild(new StackPanel(), o=>{
 			o.Orientation = Orientation.Vertical;
 			o.Spacing = 4;
 			var box = o;

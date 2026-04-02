@@ -59,7 +59,7 @@ public partial class ViewSample
 //優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
 		})
 		.A(new Button(), o=>{
-			o.InitContent(new TextBlock(), t=>{
+			o.SetContent(new TextBlock(), t=>{
 				t.Text = Todo.I18n("按鈕一");//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
 			});
 //你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
@@ -69,7 +69,7 @@ public partial class ViewSample
 			};
 		})
 		.A(new ScrollViewer(), Sv=>{
-			Sv.InitContent(new StackPanel(), Sp=>{
+			Sv.SetContent(new StackPanel(), Sp=>{
 				Sp.A(new OpBtn(), o=>{
 					//UI中硬編碼的字符串都要這樣寫Todo
 					o._Button.Content = Todo.I18n("調用後端服務");
@@ -127,12 +127,33 @@ public partial class ViewSample
 		//基礎示例
 		Avalonia.Controls.Shapes.Path addIcon = Svgs.Add().ToIcon();
 		var b1 = new Button();
-		b1.Content = addIcon;
+		b1.SetContent(addIcon);
 // Svgs下 可用的圖標 在 Ngaq.Frontend/proj/Ngaq.Ui/Icons/Svgs.Decl.cs
 // 禁止閱讀 Svgs.Impl.cs !!!!
 		//圖標接文字示例:
 		var b2 = new Button();
-		b2.Content = Svgs.Add().ToIcon().WithText("Add");
+		b2.SetContent(Svgs.Add().ToIcon().WithText("Add"));
+	}
+
+	public void SampleOfUsingA(){
+		var 正確示例 = (Panel p)=>{
+			//所有Panel都能
+			p.A(new TextBox(), o=>{
+				//在這裏通過o.Xxx初始化
+				o.Text = Todo.I18n("正確示例");
+			})
+			//鏈試調用
+			.A(new Control())//第二個Action<>可省略不傳
+			;
+		};
+		var 錯誤示例 = (Panel p)=>{
+			var textBox = new TextBox{
+				Text = "錯誤示例"
+			};
+			p.Children.Add(textBox);
+			p.Children.Add(new Control());
+			//錯誤原因: 未使用A擴展方法; 初始化控件屬性寫法不符合規範
+		};
 	}
 
 }

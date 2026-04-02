@@ -88,12 +88,12 @@ public partial class ViewWordEdit
 		]);
 
 		Root.A(new ScrollViewer(), Sv=>{
-			Sv.InitContent(new StackPanel(), root2=>{
+			Sv.SetContent(new StackPanel(), root2=>{
 				root2.A(_Expander(), Ex=>{
 					Ex.Header = Todo.I18n("Word Core");
 					Ex.IsExpanded = true;
-					Ex.InitContent(new ScrollViewer(), Sv=>{
-						Sv.InitContent(new ViewUiJsonMap(), jm=>{
+					Ex.SetContent(new ScrollViewer(), Sv=>{
+						Sv.SetContent(new ViewUiJsonMap(), jm=>{
 							Ctx?.WhenPropertyChanged(x=>x.JnWord).Subscribe(propValue=>{
 								var currentJnWord = propValue.Value;
 								if (currentJnWord == null) return;
