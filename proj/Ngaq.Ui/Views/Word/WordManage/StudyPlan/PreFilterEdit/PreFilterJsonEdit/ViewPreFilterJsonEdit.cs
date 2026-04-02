@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
@@ -67,28 +68,18 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = "Back";
+			o.Content = Todo.I18n("Back");
 			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
 		});
-		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(" Save");
+		g.A(new OpBtn(), o=>{
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
 			o.Background = UiCfg.Inst.MainColor;
-			o.Click += async (s,e)=>{
-				if(Ctx is null){
-					return;
-				}
-				await Ctx.Save();
-			};
+			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
-		g.A(new Button(), o=>{
-			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(" Delete");
+		g.A(new OpBtn(), o=>{
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
-			o.Click += async (s,e)=>{
-				if(Ctx is null){
-					return;
-				}
-				await Ctx.Delete();
-			};
+			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		});
 		return g.Grid;
 	}

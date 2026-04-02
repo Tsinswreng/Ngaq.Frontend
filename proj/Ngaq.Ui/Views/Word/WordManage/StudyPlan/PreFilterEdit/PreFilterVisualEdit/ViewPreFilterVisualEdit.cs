@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
 using System.Collections.Generic;
 using Avalonia;
@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
@@ -125,27 +126,17 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 			o.Content = Todo.I18n("Open JSON");
 			o.Click += (s,e)=>Ctx?.OpenJsonEditor();
 		})
-		.A(_Button(), o=>{
+		.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
-			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
-			o.Click += async (s,e)=>{
-				if(Ctx is null){
-					return;
-				}
-				await Ctx.Save();
-			};
+			o._Button.HorizontalContentAlignment = HAlign.Center;
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		})
-		.A(_Button(), o=>{
+		.A(new OpBtn(), o=>{
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
-			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
-			o.Click += async (s,e)=>{
-				if(Ctx is null){
-					return;
-				}
-				await Ctx.Delete();
-			};
+			o._Button.HorizontalContentAlignment = HAlign.Center;
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		});
 		return bar.Grid;
 	}

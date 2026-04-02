@@ -80,9 +80,9 @@ public class ViewPreFilterDataEdit: AppViewBase{
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(ObservableCollection<Ctx.RowFieldsFilterCard> Rows){
 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(Rows){
 			Columns = {
-				new TextColumn<Ctx.RowFieldsFilterCard, str>("#", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>("Fields", x=>x.FieldsPreview),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>("Items", x=>x.FilterCountText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(Todo.I18n("#"), x=>x.UiIdxText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(Todo.I18n("Fields"), x=>x.FieldsPreview),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(Todo.I18n("Items"), x=>x.FilterCountText),
 			},
 		};
 	}
@@ -111,11 +111,11 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		var sp = new StackPanel{Spacing = 8};
 		bdr.Child = sp;
 		sp.Children.Add(new TextBlock{
-			Text = "PreFilter",
+			Text = Todo.I18n("PreFilter"),
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		});
-		sp.Children.Add(MkInputRow("Version", CBE.Mk<Ctx>(x=>x.PreFilterVersion, Mode: BindingMode.TwoWay)));
+		sp.Children.Add(MkInputRow(Todo.I18n("Version"), CBE.Mk<Ctx>(x=>x.PreFilterVersion, Mode: BindingMode.TwoWay)));
 		return bdr;
 	}
 
@@ -132,7 +132,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		]);
 		box.Child = root.Grid;
 
-		var title = IsCore ? "CoreFilter" : "PropFilter";
+		var title = IsCore ? Todo.I18n("CoreFilter") : Todo.I18n("PropFilter");
 		var top = new AutoGrid(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
@@ -144,7 +144,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 			o.VerticalAlignment = VAlign.Center;
 		});
 		top.A(new Button(), o=>{
-			o.Content = Svgs.Add().ToIcon().WithText(" Add Group");
+			o.Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Group"));
 			o.HorizontalAlignment = HAlign.Right;
 			o.Click += (s,e)=>{
 				if(IsCore){
@@ -218,11 +218,11 @@ public class ViewPreFilterDataEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = "Back";
+			o.Content = Todo.I18n("Back");
 			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(" Save Draft");
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Draft"));
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>{
 				if(Ctx?.CommitPreFilterDataDraft() == true){

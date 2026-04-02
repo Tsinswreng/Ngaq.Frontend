@@ -294,7 +294,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 		var view = new ViewPreFilterJsonEdit();
 		view.Ctx?.FromPoPreFilter(bo.PoPreFilter);
-		ViewNavi?.GoTo(ToolView.WithTitle("PoPreFilter JSON", view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("PoPreFilter JSON"), view));
 		return NIL;
 	}
 
@@ -302,7 +302,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	/// 導航到 PreFilter（無 Po）GUI 子編輯頁。
 	public nil OpenPreFilterDataEditor(){
 		var view = new ViewPreFilterDataEdit(this);
-		ViewNavi?.GoTo(ToolView.WithTitle("PreFilter", view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("PreFilter"), view));
 		return NIL;
 	}
 
@@ -320,7 +320,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		OnPropertyChanged(nameof(HasError));
 		BoPreFilter = bo;
 		RefreshTextPreview();
-		ShowMsg("PreFilter draft updated");
+		ShowMsg(Todo.I18n("PreFilter draft updated"));
 		return true;
 	}
 
@@ -500,7 +500,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 			// step 2: 組裝 PreFilter 並做格式校驗
 			if(!Version.TryParse((PreFilterVersion ?? "").Trim(), out var ver)){
-				Err = "Version format invalid. Example: 1.0.0.0";
+				Err = Todo.I18n("Version format invalid. Example: 1.0.0.0");
 				return false;
 			}
 
@@ -594,8 +594,12 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		if(parts.Count == 0){
 			return [];
 		}
-		if(ValueType == EValueType.String || ValueType == EValueType.Null){
+		if(ValueType == EValueType.String){
 			return parts.Cast<obj?>().ToList();
+		}
+		if(ValueType == EValueType.Null){
+			// Null type should serialize as real null values, not "null" strings.
+			return parts.Select(_ => (obj?)null).ToList();
 		}
 		if(ValueType == EValueType.Number){
 			var ans = new List<obj?>();
@@ -608,7 +612,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 					ans.Add(d);
 					continue;
 				}
-				Err = $"'{p}' is not a valid number";
+				Err = Todo.I18n($"'{p}' is not a valid number");
 				return [];
 			}
 			return ans;

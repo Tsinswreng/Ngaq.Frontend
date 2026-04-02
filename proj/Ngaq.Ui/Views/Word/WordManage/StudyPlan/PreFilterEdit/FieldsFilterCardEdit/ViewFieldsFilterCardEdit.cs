@@ -45,13 +45,13 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		sv.Content = root;
 
 		root.Children.Add(MkInputRow(
-			"Fields (comma/newline separated)",
+			Todo.I18n("Fields (comma/newline separated)"),
 			CBE.Mk<Ctx>(x=>x.FieldsText, Mode: BindingMode.TwoWay),
 			AcceptsReturn: true
 		));
 
 		var btnAdd = new Button{
-			Content = Svgs.Add().ToIcon().WithText(" Add Item"),
+			Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Item")),
 			HorizontalAlignment = HAlign.Left,
 		};
 		btnAdd.Click += (s,e)=>Ctx?.AddItem();
@@ -68,11 +68,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			};
 			var sp = new StackPanel{Spacing = 6};
 			bdr.Child = sp;
-			sp.Children.Add(MkComboRow("Operation", Ctx?.OperationOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)));
-			sp.Children.Add(MkComboRow("Value Type", Ctx?.ValueTypeOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)));
-			sp.Children.Add(MkInputRow("Values (comma/newline separated)", CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true));
+			sp.Children.Add(MkComboRow(Todo.I18n("Operation"), Ctx?.OperationOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)));
+			sp.Children.Add(MkComboRow(Todo.I18n("Value Type"), Ctx?.ValueTypeOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)));
+			sp.Children.Add(MkInputRow(Todo.I18n("Values (comma/newline separated)"), CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true));
 			var rm = new Button{
-				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(" Remove Item"),
+				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove Item")),
 				Background = new SolidColorBrush(Color.FromRgb(210, 56, 56)),
 				HorizontalAlignment = HAlign.Right,
 			};
@@ -91,11 +91,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = "Back";
+			o.Content = Todo.I18n("Back");
 			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(" Save Item");
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Item"));
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
 		});

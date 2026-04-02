@@ -91,7 +91,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 			PoPreFilterJson = FormatJson(JsonSerializer.Stringify(po));
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg("Saved");
+			ShowMsg(Todo.I18n("Saved"));
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -111,7 +111,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		}
 		if(po.Id == IdPreFilter.Zero){
 			PoPreFilterJson = "";
-			ShowMsg("No persisted Id to delete");
+			ShowMsg(Todo.I18n("No persisted Id to delete"));
 			return NIL;
 		}
 
@@ -120,7 +120,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 			PoPreFilterJson = "";
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg("Deleted");
+			ShowMsg(Todo.I18n("Deleted"));
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -133,7 +133,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var parsed = JsonSerializer.Parse<PoPreFilter>(PoPreFilterJson);
 			if(parsed is null){
-				Err = "PoPreFilter JSON parse failed";
+				Err = Todo.I18n("PoPreFilter JSON parse failed");
 				return false;
 			}
 			Po = parsed;
