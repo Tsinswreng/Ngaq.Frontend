@@ -1,21 +1,33 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
+
+using System;
 using System.Collections.ObjectModel;
+using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
+using Ngaq.Core.Shared.StudyPlan.Models.Req;
+using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 
 using Ctx = VmWeightArgPage;
+
+/// WeightArg 列表頁 ViewModel。
+/// 使用後端接口分頁讀取，不使用假數據。
 public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
-	protected VmWeightArgPage(){
+	void Init(){
 		PageBar = VmPageBar.Mk();
 		PageBar.PageSize = 10;
 		PageBar.FnPrevPage = OnPrevPage;
 		PageBar.FnNextPage = OnNextPage;
-		InitDemoData();
 	}
+
+	protected VmWeightArgPage(){
+		Init();
+	}
+
 	public static Ctx Mk(){
 		return new Ctx();
 	}
@@ -30,20 +42,31 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		#endif
 	}
 
-	public VmPageBar PageBar{get;set;}
+	ISvcStudyPlan? SvcStudyPlan{get;set;}
+	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
+
+	/// 依賴注入構造器。
+	public VmWeightArgPage(
+		ISvcStudyPlan? SvcStudyPlan
+		,IFrontendUserCtxMgr? UserCtxMgr
+	):this(){
+		this.SvcStudyPlan = SvcStudyPlan;
+		this.UserCtxMgr = UserCtxMgr;
+		Init();
+	}
+
+	public VmPageBar PageBar{get;set;} = null!;
 
 	public str Input{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}="";
+	} = "";
 
 	public ObservableCollection<RowWeightArg> Rows{get;set;} = [];
 
-	protected IList<PoWeightArg> AllWeightArg{get;set;} = [];
-
+	/// 列表行模型。
 	public class RowWeightArg{
 		public bool IsChecked{get;set;} = false;
-		//GUI中之序號、非Id
 		public u64 UiIdx{get;set;}
 		public str UiIdxText{get;set;} = "";
 		public str Name{get;set;} = "";
@@ -51,23 +74,7 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		public PoWeightArg? Raw{get;set;} = null;
 	}
 
-	protected nil InitDemoData(){
-		var now = Tempus.Now();
-		var l = new List<PoWeightArg>();
-		for(var i = 1; i <= 38; i++){
-			var created = (Tempus)(now.Value - i*InMillisecond.Hour);
-			var updated = i % 4 == 0 ? Tempus.Zero : (Tempus)(created.Value + 15*InMillisecond.Minute);
-			l.Add(new PoWeightArg{
-				UniqName = $"WeightArg_{i:000}",
-				BizCreatedAt = created,
-				BizUpdatedAt = updated,
-			});
-		}
-		AllWeightArg = l;
-		return NIL;
-	}
-
-	protected static str FormatBizTime(PoWeightArg po){
+	static str FormatBizTime(PoWeightArg po){
 		var updated = po.BizUpdatedAt == Tempus.Zero ? po.BizCreatedAt : po.BizUpdatedAt;
 		if(updated == Tempus.Zero){
 			return "-";
@@ -75,53 +82,45 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		return updated.ToIso();
 	}
 
-	protected nil CalcTotalPage(u64 totalCount){
-		var pageSize = PageBar.PageSize == 0 ? 10 : PageBar.PageSize;
-		var totalPage = totalCount == 0 ? 1 : (totalCount + pageSize - 1) / pageSize;
-		PageBar.TotPageCnt = totalPage;
-		return NIL;
-	}
-
 	public async Task<nil> InitSearch(CT Ct = default){
 		PageBar.PageNum = 1;
 		return await Search(Ct);
 	}
 
+	/// 根據輸入條件查詢後端分頁，並回填 UI 列表。
 	public async Task<nil> Search(CT Ct = default){
-		await Task.Yield();
-		IEnumerable<PoWeightArg> q = AllWeightArg;
-		if(!str.IsNullOrWhiteSpace(Input)){
-			q = q.Where(x=>(x.UniqName??"").Contains(Input, StringComparison.OrdinalIgnoreCase));
+		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
+			return NIL;
 		}
-		var pageNum = PageBar.PageNum <= 1 ? 1 : PageBar.PageNum;
-		var pageSize = PageBar.PageSize == 0 ? 10 : PageBar.PageSize;
-		var start = (pageNum - 1) * pageSize;
-		var end = start + pageSize;
-		u64 idx = 0;
-		var onePage = new List<PoWeightArg>();
-		foreach(var po in q){
-			if(idx >= start && idx < end){
-				onePage.Add(po);
+		try{
+			var pageQry = PageBar.ToPageQry();
+			pageQry.WantTotCnt = true;
+			var req = new ReqPageWeightArg{
+				PageQry = pageQry,
+				UniqNameSearch = str.IsNullOrWhiteSpace(Input) ? null : Input.Trim(),
+			};
+
+			var page = await SvcStudyPlan.PageWeightArg(UserCtxMgr.GetDbUserCtx(), req, Ct);
+			PageBar.FromPageResultInfo(page);
+
+			Rows.Clear();
+			var startUiIdx = page.PageIdx * page.PageSize;
+			var localIdx = 0UL;
+			if(page.DataAsyE is not null){
+				await foreach(var po in page.DataAsyE){
+					localIdx++;
+					var uiIdx = startUiIdx + localIdx;
+					Rows.Add(new RowWeightArg{
+						UiIdx = uiIdx,
+						UiIdxText = uiIdx.ToString(),
+						Name = po.UniqName ?? "",
+						ModifiedTime = FormatBizTime(po),
+						Raw = po,
+					});
+				}
 			}
-			idx++;
-		}
-		CalcTotalPage(idx);
-		var totalPage = PageBar.TotPageCnt ?? 1;
-		if(pageNum > totalPage){
-			PageBar.PageNum = totalPage;
-			return await Search(Ct);
-		}
-		Rows.Clear();
-		for(var i = 0; i < onePage.Count; i++){
-			var po = onePage[i];
-			var uiIdx = start + (u64)i + 1;
-			Rows.Add(new RowWeightArg{
-				UiIdx = uiIdx,
-				UiIdxText = uiIdx.ToString(),
-				Name = po.UniqName ?? "",
-				ModifiedTime = FormatBizTime(po),
-				Raw = po,
-			});
+		}catch(Exception e){
+			HandleErr(e);
 		}
 		return NIL;
 	}
@@ -136,22 +135,23 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 	}
 
 	protected async Task<nil> OnNextPage(VmPageBar pageBar, CT Ct){
-		var totalPage = pageBar.TotPageCnt ?? 1;
-		if(pageBar.PageNum >= totalPage){
+		// TotPageCnt == null means backend does not provide total pages.
+		// In this case, do not block paging forward by a fake "1 page" limit.
+		if(pageBar.TotPageCnt is u64 totalPage && pageBar.PageNum >= totalPage){
 			return NIL;
 		}
 		pageBar.PageNum++;
 		return await Search(Ct);
 	}
 
-	protected async Task<nil> OnGoPage(VmPageBar pageBar, CT Ct){
-		var totalPage = pageBar.TotPageCnt ?? 1;
-		var target = pageBar.PageNum <= 1 ? 1 : pageBar.PageNum;
-		if(target > totalPage){
-			target = totalPage;
-		}
-		pageBar.PageNum = target;
-		return await Search(Ct);
+	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
+	public nil OpenDetail(RowWeightArg? row = null){
+		var view = new ViewWeightArgEdit();
+		view.Ctx?.SetCreateMode(row is null);
+		view.Ctx?.FromPoWeightArg(row?.Raw);
+		var title = row?.Name ?? Todo.I18n("新增權重參數");
+		var titled = ToolView.WithTitle(title, view);
+		ViewNavi?.GoTo(titled);
+		return NIL;
 	}
-
 }

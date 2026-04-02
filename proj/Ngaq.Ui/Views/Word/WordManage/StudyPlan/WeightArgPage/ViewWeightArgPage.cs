@@ -101,7 +101,7 @@ public partial class ViewWeightArgPage
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
 			o.Content = Svgs.Add().ToIcon();
-			o.Click += (s,e)=>OpenDetail(Todo.I18n("New Item"));
+			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
 	}
@@ -159,18 +159,11 @@ public partial class ViewWeightArgPage
 			}
 			if(cur is TreeDataGridRow row){
 				if(row.DataContext is Ctx.RowWeightArg vmRow){
-					OpenDetail(vmRow.Name);
+					Ctx.OpenDetail(vmRow);
 					e.Handled = true;
 				}
 				return;
 			}
 		}
-	}
-	public nil OpenDetail(str Title){
-		var view = new ViewWeightArgEdit();
-		var title = Title;
-		var titled = ToolView.WithTitle(title, view);
-		Ctx?.ViewNavi?.GoTo(titled);
-		return NIL;
 	}
 }
