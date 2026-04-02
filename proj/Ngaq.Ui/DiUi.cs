@@ -17,6 +17,7 @@ using Tsinswreng.AvlnTools.Navigation;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 
 namespace Ngaq.Ui;
 
@@ -41,6 +42,7 @@ public static class DiUi{
 		z.AddTransient<VmPreFilterVisualEdit>();
 		z.AddTransient<VmPreFilterJsonEdit>();
 		z.AddTransient<VmPreFilterPage>();
+		z.AddTransient<VmStudyPlanPage>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}
