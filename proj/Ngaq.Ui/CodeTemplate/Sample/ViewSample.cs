@@ -59,6 +59,7 @@ public partial class ViewSample
 //優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
 		})
 		.A(new Button(), o=>{
+			//初始化ContentControl.Content時使用SetContent擴展方法、不要直接給Content賦值
 			o.SetContent(new TextBlock(), t=>{
 				t.Text = Todo.I18n("按鈕一");//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
 			});
@@ -135,7 +136,7 @@ public partial class ViewSample
 		b2.SetContent(Svgs.Add().ToIcon().WithText("Add"));
 	}
 
-	public void SampleOfUsingA(){
+	public void SampleOfUsingDsl(){
 		var 正確示例 = (Panel p)=>{
 			//所有Panel都能
 			p.A(new TextBox(), o=>{
@@ -144,6 +145,12 @@ public partial class ViewSample
 			})
 			//鏈試調用
 			.A(new Control())//第二個Action<>可省略不傳
+			.A(new Button(), o=>{
+				//所有ContentControl、賦其Content時 都用 SetContent。第二個Action<>可省略。
+				o.SetContent(new TextBlock(), o=>{
+					o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				});
+			})
 			;
 		};
 		var 錯誤示例 = (Panel p)=>{
@@ -152,7 +159,13 @@ public partial class ViewSample
 			};
 			p.Children.Add(textBox);
 			p.Children.Add(new Control());
-			//錯誤原因: 未使用A擴展方法; 初始化控件屬性寫法不符合規範
+			var btn = new Button();
+			var textBlock = new TextBlock(){
+				FontSize = 20
+			};
+			btn.Content = textBlock;
+			//錯誤原因: 未使用A和SetContent擴展方法;
+			// 初始化控件屬性寫法不符合規範; 硬編碼字體大小; 硬編碼文本未使用Todo.I18n
 		};
 	}
 
