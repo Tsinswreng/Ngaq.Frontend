@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -15,6 +15,9 @@ using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 using Tsinswreng.CsTools;
 
 using Ctx = VmPreFilterVisualEdit;

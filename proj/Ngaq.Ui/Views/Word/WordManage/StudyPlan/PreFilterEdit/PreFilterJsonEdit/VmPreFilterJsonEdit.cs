@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;

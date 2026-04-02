@@ -1,8 +1,9 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
 
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
 using Ctx = VmFieldsFilterCardEdit;
 

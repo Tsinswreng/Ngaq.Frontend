@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 
 using Avalonia;
 using Avalonia.Controls;

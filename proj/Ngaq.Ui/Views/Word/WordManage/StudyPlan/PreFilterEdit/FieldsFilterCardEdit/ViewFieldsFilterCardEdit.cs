@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
 
 using System.Collections.Generic;
 using Avalonia;
@@ -8,6 +8,7 @@ using Avalonia.Media;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 

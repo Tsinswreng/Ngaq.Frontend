@@ -9,8 +9,7 @@ using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
-
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Ctx = VmPreFilterPage;
 
 /// PreFilter 列表頁 ViewModel。
