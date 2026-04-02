@@ -150,7 +150,7 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		var view = new ViewPreFilterVisualEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoPreFilter(row?.Raw);
-		var title = row?.Name ?? "新增預篩選器";
+		var title = row?.Name ?? Todo.I18n("新增預篩選器");
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 		return NIL;

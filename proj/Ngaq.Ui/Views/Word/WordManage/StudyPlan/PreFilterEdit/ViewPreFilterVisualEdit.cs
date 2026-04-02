@@ -13,10 +13,8 @@ using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = VmPreFilterVisualEdit;
 
-/// <summary>
 /// PreFilter GUI 主頁。
 /// 僅顯示 Po 主信息 + Text 預覽，並提供跳轉到子編輯頁和 JSON 編輯頁。
-/// </summary>
 public class ViewPreFilterVisualEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -77,15 +75,16 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		var sp = new StackPanel{Spacing = 8};
 		bdr.Child = sp;
 
-		sp.Children.Add(new TextBlock{
-			Text = "PoPreFilter",
+		sp.A(new TextBlock{
+			Text = Todo.I18n("PoPreFilter"),
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
-		});
-		sp.Children.Add(MkInputRow("Id", CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true));
-		sp.Children.Add(MkInputRow("Name", CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)));
-		sp.Children.Add(MkInputRow("Description", CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true));
-		sp.Children.Add(MkComboRow("Type", Ctx?.PoTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay)));
+		})
+		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
+		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
+		.A(MkComboRow(Todo.I18n("Type"), Ctx?.PoTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay)))
+		;
 		return bdr;
 	}
 
@@ -98,18 +97,19 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		var sp = new StackPanel{Spacing = 8};
 		bdr.Child = sp;
 
-		sp.Children.Add(new TextBlock{
-			Text = "Text (Preview)",
+		sp.A(new TextBlock{
+			Text = Todo.I18n("Text (Preview)"),
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
+		})
+		.A(MkInputRow(Todo.I18n("Text Payload"), CBE.Mk<Ctx>(x=>x.PoTextPreview, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
+		.A(new Button(), o=>{
+			o.Content = Todo.I18n("Edit PreFilter(Text) In GUI");
+			o.HorizontalAlignment = HAlign.Left;
+			o.Click += (s,e)=>Ctx?.OpenPreFilterDataEditor();
 		});
-		sp.Children.Add(MkInputRow("Text", CBE.Mk<Ctx>(x=>x.PoTextPreview, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true));
-		var btn = new Button{
-			Content = "Edit PreFilter(Text) In GUI",
-			HorizontalAlignment = HAlign.Left,
-		};
-		btn.Click += (s,e)=>Ctx?.OpenPreFilterDataEditor();
-		sp.Children.Add(btn);
+
+
 		return bdr;
 	}
 
@@ -122,7 +122,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		]);
 		bar.A(_Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = "Open JSON";
+			o.Content = Todo.I18n("Open JSON");
 			o.Click += (s,e)=>Ctx?.OpenJsonEditor();
 		})
 		.A(_Button(), o=>{
@@ -139,7 +139,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		.A(_Button(), o=>{
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(" Delete");
+			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
 			o.Click += async (s,e)=>{
 				if(Ctx is null){
 					return;
