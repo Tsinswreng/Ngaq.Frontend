@@ -1,6 +1,8 @@
 namespace Ngaq.Ui.CodeTemplate.Sample;
 
 using Avalonia.Controls;
+using Avalonia.Markup.Declarative;
+using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
@@ -138,7 +140,7 @@ public partial class ViewSample
 
 	public void SampleOfUsingDsl(){
 		var 正確示例 = (Panel p)=>{
-			//所有Panel都能
+			//所有Panel都能用.A()擴展方法
 			p.A(new TextBox(), o=>{
 				//在這裏通過o.Xxx初始化
 				o.Text = Todo.I18n("正確示例");
@@ -168,5 +170,58 @@ public partial class ViewSample
 			// 初始化控件屬性寫法不符合規範; 硬編碼字體大小; 硬編碼文本未使用Todo.I18n
 		};
 	}
+
+	public void SampleNoDupliStyle(){
+		var 錯誤示例 = (Panel P)=>{
+			P.A(new Button(), o=>{
+				o.Background = Brushes.Gray;
+				o.VAlign(x=>x.Center);
+				o.HAlign(x=>x.Center);
+				o.SetContent(Todo.I18n("文件"));
+			})
+			.A(new Button(), o=>{
+				o.Background = Brushes.Gray;
+				o.VAlign(x=>x.Center);
+				o.HAlign(x=>x.Center);
+				o.SetContent(Todo.I18n("編輯"));
+			})
+			;
+		};
+		var 正確示例1 = (Panel P)=>{
+			var _Btn = ()=>{
+				var o = new Button();
+				o.Background = Brushes.Gray;
+				o.VAlign(x=>x.Center);
+				o.HAlign(x=>x.Center);
+				return o;
+			};
+			P.A(_Btn(), o=>{
+				o.SetContent(Todo.I18n("文件"));
+			})
+			.A(_Btn(), o=>{
+				o.SetContent(Todo.I18n("編輯"));
+			})
+			;
+		};
+		var 正確示例2 = (Panel P)=>{
+			P.Styles.A(
+				new Style(x=>x.Is<Button>().Class(Cls.MenuBtn))
+				.Set(HorizontalAlignmentProperty, HAlign.Center)
+				.Set(VerticalAlignmentProperty, VAlign.Center)
+				.Set(BackgroundProperty, Brushes.Gray)
+			)
+
+			;
+			P.A(new Button(), o=>{
+				o.Classes.Add(Cls.MenuBtn);
+				o.SetContent(Todo.I18n("文件"));
+			})
+			.A(new Button(), o=>{
+				o.Classes.Add(Cls.MenuBtn);
+				o.SetContent(Todo.I18n("編輯"));
+			});
+		};
+	}
+
 
 }

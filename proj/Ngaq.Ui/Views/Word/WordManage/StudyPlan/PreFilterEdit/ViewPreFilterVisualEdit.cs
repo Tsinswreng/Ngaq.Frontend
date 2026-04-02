@@ -128,7 +128,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		.A(_Button(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(" Save");
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
 			o.Click += async (s,e)=>{
 				if(Ctx is null){
 					return;
