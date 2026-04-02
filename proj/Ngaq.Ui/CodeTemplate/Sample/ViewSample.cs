@@ -28,7 +28,7 @@ public partial class ViewSample
 		Render();
 		Loaded += (s,e)=>{
 			//只在構造函數中 做 UI初始化相關操作
-			//如果涉及其他項目 如調用接口獲取數據/耗時操作 等、應放在Loaded回調中
+			//如果希望在進入界面的時候做一些其他的初始化操作 如調用接口獲取數據/耗時操作 等、應放在Loaded回調中
 		};
 	}
 	public II18n I = I18n.Inst;

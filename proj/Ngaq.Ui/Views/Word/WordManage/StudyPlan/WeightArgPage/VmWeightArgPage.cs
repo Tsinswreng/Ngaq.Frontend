@@ -154,11 +154,4 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
-	public nil OpenDetail(RowWeightArg? row = null){
-		var view = new ViewStudyPlanEdit();
-		var title = row?.Name ?? "新增權重參數";
-		var titled = ToolView.WithTitle(title, view);
-		ViewNavi?.GoTo(titled);
-		return NIL;
-	}
 }

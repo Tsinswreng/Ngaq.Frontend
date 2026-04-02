@@ -15,6 +15,8 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWeightArgPage;
@@ -79,7 +81,7 @@ public partial class ViewWeightArgPage
 			ColDef(1, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
-		top.A(_TextBox(), o=>{
+		top.A(new TextBox(), o=>{
 			o.CBind<Ctx>(
 				o.PropText,
 				x=>x.Input
@@ -95,10 +97,10 @@ public partial class ViewWeightArgPage
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
-		.A(_Button(), o=>{
+		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
 			o.Content = Svgs.Add().ToIcon();
-			o.Click += (s,e)=>Ctx?.OpenDetail();
+			o.Click += (s,e)=>OpenDetail(Todo.I18n("New Item"));
 		});
 		return top.Grid;
 	}
@@ -156,11 +158,18 @@ public partial class ViewWeightArgPage
 			}
 			if(cur is TreeDataGridRow row){
 				if(row.DataContext is Ctx.RowWeightArg vmRow){
-					Ctx.OpenDetail(vmRow);
+					OpenDetail(vmRow.Name);
 					e.Handled = true;
 				}
 				return;
 			}
 		}
+	}
+	public nil OpenDetail(str Title){
+		var view = new ViewStudyPlanEdit();
+		var title = Title;
+		var titled = ToolView.WithTitle(title, view);
+		Ctx?.ViewNavi?.GoTo(titled);
+		return NIL;
 	}
 }
