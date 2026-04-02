@@ -26,6 +26,10 @@ public partial class ViewSample
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
+		Loaded += (s,e)=>{
+			//只在構造函數中 做 UI初始化相關操作
+			//如果涉及其他項目 如調用接口獲取數據/耗時操作 等、應放在Loaded回調中
+		};
 	}
 	public II18n I = I18n.Inst;
 
@@ -120,10 +124,13 @@ public partial class ViewSample
 	#endregion Style
 
 	//導航示例
-	public void SampleNavi(Control TargetView){
+	public void SampleNavi(Button Btn, Func<Control> MkTargetView){
 		//帶標題跳轉
-		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("頂欄標題"), TargetView));
-		//若不要標題就直接傳進Goto
+		Btn.Click += (s,e)=>{
+			//若不要標題就直接傳進Goto
+			var TargetView = MkTargetView(); //用Func<>實現延遲加載
+			Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("頂欄標題"), TargetView));
+		};
 	}
 
 	public void SampleIcon(){

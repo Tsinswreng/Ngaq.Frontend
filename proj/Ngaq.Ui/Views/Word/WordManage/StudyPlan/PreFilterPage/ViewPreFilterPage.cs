@@ -32,7 +32,9 @@ public partial class ViewPreFilterPage
 		Style();
 		Render();
 		InitDataGrid();
-		_ = Ctx?.InitSearch();
+		Loaded += async(s,e)=>{
+			_ = Ctx?.InitSearch(default);
+		};
 	}
 	public II18n I = I18n.Inst;
 	public partial class Cls{
