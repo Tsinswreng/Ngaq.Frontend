@@ -17,6 +17,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWeightArgPage;
@@ -166,7 +167,7 @@ public partial class ViewWeightArgPage
 		}
 	}
 	public nil OpenDetail(str Title){
-		var view = new ViewStudyPlanEdit();
+		var view = new ViewWeightArgEdit();
 		var title = Title;
 		var titled = ToolView.WithTitle(title, view);
 		Ctx?.ViewNavi?.GoTo(titled);
