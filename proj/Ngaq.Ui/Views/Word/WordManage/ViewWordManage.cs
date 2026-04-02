@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage;
 
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Layout;
@@ -74,12 +75,12 @@ public partial class ViewWordManage
 			menuGrid.Children.Add(item);
 		}
 
-		addItem(_Item(Todo.I18n("Dictionary"), new ViewDictionary(), Svgs.BookA().ToIcon()), 0, 0);
-		addItem(_Item(I[K.SearchMyWords], new ViewSearchWords(), Svgs.Search().ToIcon()), 0, 1);
-		addItem(_Item(I[K.AddWords], new ViewAddWord(), Svgs.Add().ToIcon()), 1, 0);
-		addItem(_Item(Todo.I18n("Study Plan"), new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
-		addItem(_Item(I[K.BackupEtSync], new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
-		addItem(_Item(Todo.I18n("Statistics"), new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
+		addItem(_Item(Todo.I18n("Dictionary"), ()=>new ViewDictionary(), Svgs.BookA().ToIcon()), 0, 0);
+		addItem(_Item(I[K.SearchMyWords], ()=>new ViewSearchWords(), Svgs.Search().ToIcon()), 0, 1);
+		addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 1, 0);
+		addItem(_Item(Todo.I18n("Study Plan"), ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
+		addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
+		addItem(_Item(Todo.I18n("Statistics"), ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
 
 		Root.A(menuGrid);
 
@@ -89,12 +90,13 @@ public partial class ViewWordManage
 
 	protected Control _Item(
 		str Title
-		,ContentControl Target
+		,Func<ContentControl> MkTarget
 		,Control? Icon = null
 	){
 		var R = new SwipeLongPressBtn();
-		var titled = ToolView.WithTitle(Title, Target);
+		Control? titled = null;
 		R.Click += (s,e)=>{
+			titled ??= ToolView.WithTitle(Title, MkTarget());
 			Ctx?.ViewNavi?.GoTo(titled);
 		};
 		R.HorizontalContentAlignment = HAlign.Stretch;

@@ -79,7 +79,7 @@ public partial class ViewPreFilterPage
 			ColDef(1, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
-		top.A(_TextBox(), o=>{
+		top.A(new TextBox(), o=>{
 			o.CBind<Ctx>(
 				o.PropText,
 				x=>x.Input
@@ -95,7 +95,7 @@ public partial class ViewPreFilterPage
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
-		.A(_Button(), o=>{
+		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();

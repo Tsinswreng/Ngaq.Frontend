@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views;
 
+using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -57,6 +58,27 @@ public partial class MainView : UserControl {
 		}
 
 		btn.Click += (s,e)=>{
+			MgrViewNavi.Inst.ViewNavi?.GoTo(RealTarget);
+		};
+		return btn;
+	}
+
+	[Doc(@$"造按鈕、點後跳到目標視圖（延遲建構）")]
+	public Button MkBtnToView(
+		Func<Control> MkTarget
+		,str? Title = null
+	){
+		Control? RealTarget = null;
+		var btn = new Button();
+		if(Title is not null){
+			btn.Content = Title;
+		}
+
+		btn.Click += (s,e)=>{
+			RealTarget ??= Title is not null
+				? ToolView.WithTitle(Title, MkTarget())
+				: MkTarget()
+			;
 			MgrViewNavi.Inst.ViewNavi?.GoTo(RealTarget);
 		};
 		return btn;

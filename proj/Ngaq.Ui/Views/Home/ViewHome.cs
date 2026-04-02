@@ -61,24 +61,23 @@ public partial class ViewHome
 		};
 
 		Root.A(new ViewBottomBar(), ViewBottomBar=>{
-			var ViewWordQuery = new ViewLearnWords();
 			ViewBottomBar.Items.A(new Btn_Control(
 					BarItem(I[K.Learn], Svgs.BookOpenTextFill().ToIcon())//📖
-					,ViewWordQuery
+					,()=>new ViewLearnWords()
 				),
 				o=>{
-					ViewBottomBar.Cur.Content = o.Control;
+					ViewBottomBar.Cur.Content = o.GetOrCreateControl();
 					o.Button.Background = Brushes.Transparent;
 				}
 			).A(
 				new Btn_Control(
 					BarItem(I[K.Library], Svgs.BookBookmarkFill().ToIcon())//📚
-					,new ViewWordManage()
+					,()=>new ViewWordManage()
 				)
 			).A(
 				new Btn_Control(
 					BarItem(I[K.Me], Svgs.UserCircleFill().ToIcon())//👤
-					,new ViewAboutMe()
+					,()=>new ViewAboutMe()
 				)
 			)
 			;

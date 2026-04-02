@@ -47,11 +47,9 @@ public partial class ViewStudyPlan
 
 	StackPanel _S(){
 		var o = new StackPanel();
-		//var toView = MainView.Inst.MkFnBtnToView();
-		var toView = MainView.Inst.MkBtnToView;
 		o.A(
-			toView(new ViewPreFilterPage(),Todo.I18n("PreFilter"))
-		).A(toView(new ViewWeightArgPage(),Todo.I18n("Weight Arg")))
+			MainView.Inst.MkBtnToView(()=>new ViewPreFilterPage(),Todo.I18n("PreFilter"))
+		).A(MainView.Inst.MkBtnToView(()=>new ViewWeightArgPage(),Todo.I18n("Weight Arg")))
 		;
 		return o;
 	}

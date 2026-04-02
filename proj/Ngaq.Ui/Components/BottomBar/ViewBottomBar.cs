@@ -32,14 +32,14 @@ public partial class ViewBottomBar
 		// 當 Items 被添加時，如果尚未選中則預設選中第一個
 		Items.CollectionChanged += (s, e) =>{
 			if (Cur.Content == null && Items.Count > 0){
-				Cur.Content = Items[0].Control;
+				Cur.Content = Items[0].GetOrCreateControl();
 			}
 			UpdateSelectedHighlight();
 		};
 		// 當控件加入視覺樹時再嘗試設置初始選中（保險）
 		this.AttachedToVisualTree += (s,e)=>{
 			if (Cur.Content == null && Items.Count > 0){
-				Cur.Content = Items[0].Control;
+				Cur.Content = Items[0].GetOrCreateControl();
 			}
 			UpdateSelectedHighlight();
 		};
@@ -81,7 +81,7 @@ public partial class ViewBottomBar
 				o.ItemTemplate = new FuncDataTemplate<Btn_Control>((Btn_Control, b)=>{
 					var Ans = Btn_Control.Button;
 					Ans.Click += (s,e)=>{
-						Cur.Content = Btn_Control.Control;
+						Cur.Content = Btn_Control.GetOrCreateControl();
 						UpdateSelectedHighlight();
 					};
 					// 初始時綁定 DataContext 方便查找
@@ -106,7 +106,7 @@ public partial class ViewBottomBar
 		if (Items == null) return;
 		foreach(var it in Items){
 			var b = it.Button;
-			if (it.Control == Cur.Content){
+			if (it.Control is not null && it.Control == Cur.Content){
 				if (ThemeBrush != null){
 					b.Background = ThemeBrush;
 					b.Foreground = Brushes.White;
