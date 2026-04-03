@@ -64,6 +64,19 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 
 	public ObservableCollection<RowWeightArg> Rows{get;set;} = [];
 
+	public bool IsSelectMode{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(CanCreate));
+			}
+		}
+	} = false;
+
+	public bool CanCreate => !IsSelectMode;
+
+	Action<PoWeightArg>? FnOnSelected{get;set;}
+
 	/// 列表行模型。
 	public class RowWeightArg{
 		public bool IsChecked{get;set;} = false;
@@ -146,12 +159,24 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 
 	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
 	public nil OpenDetail(RowWeightArg? row = null){
+		if(IsSelectMode){
+			if(row?.Raw is not null){
+				FnOnSelected?.Invoke(row.Raw);
+			}
+			return NIL;
+		}
 		var view = new ViewWeightArgEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoWeightArg(row?.Raw);
 		var title = row?.Name ?? Todo.I18n("新增權重參數");
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
+		return NIL;
+	}
+
+	public nil SetSelectMode(Action<PoWeightArg> FnOnSelected){
+		IsSelectMode = true;
+		this.FnOnSelected = FnOnSelected;
 		return NIL;
 	}
 }

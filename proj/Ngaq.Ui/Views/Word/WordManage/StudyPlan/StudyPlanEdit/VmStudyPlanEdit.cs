@@ -5,7 +5,10 @@ using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
+using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
+using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
+using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightCalculator;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
@@ -165,6 +168,33 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		po.UniqName = str.IsNullOrWhiteSpace(PoUniqName) ? null : PoUniqName.Trim();
 		po.Descr = PoDescr?.Trim() ?? "";
 		return po;
+	}
+
+	public nil ApplySelectedPreFilter(PoPreFilter? Po){
+		if(Po is null){
+			return NIL;
+		}
+		PoStudyPlan.PreFilterId = Po.Id;
+		PreFilterIdText = Po.Id.ToString();
+		return NIL;
+	}
+
+	public nil ApplySelectedWeightCalculator(PoWeightCalculator? Po){
+		if(Po is null){
+			return NIL;
+		}
+		PoStudyPlan.WeightCalculatorId = Po.Id;
+		WeightCalculatorIdText = Po.Id.ToString();
+		return NIL;
+	}
+
+	public nil ApplySelectedWeightArg(PoWeightArg? Po){
+		if(Po is null){
+			return NIL;
+		}
+		PoStudyPlan.WeightArgId = Po.Id;
+		WeightArgIdText = Po.Id.ToString();
+		return NIL;
 	}
 
 	static PoStudyPlan ClonePoStudyPlan(PoStudyPlan? src){

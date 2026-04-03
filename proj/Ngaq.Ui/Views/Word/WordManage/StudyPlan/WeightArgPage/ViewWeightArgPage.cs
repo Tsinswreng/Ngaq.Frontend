@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -16,7 +17,6 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -103,6 +103,7 @@ public partial class ViewWeightArgPage
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.CanCreate, Mode: BindingMode.OneWay);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});

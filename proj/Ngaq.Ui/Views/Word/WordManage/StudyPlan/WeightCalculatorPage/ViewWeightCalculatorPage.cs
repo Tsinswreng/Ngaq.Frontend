@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -102,6 +103,7 @@ public partial class ViewWeightCalculatorPage
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.CanCreate, Mode: BindingMode.OneWay);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});

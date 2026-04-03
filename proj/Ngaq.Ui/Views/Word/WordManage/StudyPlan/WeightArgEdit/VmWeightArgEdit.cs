@@ -7,6 +7,7 @@ using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
+using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightCalculator;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
@@ -183,6 +184,14 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 
 	void OnPayloadJsonApplied(str PayloadJson){
 		PayloadText = PayloadJson ?? "";
+	}
+
+	public nil ApplySelectedWeightCalculator(PoWeightCalculator? Po){
+		if(Po is null){
+			return NIL;
+		}
+		WeightCalculatorName = Po.UniqName ?? "";
+		return NIL;
 	}
 
 	void SyncFromPo(){

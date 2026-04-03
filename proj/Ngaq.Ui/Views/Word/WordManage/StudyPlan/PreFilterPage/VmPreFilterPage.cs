@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 
+using System;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
@@ -60,6 +61,19 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	} = "";
 
 	public ObservableCollection<RowPreFilter> Rows{get;set;} = [];
+
+	public bool IsSelectMode{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(CanCreate));
+			}
+		}
+	} = false;
+
+	public bool CanCreate => !IsSelectMode;
+
+	Action<PoPreFilter>? FnOnSelected{get;set;}
 
 	/// 列表行模型。
 	public class RowPreFilter{
@@ -146,12 +160,24 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
 	// 檢查 VmWeightArgPage是否有同樣問題。
 	public nil OpenDetail(RowPreFilter? row = null){
+		if(IsSelectMode){
+			if(row?.Raw is not null){
+				FnOnSelected?.Invoke(row.Raw);
+			}
+			return NIL;
+		}
 		var view = new ViewPreFilterVisualEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoPreFilter(row?.Raw);
 		var title = row?.Name ?? Todo.I18n("新增預篩選器");
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
+		return NIL;
+	}
+
+	public nil SetSelectMode(Action<PoPreFilter> FnOnSelected){
+		IsSelectMode = true;
+		this.FnOnSelected = FnOnSelected;
 		return NIL;
 	}
 }

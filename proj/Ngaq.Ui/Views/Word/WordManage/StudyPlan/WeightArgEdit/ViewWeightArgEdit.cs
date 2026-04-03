@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 
+using System;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
@@ -11,6 +12,8 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
@@ -93,7 +96,20 @@ public partial class ViewWeightArgEdit
 		})
 		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
-		.A(MkInputRow(Todo.I18n("WeightCalculatorName"), CBE.Mk<Ctx>(x=>x.WeightCalculatorName, Mode: BindingMode.TwoWay)))
+		.A(MkInputWithBtnRow(
+			Todo.I18n("WeightCalculatorName"),
+			CBE.Mk<Ctx>(x=>x.WeightCalculatorName, Mode: BindingMode.OneWay),
+			Todo.I18n("Choose"),
+			()=>{
+				var view = new ViewWeightCalculatorPage();
+				view.Ctx?.SetSelectMode(po=>{
+					Ctx?.ApplySelectedWeightCalculator(po);
+					Ctx?.ViewNavi?.Back();
+				});
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇權重算法"), view));
+			},
+			ReadOnly: true
+		))
 		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
 		.A(MkComboRow(Todo.I18n("Type"), Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay)))
 		;
@@ -167,6 +183,28 @@ public partial class ViewWeightArgEdit
 		}
 		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
 		sp.Children.Add(cb);
+		return sp;
+	}
+
+	Control MkInputWithBtnRow(
+		str Label, IBinding Binding, str BtnText, Action OnBtnClick, bool ReadOnly = false
+	){
+		var sp = new StackPanel{Spacing = 3};
+		sp.Children.Add(new TextBlock{Text = Label});
+		var row = new AutoGrid(IsRow:false);
+		row.Grid.ColumnDefinitions.AddRange([
+			ColDef(7, GUT.Star),
+			ColDef(2, GUT.Star),
+		]);
+		row.A(new TextBox(), o=>{
+			o.IsReadOnly = ReadOnly;
+			o.Bind(TextBox.TextProperty, Binding);
+		})
+		.A(new Button(), o=>{
+			o.Content = BtnText;
+			o.Click += (s,e)=>OnBtnClick();
+		});
+		sp.Children.Add(row.Grid);
 		return sp;
 	}
 }

@@ -62,6 +62,19 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 
 	public ObservableCollection<RowWeightCalculator> Rows{get;set;} = [];
 
+	public bool IsSelectMode{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(CanCreate));
+			}
+		}
+	} = false;
+
+	public bool CanCreate => !IsSelectMode;
+
+	Action<PoWeightCalculator>? FnOnSelected{get;set;}
+
 	/// 列表行模型。
 	public class RowWeightCalculator{
 		public bool IsChecked{get;set;} = false;
@@ -144,7 +157,19 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 
 	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
 	public nil OpenDetail(RowWeightCalculator? row = null){
+		if(IsSelectMode){
+			if(row?.Raw is not null){
+				FnOnSelected?.Invoke(row.Raw);
+			}
+			return NIL;
+		}
 		OnOpenDetailRequested?.Invoke(row);
+		return NIL;
+	}
+
+	public nil SetSelectMode(Action<PoWeightCalculator> FnOnSelected){
+		IsSelectMode = true;
+		this.FnOnSelected = FnOnSelected;
 		return NIL;
 	}
 
