@@ -9,6 +9,7 @@ using Ngaq.Core.Infra.IF;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightCalculator;
 using Ngaq.Core.Shared.StudyPlan.Svc;
+using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPayloadJsonEdit;
@@ -81,10 +82,12 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = 1;
 
-	public str WeightCalculatorIdText{
+	public str WeightCalculatorUniqNameText{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
+
+	public IdWeightCalculator WeightCalculatorId{get;set;} = IdWeightCalculator.Zero;
 
 	/// 主頁只顯示 Payload 預覽，完整編輯放到 JSON 子頁。
 	public str PayloadTextPreview{
@@ -120,7 +123,9 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 	public nil FromPoWeightArg(PoWeightArg? PoWeightArg){
 		this.PoWeightArg = ClonePoWeightArg(PoWeightArg);
 		IsCreateMode = PoWeightArg is null || PoWeightArg.Id == IdWeightArg.Zero;
+		WeightCalculatorUniqNameText = "";
 		SyncFromPo();
+		_ = RefreshWeightCalculatorUniqName();
 		return NIL;
 	}
 
@@ -191,7 +196,8 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		PoWeightArg.WeightCalculatorId = Po.Id;
-		WeightCalculatorIdText = Po.Id.ToString();
+		WeightCalculatorId = Po.Id;
+		WeightCalculatorUniqNameText = Po.UniqName ?? "";
 		return NIL;
 	}
 
@@ -202,18 +208,45 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		PoIdText = po.Id.ToString();
 		PoUniqName = po.UniqName ?? "";
 		PoDescr = po.Descr ?? "";
-		WeightCalculatorIdText = po.WeightCalculatorId.ToString();
+		WeightCalculatorId = po.WeightCalculatorId;
+		if(WeightCalculatorId.IsNullOrDefault()){
+			WeightCalculatorUniqNameText = "";
+		}
 		PoTypeIndex = ClampIndex((i32)po.Type, TypeOptions.Count);
 		PayloadText = po.Text ?? "";
 		LastError = "";
 		OnPropertyChanged(nameof(HasError));
 	}
 
+	/// <summary>
+	/// 根據當前 <see cref="PoWeightArg.WeightCalculatorId"/> 回查算法名稱，
+	/// 供 GUI 顯示 UniqName（界面不展示 Id）。
+	/// </summary>
+	public async Task<nil> RefreshWeightCalculatorUniqName(CT Ct = default){
+		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
+			return NIL;
+		}
+		try{
+			if(WeightCalculatorId.IsNullOrDefault()){
+				WeightCalculatorUniqNameText = "";
+				return NIL;
+			}
+			var dbCtx = UserCtxMgr.GetDbUserCtx();
+			var po = await SvcStudyPlan
+				.BatGetWeightCalculatorById(dbCtx, ToolAsyE.ToAsyE([WeightCalculatorId]), Ct)
+				.FirstOrDefaultAsync(Ct);
+			WeightCalculatorUniqNameText = po?.UniqName ?? "";
+		}catch(Exception e){
+			HandleErr(e);
+		}
+		return NIL;
+	}
+
 	PoWeightArg BuildPoFromFields(){
 		var po = ClonePoWeightArg(PoWeightArg);
 		po.UniqName = str.IsNullOrWhiteSpace(PoUniqName) ? null : PoUniqName.Trim();
 		po.Descr = PoDescr?.Trim() ?? "";
-		po.WeightCalculatorId = ParseWeightCalculatorId(WeightCalculatorIdText);
+		po.WeightCalculatorId = WeightCalculatorId;
 		po.Type = EnumOrDefault<EWeightArgType>(PoTypeIndex);
 		if(po.Type == EWeightArgType.Unknown){
 			po.Type = EWeightArgType.Json;
@@ -253,14 +286,6 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 			WeightCalculatorId = src.WeightCalculatorId,
 			Descr = src.Descr,
 		};
-	}
-
-	static IdWeightCalculator ParseWeightCalculatorId(str? IdText){
-		var txt = IdText?.Trim() ?? "";
-		if(IdWeightCalculator.TryParse(txt, out var id)){
-			return id;
-		}
-		return IdWeightCalculator.Zero;
 	}
 
 	static i32 ClampIndex(i32 value, i32 count){

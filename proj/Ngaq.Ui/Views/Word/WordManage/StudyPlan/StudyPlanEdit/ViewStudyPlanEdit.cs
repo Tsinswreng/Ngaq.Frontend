@@ -95,8 +95,8 @@ public partial class ViewStudyPlanEdit
 		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			Todo.I18n("PreFilterId"),
-			CBE.Mk<Ctx>(x=>x.PreFilterIdText, Mode: BindingMode.OneWay),
+			Todo.I18n("PreFilter"),
+			CBE.Mk<Ctx>(x=>x.PreFilterUniqNameText, Mode: BindingMode.OneWay),
 			Todo.I18n("Choose"),
 			()=>{
 				var view = new ViewPreFilterPage();
@@ -108,10 +108,9 @@ public partial class ViewStudyPlanEdit
 			},
 			ReadOnly: true
 		))
-		.A(MkInputRow(Todo.I18n("PreFilterName"), CBE.Mk<Ctx>(x=>x.PreFilterUniqNameText, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			Todo.I18n("WeightCalculatorId"),
-			CBE.Mk<Ctx>(x=>x.WeightCalculatorIdText, Mode: BindingMode.OneWay),
+			Todo.I18n("WeightCalculator"),
+			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
 			Todo.I18n("Choose"),
 			()=>{
 				var view = new ViewWeightCalculatorPage();
@@ -123,10 +122,9 @@ public partial class ViewStudyPlanEdit
 			},
 			ReadOnly: true
 		))
-		.A(MkInputRow(Todo.I18n("WeightCalculatorName"), CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			Todo.I18n("WeightArgId"),
-			CBE.Mk<Ctx>(x=>x.WeightArgIdText, Mode: BindingMode.OneWay),
+			Todo.I18n("WeightArg"),
+			CBE.Mk<Ctx>(x=>x.WeightArgUniqNameText, Mode: BindingMode.OneWay),
 			Todo.I18n("Choose"),
 			()=>{
 				var view = new ViewWeightArgPage();
@@ -138,7 +136,6 @@ public partial class ViewStudyPlanEdit
 			},
 			ReadOnly: true
 		))
-		.A(MkInputRow(Todo.I18n("WeightArgName"), CBE.Mk<Ctx>(x=>x.WeightArgUniqNameText, Mode: BindingMode.OneWay), ReadOnly: true))
 		;
 		return bdr;
 	}

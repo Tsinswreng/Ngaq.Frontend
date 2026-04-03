@@ -97,8 +97,8 @@ public partial class ViewWeightArgEdit
 		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText), ReadOnly: true))
 		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			Todo.I18n("WeightCalculatorId"),
-			CBE.Mk<Ctx>(x=>x.WeightCalculatorIdText),
+			Todo.I18n("WeightCalculator"),
+			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
 			Todo.I18n("Choose"),
 			()=>{
 				var view = new ViewWeightCalculatorPage();
