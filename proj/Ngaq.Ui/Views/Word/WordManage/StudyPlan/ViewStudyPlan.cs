@@ -6,6 +6,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
@@ -50,6 +51,9 @@ public partial class ViewStudyPlan
 	StackPanel _S(){
 		var o = new StackPanel();
 		o
+		.A(
+			MainView.Inst.MkBtnToView(()=>new ViewSetCurStudyPlan(),Todo.I18n("設置當前學習方案"))
+		)
 		.A(
 			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),Todo.I18n("PoStudyPlan"))
 		)

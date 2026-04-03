@@ -47,6 +47,13 @@ WeightArg 是依賴 WeightCalculator 的
 StudyPlan同理。當前studyPlan的編輯頁是要自己填引用的Id的。
 你也改成按按鈕之後能跳轉到分頁分頁來選擇。
 
+在ViewStudyPlan上加一個頁面 叫 設置當前學習方案 。
+進入之後就直接顯示到 StudyPlan的編輯頁。
+然後內容是 調後端的 獲取當前學習方案接口。
+
+原本 StudyPlanPage頁面上有一個 Restore 按鈕、
+把這個按鈕移動到 設置當前學習方案 的頁面 的菜單裏。
+
 ]
 """;
 }

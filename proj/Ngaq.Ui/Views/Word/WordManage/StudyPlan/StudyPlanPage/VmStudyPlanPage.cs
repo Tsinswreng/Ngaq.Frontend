@@ -157,18 +157,4 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	public async Task<nil> RestoreStudyPlan(CT Ct){
-		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
-			return NIL;
-		}
-		try{
-			await SvcStudyPlan.RestoreBuiltinStudyPlan(
-				UserCtxMgr.GetDbUserCtx(), Ct
-			);
-			return await InitSearch(Ct);
-		}catch(Exception e){
-			HandleErr(e);
-		}
-		return NIL;
-	}
 }

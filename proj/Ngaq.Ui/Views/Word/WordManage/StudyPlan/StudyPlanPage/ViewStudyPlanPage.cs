@@ -76,7 +76,6 @@ public partial class ViewStudyPlanPage
 			ColDef(7, GUT.Star),
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
-			ColDef(2, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
@@ -99,11 +98,6 @@ public partial class ViewStudyPlanPage
 			o.Classes.Add(Cls.FullStretch);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
-		})
-		.A(new OpBtn(), o=>{
-			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = Todo.I18n("RestoreBuiltin");
-			o.SetExe((Ct)=>Ctx?.RestoreStudyPlan(Ct)!);
 		});
 		return top.Grid;
 	}
