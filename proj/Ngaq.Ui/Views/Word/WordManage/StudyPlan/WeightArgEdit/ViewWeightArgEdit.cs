@@ -71,11 +71,11 @@ public partial class ViewWeightArgEdit
 			Padding = new Thickness(10, 6),
 			IsVisible = false,
 		};
-		b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
+		b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError);
 		var txt = new TextBlock{
 			Foreground = Brushes.White,
 		};
-		txt.CBind<Ctx>(TextBlock.TextProperty, x=>x.LastError, Mode: BindingMode.OneWay);
+		txt.CBind<Ctx>(TextBlock.TextProperty, x=>x.LastError);
 		b.Child = txt;
 		return b;
 	}
@@ -94,11 +94,11 @@ public partial class ViewWeightArgEdit
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText), ReadOnly: true))
 		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			Todo.I18n("WeightCalculatorName"),
-			CBE.Mk<Ctx>(x=>x.WeightCalculatorName, Mode: BindingMode.OneWay),
+			CBE.Mk<Ctx>(x=>x.WeightCalculatorName),
 			Todo.I18n("Choose"),
 			()=>{
 				var view = new ViewWeightCalculatorPage();
@@ -130,7 +130,7 @@ public partial class ViewWeightArgEdit
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkInputRow(Todo.I18n("Payload"), CBE.Mk<Ctx>(x=>x.PayloadTextPreview, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
+		.A(MkInputRow(Todo.I18n("Payload"), CBE.Mk<Ctx>(x=>x.PayloadTextPreview), ReadOnly: true, AcceptsReturn: true))
 		.A(new Button(), o=>{
 			o.Content = Todo.I18n("Edit Payload JSON");
 			o.HorizontalAlignment = HAlign.Left;
