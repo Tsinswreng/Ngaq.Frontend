@@ -134,9 +134,6 @@ public partial class ViewStudyPlanPage
 			Columns = {
 				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n(""), x=>x.UiIdxText),
 				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("名稱"), x=>x.Name),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("PreFilterId"), x=>x.PreFilterId),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("WeightCalculatorId"), x=>x.WeightCalculatorId),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("WeightArgId"), x=>x.WeightArgId),
 				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
 			},
 		};
