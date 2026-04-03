@@ -9,8 +9,6 @@ using Ngaq.Core.Shared.StudyPlan.Models.Req;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 
 using Ctx = VmWeightCalculatorPage;
 
@@ -146,12 +144,10 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 
 	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
 	public nil OpenDetail(RowWeightCalculator? row = null){
-		var view = new ViewWeightCalculatorEdit();
-		view.Ctx?.SetCreateMode(row is null);
-		view.Ctx?.FromPoWeightCalculator(row?.Raw);
-		var title = row?.Name ?? Todo.I18n("新增權重算法");
-		var titled = ToolView.WithTitle(title, view);
-		ViewNavi?.GoTo(titled);
+		OnOpenDetailRequested?.Invoke(row);
 		return NIL;
 	}
+
+	/// 由 View 層監聽，收到後在 View 中完成頁面實例化與導航。
+	public event Action<RowWeightCalculator?>? OnOpenDetailRequested;
 }

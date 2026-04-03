@@ -15,6 +15,8 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWeightCalculatorPage;
@@ -29,6 +31,9 @@ public partial class ViewWeightCalculatorPage
 
 	public ViewWeightCalculatorPage(){
 		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnOpenDetailRequested += OpenDetail;
+		}
 		Style();
 		Render();
 		InitDataGrid();
@@ -163,5 +168,14 @@ public partial class ViewWeightCalculatorPage
 				return;
 			}
 		}
+	}
+
+	void OpenDetail(Ctx.RowWeightCalculator? row){
+		var view = new ViewWeightCalculatorEdit();
+		view.Ctx?.SetCreateMode(row is null);
+		view.Ctx?.FromPoWeightCalculator(row?.Raw);
+		var title = row?.Name ?? Todo.I18n("新增權重算法");
+		var titled = ToolView.WithTitle(title, view);
+		Ctx?.ViewNavi?.GoTo(titled);
 	}
 }
