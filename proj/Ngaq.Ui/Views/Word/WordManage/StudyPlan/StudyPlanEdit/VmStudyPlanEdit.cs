@@ -11,13 +11,14 @@ using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightCalculator;
 using Ngaq.Core.Shared.StudyPlan.Svc;
+using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Tsinswreng.CsTools;
 using Ctx = VmStudyPlanEdit;
 
 /// StudyPlan 編輯頁 ViewModel。
-/// 當前僅支持修改與刪除既有實體，不支持新增。
+/// 支持新增、修改與刪除。
 public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 	protected VmStudyPlanEdit(){}
 
@@ -125,6 +126,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		};
 		IsCreateMode = PoStudyPlan is null || PoStudyPlan.Id == IdStudyPlan.Zero;
 		SyncFromBo();
+		_ = RefreshRefUniqNames();
 		return NIL;
 	}
 
@@ -140,18 +142,18 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
 			return NIL;
 		}
-		if(IsCreateMode){
-			LastError = Todo.I18n("StudyPlan 暫不支持新增");
-			OnPropertyChanged(nameof(HasError));
-			ShowMsg(LastError);
-			return NIL;
-		}
 		try{
 			var po = BuildPoFromFields();
-			await SvcStudyPlan.BatUpdStudyPlan(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+			var dbCtx = UserCtxMgr.GetDbUserCtx();
+			if(IsCreateMode){
+				await SvcStudyPlan.BatAddStudyPlan(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+			}else{
+				await SvcStudyPlan.BatUpdStudyPlan(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+			}
 			PoStudyPlan = po;
 			BoStudyPlan.PoStudyPlan = ClonePoStudyPlan(po);
 			SyncFromBo();
+			IsCreateMode = false;
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			ShowMsg(Todo.I18n("Saved"));
@@ -205,6 +207,38 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		po.UniqName = str.IsNullOrWhiteSpace(PoUniqName) ? null : PoUniqName.Trim();
 		po.Descr = PoDescr?.Trim() ?? "";
 		return po;
+	}
+
+	/// <summary>
+	/// 由 PoStudyPlan 的外鍵 Id 反查三個關聯實體名，解決僅從列表打開編輯頁時名稱為空的問題。
+	/// </summary>
+	async Task<nil> RefreshRefUniqNames(CT Ct = default){
+		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
+			return NIL;
+		}
+		try{
+			var dbCtx = UserCtxMgr.GetDbUserCtx();
+			var po = PoStudyPlan ?? new PoStudyPlan();
+			if(!po.PreFilterId.IsNullOrDefault()){
+				BoStudyPlan.PoPreFilter = await SvcStudyPlan
+					.BatGetPreFilterById(dbCtx, ToolAsyE.ToAsyE([po.PreFilterId]), Ct)
+					.FirstOrDefaultAsync(Ct);
+			}
+			if(!po.WeightCalculatorId.IsNullOrDefault()){
+				BoStudyPlan.PoWeightCalculator = await SvcStudyPlan
+					.BatGetWeightCalculatorById(dbCtx, ToolAsyE.ToAsyE([po.WeightCalculatorId]), Ct)
+					.FirstOrDefaultAsync(Ct);
+			}
+			if(!po.WeightArgId.IsNullOrDefault()){
+				BoStudyPlan.PoWeightArg = await SvcStudyPlan
+					.BatGetWeightArgById(dbCtx, ToolAsyE.ToAsyE([po.WeightArgId]), Ct)
+					.FirstOrDefaultAsync(Ct);
+			}
+			SyncFromBo();
+		}catch(Exception e){
+			HandleErr(e);
+		}
+		return NIL;
 	}
 
 	public nil ApplySelectedPreFilter(PoPreFilter? Po){
