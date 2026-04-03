@@ -82,7 +82,7 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		return updated.ToIso();
 	}
 
-	public async Task<nil> InitSearch(CT Ct = default){
+	public async Task<nil> InitSearch(CT Ct){
 		PageBar.PageNum = 1;
 		return await Search(Ct);
 	}
