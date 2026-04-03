@@ -148,15 +148,27 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 
 	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
 	public nil OpenDetail(RowStudyPlan? row = null){
-		if(row?.Raw is null){
-			return NIL;
-		}
 		var view = new ViewStudyPlanEdit();
-		view.Ctx?.SetCreateMode(false);
-		view.Ctx?.FromPoStudyPlan(row.Raw);
-		var title = row.Name;
+		view.Ctx?.SetCreateMode(row?.Raw is null);
+		view.Ctx?.FromPoStudyPlan(row?.Raw);
+		var title = row?.Name ?? Todo.I18n("新增學習方案");
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
+		return NIL;
+	}
+
+	public async Task<nil> RestoreStudyPlan(CT Ct){
+		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
+			return NIL;
+		}
+		try{
+			await SvcStudyPlan.RestoreBuiltinStudyPlan(
+				UserCtxMgr.GetDbUserCtx(), Ct
+			);
+			return await InitSearch(Ct);
+		}catch(Exception e){
+			HandleErr(e);
+		}
 		return NIL;
 	}
 }

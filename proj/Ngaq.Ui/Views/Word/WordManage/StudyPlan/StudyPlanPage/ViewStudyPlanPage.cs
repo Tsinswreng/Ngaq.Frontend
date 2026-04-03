@@ -73,8 +73,10 @@ public partial class ViewStudyPlanPage
 	Control MkTopBar(){
 		var top = new AutoGrid(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(8, GUT.Star),
+			ColDef(7, GUT.Star),
 			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Star),
+			ColDef(2, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
@@ -92,6 +94,16 @@ public partial class ViewStudyPlanPage
 			o.Background = UiCfg.Inst.MainColor;
 			o.BtnContent = Svgs.Search().ToIcon();
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
+		})
+		.A(new Button(), o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.Content = Svgs.Add().ToIcon();
+			o.Click += (s,e)=>Ctx?.OpenDetail();
+		})
+		.A(new OpBtn(), o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.BtnContent = Todo.I18n("RestoreBuiltin");
+			o.SetExe((Ct)=>Ctx?.RestoreStudyPlan(Ct)!);
 		});
 		return top.Grid;
 	}
