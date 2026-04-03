@@ -158,7 +158,10 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		if(IsSelectMode){
 			if(row?.Raw is not null){
 				FnOnSelected?.Invoke(row.Raw);
+				return NIL;
 			}
+			// 選擇模式下點擊「新增」(row==null) 也允許進入新增編輯頁。
+			OnOpenDetailRequested?.Invoke(row);
 			return NIL;
 		}
 		OnOpenDetailRequested?.Invoke(row);
