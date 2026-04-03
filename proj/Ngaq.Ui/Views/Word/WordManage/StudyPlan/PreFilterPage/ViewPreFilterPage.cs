@@ -16,6 +16,8 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmPreFilterPage;
@@ -30,6 +32,9 @@ public partial class ViewPreFilterPage
 
 	public ViewPreFilterPage(){
 		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnOpenDetailRequested += OpenDetail;
+		}
 		Style();
 		Render();
 		InitDataGrid();
@@ -167,5 +172,17 @@ public partial class ViewPreFilterPage
 				return;
 			}
 		}
+	}
+
+	/// <summary>
+	/// 普通模式下打开编辑页；选择模式下不会进入该分支。
+	/// </summary>
+	void OpenDetail(Ctx.RowPreFilter? row){
+		var view = new ViewPreFilterVisualEdit();
+		view.Ctx?.SetCreateMode(row is null);
+		view.Ctx?.FromPoPreFilter(row?.Raw);
+		var title = row?.Name ?? Todo.I18n("新增預篩選器");
+		var titled = ToolView.WithTitle(title, view);
+		Ctx?.ViewNavi?.GoTo(titled);
 	}
 }

@@ -32,6 +32,9 @@ public partial class ViewWeightArgPage
 
 	public ViewWeightArgPage(){
 		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnOpenDetailRequested += OpenDetail;
+		}
 		Style();
 		Render();
 		InitDataGrid();
@@ -169,5 +172,17 @@ public partial class ViewWeightArgPage
 				return;
 			}
 		}
+	}
+
+	/// <summary>
+	/// 普通模式下打开编辑页；选择模式下不会进入该分支。
+	/// </summary>
+	void OpenDetail(Ctx.RowWeightArg? row){
+		var view = new ViewWeightArgEdit();
+		view.Ctx?.SetCreateMode(row is null);
+		view.Ctx?.FromPoWeightArg(row?.Raw);
+		var title = row?.Name ?? Todo.I18n("新增權重參數");
+		var titled = ToolView.WithTitle(title, view);
+		Ctx?.ViewNavi?.GoTo(titled);
 	}
 }

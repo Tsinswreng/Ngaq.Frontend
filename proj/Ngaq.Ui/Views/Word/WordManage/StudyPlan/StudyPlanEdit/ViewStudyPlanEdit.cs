@@ -1,6 +1,5 @@
 ﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 
-using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -11,6 +10,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
@@ -94,7 +94,7 @@ public partial class ViewStudyPlanEdit
 		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
-		.A(MkInputWithBtnRow(
+		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			Todo.I18n("PreFilterId"),
 			CBE.Mk<Ctx>(x=>x.PreFilterIdText, Mode: BindingMode.OneWay),
 			Todo.I18n("Choose"),
@@ -107,7 +107,7 @@ public partial class ViewStudyPlanEdit
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇PreFilter"), view));
 			}
 		))
-		.A(MkInputWithBtnRow(
+		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			Todo.I18n("WeightCalculatorId"),
 			CBE.Mk<Ctx>(x=>x.WeightCalculatorIdText, Mode: BindingMode.OneWay),
 			Todo.I18n("Choose"),
@@ -120,7 +120,7 @@ public partial class ViewStudyPlanEdit
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇WeightCalculator"), view));
 			}
 		))
-		.A(MkInputWithBtnRow(
+		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			Todo.I18n("WeightArgId"),
 			CBE.Mk<Ctx>(x=>x.WeightArgIdText, Mode: BindingMode.OneWay),
 			Todo.I18n("Choose"),
@@ -172,25 +172,4 @@ public partial class ViewStudyPlanEdit
 		return sp;
 	}
 
-	Control MkInputWithBtnRow(
-		str Label, IBinding Binding, str BtnText, Action OnBtnClick
-	){
-		var sp = new StackPanel{Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		var row = new AutoGrid(IsRow:false);
-		row.Grid.ColumnDefinitions.AddRange([
-			ColDef(7, GUT.Star),
-			ColDef(2, GUT.Star),
-		]);
-		row.A(new TextBox(), o=>{
-			o.IsReadOnly = true;
-			o.Bind(TextBox.TextProperty, Binding);
-		})
-		.A(new Button(), o=>{
-			o.Content = BtnText;
-			o.Click += (s,e)=>OnBtnClick();
-		});
-		sp.Children.Add(row.Grid);
-		return sp;
-	}
 }

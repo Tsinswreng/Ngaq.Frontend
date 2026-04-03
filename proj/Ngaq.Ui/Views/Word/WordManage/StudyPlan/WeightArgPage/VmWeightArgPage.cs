@@ -9,8 +9,6 @@ using Ngaq.Core.Shared.StudyPlan.Models.Req;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 
 using Ctx = VmWeightArgPage;
 
@@ -157,7 +155,11 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
-	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
+	/// <summary>
+	/// 行点击处理：
+	/// - 选择模式：回调选中项；
+	/// - 普通模式：通知 View 层执行跳转。
+	/// </summary>
 	public nil OpenDetail(RowWeightArg? row = null){
 		if(IsSelectMode){
 			if(row?.Raw is not null){
@@ -165,18 +167,21 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 			}
 			return NIL;
 		}
-		var view = new ViewWeightArgEdit();
-		view.Ctx?.SetCreateMode(row is null);
-		view.Ctx?.FromPoWeightArg(row?.Raw);
-		var title = row?.Name ?? Todo.I18n("新增權重參數");
-		var titled = ToolView.WithTitle(title, view);
-		ViewNavi?.GoTo(titled);
+		OnOpenDetailRequested?.Invoke(row);
 		return NIL;
 	}
 
+	/// <summary>
+	/// 切换为“选择模式”，用于给其他页面选取 WeightArg。
+	/// </summary>
 	public nil SetSelectMode(Action<PoWeightArg> FnOnSelected){
 		IsSelectMode = true;
 		this.FnOnSelected = FnOnSelected;
 		return NIL;
 	}
+
+	/// <summary>
+	/// 由 View 监听并执行实际导航（Vm 不直接依赖 View）。
+	/// </summary>
+	public event Action<RowWeightArg?>? OnOpenDetailRequested;
 }
