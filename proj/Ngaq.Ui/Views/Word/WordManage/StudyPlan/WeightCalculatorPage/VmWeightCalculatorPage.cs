@@ -1,21 +1,22 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 
 using System;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
-using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
+using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightCalculator;
 using Ngaq.Core.Shared.StudyPlan.Models.Req;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
-using Ctx = VmStudyPlanPage;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 
-/// StudyPlan 列表頁 ViewModel。
-/// 使用後端接口分頁讀取，點擊列表項進入編輯頁。
-public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
+using Ctx = VmWeightCalculatorPage;
+
+/// WeightCalculator 列表頁 ViewModel。
+/// 使用後端接口分頁讀取，不使用假數據。
+public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 	void Init(){
 		PageBar = VmPageBar.Mk();
 		PageBar.PageSize = 10;
@@ -23,7 +24,7 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 		PageBar.FnNextPage = OnNextPage;
 	}
 
-	protected VmStudyPlanPage(){
+	protected VmWeightCalculatorPage(){
 		Init();
 	}
 
@@ -32,7 +33,7 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmStudyPlanPage(){
+	static VmWeightCalculatorPage(){
 		#if DEBUG
 		{
 			var o = new Ctx();
@@ -44,7 +45,8 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 	ISvcStudyPlan? SvcStudyPlan{get;set;}
 	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
 
-	public VmStudyPlanPage(
+	/// 依賴注入構造器。
+	public VmWeightCalculatorPage(
 		ISvcStudyPlan? SvcStudyPlan
 		,IFrontendUserCtxMgr? UserCtxMgr
 	):this(){
@@ -60,23 +62,21 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "";
 
-	public ObservableCollection<RowStudyPlan> Rows{get;set;} = [];
+	public ObservableCollection<RowWeightCalculator> Rows{get;set;} = [];
 
 	/// 列表行模型。
-	public class RowStudyPlan{
+	public class RowWeightCalculator{
 		public bool IsChecked{get;set;} = false;
 		public u64 UiIdx{get;set;}
 		public str UiIdxText{get;set;} = "";
 		public str Name{get;set;} = "";
-		public str PreFilterId{get;set;} = "";
-		public str WeightCalculatorId{get;set;} = "";
-		public str WeightArgId{get;set;} = "";
+		public str Type{get;set;} = "";
 		public str ModifiedTime{get;set;} = "";
-		public PoStudyPlan? Raw{get;set;} = null;
+		public PoWeightCalculator? Raw{get;set;} = null;
 	}
 
-	static str FormatBizTime(PoStudyPlan po){
-		var updated = po.BizUpdatedAt == Tempus.Zero ? po.BizCreatedAt : po.BizUpdatedAt;
+	static str FormatDbTime(PoWeightCalculator po){
+		var updated = po.DbUpdatedAt == Tempus.Zero ? po.DbCreatedAt : po.DbUpdatedAt;
 		if(updated == Tempus.Zero){
 			return "-";
 		}
@@ -96,12 +96,12 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 		try{
 			var pageQry = PageBar.ToPageQry();
 			pageQry.WantTotCnt = true;
-			var req = new ReqPageStudyPlan{
+			var req = new ReqPageWeightCalculator{
 				PageQry = pageQry,
 				UniqNameSearch = str.IsNullOrWhiteSpace(Input) ? null : Input.Trim(),
 			};
 
-			var page = await SvcStudyPlan.PageStudyPlan(UserCtxMgr.GetDbUserCtx(), req, Ct);
+			var page = await SvcStudyPlan.PageWeightCalculator(UserCtxMgr.GetDbUserCtx(), req, Ct);
 			PageBar.FromPageResultInfo(page);
 
 			Rows.Clear();
@@ -111,14 +111,12 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 				await foreach(var po in page.DataAsyE){
 					localIdx++;
 					var uiIdx = startUiIdx + localIdx;
-					Rows.Add(new RowStudyPlan{
+					Rows.Add(new RowWeightCalculator{
 						UiIdx = uiIdx,
 						UiIdxText = uiIdx.ToString(),
 						Name = po.UniqName ?? "",
-						PreFilterId = po.PreFilterId.ToString(),
-						WeightCalculatorId = po.WeightCalculatorId.ToString(),
-						WeightArgId = po.WeightArgId.ToString(),
-						ModifiedTime = FormatBizTime(po),
+						Type = po.Type.ToString(),
+						ModifiedTime = FormatDbTime(po),
 						Raw = po,
 					});
 				}
@@ -147,14 +145,11 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 	}
 
 	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
-	public nil OpenDetail(RowStudyPlan? row = null){
-		if(row?.Raw is null){
-			return NIL;
-		}
-		var view = new ViewStudyPlanEdit();
-		view.Ctx?.SetCreateMode(false);
-		view.Ctx?.FromPoStudyPlan(row.Raw);
-		var title = row.Name;
+	public nil OpenDetail(RowWeightCalculator? row = null){
+		var view = new ViewWeightCalculatorEdit();
+		view.Ctx?.SetCreateMode(row is null);
+		view.Ctx?.FromPoWeightCalculator(row?.Raw);
+		var title = row?.Name ?? Todo.I18n("新增權重算法");
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 		return NIL;

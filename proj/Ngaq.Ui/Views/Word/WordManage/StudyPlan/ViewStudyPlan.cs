@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Avalonia.Controls;
 using Ngaq.Ui;
@@ -8,6 +8,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmStudyPlan;
@@ -50,15 +51,20 @@ public partial class ViewStudyPlan
 		var o = new StackPanel();
 		o
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),Todo.I18n("StudyPlan"))
+			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),Todo.I18n("PoStudyPlan"))
+		)
+		.A(
+			MainView.Inst.MkBtnToView(()=>new ViewWeightCalculatorPage(),Todo.I18n("PoWeightCalculator"))
 		)
 		.A(
 			MainView.Inst.MkBtnToView(()=>new ViewPreFilterPage(),Todo.I18n("PreFilter"))
-		).A(MainView.Inst.MkBtnToView(()=>new ViewWeightArgPage(),Todo.I18n("Weight Arg")))
+		)
+		.A(
+			MainView.Inst.MkBtnToView(()=>new ViewWeightArgPage(),Todo.I18n("Weight Arg"))
+		)
 		;
 		return o;
 	}
 
 
 }
-

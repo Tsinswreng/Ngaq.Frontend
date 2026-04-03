@@ -1,5 +1,6 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -11,9 +12,10 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmStudyPlanEdit;
 
-public partial class ViewStudyPlanEdit
+using Ctx = VmWeightCalculatorEdit;
+
+public partial class ViewWeightCalculatorEdit
 	:AppViewBase
 {
 	public Ctx? Ctx{
@@ -21,11 +23,12 @@ public partial class ViewStudyPlanEdit
 		set{DataContext = value;}
 	}
 
-	public ViewStudyPlanEdit(){
+	public ViewWeightCalculatorEdit(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
 	}
+
 	public II18n I = I18n.Inst;
 	public partial class Cls{}
 
@@ -82,16 +85,15 @@ public partial class ViewStudyPlanEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = Todo.I18n("PoStudyPlan"),
+			Text = Todo.I18n("PoWeightCalculator"),
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
 		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
-		.A(MkInputRow(Todo.I18n("PreFilterId"), CBE.Mk<Ctx>(x=>x.PreFilterIdText, Mode: BindingMode.OneWay), ReadOnly: true))
-		.A(MkInputRow(Todo.I18n("WeightCalculatorId"), CBE.Mk<Ctx>(x=>x.WeightCalculatorIdText, Mode: BindingMode.OneWay), ReadOnly: true))
-		.A(MkInputRow(Todo.I18n("WeightArgId"), CBE.Mk<Ctx>(x=>x.WeightArgIdText, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkComboRow(Todo.I18n("Type"), Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay)))
+		.A(MkInputRow(Todo.I18n("Payload(Text)"), CBE.Mk<Ctx>(x=>x.PayloadText, Mode: BindingMode.TwoWay), AcceptsReturn: true))
 		;
 		return bdr;
 	}
@@ -124,10 +126,22 @@ public partial class ViewStudyPlanEdit
 			IsReadOnly = ReadOnly,
 			AcceptsReturn = AcceptsReturn,
 			TextWrapping = AcceptsReturn ? TextWrapping.Wrap : TextWrapping.NoWrap,
-			MaxHeight = AcceptsReturn ? 140 : double.PositiveInfinity,
+			MaxHeight = AcceptsReturn ? 180 : double.PositiveInfinity,
 		};
 		tb.Bind(TextBox.TextProperty, Binding);
 		sp.Children.Add(tb);
+		return sp;
+	}
+
+	Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
+		var sp = new StackPanel{Spacing = 3};
+		sp.Children.Add(new TextBlock{Text = Label});
+		var cb = new ComboBox();
+		foreach(var item in Items){
+			cb.Items.Add(item);
+		}
+		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
+		sp.Children.Add(cb);
 		return sp;
 	}
 }

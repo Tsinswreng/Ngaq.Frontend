@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -17,9 +17,9 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmStudyPlanPage;
+using Ctx = VmWeightCalculatorPage;
 
-public partial class ViewStudyPlanPage
+public partial class ViewWeightCalculatorPage
 	:AppViewBase
 {
 	public Ctx? Ctx{
@@ -27,7 +27,7 @@ public partial class ViewStudyPlanPage
 		set{DataContext = value;}
 	}
 
-	public ViewStudyPlanPage(){
+	public ViewWeightCalculatorPage(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
@@ -55,25 +55,27 @@ public partial class ViewStudyPlanPage
 
 	AutoGrid Root = new(IsRow: true);
 	TreeDataGrid? Grid;
-	FlatTreeDataGridSource<Ctx.RowStudyPlan>? GridSource;
+	FlatTreeDataGridSource<Ctx.RowWeightCalculator>? GridSource;
 
-	public nil Render(){
+	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Star),
 			RowDef(1, GUT.Auto),
 		]);
+
 		Root.A(MkTopBar());
 		Root.A(MkGridHost());
 		Root.A(MkPageBarHost());
 		return NIL;
 	}
 
-	Control MkTopBar(){
+	protected Control MkTopBar(){
 		var top = new AutoGrid(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(8, GUT.Star),
+			ColDef(7, GUT.Star),
+			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
@@ -89,14 +91,19 @@ public partial class ViewStudyPlanPage
 		})
 		.A(searchBtn, o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.Background = UiCfg.Inst.MainColor;
 			o.BtnContent = Svgs.Search().ToIcon();
+			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
+		})
+		.A(new Button(), o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.Content = Svgs.Add().ToIcon();
+			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
 	}
 
-	Control MkGridHost(){
+	protected Control MkGridHost(){
 		Grid = new TreeDataGrid{
 			MinHeight = 280,
 		};
@@ -112,7 +119,7 @@ public partial class ViewStudyPlanPage
 		return Grid;
 	}
 
-	Control MkPageBarHost(){
+	protected Control MkPageBarHost(){
 		var pageBar = new ViewPageBar();
 		if(Ctx is not null){
 			pageBar.Ctx = Ctx.PageBar;
@@ -120,26 +127,24 @@ public partial class ViewStudyPlanPage
 		return pageBar;
 	}
 
-	nil InitDataGrid(){
+	protected nil InitDataGrid(){
 		if(Ctx is null || Grid is null){
 			return NIL;
 		}
-		GridSource = new FlatTreeDataGridSource<Ctx.RowStudyPlan>(Ctx.Rows){
+		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightCalculator>(Ctx.Rows){
 			Columns = {
-				new CheckBoxColumn<Ctx.RowStudyPlan>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("名稱"), x=>x.Name),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("PreFilterId"), x=>x.PreFilterId),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("WeightCalculatorId"), x=>x.WeightCalculatorId),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("WeightArgId"), x=>x.WeightArgId),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
+				new CheckBoxColumn<Ctx.RowWeightCalculator>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
+				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n(""), x=>x.UiIdxText),
+				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("名稱"), x=>x.Name),
+				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("類型"), x=>x.Type),
+				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;
 		return NIL;
 	}
 
-	void OnGridTapped(object? sender, TappedEventArgs e){
+	protected void OnGridTapped(object? sender, TappedEventArgs e){
 		if(Ctx is null || Grid is null){
 			return;
 		}
@@ -151,7 +156,7 @@ public partial class ViewStudyPlanPage
 				return;
 			}
 			if(cur is TreeDataGridRow row){
-				if(row.DataContext is Ctx.RowStudyPlan vmRow){
+				if(row.DataContext is Ctx.RowWeightCalculator vmRow){
 					Ctx.OpenDetail(vmRow);
 					e.Handled = true;
 				}
