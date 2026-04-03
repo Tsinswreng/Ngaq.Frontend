@@ -143,7 +143,6 @@ public partial class ViewWeightArgPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightArg>(Ctx.Rows){
 			Columns = {
-				new CheckBoxColumn<Ctx.RowWeightArg>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
 				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n(""), x=>x.UiIdxText),
 				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n("名稱"), x=>x.Name),
 				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
@@ -181,7 +180,7 @@ public partial class ViewWeightArgPage
 		var view = new ViewWeightArgEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoWeightArg(row?.Raw);
-		var title = row?.Name ?? Todo.I18n("新增權重參數");
+		var title = row?.Raw?.UniqName ?? Todo.I18n("新增權重參數");
 		var titled = ToolView.WithTitle(title, view);
 		Ctx?.ViewNavi?.GoTo(titled);
 	}

@@ -4,7 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
-using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
+using Ngaq.Core.Shared.StudyPlan.Models;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Infra;
 
@@ -54,15 +54,15 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 
 	/// <summary>
 	/// 讀取後端「當前學習方案」。
-	/// 成功後把 StudyPlan 主體回調給 View 層更新編輯頁。
+	/// 成功後把 BoStudyPlan 回調給 View 層更新編輯頁。
 	/// </summary>
 	public async Task<nil> LoadCurStudyPlan(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
 			return NIL;
 		}
 		try{
-			var jn = await SvcStudyPlan.GetCurJnStudyPlan(UserCtxMgr.GetDbUserCtx(), Ct);
-			OnLoadedCurStudyPlan?.Invoke(jn?.StudyPlan);
+			var bo = await SvcStudyPlan.GetCurBoStudyPlan(UserCtxMgr.GetDbUserCtx(), Ct);
+			OnLoadedCurStudyPlan?.Invoke(bo);
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 		}catch(Exception e){
@@ -93,7 +93,7 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 	}
 
 	/// <summary>
-	/// View 監聽此事件，把當前 StudyPlan 灌入子編輯頁。
+	/// View 監聽此事件，把當前 BoStudyPlan 灌入子編輯頁。
 	/// </summary>
-	public event Action<PoStudyPlan?>? OnLoadedCurStudyPlan;
+	public event Action<BoStudyPlan?>? OnLoadedCurStudyPlan;
 }

@@ -132,7 +132,6 @@ public partial class ViewStudyPlanPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowStudyPlan>(Ctx.Rows){
 			Columns = {
-				new CheckBoxColumn<Ctx.RowStudyPlan>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
 				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n(""), x=>x.UiIdxText),
 				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("名稱"), x=>x.Name),
 				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("PreFilterId"), x=>x.PreFilterId),

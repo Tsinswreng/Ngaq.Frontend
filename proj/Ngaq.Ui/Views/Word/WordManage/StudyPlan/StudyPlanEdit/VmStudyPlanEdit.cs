@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
+using Ngaq.Core.Shared.StudyPlan.Models;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.WeightArg;
@@ -77,7 +78,17 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "";
 
+	public str PreFilterUniqNameText{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
 	public str WeightCalculatorIdText{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
+	public str WeightCalculatorUniqNameText{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
@@ -87,7 +98,17 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "";
 
+	public str WeightArgUniqNameText{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
 	public PoStudyPlan PoStudyPlan{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = new();
+
+	public BoStudyPlan BoStudyPlan{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = new();
@@ -99,8 +120,19 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 
 	public nil FromPoStudyPlan(PoStudyPlan? PoStudyPlan){
 		this.PoStudyPlan = ClonePoStudyPlan(PoStudyPlan);
+		BoStudyPlan = new BoStudyPlan{
+			PoStudyPlan = ClonePoStudyPlan(PoStudyPlan),
+		};
 		IsCreateMode = PoStudyPlan is null || PoStudyPlan.Id == IdStudyPlan.Zero;
-		SyncFromPo();
+		SyncFromBo();
+		return NIL;
+	}
+
+	public nil FromBoStudyPlan(BoStudyPlan? BoStudyPlan){
+		this.BoStudyPlan = CloneBoStudyPlan(BoStudyPlan);
+		this.PoStudyPlan = ClonePoStudyPlan(this.BoStudyPlan.PoStudyPlan);
+		IsCreateMode = this.PoStudyPlan.Id == IdStudyPlan.Zero;
+		SyncFromBo();
 		return NIL;
 	}
 
@@ -118,7 +150,8 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			var po = BuildPoFromFields();
 			await SvcStudyPlan.BatUpdStudyPlan(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			PoStudyPlan = po;
-			SyncFromPo();
+			BoStudyPlan.PoStudyPlan = ClonePoStudyPlan(po);
+			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			ShowMsg(Todo.I18n("Saved"));
@@ -140,8 +173,9 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 				await SvcStudyPlan.BatSoftDelStudyPlan(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoStudyPlan = new PoStudyPlan();
+			BoStudyPlan = new BoStudyPlan();
 			IsCreateMode = true;
-			SyncFromPo();
+			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			ShowMsg(Todo.I18n("Deleted"));
@@ -153,14 +187,17 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	void SyncFromPo(){
+	void SyncFromBo(){
 		var po = PoStudyPlan ?? new PoStudyPlan();
 		PoIdText = po.Id.ToString();
 		PoUniqName = po.UniqName ?? "";
 		PoDescr = po.Descr ?? "";
 		PreFilterIdText = po.PreFilterId.ToString();
+		PreFilterUniqNameText = BoStudyPlan.PoPreFilter?.UniqName ?? "";
 		WeightCalculatorIdText = po.WeightCalculatorId.ToString();
+		WeightCalculatorUniqNameText = BoStudyPlan.PoWeightCalculator?.UniqName ?? "";
 		WeightArgIdText = po.WeightArgId.ToString();
+		WeightArgUniqNameText = BoStudyPlan.PoWeightArg?.UniqName ?? "";
 	}
 
 	PoStudyPlan BuildPoFromFields(){
@@ -176,6 +213,8 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		}
 		PoStudyPlan.PreFilterId = Po.Id;
 		PreFilterIdText = Po.Id.ToString();
+		PreFilterUniqNameText = Po.UniqName ?? "";
+		BoStudyPlan.PoPreFilter = Po;
 		return NIL;
 	}
 
@@ -185,6 +224,8 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		}
 		PoStudyPlan.WeightCalculatorId = Po.Id;
 		WeightCalculatorIdText = Po.Id.ToString();
+		WeightCalculatorUniqNameText = Po.UniqName ?? "";
+		BoStudyPlan.PoWeightCalculator = Po;
 		return NIL;
 	}
 
@@ -194,7 +235,22 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		}
 		PoStudyPlan.WeightArgId = Po.Id;
 		WeightArgIdText = Po.Id.ToString();
+		WeightArgUniqNameText = Po.UniqName ?? "";
+		BoStudyPlan.PoWeightArg = Po;
 		return NIL;
+	}
+
+	static BoStudyPlan CloneBoStudyPlan(BoStudyPlan? src){
+		src ??= new BoStudyPlan();
+		return new BoStudyPlan{
+			PoStudyPlan = ClonePoStudyPlan(src.PoStudyPlan),
+			PoPreFilter = src.PoPreFilter,
+			PreFilter = src.PreFilter,
+			PoWeightCalculator = src.PoWeightCalculator,
+			WeightCalctr = src.WeightCalctr,
+			PoWeightArg = src.PoWeightArg,
+			WeightArg = src.WeightArg,
+		};
 	}
 
 	static PoStudyPlan ClonePoStudyPlan(PoStudyPlan? src){

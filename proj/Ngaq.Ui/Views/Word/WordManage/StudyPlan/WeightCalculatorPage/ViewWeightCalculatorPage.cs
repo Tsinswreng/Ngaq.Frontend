@@ -140,7 +140,6 @@ public partial class ViewWeightCalculatorPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightCalculator>(Ctx.Rows){
 			Columns = {
-				new CheckBoxColumn<Ctx.RowWeightCalculator>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
 				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n(""), x=>x.UiIdxText),
 				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("名稱"), x=>x.Name),
 				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("類型"), x=>x.Type),
@@ -176,7 +175,7 @@ public partial class ViewWeightCalculatorPage
 		var view = new ViewWeightCalculatorEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoWeightCalculator(row?.Raw);
-		var title = row?.Name ?? Todo.I18n("新增權重算法");
+		var title = row?.Raw?.UniqName ?? Todo.I18n("新增權重算法");
 		var titled = ToolView.WithTitle(title, view);
 		Ctx?.ViewNavi?.GoTo(titled);
 	}

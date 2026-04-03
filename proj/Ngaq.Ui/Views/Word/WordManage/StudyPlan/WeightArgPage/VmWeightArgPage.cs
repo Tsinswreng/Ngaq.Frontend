@@ -9,6 +9,7 @@ using Ngaq.Core.Shared.StudyPlan.Models.Req;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Ctx = VmWeightArgPage;
 
@@ -71,7 +72,8 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		}
 	} = false;
 
-	public bool CanCreate => !IsSelectMode;
+	/// 在选择模式中也允许新增，方便“边选边创建”。
+	public bool CanCreate => true;
 
 	Action<PoWeightArg>? FnOnSelected{get;set;}
 
@@ -83,14 +85,6 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 		public str Name{get;set;} = "";
 		public str ModifiedTime{get;set;} = "";
 		public PoWeightArg? Raw{get;set;} = null;
-	}
-
-	static str FormatBizTime(PoWeightArg po){
-		var updated = po.BizUpdatedAt == Tempus.Zero ? po.BizCreatedAt : po.BizUpdatedAt;
-		if(updated == Tempus.Zero){
-			return "-";
-		}
-		return updated.ToIso();
 	}
 
 	public async Task<nil> InitSearch(CT Ct){
@@ -124,8 +118,8 @@ public partial class VmWeightArgPage: ViewModelBase, IMk<Ctx>{
 					Rows.Add(new RowWeightArg{
 						UiIdx = uiIdx,
 						UiIdxText = uiIdx.ToString(),
-						Name = po.UniqName ?? "",
-						ModifiedTime = FormatBizTime(po),
+						Name = ToolStudyPlanView.FormatUniqName(po.UniqName),
+						ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.BizUpdatedAt, po.BizCreatedAt),
 						Raw = po,
 					});
 				}

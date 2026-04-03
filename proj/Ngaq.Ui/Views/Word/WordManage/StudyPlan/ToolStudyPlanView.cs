@@ -1,8 +1,10 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using System;
+using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Ngaq.Core.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
@@ -10,6 +12,42 @@ using Tsinswreng.AvlnTools.Tools;
 /// StudyPlan 相关页面的通用视图拼装工具。
 /// </summary>
 public static class ToolStudyPlanView{
+	/// <summary>
+	/// 统一格式化 UniqName：超长时保留头尾，中间用省略号替代。
+	/// </summary>
+	public static str FormatUniqName(str? UniqName, int HeadLen = 10, int TailLen = 6){
+		var raw = UniqName?.Trim() ?? "";
+		if(str.IsNullOrWhiteSpace(raw)){
+			return "-";
+		}
+		var minLen = HeadLen + TailLen + 3;
+		if(raw.Length <= minLen){
+			return raw;
+		}
+		return $"{raw[..HeadLen]}...{raw[^TailLen..]}";
+	}
+
+	/// <summary>
+	/// 统一格式化日期：按当前用户所在时区显示短格式 yy-MM-dd。
+	/// </summary>
+	public static str FormatDateShort(Tempus Time, TimeZoneInfo? TimeZone = null){
+		if(Time == Tempus.Zero){
+			return "-";
+		}
+		var tz = TimeZone ?? TimeZoneInfo.Local;
+		var dto = DateTimeOffset.FromUnixTimeMilliseconds(Time.Value);
+		var local = TimeZoneInfo.ConvertTime(dto, tz);
+		return local.ToString("yy-MM-dd", CultureInfo.InvariantCulture);
+	}
+
+	/// <summary>
+	/// 统一处理“更新时间优先，否则创建时间”的短日期显示。
+	/// </summary>
+	public static str FormatUpdatedDateShort(Tempus UpdatedAt, Tempus CreatedAt, TimeZoneInfo? TimeZone = null){
+		var t = UpdatedAt == Tempus.Zero ? CreatedAt : UpdatedAt;
+		return FormatDateShort(t, TimeZone);
+	}
+
 	/// <summary>
 	/// 创建“只读文本 + 选择按钮”的一行输入控件。
 	/// </summary>

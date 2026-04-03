@@ -43,10 +43,7 @@ public class ViewNaviBase:UserControl{
 
 
 public partial class MainView : UserControl {
-	public static MainView Inst{get;protected set;} =new();
-
-	[Doc(@$"造按鈕、點後跳到目標視圖")]
-	public Button MkBtnToView(
+	public partial Button MkBtnToView(
 		Control Target
 		,str? Title = null
 	){
@@ -63,8 +60,7 @@ public partial class MainView : UserControl {
 		return btn;
 	}
 
-	[Doc(@$"造按鈕、點後跳到目標視圖（延遲建構）")]
-	public Button MkBtnToView(
+	public partial Button MkBtnToView(
 		Func<Control> MkTarget
 		,str? Title = null
 	){
@@ -83,14 +79,8 @@ public partial class MainView : UserControl {
 		};
 		return btn;
 	}
-	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
-	public SvcPopup SvcPopup{get;set;}
-	public AutoGrid AutoGrid = new (IsRow: true);
-	public Grid Root{get{return AutoGrid.Grid;}}
-	public ViewNaviBase ViewNaviBase{get;} = new ();
-	public ILogger? Logger{get=>App.Logger;set{}}
-	[Doc(@$"可關閉彈窗")]
-	public nil ShowMsg(str Msg){
+
+	public partial nil ShowMsg(str Msg){
 		Dispatcher.UIThread.Post((Action)(()=>{
 			var SvcPopup = this.SvcPopup;
 			var msgBox = new MsgBox();
@@ -131,9 +121,7 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
-
-	[Doc(@$"前端拿到異常後處理之")]
-	public nil HandleErr(obj? Ex){
+	public partial nil HandleErr(obj? Ex){
 		str? toLog = null;
 		if(Ex is IAppErr Err){
 			if(Err.Type is not null){

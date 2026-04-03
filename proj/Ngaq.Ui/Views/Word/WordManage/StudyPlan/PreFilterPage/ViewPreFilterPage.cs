@@ -142,7 +142,6 @@ public partial class ViewPreFilterPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowPreFilter>(Ctx.Rows){
 			Columns = {
-				new CheckBoxColumn<Ctx.RowPreFilter>("", x=>x.IsChecked, (x,v)=>x.IsChecked = v),
 				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n(""), x=>x.UiIdxText),
 				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("名稱"), x=>x.Name),
 				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("類型"), x=>x.Type),
@@ -181,7 +180,7 @@ public partial class ViewPreFilterPage
 		var view = new ViewPreFilterVisualEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoPreFilter(row?.Raw);
-		var title = row?.Name ?? Todo.I18n("新增預篩選器");
+		var title = row?.Raw?.UniqName ?? Todo.I18n("新增預篩選器");
 		var titled = ToolView.WithTitle(title, view);
 		Ctx?.ViewNavi?.GoTo(titled);
 	}

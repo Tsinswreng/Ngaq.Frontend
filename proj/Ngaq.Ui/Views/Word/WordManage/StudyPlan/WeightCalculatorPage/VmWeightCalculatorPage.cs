@@ -9,6 +9,7 @@ using Ngaq.Core.Shared.StudyPlan.Models.Req;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Ctx = VmWeightCalculatorPage;
 
@@ -71,7 +72,8 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 		}
 	} = false;
 
-	public bool CanCreate => !IsSelectMode;
+	/// 在选择模式中也允许新增，方便“边选边创建”。
+	public bool CanCreate => true;
 
 	Action<PoWeightCalculator>? FnOnSelected{get;set;}
 
@@ -84,14 +86,6 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 		public str Type{get;set;} = "";
 		public str ModifiedTime{get;set;} = "";
 		public PoWeightCalculator? Raw{get;set;} = null;
-	}
-
-	static str FormatDbTime(PoWeightCalculator po){
-		var updated = po.DbUpdatedAt == Tempus.Zero ? po.DbCreatedAt : po.DbUpdatedAt;
-		if(updated == Tempus.Zero){
-			return "-";
-		}
-		return updated.ToIso();
 	}
 
 	public async Task<nil> InitSearch(CT Ct){
@@ -125,9 +119,9 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 					Rows.Add(new RowWeightCalculator{
 						UiIdx = uiIdx,
 						UiIdxText = uiIdx.ToString(),
-						Name = po.UniqName ?? "",
+						Name = ToolStudyPlanView.FormatUniqName(po.UniqName),
 						Type = po.Type.ToString(),
-						ModifiedTime = FormatDbTime(po),
+						ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.DbUpdatedAt, po.DbCreatedAt),
 						Raw = po,
 					});
 				}

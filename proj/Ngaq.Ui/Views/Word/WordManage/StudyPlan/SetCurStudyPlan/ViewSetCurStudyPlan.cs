@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Core.Shared.StudyPlan.Models;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
@@ -124,10 +125,10 @@ public partial class ViewSetCurStudyPlan
 	}
 
 	/// <summary>
-	/// 把後端返回的當前 StudyPlan 實體灌入編輯頁。
+	/// 把後端返回的當前 BoStudyPlan 灌入編輯頁。
 	/// </summary>
-	void ApplyCurStudyPlan(Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan.PoStudyPlan? Po){
-		EditView.Ctx?.SetCreateMode(Po is null);
-		EditView.Ctx?.FromPoStudyPlan(Po);
+	void ApplyCurStudyPlan(BoStudyPlan? Bo){
+		EditView.Ctx?.SetCreateMode(Bo?.PoStudyPlan is null);
+		EditView.Ctx?.FromBoStudyPlan(Bo);
 	}
 }

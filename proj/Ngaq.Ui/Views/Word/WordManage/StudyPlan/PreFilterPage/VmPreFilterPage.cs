@@ -9,6 +9,7 @@ using Ngaq.Core.Shared.StudyPlan.Models.Req;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Ctx = VmPreFilterPage;
 
 /// PreFilter 列表頁 ViewModel。
@@ -69,7 +70,8 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		}
 	} = false;
 
-	public bool CanCreate => !IsSelectMode;
+	/// 在选择模式中也允许新增，方便“边选边创建”。
+	public bool CanCreate => true;
 
 	Action<PoPreFilter>? FnOnSelected{get;set;}
 
@@ -82,14 +84,6 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 		public str Type{get;set;} = "";
 		public str ModifiedTime{get;set;} = "";
 		public PoPreFilter? Raw{get;set;} = null;
-	}
-
-	static str FormatBizTime(PoPreFilter Po){
-		var updated = Po.BizUpdatedAt == Tempus.Zero ? Po.BizCreatedAt : Po.BizUpdatedAt;
-		if(updated == Tempus.Zero){
-			return "-";
-		}
-		return updated.ToIso();
 	}
 
 	public async Task<nil> InitSearch(CT Ct){
@@ -123,9 +117,9 @@ public partial class VmPreFilterPage: ViewModelBase, IMk<Ctx>{
 					Rows.Add(new RowPreFilter{
 						UiIdx = uiIdx,
 						UiIdxText = uiIdx.ToString(),
-						Name = po.UniqName ?? "",
+						Name = ToolStudyPlanView.FormatUniqName(po.UniqName),
 						Type = po.Type.ToString(),
-						ModifiedTime = FormatBizTime(po),
+						ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.BizUpdatedAt, po.BizCreatedAt),
 						Raw = po,
 					});
 				}

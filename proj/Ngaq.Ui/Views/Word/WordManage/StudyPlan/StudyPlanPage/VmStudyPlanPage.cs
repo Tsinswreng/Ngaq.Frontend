@@ -75,14 +75,6 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 		public PoStudyPlan? Raw{get;set;} = null;
 	}
 
-	static str FormatBizTime(PoStudyPlan po){
-		var updated = po.BizUpdatedAt == Tempus.Zero ? po.BizCreatedAt : po.BizUpdatedAt;
-		if(updated == Tempus.Zero){
-			return "-";
-		}
-		return updated.ToIso();
-	}
-
 	public async Task<nil> InitSearch(CT Ct){
 		PageBar.PageNum = 1;
 		return await Search(Ct);
@@ -114,11 +106,11 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 					Rows.Add(new RowStudyPlan{
 						UiIdx = uiIdx,
 						UiIdxText = uiIdx.ToString(),
-						Name = po.UniqName ?? "",
+						Name = ToolStudyPlanView.FormatUniqName(po.UniqName),
 						PreFilterId = po.PreFilterId.ToString(),
 						WeightCalculatorId = po.WeightCalculatorId.ToString(),
 						WeightArgId = po.WeightArgId.ToString(),
-						ModifiedTime = FormatBizTime(po),
+						ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.BizUpdatedAt, po.BizCreatedAt),
 						Raw = po,
 					});
 				}
@@ -151,7 +143,7 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 		var view = new ViewStudyPlanEdit();
 		view.Ctx?.SetCreateMode(row?.Raw is null);
 		view.Ctx?.FromPoStudyPlan(row?.Raw);
-		var title = row?.Name ?? Todo.I18n("新增學習方案");
+		var title = row?.Raw?.UniqName ?? Todo.I18n("新增學習方案");
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 		return NIL;

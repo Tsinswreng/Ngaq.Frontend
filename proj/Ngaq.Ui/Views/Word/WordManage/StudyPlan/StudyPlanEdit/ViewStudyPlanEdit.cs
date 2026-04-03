@@ -105,8 +105,10 @@ public partial class ViewStudyPlanEdit
 					Ctx?.ViewNavi?.Back();
 				});
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇PreFilter"), view));
-			}
+			},
+			ReadOnly: true
 		))
+		.A(MkInputRow(Todo.I18n("PreFilterName"), CBE.Mk<Ctx>(x=>x.PreFilterUniqNameText, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			Todo.I18n("WeightCalculatorId"),
 			CBE.Mk<Ctx>(x=>x.WeightCalculatorIdText, Mode: BindingMode.OneWay),
@@ -118,8 +120,10 @@ public partial class ViewStudyPlanEdit
 					Ctx?.ViewNavi?.Back();
 				});
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇WeightCalculator"), view));
-			}
+			},
+			ReadOnly: true
 		))
+		.A(MkInputRow(Todo.I18n("WeightCalculatorName"), CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			Todo.I18n("WeightArgId"),
 			CBE.Mk<Ctx>(x=>x.WeightArgIdText, Mode: BindingMode.OneWay),
@@ -131,8 +135,10 @@ public partial class ViewStudyPlanEdit
 					Ctx?.ViewNavi?.Back();
 				});
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇WeightArg"), view));
-			}
+			},
+			ReadOnly: true
 		))
+		.A(MkInputRow(Todo.I18n("WeightArgName"), CBE.Mk<Ctx>(x=>x.WeightArgUniqNameText, Mode: BindingMode.OneWay), ReadOnly: true))
 		;
 		return bdr;
 	}
