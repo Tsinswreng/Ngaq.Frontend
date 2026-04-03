@@ -18,7 +18,12 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 
 namespace Ngaq.Ui;
 
@@ -44,7 +49,12 @@ public static class DiUi{
 		z.AddTransient<VmPreFilterJsonEdit>();
 		z.AddTransient<VmPreFilterPage>();
 		z.AddTransient<VmStudyPlanPage>();
+		z.AddTransient<VmStudyPlanEdit>();
+		z.AddTransient<VmSetCurStudyPlan>();
 		z.AddTransient<VmWeightArgPage>();
+		z.AddTransient<VmWeightArgEdit>();
+		z.AddTransient<VmWeightCalculatorPage>();
+		z.AddTransient<VmWeightCalculatorEdit>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}
