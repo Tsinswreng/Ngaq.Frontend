@@ -81,7 +81,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = 1;
 
-	public str WeightCalculatorName{
+	public str WeightCalculatorIdText{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
@@ -190,7 +190,8 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		if(Po is null){
 			return NIL;
 		}
-		WeightCalculatorName = Po.UniqName ?? "";
+		PoWeightArg.WeightCalculatorId = Po.Id;
+		WeightCalculatorIdText = Po.Id.ToString();
 		return NIL;
 	}
 
@@ -201,7 +202,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		PoIdText = po.Id.ToString();
 		PoUniqName = po.UniqName ?? "";
 		PoDescr = po.Descr ?? "";
-		WeightCalculatorName = po.WeightCalculatorName ?? "";
+		WeightCalculatorIdText = po.WeightCalculatorId.ToString();
 		PoTypeIndex = ClampIndex((i32)po.Type, TypeOptions.Count);
 		PayloadText = po.Text ?? "";
 		LastError = "";
@@ -212,7 +213,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		var po = ClonePoWeightArg(PoWeightArg);
 		po.UniqName = str.IsNullOrWhiteSpace(PoUniqName) ? null : PoUniqName.Trim();
 		po.Descr = PoDescr?.Trim() ?? "";
-		po.WeightCalculatorName = WeightCalculatorName?.Trim() ?? "";
+		po.WeightCalculatorId = ParseWeightCalculatorId(WeightCalculatorIdText);
 		po.Type = EnumOrDefault<EWeightArgType>(PoTypeIndex);
 		if(po.Type == EWeightArgType.Unknown){
 			po.Type = EWeightArgType.Json;
@@ -249,9 +250,17 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 			Type = src.Type,
 			Text = src.Text,
 			Binary = src.Binary?.ToArray() ?? [],
-			WeightCalculatorName = src.WeightCalculatorName,
+			WeightCalculatorId = src.WeightCalculatorId,
 			Descr = src.Descr,
 		};
+	}
+
+	static IdWeightCalculator ParseWeightCalculatorId(str? IdText){
+		var txt = IdText?.Trim() ?? "";
+		if(IdWeightCalculator.TryParse(txt, out var id)){
+			return id;
+		}
+		return IdWeightCalculator.Zero;
 	}
 
 	static i32 ClampIndex(i32 value, i32 count){
