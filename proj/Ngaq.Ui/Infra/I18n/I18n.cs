@@ -9,15 +9,13 @@ public interface II18nKey:ICfgNode{
 
 }
 
-public class I18nKey:CfgItem<str>, II18nKey{
+public class I18nKey:CfgNode<str>, II18nKey{
 	public static II18nKey Mk(
 		II18nKey? Parent
 		,IList<str> Path
-		,ICfgValue? DfltValue = null
 	){
 		var R = new I18nKey{
 			RelaPathSegs=Path,
-			DfltValue=DfltValue,
 			Parent=Parent
 		};
 		return R;
@@ -37,10 +35,10 @@ public class I18n:II18n{
 	public ICfgAccessor CfgAccessor{get;set;}
 	MessageFormatter MsgFmt = new();
 	public str Get(II18nKey Key, params obj[] Args){
-		if(!CfgAccessor.TryGetBoxedByPath(Key.GetFullPathSegs(), out var Value)){
+		if(!CfgAccessor.TryGet(Key.GetFullPathSegs(), out var Value)){
 			return Key.GetFullPathSegs().Last();
 		}
-		if(Value.Data is str Template){
+		if(Value is str Template){
 			if(Args.Length == 0){
 				return Template;
 			}else{
@@ -69,7 +67,7 @@ public static class AppExtnErrItem{
 	public static I18nKey ToI18nKey(this IErrItem z, params obj?[] Args){
 		return new I18nKey{
 			RelaPathSegs=["Error", ..z.RelaPathSegs],
-			DfltValue = z.DfltValue
+			DfltValueObj = z.DfltValueObj
 			,Parent = z.Parent
 			,Children = z.Children
 		};

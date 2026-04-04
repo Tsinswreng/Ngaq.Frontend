@@ -74,7 +74,7 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 		await Task.Run(async()=>{
 			Cfg.Set(ItemsClientCfg.Word.FilterLanguage, langs);
 			Cfg.Set(ItemsClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
-			await Cfg.SaveAsy(Ct);
+			await Cfg.Save(Ct);
 		});
 		return NIL;
 	}
