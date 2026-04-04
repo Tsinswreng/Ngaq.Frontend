@@ -6,6 +6,7 @@ using System.Linq;
 using Ngaq.Core.Shared.StudyPlan.Models.PreFilter;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit.FilterItemEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
 using Ctx = VmFieldsFilterCardEdit;
