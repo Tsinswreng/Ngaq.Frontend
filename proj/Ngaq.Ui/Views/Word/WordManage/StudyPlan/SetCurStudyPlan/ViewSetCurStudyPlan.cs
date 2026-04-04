@@ -5,20 +5,19 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Ngaq.Core.Shared.StudyPlan.Models;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSetCurStudyPlan;
 
 /// <summary>
 /// 設置當前學習方案頁。
-/// 頁面打開後即讀取後端當前學習方案，並直接顯示 StudyPlan 編輯頁。
+/// 頁面打開後即讀取後端當前學習方案，僅展示關鍵字段並支持重新選擇。
 /// </summary>
 public partial class ViewSetCurStudyPlan
 	:AppViewBase
@@ -30,9 +29,6 @@ public partial class ViewSetCurStudyPlan
 
 	public ViewSetCurStudyPlan(){
 		Ctx = App.DiOrMk<Ctx>();
-		if(Ctx is not null){
-			Ctx.OnLoadedCurStudyPlan += ApplyCurStudyPlan;
-		}
 		Style();
 		Render();
 		Loaded += async(s,e)=>{
@@ -62,7 +58,6 @@ public partial class ViewSetCurStudyPlan
 	}
 
 	AutoGrid Root = new(IsRow: true);
-	ViewStudyPlanEdit EditView = new();
 	bool HasAutoLoaded = false;
 
 	protected nil Render(){
@@ -108,9 +103,7 @@ public partial class ViewSetCurStudyPlan
 			RowDef(1, GUT.Star),
 		]);
 		host.A(MkErrorBar());
-		host.A(EditView, o=>{
-			o.Classes.Add(Cls.FullStretch);
-		});
+		host.A(MkFieldsPanel());
 		return host.Grid;
 	}
 
@@ -130,10 +123,61 @@ public partial class ViewSetCurStudyPlan
 	}
 
 	/// <summary>
-	/// 把後端返回的當前 BoStudyPlan 灌入編輯頁。
+	/// 當前方案字段展示區。
 	/// </summary>
-	void ApplyCurStudyPlan(BoStudyPlan? Bo){
-		EditView.Ctx?.SetCreateMode(Bo?.PoStudyPlan is null);
-		EditView.Ctx?.FromBoStudyPlan(Bo);
+	Control MkFieldsPanel(){
+		var sv = new ScrollViewer();
+		var root = new StackPanel{
+			Spacing = 10,
+			Margin = new Thickness(10),
+		};
+		sv.Content = root;
+
+		var bdr = new Border{
+			BorderBrush = Brushes.DimGray,
+			BorderThickness = new Thickness(1),
+			Padding = new Thickness(10),
+		};
+		root.Children.Add(bdr);
+
+		var sp = new StackPanel{
+			Spacing = 8,
+		};
+		bdr.Child = sp;
+
+		sp.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.CurId, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkInputRow(Todo.I18n("UniqName"), CBE.Mk<Ctx>(x=>x.CurUniqName, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkInputRow(Todo.I18n("descr"), CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
+		.A(new Button(), o=>{
+			o.Content = Todo.I18n("選擇");
+			o.Click += (s,e)=>{
+				var view = new ViewStudyPlanPage();
+				view.Ctx?.SetSelectMode(po=>{
+					_ = Ctx?.ApplySelectedStudyPlan(po, default);
+					view.Ctx?.ViewNavi?.Back();
+				});
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
+			};
+		});
+
+		return sv;
+	}
+
+	Control MkInputRow(str Label, IBinding Binding, bool ReadOnly = false, bool AcceptsReturn = false){
+		var sp = new StackPanel{
+			Spacing = 3,
+		};
+		sp.Children.Add(new TextBlock{
+			Text = Label,
+		});
+		var tb = new TextBox{
+			IsReadOnly = ReadOnly,
+			AcceptsReturn = AcceptsReturn,
+			TextWrapping = AcceptsReturn ? TextWrapping.Wrap : TextWrapping.NoWrap,
+			MaxHeight = AcceptsReturn ? 140 : double.PositiveInfinity,
+		};
+		tb.Bind(TextBox.TextProperty, Binding);
+		sp.Children.Add(tb);
+		return sp;
 	}
 }

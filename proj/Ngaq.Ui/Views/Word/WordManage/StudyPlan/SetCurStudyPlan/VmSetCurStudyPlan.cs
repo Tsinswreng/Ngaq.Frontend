@@ -1,10 +1,10 @@
 ﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 
-using System;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.StudyPlan.Models;
+using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Infra;
 
@@ -52,9 +52,24 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
+	public str CurId{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
+	public str CurUniqName{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
+	public str CurDescr{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
 	/// <summary>
 	/// 讀取後端「當前學習方案」。
-	/// 成功後把 BoStudyPlan 回調給 View 層更新編輯頁。
+	/// 成功後刷新當前方案的展示字段。
 	/// </summary>
 	public async Task<nil> LoadCurStudyPlan(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
@@ -72,7 +87,28 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 					PoWeightArg = jn.WeightArg,
 				};
 			}
-			OnLoadedCurStudyPlan?.Invoke(bo);
+			AssignCurFields(bo?.PoStudyPlan);
+			LastError = "";
+			OnPropertyChanged(nameof(HasError));
+		}catch(Exception e){
+			LastError = e.Message;
+			OnPropertyChanged(nameof(HasError));
+			HandleErr(e);
+		}
+		return NIL;
+	}
+
+	/// <summary>
+	/// 把所选學習方案設為當前方案，設置成功後刷新展示字段。
+	/// </summary>
+	public async Task<nil> ApplySelectedStudyPlan(PoStudyPlan? PoStudyPlan, CT Ct = default){
+		if(AnyNull(SvcStudyPlan, UserCtxMgr) || PoStudyPlan is null){
+			return NIL;
+		}
+		try{
+			await SvcStudyPlan.SetCurStudyPlanId(UserCtxMgr.GetDbUserCtx(), PoStudyPlan.Id, Ct);
+			AssignCurFields(PoStudyPlan);
+			ShowMsg(Todo.I18n("設置成功"));
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 		}catch(Exception e){
@@ -102,8 +138,9 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
-	/// View 監聽此事件，把當前 BoStudyPlan 灌入子編輯頁。
-	/// </summary>
-	public event Action<BoStudyPlan?>? OnLoadedCurStudyPlan;
+	void AssignCurFields(PoStudyPlan? poStudyPlan){
+		CurId = poStudyPlan?.Id.ToString() ?? "";
+		CurUniqName = poStudyPlan?.UniqName ?? "";
+		CurDescr = poStudyPlan?.Descr ?? "";
+	}
 }

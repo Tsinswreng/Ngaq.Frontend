@@ -10,7 +10,6 @@ using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Ctx = VmStudyPlanPage;
 
 /// StudyPlan 列表頁 ViewModel。
@@ -61,6 +60,20 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 	} = "";
 
 	public ObservableCollection<RowStudyPlan> Rows{get;set;} = [];
+
+	public bool IsSelectMode{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(CanCreate));
+			}
+		}
+	} = false;
+
+	/// 在选择模式中也允许新增，方便“边选边创建”。
+	public bool CanCreate => true;
+
+	Action<PoStudyPlan>? FnOnSelected{get;set;}
 
 	/// 列表行模型。
 	public class RowStudyPlan{
@@ -138,15 +151,32 @@ public partial class VmStudyPlanPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
-	// TODO 頁面跳轉邏輯不應放在 Vm層。 Vm不應該引用View層的控件
 	public nil OpenDetail(RowStudyPlan? row = null){
-		var view = new ViewStudyPlanEdit();
-		view.Ctx?.SetCreateMode(row?.Raw is null);
-		view.Ctx?.FromPoStudyPlan(row?.Raw);
-		var title = row?.Raw?.UniqName ?? Todo.I18n("新增學習方案");
-		var titled = ToolView.WithTitle(title, view);
-		ViewNavi?.GoTo(titled);
+		if(IsSelectMode){
+			if(row?.Raw is not null){
+				FnOnSelected?.Invoke(row.Raw);
+				return NIL;
+			}
+			// 選擇模式下點擊「新增」(row==null) 也允許進入新增編輯頁。
+			OnOpenDetailRequested?.Invoke(row);
+			return NIL;
+		}
+		OnOpenDetailRequested?.Invoke(row);
 		return NIL;
 	}
+
+	/// <summary>
+	/// 切换为“选择模式”，用于给其他页面选取 StudyPlan。
+	/// </summary>
+	public nil SetSelectMode(Action<PoStudyPlan> FnOnSelected){
+		IsSelectMode = true;
+		this.FnOnSelected = FnOnSelected;
+		return NIL;
+	}
+
+	/// <summary>
+	/// 由 View 層監聽，收到後在 View 中完成頁面實例化與導航。
+	/// </summary>
+	public event Action<RowStudyPlan?>? OnOpenDetailRequested;
 
 }

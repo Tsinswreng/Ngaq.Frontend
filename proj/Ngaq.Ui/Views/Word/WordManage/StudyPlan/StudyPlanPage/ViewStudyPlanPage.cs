@@ -15,6 +15,8 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmStudyPlanPage;
@@ -29,6 +31,9 @@ public partial class ViewStudyPlanPage
 
 	public ViewStudyPlanPage(){
 		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnOpenDetailRequested += OpenDetail;
+		}
 		Style();
 		Render();
 		InitDataGrid();
@@ -96,6 +101,7 @@ public partial class ViewStudyPlanPage
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.CanCreate, Mode: Avalonia.Data.BindingMode.OneWay);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
@@ -160,5 +166,14 @@ public partial class ViewStudyPlanPage
 				return;
 			}
 		}
+	}
+
+	void OpenDetail(Ctx.RowStudyPlan? row){
+		var view = new ViewStudyPlanEdit();
+		view.Ctx?.SetCreateMode(row?.Raw is null);
+		view.Ctx?.FromPoStudyPlan(row?.Raw);
+		var title = row?.Raw?.UniqName ?? Todo.I18n("新增學習方案");
+		var titled = ToolView.WithTitle(title, view);
+		Ctx?.ViewNavi?.GoTo(titled);
 	}
 }
