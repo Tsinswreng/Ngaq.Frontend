@@ -159,6 +159,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		.ToList();
 	public IReadOnlyList<str> OperationOptions{get;} = Enum.GetNames<EFilterOperationMode>();
 	public IReadOnlyList<str> ValueTypeOptions{get;} = Enum.GetNames<EValueType>();
+	public bool ShowPoTypeField => PoTypeOptions.Count > 1;
 
 	public str PoIdText{
 		get{return field;}

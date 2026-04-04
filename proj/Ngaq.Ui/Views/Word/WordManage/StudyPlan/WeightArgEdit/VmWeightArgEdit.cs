@@ -70,6 +70,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		.Where(x=>x != EWeightArgType.Unknown)
 		.Select(x=>x.ToString())
 		.ToList();
+	public bool ShowTypeField => TypeOptions.Count > 1;
 
 	public str PoIdText{
 		get{return field;}

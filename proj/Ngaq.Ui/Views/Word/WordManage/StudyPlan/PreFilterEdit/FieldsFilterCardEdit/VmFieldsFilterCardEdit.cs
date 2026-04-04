@@ -85,7 +85,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 
 	public nil AddItem(){
 		Items.Add(VmPreFilterVisualEdit.MkFilterItemRow());
-		RefreshItemCards();
+		CommitItemsDraft();
 		return NIL;
 	}
 
@@ -120,7 +120,24 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		Items.Remove(Item);
+		CommitItemsDraft();
+		return NIL;
+	}
+
+	/// <summary>
+	/// Persist current item-list draft to the backing FieldsFilter row immediately.
+	/// This avoids losing item edits/deletes when user exits and re-enters the group page.
+	/// </summary>
+	public nil CommitItemsDraft(){
 		RefreshItemCards();
+		if(Target is null || Owner is null){
+			return NIL;
+		}
+		Target.Items.Clear();
+		foreach(var item in Items){
+			Target.Items.Add(CloneItem(item));
+		}
+		Owner.RefreshFieldsFilterCards();
 		return NIL;
 	}
 

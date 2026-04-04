@@ -48,8 +48,16 @@ public class ViewFilterItemEdit: AppViewBase{
 		};
 		sv.Content = root;
 
-		root.Children.Add(MkComboRow(Todo.I18n("Operation"), Ctx?.OperationOptions ?? [], CBE.Mk<Ctx>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)));
-		root.Children.Add(MkComboRow(Todo.I18n("Value Type"), Ctx?.ValueTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)));
+		root.Children.Add(MkComboRow(
+			Todo.I18n("Operation"),
+			CBE.Mk<Ctx>(x=>x.OperationOptions, Mode: BindingMode.OneWay),
+			CBE.Mk<Ctx>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)
+		));
+		root.Children.Add(MkComboRow(
+			Todo.I18n("Value Type"),
+			CBE.Mk<Ctx>(x=>x.ValueTypeOptions, Mode: BindingMode.OneWay),
+			CBE.Mk<Ctx>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)
+		));
 		root.Children.Add(MkInputRow(Todo.I18n("Values (newline separated)"), CBE.Mk<Ctx>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true, MaxHeight: 180));
 		return sv;
 	}
@@ -91,14 +99,12 @@ public class ViewFilterItemEdit: AppViewBase{
 		return sp;
 	}
 
-	Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
+	Control MkComboRow(str Label, IBinding ItemsBinding, IBinding SelectedIdxBinding){
 		var sp = new StackPanel{Spacing = 3};
 		sp.Children.Add(new TextBlock{Text = Label});
 		var cb = new ComboBox();
-		foreach(var item in Items){
-			cb.Items.Add(item);
-		}
-		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
+		cb.Bind(ComboBox.ItemsSourceProperty, ItemsBinding);
+		cb.Bind(ComboBox.SelectedIndexProperty, SelectedIdxBinding);
 		sp.Children.Add(cb);
 		return sp;
 	}

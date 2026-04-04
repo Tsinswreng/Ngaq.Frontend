@@ -66,6 +66,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 		.Where(x=>x != EWeightCalculatorType.Unknown)
 		.Select(x=>x.ToString())
 		.ToList();
+	public bool ShowTypeField => TypeOptions.Count > 1;
 
 	public str PoIdText{
 		get{return field;}

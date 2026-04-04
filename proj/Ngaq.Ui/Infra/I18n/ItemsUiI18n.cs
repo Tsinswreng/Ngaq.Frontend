@@ -3,7 +3,7 @@ using static Ngaq.Ui.Infra.I18n.I18nKey;
 using K = II18nKey;
 
 public static partial class ItemsUiI18n{
-	public static K? View = Mk(null, ["View"]);
+	public static K? View = Mk(null, [nameof(View)]);
 
 public class Common{
 	public static readonly K _R = Mk(View, [nameof(Common)]);
@@ -12,29 +12,29 @@ public class Common{
 }
 
 public class Home{
-	public static readonly K _Root = Mk(View, [nameof(Home)]);
-	public static readonly K Learn = Mk(_Root, [nameof(Learn)]);
-	public static readonly K Library = Mk(_Root, [nameof(Library)]);
-	public static readonly K Me = Mk(_Root, [nameof(Me)]);
+	public static readonly K _R = Mk(View, [nameof(Home)]);
+	public static readonly K Learn = Mk(_R, [nameof(Learn)]);
+	public static readonly K Library = Mk(_R, [nameof(Library)]);
+	public static readonly K Me = Mk(_R, [nameof(Me)]);
 }
 
 
 public class LearnWord{
-	public static readonly K _Root = Mk(View, [nameof(LearnWord)]);
-	public static readonly K Start = Mk(_Root, [nameof(Start)]);
-	public static readonly K Save = Mk(_Root, [nameof(Save)]);
-	public static readonly K Reset = Mk(_Root, [nameof(Reset)]);
-	public static readonly K Clear = Mk(_Root, [nameof(Clear)]);
-	public static readonly K Settings = Mk(_Root, [nameof(Settings)]);
-	public static readonly K LearnWordSettings = Mk(_Root, [nameof(LearnWordSettings)]);
+	public static readonly K _R = Mk(View, [nameof(LearnWord)]);
+	public static readonly K Start = Mk(_R, [nameof(Start)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	public static readonly K Reset = Mk(_R, [nameof(Reset)]);
+	public static readonly K Clear = Mk(_R, [nameof(Clear)]);
+	public static readonly K Settings = Mk(_R, [nameof(Settings)]);
+	public static readonly K LearnWordSettings = Mk(_R, [nameof(LearnWordSettings)]);
 }
 
 public class Library{
-	public static readonly K R = Mk(View, [nameof(Library)]);
-	public static readonly K SearchWords = Mk(R, [nameof(SearchWords)]);
-	public static readonly K SearchMyWords = Mk(R, [nameof(SearchMyWords)]);
-	public static readonly K AddWords = Mk(R, [nameof(AddWords)]);
-	public static readonly K BackupEtSync = Mk(R, [nameof(BackupEtSync)]);
+	public static readonly K _R = Mk(View, [nameof(Library)]);
+	public static readonly K SearchWords = Mk(_R, [nameof(SearchWords)]);
+	public static readonly K SearchMyWords = Mk(_R, [nameof(SearchMyWords)]);
+	public static readonly K AddWords = Mk(_R, [nameof(AddWords)]);
+	public static readonly K BackupEtSync = Mk(_R, [nameof(BackupEtSync)]);
 }
 
 public class LoginRegister{

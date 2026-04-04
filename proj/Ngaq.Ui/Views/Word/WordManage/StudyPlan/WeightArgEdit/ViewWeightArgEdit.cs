@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
@@ -94,7 +95,7 @@ public partial class ViewWeightArgEdit
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText), ReadOnly: true))
+		.A(MkIdRow(Todo.I18n("ID"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
 		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			Todo.I18n("WeightCalculator"),
@@ -104,15 +105,17 @@ public partial class ViewWeightArgEdit
 				var view = new ViewWeightCalculatorPage();
 				view.Ctx?.SetSelectMode(po=>{
 					Ctx?.ApplySelectedWeightCalculator(po);
-					Ctx?.ViewNavi?.Back();
+					view.Ctx?.ViewNavi?.Back();
 				});
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇權重算法"), view));
 			},
 			ReadOnly: true
 		))
 		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
-		.A(MkComboRow(Todo.I18n("Type"), Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay)))
 		;
+		var typeRow = MkComboRow(Todo.I18n("Type"), Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
+		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowTypeField, Mode: BindingMode.OneWay);
+		sp.A(typeRow);
 		return bdr;
 	}
 
@@ -184,6 +187,23 @@ public partial class ViewWeightArgEdit
 		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
 		sp.Children.Add(cb);
 		return sp;
+	}
+
+	Control MkIdRow(str Label, IBinding Binding){
+		var row = new StackPanel{
+			Spacing = 6,
+			Orientation = Orientation.Horizontal,
+		};
+		row.Children.Add(new TextBlock{
+			Text = Label + ":",
+			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+		});
+		var value = new TextBlock{
+			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+		};
+		value.Bind(TextBlock.TextProperty, Binding);
+		row.Children.Add(value);
+		return row;
 	}
 
 }

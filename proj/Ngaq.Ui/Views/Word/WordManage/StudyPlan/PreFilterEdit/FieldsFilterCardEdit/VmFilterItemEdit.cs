@@ -62,7 +62,7 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		Target.OperationIndex = OperationIndex;
 		Target.ValueTypeIndex = ValueTypeIndex;
 		Target.ValuesText = ValuesText;
-		Owner.RefreshItemCards();
+		Owner.CommitItemsDraft();
 		ShowMsg(Todo.I18n($"Saved Filter Item #{ItemIdx}"));
 		ViewNavi?.Back();
 		return NIL;
