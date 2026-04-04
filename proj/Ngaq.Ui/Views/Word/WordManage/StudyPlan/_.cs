@@ -54,6 +54,44 @@ StudyPlan同理。當前studyPlan的編輯頁是要自己填引用的Id的。
 原本 StudyPlanPage頁面上有一個 Restore 按鈕、
 把這個按鈕移動到 設置當前學習方案 的頁面 的菜單裏。
 
+前端涉及引用的部分、目前有兩種情況
+一種情況是同時顯示被引用對象的UniqName和Id
+一種情況是只顯示Id 不顯示UniqName
+用戶操作GUI時本應無需關心Id。改成只顯示UniqName不顯示Id的。
+
+前端可編輯Type的地方 不要顯示Unknown這一選項。
+	
+PreFilter 載荷GUI編輯頁不要顯示Version
+
+新建PreFilter時 載荷json的默認值應該是這樣
+```json
+{
+	"Version": "1.0.0.0",
+	"CoreFilter": [],
+	"PropFilter": []
+}
+```
+
+CoreFilter的Fields
+	只能是 PoWord 有 的字段
+	(Head, Lang, BizCreatedAt, BizUpdatedAt)這四種
+	選擇時 做成 既能下拉框選擇 也能手動輸入補全的。除此之外不接收其他無效值。注意用nameof關鍵字  禁止硬編碼。
+	
+	編輯每個 FilterItem 單獨一個頁面 不要把所有的 FilterItem 全塞一個頁面裏再用 scrollViewer顯示。
+	
+	具體 CoreFilter的視圖應該是這樣:
+	
+	頂上兩個標籤、Fields標籤和FilterItems標籤。
+	在 Fields標籤頁裏就在滾動器裏放多個可選可填充的輸入框。
+	
+	FilterItems 標籤頁裏 先用TreeDataGrid顯示所有的 FilterItems、點擊之後纔 轉到 具體單個 FilterItem 的編輯頁。
+	
+	FilterItem中 編輯多個Value時默認只用換行符作分隔、不要支持逗號。
+	編輯Value的輸出框要做個最大高度、不然我內容行數變多他就一直變高。
+	
+	PropFilter和CoreFilter類似、
+	只是Field的編輯不同:
+	PropFilter的 Field 編輯的時候 可選 E:\_code\CsNgaq\Ngaq.Core\Shared\Word\Models\Po\Kv\ConstPropKey.cs 這個下面的條目、也可以自己填別的。
 ]
 """;
 }
