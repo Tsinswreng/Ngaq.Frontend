@@ -45,13 +45,6 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 		this.UserCtxMgr = UserCtxMgr;
 	}
 
-	public str LastError{
-		get{return field;}
-		set{SetProperty(ref field, value);}
-	} = "";
-
-	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
-
 	public str CurId{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -94,11 +87,7 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 				};
 			}
 			AssignCurFields(bo?.PoStudyPlan);
-			LastError = "";
-			OnPropertyChanged(nameof(HasError));
 		}catch(Exception e){
-			LastError = e.Message;
-			OnPropertyChanged(nameof(HasError));
 			HandleErr(e);
 		}
 		return NIL;
@@ -115,14 +104,25 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 			await SvcStudyPlan.SetCurStudyPlanId(UserCtxMgr.GetDbUserCtx(), PoStudyPlan.Id, Ct);
 			AssignCurFields(PoStudyPlan);
 			ShowMsg(Todo.I18n("設置成功"));
-			LastError = "";
-			OnPropertyChanged(nameof(HasError));
 		}catch(Exception e){
-			LastError = e.Message;
-			OnPropertyChanged(nameof(HasError));
 			HandleErr(e);
 		}
 		return NIL;
+	}
+
+	/// <summary>
+	/// 在「選擇」流程中暫存候選 StudyPlan，暫不調用後端接口。
+	/// </summary>
+	public nil SelectCandidateStudyPlan(PoStudyPlan? poStudyPlan){
+		AssignCurFields(poStudyPlan);
+		return NIL;
+	}
+
+	/// <summary>
+	/// 把當前候選方案提交為「當前學習方案」。此函數給 OpBtn 綁定。
+	/// </summary>
+	public async Task<nil> CommitSelectedStudyPlan(CT Ct = default){
+		return await ApplySelectedStudyPlan(CurPoStudyPlan, Ct);
 	}
 
 	/// <summary>
@@ -137,8 +137,6 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 			ShowMsg(Todo.I18n("RestoreBuiltinDone"));
 			return await LoadCurStudyPlan(Ct);
 		}catch(Exception e){
-			LastError = e.Message;
-			OnPropertyChanged(nameof(HasError));
 			HandleErr(e);
 		}
 		return NIL;

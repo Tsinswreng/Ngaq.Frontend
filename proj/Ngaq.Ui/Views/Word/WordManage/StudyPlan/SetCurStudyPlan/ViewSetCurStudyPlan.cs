@@ -99,28 +99,9 @@ public partial class ViewSetCurStudyPlan
 
 	Control MkBody(){
 		var host = new AutoGrid(IsRow:true);
-		host.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
-		]);
-		host.A(MkErrorBar());
+		host.Grid.RowDefinitions.AddRange([RowDef(1, GUT.Star)]);
 		host.A(MkFieldsPanel());
 		return host.Grid;
-	}
-
-	Control MkErrorBar(){
-		var b = new Border{
-			Background = new SolidColorBrush(Color.FromArgb(80, 180, 30, 30)),
-			Padding = new Thickness(10, 6),
-			IsVisible = false,
-		};
-		b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
-		var txt = new TextBlock{
-			Foreground = Brushes.White,
-		};
-		txt.CBind<Ctx>(TextBlock.TextProperty, x=>x.LastError, Mode: BindingMode.OneWay);
-		b.Child = txt;
-		return b;
 	}
 
 	/// <summary>
@@ -154,11 +135,15 @@ public partial class ViewSetCurStudyPlan
 			o.Click += (s,e)=>{
 				var view = new ViewStudyPlanPage();
 				view.Ctx?.SetSelectMode(po=>{
-					_ = Ctx?.ApplySelectedStudyPlan(po, default);
+					Ctx?.SelectCandidateStudyPlan(po);
 					view.Ctx?.ViewNavi?.Back();
 				});
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
 			};
+		})
+		.A(new OpBtn(), o=>{
+			o.BtnContent = Todo.I18n("設為當前");
+			o.SetExe((Ct)=>Ctx?.CommitSelectedStudyPlan(Ct)!);
 		})
 		.A(new Button(), o=>{
 			o.Content = Todo.I18n("編輯");
