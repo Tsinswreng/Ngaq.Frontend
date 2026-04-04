@@ -130,20 +130,9 @@ public partial class ViewSetCurStudyPlan
 		sp.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.CurId, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(MkInputRow(Todo.I18n("UniqName"), CBE.Mk<Ctx>(x=>x.CurUniqName, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(MkInputRow(Todo.I18n("descr"), CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
-		.A(new Button(), o=>{
-			o.Content = Todo.I18n("選擇");
-			o.Click += (s,e)=>{
-				var view = new ViewStudyPlanPage();
-				view.Ctx?.SetSelectMode(po=>{
-					Ctx?.SelectCandidateStudyPlan(po);
-					view.Ctx?.ViewNavi?.Back();
-				});
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
-			};
-		})
 		.A(new OpBtn(), o=>{
-			o.BtnContent = Todo.I18n("設為當前");
-			o.SetExe((Ct)=>Ctx?.CommitSelectedStudyPlan(Ct)!);
+			o.BtnContent = Todo.I18n("選擇");
+			o.SetExe((Ct)=>ChooseAndApplyStudyPlan(Ct));
 		})
 		.A(new Button(), o=>{
 			o.Content = Todo.I18n("編輯");
@@ -179,5 +168,38 @@ public partial class ViewSetCurStudyPlan
 		tb.Bind(TextBox.TextProperty, Binding);
 		sp.Children.Add(tb);
 		return sp;
+	}
+
+	async System.Threading.Tasks.Task<nil> ChooseAndApplyStudyPlan(CT Ct){
+		if(Ctx is null){
+			return NIL;
+		}
+		var tcs = new System.Threading.Tasks.TaskCompletionSource<
+			Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan.PoStudyPlan?
+		>();
+		var view = new ViewStudyPlanPage();
+		view.DetachedFromVisualTree += (s,e)=>{
+			tcs.TrySetResult(null);
+		};
+		view.Ctx?.SetSelectMode(po=>{
+			Ctx.SelectCandidateStudyPlan(po);
+			tcs.TrySetResult(po);
+			view.Ctx?.ViewNavi?.Back();
+		});
+		Ctx.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
+		Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan.PoStudyPlan? selected = null;
+		try{
+			using var reg = Ct.Register(()=>tcs.TrySetCanceled(Ct));
+			selected = await tcs.Task;
+			if(selected is null){
+				return NIL;
+			}
+			return await Ctx.CommitSelectedStudyPlan(Ct);
+		}catch(System.OperationCanceledException){
+			return NIL;
+		}catch(System.Exception e){
+			Ctx.HandleErr(e);
+			return NIL;
+		}
 	}
 }
