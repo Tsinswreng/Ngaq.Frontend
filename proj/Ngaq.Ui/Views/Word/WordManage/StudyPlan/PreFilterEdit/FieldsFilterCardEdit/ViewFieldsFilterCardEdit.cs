@@ -132,11 +132,10 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		ItemGrid = new TreeDataGrid{
 			MinHeight = 220,
 		};
-		ItemGrid.Styles.Add(
+		ItemGrid.Styles.A(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
-		);
-		ItemGrid.Styles.Add(
+		).A(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
