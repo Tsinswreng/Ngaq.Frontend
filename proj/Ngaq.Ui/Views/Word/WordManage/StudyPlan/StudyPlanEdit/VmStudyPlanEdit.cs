@@ -38,6 +38,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 
 	ISvcStudyPlan? SvcStudyPlan{get;set;}
 	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
+	i64 RefRefreshVer{get;set;} = 0;
 
 	public VmStudyPlanEdit(
 		ISvcStudyPlan? SvcStudyPlan
@@ -196,6 +197,9 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		PoDescr = po.Descr ?? "";
 		PreFilterIdText = po.PreFilterId.ToString();
 		PreFilterUniqNameText = BoStudyPlan.PoPreFilter?.UniqName ?? "";
+		if(str.IsNullOrWhiteSpace(PreFilterUniqNameText) && po.PreFilterId != IdPreFilter.Zero){
+			PreFilterUniqNameText = po.PreFilterId.ToString();
+		}
 		WeightCalculatorIdText = po.WeightCalculatorId.ToString();
 		WeightCalculatorUniqNameText = BoStudyPlan.PoWeightCalculator?.UniqName ?? "";
 		WeightArgIdText = po.WeightArgId.ToString();
@@ -216,23 +220,40 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
 			return NIL;
 		}
+		var curVer = ++RefRefreshVer;
 		try{
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			var po = PoStudyPlan ?? new PoStudyPlan();
+			var preFilterId = po.PreFilterId;
+			var weightCalculatorId = po.WeightCalculatorId;
+			var weightArgId = po.WeightArgId;
 			if(!po.PreFilterId.IsNullOrDefault()){
 				BoStudyPlan.PoPreFilter = await SvcStudyPlan
 					.BatGetPreFilterById(dbCtx, ToolAsyE.ToAsyE([po.PreFilterId]), Ct)
 					.FirstOrDefaultAsync(Ct);
+			}
+			if(curVer != RefRefreshVer){
+				return NIL;
 			}
 			if(!po.WeightCalculatorId.IsNullOrDefault()){
 				BoStudyPlan.PoWeightCalculator = await SvcStudyPlan
 					.BatGetWeightCalculatorById(dbCtx, ToolAsyE.ToAsyE([po.WeightCalculatorId]), Ct)
 					.FirstOrDefaultAsync(Ct);
 			}
+			if(curVer != RefRefreshVer){
+				return NIL;
+			}
 			if(!po.WeightArgId.IsNullOrDefault()){
 				BoStudyPlan.PoWeightArg = await SvcStudyPlan
 					.BatGetWeightArgById(dbCtx, ToolAsyE.ToAsyE([po.WeightArgId]), Ct)
 					.FirstOrDefaultAsync(Ct);
+			}
+			if(curVer != RefRefreshVer){
+				return NIL;
+			}
+			var latestPo = PoStudyPlan ?? new PoStudyPlan();
+			if(latestPo.PreFilterId != preFilterId || latestPo.WeightCalculatorId != weightCalculatorId || latestPo.WeightArgId != weightArgId){
+				return NIL;
 			}
 			SyncFromBo();
 		}catch(Exception e){
@@ -245,9 +266,13 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		if(Po is null){
 			return NIL;
 		}
+		RefRefreshVer++;
 		PoStudyPlan.PreFilterId = Po.Id;
 		PreFilterIdText = Po.Id.ToString();
 		PreFilterUniqNameText = Po.UniqName ?? "";
+		if(str.IsNullOrWhiteSpace(PreFilterUniqNameText)){
+			PreFilterUniqNameText = Po.Id.ToString();
+		}
 		BoStudyPlan.PoPreFilter = Po;
 		return NIL;
 	}
@@ -256,6 +281,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		if(Po is null){
 			return NIL;
 		}
+		RefRefreshVer++;
 		PoStudyPlan.WeightCalculatorId = Po.Id;
 		WeightCalculatorIdText = Po.Id.ToString();
 		WeightCalculatorUniqNameText = Po.UniqName ?? "";
@@ -267,6 +293,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		if(Po is null){
 			return NIL;
 		}
+		RefRefreshVer++;
 		PoStudyPlan.WeightArgId = Po.Id;
 		WeightArgIdText = Po.Id.ToString();
 		WeightArgUniqNameText = Po.UniqName ?? "";

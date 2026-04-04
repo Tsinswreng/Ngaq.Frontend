@@ -86,7 +86,7 @@ public partial class Cls_{
 		})
 		.A(new OpBtn(), (o)=>{
 			var b = o._Button;
-			b.SetContent(_TextBlock(), t=>{
+			b.SetContent(new TextBlock(), t=>{
 				t.Text = I[K.Login];
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 			});

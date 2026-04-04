@@ -36,6 +36,10 @@ public partial class ViewSetCurStudyPlan
 		Style();
 		Render();
 		Loaded += async(s,e)=>{
+			if(HasAutoLoaded){
+				return;
+			}
+			HasAutoLoaded = true;
 			_ = Ctx?.LoadCurStudyPlan(default);
 		};
 	}
@@ -59,6 +63,7 @@ public partial class ViewSetCurStudyPlan
 
 	AutoGrid Root = new(IsRow: true);
 	ViewStudyPlanEdit EditView = new();
+	bool HasAutoLoaded = false;
 
 	protected nil Render(){
 		this.Content = Root.Grid;

@@ -64,7 +64,7 @@ public interface II18n{
 }
 
 public static class AppExtnErrItem{
-	public static I18nKey ToI18nKey(this IErrItem z, params obj?[] Args){
+	public static I18nKey ToI18nKey(this IErrNode z, params obj?[] Args){
 		return new I18nKey{
 			RelaPathSegs=["Error", ..z.RelaPathSegs],
 			DfltValueObj = z.DfltValueObj

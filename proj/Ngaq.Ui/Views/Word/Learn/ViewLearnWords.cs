@@ -7,18 +7,13 @@ using Avalonia.Data;
 using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
-using DynamicData.Binding;
-using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
-using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
-using Ngaq.Ui.Views.Word.WordEditJsonMap;
 using Ngaq.Ui.Views.Word.WordInfo;
-using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
@@ -178,16 +173,6 @@ public partial class ViewLearnWords
 				));
 
 				o.SetExe((Ct)=>Ctx?.SaveEtRestart(Ct));
-/*
-				Ctx?.WhenPropertyChanged(x=>x.IsSaved).Subscribe(x=>{
-					if(!Ctx.IsSaved){
-						o._Button.Background = UiCfg.Inst.MainColor;
-					}else{
-						o._Button.Background = (new Button()).Background;
-					}
-
-				});
- */
  				o._Button.Styles.Add(
 					new Style(
 						//x=>x.OfType<Button>().Template().OfType<ContentPresenter>() //改僞類樣式旹纔需?
@@ -204,7 +189,6 @@ public partial class ViewLearnWords
 						)
 					)
 				);
-
 			}).A(Btn(), o=>{
 				o._Button.SetContent(Hc(//🔄
 					Ic(Svgs.RotateCw())
@@ -225,14 +209,7 @@ public partial class ViewLearnWords
 						)
 					);
 				};
-				// var ctxMenu = new ContextMenu();
-				// ctxMenu.Items.AddInit(new TextBox(), o=>{
-				// 	o.Text = "122";
-				// });
-				// o._Button.ContextMenu = ctxMenu;
-				//o.SetExt((Ct)=>Ctx?.ResetAsy(Ct));
 			})
-
 			;
 		}}
 
@@ -252,13 +229,13 @@ public partial class ViewLearnWords
 		});
 		{{
 			Root
-			.A(_Border(), o=>{
+			.A(new Border(), o=>{
 				//背景圖遮?
 				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
 				o.ZIndex = -1;
 			})
 			.A(_Menu())
-			.A(_ScrollViewer(), Scr=>{
+			.A(new ScrollViewer(), Scr=>{
 				Scr.SetContent(_ListWordCard(), o=>{
 					o.CBind<Ctx>(
 						ItemsControl.ItemsSourceProperty
@@ -361,19 +338,6 @@ public partial class ViewLearnWords
 							Ctx?.ClickWordCard(o.Ctx);
 						}
 					};
-					//觸屏?長按ʹ效ˋ不佳。scrollViewer上下滑動旹亦祘。璫只在靜止旹長按纔生效
-					// Btn.OnLongPressed += (s,e)=>{
-					// 	if(o?.Ctx != null){
-					// 		Ctx?.OnLongPressed(o.Ctx);
-					// 	}
-					// };
-					// Btn.OnSwipe += (s,e)=>{
-					// 	if(e.Direction == Tsinswreng.AvlnTools.Controls.IF.ISwipeBtn.SwipeDirection.Right){
-					// 		if(o?.Ctx != null){
-					// 			Ctx?.OnLongPressed(o.Ctx);
-					// 		}
-					// 	}
-					// };
 				});
 			}}//~Grid
 

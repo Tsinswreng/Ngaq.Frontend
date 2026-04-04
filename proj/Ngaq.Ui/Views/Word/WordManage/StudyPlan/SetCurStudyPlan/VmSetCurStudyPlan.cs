@@ -61,7 +61,17 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		try{
-			var bo = await SvcStudyPlan.GetCurBoStudyPlan(UserCtxMgr.GetDbUserCtx(), Ct);
+			var dbCtx = UserCtxMgr.GetDbUserCtx();
+			var jn = await SvcStudyPlan.GetCurJnStudyPlan(dbCtx, Ct);
+			BoStudyPlan? bo = null;
+			if(jn is not null){
+				bo = new BoStudyPlan{
+					PoStudyPlan = jn.StudyPlan,
+					PoPreFilter = jn.PreFilter,
+					PoWeightCalculator = jn.WeightCalculator,
+					PoWeightArg = jn.WeightArg,
+				};
+			}
 			OnLoadedCurStudyPlan?.Invoke(bo);
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
