@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
@@ -60,7 +61,15 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
-	public IReadOnlyList<str> TypeOptions{get;} = Enum.GetNames<EWeightArgType>();
+	public IReadOnlyList<EWeightArgType> TypeValues{get;} = Enum
+		.GetValues<EWeightArgType>()
+		.Where(x=>x != EWeightArgType.Unknown)
+		.ToList();
+	public IReadOnlyList<str> TypeOptions{get;} = Enum
+		.GetValues<EWeightArgType>()
+		.Where(x=>x != EWeightArgType.Unknown)
+		.Select(x=>x.ToString())
+		.ToList();
 
 	public str PoIdText{
 		get{return field;}
@@ -212,7 +221,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		if(WeightCalculatorId.IsNullOrDefault()){
 			WeightCalculatorUniqNameText = "";
 		}
-		PoTypeIndex = ClampIndex((i32)po.Type, TypeOptions.Count);
+		PoTypeIndex = GetTypeIndex(po.Type);
 		PayloadText = po.Text ?? "";
 		LastError = "";
 		OnPropertyChanged(nameof(HasError));
@@ -247,10 +256,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		po.UniqName = str.IsNullOrWhiteSpace(PoUniqName) ? null : PoUniqName.Trim();
 		po.Descr = PoDescr?.Trim() ?? "";
 		po.WeightCalculatorId = WeightCalculatorId;
-		po.Type = EnumOrDefault<EWeightArgType>(PoTypeIndex);
-		if(po.Type == EWeightArgType.Unknown){
-			po.Type = EWeightArgType.Json;
-		}
+		po.Type = GetTypeByIndex(PoTypeIndex);
 		po.Text = PayloadText;
 		po.Binary = null;
 		return po;
@@ -301,13 +307,23 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		return value;
 	}
 
-	static TEnum EnumOrDefault<TEnum>(i32 index)
-		where TEnum : struct, Enum
-	{
-		var values = Enum.GetValues<TEnum>();
-		if(index < 0 || index >= values.Length){
-			return values[0];
+	i32 GetTypeIndex(EWeightArgType type){
+		if(TypeValues.Count == 0){
+			return 0;
 		}
-		return values[index];
+		for(i32 i = 0; i < TypeValues.Count; i++){
+			if(TypeValues[i] == type){
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	EWeightArgType GetTypeByIndex(i32 index){
+		if(TypeValues.Count == 0){
+			return EWeightArgType.Json;
+		}
+		var i = ClampIndex(index, TypeValues.Count);
+		return TypeValues[i];
 	}
 }

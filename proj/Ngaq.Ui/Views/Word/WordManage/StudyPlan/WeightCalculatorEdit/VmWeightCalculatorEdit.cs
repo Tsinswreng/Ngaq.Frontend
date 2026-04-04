@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
@@ -56,7 +57,15 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
-	public IReadOnlyList<str> TypeOptions{get;} = Enum.GetNames<EWeightCalculatorType>();
+	public IReadOnlyList<EWeightCalculatorType> TypeValues{get;} = Enum
+		.GetValues<EWeightCalculatorType>()
+		.Where(x=>x != EWeightCalculatorType.Unknown)
+		.ToList();
+	public IReadOnlyList<str> TypeOptions{get;} = Enum
+		.GetValues<EWeightCalculatorType>()
+		.Where(x=>x != EWeightCalculatorType.Unknown)
+		.Select(x=>x.ToString())
+		.ToList();
 
 	public str PoIdText{
 		get{return field;}
@@ -162,7 +171,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 		PoIdText = po.Id.ToString();
 		PoUniqName = po.UniqName ?? "";
 		PoDescr = po.Descr ?? "";
-		PoTypeIndex = ClampIndex((i32)po.Type, TypeOptions.Count);
+		PoTypeIndex = GetTypeIndex(po.Type);
 		PayloadText = po.Text ?? "";
 		LastError = "";
 		OnPropertyChanged(nameof(HasError));
@@ -172,10 +181,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 		var po = ClonePoWeightCalculator(PoWeightCalculator);
 		po.UniqName = str.IsNullOrWhiteSpace(PoUniqName) ? null : PoUniqName.Trim();
 		po.Descr = PoDescr?.Trim() ?? "";
-		po.Type = EnumOrDefault<EWeightCalculatorType>(PoTypeIndex);
-		if(po.Type == EWeightCalculatorType.Unknown){
-			po.Type = EWeightCalculatorType.Js;
-		}
+		po.Type = GetTypeByIndex(PoTypeIndex);
 		po.Text = PayloadText;
 		po.Binary = null;
 		return po;
@@ -212,13 +218,23 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 		return value;
 	}
 
-	static TEnum EnumOrDefault<TEnum>(i32 index)
-		where TEnum : struct, Enum
-	{
-		var values = Enum.GetValues<TEnum>();
-		if(index < 0 || index >= values.Length){
-			return values[0];
+	i32 GetTypeIndex(EWeightCalculatorType type){
+		if(TypeValues.Count == 0){
+			return 0;
 		}
-		return values[index];
+		for(i32 i = 0; i < TypeValues.Count; i++){
+			if(TypeValues[i] == type){
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	EWeightCalculatorType GetTypeByIndex(i32 index){
+		if(TypeValues.Count == 0){
+			return EWeightCalculatorType.Js;
+		}
+		var i = ClampIndex(index, TypeValues.Count);
+		return TypeValues[i];
 	}
 }

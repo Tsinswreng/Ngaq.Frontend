@@ -3,8 +3,13 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCard
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -14,6 +19,9 @@ using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = VmFieldsFilterCardEdit;
 
+/// <summary>
+/// Editor view for a single fields-filter group.
+/// </summary>
 public class ViewFieldsFilterCardEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -23,9 +31,13 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	public ViewFieldsFilterCardEdit(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();
+		InitGridSource();
 	}
 
 	AutoGrid Root = new(IsRow: true);
+	TreeDataGrid? ItemGrid;
+	FlatTreeDataGridSource<Ctx.RowFilterItemCard>? ItemGridSource;
+
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -38,6 +50,19 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	}
 
 	Control MkBody(){
+		var tabs = new TabControl();
+		tabs.Items.Add(new TabItem{
+			Header = Todo.I18n("Fields"),
+			Content = MkFieldsTab(),
+		});
+		tabs.Items.Add(new TabItem{
+			Header = Todo.I18n("FilterItems"),
+			Content = MkFilterItemsTab(),
+		});
+		return tabs;
+	}
+
+	Control MkFieldsTab(){
 		var sv = new ScrollViewer();
 		var root = new StackPanel{
 			Spacing = 10,
@@ -45,44 +70,115 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		};
 		sv.Content = root;
 
-		root.Children.Add(MkInputRow(
-			Todo.I18n("Fields (comma/newline separated)"),
-			CBE.Mk<Ctx>(x=>x.FieldsText, Mode: BindingMode.TwoWay),
-			AcceptsReturn: true
-		));
-
-		var btnAdd = new Button{
-			Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Item")),
+		var addBtn = new Button{
+			Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Field")),
 			HorizontalAlignment = HAlign.Left,
 		};
-		btnAdd.Click += (s,e)=>Ctx?.AddItem();
-		root.Children.Add(btnAdd);
+		addBtn.Click += (s,e)=>Ctx?.AddField();
+		root.Children.Add(addBtn);
 
 		var list = new ItemsControl();
-		list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.Items, Mode: BindingMode.OneWay));
+		list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.Fields, Mode: BindingMode.OneWay));
 		list.SetItemsPanel(()=>new StackPanel{Spacing = 8});
-		list.SetItemTemplate<VmPreFilterVisualEdit.VmFilterItemRow>((item, ns)=>{
-			var bdr = new Border{
-				BorderBrush = Brushes.DimGray,
-				BorderThickness = new Thickness(1),
-				Padding = new Thickness(8),
+		list.SetItemTemplate<VmPreFilterVisualEdit.VmFieldValueRow>((item, ns)=>{
+			var row = new AutoGrid(IsRow:false);
+			row.Grid.ColumnDefinitions.AddRange([
+				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Auto),
+			]);
+
+			var cb = new ComboBox{
+				IsEditable = true,
+				HorizontalAlignment = HAlign.Stretch,
 			};
-			var sp = new StackPanel{Spacing = 6};
-			bdr.Child = sp;
-			sp.Children.Add(MkComboRow(Todo.I18n("Operation"), Ctx?.OperationOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)));
-			sp.Children.Add(MkComboRow(Todo.I18n("Value Type"), Ctx?.ValueTypeOptions ?? [], CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)));
-			sp.Children.Add(MkInputRow(Todo.I18n("Values (comma/newline separated)"), CBE.Mk<VmPreFilterVisualEdit.VmFilterItemRow>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true));
+			cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptions, Source: Ctx, Mode: BindingMode.OneWay));
+			cb.Bind(ComboBox.TextProperty, CBE.Mk<VmPreFilterVisualEdit.VmFieldValueRow>(x=>x.Value, Mode: BindingMode.TwoWay));
+			row.A(cb);
+
 			var rm = new Button{
-				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove Item")),
+				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove")),
 				Background = new SolidColorBrush(Color.FromRgb(210, 56, 56)),
-				HorizontalAlignment = HAlign.Right,
 			};
-			rm.Click += (s,e)=>Ctx?.RemoveItem(item);
-			sp.Children.Add(rm);
-			return bdr;
+			rm.Click += (s,e)=>Ctx?.RemoveField(item);
+			row.A(rm);
+			return row.Grid;
 		});
 		root.Children.Add(list);
 		return sv;
+	}
+
+	Control MkFilterItemsTab(){
+		var root = new AutoGrid(IsRow:true);
+		root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Star),
+		]);
+
+		var top = new AutoGrid(IsRow:false);
+		top.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Auto),
+		]);
+		top.A(new TextBlock(), o=>{
+			o.Text = Todo.I18n("Tap row to edit one FilterItem");
+			o.VerticalAlignment = VAlign.Center;
+		});
+		top.A(new Button(), o=>{
+			o.Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Item"));
+			o.Click += (s,e)=>Ctx?.AddItem();
+		});
+		root.A(top.Grid);
+
+		ItemGrid = new TreeDataGrid{
+			MinHeight = 220,
+		};
+		ItemGrid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+		);
+		ItemGrid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+		);
+		ItemGrid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
+		root.A(ItemGrid);
+		return root.Grid;
+	}
+
+	void InitGridSource(){
+		if(Ctx is null || ItemGrid is null){
+			return;
+		}
+		ItemGridSource = new FlatTreeDataGridSource<Ctx.RowFilterItemCard>(Ctx.ItemCards){
+			Columns = {
+				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("#"), x=>x.UiIdxText),
+				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("Operation"), x=>x.Operation),
+				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("ValueType"), x=>x.ValueType),
+				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("Values"), x=>x.ValuesPreview),
+			},
+		};
+		ItemGrid.Source = ItemGridSource;
+	}
+
+	void OnGridTapped(object? sender, TappedEventArgs e){
+		if(Ctx is null){
+			return;
+		}
+		if(e.Source is not StyledElement src){
+			return;
+		}
+		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
+			if(cur is ToggleButton){
+				return;
+			}
+			if(cur is TreeDataGridRow row){
+				if(row.DataContext is Ctx.RowFilterItemCard vmRow){
+					Ctx.OpenFilterItem(vmRow);
+					e.Handled = true;
+				}
+				return;
+			}
+		}
 	}
 
 	Control MkBottomBar(){
@@ -96,34 +192,10 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Item"));
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Group"));
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
 		});
 		return g.Grid;
-	}
-
-	Control MkInputRow(str Label, IBinding Binding, bool AcceptsReturn = false){
-		var sp = new StackPanel{Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		var tb = new TextBox{
-			AcceptsReturn = AcceptsReturn,
-			TextWrapping = AcceptsReturn ? TextWrapping.Wrap : TextWrapping.NoWrap,
-		};
-		tb.Bind(TextBox.TextProperty, Binding);
-		sp.Children.Add(tb);
-		return sp;
-	}
-
-	Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
-		var sp = new StackPanel{Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		var cb = new ComboBox();
-		foreach(var item in Items){
-			cb.Items.Add(item);
-		}
-		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
-		sp.Children.Add(cb);
-		return sp;
 	}
 }

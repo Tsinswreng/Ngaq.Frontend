@@ -19,8 +19,9 @@ using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit.VmPreFilterVisualEdit;
 
-
-/// PreFilter（無 Po 字段）GUI 子編輯頁。
+/// <summary>
+/// GUI editor for PreFilter payload data (without Po fields).
+/// </summary>
 public class ViewPreFilterDataEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -58,7 +59,6 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		};
 		sv.Content = root;
 		root.Children.Add(MkErrorBar());
-		root.Children.Add(MkPreFilterMetaSection());
 		root.Children.Add(MkFieldsFilterGridSection(true));
 		root.Children.Add(MkFieldsFilterGridSection(false));
 		return sv;
@@ -101,23 +101,6 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		txt.CBind<Ctx>(TextBlock.TextProperty, x=>x.LastError, Mode: BindingMode.OneWay);
 		b.Child = txt;
 		return b;
-	}
-
-	Control MkPreFilterMetaSection(){
-		var bdr = new Border{
-			BorderBrush = Brushes.DimGray,
-			BorderThickness = new Thickness(1),
-			Padding = new Thickness(10),
-		};
-		var sp = new StackPanel{Spacing = 8};
-		bdr.Child = sp;
-		sp.Children.Add(new TextBlock{
-			Text = Todo.I18n("PreFilter"),
-			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
-			FontWeight = FontWeight.SemiBold,
-		});
-		sp.Children.Add(MkInputRow(Todo.I18n("Version"), CBE.Mk<Ctx>(x=>x.PreFilterVersion, Mode: BindingMode.TwoWay)));
-		return bdr;
 	}
 
 	Control MkFieldsFilterGridSection(bool IsCore){
@@ -232,17 +215,5 @@ public class ViewPreFilterDataEdit: AppViewBase{
 			};
 		});
 		return g.Grid;
-	}
-
-	Control MkInputRow(str Label, IBinding Binding, bool AcceptsReturn = false){
-		var sp = new StackPanel{Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		var tb = new TextBox{
-			AcceptsReturn = AcceptsReturn,
-			TextWrapping = AcceptsReturn ? TextWrapping.Wrap : TextWrapping.NoWrap,
-		};
-		tb.Bind(TextBox.TextProperty, Binding);
-		sp.Children.Add(tb);
-		return sp;
 	}
 }

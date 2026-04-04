@@ -12,6 +12,8 @@ using Ngaq.Core.Shared.StudyPlan.Models;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Models.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Svc;
+using Ngaq.Core.Shared.Word.Models.Po.Kv;
+using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
@@ -23,8 +25,9 @@ using Tsinswreng.CsTools;
 using Ctx = VmPreFilterVisualEdit;
 using Ngaq.Core.Infra.IF;
 
-/// PreFilter GUI 主編輯 ViewModel。
-/// 僅負責 GUI 視圖，不承載 JSON 視圖狀態。
+/// <summary>
+/// PreFilter visual editor VM.
+/// </summary>
 public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	protected VmPreFilterVisualEdit(){
 		InitRowEvents();
@@ -49,8 +52,23 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	IJsonSerializer JsonSerializer{get;set;} = AppJsonSerializer.Inst;
 	bool _isHydrating = false;
 
+	/// <summary>
+	/// Allowed PoWord fields for CoreFilter.
+	/// </summary>
+	public static readonly IReadOnlyList<str> CoreWordFieldOptions = [
+		nameof(PoWord.Head),
+		nameof(PoWord.Lang),
+		nameof(PoWord.BizCreatedAt),
+		nameof(PoWord.BizUpdatedAt),
+	];
 
-	/// 依賴注入構造器。
+	static readonly HashSet<str> CoreWordFieldSet = CoreWordFieldOptions.ToHashSet();
+
+	/// <summary>
+	/// Builtin prop keys from <see cref="KeysProp"/> for PropFilter suggestions.
+	/// </summary>
+	public IReadOnlyList<str> PropFieldOptions{get;} = BuildPropFieldOptions();
+
 	public VmPreFilterVisualEdit(
 		ISvcStudyPlan? SvcStudyPlan
 		,IFrontendUserCtxMgr? UserCtxMgr
@@ -64,8 +82,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		SyncFromBo();
 	}
 
-
-	/// GUI 子頁列表中的單條過濾條件。
 	public class VmFilterItemRow: ViewModelBase{
 		public i32 OperationIndex{
 			get{return field;}
@@ -83,19 +99,18 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		} = "";
 	}
 
-
-	/// GUI 子頁中的一組 Fields + Filters。
-	public class VmFieldsFilterRow: ViewModelBase{
-		public str FieldsText{
+	public class VmFieldValueRow: ViewModelBase{
+		public str Value{
 			get{return field;}
 			set{SetProperty(ref field, value);}
 		} = "";
+	}
 
+	public class VmFieldsFilterRow: ViewModelBase{
+		public ObservableCollection<VmFieldValueRow> Fields{get;set;} = [];
 		public ObservableCollection<VmFilterItemRow> Items{get;set;} = [];
 	}
 
-
-	/// TreeDataGrid 顯示行。
 	public class RowFieldsFilterCard{
 		public u64 UiIdx{get;set;}
 		public str UiIdxText{get;set;} = "";
@@ -105,15 +120,11 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		public VmFieldsFilterRow? Raw{get;set;}
 	}
 
-
-	/// 當前編輯中的業務模型。
 	public BoPreFilter BoPreFilter{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = MkEmptyBoPreFilter();
 
-
-	/// GUI 主頁展示的 Text 預覽，只顯示前段內容。
 	public str PoTextPreview{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -126,9 +137,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
-
-	/// 當前頁面是否爲「新增」模式。
-	/// true: 新增；false: 編輯既有實體。
 	public bool IsCreateMode{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -140,7 +148,15 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	public ObservableCollection<RowFieldsFilterCard> CoreFilterCards{get;set;} = [];
 	public ObservableCollection<RowFieldsFilterCard> PropFilterCards{get;set;} = [];
 
-	public IReadOnlyList<str> PoTypeOptions{get;} = Enum.GetNames<EPreFilterType>();
+	public IReadOnlyList<EPreFilterType> PoTypeValues{get;} = Enum
+		.GetValues<EPreFilterType>()
+		.Where(x=>x != EPreFilterType.Unknown)
+		.ToList();
+	public IReadOnlyList<str> PoTypeOptions{get;} = Enum
+		.GetValues<EPreFilterType>()
+		.Where(x=>x != EPreFilterType.Unknown)
+		.Select(x=>x.ToString())
+		.ToList();
 	public IReadOnlyList<str> OperationOptions{get;} = Enum.GetNames<EFilterOperationMode>();
 	public IReadOnlyList<str> ValueTypeOptions{get;} = Enum.GetNames<EValueType>();
 
@@ -162,7 +178,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	public i32 PoTypeIndex{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = 1;
+	} = 0;
 
 	public str PreFilterVersion{
 		get{return field;}
@@ -177,8 +193,11 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	void OnFieldsRowsChanged(object? sender, NotifyCollectionChangedEventArgs e){
 		if(e.NewItems is not null){
 			foreach(var row in e.NewItems.OfType<VmFieldsFilterRow>()){
-				row.PropertyChanged += OnFieldsRowChanged;
+				row.Fields.CollectionChanged += OnFieldValuesChanged;
 				row.Items.CollectionChanged += OnFilterItemsChanged;
+				foreach(var field in row.Fields){
+					field.PropertyChanged += OnFieldValueChanged;
+				}
 				foreach(var item in row.Items){
 					item.PropertyChanged += OnFilterItemChanged;
 				}
@@ -186,13 +205,34 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		}
 		if(e.OldItems is not null){
 			foreach(var row in e.OldItems.OfType<VmFieldsFilterRow>()){
-				row.PropertyChanged -= OnFieldsRowChanged;
+				row.Fields.CollectionChanged -= OnFieldValuesChanged;
 				row.Items.CollectionChanged -= OnFilterItemsChanged;
+				foreach(var field in row.Fields){
+					field.PropertyChanged -= OnFieldValueChanged;
+				}
 				foreach(var item in row.Items){
 					item.PropertyChanged -= OnFilterItemChanged;
 				}
 			}
 		}
+		TouchRows();
+	}
+
+	void OnFieldValuesChanged(object? sender, NotifyCollectionChangedEventArgs e){
+		if(e.NewItems is not null){
+			foreach(var field in e.NewItems.OfType<VmFieldValueRow>()){
+				field.PropertyChanged += OnFieldValueChanged;
+			}
+		}
+		if(e.OldItems is not null){
+			foreach(var field in e.OldItems.OfType<VmFieldValueRow>()){
+				field.PropertyChanged -= OnFieldValueChanged;
+			}
+		}
+		TouchRows();
+	}
+
+	void OnFieldValueChanged(object? sender, PropertyChangedEventArgs e){
 		TouchRows();
 	}
 
@@ -210,10 +250,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		TouchRows();
 	}
 
-	void OnFieldsRowChanged(object? sender, PropertyChangedEventArgs e){
-		TouchRows();
-	}
-
 	void OnFilterItemChanged(object? sender, PropertyChangedEventArgs e){
 		TouchRows();
 	}
@@ -225,8 +261,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		RefreshFieldsFilterCards();
 	}
 
-
-	/// 刷新 Core/Prop 的列表卡片預覽。
 	public nil RefreshFieldsFilterCards(){
 		CoreFilterCards.Clear();
 		for(u64 i = 0; i < (u64)CoreFilterRows.Count; i++){
@@ -235,7 +269,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 				UiIdx = i + 1,
 				UiIdxText = (i + 1).ToString(),
 				Kind = "Core",
-				FieldsPreview = str.IsNullOrWhiteSpace(row.FieldsText) ? "-" : row.FieldsText,
+				FieldsPreview = JoinFieldPreview(row),
 				FilterCountText = (row.Items?.Count ?? 0).ToString(),
 				Raw = row,
 			});
@@ -247,7 +281,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 				UiIdx = i + 1,
 				UiIdxText = (i + 1).ToString(),
 				Kind = "Prop",
-				FieldsPreview = str.IsNullOrWhiteSpace(row.FieldsText) ? "-" : row.FieldsText,
+				FieldsPreview = JoinFieldPreview(row),
 				FilterCountText = (row.Items?.Count ?? 0).ToString(),
 				Raw = row,
 			});
@@ -255,8 +289,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-
-	/// 由列表頁傳入 Po 實體初始化 GUI 主頁。
 	public nil FromPoPreFilter(PoPreFilter? PoPreFilter){
 		var bo = MkEmptyBoPreFilter();
 		IsCreateMode = PoPreFilter is null;
@@ -266,24 +298,17 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return FromBoPreFilter(bo);
 	}
 
-
-	/// 由既有業務模型初始化 GUI 主頁。
 	public nil FromBoPreFilter(BoPreFilter? BoPreFilter){
 		this.BoPreFilter = BoPreFilter ?? MkEmptyBoPreFilter();
 		SyncFromBo();
 		return NIL;
 	}
 
-	/// <summary>
-	/// 顯式設置當前編輯模式，供列表頁跳轉時調用。
-	/// </summary>
 	public nil SetCreateMode(bool IsCreate){
 		this.IsCreateMode = IsCreate;
 		return NIL;
 	}
 
-
-	/// 導航到 JSON 專用編輯視圖。
 	public nil OpenJsonEditor(){
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
@@ -301,16 +326,12 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-
-	/// 導航到 PreFilter（無 Po）GUI 子編輯頁。
 	public nil OpenPreFilterDataEditor(){
 		var view = new ViewPreFilterDataEdit(this);
 		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("PreFilter"), view));
 		return NIL;
 	}
 
-
-	/// 保存 GUI 子編輯頁變更到本 VM（不寫庫）。
 	public bool CommitPreFilterDataDraft(){
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
@@ -327,9 +348,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return true;
 	}
 
-
-	/// 保存到後端。
-	/// 新建時調 BatAddPreFilter，編輯時調 BatUpdPreFilter。
 	public async Task<nil> Save(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
 			return NIL;
@@ -350,7 +368,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 				await SvcStudyPlan.BatUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 
-			// 新增成功後，後續保存應切到更新模式，避免重複走 Add。
 			IsCreateMode = false;
 			BoPreFilter = bo;
 			SyncFromBo();
@@ -363,8 +380,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-
-	/// 軟刪除當前 PreFilter。
 	public async Task<nil> Delete(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
 			return NIL;
@@ -423,14 +438,12 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 		_isHydrating = true;
 		try{
-			// step 1: 同步 Po 主字段（主頁展示）
 			PoIdText = po.Id.ToString();
 			PoUniqName = po.UniqName ?? "";
 			PoDescr = po.Descr;
-			PoTypeIndex = ClampIndex((i32)po.Type, PoTypeOptions.Count);
+			PoTypeIndex = GetTypeIndex(po.Type);
 
-			// step 2: 同步 PreFilter 可視編輯字段（子頁展示）
-			PreFilterVersion = pre.Version?.ToString() ?? "1.0.0.0";
+			PreFilterVersion = (pre.Version ?? new Version(1, 0, 0, 0)).ToString();
 			CoreFilterRows.Clear();
 			foreach(var row in (pre.CoreFilter ?? []).Select(MkRowFromModel)){
 				CoreFilterRows.Add(row);
@@ -438,12 +451,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			PropFilterRows.Clear();
 			foreach(var row in (pre.PropFilter ?? []).Select(MkRowFromModel)){
 				PropFilterRows.Add(row);
-			}
-			if(CoreFilterRows.Count == 0){
-				CoreFilterRows.Add(MkFieldsFilterRow());
-			}
-			if(PropFilterRows.Count == 0){
-				PropFilterRows.Add(MkFieldsFilterRow());
 			}
 			RefreshFieldsFilterCards();
 			RefreshTextPreview();
@@ -469,18 +476,16 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	VmFieldsFilterRow MkRowFromModel(FieldsFilter row){
-		var vm = new VmFieldsFilterRow{
-			FieldsText = string.Join(", ", row.Fields ?? []),
-		};
+		var vm = new VmFieldsFilterRow();
+		foreach(var field in row.Fields ?? []){
+			vm.Fields.Add(new VmFieldValueRow{Value = field ?? ""});
+		}
 		foreach(var item in (row.Filters ?? [])){
 			vm.Items.Add(new VmFilterItemRow{
 				OperationIndex = ClampIndex((i32)item.Operation, OperationOptions.Count),
 				ValueTypeIndex = ClampIndex((i32)item.ValueType, ValueTypeOptions.Count),
-				ValuesText = string.Join(", ", (item.Values ?? []).Select(x => x?.ToString() ?? "")),
+				ValuesText = string.Join(Environment.NewLine, (item.Values ?? []).Select(x => x?.ToString() ?? "")),
 			});
-		}
-		if(vm.Items.Count == 0){
-			vm.Items.Add(MkFilterItemRow());
 		}
 		return vm;
 	}
@@ -492,37 +497,30 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		Bo = BoPreFilter ?? MkEmptyBoPreFilter();
 		Err = "";
 		try{
-			// step 1: 組裝 PoPreFilter
 			var po = ClonePoPreFilter(Bo.PoPreFilter);
 			po.UniqName = str.IsNullOrWhiteSpace(PoUniqName) ? null : PoUniqName.Trim();
 			po.Descr = PoDescr?.Trim() ?? "";
-			po.Type = EnumOrDefault<EPreFilterType>(PoTypeIndex);
-			if(po.Type == EPreFilterType.Unknown){
-				po.Type = EPreFilterType.Json;
-			}
+			po.Type = GetTypeByIndex(PoTypeIndex);
 
-			// step 2: 組裝 PreFilter 並做格式校驗
 			if(!Version.TryParse((PreFilterVersion ?? "").Trim(), out var ver)){
-				Err = Todo.I18n("Version format invalid. Example: 1.0.0.0");
-				return false;
+				ver = new Version(1, 0, 0, 0);
 			}
 
 			var pre = new Ngaq.Core.Shared.StudyPlan.Models.PreFilter.PreFilter{
 				Version = ver,
-				CoreFilter = BuildFieldsFilterList(CoreFilterRows, out var coreErr),
+				CoreFilter = BuildFieldsFilterList(CoreFilterRows, IsCore: true, out var coreErr),
 				PropFilter = [],
 			};
 			if(coreErr is not null){
 				Err = coreErr;
 				return false;
 			}
-			pre.PropFilter = BuildFieldsFilterList(PropFilterRows, out var propErr);
+			pre.PropFilter = BuildFieldsFilterList(PropFilterRows, IsCore: false, out var propErr);
 			if(propErr is not null){
 				Err = propErr;
 				return false;
 			}
 
-			// step 3: 回填 Text 載荷（不使用 Binary）
 			po.DataSchemaVer = pre.Version;
 			po.Text = JsonSerializer.Stringify(pre);
 			po.Binary = null;
@@ -559,6 +557,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 	IList<FieldsFilter> BuildFieldsFilterList(
 		IEnumerable<VmFieldsFilterRow> Rows,
+		bool IsCore,
 		out str? Err
 	){
 		Err = null;
@@ -566,7 +565,19 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		var rowIdx = 0;
 		foreach(var row in Rows){
 			rowIdx++;
-			var fields = SplitCsv(row.FieldsText).ToList();
+			var fields = row.Fields
+				.Select(x=>x.Value?.Trim() ?? "")
+				.Where(x=>!str.IsNullOrWhiteSpace(x))
+				.Distinct()
+				.ToList();
+			if(IsCore){
+				var invalid = fields.Where(x=>!CoreWordFieldSet.Contains(x)).ToList();
+				if(invalid.Count > 0){
+					Err = Todo.I18n($"Row#{rowIdx}: invalid CoreFilter field: {invalid[0]}");
+					return [];
+				}
+			}
+
 			var filters = new List<FilterItem>();
 			var itemIdx = 0;
 			foreach(var item in row.Items){
@@ -583,6 +594,9 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 					Values = values,
 				});
 			}
+			if(fields.Count == 0 && filters.Count == 0){
+				continue;
+			}
 			ans.Add(new FieldsFilter{
 				Fields = fields,
 				Filters = filters,
@@ -593,7 +607,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 	IList<obj?> ParseValues(str Text, EValueType ValueType, out str? Err){
 		Err = null;
-		var parts = SplitCsv(Text).ToList();
+		var parts = SplitLines(Text).ToList();
 		if(parts.Count == 0){
 			return [];
 		}
@@ -601,7 +615,6 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			return parts.Cast<obj?>().ToList();
 		}
 		if(ValueType == EValueType.Null){
-			// Null type should serialize as real null values, not "null" strings.
 			return parts.Select(_ => (obj?)null).ToList();
 		}
 		if(ValueType == EValueType.Number){
@@ -623,12 +636,12 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return parts.Cast<obj?>().ToList();
 	}
 
-	static IEnumerable<str> SplitCsv(str? Text){
+	static IEnumerable<str> SplitLines(str? Text){
 		if(str.IsNullOrWhiteSpace(Text)){
 			return [];
 		}
 		return Text
-			.Split([',', '\n', '\r', ';'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+			.Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
 			.Where(x=>!str.IsNullOrWhiteSpace(x));
 	}
 
@@ -655,13 +668,11 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return Value;
 	}
 
-	static VmFieldsFilterRow MkFieldsFilterRow(){
-		var row = new VmFieldsFilterRow();
-		row.Items.Add(MkFilterItemRow());
-		return row;
+	VmFieldsFilterRow MkFieldsFilterRow(){
+		return new VmFieldsFilterRow();
 	}
 
-	static VmFilterItemRow MkFilterItemRow(){
+	public static VmFilterItemRow MkFilterItemRow(){
 		return new VmFilterItemRow{
 			OperationIndex = 1,
 			ValueTypeIndex = 1,
@@ -673,7 +684,64 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			PoPreFilter = new PoPreFilter{
 				Type = EPreFilterType.Json,
 			},
-			PreFilter = new Ngaq.Core.Shared.StudyPlan.Models.PreFilter.PreFilter(),
+			PreFilter = new Ngaq.Core.Shared.StudyPlan.Models.PreFilter.PreFilter{
+				Version = new Version(1, 0, 0, 0),
+				CoreFilter = [],
+				PropFilter = [],
+			},
 		};
+	}
+
+	static IReadOnlyList<str> BuildPropFieldOptions(){
+		var ans = new List<str>();
+		var keys = KeysProp.Inst;
+		var t = typeof(KeysProp);
+
+		foreach(var p in t.GetProperties().Where(x=>x.PropertyType == typeof(EItemProp))){
+			if(p.GetValue(keys) is EItemProp key){
+				ans.Add(key);
+			}
+		}
+		foreach(var f in t.GetFields().Where(x=>x.FieldType == typeof(EItemProp))){
+			if(f.GetValue(keys) is EItemProp key){
+				ans.Add(key);
+			}
+		}
+		return ans
+			.Where(x=>!str.IsNullOrWhiteSpace(x))
+			.Distinct()
+			.OrderBy(x=>x)
+			.ToList();
+	}
+
+	str JoinFieldPreview(VmFieldsFilterRow row){
+		var fields = row.Fields
+			.Select(x=>x.Value?.Trim() ?? "")
+			.Where(x=>!str.IsNullOrWhiteSpace(x))
+			.ToList();
+		if(fields.Count == 0){
+			return "-";
+		}
+		return string.Join(", ", fields);
+	}
+
+	i32 GetTypeIndex(EPreFilterType type){
+		if(PoTypeValues.Count == 0){
+			return 0;
+		}
+		for(i32 i = 0; i < PoTypeValues.Count; i++){
+			if(PoTypeValues[i] == type){
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	EPreFilterType GetTypeByIndex(i32 idx){
+		if(PoTypeValues.Count == 0){
+			return EPreFilterType.Json;
+		}
+		var clamped = ClampIndex(idx, PoTypeValues.Count);
+		return PoTypeValues[clamped];
 	}
 }

@@ -9,27 +9,27 @@ type Full = {
 	View:{
 		Common:{
 			Confirm: TTemplate
-			,Cancel: TTemplate
+			Cancel: TTemplate
 		}
-		,Home:{
+		Home:{
 			Learn: TTemplate
-			,Library: TTemplate
-			,Me: TTemplate
+			Library: TTemplate
+			Me: TTemplate
 		}
-		,Library:{
+		Library:{
 			SearchWords: TTemplate
-			,AddWords: TTemplate
-			,BackupEtSync: TTemplate
+			AddWords: TTemplate
+			BackupEtSync: TTemplate
 		}
-		,LearnWord:{
+		LearnWord:{
 			Start: TTemplate
-			,Save: TTemplate
-			,Reset: TTemplate
-			,Clear: TTemplate
-			,Settings: TTemplate
-			,LearnWordSettings: TTemplate
+			Save: TTemplate
+			Reset: TTemplate
+			Clear: TTemplate
+			Settings: TTemplate
+			LearnWordSettings: TTemplate
 		}
-		,LoginRegister:{
+		LoginRegister:{
 			Login:TTemplate
 			Register:TTemplate
 			UserName:TTemplate
@@ -38,22 +38,22 @@ type Full = {
 			ConfirmPassword:TTemplate
 			__CannotBeEmpty:TTemplate
 		}
-		,Settings:{
+		Settings:{
 			UIConfig:TTemplate
 			About:TTemplate
 		}
-		,About:{
+		About:{
 			AppVersion:TTemplate
 			Website:TTemplate
 		}
 	}
 	//----Errors----
-	,Error:{
+	Error:{
 		Common: {
 			ArgErr: TTemplate
 			UnknownErr: TTemplate
 		}
-		,User: {
+		User: {
 			UserNotExist: TTemplate
 			UserAlreadyExist: TTemplate
 			PasswordNotMatch: TTemplate
@@ -65,14 +65,3 @@ type Full = {
 
 type TI18nKv = Full;
 export type {TI18nKv};
-
-
-/*
-
-{
-"downloaded": "已下载{0}个文件。",
-"downloaded#zero": "还没下载任何文件。",
-"userLike": "{0}觉得有用。",
-"userLike#plural": "{0}等{1}人觉得有用。"
-}
-*/
