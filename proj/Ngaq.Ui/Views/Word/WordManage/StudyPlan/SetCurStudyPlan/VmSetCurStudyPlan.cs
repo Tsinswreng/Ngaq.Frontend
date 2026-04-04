@@ -68,6 +68,12 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 	} = "";
 
 	/// <summary>
+	/// 当前已加载/已选中的 StudyPlan。
+	/// 供 View 层跳转到编辑页时复用，避免重复查询。
+	/// </summary>
+	public PoStudyPlan? CurPoStudyPlan{get;private set;}
+
+	/// <summary>
 	/// 讀取後端「當前學習方案」。
 	/// 成功後刷新當前方案的展示字段。
 	/// </summary>
@@ -139,6 +145,7 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 	}
 
 	void AssignCurFields(PoStudyPlan? poStudyPlan){
+		CurPoStudyPlan = poStudyPlan;
 		CurId = poStudyPlan?.Id.ToString() ?? "";
 		CurUniqName = poStudyPlan?.UniqName ?? "";
 		CurDescr = poStudyPlan?.Descr ?? "";

@@ -10,6 +10,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -157,6 +158,20 @@ public partial class ViewSetCurStudyPlan
 					view.Ctx?.ViewNavi?.Back();
 				});
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
+			};
+		})
+		.A(new Button(), o=>{
+			o.Content = Todo.I18n("編輯");
+			o.Click += (s,e)=>{
+				var po = Ctx?.CurPoStudyPlan;
+				if(po is null){
+					Ctx?.ShowMsg(Todo.I18n("當前無可編輯StudyPlan"));
+					return;
+				}
+				var view = new ViewStudyPlanEdit();
+				view.Ctx?.SetCreateMode(false);
+				view.Ctx?.FromPoStudyPlan(po);
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(po.UniqName ?? Todo.I18n("編輯StudyPlan"), view));
 			};
 		});
 
