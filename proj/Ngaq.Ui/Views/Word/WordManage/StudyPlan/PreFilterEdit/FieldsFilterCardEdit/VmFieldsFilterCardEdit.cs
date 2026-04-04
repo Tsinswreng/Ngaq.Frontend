@@ -2,6 +2,8 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCard
 
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Linq;
+using Ngaq.Core.Shared.StudyPlan.Models.PreFilter;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
@@ -37,11 +39,29 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 	public ObservableCollection<VmPreFilterVisualEdit.VmFilterItemRow> Items{get;set;} = [];
 	public ObservableCollection<RowFilterItemCard> ItemCards{get;set;} = [];
 
-	public IReadOnlyList<str> OperationOptions => Owner?.OperationOptions ?? [];
-	public IReadOnlyList<str> ValueTypeOptions => Owner?.ValueTypeOptions ?? [];
 	public IReadOnlyList<str> FieldOptions => IsCore
 		? VmPreFilterVisualEdit.CoreWordFieldOptions
 		: Owner?.PropFieldOptions ?? [];
+
+	public IReadOnlyList<i32> OperationRawIndices{get;} = Enum
+		.GetValues<EFilterOperationMode>()
+		.Select((x, idx)=>(x, idx))
+		.Where(x=>x.x != EFilterOperationMode.Null)
+		.Select(x=>(i32)x.idx)
+		.ToList();
+	public IReadOnlyList<str> OperationOptionsDisplay => OperationRawIndices
+		.Select(ToOperationDisplayByRawIndex)
+		.ToList();
+
+	public IReadOnlyList<i32> ValueTypeRawIndices{get;} = Enum
+		.GetValues<EValueType>()
+		.Select((x, idx)=>(x, idx))
+		.Where(x=>x.x != EValueType.Null)
+		.Select(x=>(i32)x.idx)
+		.ToList();
+	public IReadOnlyList<str> ValueTypeOptionsDisplay => ValueTypeRawIndices
+		.Select(ToValueTypeDisplayByRawIndex)
+		.ToList();
 
 	public nil Load(
 		VmPreFilterVisualEdit Owner,
@@ -68,8 +88,8 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 
 		RefreshItemCards();
 		OnPropertyChanged(nameof(FieldOptions));
-		OnPropertyChanged(nameof(OperationOptions));
-		OnPropertyChanged(nameof(ValueTypeOptions));
+		OnPropertyChanged(nameof(OperationOptionsDisplay));
+		OnPropertyChanged(nameof(ValueTypeOptionsDisplay));
 		return NIL;
 	}
 
@@ -96,8 +116,8 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 			ItemCards.Add(new RowFilterItemCard{
 				UiIdx = i + 1,
 				UiIdxText = (i + 1).ToString(),
-				Operation = SafeOpt(OperationOptions, item.OperationIndex),
-				ValueType = SafeOpt(ValueTypeOptions, item.ValueTypeIndex),
+				Operation = ToOperationDisplayByRawIndex(item.OperationIndex),
+				ValueType = ToValueTypeDisplayByRawIndex(item.ValueTypeIndex),
 				ValuesPreview = ValuesPreview(item.ValuesText),
 				Raw = item,
 			});
@@ -124,10 +144,6 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
-	/// Persist current item-list draft to the backing FieldsFilter row immediately.
-	/// This avoids losing item edits/deletes when user exits and re-enters the group page.
-	/// </summary>
 	public nil CommitItemsDraft(){
 		RefreshItemCards();
 		if(Target is null || Owner is null){
@@ -166,11 +182,92 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	static str SafeOpt(IReadOnlyList<str> opts, i32 idx){
-		if(idx < 0 || idx >= opts.Count){
-			return "";
+	public i32 ToOperationOptionIndex(i32 rawIndex){
+		for(i32 i = 0; i < OperationRawIndices.Count; i++){
+			if(OperationRawIndices[i] == rawIndex){
+				return i;
+			}
 		}
-		return opts[idx];
+		return 0;
+	}
+
+	public i32 ToOperationRawIndex(i32 optionIndex){
+		if(OperationRawIndices.Count == 0){
+			return 1;
+		}
+		var i = ClampIndex(optionIndex, OperationRawIndices.Count);
+		return OperationRawIndices[i];
+	}
+
+	public i32 ToValueTypeOptionIndex(i32 rawIndex){
+		for(i32 i = 0; i < ValueTypeRawIndices.Count; i++){
+			if(ValueTypeRawIndices[i] == rawIndex){
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	public i32 ToValueTypeRawIndex(i32 optionIndex){
+		if(ValueTypeRawIndices.Count == 0){
+			return 1;
+		}
+		var i = ClampIndex(optionIndex, ValueTypeRawIndices.Count);
+		return ValueTypeRawIndices[i];
+	}
+
+	str ToOperationDisplayByRawIndex(i32 rawIndex){
+		var mode = EnumByRawIndex<EFilterOperationMode>(rawIndex);
+		return mode switch{
+			EFilterOperationMode.Eq => "＝",
+			EFilterOperationMode.Ne => "≠",
+			EFilterOperationMode.Gt => "＞",
+			EFilterOperationMode.Ge => "≥",
+			EFilterOperationMode.Lt => "＜",
+			EFilterOperationMode.Le => "≤",
+			EFilterOperationMode.IncludeAny => I18nOrSelf("Include Any"),
+			EFilterOperationMode.IncludeAll => I18nOrSelf("Include All"),
+			EFilterOperationMode.ExcludeAll => I18nOrSelf("Exclude All"),
+			_ => I18nOrSelf(mode.ToString()),
+		};
+	}
+
+	str ToValueTypeDisplayByRawIndex(i32 rawIndex){
+		var type = EnumByRawIndex<EValueType>(rawIndex);
+		return type switch{
+			EValueType.String => I18nOrSelf("String"),
+			EValueType.Number => I18nOrSelf("Number"),
+			EValueType.Null => I18nOrSelf("Null"),
+			_ => I18nOrSelf(type.ToString()),
+		};
+	}
+
+	static str I18nOrSelf(str text){
+		var localized = Todo.I18n(text);
+		return str.IsNullOrWhiteSpace(localized) ? text : localized;
+	}
+
+	static TEnum EnumByRawIndex<TEnum>(i32 rawIndex)
+		where TEnum : struct, Enum
+	{
+		var values = Enum.GetValues<TEnum>();
+		if(rawIndex < 0 || rawIndex >= values.Length){
+			return values[0];
+		}
+		return values[rawIndex];
+	}
+
+	static i32 ClampIndex(i32 value, i32 count){
+		if(count <= 0){
+			return 0;
+		}
+		if(value < 0){
+			return 0;
+		}
+		if(value >= count){
+			return count - 1;
+		}
+		return value;
 	}
 
 	static str ValuesPreview(str text){

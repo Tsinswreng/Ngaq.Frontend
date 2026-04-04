@@ -1,6 +1,5 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
 
-using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -48,16 +47,22 @@ public class ViewFilterItemEdit: AppViewBase{
 		};
 		sv.Content = root;
 
-		root.Children.Add(MkComboRow(
+		var top = new AutoGrid(IsRow:false);
+		top.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Star),
+		]);
+		top.A(MkComboRow(
 			Todo.I18n("Operation"),
 			CBE.Mk<Ctx>(x=>x.OperationOptions, Mode: BindingMode.OneWay),
-			CBE.Mk<Ctx>(x=>x.OperationIndex, Mode: BindingMode.TwoWay)
+			CBE.Mk<Ctx>(x=>x.SelectedOperationIndex, Mode: BindingMode.TwoWay)
 		));
-		root.Children.Add(MkComboRow(
+		top.A(MkComboRow(
 			Todo.I18n("Value Type"),
 			CBE.Mk<Ctx>(x=>x.ValueTypeOptions, Mode: BindingMode.OneWay),
-			CBE.Mk<Ctx>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay)
+			CBE.Mk<Ctx>(x=>x.SelectedValueTypeIndex, Mode: BindingMode.TwoWay)
 		));
+		root.Children.Add(top.Grid);
 		root.Children.Add(MkInputRow(Todo.I18n("Values (newline separated)"), CBE.Mk<Ctx>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true, MaxHeight: 180));
 		return sv;
 	}

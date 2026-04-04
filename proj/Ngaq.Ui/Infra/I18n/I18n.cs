@@ -5,7 +5,7 @@ using Ngaq.Core.Infra.Errors;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsErr;
 
-public interface II18nKey:ICfgItem{
+public interface II18nKey:ICfgNode{
 
 }
 

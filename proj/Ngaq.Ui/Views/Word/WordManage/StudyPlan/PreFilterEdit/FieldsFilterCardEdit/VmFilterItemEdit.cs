@@ -20,15 +20,15 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 	VmPreFilterVisualEdit.VmFilterItemRow? Target{get;set;}
 	u64 ItemIdx{get;set;}
 
-	public IReadOnlyList<str> OperationOptions => Owner?.OperationOptions ?? [];
-	public IReadOnlyList<str> ValueTypeOptions => Owner?.ValueTypeOptions ?? [];
+	public IReadOnlyList<str> OperationOptions => Owner?.OperationOptionsDisplay ?? [];
+	public IReadOnlyList<str> ValueTypeOptions => Owner?.ValueTypeOptionsDisplay ?? [];
 
-	public i32 OperationIndex{
+	public i32 SelectedOperationIndex{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = 0;
 
-	public i32 ValueTypeIndex{
+	public i32 SelectedValueTypeIndex{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = 0;
@@ -46,8 +46,8 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		this.Owner = Owner;
 		this.Target = Target;
 		this.ItemIdx = ItemIdx;
-		OperationIndex = Target.OperationIndex;
-		ValueTypeIndex = Target.ValueTypeIndex;
+		SelectedOperationIndex = Owner.ToOperationOptionIndex(Target.OperationIndex);
+		SelectedValueTypeIndex = Owner.ToValueTypeOptionIndex(Target.ValueTypeIndex);
 		ValuesText = Target.ValuesText;
 		OnPropertyChanged(nameof(OperationOptions));
 		OnPropertyChanged(nameof(ValueTypeOptions));
@@ -59,8 +59,8 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 			ShowMsg(Todo.I18n("Editor not ready"));
 			return NIL;
 		}
-		Target.OperationIndex = OperationIndex;
-		Target.ValueTypeIndex = ValueTypeIndex;
+		Target.OperationIndex = Owner.ToOperationRawIndex(SelectedOperationIndex);
+		Target.ValueTypeIndex = Owner.ToValueTypeRawIndex(SelectedValueTypeIndex);
 		Target.ValuesText = ValuesText;
 		Owner.CommitItemsDraft();
 		ShowMsg(Todo.I18n($"Saved Filter Item #{ItemIdx}"));
