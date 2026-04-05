@@ -49,7 +49,6 @@ public partial class ViewDictionary
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),
-
 			]);
 		});
 
@@ -144,8 +143,4 @@ public partial class ViewDictionary
 		}
 		SearchBtn.PerformClick();
 	}
-
-
-
-
 }

@@ -1,7 +1,7 @@
 namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
+
 using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Dictionary.Models;
-using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Models.DictionaryApi;
 using Ngaq.Ui.Infra;
 

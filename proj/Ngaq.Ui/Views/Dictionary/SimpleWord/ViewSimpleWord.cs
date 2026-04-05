@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;

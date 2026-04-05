@@ -1,7 +1,8 @@
 namespace Ngaq.Ui.Views.Word.Pronunciation;
+
 using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Audio;
-using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmPronunciation;
