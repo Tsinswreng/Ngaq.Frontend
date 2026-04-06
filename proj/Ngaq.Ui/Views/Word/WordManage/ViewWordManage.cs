@@ -81,7 +81,7 @@ public partial class ViewWordManage
 		addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 1, 0);
 		addItem(_Item(Todo.I18n("Study Plan"), ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
 		addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
-		addItem(_Item(Todo.I18n("Statistics"), ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
+		addItem(_Item(Todo.I18n("Statistics"), ()=>new ViewStatisticsV2(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
 		addItem(_Item(Todo.I18n("UserLang"), ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 0);
 
 		Root.A(menuGrid);
