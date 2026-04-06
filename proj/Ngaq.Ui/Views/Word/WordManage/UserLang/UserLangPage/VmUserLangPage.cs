@@ -154,7 +154,21 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
+	/// 將 `PoWord.Lang` 中尚未註冊的語言補全到 `PoUserLang`，並刷新當前列表。
+	public async Task<nil> AddAllUnregisteredUserLangs(CT Ct = default){
+		if(AnyNull(SvcUserLang, UserCtxMgr)){
+			return NIL;
+		}
+		try{
+			await SvcUserLang.AddAllUnregisteredUserLangs(UserCtxMgr.GetDbUserCtx(), Ct);
+			ShowMsg(Todo.I18n("Added all unregistered user langs"));
+			return await InitSearch(Ct);
+		}catch(Exception e){
+			HandleErr(e);
+		}
+		return NIL;
+	}
+
 	/// 由 View 層監聽，收到後在 View 中實例化詳情頁並導航。
 	public event Action<RowUserLang?>? OnOpenDetailRequested;
 }
-

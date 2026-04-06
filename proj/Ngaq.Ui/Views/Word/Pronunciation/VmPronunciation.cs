@@ -3,8 +3,10 @@ using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Audio;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Infra;
-
+using Pronunciation = Ngaq.Core.Shared.Dictionary.Models.Pronunciation;
 using Ctx = VmPronunciation;
+using Ngaq.Core.Shared.Dictionary.Models;
+
 public partial class VmPronunciation: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
 	protected VmPronunciation(){}

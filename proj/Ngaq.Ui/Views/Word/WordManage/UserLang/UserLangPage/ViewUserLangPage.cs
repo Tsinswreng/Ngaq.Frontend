@@ -85,9 +85,10 @@ public partial class ViewUserLangPage
 	protected Control MkTopBar(){
 		var top = new AutoGrid(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(7, GUT.Star),
+			ColDef(6, GUT.Star),
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
+			ColDef(2, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
@@ -110,6 +111,12 @@ public partial class ViewUserLangPage
 			o.Classes.Add(Cls.FullStretch);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
+		})
+		.A(new OpBtn(), o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.BtnContent = Svgs.DatabaseImport().ToIcon().WithText(Todo.I18n("Auto Add Missing"));
+			o.Background = new SolidColorBrush(Color.FromRgb(68, 102, 160));
+			o.SetExe((Ct)=>Ctx?.AddAllUnregisteredUserLangs(Ct));
 		});
 		return top.Grid;
 	}
@@ -190,4 +197,3 @@ public partial class ViewUserLangPage
 		Ctx?.ViewNavi?.GoTo(titled);
 	}
 }
-
