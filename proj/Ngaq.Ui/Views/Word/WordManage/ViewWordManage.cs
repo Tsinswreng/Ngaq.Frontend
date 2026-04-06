@@ -14,6 +14,7 @@ using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
@@ -63,7 +64,7 @@ public partial class ViewWordManage
 
 		var menuGrid = new Grid{
 			ColumnDefinitions = new ColumnDefinitions("*,*"),
-			RowDefinitions = new RowDefinitions("Auto,Auto,Auto"),
+			RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto"),
 			ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.4,
 			RowSpacing = UiCfg.Inst.BaseFontSize * 0.6,
 			Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.4),
@@ -81,6 +82,7 @@ public partial class ViewWordManage
 		addItem(_Item(Todo.I18n("Study Plan"), ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
 		addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
 		addItem(_Item(Todo.I18n("Statistics"), ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
+		addItem(_Item(Todo.I18n("UserLang"), ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 0);
 
 		Root.A(menuGrid);
 
