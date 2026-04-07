@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 
 using System;
 using System.Collections.ObjectModel;
@@ -13,8 +13,6 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Ctx = VmNormLangPage;
 
-/// NormLang 列表頁 ViewModel。
-/// 負責分頁查詢與打開編輯頁事件派發。
 public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	void Init(){
 		PageBar = VmPageBar.Mk();
@@ -62,8 +60,14 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 
 	public ObservableCollection<RowNormLang> Rows{get;set;} = [];
 
-	/// 當前頁允許新增。
 	public bool CanCreate => true;
+
+	public bool IsSelectMode{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = false;
+
+	Action<PoNormLang>? FnOnSelected{get;set;}
 
 	public class RowNormLang{
 		public u64 UiIdx{get;set;}
@@ -80,7 +84,6 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 		return await Search(Ct);
 	}
 
-	/// 按 Code 模糊查詢 NormLang 分頁。
 	public async Task<nil> Search(CT Ct = default){
 		if(AnyNull(SvcNormLang, UserCtxMgr)){
 			return NIL;
@@ -138,11 +141,22 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	}
 
 	public nil OpenDetail(RowNormLang? Row = null){
+		if(IsSelectMode){
+			if(Row?.Raw is not null){
+				FnOnSelected?.Invoke(Row.Raw);
+			}
+			return NIL;
+		}
 		OnOpenDetailRequested?.Invoke(Row);
 		return NIL;
 	}
 
-	/// 初始化內置語言，完成後刷新當前分頁。
+	public nil SetSelectMode(Action<PoNormLang> FnOnSelected){
+		IsSelectMode = true;
+		this.FnOnSelected = FnOnSelected;
+		return NIL;
+	}
+
 	public async Task<nil> InitBuiltinNormLang(CT Ct = default){
 		if(AnyNull(SvcNormLang, UserCtxMgr)){
 			return NIL;
@@ -157,6 +171,5 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// 由 View 層監聽，收到後在 View 中完成導航。
 	public event Action<RowNormLang?>? OnOpenDetailRequested;
 }
