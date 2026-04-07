@@ -8,6 +8,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -111,6 +112,70 @@ public partial class MainView : UserControl {
 					VerticalAlignment = VAlign.Center,
 					TextWrapping = TextWrapping.Wrap,
 				};
+				o.Background = Brushes.Black;
+				var Bdr = new Border();
+				Bdr.Child = o;
+				Bdr.Padding = new Avalonia.Thickness(40);
+				SvcPopup.ShowPopup(Bdr);
+			}
+		}));
+		return NIL;
+	}
+
+	public partial nil ShowMsg(str Msg, IList<Func<obj?>> Operations){
+		Dispatcher.UIThread.Post((Action)(()=>{
+			var SvcPopup = this.SvcPopup;
+			var msgBox = new MsgBox();
+			{var o = msgBox;
+				o._CloseBtn.Background = null;
+				o._CloseBtn.SetContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
+					o.Fill = Brushes.Red;
+				});
+				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
+				o.MinWidth = UiCfg.Inst.WindowWidth*0.5;
+				o._Border.BorderThickness = new Avalonia.Thickness(1);
+				o._Border.BorderBrush = Brushes.White;
+				o._BdrTitle.Background = new SolidColorBrush(new Color(255, 40,40,40));
+				o._BdrBody.MaxHeight = UiCfg.Inst.WindowHeight*0.8;
+
+				o._CloseBtn.Click+=(object? s,global::Avalonia.Interactivity.RoutedEventArgs e)=>{
+					SvcPopup.ClosePopup();
+				};
+				o.HorizontalAlignment = HAlign.Center;
+				o.VerticalAlignment = VAlign.Center;
+
+				// 先展示提示文本，再縱向渲染操作按鈕列。
+				var Body = new StackPanel{
+					Orientation = Orientation.Vertical,
+					Spacing = UiCfg.Inst.BaseFontSize*0.6,
+					HorizontalAlignment = HAlign.Stretch,
+					VerticalAlignment = VAlign.Center,
+				};
+				Body.A(new SelectableTextBlock{
+					Text = Msg,
+					TextWrapping = TextWrapping.Wrap,
+					HorizontalAlignment = HAlign.Center,
+				});
+
+				for(i32 Idx = 0; Idx < Operations.Count; Idx++){
+					var Operation = Operations[Idx];
+					var Btn = new Button();
+					Btn.SetContent($"{Todo.I18n("Operation")} {Idx+1}");
+					Btn.HorizontalAlignment = HAlign.Stretch;
+					Btn.Click += (s,e)=>{
+						// 按規範要求: 先關閉彈窗，再執行對應操作。
+						SvcPopup.ClosePopup();
+						try{
+							_ = Operation();
+						}
+						catch(Exception Ex){
+							HandleErr(Ex);
+						}
+					};
+					Body.A(Btn);
+				}
+
+				o._Body.Content = Body;
 				o.Background = Brushes.Black;
 				var Bdr = new Border();
 				Bdr.Child = o;
