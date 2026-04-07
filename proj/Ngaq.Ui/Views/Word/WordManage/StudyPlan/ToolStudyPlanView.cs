@@ -8,13 +8,11 @@ using Ngaq.Core.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-/// <summary>
 /// StudyPlan 相关页面的通用视图拼装工具。
-/// </summary>
+
 public static class ToolStudyPlanView{
-	/// <summary>
 	/// 统一格式化 UniqName：超长时保留头尾，中间用省略号替代。
-	/// </summary>
+
 	public static str FormatUniqName(str? UniqName, int HeadLen = 10, int TailLen = 6){
 		var raw = UniqName?.Trim() ?? "";
 		if(str.IsNullOrWhiteSpace(raw)){
@@ -27,9 +25,8 @@ public static class ToolStudyPlanView{
 		return $"{raw[..HeadLen]}...{raw[^TailLen..]}";
 	}
 
-	/// <summary>
 	/// 统一格式化日期：按当前用户所在时区显示短格式 yy-MM-dd。
-	/// </summary>
+
 	public static str FormatDateShort(Tempus Time, TimeZoneInfo? TimeZone = null){
 		if(Time == Tempus.Zero){
 			return "-";
@@ -40,17 +37,13 @@ public static class ToolStudyPlanView{
 		return local.ToString("yy-MM-dd", CultureInfo.InvariantCulture);
 	}
 
-	/// <summary>
 	/// 统一处理“更新时间优先，否则创建时间”的短日期显示。
-	/// </summary>
 	public static str FormatUpdatedDateShort(Tempus UpdatedAt, Tempus CreatedAt, TimeZoneInfo? TimeZone = null){
 		var t = UpdatedAt == Tempus.Zero ? CreatedAt : UpdatedAt;
 		return FormatDateShort(t, TimeZone);
 	}
 
-	/// <summary>
 	/// 创建“只读文本 + 选择按钮”的一行输入控件。
-	/// </summary>
 	/// <param name="Label">行标题文本。</param>
 	/// <param name="Binding">文本框绑定。</param>
 	/// <param name="BtnText">按钮文本。</param>

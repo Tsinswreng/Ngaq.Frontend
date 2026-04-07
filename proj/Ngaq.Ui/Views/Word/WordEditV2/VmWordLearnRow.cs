@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordEditV2;
 
+using System.Globalization;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
@@ -26,6 +27,20 @@ public partial class VmWordLearnRow: ViewModelBase{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = Tempus.Now().ToIso();
+
+	/// 概要表格顯示用時間格式：yy-MM-dd HH:mm:ss。
+	public str BizCreatedAtDisplay{
+		get{
+			try{
+				var t = Tempus.FromIso(BizCreatedAtIso);
+				var dto = DateTimeOffset.FromUnixTimeMilliseconds(t.Value);
+				var local = TimeZoneInfo.ConvertTime(dto, TimeZoneInfo.Local);
+				return local.ToString("yy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+			}catch{
+				return BizCreatedAtIso;
+			}
+		}
+	}
 
 	/// 概要列表顯示字段。
 	public str LearnResultText => GetLearnResultByIndex(LearnResultIndex).ToString();

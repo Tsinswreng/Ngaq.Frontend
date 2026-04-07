@@ -232,7 +232,7 @@ public partial class ViewWordEditV2: AppViewBase{
 			Columns = {
 				new TextColumn<VmWordLearnRow, str>(Todo.I18n("#"), x=>GetLearnRowIdxText(x)),
 				new TextColumn<VmWordLearnRow, str>(Todo.I18n("LearnResult"), x=>x.LearnResultText),
-				new TextColumn<VmWordLearnRow, str>(Todo.I18n("BizCreatedAt"), x=>x.BizCreatedAtIso),
+				new TextColumn<VmWordLearnRow, str>(Todo.I18n("BizCreatedAt"), x=>x.BizCreatedAtDisplay),
 			},
 		};
 		LearnGrid.Source = LearnGridSource;
@@ -320,9 +320,11 @@ public partial class ViewWordEditV2: AppViewBase{
 				sp.Margin = new Thickness(10);
 				sp.Spacing = 8;
 				sp.A(MkComboRow(Todo.I18n("KType"), _KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkEditableComboRow(Todo.I18n("Key"), GetPropKeyOptions(), CBE.Mk<VmWordPropRow>(x=>x.KeyText, Mode: BindingMode.TwoWay)));
+				sp.A(MkEditableComboRow(Todo.I18n("Key(Str)"), GetPropKeyOptions(), CBE.Mk<VmWordPropRow>(x=>x.KStrText, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(Todo.I18n("Key(I64)"), CBE.Mk<VmWordPropRow>(x=>x.KI64Text, Mode: BindingMode.TwoWay)));
 				sp.A(MkComboRow(Todo.I18n("VType"), _KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.VTypeIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(Todo.I18n("Value"), CBE.Mk<VmWordPropRow>(x=>x.ValueText, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(Todo.I18n("VStr"), CBE.Mk<VmWordPropRow>(x=>x.VStrText, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(Todo.I18n("VI64"), CBE.Mk<VmWordPropRow>(x=>x.VI64Text, Mode: BindingMode.TwoWay)));
 				sp.DataContext = Row;
 			});
 		});
@@ -513,4 +515,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		return sp;
 	}
 }
+
+
+
 
