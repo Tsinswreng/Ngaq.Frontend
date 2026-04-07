@@ -28,6 +28,8 @@ using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangEdit;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangEdit;
+using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
+using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 
 namespace Ngaq.Ui;
 
@@ -63,7 +65,10 @@ public static class DiUi{
 		z.AddTransient<VmNormLangEdit>();
 		z.AddTransient<VmUserLangPage>();
 		z.AddTransient<VmUserLangEdit>();
+		z.AddTransient<VmNormLangToUserLangPage>();
+		z.AddTransient<VmNormLangToUserLangEdit>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}
 }
+

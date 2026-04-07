@@ -1,10 +1,9 @@
-namespace Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
+namespace Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -17,14 +16,13 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangEdit;
+using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmUserLangPage;
+using Ctx = VmNormLangToUserLangPage;
 
-/// UserLang 列表頁視圖。
-/// 上部爲搜索與新增，主體爲 TreeDataGrid，底部爲分頁條。
-public partial class ViewUserLangPage
+/// 標準語言到用戶語言映射列表頁視圖。
+public partial class ViewNormLangToUserLangPage
 	:AppViewBase
 {
 	public Ctx? Ctx{
@@ -32,7 +30,7 @@ public partial class ViewUserLangPage
 		set{DataContext = value;}
 	}
 
-	public ViewUserLangPage(){
+	public ViewNormLangToUserLangPage(){
 		Ctx = App.DiOrMk<Ctx>();
 		if(Ctx is not null){
 			Ctx.OnOpenDetailRequested += OpenDetail;
@@ -51,7 +49,6 @@ public partial class ViewUserLangPage
 		public static str FullStretch = nameof(FullStretch);
 	}
 
-	/// 統一定義通用拉伸樣式。
 	protected nil Style(){
 		var S = Styles;
 		new Style(
@@ -66,9 +63,8 @@ public partial class ViewUserLangPage
 
 	AutoGrid Root = new(IsRow: true);
 	TreeDataGrid? Grid;
-	FlatTreeDataGridSource<Ctx.RowUserLang>? GridSource;
+	FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>? GridSource;
 
-	/// 組裝頁面骨架。
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -82,21 +78,16 @@ public partial class ViewUserLangPage
 		return NIL;
 	}
 
-	/// 創建頂部搜索條。
 	protected Control MkTopBar(){
 		var top = new AutoGrid(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(6, GUT.Star),
+			ColDef(7, GUT.Star),
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
-			ColDef(2, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
-			o.CBind<Ctx>(
-				o.PropText,
-				x=>x.Input
-			);
+			o.CBind<Ctx>(o.PropText, x=>x.Input);
 			o.KeyBindings.Add(new KeyBinding{
 				Gesture = new KeyGesture(Key.Enter),
 				Command = new RelayCommand(()=>searchBtn.PerformClick()),
@@ -110,21 +101,12 @@ public partial class ViewUserLangPage
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.CBind<Ctx>(IsVisibleProperty, x=>!x.IsSelectMode, Mode: BindingMode.OneWay);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
-		})
-		.A(new OpBtn(), o=>{
-			o.Classes.Add(Cls.FullStretch);
-			o.CBind<Ctx>(IsVisibleProperty, x=>!x.IsSelectMode, Mode: BindingMode.OneWay);
-			o.BtnContent = Svgs.DatabaseImport().ToIcon().WithText(Todo.I18n("Auto Add Missing"));
-			o.Background = new SolidColorBrush(Color.FromRgb(68, 102, 160));
-			o.SetExe((Ct)=>Ctx?.AddAllUnregisteredUserLangs(Ct));
 		});
 		return top.Grid;
 	}
 
-	/// 創建列表容器與交互行樣式。
 	protected Control MkGridHost(){
 		Grid = new TreeDataGrid{
 			MinHeight = 280,
@@ -141,7 +123,6 @@ public partial class ViewUserLangPage
 		return Grid;
 	}
 
-	/// 創建底部分頁條。
 	protected Control MkPageBarHost(){
 		var pageBar = new ViewPageBar();
 		if(Ctx is not null){
@@ -150,25 +131,24 @@ public partial class ViewUserLangPage
 		return pageBar;
 	}
 
-	/// 建立 TreeDataGrid 列配置。
 	protected nil InitDataGrid(){
 		if(Ctx is null || Grid is null){
 			return NIL;
 		}
-		GridSource = new FlatTreeDataGridSource<Ctx.RowUserLang>(Ctx.Rows){
+		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("Name"), x=>x.Name),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("RelLangType"), x=>x.RelLangType),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("RelLang"), x=>x.RelLang),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("Modified"), x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n(""), x=>x.UiIdxText),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("NormLangType"), x=>x.NormLangType),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("NormLang"), x=>x.NormLang),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("UserLang"), x=>x.UserLang),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("Descr"), x=>x.Descr),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("Modified"), x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;
 		return NIL;
 	}
 
-	/// 捕獲行點擊，忽略 ToggleButton 內部交互並打開詳情。
 	protected void OnGridTapped(object? sender, TappedEventArgs e){
 		if(Ctx is null || Grid is null){
 			return;
@@ -181,7 +161,7 @@ public partial class ViewUserLangPage
 				return;
 			}
 			if(cur is TreeDataGridRow row){
-				if(row.DataContext is Ctx.RowUserLang vmRow){
+				if(row.DataContext is Ctx.RowNormLangToUserLang vmRow){
 					Ctx.OpenDetail(vmRow);
 					e.Handled = true;
 				}
@@ -190,15 +170,12 @@ public partial class ViewUserLangPage
 		}
 	}
 
-	/// 打開編輯頁：`row==null` 為新增，否則載入既有項。
-	void OpenDetail(Ctx.RowUserLang? row){
-		var view = new ViewUserLangEdit();
+	void OpenDetail(Ctx.RowNormLangToUserLang? row){
+		var view = new ViewNormLangToUserLangEdit();
 		view.Ctx?.SetCreateMode(row?.Raw is null);
-		view.Ctx?.FromPoUserLang(row?.Raw);
-		var title = row?.Raw?.UniqName ?? Todo.I18n("新增UserLang");
+		view.Ctx?.FromPoNormLangToUserLang(row?.Raw);
+		var title = row?.Raw?.NormLang ?? Todo.I18n("Add NormLangToUserLang");
 		var titled = ToolView.WithTitle(title, view);
 		Ctx?.ViewNavi?.GoTo(titled);
 	}
 }
-
-

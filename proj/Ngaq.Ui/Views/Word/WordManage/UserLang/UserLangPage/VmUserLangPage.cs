@@ -72,6 +72,14 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 	/// 列表行集合（TreeDataGrid 綁定源）。
 	public ObservableCollection<RowUserLang> Rows{get;set;} = [];
 
+	/// 是否處於選擇模式（供其他頁面復用本分頁視圖挑選 UserLang）。
+	public bool IsSelectMode{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = false;
+
+	Action<PoUserLang>? FnOnSelected{get;set;}
+
 	/// 列表行模型。
 	public class RowUserLang{
 		public u64 UiIdx{get;set;}
@@ -150,7 +158,20 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 
 	/// 請求打開詳情頁（row=null 表示新增）。
 	public nil OpenDetail(RowUserLang? Row = null){
+		if(IsSelectMode){
+			if(Row?.Raw is not null){
+				FnOnSelected?.Invoke(Row.Raw);
+			}
+			return NIL;
+		}
 		OnOpenDetailRequested?.Invoke(Row);
+		return NIL;
+	}
+
+	/// 設為選擇模式，點行後回調選中項而不再進入詳情頁。
+	public nil SetSelectMode(Action<PoUserLang> FnOnSelected){
+		IsSelectMode = true;
+		this.FnOnSelected = FnOnSelected;
 		return NIL;
 	}
 
@@ -172,3 +193,4 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 	/// 由 View 層監聽，收到後在 View 中實例化詳情頁並導航。
 	public event Action<RowUserLang?>? OnOpenDetailRequested;
 }
+

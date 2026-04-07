@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Dictionary;
+namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -10,12 +10,14 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmDictionary;
 
 public partial class ViewDictionary
 	:AppViewBase
+	,I_MkTitleMenu
 {
 
 	public Ctx? Ctx{
@@ -146,6 +148,17 @@ public partial class ViewDictionary
 		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
 	}
 
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = Todo.I18n("配置語言映射");
+			o.Click += (s,e)=>{
+				var view = new ViewNormLangToUserLangPage();
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("配置語言映射"), view));
+			};
+		});
+		return menu;
+	}
 	public void ClickLookupBtn(str? SearchText = null){
 		if(SearchText != null){
 			SearchTextBox.Text = SearchText;
@@ -153,3 +166,4 @@ public partial class ViewDictionary
 		SearchBtn.PerformClick();
 	}
 }
+
