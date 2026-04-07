@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+﻿namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -22,7 +22,6 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmNormLangPage;
 
-/// NormLang 分頁列表頁。
 public partial class ViewNormLangPage
 	:AppViewBase
 	,I_MkTitleMenu
@@ -141,10 +140,8 @@ public partial class ViewNormLangPage
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLang>(Ctx.Rows){
 			Columns = {
 				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("Type"), x=>x.Type),
 				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("Code"), x=>x.Code),
 				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("NativeName"), x=>x.NativeName),
-				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("Modified"), x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;
@@ -176,7 +173,7 @@ public partial class ViewNormLangPage
 		var view = new ViewNormLangEdit();
 		view.Ctx?.SetCreateMode(row?.Raw is null);
 		view.Ctx?.FromPoNormLang(row?.Raw);
-		var title = row?.Raw?.Code ?? Todo.I18n("新增NormLang");
+		var title = row?.Raw?.Code ?? Todo.I18n("Add NormLang");
 		var titled = ToolView.WithTitle(title, view);
 		Ctx?.ViewNavi?.GoTo(titled);
 	}
@@ -184,7 +181,7 @@ public partial class ViewNormLangPage
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
-			o.Header = Todo.I18n("初始化");
+			o.Header = Todo.I18n("Init Builtin");
 			o.Click += async(s,e)=>{
 				if(Ctx is null){
 					return;

@@ -130,7 +130,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	}
 
 	protected async Task<nil> OnNextPage(VmPageBar PageBar, CT Ct){
-		if(PageBar.TotPageCnt is u64 TotalPage && PageBar.PageNum >= TotalPage){
+		if(PageBar.TotPageCnt is u64 TotalPage && TotalPage > 0 && PageBar.PageNum >= TotalPage){
 			return NIL;
 		}
 		PageBar.PageNum++;
