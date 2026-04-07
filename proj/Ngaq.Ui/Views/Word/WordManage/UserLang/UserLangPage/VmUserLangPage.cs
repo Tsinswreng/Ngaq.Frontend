@@ -75,8 +75,15 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 	/// 是否處於選擇模式（供其他頁面復用本分頁視圖挑選 UserLang）。
 	public bool IsSelectMode{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(ShowManageActions));
+			}
+		}
 	} = false;
+
+	/// 管理操作（新增/自動補全）是否顯示。
+	public bool ShowManageActions => !IsSelectMode;
 
 	Action<PoUserLang>? FnOnSelected{get;set;}
 
@@ -193,4 +200,5 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 	/// 由 View 層監聽，收到後在 View 中實例化詳情頁並導航。
 	public event Action<RowUserLang?>? OnOpenDetailRequested;
 }
+
 

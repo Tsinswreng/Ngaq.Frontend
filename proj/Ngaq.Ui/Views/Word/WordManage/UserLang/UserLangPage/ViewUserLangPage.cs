@@ -110,13 +110,13 @@ public partial class ViewUserLangPage
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.CBind<Ctx>(IsVisibleProperty, x=>!x.IsSelectMode, Mode: BindingMode.OneWay);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowManageActions, Mode: BindingMode.OneWay);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		})
 		.A(new OpBtn(), o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.CBind<Ctx>(IsVisibleProperty, x=>!x.IsSelectMode, Mode: BindingMode.OneWay);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowManageActions, Mode: BindingMode.OneWay);
 			o.BtnContent = Svgs.DatabaseImport().ToIcon().WithText(Todo.I18n("Auto Add Missing"));
 			o.Background = new SolidColorBrush(Color.FromRgb(68, 102, 160));
 			o.SetExe((Ct)=>Ctx?.AddAllUnregisteredUserLangs(Ct));
@@ -200,5 +200,6 @@ public partial class ViewUserLangPage
 		Ctx?.ViewNavi?.GoTo(titled);
 	}
 }
+
 
 
