@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using System.Globalization;
+using System.Linq;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
@@ -17,11 +18,16 @@ using Ngaq.Ui.Icons;
 /// 左：可輸入字符串
 /// 右：單一按鈕，點開同一菜單中的「格式選擇 + 日曆」
 public partial class TempusBox: ContentControl{
-	public enum ETextFormat{
+	public enum EBuiltinFormat{
 		Iso,
 		UnixMs,
-		LocalDateTime,
-		DateOnly,
+	}
+
+	struct FormatOption{
+		public bool IsBuiltin;
+		public EBuiltinFormat Builtin;
+		public str? Pattern;
+		public str Display;
 	}
 
 	/// 當前 `Tempus` 主值。文本輸入和日曆選擇都會回寫到此值。
@@ -44,33 +50,56 @@ public partial class TempusBox: ContentControl{
 	}
 	bool _IsReadOnly = false;
 
-	/// 當前文本格式。
-	public ETextFormat TextFormat{
-		get{return _TextFormat;}
+	/// 內置格式列表（可配置）。
+	public IList<EBuiltinFormat> BuiltinFormats{get;} = [EBuiltinFormat.Iso, EBuiltinFormat.UnixMs];
+
+	/// 自定義格式列表（可配置）。如 `"yy-MM-dd"`。
+	public IList<str> CustomFormatPatterns{get;} = [];
+
+	/// 當前選中的格式下標。
+	public i32 SelectedFormatIndex{
+		get{return _SelectedFormatIndex;}
 		set{
-			_TextFormat = value;
+			var max = _FormatOptions.Count - 1;
+			var next = max < 0 ? 0 : Math.Clamp(value, 0, max);
+			_SelectedFormatIndex = next;
 			SyncUiFromTempus();
 		}
 	}
-	ETextFormat _TextFormat = ETextFormat.Iso;
+	i32 _SelectedFormatIndex = 0;
+
+	/// 控件統一高度，讓左按鈕與輸入框外框對齊。
+	public f64 ControlHeight{
+		get{return _ControlHeight;}
+		set{
+			_ControlHeight = value;
+			ApplyControlSize();
+		}
+	}
+	f64 _ControlHeight = 34;
 
 	/// 最近一次文本解析是否成功，外層可讀取作提示。
 	public bool LastParseOk{get;protected set;} = true;
-
-	public II18n I{get;set;} = I18n.Inst;
-
-	readonly AutoGrid Root = new(IsRow: false);
-	TextBox? _Input;
-	Button? _BtnMenu;
-	ComboBox? _CbFormat;
-	Avalonia.Controls.Calendar? _Calendar;
+	public readonly AutoGrid Root = new(IsRow: false);
+	public TextBox _Input{get;set;} = null!;
+	public Button _BtnMenu{get;set;}
+	public ComboBox _ComboBoxFormat{get;set;}
+	public Avalonia.Controls.Calendar _Calendar{get;set;}
 	Flyout? _MenuFlyout;
 	bool _SyncingUi = false;
-	readonly ETextFormat[] _FormatOptions = [ETextFormat.Iso, ETextFormat.UnixMs, ETextFormat.LocalDateTime, ETextFormat.DateOnly];
+	readonly List<FormatOption> _FormatOptions = [];
 
 	public TempusBox(){
+		RebuildFormatOptions();
 		Render();
+		ApplyControlSize();
 		ApplyReadOnlyState();
+		SyncUiFromTempus();
+	}
+
+	/// 外層修改 `BuiltinFormats/CustomFormatPatterns` 後調用，刷新下拉格式源。
+	public void RefreshFormatOptions(){
+		RebuildFormatOptions();
 		SyncUiFromTempus();
 	}
 
@@ -87,14 +116,18 @@ public partial class TempusBox: ContentControl{
 
 	TextBox MkInputBox(){
 		var txt = new TextBox{
-			MinWidth = 0
+			MinWidth = 0,
+			VerticalAlignment = VAlign.Stretch,
 		};
+		txt.Margin = new Thickness(0);
+		txt.BorderThickness = new Thickness(1);
+		txt.Padding = new Thickness(8, 0, 8, 0);
 		txt.TextChanged += (s, e)=>{
 			// 由用戶輸入觸發時，按當前格式解析；失敗則只更新標記，不覆蓋既有 Tempus。
 			if(_SyncingUi){
 				return;
 			}
-			if(TryParseTempus(txt.Text ?? "", TextFormat, out var parsed)){
+			if(TryParseBySelectedFormat(txt.Text ?? "", out var parsed)){
 				LastParseOk = true;
 				_Tempus = parsed;
 				SyncUiFromTempus();
@@ -112,19 +145,22 @@ public partial class TempusBox: ContentControl{
 		};
 		btn.HorizontalAlignment = HAlign.Stretch;
 		btn.VerticalAlignment = VAlign.Stretch;
+		btn.Margin = new Thickness(0);
+		btn.BorderThickness = new Thickness(1);
+		btn.Padding = new Thickness(8, 0, 8, 0);
 		var flyout = new Flyout{
 			Placement = PlacementMode.Bottom,
 		};
 		var panel = new StackPanel();
 		var cbFormat = new ComboBox{
-			ItemsSource = _FormatOptions.Select(FormatToDisplay).ToArray(),
+			ItemsSource = _FormatOptions.Select(x=>x.Display).ToArray(),
 		};
 		cbFormat.SelectionChanged += (s, e)=>{
 			if(_SyncingUi){
 				return;
 			}
-			if(cbFormat.SelectedIndex is >= 0 and < 4){
-				TextFormat = _FormatOptions[cbFormat.SelectedIndex];
+			if(cbFormat.SelectedIndex is >= 0 && cbFormat.SelectedIndex < _FormatOptions.Count){
+				SelectedFormatIndex = cbFormat.SelectedIndex;
 			}
 		};
 		panel.A(cbFormat);
@@ -163,12 +199,14 @@ public partial class TempusBox: ContentControl{
 			if(IsReadOnly){
 				return;
 			}
-			cbFormat.SelectedIndex = Array.IndexOf(_FormatOptions, TextFormat);
+			RebuildFormatOptions();
+			cbFormat.ItemsSource = _FormatOptions.Select(x=>x.Display).ToArray();
+			cbFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, _FormatOptions.Count-1));
 			FlyoutBase.ShowAttachedFlyout(btn);
 			cbFormat.IsDropDownOpen = true;
 		};
 		_BtnMenu = btn;
-		_CbFormat = cbFormat;
+		_ComboBoxFormat = cbFormat;
 		_Calendar = calendar;
 		_MenuFlyout = flyout;
 		return btn;
@@ -178,10 +216,14 @@ public partial class TempusBox: ContentControl{
 		if(_Input is null || _Calendar is null || _BtnMenu is null){
 			return;
 		}
+		if(_FormatOptions.Count == 0){
+			RebuildFormatOptions();
+		}
 		_SyncingUi = true;
-		_Input.Text = FormatTempus(_Tempus, TextFormat);
-		if(_CbFormat is not null){
-			_CbFormat.SelectedIndex = Array.IndexOf(_FormatOptions, TextFormat);
+		_Input.Text = FormatBySelectedFormat(_Tempus);
+		if(_ComboBoxFormat is not null){
+			_ComboBoxFormat.ItemsSource = _FormatOptions.Select(x=>x.Display).ToArray();
+			_ComboBoxFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, _FormatOptions.Count-1));
 		}
 		var localDate = DateTimeOffset.FromUnixTimeMilliseconds(_Tempus.Value).ToLocalTime().Date;
 		_Calendar.SelectedDate = localDate;
@@ -196,8 +238,8 @@ public partial class TempusBox: ContentControl{
 		if(_BtnMenu is not null){
 			_BtnMenu.IsEnabled = !IsReadOnly;
 		}
-		if(_CbFormat is not null){
-			_CbFormat.IsEnabled = !IsReadOnly;
+		if(_ComboBoxFormat is not null){
+			_ComboBoxFormat.IsEnabled = !IsReadOnly;
 		}
 		if(_Calendar is not null){
 			_Calendar.IsEnabled = !IsReadOnly;
@@ -207,84 +249,131 @@ public partial class TempusBox: ContentControl{
 		}
 	}
 
-	static str FormatToDisplay(ETextFormat Format){
+	void ApplyControlSize(){
+		if(_Input is not null){
+			_Input.Height = ControlHeight;
+		}
+		if(_BtnMenu is not null){
+			_BtnMenu.Height = ControlHeight;
+		}
+	}
+
+	void RebuildFormatOptions(){
+		_FormatOptions.Clear();
+		foreach(var b in BuiltinFormats.Distinct()){
+			_FormatOptions.Add(new FormatOption{
+				IsBuiltin = true,
+				Builtin = b,
+				Display = BuiltinToDisplay(b),
+			});
+		}
+		foreach(var pattern in CustomFormatPatterns.Where(x=>!string.IsNullOrWhiteSpace(x)).Distinct()){
+			_FormatOptions.Add(new FormatOption{
+				IsBuiltin = false,
+				Pattern = pattern.Trim(),
+				Display = pattern.Trim(),
+			});
+		}
+		if(_FormatOptions.Count == 0){
+			_FormatOptions.Add(new FormatOption{
+				IsBuiltin = true,
+				Builtin = EBuiltinFormat.Iso,
+				Display = BuiltinToDisplay(EBuiltinFormat.Iso),
+			});
+		}
+		_SelectedFormatIndex = Math.Clamp(_SelectedFormatIndex, 0, _FormatOptions.Count-1);
+	}
+
+	static str BuiltinToDisplay(EBuiltinFormat Format){
 		return Format switch{
-			ETextFormat.Iso => "ISO 8601",
-			ETextFormat.UnixMs => "Unix ms",
-			ETextFormat.LocalDateTime => "Local datetime",
-			ETextFormat.DateOnly => "Date only",
+			EBuiltinFormat.Iso => "ISO 8601",
+			EBuiltinFormat.UnixMs => "Unix ms",
 			_ => "Unknown",
 		};
 	}
 
-	static str FormatTempus(Tempus Value, ETextFormat Format){
-		return Format switch{
-			ETextFormat.Iso => Value.ToIso(),
-			ETextFormat.UnixMs => Value.Value.ToString(CultureInfo.InvariantCulture),
-			ETextFormat.LocalDateTime
-				=> DateTimeOffset.FromUnixTimeMilliseconds(Value.Value)
+	str FormatBySelectedFormat(Tempus Value){
+		if(_FormatOptions.Count == 0){
+			return Value.Value.ToString(CultureInfo.InvariantCulture);
+		}
+		var opt = _FormatOptions[Math.Clamp(SelectedFormatIndex, 0, _FormatOptions.Count-1)];
+		if(opt.IsBuiltin){
+			return opt.Builtin switch{
+				// ISO 8601 顯示按本地時區輸出。
+				EBuiltinFormat.Iso => DateTimeOffset.FromUnixTimeMilliseconds(Value.Value)
+					.ToLocalTime()
+					.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture),
+				EBuiltinFormat.UnixMs => Value.Value.ToString(CultureInfo.InvariantCulture),
+				_ => Value.Value.ToString(CultureInfo.InvariantCulture),
+			};
+		}
+		try{
+			var local = DateTimeOffset.FromUnixTimeMilliseconds(Value.Value).ToLocalTime().DateTime;
+			return local.ToString(NormalizePattern(opt.Pattern ?? ""), CultureInfo.InvariantCulture);
+		}catch{
+			return DateTimeOffset.FromUnixTimeMilliseconds(Value.Value)
 				.ToLocalTime()
-				.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-			ETextFormat.DateOnly
-				=> DateTimeOffset.FromUnixTimeMilliseconds(Value.Value)
-				.ToLocalTime()
-				.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
-			_ => Value.ToIso(),
-		};
+				.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture);
+		}
 	}
 
-	static bool TryParseTempus(str Text, ETextFormat Format, out Tempus Result){
+	bool TryParseBySelectedFormat(str Text, out Tempus Result){
 		Result = default;
 		if(string.IsNullOrWhiteSpace(Text)){
 			return false;
 		}
-		switch(Format){
-			case ETextFormat.Iso:
-				return Tempus.TryFromIso(Text, out Result);
+		if(_FormatOptions.Count == 0){
+			RebuildFormatOptions();
+		}
+		var opt = _FormatOptions[Math.Clamp(SelectedFormatIndex, 0, _FormatOptions.Count-1)];
+		if(opt.IsBuiltin){
+			switch(opt.Builtin){
+				case EBuiltinFormat.Iso:
+					if(DateTimeOffset.TryParseExact(
+						Text,
+						"yyyy-MM-ddTHH:mm:ss.fffzzz",
+						CultureInfo.InvariantCulture,
+						DateTimeStyles.None,
+						out var dtoIso
+					)){
+						Result = Tempus.FromUnixMs(dtoIso.ToUnixTimeMilliseconds());
+						return true;
+					}
+					return false;
 
-			case ETextFormat.UnixMs:
+				case EBuiltinFormat.UnixMs:
 				if(i64.TryParse(Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms)){
 					Result = Tempus.FromUnixMs(ms);
 					return true;
 				}
 				return false;
-
-			case ETextFormat.LocalDateTime:
-				if(DateTime.TryParseExact(
-					Text,
-					"yyyy-MM-dd HH:mm:ss",
-					CultureInfo.InvariantCulture,
-					DateTimeStyles.None,
-					out var dt
-				)){
-					Result = Tempus.FromDateTime(new DateTime(
-						dt.Year, dt.Month, dt.Day,
-						dt.Hour, dt.Minute, dt.Second,
-						DateTimeKind.Local
-					));
-					return true;
-				}
-				return false;
-
-			case ETextFormat.DateOnly:
-				if(DateTime.TryParseExact(
-					Text,
-					"yyyy-MM-dd",
-					CultureInfo.InvariantCulture,
-					DateTimeStyles.None,
-					out var date
-				)){
-					Result = Tempus.FromDateTime(new DateTime(
-						date.Year, date.Month, date.Day,
-						0, 0, 0,
-						DateTimeKind.Local
-					));
-					return true;
-				}
-				return false;
-
-			default:
-				return false;
+			}
+			return false;
 		}
+		var pattern = NormalizePattern(opt.Pattern ?? "");
+		if(DateTime.TryParseExact(
+			Text,
+			pattern,
+			CultureInfo.InvariantCulture,
+			DateTimeStyles.None,
+			out var dtCustom
+		)){
+			Result = Tempus.FromDateTime(new DateTime(
+				dtCustom.Year, dtCustom.Month, dtCustom.Day,
+				dtCustom.Hour, dtCustom.Minute, dtCustom.Second,
+				dtCustom.Millisecond,
+				DateTimeKind.Local
+			));
+			return true;
+		}
+		return false;
+	}
+
+	static str NormalizePattern(str Pattern){
+		// 兼容常見習慣寫法：YY/DD（非 .NET 標準）→ yy/dd。
+		return Pattern
+		.Replace("YYYY", "yyyy")
+		.Replace("YY", "yy")
+		.Replace("DD", "dd");
 	}
 }
