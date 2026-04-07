@@ -18,7 +18,7 @@ using Ctx = VmNormLangPage;
 public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	void Init(){
 		PageBar = VmPageBar.Mk();
-		PageBar.PageSize = 10;
+		PageBar.PageSize = 20;
 		PageBar.FnPrevPage = OnPrevPage;
 		PageBar.FnNextPage = OnNextPage;
 	}
