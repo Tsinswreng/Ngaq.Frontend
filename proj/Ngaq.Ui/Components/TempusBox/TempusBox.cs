@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Components.TempusBox;
 
 using Avalonia;
+using Avalonia.Data;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using System.Globalization;
@@ -21,6 +22,9 @@ public class TempusFormatItem{
 	#Example([2026-04-07T23:16:07.344+08:00])
 	")]
 	public static TempusFormatItem Iso8601Full{get;set;}
+	[Doc(@$"默認內置。
+	#Examples([1775575237143])
+	")]
 	public static TempusFormatItem UnixMs{get;set;}
 	[Doc(@$"
 	#Examples([26-04-07])
@@ -34,6 +38,106 @@ public class TempusFormatItem{
 	[Doc(@$"該種格式的名稱 在下拉框中顯示")]
 	public str FmtDisplayName{get;set;} = "";
 	public IValueConverter Converter{get;set;} = null!;
+
+	static TempusFormatItem(){
+		Iso8601Full = new TempusFormatItem{
+			FmtDisplayName = "ISO 8601",
+			Converter = MkIsoLocalConverter(),
+		};
+		UnixMs = new TempusFormatItem{
+			FmtDisplayName = "Unix ms",
+			Converter = MkUnixMsConverter(),
+		};
+		yy_MM_DD = new TempusFormatItem{
+			FmtDisplayName = "yy-MM-dd",
+			Converter = MkDateTimePatternConverter("yy-MM-dd"),
+		};
+		yy_MM_DD__HH_mm = new TempusFormatItem{
+			FmtDisplayName = "yy-MM-dd HH:mm",
+			Converter = MkDateTimePatternConverter("yy-MM-dd HH:mm"),
+		};
+	}
+
+	static IValueConverter MkIsoLocalConverter(){
+		return new ParamFnConvtr<obj?, obj?>(
+			(v, p)=>{
+				if(v is Tempus t){
+					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)
+					.ToLocalTime()
+					.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture);
+				}
+				return BindingNotification.UnsetValue;
+			},
+			(v, p)=>{
+				if(v is str s && DateTimeOffset.TryParseExact(
+					s,
+					"yyyy-MM-ddTHH:mm:ss.fffzzz",
+					CultureInfo.InvariantCulture,
+					DateTimeStyles.None,
+					out var dto
+				)){
+					return Tempus.FromUnixMs(dto.ToUnixTimeMilliseconds());
+				}
+				return BindingNotification.UnsetValue;
+			}
+		);
+	}
+
+	static IValueConverter MkUnixMsConverter(){
+		return new ParamFnConvtr<obj?, obj?>(
+			(v, p)=>{
+				if(v is Tempus t){
+					return t.Value.ToString(CultureInfo.InvariantCulture);
+				}
+				return BindingNotification.UnsetValue;
+			},
+			(v, p)=>{
+				if(v is str s && i64.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms)){
+					return Tempus.FromUnixMs(ms);
+				}
+				return BindingNotification.UnsetValue;
+			}
+		);
+	}
+
+	static IValueConverter MkDateTimePatternConverter(str Pattern){
+		var fmt = NormalizePattern(Pattern);
+		return new ParamFnConvtr<obj?, obj?>(
+			(v, p)=>{
+				if(v is Tempus t){
+					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)
+					.ToLocalTime()
+					.DateTime
+					.ToString(fmt, CultureInfo.InvariantCulture);
+				}
+				return BindingNotification.UnsetValue;
+			},
+			(v, p)=>{
+				if(v is str s && DateTime.TryParseExact(
+					s,
+					fmt,
+					CultureInfo.InvariantCulture,
+					DateTimeStyles.None,
+					out var dt
+				)){
+					return Tempus.FromDateTime(new DateTime(
+						dt.Year, dt.Month, dt.Day,
+						dt.Hour, dt.Minute, dt.Second,
+						dt.Millisecond,
+						DateTimeKind.Local
+					));
+				}
+				return BindingNotification.UnsetValue;
+			}
+		);
+	}
+
+	static str NormalizePattern(str Pattern){
+		return Pattern
+		.Replace("YYYY", "yyyy")
+		.Replace("YY", "yy")
+		.Replace("DD", "dd");
+	}
 }
 
 
@@ -41,18 +145,6 @@ public class TempusFormatItem{
 /// 左：可輸入字符串
 /// 右：單一按鈕，點開同一菜單中的「格式選擇 + 日曆」
 public partial class TempusBox: ContentControl{
-	public enum EBuiltinFormat{
-		Iso,
-		UnixMs,
-	}
-
-	struct FormatOption{
-		public bool IsBuiltin;
-		public EBuiltinFormat Builtin;
-		public str? Pattern;
-		public str Display;
-	}
-
 	/// 當前 `Tempus` 主值。文本輸入和日曆選擇都會回寫到此值。
 	public Tempus Tempus{
 		get{return _Tempus;}
@@ -73,17 +165,17 @@ public partial class TempusBox: ContentControl{
 	}
 	bool _IsReadOnly = false;
 
-	/// 內置格式列表（可配置）。
-	public IList<EBuiltinFormat> BuiltinFormats{get;} = [EBuiltinFormat.Iso, EBuiltinFormat.UnixMs];
-
-	/// 自定義格式列表（可配置）。如 `"yy-MM-dd"`。
-	public IList<str> CustomFormatPatterns{get;} = [];
+	/// 全部格式來源。下拉框只使用此列表。
+	public IList<TempusFormatItem> FormatItems{get;} = [
+		TempusFormatItem.Iso8601Full,
+		TempusFormatItem.UnixMs,
+	];
 
 	/// 當前選中的格式下標。
 	public i32 SelectedFormatIndex{
 		get{return _SelectedFormatIndex;}
 		set{
-			var max = _FormatOptions.Count - 1;
+			var max = FormatItems.Count - 1;
 			var next = max < 0 ? 0 : Math.Clamp(value, 0, max);
 			_SelectedFormatIndex = next;
 			SyncUiFromTempus();
@@ -110,19 +202,17 @@ public partial class TempusBox: ContentControl{
 	public Avalonia.Controls.Calendar _Calendar{get;set;}
 	Flyout? _MenuFlyout;
 	bool _SyncingUi = false;
-	readonly List<FormatOption> _FormatOptions = [];
 
 	public TempusBox(){
-		RebuildFormatOptions();
 		Render();
 		ApplyControlSize();
 		ApplyReadOnlyState();
 		SyncUiFromTempus();
 	}
 
-	/// 外層修改 `BuiltinFormats/CustomFormatPatterns` 後調用，刷新下拉格式源。
+	/// 外層修改 `FormatItems` 後調用，刷新下拉格式源。
 	public void RefreshFormatOptions(){
-		RebuildFormatOptions();
+		_SelectedFormatIndex = Math.Clamp(_SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
 		SyncUiFromTempus();
 	}
 
@@ -176,13 +266,13 @@ public partial class TempusBox: ContentControl{
 		};
 		var panel = new StackPanel();
 		var cbFormat = new ComboBox{
-			ItemsSource = _FormatOptions.Select(x=>x.Display).ToArray(),
+			ItemsSource = FormatItems.Select(x=>x.FmtDisplayName).ToArray(),
 		};
 		cbFormat.SelectionChanged += (s, e)=>{
 			if(_SyncingUi){
 				return;
 			}
-			if(cbFormat.SelectedIndex is >= 0 && cbFormat.SelectedIndex < _FormatOptions.Count){
+			if(cbFormat.SelectedIndex is >= 0 && cbFormat.SelectedIndex < FormatItems.Count){
 				SelectedFormatIndex = cbFormat.SelectedIndex;
 			}
 		};
@@ -222,9 +312,8 @@ public partial class TempusBox: ContentControl{
 			if(IsReadOnly){
 				return;
 			}
-			RebuildFormatOptions();
-			cbFormat.ItemsSource = _FormatOptions.Select(x=>x.Display).ToArray();
-			cbFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, _FormatOptions.Count-1));
+			cbFormat.ItemsSource = FormatItems.Select(x=>x.FmtDisplayName).ToArray();
+			cbFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
 			FlyoutBase.ShowAttachedFlyout(btn);
 			cbFormat.IsDropDownOpen = true;
 		};
@@ -239,14 +328,11 @@ public partial class TempusBox: ContentControl{
 		if(_Input is null || _Calendar is null || _BtnMenu is null){
 			return;
 		}
-		if(_FormatOptions.Count == 0){
-			RebuildFormatOptions();
-		}
 		_SyncingUi = true;
 		_Input.Text = FormatBySelectedFormat(_Tempus);
 		if(_ComboBoxFormat is not null){
-			_ComboBoxFormat.ItemsSource = _FormatOptions.Select(x=>x.Display).ToArray();
-			_ComboBoxFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, _FormatOptions.Count-1));
+			_ComboBoxFormat.ItemsSource = FormatItems.Select(x=>x.FmtDisplayName).ToArray();
+			_ComboBoxFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
 		}
 		var localDate = DateTimeOffset.FromUnixTimeMilliseconds(_Tempus.Value).ToLocalTime().Date;
 		_Calendar.SelectedDate = localDate;
@@ -281,63 +367,16 @@ public partial class TempusBox: ContentControl{
 		}
 	}
 
-	void RebuildFormatOptions(){
-		_FormatOptions.Clear();
-		foreach(var b in BuiltinFormats.Distinct()){
-			_FormatOptions.Add(new FormatOption{
-				IsBuiltin = true,
-				Builtin = b,
-				Display = BuiltinToDisplay(b),
-			});
-		}
-		foreach(var pattern in CustomFormatPatterns.Where(x=>!string.IsNullOrWhiteSpace(x)).Distinct()){
-			_FormatOptions.Add(new FormatOption{
-				IsBuiltin = false,
-				Pattern = pattern.Trim(),
-				Display = pattern.Trim(),
-			});
-		}
-		if(_FormatOptions.Count == 0){
-			_FormatOptions.Add(new FormatOption{
-				IsBuiltin = true,
-				Builtin = EBuiltinFormat.Iso,
-				Display = BuiltinToDisplay(EBuiltinFormat.Iso),
-			});
-		}
-		_SelectedFormatIndex = Math.Clamp(_SelectedFormatIndex, 0, _FormatOptions.Count-1);
-	}
-
-	static str BuiltinToDisplay(EBuiltinFormat Format){
-		return Format switch{
-			EBuiltinFormat.Iso => "ISO 8601",
-			EBuiltinFormat.UnixMs => "Unix ms",
-			_ => "Unknown",
-		};
-	}
-
 	str FormatBySelectedFormat(Tempus Value){
-		if(_FormatOptions.Count == 0){
+		if(FormatItems.Count == 0){
 			return Value.Value.ToString(CultureInfo.InvariantCulture);
 		}
-		var opt = _FormatOptions[Math.Clamp(SelectedFormatIndex, 0, _FormatOptions.Count-1)];
-		if(opt.IsBuiltin){
-			return opt.Builtin switch{
-				// ISO 8601 顯示按本地時區輸出。
-				EBuiltinFormat.Iso => DateTimeOffset.FromUnixTimeMilliseconds(Value.Value)
-					.ToLocalTime()
-					.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture),
-				EBuiltinFormat.UnixMs => Value.Value.ToString(CultureInfo.InvariantCulture),
-				_ => Value.Value.ToString(CultureInfo.InvariantCulture),
-			};
+		var item = FormatItems[Math.Clamp(SelectedFormatIndex, 0, FormatItems.Count-1)];
+		var converted = item.Converter.Convert(Value, typeof(str), null, CultureInfo.InvariantCulture);
+		if(converted is str s){
+			return s;
 		}
-		try{
-			var local = DateTimeOffset.FromUnixTimeMilliseconds(Value.Value).ToLocalTime().DateTime;
-			return local.ToString(NormalizePattern(opt.Pattern ?? ""), CultureInfo.InvariantCulture);
-		}catch{
-			return DateTimeOffset.FromUnixTimeMilliseconds(Value.Value)
-				.ToLocalTime()
-				.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture);
-		}
+		return Value.Value.ToString(CultureInfo.InvariantCulture);
 	}
 
 	bool TryParseBySelectedFormat(str Text, out Tempus Result){
@@ -345,58 +384,15 @@ public partial class TempusBox: ContentControl{
 		if(string.IsNullOrWhiteSpace(Text)){
 			return false;
 		}
-		if(_FormatOptions.Count == 0){
-			RebuildFormatOptions();
-		}
-		var opt = _FormatOptions[Math.Clamp(SelectedFormatIndex, 0, _FormatOptions.Count-1)];
-		if(opt.IsBuiltin){
-			switch(opt.Builtin){
-				case EBuiltinFormat.Iso:
-					if(DateTimeOffset.TryParseExact(
-						Text,
-						"yyyy-MM-ddTHH:mm:ss.fffzzz",
-						CultureInfo.InvariantCulture,
-						DateTimeStyles.None,
-						out var dtoIso
-					)){
-						Result = Tempus.FromUnixMs(dtoIso.ToUnixTimeMilliseconds());
-						return true;
-					}
-					return false;
-
-				case EBuiltinFormat.UnixMs:
-				if(i64.TryParse(Text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms)){
-					Result = Tempus.FromUnixMs(ms);
-					return true;
-				}
-				return false;
-			}
+		if(FormatItems.Count == 0){
 			return false;
 		}
-		var pattern = NormalizePattern(opt.Pattern ?? "");
-		if(DateTime.TryParseExact(
-			Text,
-			pattern,
-			CultureInfo.InvariantCulture,
-			DateTimeStyles.None,
-			out var dtCustom
-		)){
-			Result = Tempus.FromDateTime(new DateTime(
-				dtCustom.Year, dtCustom.Month, dtCustom.Day,
-				dtCustom.Hour, dtCustom.Minute, dtCustom.Second,
-				dtCustom.Millisecond,
-				DateTimeKind.Local
-			));
+		var item = FormatItems[Math.Clamp(SelectedFormatIndex, 0, FormatItems.Count-1)];
+		var converted = item.Converter.ConvertBack(Text, typeof(Tempus), null, CultureInfo.InvariantCulture);
+		if(converted is Tempus t){
+			Result = t;
 			return true;
 		}
 		return false;
-	}
-
-	static str NormalizePattern(str Pattern){
-		// 兼容常見習慣寫法：YY/DD（非 .NET 標準）→ yy/dd。
-		return Pattern
-		.Replace("YYYY", "yyyy")
-		.Replace("YY", "yy")
-		.Replace("DD", "dd");
 	}
 }
