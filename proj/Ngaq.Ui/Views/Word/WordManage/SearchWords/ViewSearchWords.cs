@@ -6,18 +6,19 @@ using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordCard;
-using Ngaq.Ui.Views.Word.WordEditJsonMap;
-using Ngaq.Ui.Views.Word.WordManage.EditWord;
+using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
+
 public partial class ViewSearchWords
 	:AppViewBase
 {
@@ -28,23 +29,18 @@ public partial class ViewSearchWords
 	}
 
 	public ViewSearchWords(){
-		//Ctx = Ctx.Mk();
 		Ctx = App.GetRSvc<Ctx>();
 		Style();
 		Render();
 	}
 
-	public partial class Cls{
-
-	}
+	public partial class Cls{}
 
 	protected nil Style(){
 		return NIL;
 	}
 
-	//StackPanel Root = new StackPanel();
 	AutoGrid Root = new AutoGrid(IsRow: true);
-
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -76,7 +72,6 @@ public partial class ViewSearchWords
 				);
 			})
 			.A(searchBtn, o=>{
-				//o.BtnContent = "🔍";
 				o.BtnContent = Svgs.Search().ToIcon();
 				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
 				o._Button.StretchCenter();
@@ -92,10 +87,9 @@ public partial class ViewSearchWords
 					);
 			});
 		});
-		Root.A(_PageBar(), o=>{
+		Root.A(MkPageBar(), o=>{
 			o.HorizontalAlignment = HAlign.Center;
 		});
-
 
 		return NIL;
 	}
@@ -112,26 +106,25 @@ public partial class ViewSearchWords
 
 			View.Ctx.FromTypedObj(typedObj);
 			R.Content = View;
-			//R.HorizontalContentAlignment = HAlign.Left;
 			if(!AnyNull(View.Ctx.WordForLearn?.JnWord)){
 				R.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, View.Ctx.WordForLearn.JnWord);
 			}else{
 				Ctx?.ShowMsg(Todo.I18n("Word not found."));
 			}
 			R.Click += (s,e)=>{
-				// var Target = new ViewEditJsonWord();
-				// Target.Ctx?.FromTypedObj(typedObj);
-
-				var Target = new ViewWordEdit();
+				var Target = new ViewWordEditV2();
 				var jnWord = VmSearchedWordCard.GetJnWordFromTypedObj(typedObj);
-				Target.Ctx?.FromBo(jnWord);
+				if(AnyNull(Target.Ctx, jnWord)){
+					return;
+				}
+				Target.Ctx.FromJnWord(jnWord);
 				var titleStr = jnWord.Head;
 				var titled = ToolView.WithTitle(titleStr, Target);
 				Ctx?.ViewNavi?.GoTo(titled);
 			};
 			R.Styles.Add(new Style().Set(
 				BackgroundProperty
-				,Brushes.Transparent//背景設潙空則影響點擊判定範圍、點到空處則視潙未點、故用透明㕥代空背?
+				,Brushes.Transparent
 			));
 			R.Styles.Add(new Style().NoMargin().NoPadding());
 			return R;
@@ -139,45 +132,11 @@ public partial class ViewSearchWords
 		return R;
 	}
 
-	Control _PageBar(){
-		var R = new AutoGrid(IsRow: false);
-		R.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-		]);
-		R.A(new Button(), o=>{
-			o.Content = "<";
-			o.Click += (s,e)=>{
-				Ctx?.PrevPage();
-			};
-		});
-		R.A(new TextBox(), o=>{
-			o.CBind<Ctx>(
-				o.PropText
-				,
-					x=>x.PageIdx
-					,Converter: new ParamFnConvtr<u64, str>(
-						(idx, arg)=>(idx+1).ToString()
-						,(Str, arg)=>{
-							if(u64.TryParse(Str, out var R)){
-								return R-1;
-							}
-							return 1;
-						}
-					)
-					,Mode: BindingMode.TwoWay
-				);
-		});
-		R.A(new Button(), o=>{
-			o.Content = ">";
-			o.Click += (s,e)=>{
-				Ctx?.NextPage();
-			};
-		});
-		return R.Grid;
-
+	Control MkPageBar(){
+		var view = new ViewPageBar();
+		if(Ctx is not null){
+			view.Ctx = Ctx.PageBar;
+		}
+		return view;
 	}
-
-
 }

@@ -105,7 +105,7 @@ public partial class ViewStatistics
 	}
 
 	void DrawPlot(AvaPlot o){
-if (Ctx is null){return;}
+		if (Ctx is null){return;}
 		// 1. 先清画布，画散点
 		o.Plot.Clear();
 		o.Plot.Add.Scatter(Ctx.Points, null);
