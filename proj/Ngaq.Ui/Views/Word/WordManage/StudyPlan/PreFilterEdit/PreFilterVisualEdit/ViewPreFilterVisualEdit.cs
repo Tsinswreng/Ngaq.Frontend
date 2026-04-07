@@ -124,7 +124,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
 		]);
-		bar.A(_Button(), o=>{
+		bar.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Content = Todo.I18n("Open JSON");
 			o.Click += (s,e)=>Ctx?.OpenJsonEditor();

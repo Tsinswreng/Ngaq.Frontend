@@ -55,9 +55,6 @@ public partial class ViewAboutMe
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Star),
 		]);
-		// R.Grid.RowDefinitions.AddRange([
-		// 	RowDef(1, GUT.Auto)
-		// ]);
 
 		R.A(new SwipeLongPressBtn(), o=>{
 			o.VAlign(x=>x.Stretch);
@@ -68,13 +65,13 @@ public partial class ViewAboutMe
 			});
 			o.Click += (o, e) => {
 				Ctx?.ViewNavi?.GoTo(
-					ToolView.WithTitle("UserProfile", new ViewUserProfile())//TODO i18n
+					ToolView.WithTitle(Todo.I18n("UserProfile"), new ViewUserProfile())
 				);
 			};
 		});
 		R.A(new SwipeLongPressBtn(), o=>{
 			o.VAlign(VAlign.Stretch);
-			o.SetContent(_TextBlock(), t=>{
+			o.SetContent(new TextBlock(), t=>{
 				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				t.Bind(
 					t.PropText_()
@@ -91,19 +88,15 @@ public partial class ViewAboutMe
 	}
 
 	protected Control _ToolBar(){
-		// var R = new AutoGrid(IsRow:false);
-		// R.Grid.ColumnDefinitions.AddRange([
-		// 	ColDef()
-		// ]);
 		var R = new StackPanel();
 		R.Orientation = Orientation.Horizontal;
 		{{
-			R.A(_Button(), o=>{
+			R.A(new Button(), o=>{
 				//o.Content = "⚙️";
 				o.Content = Svgs.GearFill().ToIcon();
 				o.Click += (s,e)=>{
 					Ctx?.ViewNavi?.GoTo(
-						ToolView.WithTitle("Settings", new ViewSettings())
+						ToolView.WithTitle(Todo.I18n("Settings"), new ViewSettings())
 					);
 				};
 				o.Styles.Add(new Style(

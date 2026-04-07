@@ -1,5 +1,6 @@
-namespace Ngaq.Ui.Views.Dictionary;
+﻿namespace Ngaq.Ui.Views.Dictionary;
 
+using Avalonia.Controls;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Ngaq.Core.Frontend.User;
@@ -22,6 +23,7 @@ using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 using Tsinswreng.CsErr;
 
 using Ctx = VmDictionary;
+using Tsinswreng.AvlnTools.Dsl;
 
 public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	protected VmDictionary(){}
@@ -188,15 +190,24 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		}catch(Exception Ex){
 			// step 3: 捕獲特定語言映射異常，提供兩個選項。
 			if(IsNormLangMappingErr(Ex)){
+				var BtnGoCfg = new Button();
+				BtnGoCfg.SetContent(Todo.I18n("轉到語言配置頁"));
+				BtnGoCfg.Click += (s,e)=>{
+					_ = OpenNormLangMappingPage();
+				};
+				var BtnSkipCfg = new Button();
+				BtnSkipCfg.SetContent(Todo.I18n("暫不配置，直接轉到編輯頁"));
+				BtnSkipCfg.Click += (s,e)=>{
+					_ = GoToWordEditPage(BuildFallbackJnWord(Req, Resp));
+				};
 				ShowMsg(
 					Todo.I18n(
 						"未設定轉換語言映射。\n"+
-						"Option 1: 轉到語言配置頁\n"+
-						"Option 2: 暫不配置，直接進入編輯頁"
+						"請選擇後續操作："
 					),
 					[
-						()=>OpenNormLangMappingPage(),
-						()=>GoToWordEditPage(BuildFallbackJnWord(Req, Resp)),
+						BtnGoCfg,
+						BtnSkipCfg,
 					]
 				);
 				return NIL;

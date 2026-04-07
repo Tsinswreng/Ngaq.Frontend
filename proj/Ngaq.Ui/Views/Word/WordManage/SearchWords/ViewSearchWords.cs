@@ -64,7 +64,7 @@ public partial class ViewSearchWords
 		}
 		{{
 			var searchBtn = new OpBtn();
-			SearchGrid.A(_TextBox(), o=>{
+			SearchGrid.A(new TextBox(), o=>{
 				o.CBind<Ctx>(
 					o.PropText
 					,x=>x.Input);
@@ -82,7 +82,7 @@ public partial class ViewSearchWords
 				o._Button.StretchCenter();
 			});
 		}}
-		Root.A(_ScrollViewer(), scrl=>{
+		Root.A(new ScrollViewer(), scrl=>{
 			scrl.SetContent(_ListWordCard(), o=>{
 				o.CBind<Ctx>(
 					ItemsControl.ItemsSourceProperty
@@ -146,13 +146,13 @@ public partial class ViewSearchWords
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Auto),
 		]);
-		R.A(_Button(), o=>{
+		R.A(new Button(), o=>{
 			o.Content = "<";
 			o.Click += (s,e)=>{
 				Ctx?.PrevPage();
 			};
 		});
-		R.A(_TextBox(), o=>{
+		R.A(new TextBox(), o=>{
 			o.CBind<Ctx>(
 				o.PropText
 				,
@@ -169,7 +169,7 @@ public partial class ViewSearchWords
 					,Mode: BindingMode.TwoWay
 				);
 		});
-		R.A(_Button(), o=>{
+		R.A(new Button(), o=>{
 			o.Content = ">";
 			o.Click += (s,e)=>{
 				Ctx?.NextPage();

@@ -119,7 +119,7 @@ public partial class ViewWordManage
 			content.Children.Add(Icon);
 		}
 
-		var titleText = _TextBlock();
+		var titleText = new TextBlock();
 		titleText.Text = Title;
 		titleText.FontSize = UiCfg.Inst.BaseFontSize * 1.1;
 		titleText.TextAlignment = TextAlignment.Center;

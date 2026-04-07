@@ -47,7 +47,7 @@ public partial class ViewEditJsonWord
 				RowDef(1, GUT.Auto),
 			]);
 		});
-		Root.A(_TextBox(), o=>{
+		Root.A(new TextBox(), o=>{
 			o.AcceptsReturn = true;
 			o.CBind<Ctx>(
 				o.PropText
@@ -63,14 +63,14 @@ public partial class ViewEditJsonWord
 		}
 		{{
 			BottomBtnGrid
-			.A(_Button(), o=>{
+			.A(new Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
 				o.Content = Todo.I18n("Save");
 				o.Click += (s,e)=>{
 					Ctx?.Save();
 				};
 			})
-			.A(_Button(), o=>{
+			.A(new Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
 				o.Content = Todo.I18n("Delete");
 				o.Click += (s,e)=>{

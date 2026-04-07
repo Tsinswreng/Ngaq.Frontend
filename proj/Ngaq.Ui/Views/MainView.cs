@@ -106,7 +106,7 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
-	public partial nil ShowMsg(str Msg, IList<Func<obj?>> Operations){
+	public partial nil ShowMsg(str Msg, IList<Button> Operations){
 		Dispatcher.UIThread.Post((()=>{
 			var SvcPopup = this.SvcPopup;
 			var msgBox = new MsgBox();
@@ -142,19 +142,11 @@ public partial class MainView : UserControl {
 				});
 
 				for(i32 Idx = 0; Idx < Operations.Count; Idx++){
-					var Operation = Operations[Idx];
-					var Btn = new Button();
-					Btn.SetContent($"{Todo.I18n("Operation")} {Idx+1}");
+					var Btn = Operations[Idx];
 					Btn.HorizontalAlignment = HAlign.Stretch;
+					// 點擊操作按鈕時統一關閉彈窗；其他業務行爲由調用方在按鈕自身事件中處理。
 					Btn.Click += (s,e)=>{
-						// 按規範要求: 先關閉彈窗，再執行對應操作。
 						SvcPopup.ClosePopup();
-						try{
-							_ = Operation();
-						}
-						catch(Exception Ex){
-							HandleErr(Ex);
-						}
 					};
 					Body.A(Btn);
 				}
