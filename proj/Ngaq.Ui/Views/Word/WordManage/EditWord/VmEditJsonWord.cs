@@ -64,11 +64,6 @@ public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 		return pretty;
 	}
 
-	public nil FromTypedObj(ITypedObj Obj){
-		var JnWord = VmSearchedWordCard.GetJnWordFromTypedObj(Obj);
-		return FromJnWord(JnWord);
-	}
-
 	public nil FromJnWord(IJnWord JnWord){
 		this.Bo = JnWord;
 		IJnWord simple = JnWord;

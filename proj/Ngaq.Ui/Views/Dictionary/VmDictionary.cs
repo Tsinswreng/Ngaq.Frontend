@@ -19,7 +19,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Word.WordEditV2;
-using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
+using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Tsinswreng.CsErr;
 
 using Ctx = VmDictionary;
@@ -227,8 +227,14 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	/// 打開語言映射配置頁。
 	obj? OpenNormLangMappingPage(){
-		var View = new ViewNormLangToUserLangPage();
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("配置語言映射"), View));
+		// 直接進入新增映射頁，並預填當前源語言，減少用戶操作步驟。
+		var View = new ViewNormLangToUserLangEdit();
+		if(View.Ctx is not null){
+			View.Ctx.SetCreateMode(true);
+			View.Ctx.FromPoNormLangToUserLang(null);
+			View.Ctx.PoNormLang = SrcLang;
+		}
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Add NormLangToUserLang"), View));
 		return NIL;
 	}
 

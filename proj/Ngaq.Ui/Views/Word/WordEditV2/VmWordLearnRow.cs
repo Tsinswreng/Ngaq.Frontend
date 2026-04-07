@@ -1,71 +1,78 @@
 namespace Ngaq.Ui.Views.Word.WordEditV2;
 
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
-using Ngaq.Core.Shared.User.Models.Po;
-using Ngaq.Core.Shared.User.UserCtx;
-using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Models.Learn_;
-using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
-using Ngaq.Core.Shared.Word.Svc;
-using Ngaq.Core.Tools;
-using Ngaq.Core.Tools.Json;
-using Ngaq.Ui.Infra;
-using Tsinswreng.CsTools;
-using JsonNode = System.Text.Json.Nodes.JsonNode;
-
-using Ctx = VmWordEditV2;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
-public partial class VmWordLearnRow: ViewModelBase {
-	public PoWordLearn Raw { get; set; } = new();
+using Ngaq.Ui.Infra;
 
-	public str LearnResultText {
-		get { return field; }
-		set { SetProperty(ref field, value); }
-	} = nameof(ELearn.Add);
+/// 單詞學習記錄行編輯 ViewModel。
+public partial class VmWordLearnRow: ViewModelBase{
+	public static IReadOnlyList<ELearn> LearnResults{get;} = [
+		ELearn.Add,
+		ELearn.Rmb,
+		ELearn.Fgt,
+	];
 
-	public str BizCreatedAtIso {
-		get { return field; }
-		set { SetProperty(ref field, value); }
+	public PoWordLearn Raw{get;set;} = new();
+
+	/// LearnResult 下拉索引。
+	public i32 LearnResultIndex{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = 0;
+
+	public str BizCreatedAtIso{
+		get{return field;}
+		set{SetProperty(ref field, value);}
 	} = Tempus.Now().ToIso();
 
-	public static VmWordLearnRow NewRow() {
-		return new VmWordLearnRow();
+	/// 概要列表顯示字段。
+	public str LearnResultText => GetLearnResultByIndex(LearnResultIndex).ToString();
+
+	public static VmWordLearnRow NewRow(){
+		return new VmWordLearnRow{
+			LearnResultIndex = 0,
+		};
 	}
 
-	public static VmWordLearnRow FromPo(PoWordLearn Po) {
-		var vm = new VmWordLearnRow {
+	public static VmWordLearnRow FromPo(PoWordLearn Po){
+		var vm = new VmWordLearnRow{
 			Raw = (PoWordLearn)Po.ShallowCloneSelf(),
-			LearnResultText = Po.LearnResult.ToString(),
-			BizCreatedAtIso = Po.BizCreatedAt.ToIso()
+			LearnResultIndex = GetLearnResultIndex(Po.LearnResult),
+			BizCreatedAtIso = Po.BizCreatedAt.ToIso(),
 		};
 		return vm;
 	}
 
-	public bool TryToPo(IdWord WordId, out PoWordLearn Po, out str Err) {
+	public bool TryToPo(IdWord WordId, out PoWordLearn Po, out str Err){
 		Err = "";
 		Po = (PoWordLearn)Raw.ShallowCloneSelf();
 		Po.WordId = WordId;
+		Po.LearnResult = GetLearnResultByIndex(LearnResultIndex);
 
-		if (!Enum.TryParse<ELearn>(LearnResultText, true, out var learn)) {
-			Err = $"Invalid learn result: {LearnResultText}";
-			return false;
-		}
-		Po.LearnResult = learn;
-
-		try {
+		try{
 			Po.BizCreatedAt = Tempus.FromIso(BizCreatedAtIso);
-		} catch {
-			Err = "BizCreatedAt must be ISO time.";
+		}catch{
+			Err = Todo.I18n("BizCreatedAt must be ISO time.");
 			return false;
 		}
 		return true;
+	}
+
+	static i32 GetLearnResultIndex(ELearn Learn){
+		for(i32 i = 0; i < LearnResults.Count; i++){
+			if(LearnResults[i] == Learn){
+				return i;
+			}
+		}
+		return 0;
+	}
+
+	static ELearn GetLearnResultByIndex(i32 Index){
+		if(Index < 0 || Index >= LearnResults.Count){
+			return ELearn.Add;
+		}
+		return LearnResults[Index];
 	}
 }
