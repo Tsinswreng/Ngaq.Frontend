@@ -8,7 +8,9 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
+using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Errors;
+using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
@@ -225,8 +227,12 @@ public partial class MainView : UserControl {
 		var Navi = MgrViewNavi.Inst.ViewNavi;
 
 
-		var Home = new ViewHome();
+		//var Home = new ViewHome();
 		// var Home = new ViewWordEditV2();
+		var Home = new StackPanel();
+		Home.A(new TempusBox(), o=>{
+			o.Tempus = new Tempus();
+		});
 
 		Navi.GoTo(Home);
 	}
