@@ -18,8 +18,6 @@ public partial class ViewTitle
 	public ContentControl Body{get;set;} = new ContentControl();
 	public ContentControl Title{get;set;} = new ContentControl();
 
-
-
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
@@ -31,10 +29,9 @@ public partial class ViewTitle
 		Render();
 	}
 
-	public  partial class Cls_{
+	public partial class Cls{
 
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
 		return NIL;

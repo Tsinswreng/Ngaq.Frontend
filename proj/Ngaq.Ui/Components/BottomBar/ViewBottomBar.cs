@@ -73,7 +73,7 @@ public partial class ViewBottomBar
 		});
 		{{
 			Root.A(Cur)
-			.A(_ItemsControl(), o=>{
+			.A(new ItemsControl(), o=>{
 				o.ItemsSource = Items;
 				o.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 					return new UniformHorizontalPanel();

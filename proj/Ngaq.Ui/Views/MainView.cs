@@ -2,38 +2,23 @@ namespace Ngaq.Ui.Views;
 
 using System;
 using System.Collections.Generic;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
-using Ngaq.Ui.CodeTemplate.Sample;
-using Ngaq.Ui.Components.KvMap;
-using Ngaq.Ui.Components.KvMap.JsonMap;
-using Ngaq.Ui.Components.PageBar;
-using Ngaq.Ui.Controls;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
-using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Try;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
-using Ngaq.Ui.Views.User.ChangePassword;
-using Ngaq.Ui.Views.Word.WordEditV2;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.CsCore;
 using Tsinswreng.CsErr;
 
 
@@ -111,6 +96,68 @@ public partial class MainView : UserControl {
 					VerticalAlignment = VAlign.Center,
 					TextWrapping = TextWrapping.Wrap,
 				};
+				o.Background = Brushes.Black;
+				var Bdr = new Border();
+				Bdr.Child = o;
+				Bdr.Padding = new Avalonia.Thickness(40);
+				SvcPopup.ShowPopup(Bdr);
+			}
+		}));
+		return NIL;
+	}
+
+	public partial nil ShowMsg(str Msg, IList<Button> Operations){
+		Dispatcher.UIThread.Post((()=>{
+			var SvcPopup = this.SvcPopup;
+			var msgBox = new MsgBox();
+			{var o = msgBox;
+				o._CloseBtn.Background = null;
+				o._CloseBtn.SetContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
+					o.Fill = Brushes.Red;
+				});
+				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
+				o.MinWidth = UiCfg.Inst.WindowWidth*0.5;
+				o._Border.BorderThickness = new Avalonia.Thickness(1);
+				o._Border.BorderBrush = Brushes.White;
+				o._BdrTitle.Background = new SolidColorBrush(new Color(255, 40,40,40));
+				o._BdrBody.MaxHeight = UiCfg.Inst.WindowHeight*0.8;
+
+				o._CloseBtn.Click+=(object? s,global::Avalonia.Interactivity.RoutedEventArgs e)=>{
+					SvcPopup.ClosePopup();
+				};
+				o.HorizontalAlignment = HAlign.Center;
+				o.VerticalAlignment = VAlign.Center;
+
+				// 先展示提示文本，再縱向渲染操作按鈕列。
+				var Body = new StackPanel{
+					Orientation = Orientation.Vertical,
+					Spacing = UiCfg.Inst.BaseFontSize*0.35,
+					Margin = new Avalonia.Thickness(
+						UiCfg.Inst.BaseFontSize*0.7,
+						UiCfg.Inst.BaseFontSize*0.45,
+						UiCfg.Inst.BaseFontSize*0.7,
+						UiCfg.Inst.BaseFontSize*0.45
+					),
+					HorizontalAlignment = HAlign.Stretch,
+					VerticalAlignment = VAlign.Center,
+				};
+				Body.A(new SelectableTextBlock{
+					Text = Msg,
+					TextWrapping = TextWrapping.Wrap,
+					HorizontalAlignment = HAlign.Center,
+				});
+
+				for(i32 Idx = 0; Idx < Operations.Count; Idx++){
+					var Btn = Operations[Idx];
+					Btn.HorizontalAlignment = HAlign.Stretch;
+					// 點擊操作按鈕時統一關閉彈窗；其他業務行爲由調用方在按鈕自身事件中處理。
+					Btn.Click += (s,e)=>{
+						SvcPopup.ClosePopup();
+					};
+					Body.A(Btn);
+				}
+
+				o._Body.Content = Body;
 				o.Background = Brushes.Black;
 				var Bdr = new Border();
 				Bdr.Child = o;

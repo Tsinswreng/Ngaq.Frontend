@@ -4,62 +4,67 @@ interface ITypedTemplate{
 }
 
 export type TTemplate = string|ITypedTemplate
-
+type K = TTemplate
 type Full = {
 	View:{
 		Common:{
-			Confirm: TTemplate
-			Cancel: TTemplate
+			Confirm: K
+			Cancel: K
 		}
 		Home:{
-			Learn: TTemplate
-			Library: TTemplate
-			Me: TTemplate
+			Learn: K
+			Library: K
+			Me: K
 		}
 		Library:{
-			SearchWords: TTemplate
-			AddWords: TTemplate
-			BackupEtSync: TTemplate
+			SearchWords: K
+			AddWords: K
+			BackupEtSync: K
 		}
 		LearnWord:{
-			Start: TTemplate
-			Save: TTemplate
-			Reset: TTemplate
-			Clear: TTemplate
-			Settings: TTemplate
-			LearnWordSettings: TTemplate
+			Start: K
+			Save: K
+			Reset: K
+			Clear: K
+			Settings: K
+			LearnWordSettings: K
 		}
 		LoginRegister:{
-			Login:TTemplate
-			Register:TTemplate
-			UserName:TTemplate
-			Email:TTemplate
-			Password:TTemplate
-			ConfirmPassword:TTemplate
-			__CannotBeEmpty:TTemplate
+			Login:K
+			Register:K
+			UserName:K
+			Email:K
+			Password:K
+			ConfirmPassword:K
+			__CannotBeEmpty:K
 		}
 		Settings:{
-			UIConfig:TTemplate
-			About:TTemplate
+			UIConfig:K
+			About:K
 		}
 		About:{
-			AppVersion:TTemplate
-			Website:TTemplate
+			AppVersion:K
+			Website:K
 		}
 	}
 	//----Errors----
 	Error:{
 		Common: {
-			ArgErr: TTemplate
-			UnknownErr: TTemplate
+			ArgErr: K
+			UnknownErr: K
 		}
 		User: {
-			UserNotExist: TTemplate
-			UserAlreadyExist: TTemplate
-			PasswordNotMatch: TTemplate
-			InvalidToken: TTemplate
-			TokenExpired: TTemplate
+			UserNotExist: K
+			UserAlreadyExist: K
+			PasswordNotMatch: K
+			InvalidToken: K
+			TokenExpired: K
 		}
+	}
+	Lang:{
+		zh: K
+		zh_CN: K
+		//...
 	}
 }
 

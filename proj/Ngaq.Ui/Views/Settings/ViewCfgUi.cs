@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Settings;
 
+using Avalonia.Controls;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
@@ -30,8 +31,8 @@ public partial class ViewCfgUi
 
 	protected nil Render(){
 		var _Item = ViewSettings.FnSettingItem(Ctx?.ViewNavi);
-		this.SetContent(_StackPanel(), S=>{
-			S.A(_Item("Font Size", new ViewCfgFont()));
+		this.SetContent(new StackPanel(), S=>{
+			S.A(_Item(Todo.I18n("Font Size"), new ViewCfgFont()));
 		});
 		return NIL;
 	}

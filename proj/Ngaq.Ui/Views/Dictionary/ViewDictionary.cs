@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Dictionary;
+﻿namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -8,13 +8,16 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Dictionary.DictionaryApi;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
+using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmDictionary;
+
 public partial class ViewDictionary
 	:AppViewBase
+	,I_MkTitleMenu
 {
 
 	public Ctx? Ctx{
@@ -28,6 +31,7 @@ public partial class ViewDictionary
 		Render();
 		this.Loaded += (s, e) => {
 			SearchTextBox?.Focus();
+			_ = Ctx?.InitLang(default);
 		};
 	}
 	public II18n I = I18n.Inst;
@@ -38,21 +42,19 @@ public partial class ViewDictionary
 	}
 
 	AutoGrid Root = new(IsRow:true);
-	public TextBox SearchTextBox = new();//主查詢輸入框
+	public TextBox SearchTextBox = new();
 	public OpBtn SearchBtn = new();
+	public OpBtn SaveToWordBtn = new();
+
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			Root.RowDefs.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
 			]);
 		});
 
-		// 語言選擇行
 		var LangGrid = new AutoGrid(IsRow: false);
 		Root.A(LangGrid.Grid, o=>{
 			LangGrid.ColDefs.AddRange([
@@ -62,17 +64,14 @@ public partial class ViewDictionary
 			]);
 		});
 		{{
-			// 源語言輸入
-			LangGrid.A(new TextBox(), o=>{
-				o.CBind<Ctx>(o.PropText,x=>x.SrcLang);
-				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
-				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
-				o.FontSize = UiCfg.Inst.BaseFontSize*0.7;
-				o.Watermark = "en";
+			LangGrid.A(new Button(), o=>{
+				o.CBind<Ctx>(o.PropContent, x=>x.SrcLang);
+				o.HorizontalContentAlignment = HAlign.Center;
+				o.VerticalContentAlignment = VAlign.Center;
 				o.MinHeight = 24;
 				o.Padding = new Avalonia.Thickness(0);
+				o.Click += (s,e)=>OpenNormLangSelector(true);
 			})
-			// 切換按鈕
 			.A(new Button(), o=>{
 				o.Content = "⇄";
 				o.VerticalAlignment = VAlign.Center;
@@ -80,35 +79,28 @@ public partial class ViewDictionary
 				o.MinHeight = 24;
 				o.Padding = new Avalonia.Thickness(0);
 				o.Click += (s, e) => {
-					if(Ctx != null) {
-						var tmp = Ctx.SrcLang;
-						Ctx.SrcLang = Ctx.TgtLang;
-						Ctx.TgtLang = tmp;
-					}
+					Ctx?.SwapLang();
 				};
 			})
-			// 目標語言輸入
-			.A(new TextBox(), o=>{
-				o.CBind<Ctx>(o.PropText,x=>x.TgtLang);
-				o.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Center;
-				o.VerticalContentAlignment = Avalonia.Layout.VerticalAlignment.Center;
-				o.FontSize = UiCfg.Inst.BaseFontSize*0.7;
-				o.Watermark = "zh";
+			.A(new Button(), o=>{
+				o.CBind<Ctx>(o.PropContent, x=>x.TgtLang);
+				o.HorizontalContentAlignment = HAlign.Center;
+				o.VerticalContentAlignment = VAlign.Center;
 				o.MinHeight = 24;
 				o.Padding = new Avalonia.Thickness(0);
+				o.Click += (s,e)=>OpenNormLangSelector(false);
 			});
 		}}
 
-		// 搜索?
 		var SearchGrid = new AutoGrid(IsRow: false);
 		Root.A(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs.AddRange([
-				ColDef(10, GUT.Star),
+				ColDef(8, GUT.Star),
 				ColDef(2, GUT.Star),
+				ColDef(4, GUT.Star),
 			]);
 		});
 		{{
-
 			SearchGrid
 			.A(SearchTextBox, o=>{
 				o.CBind<Ctx>(o.PropText,x=>x.Input);
@@ -120,23 +112,60 @@ public partial class ViewDictionary
 				);
 			})
 			.A(SearchBtn, o=>{
-				//o._Button.Content = "Search";
 				o._Button.StretchCenter();
 				o._Button.Content = Svgs.Search().ToIcon();
 				o.SetExe(Ct=>Ctx?.Lookup(Ct));
 			})
-			;
-
+			.A(SaveToWordBtn, o=>{
+				// 保存到詞庫按鈕只負責「轉換 + 跳編輯頁」；最終保存仍在編輯頁完成。
+				o.BtnContent = Todo.I18n("保存到詞庫");
+				o.SetExe(Ct=>Ctx?.ToWordEdit(Ct));
+			});
 		}}
-		Root.A(new ViewSimpleWord(), o=>{
-			o.CBind<Ctx>(o.PropDataContext,x=>x.Result);
-		})
 
-		;
+		Root.A(new ScrollViewer(), sv=>{
+			sv.SetContent(new ViewSimpleWord(), o=>{
+				o.CBind<Ctx>(o.PropDataContext,x=>x.Result);
+			});
+		});
 
 		return NIL;
 	}
 
+	void OpenNormLangSelector(bool IsSrc){
+		var view = new ViewNormLangPage();
+		if(view.Ctx is not null){
+			if(IsSrc){
+				view.Ctx.Input = Ctx?.SrcLang ?? "";
+			}else{
+				view.Ctx.Input = Ctx?.TgtLang ?? "";
+			}
+		}
+		if(IsSrc){
+			view.Ctx?.SetSelectMode(po=>{
+				Ctx?.ApplySrcNormLang(po);
+				view.Ctx?.ViewNavi?.Back();
+			});
+		}else{
+			view.Ctx?.SetSelectMode(po=>{
+				Ctx?.ApplyTgtNormLang(po);
+				view.Ctx?.ViewNavi?.Back();
+			});
+		}
+		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
+	}
+
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = Todo.I18n("配置語言映射");
+			o.Click += (s,e)=>{
+				var view = new ViewNormLangToUserLangPage();
+				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("配置語言映射"), view));
+			};
+		});
+		return menu;
+	}
 	public void ClickLookupBtn(str? SearchText = null){
 		if(SearchText != null){
 			SearchTextBox.Text = SearchText;
@@ -144,3 +173,4 @@ public partial class ViewDictionary
 		SearchBtn.PerformClick();
 	}
 }
+

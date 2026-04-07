@@ -1,0 +1,205 @@
+namespace Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
+
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Styling;
+using CommunityToolkit.Mvvm.Input;
+using Ngaq.Ui;
+using Ngaq.Ui.Components.PageBar;
+using Ngaq.Ui.Icons;
+using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangEdit;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
+using Ctx = VmUserLangPage;
+
+/// UserLang 列表頁視圖。
+/// 上部爲搜索與新增，主體爲 TreeDataGrid，底部爲分頁條。
+public partial class ViewUserLangPage
+	:AppViewBase
+{
+	public Ctx? Ctx{
+		get{return DataContext as Ctx;}
+		set{DataContext = value;}
+	}
+
+	public ViewUserLangPage(){
+		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnOpenDetailRequested += OpenDetail;
+		}
+		Style();
+		Render();
+		InitDataGrid();
+		Loaded += async(s,e)=>{
+			_ = Ctx?.InitSearch(default);
+		};
+	}
+
+	public II18n I = I18n.Inst;
+
+	public partial class Cls{
+		public static str FullStretch = nameof(FullStretch);
+	}
+
+	/// 統一定義通用拉伸樣式。
+	protected nil Style(){
+		var S = Styles;
+		new Style(
+			x=>x.Is<Control>()
+			.Class(Cls.FullStretch)
+		)
+		.Set(HorizontalAlignmentProperty, HAlign.Stretch)
+		.Set(VerticalAlignmentProperty, VAlign.Stretch)
+		.AddTo(S);
+		return NIL;
+	}
+
+	AutoGrid Root = new(IsRow: true);
+	TreeDataGrid? Grid;
+	FlatTreeDataGridSource<Ctx.RowUserLang>? GridSource;
+
+	/// 組裝頁面骨架。
+	protected nil Render(){
+		this.Content = Root.Grid;
+		Root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Star),
+			RowDef(1, GUT.Auto),
+		]);
+		Root.A(MkTopBar());
+		Root.A(MkGridHost());
+		Root.A(MkPageBarHost());
+		return NIL;
+	}
+
+	/// 創建頂部搜索條。
+	protected Control MkTopBar(){
+		var top = new AutoGrid(IsRow:false);
+		top.Grid.ColumnDefinitions.AddRange([
+			ColDef(6, GUT.Star),
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Star),
+			ColDef(2, GUT.Star),
+		]);
+		var searchBtn = new OpBtn();
+		top.A(new TextBox(), o=>{
+			o.CBind<Ctx>(
+				o.PropText,
+				x=>x.Input
+			);
+			o.KeyBindings.Add(new KeyBinding{
+				Gesture = new KeyGesture(Key.Enter),
+				Command = new RelayCommand(()=>searchBtn.PerformClick()),
+			});
+		})
+		.A(searchBtn, o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.BtnContent = Svgs.Search().ToIcon();
+			o.Background = UiCfg.Inst.MainColor;
+			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
+		})
+		.A(new Button(), o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowManageActions, Mode: BindingMode.OneWay);
+			o.Content = Svgs.Add().ToIcon();
+			o.Click += (s,e)=>Ctx?.OpenDetail();
+		})
+		.A(new OpBtn(), o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowManageActions, Mode: BindingMode.OneWay);
+			o.BtnContent = Svgs.DatabaseImport().ToIcon().WithText(Todo.I18n("Auto Add Missing"));
+			o.Background = new SolidColorBrush(Color.FromRgb(68, 102, 160));
+			o.SetExe((Ct)=>Ctx?.AddAllUnregisteredUserLangs(Ct));
+		});
+		return top.Grid;
+	}
+
+	/// 創建列表容器與交互行樣式。
+	protected Control MkGridHost(){
+		Grid = new TreeDataGrid{
+			MinHeight = 280,
+		};
+		Grid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+		);
+		Grid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+		);
+		Grid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
+		return Grid;
+	}
+
+	/// 創建底部分頁條。
+	protected Control MkPageBarHost(){
+		var pageBar = new ViewPageBar();
+		if(Ctx is not null){
+			pageBar.Ctx = Ctx.PageBar;
+		}
+		return pageBar;
+	}
+
+	/// 建立 TreeDataGrid 列配置。
+	protected nil InitDataGrid(){
+		if(Ctx is null || Grid is null){
+			return NIL;
+		}
+		GridSource = new FlatTreeDataGridSource<Ctx.RowUserLang>(Ctx.Rows){
+			Columns = {
+				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n(""), x=>x.UiIdxText),
+				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("Name"), x=>x.Name),
+				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("RelLangType"), x=>x.RelLangType),
+				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("RelLang"), x=>x.RelLang),
+				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("Modified"), x=>x.ModifiedTime),
+			},
+		};
+		Grid.Source = GridSource;
+		return NIL;
+	}
+
+	/// 捕獲行點擊，忽略 ToggleButton 內部交互並打開詳情。
+	protected void OnGridTapped(object? sender, TappedEventArgs e){
+		if(Ctx is null || Grid is null){
+			return;
+		}
+		if(e.Source is not StyledElement src){
+			return;
+		}
+		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
+			if(cur is ToggleButton){
+				return;
+			}
+			if(cur is TreeDataGridRow row){
+				if(row.DataContext is Ctx.RowUserLang vmRow){
+					Ctx.OpenDetail(vmRow);
+					e.Handled = true;
+				}
+				return;
+			}
+		}
+	}
+
+	/// 打開編輯頁：`row==null` 為新增，否則載入既有項。
+	void OpenDetail(Ctx.RowUserLang? row){
+		var view = new ViewUserLangEdit();
+		view.Ctx?.SetCreateMode(row?.Raw is null);
+		view.Ctx?.FromPoUserLang(row?.Raw);
+		var title = row?.Raw?.UniqName ?? Todo.I18n("新增UserLang");
+		var titled = ToolView.WithTitle(title, view);
+		Ctx?.ViewNavi?.GoTo(titled);
+	}
+}
+
+
+

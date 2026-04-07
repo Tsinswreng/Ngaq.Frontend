@@ -68,7 +68,7 @@ public partial class Cls_{
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.A(_StackPanel(), Stk=>{
+		Root.A(new StackPanel(), Stk=>{
 			Stk.Spacing = 4.0;
 
 			var formItem = FnAddLabelBox(Stk);

@@ -40,7 +40,7 @@ public partial class ViewAbout
 				RowDef(1, GUT.Auto),
 			]);
 		});
-		Root.A(_StackPanel(), sp=>{
+		Root.A(new StackPanel(), sp=>{
 			sp.A(new SelectableTextBlock(), o=>{
 				o.Text = I[K.AppVersion];
 			})

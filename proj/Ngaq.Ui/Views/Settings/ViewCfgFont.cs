@@ -38,7 +38,7 @@ public partial class ViewCfgFont
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
 		]);
-		R.A(_TextBox(), o=>{
+		R.A(new TextBox(), o=>{
 			o.CBind<Ctx>(
 				o.PropText
 				,
@@ -61,23 +61,23 @@ public partial class ViewCfgFont
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.A(_TextBlock(), o=>{
-			o.Text = "Base Font Size";
+		Root.A(new TextBlock(), o=>{
+			o.Text = Todo.I18n("Base Font Size");
 		});
 		Root.A(InputFontSize())
 		.A(new SwipeLongPressBtn(), o=>{
-			o.Content = "Try";
+			o.Content = Todo.I18n("Try");
 			o.Click += (s,e)=>{
 				Ctx?.TryNeoFontSize();
 			};
 		})
 		.A(new SwipeLongPressBtn(), o=>{
-			o.Content = "Apply";
+			o.Content = Todo.I18n("Apply");
 			o.Click += (s,e)=>{
 				Ctx?.ApplyNeoFontSize();
 			};
 		})
-		.A(_TextBlock(), o=>{
+		.A(new TextBlock(), o=>{
 			o.Text = SampleText;
 			o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
 			o.CBind<Ctx>(
@@ -89,14 +89,13 @@ public partial class ViewCfgFont
 	}
 
 str SampleText =
+Todo.I18n("You need to relaunch the application after changing the font size.")+
 """
-You need to relaunch the application after changing the font size.
 !"#$%&'()*+,-./0123456789:;<=>?@
 ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`
 abcdefghijklmnopqrstuvwxyz{|}~
- ¡¢£¤¥¦§¨©ª«
-一去二三里  煙村亖五?
-亭臺六七? 八九十枝?
+一去二三里 煙村四五家
+亭臺六七座 八九十枝花
 """;
 
 }

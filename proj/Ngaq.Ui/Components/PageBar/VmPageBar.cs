@@ -28,8 +28,18 @@ public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 		var z = this; var p = PageResultInfo;
 		z.PageNum = p.PageIdx+1;
 		z.PageSize = p.PageSize;
+		if(!p.HasTotCnt){
+			z.TotCnt = null;
+			z.TotPageCnt = null;
+			return;
+		}
 		z.TotCnt = p.TotCnt;
-		z.TotPageCnt = (u64)(z.TotCnt/z.PageSize+(u64)(z.TotCnt%z.PageSize!=0?1:0));
+		if(z.PageSize == 0){
+			z.TotPageCnt = null;
+			return;
+		}
+		var totCnt = z.TotCnt ?? 0;
+		z.TotPageCnt = totCnt/z.PageSize + (u64)(totCnt%z.PageSize!=0 ? 1 : 0);
 	}
 
 	public IPageQry ToPageQry(){

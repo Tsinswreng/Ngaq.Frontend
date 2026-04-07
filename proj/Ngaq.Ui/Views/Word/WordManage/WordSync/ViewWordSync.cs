@@ -40,7 +40,7 @@ public partial class ViewWordSync
 		this.SetContent(Root.Grid, o=>{
 
 		});
-		Root.A(_StackPanel(), Sp=>{
+		Root.A(new StackPanel(), Sp=>{
 
 			Sp.A(new OpBtn(), op=>{
 				var o = op._Button;
@@ -58,10 +58,10 @@ public partial class ViewWordSync
 					,I[K.Pull]
 				);
 			})
-			.A(_TextBlock(), o=>{
+			.A(new TextBlock(), o=>{
 				o.Text = I[K.ExportPath];
 			})
-			.A(_TextBox(), o=>{
+			.A(new TextBox(), o=>{
 				o.CBind<Ctx>(o.PropText, x=>x.PathExport);
 			})
 			.A(new OpBtn(), o=>{
@@ -72,14 +72,14 @@ public partial class ViewWordSync
 				o.SetExe((Ct)=>Ctx?.ExportAsy(Ct));
 			})
 
-			.A(_Border(), o=>{
+			.A(new Border(), o=>{
 				o.Height = 10;
 			})
 
-			.A(_TextBlock(), o=>{
+			.A(new TextBlock(), o=>{
 				o.Text = I[K.ImportPath];
 			})
-			.A(_TextBox(), o=>{
+			.A(new TextBox(), o=>{
 				o.CBind<Ctx>(o.PropText, x=>x.PathImport);
 			})
 			.A(new OpBtn(), o=>{

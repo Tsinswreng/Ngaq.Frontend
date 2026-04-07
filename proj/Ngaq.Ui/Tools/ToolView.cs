@@ -12,7 +12,7 @@ public partial class ToolView{
 		var titled = new ViewTitle();
 		titled.Body.Content = Target;
 		//titled.Title.Content = new TextBlock(){Text = Title};
-		titled.Title.SetContent(_TextBlock(), o=>{
+		titled.Title.SetContent(new TextBlock(), o=>{
 			o.Text = Title;
 			o.VerticalAlignment = VAlign.Center;
 			o.HorizontalAlignment = HAlign.Center;

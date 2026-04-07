@@ -95,7 +95,7 @@ public partial class ViewWordInfo
 				o.HorizontalAlignment = HAlign.Left;
 				o.VerticalAlignment = VAlign.Center;
 			});
-			LangId.A(_SelectableTextBlock(), o=>{
+			LangId.A(new SelectableTextBlock(), o=>{
 				o.CBind<Ctx>(o.PropText,x=>x.Id);
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Right;
@@ -103,7 +103,7 @@ public partial class ViewWordInfo
 			});
 		}}//~LangId
 
-		Root.A(_Border(), o=>{
+		Root.A(new Border(), o=>{
 			o.BorderThickness = new Thickness(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 			o.SetChild(TxtBox(), o=>{
