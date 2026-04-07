@@ -11,6 +11,7 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
+using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
@@ -83,6 +84,7 @@ public partial class ViewWordManage
 		addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
 		addItem(_Item(Todo.I18n("Statistics"), ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
 		addItem(_Item(Todo.I18n("UserLang"), ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 0);
+		addItem(_Item(Todo.I18n("NormLang"), ()=>new ViewNormLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 1);
 
 		Root.A(menuGrid);
 

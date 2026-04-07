@@ -24,6 +24,8 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
+using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangEdit;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangEdit;
 
@@ -57,6 +59,8 @@ public static class DiUi{
 		z.AddTransient<VmWeightArgEdit>();
 		z.AddTransient<VmWeightCalculatorPage>();
 		z.AddTransient<VmWeightCalculatorEdit>();
+		z.AddTransient<VmNormLangPage>();
+		z.AddTransient<VmNormLangEdit>();
 		z.AddTransient<VmUserLangPage>();
 		z.AddTransient<VmUserLangEdit>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
