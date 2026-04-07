@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Dictionary;
+﻿namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -73,7 +73,7 @@ public partial class ViewDictionary
 				o.Click += (s,e)=>OpenNormLangSelector(true);
 			})
 			.A(new Button(), o=>{
-				o.Content = "↔";
+				o.Content = "⇄";
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Center;
 				o.MinHeight = 24;

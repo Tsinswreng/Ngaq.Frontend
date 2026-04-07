@@ -156,7 +156,9 @@ public partial class ViewSample
 			//鏈試調用
 			.A(new Control())//第二個Action<>可省略不傳
 			.A(new Button(), o=>{
-				//所有ContentControl、賦其Content時 都用 SetContent。第二個Action<>可省略。
+				//第二個Action<>可省略。
+				// 當給Content賦值 需要初始化的對象時、使用SetContent+lambda的寫法。
+				// 如果只是賦值簡單對象 不需額外初始化的、就可以直接 o.Content=xxx
 				o.SetContent(new TextBlock(), o=>{
 					o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				});

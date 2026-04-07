@@ -73,11 +73,11 @@ public partial class ViewNormLangToUserLangEdit
 			Padding = new Thickness(10, 6),
 			IsVisible = false,
 		};
-		b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
+		//b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
 		var txt = new TextBlock{
 			Foreground = Brushes.White,
 		};
-		txt.CBind<Ctx>(TextBlock.TextProperty, x=>x.LastError, Mode: BindingMode.OneWay);
+		//txt.CBind<Ctx>(TextBlock.TextProperty, x=>x.LastError, Mode: BindingMode.OneWay);
 		b.Child = txt;
 		return b;
 	}

@@ -49,13 +49,6 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = true;
 
-	public str LastError{
-		get{return field;}
-		set{SetProperty(ref field, value);}
-	} = "";
-
-	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
-
 	public IReadOnlyList<ELangIdentType> NormLangTypeValues{get;} = Enum
 		.GetValues<ELangIdentType>()
 		.Where(x=>x != ELangIdentType.Unknown)
@@ -141,12 +134,8 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			PoNormLangToUserLang = po;
 			IsCreateMode = false;
 			SyncFromPo();
-			LastError = "";
-			OnPropertyChanged(nameof(HasError));
 			ShowMsg(Todo.I18n("Saved"));
 		}catch(Exception e){
-			LastError = e.Message;
-			OnPropertyChanged(nameof(HasError));
 			HandleErr(e);
 		}
 		return NIL;
@@ -166,12 +155,8 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			};
 			IsCreateMode = true;
 			SyncFromPo();
-			LastError = "";
-			OnPropertyChanged(nameof(HasError));
 			ShowMsg(Todo.I18n("Deleted"));
 		}catch(Exception e){
-			LastError = e.Message;
-			OnPropertyChanged(nameof(HasError));
 			HandleErr(e);
 		}
 		return NIL;
@@ -186,8 +171,6 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 		PoUserLang = po.UserLang ?? "";
 		PoDescr = po.Descr ?? "";
 		PoNormLangTypeIndex = GetNormLangTypeIndex(po.NormLangType);
-		LastError = "";
-		OnPropertyChanged(nameof(HasError));
 	}
 
 	PoNormLangToUserLang BuildPoFromFields(){
