@@ -131,7 +131,13 @@ public partial class MainView : UserControl {
 				// 先展示提示文本，再縱向渲染操作按鈕列。
 				var Body = new StackPanel{
 					Orientation = Orientation.Vertical,
-					Spacing = UiCfg.Inst.BaseFontSize*0.6,
+					Spacing = UiCfg.Inst.BaseFontSize*0.35,
+					Margin = new Avalonia.Thickness(
+						UiCfg.Inst.BaseFontSize*0.7,
+						UiCfg.Inst.BaseFontSize*0.45,
+						UiCfg.Inst.BaseFontSize*0.7,
+						UiCfg.Inst.BaseFontSize*0.45
+					),
 					HorizontalAlignment = HAlign.Stretch,
 					VerticalAlignment = VAlign.Center,
 				};
