@@ -142,6 +142,21 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
+	/// 初始化內置語言，完成後刷新當前分頁。
+	public async Task<nil> InitBuiltinNormLang(CT Ct = default){
+		if(AnyNull(SvcNormLang, UserCtxMgr)){
+			return NIL;
+		}
+		try{
+			await SvcNormLang.InitBuiltinNormLang(UserCtxMgr.GetDbUserCtx(), Ct);
+			ShowMsg(Todo.I18n("Initialized builtin norm lang"));
+			return await InitSearch(Ct);
+		}catch(Exception e){
+			HandleErr(e);
+		}
+		return NIL;
+	}
+
 	/// 由 View 層監聽，收到後在 View 中完成導航。
 	public event Action<RowNormLang?>? OnOpenDetailRequested;
 }

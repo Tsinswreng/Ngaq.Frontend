@@ -25,6 +25,7 @@ using Ctx = VmNormLangPage;
 /// NormLang 分頁列表頁。
 public partial class ViewNormLangPage
 	:AppViewBase
+	,I_MkTitleMenu
 {
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -178,5 +179,19 @@ public partial class ViewNormLangPage
 		var title = row?.Raw?.Code ?? Todo.I18n("新增NormLang");
 		var titled = ToolView.WithTitle(title, view);
 		Ctx?.ViewNavi?.GoTo(titled);
+	}
+
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = Todo.I18n("初始化");
+			o.Click += async(s,e)=>{
+				if(Ctx is null){
+					return;
+				}
+				await Ctx.InitBuiltinNormLang(default);
+			};
+		});
+		return menu;
 	}
 }
