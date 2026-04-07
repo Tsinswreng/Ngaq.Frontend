@@ -14,9 +14,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Ngaq.Ui.Icons;
 
 /// 單類型 `TempusBox` 基礎組件（不拆 View/Vm）。
-/// 左：格式選擇按鈕（點擊後出下拉）
-/// 中：可輸入字符串
-/// 右：可視化日曆
+/// 左：可輸入字符串
+/// 右：單一按鈕，點開同一菜單中的「格式選擇 + 日曆」
 public partial class TempusBox: ContentControl{
 	public enum ETextFormat{
 		Iso,
@@ -61,12 +60,10 @@ public partial class TempusBox: ContentControl{
 	public II18n I{get;set;} = I18n.Inst;
 
 	readonly AutoGrid Root = new(IsRow: false);
-	Button? _BtnFormat;
 	TextBox? _Input;
-	Button? _BtnCalendar;
+	Button? _BtnMenu;
 	Avalonia.Controls.Calendar? _Calendar;
-	Flyout? _FormatFlyout;
-	Flyout? _CalendarFlyout;
+	Flyout? _MenuFlyout;
 	bool _SyncingUi = false;
 
 	public TempusBox(){
@@ -78,45 +75,17 @@ public partial class TempusBox: ContentControl{
 	void Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
 		]);
 		Root
-		.A(MkFormatBtn())
 		.A(MkInputBox())
-		.A(MkCalendarBtn());
-	}
-
-	Button MkFormatBtn(){
-		var btn = new Button{
-			Content = Svgs.FormatLineStyle().ToIcon()
-		};
-		var flyout = new Flyout{
-			Placement = PlacementMode.Bottom,
-		};
-		var panel = new StackPanel();
-		foreach(var fmt in new[]{ETextFormat.Iso, ETextFormat.UnixMs, ETextFormat.LocalDateTime, ETextFormat.DateOnly}){
-			var one = new Button();
-			one.SetContent(FormatToDisplay(fmt));
-			one.Click += (s, e)=>{
-				TextFormat = fmt;
-				flyout.Hide();
-			};
-			panel.A(one);
-		}
-		flyout.Content = panel;
-		FlyoutBase.SetAttachedFlyout(btn, flyout);
-		btn.Click += (s, e)=>{
-			FlyoutBase.ShowAttachedFlyout(btn);
-		};
-		_BtnFormat = btn;
-		_FormatFlyout = flyout;
-		return btn;
+		.A(MkMenuBtn());
 	}
 
 	TextBox MkInputBox(){
 		var txt = new TextBox{
+			MinWidth = 0
 		};
 		txt.TextChanged += (s, e)=>{
 			// 由用戶輸入觸發時，按當前格式解析；失敗則只更新標記，不覆蓋既有 Tempus。
@@ -135,13 +104,22 @@ public partial class TempusBox: ContentControl{
 		return txt;
 	}
 
-	Button MkCalendarBtn(){
+	Button MkMenuBtn(){
 		var btn = new Button{
 			Content = Svgs.Calendar().ToIcon()
 		};
 		var flyout = new Flyout{
 			Placement = PlacementMode.Bottom,
 		};
+		var panel = new StackPanel();
+		foreach(var fmt in new[]{ETextFormat.Iso, ETextFormat.UnixMs, ETextFormat.LocalDateTime, ETextFormat.DateOnly}){
+			var one = new Button();
+			one.SetContent(FormatToDisplay(fmt));
+			one.Click += (s, e)=>{
+				TextFormat = fmt;
+			};
+			panel.A(one);
+		}
 		var wrap = new Border{
 			Padding = new Thickness(6),
 		};
@@ -168,11 +146,10 @@ public partial class TempusBox: ContentControl{
 			);
 			_Tempus = Tempus.FromDateTime(merged);
 			SyncUiFromTempus();
-			// 選完日期即收起，避免右側長時間佔用空間。
-			flyout.Hide();
 		};
 		wrap.Child = calendar;
-		flyout.Content = wrap;
+		panel.A(wrap);
+		flyout.Content = panel;
 		FlyoutBase.SetAttachedFlyout(btn, flyout);
 		btn.Click += (s, e)=>{
 			if(IsReadOnly){
@@ -180,41 +157,36 @@ public partial class TempusBox: ContentControl{
 			}
 			FlyoutBase.ShowAttachedFlyout(btn);
 		};
-		_BtnCalendar = btn;
+		_BtnMenu = btn;
 		_Calendar = calendar;
-		_CalendarFlyout = flyout;
+		_MenuFlyout = flyout;
 		return btn;
 	}
 
 	void SyncUiFromTempus(){
-		if(_BtnFormat is null || _Input is null || _Calendar is null || _BtnCalendar is null){
+		if(_Input is null || _Calendar is null || _BtnMenu is null){
 			return;
 		}
 		_SyncingUi = true;
-		_BtnFormat.SetContent(FormatToDisplay(TextFormat));
 		_Input.Text = FormatTempus(_Tempus, TextFormat);
 		var localDate = DateTimeOffset.FromUnixTimeMilliseconds(_Tempus.Value).ToLocalTime().Date;
 		_Calendar.SelectedDate = localDate;
-		_BtnCalendar.SetContent(localDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 		_SyncingUi = false;
 		LastParseOk = true;
 	}
 
 	void ApplyReadOnlyState(){
-		if(_BtnFormat is not null){
-			_BtnFormat.IsEnabled = !IsReadOnly;
-		}
 		if(_Input is not null){
 			_Input.IsReadOnly = IsReadOnly;
 		}
-		if(_BtnCalendar is not null){
-			_BtnCalendar.IsEnabled = !IsReadOnly;
+		if(_BtnMenu is not null){
+			_BtnMenu.IsEnabled = !IsReadOnly;
 		}
 		if(_Calendar is not null){
 			_Calendar.IsEnabled = !IsReadOnly;
 		}
 		if(IsReadOnly){
-			_CalendarFlyout?.Hide();
+			_MenuFlyout?.Hide();
 		}
 	}
 
