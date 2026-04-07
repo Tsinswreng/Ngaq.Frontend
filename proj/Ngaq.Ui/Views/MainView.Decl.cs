@@ -29,6 +29,13 @@ public partial class MainView : UserControl {
 	[Doc(@$"可關閉彈窗")]
 	public partial nil ShowMsg(str Msg);
 
+	[Doc(@$"可關閉彈窗、執行操作。
+	#Params([],[縱向生成按鈕列 然後綁定函數。點擊後關閉彈窗再執行函數])
+	")]
+	public partial nil ShowMsg(str Msg, IList<Func<obj?>> Operations);
+
 	[Doc(@$"前端拿到異常後處理之")]
 	public partial nil HandleErr(obj? Ex);
+
+
 }
