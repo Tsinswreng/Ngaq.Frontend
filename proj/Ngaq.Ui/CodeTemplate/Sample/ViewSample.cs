@@ -130,6 +130,7 @@ public partial class ViewSample
 			//若不要標題就直接傳進Goto
 			var TargetView = MkTargetView(); //用Func<>實現延遲加載
 			Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("頂欄標題"), TargetView));
+			_ = @$"如果你希望頂欄標題有自定義菜單按鈕 需讓TargetView實現{nameof(I_MkTitleMenu)}";
 		};
 	}
 
