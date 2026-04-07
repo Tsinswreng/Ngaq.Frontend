@@ -13,6 +13,29 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.CsCore;
 using Tsinswreng.AvlnTools.Tools;
 using Ngaq.Ui.Icons;
+using Avalonia.Data.Converters;
+
+public class TempusFormatItem{
+	//默認內置 Iso8601 和 UnixMs
+	[Doc(@$"默認內置。顯示本地時區。
+	#Example([2026-04-07T23:16:07.344+08:00])
+	")]
+	public static TempusFormatItem Iso8601Full{get;set;}
+	public static TempusFormatItem UnixMs{get;set;}
+	[Doc(@$"
+	#Examples([26-04-07])
+	")]
+	public static TempusFormatItem yy_MM_DD{get;set;}
+	[Doc(@$"
+	#Examples([26-04-07 12:34])
+	")]
+	public static TempusFormatItem yy_MM_DD__HH_mm{get;set;}
+
+	[Doc(@$"該種格式的名稱 在下拉框中顯示")]
+	public str FmtDisplayName{get;set;} = "";
+	public IValueConverter Converter{get;set;} = null!;
+}
+
 
 /// 單類型 `TempusBox` 基礎組件（不拆 View/Vm）。
 /// 左：可輸入字符串
