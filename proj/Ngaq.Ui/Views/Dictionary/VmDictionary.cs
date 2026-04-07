@@ -2,6 +2,7 @@
 
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
 using Ngaq.Core.Shared.Dictionary.Svc;
@@ -61,16 +62,39 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var tmp = SrcLang;
 		SrcLang = TgtLang;
 		TgtLang = tmp;
+		_ = PersistCurLangs(default);
 		return NIL;
 	}
 
 	public nil ApplySrcNormLang(PoNormLang Po){
 		SrcLang = Po.Code ?? "";
+		_ = PersistSrcLang(Po, default);
 		return NIL;
 	}
 
 	public nil ApplyTgtNormLang(PoNormLang Po){
 		TgtLang = Po.Code ?? "";
+		_ = PersistTgtLang(Po, default);
+		return NIL;
+	}
+
+	public async Task<nil> InitLang(CT Ct){
+		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
+			return NIL;
+		}
+		try{
+			var dbCtx = FrontendUserCtxMgr.GetDbUserCtx();
+			var src = await SvcDictionary.GetCurSrcNormLang(dbCtx, Ct);
+			var tgt = await SvcDictionary.GetCurTgtNormLang(dbCtx, Ct);
+			if(src is not null && !str.IsNullOrWhiteSpace(src.Code)){
+				SrcLang = src.Code;
+			}
+			if(tgt is not null && !str.IsNullOrWhiteSpace(tgt.Code)){
+				TgtLang = tgt.Code;
+			}
+		}catch(Exception ex){
+			HandleErr(ex);
+		}
 		return NIL;
 	}
 
@@ -118,6 +142,52 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			HandleErr(ex);
 		}
 
+		return NIL;
+	}
+
+	async Task<nil> PersistCurLangs(CT Ct){
+		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
+			return NIL;
+		}
+		try{
+			var dbCtx = FrontendUserCtxMgr.GetDbUserCtx();
+			var src = new PoNormLang{
+				Type = ELangIdentType.Bcp47,
+				Code = SrcLang,
+			};
+			var tgt = new PoNormLang{
+				Type = ELangIdentType.Bcp47,
+				Code = TgtLang,
+			};
+			await SvcDictionary.SetCurSrcNormLang(dbCtx, src, Ct);
+			await SvcDictionary.SetCurTgtNormLang(dbCtx, tgt, Ct);
+		}catch(Exception ex){
+			HandleErr(ex);
+		}
+		return NIL;
+	}
+
+	async Task<nil> PersistSrcLang(PoNormLang Po, CT Ct){
+		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
+			return NIL;
+		}
+		try{
+			await SvcDictionary.SetCurSrcNormLang(FrontendUserCtxMgr.GetDbUserCtx(), Po, Ct);
+		}catch(Exception ex){
+			HandleErr(ex);
+		}
+		return NIL;
+	}
+
+	async Task<nil> PersistTgtLang(PoNormLang Po, CT Ct){
+		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
+			return NIL;
+		}
+		try{
+			await SvcDictionary.SetCurTgtNormLang(FrontendUserCtxMgr.GetDbUserCtx(), Po, Ct);
+		}catch(Exception ex){
+			HandleErr(ex);
+		}
 		return NIL;
 	}
 }

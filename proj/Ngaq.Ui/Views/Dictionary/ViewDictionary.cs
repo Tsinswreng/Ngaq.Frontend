@@ -29,6 +29,7 @@ public partial class ViewDictionary
 		Render();
 		this.Loaded += (s, e) => {
 			SearchTextBox?.Focus();
+			_ = Ctx?.InitLang(default);
 		};
 	}
 	public II18n I = I18n.Inst;
