@@ -434,7 +434,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		return b;
 	}
 
-	Control MkBottomBar(){
+		Control MkBottomBar(){
 		var g = new AutoGrid(IsRow: false);
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
@@ -442,9 +442,11 @@ public partial class ViewWordEditV2: AppViewBase{
 		]);
 		g.Grid.Margin = new Thickness(10, 8, 10, 10);
 
-		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Reset");
-			o.Click += (s,e)=>Ctx?.ResetFromSource();
+		g.A(new OpBtn(), o=>{
+			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+			o._Button.HorizontalContentAlignment = HAlign.Center;
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.SetExe(ct=>Ctx?.Delete(ct));
 		})
 		.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
@@ -454,8 +456,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		});
 		return g.Grid;
 	}
-
-	Button MkBtnAddItem(str Label){
+Button MkBtnAddItem(str Label){
 		var o = new Button();
 		o.Margin = new Thickness(10,10,10,4);
 		o.Content = Svgs.Add().ToIcon().WithText(" "+Label);
@@ -510,6 +511,8 @@ public partial class ViewWordEditV2: AppViewBase{
 		return sp;
 	}
 }
+
+
 
 
 

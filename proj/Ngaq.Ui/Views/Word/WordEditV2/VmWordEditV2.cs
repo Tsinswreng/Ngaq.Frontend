@@ -15,6 +15,7 @@ using Ngaq.Core.Shared.Word.Models.Po.Learn;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
+using Tsinswreng.CsTools;
 using JsonNode = System.Text.Json.Nodes.JsonNode;
 
 using Ctx = VmWordEditV2;
@@ -29,15 +30,18 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	}
 
 	ISvcWord? SvcWord;
+	ISvcWordV2? SvcWordV2;
 	IJsonSerializer? JsonSerializer;
 	IFrontendUserCtxMgr? UserCtxMgr;
 
 	public VmWordEditV2(
 		ISvcWord? SvcWord
+		,ISvcWordV2? SvcWordV2
 		,IJsonSerializer? JsonSerializer
 		,IFrontendUserCtxMgr? UserCtxMgr
 	){
 		this.SvcWord = SvcWord;
+		this.SvcWordV2 = SvcWordV2;
 		this.JsonSerializer = JsonSerializer;
 		this.UserCtxMgr = UserCtxMgr;
 		InitRowEvents();
@@ -324,6 +328,32 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		}
 		return NIL;
 	}
+	public async Task<nil> Delete(CT Ct){
+		if(SvcWordV2 is null || UserCtxMgr is null){
+			return NIL;
+		}
+		if(Draft is null){
+			ShowMsg(Todo.I18n("No draft"));
+			return NIL;
+		}
+		try{
+			await SvcWordV2.SoftDelJnWordInId(
+				UserCtxMgr.GetDbUserCtx(),
+				ToolAsyE.ToAsyE([Draft.Word.Id]),
+				Ct
+			);
+			LastError = "";
+			OnPropertyChanged(nameof(HasError));
+			IsDirty = false;
+			ShowMsg(Todo.I18n("Deleted"));
+			ViewNavi?.Back();
+		}catch(Exception ex){
+			LastError = ex.Message;
+			OnPropertyChanged(nameof(HasError));
+			HandleErr(ex);
+		}
+		return NIL;
+	}
 
 	bool TryApplyFormToDraft(out str Err){
 		Err = "";
@@ -426,3 +456,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		}
 	}
 }
+
+
+
+
