@@ -62,9 +62,11 @@ public partial class TempusBox: ContentControl{
 	readonly AutoGrid Root = new(IsRow: false);
 	TextBox? _Input;
 	Button? _BtnMenu;
+	ComboBox? _CbFormat;
 	Avalonia.Controls.Calendar? _Calendar;
 	Flyout? _MenuFlyout;
 	bool _SyncingUi = false;
+	readonly ETextFormat[] _FormatOptions = [ETextFormat.Iso, ETextFormat.UnixMs, ETextFormat.LocalDateTime, ETextFormat.DateOnly];
 
 	public TempusBox(){
 		Render();
@@ -75,12 +77,12 @@ public partial class TempusBox: ContentControl{
 	void Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
+			ColDef(1, GUT.Star),
 		]);
 		Root
-		.A(MkInputBox())
-		.A(MkMenuBtn());
+		.A(MkMenuBtn())
+		.A(MkInputBox());
 	}
 
 	TextBox MkInputBox(){
@@ -108,18 +110,24 @@ public partial class TempusBox: ContentControl{
 		var btn = new Button{
 			Content = Svgs.Calendar().ToIcon()
 		};
+		btn.HorizontalAlignment = HAlign.Stretch;
+		btn.VerticalAlignment = VAlign.Stretch;
 		var flyout = new Flyout{
 			Placement = PlacementMode.Bottom,
 		};
 		var panel = new StackPanel();
-		foreach(var fmt in new[]{ETextFormat.Iso, ETextFormat.UnixMs, ETextFormat.LocalDateTime, ETextFormat.DateOnly}){
-			var one = new Button();
-			one.SetContent(FormatToDisplay(fmt));
-			one.Click += (s, e)=>{
-				TextFormat = fmt;
-			};
-			panel.A(one);
-		}
+		var cbFormat = new ComboBox{
+			ItemsSource = _FormatOptions.Select(FormatToDisplay).ToArray(),
+		};
+		cbFormat.SelectionChanged += (s, e)=>{
+			if(_SyncingUi){
+				return;
+			}
+			if(cbFormat.SelectedIndex is >= 0 and < 4){
+				TextFormat = _FormatOptions[cbFormat.SelectedIndex];
+			}
+		};
+		panel.A(cbFormat);
 		var wrap = new Border{
 			Padding = new Thickness(6),
 		};
@@ -155,9 +163,12 @@ public partial class TempusBox: ContentControl{
 			if(IsReadOnly){
 				return;
 			}
+			cbFormat.SelectedIndex = Array.IndexOf(_FormatOptions, TextFormat);
 			FlyoutBase.ShowAttachedFlyout(btn);
+			cbFormat.IsDropDownOpen = true;
 		};
 		_BtnMenu = btn;
+		_CbFormat = cbFormat;
 		_Calendar = calendar;
 		_MenuFlyout = flyout;
 		return btn;
@@ -169,6 +180,9 @@ public partial class TempusBox: ContentControl{
 		}
 		_SyncingUi = true;
 		_Input.Text = FormatTempus(_Tempus, TextFormat);
+		if(_CbFormat is not null){
+			_CbFormat.SelectedIndex = Array.IndexOf(_FormatOptions, TextFormat);
+		}
 		var localDate = DateTimeOffset.FromUnixTimeMilliseconds(_Tempus.Value).ToLocalTime().Date;
 		_Calendar.SelectedDate = localDate;
 		_SyncingUi = false;
@@ -181,6 +195,9 @@ public partial class TempusBox: ContentControl{
 		}
 		if(_BtnMenu is not null){
 			_BtnMenu.IsEnabled = !IsReadOnly;
+		}
+		if(_CbFormat is not null){
+			_CbFormat.IsEnabled = !IsReadOnly;
 		}
 		if(_Calendar is not null){
 			_Calendar.IsEnabled = !IsReadOnly;
