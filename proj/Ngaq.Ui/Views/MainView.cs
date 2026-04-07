@@ -2,39 +2,23 @@ namespace Ngaq.Ui.Views;
 
 using System;
 using System.Collections.Generic;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
-using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Infra.Errors;
-using Ngaq.Ui.CodeTemplate.Sample;
-using Ngaq.Ui.Components.KvMap;
-using Ngaq.Ui.Components.KvMap.JsonMap;
-using Ngaq.Ui.Components.PageBar;
-using Ngaq.Ui.Controls;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
-using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Try;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
-using Ngaq.Ui.Views.User.ChangePassword;
-using Ngaq.Ui.Views.Word.WordEditV2;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.CsCore;
 using Tsinswreng.CsErr;
 
 
@@ -123,7 +107,7 @@ public partial class MainView : UserControl {
 	}
 
 	public partial nil ShowMsg(str Msg, IList<Func<obj?>> Operations){
-		Dispatcher.UIThread.Post((Action)(()=>{
+		Dispatcher.UIThread.Post((()=>{
 			var SvcPopup = this.SvcPopup;
 			var msgBox = new MsgBox();
 			{var o = msgBox;

@@ -44,6 +44,7 @@ public partial class ViewDictionary
 	AutoGrid Root = new(IsRow:true);
 	public TextBox SearchTextBox = new();
 	public OpBtn SearchBtn = new();
+	public OpBtn SaveToWordBtn = new();
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -94,8 +95,9 @@ public partial class ViewDictionary
 		var SearchGrid = new AutoGrid(IsRow: false);
 		Root.A(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs.AddRange([
-				ColDef(10, GUT.Star),
+				ColDef(8, GUT.Star),
 				ColDef(2, GUT.Star),
+				ColDef(4, GUT.Star),
 			]);
 		});
 		{{
@@ -113,6 +115,11 @@ public partial class ViewDictionary
 				o._Button.StretchCenter();
 				o._Button.Content = Svgs.Search().ToIcon();
 				o.SetExe(Ct=>Ctx?.Lookup(Ct));
+			})
+			.A(SaveToWordBtn, o=>{
+				// 保存到詞庫按鈕只負責「轉換 + 跳編輯頁」；最終保存仍在編輯頁完成。
+				o.BtnContent = Todo.I18n("保存到詞庫");
+				o.SetExe(Ct=>Ctx?.ToWordEdit(Ct));
 			});
 		}}
 

@@ -58,18 +58,3 @@ public class I18n:II18n{
 	}}
 }
 
-public interface II18n{
-	public str Get(II18nKey Key, params obj[] Args);
-	public str this[II18nKey Key]{get;}
-}
-
-public static class AppExtnErrItem{
-	public static I18nKey ToI18nKey(this IErrNode z, params obj?[] Args){
-		return new I18nKey{
-			RelaPathSegs=["Error", ..z.RelaPathSegs],
-			DfltValueObj = z.DfltValueObj
-			,Parent = z.Parent
-			,Children = z.Children
-		};
-	}
-}

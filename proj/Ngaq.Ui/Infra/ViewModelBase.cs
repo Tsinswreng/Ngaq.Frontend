@@ -1,6 +1,7 @@
 ﻿#define Impl
 namespace Ngaq.Ui.Infra;
 
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -69,6 +70,15 @@ public partial class ViewModelBase
 		LogInfo(nameof(ShowMsg)+": "+Msg);
 		Dispatcher.UIThread.Post(()=>{
 			MainView.Inst.ShowMsg(Msg);
+		});
+		return NIL;
+	}
+
+	/// 彈窗ʹ抽象(帶操作按鈕)。調用方傳入操作列表即可、彈窗內負責綁定按鈕並執行。
+	public nil ShowMsg(str Msg, IList<Func<obj?>> Operations){
+		LogInfo(nameof(ShowMsg)+": "+Msg);
+		Dispatcher.UIThread.Post(()=>{
+			MainView.Inst.ShowMsg(Msg, Operations);
 		});
 		return NIL;
 	}
