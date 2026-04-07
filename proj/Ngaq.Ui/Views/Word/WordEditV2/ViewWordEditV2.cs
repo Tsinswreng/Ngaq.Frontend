@@ -114,10 +114,6 @@ public partial class ViewWordEditV2: AppViewBase{
 		.A(new TabItem(), o=>{
 			o.Header = Todo.I18n("Learns");
 			o.Content = MkLearnsTab();
-		})
-		.A(new TabItem(), o=>{
-			o.Header = Todo.I18n("JSON");
-			o.Content = MkJsonTab();
 		});
 		return tab;
 	}
@@ -218,7 +214,6 @@ public partial class ViewWordEditV2: AppViewBase{
 				new TextColumn<VmWordPropRow, str>(Todo.I18n("Key"), x=>x.KeyText),
 				new TextColumn<VmWordPropRow, str>(Todo.I18n("KType"), x=>x.KTypeText),
 				new TextColumn<VmWordPropRow, str>(Todo.I18n("VType"), x=>x.VTypeText),
-				new TextColumn<VmWordPropRow, str>(Todo.I18n("Value"), x=>x.ValueText),
 			},
 		};
 		PropGrid.Source = PropGridSource;
@@ -515,6 +510,8 @@ public partial class ViewWordEditV2: AppViewBase{
 		return sp;
 	}
 }
+
+
 
 
 
