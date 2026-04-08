@@ -3,8 +3,9 @@ using Tsinswreng.CsErr;
 
 namespace Ngaq.Ui.Infra.I18n;
 
-[Doc("")]
+[Doc("國際化/本地化")]
 public interface II18n{
+	[Doc(@$"")]
 	public str Get(II18nKey Key, params obj[] Args);
 	public str this[II18nKey Key]{get;}
 }

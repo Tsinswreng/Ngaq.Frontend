@@ -1,137 +1,140 @@
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using Ngaq.Core.Frontend.User;
+namespace Ngaq.Ui.Views.Word.WordEditV2;
+
 using Ngaq.Core.Infra;
-using Ngaq.Core.Shared.User.Models.Po;
-using Ngaq.Core.Shared.User.UserCtx;
-using Ngaq.Core.Shared.Word.Models;
-using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
-using Ngaq.Core.Shared.Word.Models.Po.Learn;
-using Ngaq.Core.Shared.Word.Svc;
-using Ngaq.Core.Tools;
-using Ngaq.Core.Tools.Json;
-using Ngaq.Ui.Infra;
-using Tsinswreng.CsTools;
-using JsonNode = System.Text.Json.Nodes.JsonNode;
-
-using Ctx = VmWordPropRow;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
-public partial class VmWordPropRow: ViewModelBase {
-	public PoWordProp Raw { get; set; } = new();
+using Ngaq.Ui.Infra;
 
-	public str KTypeText {
-		get { return field; }
-		set { SetProperty(ref field, value); }
-	} = nameof(EKvType.Str);
+/// 單詞屬性行編輯 ViewModel。
+/// 約束：當前 UI 只允許 Str / I64 兩種鍵值類型。
+public partial class VmWordPropRow: ViewModelBase{
+	public static IReadOnlyList<EKvType> KvTypes{get;} = [
+		EKvType.Str,
+		EKvType.I64,
+	];
 
-	public str KeyText {
-		get { return field; }
-		set { SetProperty(ref field, value); }
+	public PoWordProp Raw{get;set;} = new();
+
+	public i32 KTypeIndex{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = 0;
+
+	/// Key 下拉/可編輯輸入（字符串鍵）。
+	public str KStrText{
+		get{return field;}
+		set{SetProperty(ref field, value);}
 	} = "";
 
-	public str VTypeText {
-		get { return field; }
-		set { SetProperty(ref field, value); }
-	} = nameof(EKvType.Str);
+	/// 整數鍵文本（KType=I64 時使用）。
+	public str KI64Text{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "0";
 
-	public str ValueText {
-		get { return field; }
-		set { SetProperty(ref field, value); }
+	public i32 VTypeIndex{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = 0;
+
+	/// 字符串值（VType=Str 時使用）。
+	public str VStrText{
+		get{return field;}
+		set{SetProperty(ref field, value);}
 	} = "";
 
-	public static VmWordPropRow NewRow() {
-		return new VmWordPropRow();
-	}
+	/// 整數值文本（VType=I64 時使用）。
+	public str VI64Text{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "0";
 
-	public static VmWordPropRow FromPo(PoWordProp Po) {
-		var vm = new VmWordPropRow {
-			Raw = (PoWordProp)Po.ShallowCloneSelf(),
-			KTypeText = Po.KType.ToString(),
-			VTypeText = Po.VType.ToString(),
-			KeyText = ReadKv(Po.KType, Po.KStr, Po.KI64, 0, null),
-			ValueText = ReadKv(Po.VType, Po.VStr, Po.VI64, Po.VF64, Po.VBinary),
+	public str KeyText => GetKvTypeByIndex(KTypeIndex) == EKvType.I64 ? KI64Text : KStrText;
+	public str ValueText => GetKvTypeByIndex(VTypeIndex) == EKvType.I64 ? VI64Text : VStrText;
+	public str KTypeText => GetKvTypeByIndex(KTypeIndex).ToString();
+	public str VTypeText => GetKvTypeByIndex(VTypeIndex).ToString();
+
+	public static VmWordPropRow NewRow(){
+		return new VmWordPropRow{
+			KTypeIndex = 0,
+			VTypeIndex = 0,
+			KStrText = "",
+			VStrText = "",
+			KI64Text = "0",
+			VI64Text = "0",
 		};
-		return vm;
 	}
 
-	public bool TryToPo(IdWord WordId, out PoWordProp Po, out str Err) {
+	public static VmWordPropRow FromPo(PoWordProp Po){
+		return new VmWordPropRow{
+			Raw = (PoWordProp)Po.ShallowCloneSelf(),
+			KTypeIndex = GetKvTypeIndex(Po.KType),
+			VTypeIndex = GetKvTypeIndex(Po.VType),
+			KStrText = Po.KStr ?? "",
+			KI64Text = Po.KI64 + "",
+			VStrText = Po.VStr ?? "",
+			VI64Text = Po.VI64 + "",
+		};
+	}
+
+	public bool TryToPo(IdWord WordId, out PoWordProp Po, out str Err){
 		Err = "";
 		Po = (PoWordProp)Raw.ShallowCloneSelf();
 		Po.WordId = WordId;
 
-		if (!Enum.TryParse<EKvType>(KTypeText, true, out var kt)) {
-			Err = $"Invalid KType: {KTypeText}";
-			return false;
-		}
-		if (!Enum.TryParse<EKvType>(VTypeText, true, out var vt)) {
-			Err = $"Invalid VType: {VTypeText}";
-			return false;
-		}
+		var kt = GetKvTypeByIndex(KTypeIndex);
+		var vt = GetKvTypeByIndex(VTypeIndex);
 		Po.KType = kt;
 		Po.VType = vt;
 
-		if (!TryAssignKv(kt, KeyText, out var kStr, out var kI64, out var _, out var _)) {
-			Err = "Invalid key value.";
-			return false;
-		}
-		if (!TryAssignKv(vt, ValueText, out var vStr, out var vI64, out var vF64, out var vBinary)) {
-			Err = "Invalid prop value.";
+		if(kt == EKvType.Str){
+			Po.KStr = KStrText;
+			Po.KI64 = 0;
+		}else if(kt == EKvType.I64){
+			if(!i64.TryParse(KI64Text, out var kI64)){
+				Err = Todo.I18n("Invalid KI64.");
+				return false;
+			}
+			Po.KI64 = kI64;
+			Po.KStr = null;
+		}else{
+			Err = Todo.I18n("Invalid KType.");
 			return false;
 		}
 
-		Po.KStr = kStr;
-		Po.KI64 = kI64;
-		Po.VStr = vStr;
-		Po.VI64 = vI64;
-		Po.VF64 = vF64;
-		Po.VBinary = vBinary;
+		if(vt == EKvType.Str){
+			Po.VStr = VStrText;
+			Po.VI64 = 0;
+		}else if(vt == EKvType.I64){
+			if(!i64.TryParse(VI64Text, out var vI64)){
+				Err = Todo.I18n("Invalid VI64.");
+				return false;
+			}
+			Po.VI64 = vI64;
+			Po.VStr = null;
+		}else{
+			Err = Todo.I18n("Invalid VType.");
+			return false;
+		}
+
+		Po.VF64 = 0;
+		Po.VBinary = null;
 		return true;
 	}
 
-	static str ReadKv(EKvType Type, str? S, i64 I, f64 F, u8[]? B) {
-		return Type switch {
-			EKvType.Str => S ?? "",
-			EKvType.I64 => I + "",
-			EKvType.F64 => F + "",
-			EKvType.Binary => B is null ? "" : Convert.ToBase64String(B),
-			_ => ""
-		};
+	static i32 GetKvTypeIndex(EKvType Type){
+		for(i32 i = 0; i < KvTypes.Count; i++){
+			if(KvTypes[i] == Type){
+				return i;
+			}
+		}
+		return 0;
 	}
 
-	static bool TryAssignKv(
-		EKvType Type,
-		str RawText,
-		out str? S,
-		out i64 I,
-		out f64 F,
-		out u8[]? B
-	) {
-		S = null;
-		I = 0;
-		F = 0;
-		B = null;
-		switch (Type) {
-		case EKvType.Str:
-			S = RawText;
-			return true;
-		case EKvType.I64:
-			return long.TryParse(RawText, out I);
-		case EKvType.F64:
-			return double.TryParse(RawText, out F);
-		case EKvType.Binary:
-			try {
-				B = str.IsNullOrWhiteSpace(RawText) ? [] : Convert.FromBase64String(RawText);
-				return true;
-			} catch {
-				return false;
-			}
-		default:
-			return false;
+	static EKvType GetKvTypeByIndex(i32 Index){
+		if(Index < 0 || Index >= KvTypes.Count){
+			return EKvType.Str;
 		}
+		return KvTypes[Index];
 	}
 }

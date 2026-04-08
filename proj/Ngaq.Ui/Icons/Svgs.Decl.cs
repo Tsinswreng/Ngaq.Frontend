@@ -82,6 +82,11 @@ public partial class Svgs{
 	//<iconPacks:PackIconMaterialDesign Kind="DeleteForeverSharp" />
 	public static partial Svg DeleteForeverSharp();
 
+	//<iconPacks:PackIconForkAwesome Kind="Calendar" />
+	public static partial Svg Calendar();
+
+	//<iconPacks:PackIconMaterial Kind="FormatLineStyle" />
+	public static partial Svg FormatLineStyle();
 	//public static partial Svg a;
 }
 

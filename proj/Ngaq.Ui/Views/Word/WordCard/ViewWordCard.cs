@@ -14,7 +14,7 @@ using Ctx = VmWordListCard;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Icons;
-using Ngaq.Ui.Views.Word.WordEditJsonMap;
+using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Infra;
 
 public partial class ViewWordListCard
@@ -35,10 +35,12 @@ public partial class ViewWordListCard
 					MainView.Inst.ShowMsg(Todo.I18n("No word selected"));
 					return;
 				}
-				var editView = new ViewWordEdit{};
-
-				editView.Ctx?.FromBo(JnWord);
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
+                var editView = new ViewWordEditV2();
+                if(editView.Ctx is null){
+                                    return;
+                }
+                editView.Ctx.FromJnWord(JnWord);
+                Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
 			};
 		});
 		return R;
@@ -206,3 +208,6 @@ public partial class ViewWordListCard
 		return R.Grid;
 	}
 }
+
+
+

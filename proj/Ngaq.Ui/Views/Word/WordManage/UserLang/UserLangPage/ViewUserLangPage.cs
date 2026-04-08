@@ -26,6 +26,7 @@ using Ctx = VmUserLangPage;
 /// 上部爲搜索與新增，主體爲 TreeDataGrid，底部爲分頁條。
 public partial class ViewUserLangPage
 	:AppViewBase
+	,I_MkTitleMenu
 {
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -86,10 +87,9 @@ public partial class ViewUserLangPage
 	protected Control MkTopBar(){
 		var top = new AutoGrid(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(6, GUT.Star),
+			ColDef(8, GUT.Star),
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
-			ColDef(2, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
@@ -113,15 +113,20 @@ public partial class ViewUserLangPage
 			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowManageActions, Mode: BindingMode.OneWay);
 			o.Content = Svgs.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
-		})
-		.A(new OpBtn(), o=>{
-			o.Classes.Add(Cls.FullStretch);
-			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowManageActions, Mode: BindingMode.OneWay);
-			o.BtnContent = Svgs.DatabaseImport().ToIcon().WithText(Todo.I18n("Auto Add Missing"));
-			o.Background = new SolidColorBrush(Color.FromRgb(68, 102, 160));
-			o.SetExe((Ct)=>Ctx?.AddAllUnregisteredUserLangs(Ct));
 		});
 		return top.Grid;
+	}
+
+	/// 頁面標題菜單：放置不常用但重要的批量操作。
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = Svgs.DatabaseImport().ToIcon().WithText(Todo.I18n("Auto Add Missing"));
+			o.Click += (s,e)=>{
+				_ = Ctx?.AddAllUnregisteredUserLangs(default);
+			};
+		});
+		return menu;
 	}
 
 	/// 創建列表容器與交互行樣式。
