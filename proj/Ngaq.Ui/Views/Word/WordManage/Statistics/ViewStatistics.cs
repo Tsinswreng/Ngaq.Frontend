@@ -205,7 +205,6 @@ public partial class ViewStatistics: AppViewBase{
 			o.RowDefinitions.AddRange([
 				RowDef(7, GUT.Star),
 				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
 				RowDef(5, GUT.Star),
 			]);
 		});
@@ -220,15 +219,24 @@ public partial class ViewStatistics: AppViewBase{
 			DrawPlot(o);
 		});
 
+		var bottomPanel = new AutoGrid(IsRow: true);
+		bottomPanel.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Star),
+		]);
+		bottomPanel
+		.A(MkPageBar(), o=>{
+			o.HAlign(x=>x.Center);
+			o.VAlign(x=>x.Top);
+		})
+		.A(MkCfgPanel());
+
 		Root
 		.A(resultPanel.Grid)
 		.A(new GridSplitter(), o=>{
 			o.GrayBarWith3Dots();
 		})
-		.A(MkPageBar(), o=>{
-			o.HAlign(x=>x.Center);
-		})
-		.A(MkCfgPanel())
+		.A(bottomPanel.Grid)
 		;
 		return NIL;
 	}
