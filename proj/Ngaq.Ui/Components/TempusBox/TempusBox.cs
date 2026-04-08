@@ -16,168 +16,39 @@ using Tsinswreng.AvlnTools.Tools;
 using Ngaq.Ui.Icons;
 using Avalonia.Data.Converters;
 
-public class TempusFormatItem{
-	//默認內置 Iso8601 和 UnixMs
-	[Doc(@$"默認內置。顯示本地時區。
-	#Example([2026-04-07T23:16:07.344+08:00])
-	")]
-	public static TempusFormatItem Iso8601Full{get;set;}
-	[Doc(@$"默認內置。
-	#Examples([1775575237143])
-	")]
-	public static TempusFormatItem UnixMs{get;set;}
-	[Doc(@$"
-	#Examples([26-04-07])
-	")]
-	public static TempusFormatItem yy_MM_DD{get;set;}
-	[Doc(@$"
-	#Examples([26-04-07 12:34])
-	")]
-	public static TempusFormatItem yy_MM_DD__HH_mm{get;set;}
-
-	[Doc(@$"該種格式的名稱 在下拉框中顯示")]
-	public str FmtDisplayName{get;set;} = "";
-	public IValueConverter Converter{get;set;} = null!;
-
-	static TempusFormatItem(){
-		Iso8601Full = new TempusFormatItem{
-			FmtDisplayName = "ISO 8601",
-			Converter = MkIsoLocalConverter(),
-		};
-		UnixMs = new TempusFormatItem{
-			FmtDisplayName = "Unix ms",
-			Converter = MkUnixMsConverter(),
-		};
-		yy_MM_DD = new TempusFormatItem{
-			FmtDisplayName = "yy-MM-dd",
-			Converter = MkDateTimePatternConverter("yy-MM-dd"),
-		};
-		yy_MM_DD__HH_mm = new TempusFormatItem{
-			FmtDisplayName = "yy-MM-dd HH:mm",
-			Converter = MkDateTimePatternConverter("yy-MM-dd HH:mm"),
-		};
-	}
-
-	static IValueConverter MkIsoLocalConverter(){
-		return new ParamFnConvtr<obj?, obj?>(
-			(v, p)=>{
-				if(v is Tempus t){
-					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)
-					.ToLocalTime()
-					.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture);
-				}
-				return BindingNotification.UnsetValue;
-			},
-			(v, p)=>{
-				if(v is str s && DateTimeOffset.TryParseExact(
-					s,
-					"yyyy-MM-ddTHH:mm:ss.fffzzz",
-					CultureInfo.InvariantCulture,
-					DateTimeStyles.None,
-					out var dto
-				)){
-					return Tempus.FromUnixMs(dto.ToUnixTimeMilliseconds());
-				}
-				return BindingNotification.UnsetValue;
-			}
-		);
-	}
-
-	static IValueConverter MkUnixMsConverter(){
-		return new ParamFnConvtr<obj?, obj?>(
-			(v, p)=>{
-				if(v is Tempus t){
-					return t.Value.ToString(CultureInfo.InvariantCulture);
-				}
-				return BindingNotification.UnsetValue;
-			},
-			(v, p)=>{
-				if(v is str s && i64.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms)){
-					return Tempus.FromUnixMs(ms);
-				}
-				return BindingNotification.UnsetValue;
-			}
-		);
-	}
-
-	static IValueConverter MkDateTimePatternConverter(str Pattern){
-		var fmt = NormalizePattern(Pattern);
-		return new ParamFnConvtr<obj?, obj?>(
-			(v, p)=>{
-				if(v is Tempus t){
-					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)
-					.ToLocalTime()
-					.DateTime
-					.ToString(fmt, CultureInfo.InvariantCulture);
-				}
-				return BindingNotification.UnsetValue;
-			},
-			(v, p)=>{
-				if(v is str s && DateTime.TryParseExact(
-					s,
-					fmt,
-					CultureInfo.InvariantCulture,
-					DateTimeStyles.None,
-					out var dt
-				)){
-					return Tempus.FromDateTime(new DateTime(
-						dt.Year, dt.Month, dt.Day,
-						dt.Hour, dt.Minute, dt.Second,
-						dt.Millisecond,
-						DateTimeKind.Local
-					));
-				}
-				return BindingNotification.UnsetValue;
-			}
-		);
-	}
-
-	static str NormalizePattern(str Pattern){
-		return Pattern
-		.Replace("YYYY", "yyyy")
-		.Replace("YY", "yy")
-		.Replace("DD", "dd");
-	}
-}
-
 
 public partial class TempusBox: ContentControl{
-	public static readonly DirectProperty<TempusBox, Tempus> TempusProperty =
-		AvaloniaProperty.RegisterDirect<TempusBox, Tempus>(
-			nameof(Tempus),
-			o => o.Tempus,
-			(o, v) => o.Tempus = v,
-			defaultBindingMode: BindingMode.TwoWay
-		);
+	Tempus _Tempus = Tempus.Now();
+	bool _IsReadOnly = false;
+	i32 _SelectedFormatIndex = 0;
+	f64 _ControlHeight = 34;
+	readonly IList<TempusFormatItem> _FormatItems = [
+		TempusFormatItem.Iso8601Full,
+		TempusFormatItem.UnixMs,
+	];
+	bool _LastParseOk = true;
 
-	/// 當前 `Tempus` 主值。文本輸入和日曆選擇都會回寫到此值。
-	public Tempus Tempus{
+	public partial Tempus Tempus{
 		get{return _Tempus;}
 		set{
 			SetAndRaise(TempusProperty, ref _Tempus, value);
 			SyncUiFromTempus();
 		}
 	}
-	Tempus _Tempus = Tempus.Now();
 
-	/// 是否只讀。`true` 時禁用格式切換和日曆，文本框進入只讀。
-	public bool IsReadOnly{
+	public partial bool IsReadOnly{
 		get{return _IsReadOnly;}
 		set{
 			_IsReadOnly = value;
 			ApplyReadOnlyState();
 		}
 	}
-	bool _IsReadOnly = false;
 
-	/// 全部格式來源。下拉框只使用此列表。
-	public IList<TempusFormatItem> FormatItems{get;} = [
-		TempusFormatItem.Iso8601Full,
-		TempusFormatItem.UnixMs,
-	];
+	public partial IList<TempusFormatItem> FormatItems{
+		get{return _FormatItems;}
+	}
 
-	/// 當前選中的格式下標。
-	public i32 SelectedFormatIndex{
+	public partial i32 SelectedFormatIndex{
 		get{return _SelectedFormatIndex;}
 		set{
 			var max = FormatItems.Count - 1;
@@ -186,37 +57,31 @@ public partial class TempusBox: ContentControl{
 			SyncUiFromTempus();
 		}
 	}
-	i32 _SelectedFormatIndex = 0;
 
-	/// 控件統一高度，讓左按鈕與輸入框外框對齊。
-	public f64 ControlHeight{
+	public partial f64 ControlHeight{
 		get{return _ControlHeight;}
 		set{
 			_ControlHeight = value;
 			ApplyControlSize();
 		}
 	}
-	f64 _ControlHeight = 34;
 
-	/// 最近一次文本解析是否成功，外層可讀取作提示。
-	public bool LastParseOk{get;protected set;} = true;
-	public readonly AutoGrid Root = new(IsRow: false);
-	public TextBox _Input{get;set;} = null!;
-	public Button _BtnMenu{get;set;}
-	public ComboBox _ComboBoxFormat{get;set;}
-	public Avalonia.Controls.Calendar _Calendar{get;set;}
+	public partial bool LastParseOk{
+		get{return _LastParseOk;}
+		protected set{_LastParseOk = value;}
+	}
+
 	Flyout? _MenuFlyout;
 	bool _SyncingUi = false;
 
-	public TempusBox(){
+	partial void Init(){
 		Render();
 		ApplyControlSize();
 		ApplyReadOnlyState();
 		SyncUiFromTempus();
 	}
 
-	/// 外層修改 `FormatItems` 後調用，刷新下拉格式源。
-	public void RefreshFormatOptions(){
+	public partial void RefreshFormatOptions(){
 		_SelectedFormatIndex = Math.Clamp(_SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
 		SyncUiFromTempus();
 	}
@@ -240,7 +105,7 @@ public partial class TempusBox: ContentControl{
 		o.VerticalContentAlignment = VAlign.Center;
 		o.Margin = new Thickness(0);
 		o.BorderThickness = new Thickness(1);
-		o.Padding = new Thickness(8, 0, 8, 0);
+		//o.Padding = new Thickness(8, 0, 8, 0);
 		o.TextChanged += (s, e)=>{
 			// 由用戶輸入觸發時，按當前格式解析；失敗則只更新標記，不覆蓋既有 Tempus。
 			if(_SyncingUi){
