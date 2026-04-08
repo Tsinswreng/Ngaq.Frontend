@@ -39,7 +39,11 @@ int.	說得對
 			TextType = p.TextType,
 			Text = p.Text,
 		}).ToList();
-		Description = string.Join("\n", Resp.Descrs);
+		var ParsedDescription = string.Join("\n", Resp.Descrs);
+		// 解析出的描述為空時，保留流式階段已展示的文本，避免界面在收尾時變空白。
+		if(!string.IsNullOrWhiteSpace(ParsedDescription)){
+			Description = ParsedDescription;
+		}
 		return NIL;
 	}
 

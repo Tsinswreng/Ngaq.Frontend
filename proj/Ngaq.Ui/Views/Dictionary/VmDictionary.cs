@@ -3,6 +3,7 @@
 using Avalonia.Controls;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using System.Text;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Errors;
@@ -58,6 +59,11 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	public IReqLlmDict? LastReqLlmDict{get;set;}
 	/// 最近一次字典查詢完整響應。供「保存到詞庫」按鈕使用。
 	public IRespLlmDict? LastRespLlmDict{get;set;}
+	/// 最近一次 LLM 流式原始輸出文本（用于排查和展示）。
+	public str LastLlmRawOutput{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
 
 	public str Input{
 		get{return field;}
@@ -127,6 +133,12 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		var User = FrontendUserCtxMgr.GetUserCtx();
+		// 先快照當前界面數據：若生成失敗則回滾，避免「內容被清空」。
+		var PrevResult = CaptureResultSnapshot(Result);
+		var PrevReq = LastReqLlmDict;
+		var PrevResp = LastRespLlmDict;
+		var PrevRawOutput = LastLlmRawOutput;
+		var StreamedResp = new StringBuilder();
 
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
@@ -148,6 +160,9 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				TgtLangs = TgtLangs,
 			},
 			OnNewSeg = (dto, ct) => {
+				if(dto.NewSeg is not null){
+					StreamedResp.Append(dto.NewSeg);
+				}
 				Result.GotNewSeg(dto);
 				return 0;
 			},
@@ -160,14 +175,116 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		LastRespLlmDict = null;
 
 		try{
+			// 先記住流式階段已展示的文本；若最終結構化解析結果缺失描述，則回退到它。
+			var StreamedDescription = Result.Description;
 			var Resp = await SvcDictionary.Lookup(User, Req, Ct);
+			LastLlmRawOutput = StreamedResp.ToString();
 			Result.FromRespLlmDict(Resp);
+			if(
+				str.IsNullOrWhiteSpace(Result.Description)
+				&& !str.IsNullOrWhiteSpace(StreamedDescription)
+			){
+				Result.Description = StreamedDescription;
+				LogWarn(
+					$"Dictionary lookup finalized with empty description, fallback to streamed text. " +
+					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}"
+				);
+			}
 			LastRespLlmDict = Resp;
 		}catch(Exception ex){
+			RestoreResultSnapshot(PrevResult);
+			LastReqLlmDict = PrevReq;
+			LastRespLlmDict = PrevResp;
+			LastLlmRawOutput = PrevRawOutput;
+			LogError(
+				$"Dictionary lookup failed. " +
+				$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
+				$"LlmResponse={StreamedResp}"
+			);
 			HandleErr(ex);
 		}
 
 		return NIL;
+	}
+
+	/// 用編輯後的原始文本重新解析詞典結果，不重調 LLM。
+	public Task<nil> ReparseFromRawOutput(str RawOutput, CT Ct){
+		if(str.IsNullOrWhiteSpace(RawOutput)){
+			ShowMsg(Todo.I18n("原始輸出為空，無法解析"));
+			return Task.FromResult<nil>(NIL);
+		}
+		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
+			return Task.FromResult<nil>(NIL);
+		}
+		var PrevResult = CaptureResultSnapshot(Result);
+		var PrevReq = LastReqLlmDict;
+		var PrevResp = LastRespLlmDict;
+		var PrevRawOutput = LastLlmRawOutput;
+		try{
+			var Req = new ReqLlmDictEvt{
+				Query = new Query{
+					Term = Input.Trim(),
+				},
+				OptLang = new OptLang{
+					SrcLang = new NormLangWithName{
+						Type = ELangIdentType.Bcp47,
+						Code = SrcLang,
+					},
+					TgtLangs = [new NormLangWithName{
+						Type = ELangIdentType.Bcp47,
+						Code = TgtLang,
+					}],
+				},
+			};
+			var Resp = SvcDictionary.ParseRawOutput(RawOutput);
+			Result ??= App.DiOrMk<VmSimpleWord>();
+			Result.FromRespLlmDict(Resp);
+			if(str.IsNullOrWhiteSpace(Result.Description)){
+				Result.Description = RawOutput;
+			}
+			LastReqLlmDict = Req;
+			LastRespLlmDict = Resp;
+			LastLlmRawOutput = RawOutput;
+		}catch(Exception ex){
+			RestoreResultSnapshot(PrevResult);
+			LastReqLlmDict = PrevReq;
+			LastRespLlmDict = PrevResp;
+			LastLlmRawOutput = PrevRawOutput;
+			LogError($"Dictionary reparse from raw output failed. RawOutput={RawOutput}");
+			HandleErr(ex);
+		}
+		return Task.FromResult<nil>(NIL);
+	}
+
+	/// 查詢前快照：失敗時恢復到此狀態。
+	LookupResultSnapshot CaptureResultSnapshot(VmSimpleWord? Cur){
+		if(Cur is null){
+			return new LookupResultSnapshot();
+		}
+		return new LookupResultSnapshot{
+			Head = Cur.Head,
+			Description = Cur.Description,
+			Pronunciations = Cur.Pronunciations.Select(p=>new Pronunciation{
+				TextType = p.TextType,
+				Text = p.Text,
+			}).ToList(),
+		};
+	}
+
+	/// 查詢失敗回滾 UI 文本。
+	nil RestoreResultSnapshot(LookupResultSnapshot Snapshot){
+		Result ??= App.DiOrMk<VmSimpleWord>();
+		Result.Head = Snapshot.Head;
+		Result.Description = Snapshot.Description;
+		Result.Pronunciations = Snapshot.Pronunciations;
+		return NIL;
+	}
+
+	/// Lookup 失敗回滾用 DTO。
+	sealed class LookupResultSnapshot{
+		public str Head{get;set;} = "";
+		public str Description{get;set;} = "";
+		public IList<Pronunciation> Pronunciations{get;set;} = [];
 	}
 
 	/// 將最近一次詞典查詢結果轉為詞庫詞條，然後跳到單詞編輯頁。

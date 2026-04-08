@@ -8,6 +8,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Dictionary.LlmRawOutputEdit;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
@@ -164,6 +165,23 @@ public partial class ViewDictionary
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangToUserLangPage();
 				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("配置語言映射"), view));
+			};
+		});
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = Todo.I18n("查看LLM原始輸出");
+			o.Click += (s,e)=>{
+				var DictCtx = Ctx;
+				if(DictCtx is null){
+					return;
+				}
+				var view = new ViewLlmRawOutputEdit();
+				if(view.Ctx is not null){
+					view.Ctx.SetRawOutput(DictCtx.LastLlmRawOutput);
+					view.Ctx.SetOnConfirm((raw, ct)=>{
+						return DictCtx.ReparseFromRawOutput(raw, ct);
+					});
+				}
+				DictCtx.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("查看LLM原始輸出"), view));
 			};
 		});
 		return menu;
