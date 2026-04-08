@@ -174,11 +174,11 @@ public partial class ViewStatistics: AppViewBase{
 		o.Plot.DataBackground.Color = ScottPlot.Colors.Black;
 		o.Plot.Axes.Color(ScottPlot.Colors.White);
 		o.Plot.Grid.MajorLineColor = ScottPlot.Colors.Gray;
-		o.Plot.Grid.MajorLineWidth = 1;
+		o.Plot.Grid.MajorLineWidth = 0.5f;
 
 		o.Plot.Clear();
-		var series = o.Plot.Add.Scatter(Ctx.Points, ScottPlot.Colors.Yellow);
-		series.LineWidth = 3;
+		var series = o.Plot.Add.Scatter(Ctx.Points, ScottPlot.Colors.LightBlue);
+		series.LineWidth = 1;
 		series.MarkerSize = 0;
 
 		var tickPositions = new List<double>();
@@ -197,6 +197,7 @@ public partial class ViewStatistics: AppViewBase{
 		for(i32 i = 0; i < Ctx.Points.Count; i++){
 			var p = Ctx.Points[i];
 			var txt = o.Plot.Add.Text(p.Y.ToString("0"), p.X, p.Y);
+			txt.LabelFontColor = ScottPlot.Colors.White;
 			txt.OffsetY = -0.3f;
 			txt.LabelAlignment = ScottPlot.Alignment.LowerCenter;
 		}
