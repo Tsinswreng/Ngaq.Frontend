@@ -141,15 +141,20 @@ public class TempusFormatItem{
 }
 
 
-/// 單類型 `TempusBox` 基礎組件（不拆 View/Vm）。
-/// 左：可輸入字符串
-/// 右：單一按鈕，點開同一菜單中的「格式選擇 + 日曆」
 public partial class TempusBox: ContentControl{
+	public static readonly DirectProperty<TempusBox, Tempus> TempusProperty =
+		AvaloniaProperty.RegisterDirect<TempusBox, Tempus>(
+			nameof(Tempus),
+			o => o.Tempus,
+			(o, v) => o.Tempus = v,
+			defaultBindingMode: BindingMode.TwoWay
+		);
+
 	/// 當前 `Tempus` 主值。文本輸入和日曆選擇都會回寫到此值。
 	public Tempus Tempus{
 		get{return _Tempus;}
 		set{
-			_Tempus = value;
+			SetAndRaise(TempusProperty, ref _Tempus, value);
 			SyncUiFromTempus();
 		}
 	}
@@ -228,28 +233,28 @@ public partial class TempusBox: ContentControl{
 	}
 
 	TextBox MkInputBox(){
-		var txt = new TextBox{
-			MinWidth = 0,
-			VerticalAlignment = VAlign.Stretch,
-		};
-		txt.Margin = new Thickness(0);
-		txt.BorderThickness = new Thickness(1);
-		txt.Padding = new Thickness(8, 0, 8, 0);
-		txt.TextChanged += (s, e)=>{
+		_Input = new TextBox{};
+		var o = _Input;
+		o.MinWidth = 0;
+		o.VerticalAlignment = VAlign.Stretch;
+		o.VerticalContentAlignment = VAlign.Center;
+		o.Margin = new Thickness(0);
+		o.BorderThickness = new Thickness(1);
+		o.Padding = new Thickness(8, 0, 8, 0);
+		o.TextChanged += (s, e)=>{
 			// 由用戶輸入觸發時，按當前格式解析；失敗則只更新標記，不覆蓋既有 Tempus。
 			if(_SyncingUi){
 				return;
 			}
-			if(TryParseBySelectedFormat(txt.Text ?? "", out var parsed)){
+			if(TryParseBySelectedFormat(o.Text ?? "", out var parsed)){
 				LastParseOk = true;
-				_Tempus = parsed;
-				SyncUiFromTempus();
+				Tempus = parsed;
 			}else{
 				LastParseOk = false;
 			}
 		};
-		_Input = txt;
-		return txt;
+
+		return o;
 	}
 
 	Button MkMenuBtn(){
@@ -290,7 +295,7 @@ public partial class TempusBox: ContentControl{
 				return;
 			}
 			var selectedDate = calendar.SelectedDate.Value;
-			var currentLocal = DateTimeOffset.FromUnixTimeMilliseconds(_Tempus.Value).ToLocalTime().DateTime;
+			var currentLocal = DateTimeOffset.FromUnixTimeMilliseconds(Tempus.Value).ToLocalTime().DateTime;
 			var merged = new DateTime(
 				selectedDate.Year,
 				selectedDate.Month,
@@ -301,8 +306,7 @@ public partial class TempusBox: ContentControl{
 				currentLocal.Millisecond,
 				DateTimeKind.Local
 			);
-			_Tempus = Tempus.FromDateTime(merged);
-			SyncUiFromTempus();
+			Tempus = Tempus.FromDateTime(merged);
 		};
 		wrap.Child = calendar;
 		panel.A(wrap);
@@ -329,12 +333,12 @@ public partial class TempusBox: ContentControl{
 			return;
 		}
 		_SyncingUi = true;
-		_Input.Text = FormatBySelectedFormat(_Tempus);
+		_Input.Text = FormatBySelectedFormat(Tempus);
 		if(_ComboBoxFormat is not null){
 			_ComboBoxFormat.ItemsSource = FormatItems.Select(x=>x.FmtDisplayName).ToArray();
 			_ComboBoxFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
 		}
-		var localDate = DateTimeOffset.FromUnixTimeMilliseconds(_Tempus.Value).ToLocalTime().Date;
+		var localDate = DateTimeOffset.FromUnixTimeMilliseconds(Tempus.Value).ToLocalTime().Date;
 		_Calendar.SelectedDate = localDate;
 		_SyncingUi = false;
 		LastParseOk = true;
