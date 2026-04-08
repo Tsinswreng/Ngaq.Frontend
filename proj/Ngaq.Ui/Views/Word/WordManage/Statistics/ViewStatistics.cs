@@ -64,12 +64,14 @@ public partial class ViewStatistics
 	}
 
 	Control MkTimeBoxRow(str Title, Expression<Func<Ctx, object?>> Expr){
-		var box = new TempusBox();
-		box.Bind(
+		var o = new TempusBox();
+		o.Bind(
 			TempusBox.TempusProperty,
 			CBE.Mk<Ctx>(Expr, Mode: BindingMode.TwoWay)
 		);
-		return MkLabeledRow(Title, box);
+		o.FormatItems.Add(TempusFormatItem.yy_MM_DD);
+		o.FormatItems.Add(TempusFormatItem.yy_MM_DD__HH_mm);
+		return MkLabeledRow(Title, o);
 	}
 
 	Control MkIntervalRow(){

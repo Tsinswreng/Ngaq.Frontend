@@ -15,6 +15,7 @@ public partial class TempusBox: ContentControl{
 	bool _IsReadOnly = false;
 	i32 _SelectedFormatIndex = 0;
 	f64 _ControlHeight = 34;
+	
 	readonly IList<ITempusFormatItem> _FormatItems = [
 		TempusFormatItem.Iso8601Full,
 		TempusFormatItem.UnixMs,
