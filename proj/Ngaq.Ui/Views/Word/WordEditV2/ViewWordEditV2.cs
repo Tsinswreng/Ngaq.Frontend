@@ -1,15 +1,18 @@
 namespace Ngaq.Ui.Views.Word.WordEditV2;
 
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui;
@@ -67,6 +70,9 @@ public partial class ViewWordEditV2: AppViewBase{
 		Todo.I18n(nameof(ELearn.Fgt)),
 	];
 
+	static readonly IValueConverter _IsoTempusConverter = new IsoToTempusConverter();
+	static readonly IValueConverter _DelAtUnixMsConverter = new DelAtUnixMsToTempusConverter();
+
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -88,7 +94,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		if(Ctx is null){
 			return;
 		}
-		Ctx.PropertyChanged += (s,e)=>{
+		Ctx.PropertyChanged += (s, e)=>{
 			if(e.PropertyName == nameof(Ctx.PropRows)){
 				RebuildPropGridSource();
 			}
@@ -130,79 +136,74 @@ public partial class ViewWordEditV2: AppViewBase{
 		sp.A(MkIdSelectableRow(Todo.I18n("WordId"), CBE.Mk<Ctx>(x=>x.WordIdText, Mode: BindingMode.OneWay)));
 		sp.A(MkInputRow(Todo.I18n("Head"), CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay)));
 		sp.A(MkInputRow(Todo.I18n("Lang"), CBE.Mk<Ctx>(x=>x.Lang, Mode: BindingMode.TwoWay)));
-		sp.A(MkTempusRow(Todo.I18n("StoredAt"), CBE.Mk<Ctx>(x=>x.StoredAtTempus, Mode: BindingMode.TwoWay)));
-		sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<Ctx>(x=>x.BizCreatedAtTempus, Mode: BindingMode.TwoWay)));
-		sp.A(MkTempusRow(Todo.I18n("BizUpdatedAt"), CBE.Mk<Ctx>(x=>x.BizUpdatedAtTempus, Mode: BindingMode.TwoWay)));
-		sp.A(MkInputRow(Todo.I18n("DelAt(unix ms)"), CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay)));
+		sp.A(MkTempusRow(Todo.I18n("StoredAt"), CBE.Mk<Ctx>(x=>x.StoredAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+		sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+		sp.A(MkTempusRow(Todo.I18n("BizUpdatedAt"), CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+		sp.A(MkTempusRow(
+			Todo.I18n("DelAt(unix ms)"),
+			CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay, Converter: _DelAtUnixMsConverter)
+		));
 		return sv;
 	}
 
 	Control MkPropsTab(){
-		var root = new AutoGrid(IsRow: true);
-		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(9, GUT.Star),
-		]);
-
-		root.A(MkBtnAddItem(Todo.I18n("Add Prop")), o=>{
-			o.Click += (s,e)=>{
-				Ctx?.AddPropRow();
-			};
-		});
-		root.A(MkPropGridHost());
-		return root.Grid;
+		return MkRowsTab(
+			Todo.I18n("Add Prop"),
+			()=>Ctx?.AddPropRow(),
+			MkPropGridHost
+		);
 	}
 
 	Control MkLearnsTab(){
+		return MkRowsTab(
+			Todo.I18n("Add Learn"),
+			()=>Ctx?.AddLearnRow(),
+			MkLearnGridHost
+		);
+	}
+
+	Control MkRowsTab(str AddBtnLabel, Action? OnAdd, Func<Control> MkGridHost){
 		var root = new AutoGrid(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(9, GUT.Star),
 		]);
 
-		root.A(MkBtnAddItem(Todo.I18n("Add Learn")), o=>{
-			o.Click += (s,e)=>{
-				Ctx?.AddLearnRow();
-			};
+		root.A(MkBtnAddItem(AddBtnLabel), o=>{
+			o.Click += (s, e)=>OnAdd?.Invoke();
 		});
-		root.A(MkLearnGridHost());
+		root.A(MkGridHost());
 		return root.Grid;
 	}
 
 	Control MkPropGridHost(){
-		PropGrid = new TreeDataGrid{
-			Margin = new Thickness(10,4,10,10),
-			MinHeight = 260,
-		};
-		PropGrid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46,46,46)))
-		);
-		PropGrid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70,70,70)))
-		);
+		PropGrid = MkGridCore();
 		PropGrid.AddHandler(InputElement.TappedEvent, OnPropGridTapped, RoutingStrategies.Bubble, true);
 		RebuildPropGridSource();
 		return PropGrid;
 	}
 
 	Control MkLearnGridHost(){
-		LearnGrid = new TreeDataGrid{
-			Margin = new Thickness(10,4,10,10),
-			MinHeight = 260,
-		};
-		LearnGrid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46,46,46)))
-		);
-		LearnGrid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70,70,70)))
-		);
+		LearnGrid = MkGridCore();
 		LearnGrid.AddHandler(InputElement.TappedEvent, OnLearnGridTapped, RoutingStrategies.Bubble, true);
 		RebuildLearnGridSource();
 		return LearnGrid;
+	}
+
+	TreeDataGrid MkGridCore(){
+		var grid = new TreeDataGrid{
+			Margin = new Thickness(10, 4, 10, 10),
+			MinHeight = 260,
+		};
+		grid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+		);
+		grid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+		);
+		return grid;
 	}
 
 	void RebuildPropGridSource(){
@@ -254,27 +255,17 @@ public partial class ViewWordEditV2: AppViewBase{
 		if(Ctx is null || PropGrid is null){
 			return;
 		}
-		if(E.Source is not StyledElement Src){
-			return;
-		}
-		for(StyledElement? cur = Src; cur is not null; cur = cur.Parent){
-			if(cur is ToggleButton){
-				return;
-			}
-			if(cur is TreeDataGridRow row){
-				if(row.DataContext is VmWordPropRow vmRow){
-					OpenPropDetail(vmRow);
-					E.Handled = true;
-				}
-				return;
-			}
-		}
+		HandleGridTapped<VmWordPropRow>(E, OpenPropDetail);
 	}
 
 	void OnLearnGridTapped(object? Sender, TappedEventArgs E){
 		if(Ctx is null || LearnGrid is null){
 			return;
 		}
+		HandleGridTapped<VmWordLearnRow>(E, OpenLearnDetail);
+	}
+
+	void HandleGridTapped<TRow>(TappedEventArgs E, Action<TRow> OpenDetail) where TRow : class{
 		if(E.Source is not StyledElement Src){
 			return;
 		}
@@ -283,8 +274,8 @@ public partial class ViewWordEditV2: AppViewBase{
 				return;
 			}
 			if(cur is TreeDataGridRow row){
-				if(row.DataContext is VmWordLearnRow vmRow){
-					OpenLearnDetail(vmRow);
+				if(row.DataContext is TRow vmRow){
+					OpenDetail(vmRow);
 					E.Handled = true;
 				}
 				return;
@@ -305,7 +296,7 @@ public partial class ViewWordEditV2: AppViewBase{
 	}
 
 	Control MkPropDetailContent(VmWordPropRow Row){
-		var root = new AutoGrid(IsRow:true);
+		var root = new AutoGrid(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(9, GUT.Star),
 			RowDef(1, GUT.Auto),
@@ -326,10 +317,10 @@ public partial class ViewWordEditV2: AppViewBase{
 		});
 
 		root.A(new Button(), o=>{
-			o.Margin = new Thickness(10,6,10,10);
+			o.Margin = new Thickness(10, 6, 10, 10);
 			o.Background = Brushes.Red;
 			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove"));
-			o.Click += (s,e)=>{
+			o.Click += (s, e)=>{
 				Ctx?.RemovePropRow(Row);
 				Ctx?.ViewNavi?.Back();
 			};
@@ -338,7 +329,7 @@ public partial class ViewWordEditV2: AppViewBase{
 	}
 
 	Control MkLearnDetailContent(VmWordLearnRow Row){
-		var root = new AutoGrid(IsRow:true);
+		var root = new AutoGrid(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(9, GUT.Star),
 			RowDef(1, GUT.Auto),
@@ -349,16 +340,16 @@ public partial class ViewWordEditV2: AppViewBase{
 				sp.Margin = new Thickness(10);
 				sp.Spacing = 8;
 				sp.A(MkComboRow(Todo.I18n("LearnResult"), _LearnResultOptions, CBE.Mk<VmWordLearnRow>(x=>x.LearnResultIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtTempus, Mode: BindingMode.TwoWay)));
+				sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
 				sp.DataContext = Row;
 			});
 		});
 
 		root.A(new Button(), o=>{
-			o.Margin = new Thickness(10,6,10,10);
+			o.Margin = new Thickness(10, 6, 10, 10);
 			o.Background = Brushes.Red;
 			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove"));
-			o.Click += (s,e)=>{
+			o.Click += (s, e)=>{
 				Ctx?.RemoveLearnRow(Row);
 				Ctx?.ViewNavi?.Back();
 			};
@@ -385,43 +376,6 @@ public partial class ViewWordEditV2: AppViewBase{
 		];
 	}
 
-	Control MkJsonTab(){
-		var root = new AutoGrid(IsRow: true);
-		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(8, GUT.Star),
-		]);
-
-		root.A(MkJsonOps());
-		root.A(new TextBox(), tb=>{
-			tb.Margin = new Thickness(10, 4, 10, 10);
-			tb.AcceptsReturn = true;
-			tb.TextWrapping = TextWrapping.Wrap;
-			tb.SetValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
-			tb.Bind(TextBox.TextProperty, CBE.Mk<Ctx>(x=>x.JsonText, Mode: BindingMode.TwoWay));
-		});
-		return root.Grid;
-	}
-
-	Control MkJsonOps(){
-		var g = new AutoGrid(IsRow: false);
-		g.Grid.Margin = new Thickness(10, 10, 10, 2);
-		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
-		]);
-
-		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Sync Form -> Json");
-			o.Click += (s,e)=>Ctx?.SyncJsonFromDraft();
-		});
-		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Apply Json -> Form");
-			o.Click += (s,e)=>Ctx?.ApplyJsonToForm();
-		});
-		return g.Grid;
-	}
-
 	Control MkErrBar(){
 		var b = new Border{
 			Background = new SolidColorBrush(Color.FromArgb(70, 180, 20, 20)),
@@ -435,7 +389,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		return b;
 	}
 
-		Control MkBottomBar(){
+	Control MkBottomBar(){
 		var g = new AutoGrid(IsRow: false);
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
@@ -457,73 +411,105 @@ public partial class ViewWordEditV2: AppViewBase{
 		});
 		return g.Grid;
 	}
-Button MkBtnAddItem(str Label){
+
+	Button MkBtnAddItem(str Label){
 		var o = new Button();
-		o.Margin = new Thickness(10,10,10,4);
+		o.Margin = new Thickness(10, 10, 10, 4);
 		o.Content = Svgs.Add().ToIcon().WithText(" "+Label);
 		return o;
 	}
 
-		Control MkTempusRow(str Label, IBinding Binding){
-		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
+	Control MkTempusRow(str Label, IBinding Binding){
 		var tb = new TempusBox();
 		tb.Bind(TempusBox.TempusProperty, Binding);
-		sp.Children.Add(tb);
-		return sp;
+		InitTempusBox(tb);
+		return MkFieldRow(Label, tb);
 	}
-Control MkInputRow(str Label, IBinding Binding){
-		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
+
+	void InitTempusBox(TempusBox Box){
+		Box.FormatItems.Add(TempusFormatItem.yy_MM_DD);
+		Box.FormatItems.Add(TempusFormatItem.yy_MM_DD__HH_mm);
+		Box.SelectedFormat = TempusFormatItem.yy_MM_DD__HH_mm;
+	}
+
+	Control MkInputRow(str Label, IBinding Binding){
 		var tb = new TextBox();
 		tb.Bind(TextBox.TextProperty, Binding);
-		sp.Children.Add(tb);
-		return sp;
+		return MkFieldRow(Label, tb);
 	}
 
 	Control MkIdSelectableRow(str Label, IBinding Binding){
-		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
 		var tb = new SelectableTextBlock{
 			FontSize = UiCfg.Inst.BaseFontSize*0.8,
 			TextWrapping = TextWrapping.Wrap,
 		};
 		tb.Bind(TextBlock.TextProperty, Binding);
-		sp.Children.Add(tb);
-		return sp;
+		return MkFieldRow(Label, tb);
 	}
 
 	Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
-		var sp = new StackPanel{Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		var cb = new ComboBox();
-		foreach(var item in Items){
-			cb.Items.Add(item);
-		}
+		var cb = new ComboBox{
+			ItemsSource = Items,
+		};
 		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
-		sp.Children.Add(cb);
-		return sp;
+		return MkFieldRow(Label, cb);
 	}
 
 	Control MkEditableComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
-		var sp = new StackPanel{Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
 		var cb = new ComboBox{
 			IsEditable = true,
-			HorizontalAlignment = HorizontalAlignment.Stretch,
+			HorizontalAlignment = HAlign.Stretch,
+			ItemsSource = Items,
 		};
-		foreach(var item in Items){
-			cb.Items.Add(item);
-		}
 		cb.Bind(ComboBox.TextProperty, Binding);
-		sp.Children.Add(cb);
+		return MkFieldRow(Label, cb);
+	}
+
+	Control MkFieldRow(str Label, Control Input){
+		var sp = new StackPanel{
+			Orientation = Orientation.Vertical,
+			Spacing = 3,
+		};
+		sp.Children.Add(new TextBlock{
+			Text = Label,
+		});
+		sp.Children.Add(Input);
 		return sp;
 	}
+
+	sealed class IsoToTempusConverter: IValueConverter{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture){
+			if(value is str s && !str.IsNullOrWhiteSpace(s)){
+				try{
+					return Tempus.FromIso(s.Trim());
+				}catch{}
+			}
+			return Tempus.Now();
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture){
+			if(value is Tempus t){
+				return t.ToIso();
+			}
+			return "";
+		}
+	}
+	sealed class DelAtUnixMsToTempusConverter: IValueConverter{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture){
+			if(value is str s && i64.TryParse(s.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var unixMs)){
+				return Tempus.FromUnixMs(unixMs);
+			}
+			return Tempus.Now();
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture){
+			if(value is Tempus t){
+				return t.Value.ToString(CultureInfo.InvariantCulture);
+			}
+			return "";
+		}
+	}
 }
-
-
-
-
 
 
 
