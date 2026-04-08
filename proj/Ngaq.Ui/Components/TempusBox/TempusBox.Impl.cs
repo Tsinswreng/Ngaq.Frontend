@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Data;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
@@ -18,6 +19,7 @@ public partial class TempusBox: ContentControl{
 	f64 _ControlHeight = 34;
  	ITempusFormatItem _SelectedFormat = TempusFormatItem.Iso8601Full;
  	ICommand? _InvalidInputCommand = null;
+ 	ICommand? _DefaultInvalidInputCommand = null;
 
 	readonly IList<ITempusFormatItem> _FormatItems = [
 		TempusFormatItem.Iso8601Full,
@@ -48,7 +50,10 @@ public partial class TempusBox: ContentControl{
 
 	public ICommand? InvalidInputCommand{
 		get{return _InvalidInputCommand;}
-		set{SetAndRaise(InvalidInputCommandProperty, ref _InvalidInputCommand, value);}
+		set{
+			var next = value ?? _DefaultInvalidInputCommand;
+			SetAndRaise(InvalidInputCommandProperty, ref _InvalidInputCommand, next);
+		}
 	}
 
 	public partial bool IsReadOnly{
@@ -93,6 +98,10 @@ public partial class TempusBox: ContentControl{
 	bool _SyncingUi = false;
 
 	partial void Init(){
+		_DefaultInvalidInputCommand = new DelegateCommand(_=>{
+			ApplyInvalidInputVisual();
+		});
+		_InvalidInputCommand = _DefaultInvalidInputCommand;
 		Render();
 		ApplyControlSize();
 		ApplyReadOnlyState();
@@ -133,6 +142,7 @@ public partial class TempusBox: ContentControl{
 			}
 			if(TryParseBySelectedFormat(o.Text ?? "", out var parsed)){
 				LastParseOk = true;
+				RestoreInputVisual();
 				Tempus = parsed;
 			}else{
 				LastParseOk = false;
@@ -205,7 +215,6 @@ public partial class TempusBox: ContentControl{
 			cbFormat.ItemsSource = FormatItems.Select(x=>x.FmtDisplayName).ToArray();
 			cbFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
 			FlyoutBase.ShowAttachedFlyout(btn);
-			cbFormat.IsDropDownOpen = true;
 		};
 		_BtnMenu = btn;
 		_ComboBoxFormat = cbFormat;
@@ -228,6 +237,7 @@ public partial class TempusBox: ContentControl{
 		_Calendar.SelectedDate = localDate;
 		_SyncingUi = false;
 		LastParseOk = true;
+		RestoreInputVisual();
 	}
 
 	void ApplyReadOnlyState(){
@@ -286,6 +296,38 @@ public partial class TempusBox: ContentControl{
 		}
 		if(InvalidInputCommand.CanExecute(text)){
 			InvalidInputCommand.Execute(text);
+		}
+	}
+
+	void ApplyInvalidInputVisual(){
+		if(_Input is null){
+			return;
+		}
+		_Input.BorderBrush = Brushes.Red;
+		_Input.Foreground = Brushes.Red;
+	}
+
+	void RestoreInputVisual(){
+		if(_Input is null){
+			return;
+		}
+		// 清除本地值，回退到主題/樣式原本外觀
+		_Input.ClearValue(TextBox.BorderBrushProperty);
+		_Input.ClearValue(TextBox.ForegroundProperty);
+	}
+
+	sealed class DelegateCommand(Action<object?> execute, Func<object?, bool>? canExecute = null): ICommand{
+		readonly Action<object?> _Execute = execute;
+		readonly Func<object?, bool>? _CanExecute = canExecute;
+		public event EventHandler? CanExecuteChanged;
+		public bool CanExecute(object? parameter){
+			return _CanExecute?.Invoke(parameter) ?? true;
+		}
+		public void Execute(object? parameter){
+			_Execute(parameter);
+		}
+		public void RaiseCanExecuteChanged(){
+			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }
