@@ -7,7 +7,16 @@ using Tsinswreng.CsCore;
 
 namespace Ngaq.Ui.Components.TempusBox;
 
-public partial class TempusFormatItem{
+public partial interface ITempusFormatItem{
+	[Doc(@$"該種格式的名稱 在下拉框中顯示")]
+	public str FmtDisplayName{get;set;}
+	public IValueConverter Converter{get;set;}
+}
+
+public partial class TempusFormatItem:ITempusFormatItem{
+	public str FmtDisplayName{get;set;} = "";
+	public IValueConverter Converter{get;set;} = null!;
+
 	[Doc(@$"顯示本地時區。
 	#Example([2026-04-07T23:16:07.344+08:00])
 	")]
@@ -25,8 +34,6 @@ public partial class TempusFormatItem{
 	")]
 	public static TempusFormatItem yy_MM_DD__HH_mm{get;set;}
 
-	[Doc(@$"該種格式的名稱 在下拉框中顯示")]
-	public str FmtDisplayName{get;set;} = "";
-	public IValueConverter Converter{get;set;} = null!;
+
 
 }

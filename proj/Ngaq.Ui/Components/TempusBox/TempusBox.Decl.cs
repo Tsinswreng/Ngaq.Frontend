@@ -25,7 +25,7 @@ public partial class TempusBox: ContentControl{
 	public partial bool IsReadOnly{get;set;}
 
 	/// 全部格式来源。下拉框只使用此列表。
-	public partial IList<TempusFormatItem> FormatItems{get;}
+	public partial IList<ITempusFormatItem> FormatItems{get;}
 
 	/// 当前选中的格式下标。
 	public partial i32 SelectedFormatIndex{get;set;}

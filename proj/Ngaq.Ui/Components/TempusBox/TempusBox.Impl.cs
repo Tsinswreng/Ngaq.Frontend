@@ -7,22 +7,15 @@ using Avalonia.Controls.Primitives;
 using System.Globalization;
 using System.Linq;
 using Ngaq.Core.Infra;
-using Ngaq.Ui.Infra;
-using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.CsCore;
-using Tsinswreng.AvlnTools.Tools;
 using Ngaq.Ui.Icons;
-using Avalonia.Data.Converters;
-
 
 public partial class TempusBox: ContentControl{
 	Tempus _Tempus = Tempus.Now();
 	bool _IsReadOnly = false;
 	i32 _SelectedFormatIndex = 0;
 	f64 _ControlHeight = 34;
-	readonly IList<TempusFormatItem> _FormatItems = [
+	readonly IList<ITempusFormatItem> _FormatItems = [
 		TempusFormatItem.Iso8601Full,
 		TempusFormatItem.UnixMs,
 	];
@@ -44,7 +37,7 @@ public partial class TempusBox: ContentControl{
 		}
 	}
 
-	public partial IList<TempusFormatItem> FormatItems{
+	public partial IList<ITempusFormatItem> FormatItems{
 		get{return _FormatItems;}
 	}
 
@@ -101,7 +94,6 @@ public partial class TempusBox: ContentControl{
 		_Input = new TextBox{};
 		var o = _Input;
 		o.MinWidth = 0;
-		o.VerticalAlignment = VAlign.Stretch;
 		o.VerticalContentAlignment = VAlign.Center;
 		o.Margin = new Thickness(0);
 		o.BorderThickness = new Thickness(1);
