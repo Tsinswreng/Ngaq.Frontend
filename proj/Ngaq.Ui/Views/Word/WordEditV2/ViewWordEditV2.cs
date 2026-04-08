@@ -13,6 +13,7 @@ using Avalonia.Styling;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui;
+using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
@@ -129,9 +130,9 @@ public partial class ViewWordEditV2: AppViewBase{
 		sp.A(MkIdSelectableRow(Todo.I18n("WordId"), CBE.Mk<Ctx>(x=>x.WordIdText, Mode: BindingMode.OneWay)));
 		sp.A(MkInputRow(Todo.I18n("Head"), CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay)));
 		sp.A(MkInputRow(Todo.I18n("Lang"), CBE.Mk<Ctx>(x=>x.Lang, Mode: BindingMode.TwoWay)));
-		sp.A(MkInputRow(Todo.I18n("StoredAt(ISO)"), CBE.Mk<Ctx>(x=>x.StoredAtIso, Mode: BindingMode.TwoWay)));
-		sp.A(MkInputRow(Todo.I18n("BizCreatedAt(ISO)"), CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay)));
-		sp.A(MkInputRow(Todo.I18n("BizUpdatedAt(ISO)"), CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay)));
+		sp.A(MkTempusRow(Todo.I18n("StoredAt"), CBE.Mk<Ctx>(x=>x.StoredAtTempus, Mode: BindingMode.TwoWay)));
+		sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<Ctx>(x=>x.BizCreatedAtTempus, Mode: BindingMode.TwoWay)));
+		sp.A(MkTempusRow(Todo.I18n("BizUpdatedAt"), CBE.Mk<Ctx>(x=>x.BizUpdatedAtTempus, Mode: BindingMode.TwoWay)));
 		sp.A(MkInputRow(Todo.I18n("DelAt(unix ms)"), CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay)));
 		return sv;
 	}
@@ -348,7 +349,7 @@ public partial class ViewWordEditV2: AppViewBase{
 				sp.Margin = new Thickness(10);
 				sp.Spacing = 8;
 				sp.A(MkComboRow(Todo.I18n("LearnResult"), _LearnResultOptions, CBE.Mk<VmWordLearnRow>(x=>x.LearnResultIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(Todo.I18n("BizCreatedAt(ISO)"), CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay)));
+				sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtTempus, Mode: BindingMode.TwoWay)));
 				sp.DataContext = Row;
 			});
 		});
@@ -463,7 +464,15 @@ Button MkBtnAddItem(str Label){
 		return o;
 	}
 
-	Control MkInputRow(str Label, IBinding Binding){
+		Control MkTempusRow(str Label, IBinding Binding){
+		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
+		sp.Children.Add(new TextBlock{Text = Label});
+		var tb = new TempusBox();
+		tb.Bind(TempusBox.TempusProperty, Binding);
+		sp.Children.Add(tb);
+		return sp;
+	}
+Control MkInputRow(str Label, IBinding Binding){
 		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
 		sp.Children.Add(new TextBlock{Text = Label});
 		var tb = new TextBox();
@@ -511,6 +520,7 @@ Button MkBtnAddItem(str Label){
 		return sp;
 	}
 }
+
 
 
 

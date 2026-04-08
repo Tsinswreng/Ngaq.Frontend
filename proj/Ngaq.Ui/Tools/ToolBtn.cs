@@ -7,9 +7,6 @@ public static class ToolBtn{
 	{
 
 		/// 裝飾潙語義ʸʹ按鈕(即伸展, 內容居中)
-
-		/// <param name="z"></param>
-		/// <returns></returns>
 		public T StretchCenter(){
 			var o = z;
 			o.HorizontalAlignment = HAlign.Stretch;
