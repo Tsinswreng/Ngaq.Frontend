@@ -9,6 +9,11 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
 
+public class InvalidCommandParam{
+	public TempusBox Self{get;set;} = null!;
+	public str Text{get;set;} = "";
+}
+
 public partial class TempusBox: ContentControl{
 	/// `Tempus` 的 Avalonia 可绑定属性。默认双向绑定。
 	public static readonly DirectProperty<TempusBox, Tempus> TempusProperty =
@@ -32,7 +37,9 @@ public partial class TempusBox: ContentControl{
 		);
 
 	/// 输入无法按当前格式解析时触发。
-	public static readonly DirectProperty<TempusBox, ICommand?> InvalidInputCommandProperty =
+		/// 输入无法按当前格式解析时触发。
+		/// `Execute(parameter)` 的参数类型为 `InvalidCommandParam`。
+		public static readonly DirectProperty<TempusBox, ICommand?> InvalidInputCommandProperty =
 		AvaloniaProperty.RegisterDirect<TempusBox, ICommand?>(
 			nameof(InvalidInputCommand),
 			o => o.InvalidInputCommand,

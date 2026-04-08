@@ -48,6 +48,15 @@ public partial class TempusBox: ContentControl{
 		}
 	}
 
+	/*
+	o.InvalidInputCommand = new RelayCommand<InvalidCommandParam?>((param)=>{
+			var badText = param?.Text ?? "";
+			var self = param?.Self ?? o;
+			ToolTip.SetTip(self, $"{Todo.I18n("Time format is invalid")}: {badText}");
+			self._Input.BorderBrush = Brushes.Goldenrod;
+			self._Input.Foreground = Brushes.Goldenrod;
+		});
+	*/
 	public ICommand? InvalidInputCommand{
 		get{return _InvalidInputCommand;}
 		set{
@@ -294,8 +303,12 @@ public partial class TempusBox: ContentControl{
 		if(InvalidInputCommand is null){
 			return;
 		}
-		if(InvalidInputCommand.CanExecute(text)){
-			InvalidInputCommand.Execute(text);
+		var param = new InvalidCommandParam{
+			Self = this,
+			Text = text,
+		};
+		if(InvalidInputCommand.CanExecute(param)){
+			InvalidInputCommand.Execute(param);
 		}
 	}
 

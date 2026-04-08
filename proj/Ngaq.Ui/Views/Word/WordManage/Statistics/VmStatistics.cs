@@ -77,7 +77,7 @@ public partial class VmStatistics: ViewModelBase{
 	public Tempus TimeStart{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}=new Tempus();
+	}=Tempus.FromDateTime(DateTime.Now.AddMonths(-2));
 
 	public Tempus TimeEnd{
 		get{return field;}

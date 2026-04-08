@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
+using CommunityToolkit.Mvvm.Input;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Components.TempusBox;
@@ -157,6 +158,7 @@ public partial class ViewStatistics: AppViewBase{
 			o._Button.HAlign(x=>x.Stretch);
 			o._Button.StretchCenter();
 			o.BtnContent = Todo.I18n("Count");
+			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.GetDataAsy(Ct));
 		});
 
@@ -172,9 +174,12 @@ public partial class ViewStatistics: AppViewBase{
 		o.Plot.DataBackground.Color = ScottPlot.Colors.Black;
 		o.Plot.Axes.Color(ScottPlot.Colors.White);
 		o.Plot.Grid.MajorLineColor = ScottPlot.Colors.Gray;
+		o.Plot.Grid.MajorLineWidth = 1;
 
 		o.Plot.Clear();
-		o.Plot.Add.Scatter(Ctx.Points, null);
+		var series = o.Plot.Add.Scatter(Ctx.Points, ScottPlot.Colors.Yellow);
+		series.LineWidth = 3;
+		series.MarkerSize = 0;
 
 		var tickPositions = new List<double>();
 		var tickLabels = new List<string>();
