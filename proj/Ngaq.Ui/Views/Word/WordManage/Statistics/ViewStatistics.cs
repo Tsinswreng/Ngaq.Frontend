@@ -2,14 +2,18 @@ namespace Ngaq.Ui.Views.Word.WordManage.Statistics;
 
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Ngaq.Ui.Converters;
+using Ngaq.Core.Infra;
+using Ngaq.Ui.Components.PageBar;
+using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using ScottPlot.Avalonia;
+using System.Linq.Expressions;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmStatistics;
@@ -45,63 +49,81 @@ public partial class ViewStatistics
 	}
 
 
-	void InitOptPanel(Panel P){
-		P.A(new TextBlock(), o=>{
-			o.Text = "StartTime:";//TODO i18n
+	Control MkLabeledRow(str Title, Control ValueCtrl){
+		var row = new AutoGrid(IsRow: false);
+		row.Grid.ColumnDefinitions.AddRange([
+			ColDef(3, GUT.Star),
+			ColDef(7, GUT.Star),
+		]);
+		row.A(new TextBlock(), o=>{
+			o.Text = Title;
+			o.VAlign(x=>x.Center);
+		})
+		.A(ValueCtrl);
+		return row.Grid;
+	}
+
+	Control MkTimeBoxRow(str Title, Expression<Func<Ctx, object?>> Expr){
+		var box = new TempusBox();
+		box.Bind(
+			TempusBox.TempusProperty,
+			CBE.Mk<Ctx>(Expr, Mode: BindingMode.TwoWay)
+		);
+		return MkLabeledRow(Title, box);
+	}
+
+	Control MkIntervalRow(){
+		var row = new AutoGrid(IsRow: false);
+		row.Grid.ColumnDefinitions.AddRange([
+			ColDef(3, GUT.Star),
+			ColDef(4, GUT.Star),
+			ColDef(4, GUT.Star),
+		]);
+		row.A(new TextBlock(), o=>{
+			o.Text = Todo.I18n("Interval");
+			o.VAlign(x=>x.Center);
 		})
 		.A(new TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText,x=>x.TimeStart, Converter: ConvtrTempus.Inst.Iso);
-		})
-		.A(new TextBlock(), o=>{
-			o.Text = "EndTime:";//TODO i18n
-		})
-		.A(new TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText,x=>x.TimeEnd, Converter: ConvtrTempus.Inst.Iso);
-		})
-		.A(new TextBlock(), o=>{
-			o.Text = "Interval:";//TODO i18n
-		})
-		.A(new TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText,x=>x.IntervalNoUnit);
-		})
-		.A(new TextBlock(), o=>{
-			o.Text = "Unit";//TODO i18n
+			o.CBind<Ctx>(o.PropText, x=>x.IntervalNoUnit);
 		})
 		.A(new ComboBox(), o=>{
-			o.Items.Add("Second");//TODO i18n
-			o.Items.Add("Minute");//TODO i18n
-			o.Items.Add("Hour");//TODO i18n
-			o.Items.Add("Day");//TODO i18n
-			o.Items.Add("Week");//TODO i18n
-			o.Items.Add("Month");//TODO i18n
-			o.Items.Add("Year");//TODO i18n
-			o.SelectedIndex = (i32)Ctx.ETimeUnit.Day;
-			o.CBind<Ctx>(o.PropSelectedIndex, x=>x.IntervalUnit);
-		})
+			o.ItemsSource = new str[]{
+				Todo.I18n("Second"),
+				Todo.I18n("Minute"),
+				Todo.I18n("Hour"),
+				Todo.I18n("Day"),
+				Todo.I18n("Week"),
+				Todo.I18n("Month"),
+				Todo.I18n("Year"),
+			};
+			o.CBind<Ctx>(o.PropSelectedIndex, x=>x.IntervalUnit, Mode: BindingMode.TwoWay);
+		});
+		return row.Grid;
+	}
 
-		.A(new TextBlock(), o=>{
-			o.Text = "Learn Result";//TODO i18n
-		})
-		.A(new TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText,x=>x.LearnResult);
-		})
-		.A(new TextBlock(), o=>{
-			o.Text = "PageIndex";
-		})
-		.A(new TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText,x=>x.PageIdx);
-		})
-		.A(new TextBlock(), o=>{
-			o.Text = "PageSize";
-		})
-		.A(new TextBox(), o=>{
-			o.CBind<Ctx>(o.PropText,x=>x.PageSize);
-		})
+	void InitOptPanel(Panel P){
+		P.A(MkTimeBoxRow(Todo.I18n("StartTime"), x=>x.TimeStart))
+		.A(MkTimeBoxRow(Todo.I18n("EndTime"), x=>x.TimeEnd))
+		.A(MkIntervalRow())
+		.A(MkLabeledRow(Todo.I18n("Learn Result"), new ComboBox{
+			Init = o=>{
+				o.ItemsSource = Ctx.LearnResultOptions;
+				o.CBind<Ctx>(o.PropSelectedIndex, x=>x.LearnResultIndex, Mode: BindingMode.TwoWay);
+			}
+		}))
 		.A(new OpBtn(), o=>{
 			o._Button.StretchCenter();
-			o.BtnContent = "Count";//TODO i18n
+			o.BtnContent = Todo.I18n("Count");
 			o.SetExe((Ct)=>Ctx?.GetDataAsy(Ct));
 		});
+	}
+
+	Control MkPageBar(){
+		var view = new ViewPageBar();
+		if(Ctx is not null){
+			view.Ctx = Ctx.PageBar;
+		}
+		return view;
 	}
 
 	void DrawPlot(AvaPlot o){
@@ -143,32 +165,39 @@ public partial class ViewStatistics
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Star),//cfgPanel
-				RowDef(1, GUT.Auto),//splitter
-				RowDef(1, GUT.Star),//graph
+				RowDef(7, GUT.Star),//結果
+				RowDef(5, GUT.Star),//查詢條件
 			]);
 		});
-		Root.A(new ScrollViewer(), Sv=>{
-			var grid = new AutoGrid(IsRow:true);
-			Sv.SetContent(grid.Grid, o=>{
+		var resultPanel = new AutoGrid(IsRow: true);
+		resultPanel.Grid.RowDefinitions.AddRange([
+				RowDef(1, GUT.Star),
+				RowDef(1, GUT.Auto),
+			]);
+		resultPanel
+			.A(new AvaPlot(), o=>{
+				// 圖表只監聽一次事件，資料更新後統一重繪。
+				Ctx?.GraphChanged += (s,e)=>{
+					DrawPlot(o);
+				};
+			})
+			.A(MkPageBar(), o=>{
+				o.HAlign(x=>x.Center);
+			});
+		Root.A(resultPanel.Grid)
+		.A(new ScrollViewer(), sv=>{
+			var grid = new AutoGrid(IsRow: true);
+			sv.SetContent(grid.Grid, o=>{
 				o.RowDefinitions.AddRange([
 					RowDef(1, GUT.Auto),
 				]);
 			});
 			grid
 			.A(new StackPanel(), Sp=>{
+				Sp.Margin = new Thickness(8);
+				Sp.Spacing = 8;
 				InitOptPanel(Sp);
 			});
-		})
-		.A(new GridSplitter(), o=>{
-			o.GrayBarWith3Dots();
-		})
-		.A(new AvaPlot(), o=>{
-			//o.MinHeight = 200;
-			//不雅。未慮況芝Ctx引用變
-			Ctx?.GraphChanged += (s,e)=>{
-				DrawPlot(o);
-			};
 		})
 		;
 		return NIL;
