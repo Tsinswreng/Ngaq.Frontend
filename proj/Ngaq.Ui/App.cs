@@ -3,8 +3,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
@@ -26,7 +28,6 @@ public partial class App :Application
 	,ILiveView
 #endif
 {
-
 	public static ILogger? Logger{get;protected set;} = null!;
 	public static T GetRSvc<T>()
 		where T : class
@@ -102,18 +103,27 @@ this.AttachDevTools();
 			,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
 		).AddTo(Styles);
 		//按鈕舒展
-		var Button = new Style(x=>
+		var ButtonSty = new Style(x=>
 			x.Is<Button>()
 		).Set(
 			TemplatedControl.HorizontalAlignmentProperty
 			, HAlign.Stretch
 		);
-		//.Set(
-		// 	ContentControl.HorizontalContentAlignmentProperty
-		// 	, HAlign.Center
-		// );
 
-		Styles.Add(Button);
+		Styles.Add(ButtonSty);
+
+		/*
+		我想把按鈕的邊框顏色綁定到和他自己的背景顏色一樣、並把這當成一種優先級最低的默認行爲
+
+如果 在 局部 顯示指定了按鈕的邊框 再不再使用默認行爲。
+		 */
+		TemplatedControl.BackgroundProperty.Changed.AddClassHandler<Button>((btn, e) => {
+			btn.SetValue(
+				TemplatedControl.BorderBrushProperty
+				,e.NewValue as IBrush
+				,BindingPriority.Style
+			);
+		});
 
 		return NIL;
 	}
