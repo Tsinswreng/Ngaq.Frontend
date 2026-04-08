@@ -67,7 +67,7 @@ public partial class MainView : UserControl {
 		return btn;
 	}
 
-	public partial nil ShowMsg(str Msg){
+	public partial nil ShowDialog(str Msg){
 		Dispatcher.UIThread.Post((Action)(()=>{
 			var SvcPopup = this.SvcPopup;
 			var msgBox = new MsgBox();
@@ -108,7 +108,7 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
-	public partial nil ShowMsg(str Msg, IList<Button> Operations){
+	public partial nil ShowDialog(str Msg, IList<Button> Operations){
 		Dispatcher.UIThread.Post((()=>{
 			var SvcPopup = this.SvcPopup;
 			var msgBox = new MsgBox();
@@ -175,14 +175,14 @@ public partial class MainView : UserControl {
 		if(Ex is IAppErr Err){
 			if(Err.Type is not null){
 				var Str = I18n.Get(Err.Type.ToI18nKey(), Err.Args??[]);
-				ShowMsg(Str);
+				ShowDialog(Str);
 				toLog += "\n"+Str+"\n"+str.Join("\n",Err.DebugArgs??[]);
 			}
 			toLog += "\n"+Err;
 		}
 		else if(Ex is Exception Exception){
 			toLog = Exception+"";
-			ShowMsg(Todo.I18n("Unknown Error"));
+			ShowDialog(Todo.I18n("Unknown Error"));
 		}
 		else{//非Exception 非 IAppErr
 			toLog??="";
@@ -190,7 +190,7 @@ public partial class MainView : UserControl {
 			var err = ItemsErr.Common.UnknownErr.ToErr();
 			if(err.Type is not null){
 				var Str = I18n.Get(err.Type.ToI18nKey(), err.Args??[]);
-				ShowMsg(Str);
+				ShowDialog(Str);
 			}
 		}
 		Logger?.LogError(toLog);

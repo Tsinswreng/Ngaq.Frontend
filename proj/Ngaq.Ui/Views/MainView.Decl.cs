@@ -26,16 +26,19 @@ public partial class MainView : UserControl {
 	public Grid Root{get{return AutoGrid.Grid;}}
 	public ViewNaviBase ViewNaviBase{get;} = new ();
 	public ILogger? Logger{get=>App.Logger;set{}}
+
+	[Doc(@$"前端拿到異常後處理之")]
+	public partial nil HandleErr(obj? Ex);
+
 	[Doc(@$"可關閉彈窗")]
-	public partial nil ShowMsg(str Msg);
+	public partial nil ShowDialog(str Msg);
 
 	[Doc(@$"可關閉彈窗、執行操作。
 	#Params([],[縱向生成按鈕列])
 	")]
-	public partial nil ShowMsg(str Msg, IList<Button> Operations);
+	public partial nil ShowDialog(str Msg, IList<Button> Operations);
 
-	[Doc(@$"前端拿到異常後處理之")]
-	public partial nil HandleErr(obj? Ex);
+	public partial nil ShowToast(str Msg, u64 DurationMs = 3000);
 
 
 }

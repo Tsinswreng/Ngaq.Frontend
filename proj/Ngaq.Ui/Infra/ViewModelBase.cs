@@ -70,7 +70,7 @@ public partial class ViewModelBase
 	public nil ShowMsg(str Msg){
 		LogInfo(nameof(ShowMsg)+": "+Msg);
 		Dispatcher.UIThread.Post(()=>{
-			MainView.Inst.ShowMsg(Msg);
+			MainView.Inst.ShowDialog(Msg);
 		});
 		return NIL;
 	}
@@ -79,7 +79,7 @@ public partial class ViewModelBase
 	public nil ShowMsg(str Msg, IList<Button> Operations){
 		LogInfo(nameof(ShowMsg)+": "+Msg);
 		Dispatcher.UIThread.Post(()=>{
-			MainView.Inst.ShowMsg(Msg, Operations);
+			MainView.Inst.ShowDialog(Msg, Operations);
 		});
 		return NIL;
 	}

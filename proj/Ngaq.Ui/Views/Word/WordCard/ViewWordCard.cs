@@ -32,7 +32,7 @@ public partial class ViewWordListCard
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
 
-					MainView.Inst.ShowMsg(Todo.I18n("No word selected"));
+					MainView.Inst.ShowDialog(Todo.I18n("No word selected"));
 					return;
 				}
                 var editView = new ViewWordEditV2();
