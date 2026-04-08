@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -76,9 +77,9 @@ public partial class App :Application
 		//只在windows下可用。在安卓中debug旹需手動註釋掉此。
 		//不能運行旹判斷平臺、緣無此符號則編譯不通
 		//增 && WINDOWS亦不效 緣Ngaq.Ui中無斯預處理ˉ符號
-		#if DEBUG && false
+		#if DEBUG
 			if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
-this.AttachDevTools();
+				DevToolsExtensions.AttachDevTools(this);
 			}
 		#endif
 

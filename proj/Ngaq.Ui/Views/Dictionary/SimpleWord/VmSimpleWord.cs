@@ -1,7 +1,11 @@
 namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 
 using System.Collections.ObjectModel;
+using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Infra;
+using Ngaq.Core.Shared.Audio;
 using Ngaq.Core.Shared.Dictionary.Models;
+using Ngaq.Core.Shared.Dictionary.Svc;
 using Ngaq.Core.Shared.Word.Models.DictionaryApi;
 using Ngaq.Ui.Infra;
 
@@ -30,6 +34,27 @@ int.	說得對
 """;
 		}
 		#endif
+	}
+
+	/// TTS服務：把詞頭轉成可播放音頻。
+	ISvcTts? SvcTts;
+	/// 音頻播放器：真正執行播放。
+	IAudioPlayer? AudioPlayer;
+	/// 字典服務：用於拿到當前源語言配置。
+	ISvcDictionary? SvcDictionary;
+	/// 前端用戶上下文：獲取 DB 上下文給字典服務。
+	IFrontendUserCtxMgr? FrontendUserCtxMgr;
+
+	public VmSimpleWord(
+		ISvcTts? SvcTts
+		,IAudioPlayer? AudioPlayer
+		,ISvcDictionary? SvcDictionary
+		,IFrontendUserCtxMgr? FrontendUserCtxMgr
+	){
+		this.SvcTts = SvcTts;
+		this.AudioPlayer = AudioPlayer;
+		this.SvcDictionary = SvcDictionary;
+		this.FrontendUserCtxMgr = FrontendUserCtxMgr;
 	}
 
 
@@ -61,6 +86,50 @@ int.	說得對
 
 	public nil GotNewSeg(DtoOnNewSeg NewSeg){
 		Description += NewSeg.NewSeg;
+		return NIL;
+	}
+
+	/// 播放詞頭讀音：先調用 ISvcTts 取音頻，再調用 IAudioPlayer 播放。
+	public async Task<nil> PlayHead(CT Ct){
+		if(str.IsNullOrWhiteSpace(Head)){
+			LogWarn($"{nameof(PlayHead)} skipped: Head is empty.");
+			return NIL;
+		}
+		if(AnyNull(SvcTts, AudioPlayer, SvcDictionary, FrontendUserCtxMgr)){
+			return NIL;
+		}
+
+		try{
+			// step 1: 取當前詞典源語言，作為 TTS 的語言參數。
+			var SrcLangPo = await SvcDictionary.GetCurSrcNormLang(
+				FrontendUserCtxMgr.GetDbUserCtx(),
+				Ct
+			);
+			var Lang = new NormLang{
+				Type = ELangIdentType.Bcp47,
+				Code = "en",
+			};
+			if(SrcLangPo is not null && !str.IsNullOrWhiteSpace(SrcLangPo.Code)){
+				Lang.Type = SrcLangPo.Type;
+				Lang.Code = SrcLangPo.Code;
+			}else{
+				LogWarn($"{nameof(PlayHead)}: CurSrcNormLang is null, fallback to en.");
+			}
+
+			// step 2: 把詞頭傳給 ISvcTts，獲取音頻數據。
+			var Audio = await SvcTts.GetAudio(
+				Head.Trim(),
+				Lang
+			);
+
+			// step 3: 調用播放器播放（按返回音頻類型自動處理）。
+			await AudioPlayer.Play(Audio, Ct);
+			LogInfo($"{nameof(PlayHead)} success. Head={Head.Trim()}, Lang={Lang.Code}");
+		}catch(Exception Ex){
+			LogError($"{nameof(PlayHead)} failed. Head={Head.Trim()}");
+			HandleErr(Ex);
+		}
+
 		return NIL;
 	}
 

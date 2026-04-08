@@ -5,9 +5,10 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Ui;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
-using Ngaq.Ui.Views.Word.Pronunciation;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSimpleWord;
@@ -53,9 +54,7 @@ public partial class ViewSimpleWord
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.5;
 			o.CBind<Ctx>(o.PropText,x=>x.Head);
 		})
-		.A(PronunciationList(), o=>{
-
-		})
+		.A(PronunciationList())
 		.A(Txt(), o=>{
 			o.CBind<Ctx>(o.PropText,x=>x.Description);
 		})
@@ -63,21 +62,43 @@ public partial class ViewSimpleWord
 		return NIL;
 	}
 
-
+	/// 讀音列表：僅在解析後有 Pronunciations 時顯示。每行左側方形播放鍵+右側文本。
 	Control PronunciationList(){
 		var R = new ItemsControl();
 		R.Bind(
 			R.PropItemsSource, CBE.Mk<Ctx>(x=>x.Pronunciations)
 		);
 
-
 		R.SetItemTemplate<Pronunciation>((p,b)=>{
-			var R = new ViewPronunciation();
-			R.Ctx!.FromPronunciation(p);
-			return R;
+			var Row = new AutoGrid(IsRow: false);
+			Row.ColDefs.AddRange([
+				ColDef(1, GUT.Auto),
+				ColDef(1, GUT.Auto),
+			]);
+			Row.A(new OpBtn(), o=>{
+				var Icon = Svgs.VolHigh().ToIcon();
+				Icon.Height = UiCfg.Inst.BaseFontSize*0.8;
+				Icon.Width = UiCfg.Inst.BaseFontSize*0.8;
+				o.BtnContent = Icon;
+				// 按鈕保持方形尺寸，且靠左不拉伸。
+				o._Button.Width = UiCfg.Inst.BaseFontSize*1.6;
+				o._Button.Height = UiCfg.Inst.BaseFontSize*1.6;
+				o._Button.HorizontalAlignment = HAlign.Left;
+				o.HorizontalAlignment = HAlign.Left;
+				o.SetExe(Ct=>Ctx?.PlayHead(Ct));
+			})
+			.A(Txt(), o=>{
+				o.Text = p.Text;
+				o.VerticalAlignment = VAlign.Center;
+				o.Margin = new Avalonia.Thickness(UiCfg.Inst.BaseFontSize*0.2, 0, 0, 0);
+			});
+			return Row.Grid;
 		});
 		R.SetItemsPanel(()=>{
-			return new StackPanel{Orientation = Orientation.Horizontal};
+			return new StackPanel{
+				Orientation = Orientation.Vertical,
+				HorizontalAlignment = HAlign.Left,
+			};
 		});
 
 		return R;
