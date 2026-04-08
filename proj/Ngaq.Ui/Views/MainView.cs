@@ -2,6 +2,8 @@ namespace Ngaq.Ui.Views;
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
@@ -30,6 +32,11 @@ public class ViewNaviBase:UserControl{
 
 
 public partial class MainView : UserControl {
+	/// 當前顯示中的 Toast 容器。每次新顯示前會先關閉舊實例，避免重疊。
+	protected Border? _ActiveToast = null;
+	/// 用于取消舊 Toast 的自動關閉任務。
+	protected CancellationTokenSource? _ToastCts = null;
+
 	public partial Button MkBtnToView(
 		Control Target
 		,str? Title = null
@@ -170,6 +177,106 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
+	/// 在主界面底部顯示可手動關閉的提示條；到期自動關閉。
+	public partial nil ShowToast(str Msg, u64 DurationMs = 3000){
+		Dispatcher.UIThread.Post((Action)(()=>{
+			CloseActiveToast();
+			var Toast = MkToastControl(Msg);
+			_ActiveToast = Toast;
+			Root.Children.Add(Toast);
+			ScheduleCloseToast(DurationMs, Toast);
+		}));
+		return NIL;
+	}
+
+	/// 構造 Toast 控件。右上角提供關閉按鈕，內容區展示文案。
+	protected Border MkToastControl(str Msg){
+		var FontSize = UiCfg.Inst.BaseFontSize;
+		var Container = new Grid{
+			HorizontalAlignment = HAlign.Stretch,
+			VerticalAlignment = VAlign.Bottom,
+			Margin = new Avalonia.Thickness(FontSize*0.8, 0, FontSize*0.8, FontSize*0.8),
+		};
+		var ToastBody = new Border{
+			Background = new SolidColorBrush(new Color(255, 40, 40, 40)),
+			BorderBrush = Brushes.White,
+			BorderThickness = new Avalonia.Thickness(1),
+			Padding = new Avalonia.Thickness(FontSize*0.55, FontSize*0.45, FontSize*0.45, FontSize*0.45),
+			HorizontalAlignment = HAlign.Stretch,
+			VerticalAlignment = VAlign.Bottom,
+		};
+		var Layout = new Grid{
+			ColumnDefinitions = new ColumnDefinitions("*,Auto"),
+			HorizontalAlignment = HAlign.Stretch,
+			VerticalAlignment = VAlign.Top,
+		};
+		var Text = new SelectableTextBlock{
+			Text = Msg,
+			TextWrapping = TextWrapping.Wrap,
+			HorizontalAlignment = HAlign.Stretch,
+			VerticalAlignment = VAlign.Center,
+			FontSize = FontSize,
+			Foreground = UiCfg.Inst.ForegroundColor,
+			Margin = new Avalonia.Thickness(0, 0, FontSize*0.5, 0),
+		};
+		Grid.SetColumn(Text, 0);
+		var CloseBtn = new Button{
+			Background = Brushes.Transparent,
+			HorizontalAlignment = HAlign.Right,
+			VerticalAlignment = VAlign.Top,
+			Padding = new Avalonia.Thickness(0),
+		};
+		CloseBtn.SetContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
+			o.Fill = Brushes.Red;
+		});
+		CloseBtn.Click += (s,e)=>{
+			CloseActiveToast();
+		};
+		Grid.SetColumn(CloseBtn, 1);
+		Layout.Children.Add(Text);
+		Layout.Children.Add(CloseBtn);
+		ToastBody.Child = Layout;
+		Container.Children.Add(ToastBody);
+		return new Border{
+			Child = Container,
+			HorizontalAlignment = HAlign.Stretch,
+			VerticalAlignment = VAlign.Bottom,
+		};
+	}
+
+	/// 啟動自動關閉任務。若中途出現新 Toast，舊任務會被取消。
+	protected void ScheduleCloseToast(u64 DurationMs, Border CurrentToast){
+		_ToastCts?.Cancel();
+		_ToastCts?.Dispose();
+		_ToastCts = new CancellationTokenSource();
+		var Ct = _ToastCts.Token;
+		_ = Task.Run(async ()=>{
+			try{
+				await Task.Delay((i32)Math.Max(1UL, DurationMs), Ct);
+				if(Ct.IsCancellationRequested){
+					return;
+				}
+				Dispatcher.UIThread.Post((Action)(()=>{
+					if(ReferenceEquals(_ActiveToast, CurrentToast)){
+						CloseActiveToast();
+					}
+				}));
+			}catch(TaskCanceledException){
+			}
+		});
+	}
+
+	/// 關閉當前 Toast 並清理其計時任務。
+	protected void CloseActiveToast(){
+		_ToastCts?.Cancel();
+		_ToastCts?.Dispose();
+		_ToastCts = null;
+		if(_ActiveToast is not null && Root.Children.Contains(_ActiveToast)){
+			Root.Children.Remove(_ActiveToast);
+		}
+		_ActiveToast = null;
+	}
+
 	public partial nil HandleErr(obj? Ex){
 		str? toLog = null;
 		if(Ex is IAppErr Err){
@@ -231,6 +338,7 @@ public partial class MainView : UserControl {
 		// var Home = new ViewWordEditV2();
 
 		Navi.GoTo(Home);
+
 	}
 }
 

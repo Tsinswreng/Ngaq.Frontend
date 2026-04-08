@@ -38,6 +38,8 @@ public partial class MainView : UserControl {
 	")]
 	public partial nil ShowDialog(str Msg, IList<Button> Operations);
 
+
+	[Doc(@$"")]
 	public partial nil ShowToast(str Msg, u64 DurationMs = 3000);
 
 
