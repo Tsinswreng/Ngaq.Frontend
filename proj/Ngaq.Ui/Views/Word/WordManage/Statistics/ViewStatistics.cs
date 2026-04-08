@@ -71,6 +71,7 @@ public partial class ViewStatistics
 		);
 		o.FormatItems.Add(TempusFormatItem.yy_MM_DD);
 		o.FormatItems.Add(TempusFormatItem.yy_MM_DD__HH_mm);
+		o.SelectedFormat = TempusFormatItem.yy_MM_DD__HH_mm;
 		return MkLabeledRow(Title, o);
 	}
 

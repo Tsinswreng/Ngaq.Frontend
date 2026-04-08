@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Input;
 using Ngaq.Core.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Ui.Icons;
@@ -15,7 +16,9 @@ public partial class TempusBox: ContentControl{
 	bool _IsReadOnly = false;
 	i32 _SelectedFormatIndex = 0;
 	f64 _ControlHeight = 34;
-	
+ 	ITempusFormatItem _SelectedFormat = TempusFormatItem.Iso8601Full;
+ 	ICommand? _InvalidInputCommand = null;
+
 	readonly IList<ITempusFormatItem> _FormatItems = [
 		TempusFormatItem.Iso8601Full,
 		TempusFormatItem.UnixMs,
@@ -28,6 +31,24 @@ public partial class TempusBox: ContentControl{
 			SetAndRaise(TempusProperty, ref _Tempus, value);
 			SyncUiFromTempus();
 		}
+	}
+
+	public ITempusFormatItem SelectedFormat{
+		get{return _SelectedFormat;}
+		set{
+			var next = value ?? (FormatItems.Count > 0 ? FormatItems[0] : TempusFormatItem.Iso8601Full);
+			SetAndRaise(SelectedFormatProperty, ref _SelectedFormat, next);
+			var idx = FormatItems.IndexOf(next);
+			if(idx >= 0){
+				_SelectedFormatIndex = idx;
+			}
+			SyncUiFromTempus();
+		}
+	}
+
+	public ICommand? InvalidInputCommand{
+		get{return _InvalidInputCommand;}
+		set{SetAndRaise(InvalidInputCommandProperty, ref _InvalidInputCommand, value);}
 	}
 
 	public partial bool IsReadOnly{
@@ -48,6 +69,9 @@ public partial class TempusBox: ContentControl{
 			var max = FormatItems.Count - 1;
 			var next = max < 0 ? 0 : Math.Clamp(value, 0, max);
 			_SelectedFormatIndex = next;
+			if(FormatItems.Count > 0){
+				SetAndRaise(SelectedFormatProperty, ref _SelectedFormat, FormatItems[next]);
+			}
 			SyncUiFromTempus();
 		}
 	}
@@ -77,6 +101,9 @@ public partial class TempusBox: ContentControl{
 
 	public partial void RefreshFormatOptions(){
 		_SelectedFormatIndex = Math.Clamp(_SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
+		if(FormatItems.Count > 0){
+			SetAndRaise(SelectedFormatProperty, ref _SelectedFormat, FormatItems[_SelectedFormatIndex]);
+		}
 		SyncUiFromTempus();
 	}
 
@@ -109,6 +136,7 @@ public partial class TempusBox: ContentControl{
 				Tempus = parsed;
 			}else{
 				LastParseOk = false;
+				TriggerInvalidInputCommand(o.Text ?? "");
 			}
 		};
 
@@ -230,10 +258,7 @@ public partial class TempusBox: ContentControl{
 	}
 
 	str FormatBySelectedFormat(Tempus Value){
-		if(FormatItems.Count == 0){
-			return Value.Value.ToString(CultureInfo.InvariantCulture);
-		}
-		var item = FormatItems[Math.Clamp(SelectedFormatIndex, 0, FormatItems.Count-1)];
+		var item = SelectedFormat;
 		var converted = item.Converter.Convert(Value, typeof(str), null, CultureInfo.InvariantCulture);
 		if(converted is str s){
 			return s;
@@ -246,15 +271,21 @@ public partial class TempusBox: ContentControl{
 		if(string.IsNullOrWhiteSpace(Text)){
 			return false;
 		}
-		if(FormatItems.Count == 0){
-			return false;
-		}
-		var item = FormatItems[Math.Clamp(SelectedFormatIndex, 0, FormatItems.Count-1)];
+		var item = SelectedFormat;
 		var converted = item.Converter.ConvertBack(Text, typeof(Tempus), null, CultureInfo.InvariantCulture);
 		if(converted is Tempus t){
 			Result = t;
 			return true;
 		}
 		return false;
+	}
+
+	void TriggerInvalidInputCommand(str text){
+		if(InvalidInputCommand is null){
+			return;
+		}
+		if(InvalidInputCommand.CanExecute(text)){
+			InvalidInputCommand.Execute(text);
+		}
 	}
 }
