@@ -291,14 +291,14 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 注意: 此函數本身不落庫；最終保存由 ViewWordEditV2 的 Save 按鈕執行。
 	public async Task<nil> ToWordEdit(CT Ct){
 		if(AnyNull(SvcWordV2, FrontendUserCtxMgr, LastReqLlmDict, LastRespLlmDict)){
-			ShowDialog(Todo.I18n("請先完成一次詞典查詢，再嘗試保存到詞庫"));
+			ShowToast(Todo.I18n("請先完成一次詞典查詢，再嘗試保存到詞庫"));
 			return NIL;
 		}
 		var Req = LastReqLlmDict!;
 		var Resp = LastRespLlmDict!;
 		try{
 			// step 1: 先調用 ISvcWordV2 的轉換函數（按需求固定順序）。
-			var JnWord = await SvcWordV2.LlmDictWordToJnWord(
+			var JnWord = await SvcWordV2.LlmDictWordToJnWordWithLearn(
 				FrontendUserCtxMgr.GetDbUserCtx(),
 				Req, Resp, Ct
 			);
@@ -306,30 +306,30 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			GoToWordEditPage(JnWord);
 		}catch(Exception Ex){
 			// step 3: 捕獲特定語言映射異常，提供兩個選項。
-			if(IsNormLangMappingErr(Ex)){
-				var BtnGoCfg = new Button();
-				BtnGoCfg.SetContent(Todo.I18n("轉到語言配置頁"));
-				BtnGoCfg.Click += (s,e)=>{
-					_ = OpenNormLangMappingPage();
-				};
-				var BtnSkipCfg = new Button();
-				BtnSkipCfg.SetContent(Todo.I18n("暫不配置，直接轉到編輯頁"));
-				BtnSkipCfg.Click += (s,e)=>{
-					_ = GoToWordEditPage(BuildFallbackJnWord(Req, Resp));
-				};
-				ShowDialog(
-					Todo.I18n(
-						"未設定轉換語言映射。\n"+
-						"請選擇後續操作："
-					),
-					[
-						BtnGoCfg,
-						BtnSkipCfg,
-					]
-				);
-				return NIL;
+			if(!IsNormLangMappingErr(Ex)){
+				HandleErr(Ex);
 			}
-			HandleErr(Ex);
+			var BtnGoCfg = new Button();
+			BtnGoCfg.SetContent(Todo.I18n("轉到語言配置頁"));
+			BtnGoCfg.Click += (s,e)=>{
+				_ = OpenNormLangMappingPage();
+			};
+			var BtnSkipCfg = new Button();
+			BtnSkipCfg.SetContent(Todo.I18n("暫不配置，直接轉到編輯頁"));
+			BtnSkipCfg.Click += (s,e)=>{
+				_ = GoToWordEditPage(BuildFallbackJnWord(Req, Resp));
+			};
+			ShowDialog(
+				Todo.I18n(
+					"未設定轉換語言映射。\n"+
+					"請選擇後續操作："
+				),
+				[
+					BtnGoCfg,
+					BtnSkipCfg,
+				]
+			);
+			return NIL;
 		}
 		return NIL;
 	}

@@ -42,6 +42,9 @@ public partial class ViewModelBase
 	}
 
 	[Impl(typeof(I_ViewNavi))]
+	[Obsolete(@$"用 {nameof(AppViewBase.ViewNavi)}。
+	不應該在ViewModel層做視圖跳轉
+	")]
 	public IViewNavi? ViewNavi{get;set;}
 	//跳轉傳參
 	public ITypedObj? Arg{get;set;}
