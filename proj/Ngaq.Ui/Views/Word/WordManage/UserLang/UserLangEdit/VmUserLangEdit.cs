@@ -154,7 +154,7 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Saved"));
+			ShowDialog(Todo.I18n("Saved"));
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));

@@ -34,7 +34,9 @@ public partial class MainView : UserControl {
 	public partial nil ShowDialog(str Msg);
 
 	[Doc(@$"可關閉彈窗、執行操作。
+	不要在ViewModel層調用此函數、因爲這違反Mvvm規範。
 	#Params([],[縱向生成按鈕列])
+	
 	")]
 	public partial nil ShowDialog(str Msg, IList<Button> Operations);
 

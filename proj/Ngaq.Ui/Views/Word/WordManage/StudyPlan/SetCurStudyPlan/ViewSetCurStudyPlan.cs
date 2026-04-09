@@ -139,7 +139,7 @@ public partial class ViewSetCurStudyPlan
 			o.Click += (s,e)=>{
 				var po = Ctx?.CurPoStudyPlan;
 				if(po is null){
-					Ctx?.ShowMsg(Todo.I18n("當前無可編輯StudyPlan"));
+					Ctx?.ShowDialog(Todo.I18n("當前無可編輯StudyPlan"));
 					return;
 				}
 				var view = new ViewStudyPlanEdit();

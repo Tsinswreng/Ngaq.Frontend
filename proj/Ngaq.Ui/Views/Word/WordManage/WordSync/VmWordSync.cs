@@ -94,7 +94,7 @@ public partial class VmWordSync: ViewModelBase{
 	public async Task<nil> ExportAsy(CT Ct=default){
 		if(File.Exists(PathExport)){
 			//TODO i18n
-			this.ShowMsg("File already exists. We won't overwrite it. Please change the path.");
+			this.ShowDialog("File already exists. We won't overwrite it. Please change the path.");
 			return NIL;
 		}
 		await Task.Run(async()=>{
@@ -106,7 +106,7 @@ public partial class VmWordSync: ViewModelBase{
 			ToolFile.EnsureFile(PathExport);
 			if(!File.Exists(PathExport)){
 				Dispatcher.UIThread.Post(()=>{
-					this.ShowMsg("Invalid Path.");//TODO i18n
+					this.ShowDialog("Invalid Path.");//TODO i18n
 				});
 				return;
 			}

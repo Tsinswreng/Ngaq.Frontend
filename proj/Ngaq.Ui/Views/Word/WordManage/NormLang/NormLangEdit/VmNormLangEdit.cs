@@ -125,7 +125,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Saved"));
+			ShowDialog(Todo.I18n("Saved"));
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -150,7 +150,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Deleted"));
+			ShowDialog(Todo.I18n("Deleted"));
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));

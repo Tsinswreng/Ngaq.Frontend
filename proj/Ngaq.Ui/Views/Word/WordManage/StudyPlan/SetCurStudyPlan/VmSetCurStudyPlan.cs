@@ -117,7 +117,7 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 		}
 		try{
 			await SvcStudyPlan.RestoreBuiltinStudyPlan(UserCtxMgr.GetDbUserCtx(), Ct);
-			ShowMsg(Todo.I18n("RestoreBuiltinDone"));
+			ShowDialog(Todo.I18n("RestoreBuiltinDone"));
 			return await LoadCurStudyPlan(Ct);
 		}catch(Exception e){
 			HandleErr(e);

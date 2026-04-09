@@ -57,25 +57,25 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 
 	public nil Save(){
 		if(Target is null || Owner is null){
-			ShowMsg(Todo.I18n("Editor not ready"));
+			ShowDialog(Todo.I18n("Editor not ready"));
 			return NIL;
 		}
 		Target.OperationIndex = Owner.ToOperationRawIndex(SelectedOperationIndex);
 		Target.ValueTypeIndex = Owner.ToValueTypeRawIndex(SelectedValueTypeIndex);
 		Target.ValuesText = ValuesText;
 		Owner.CommitItemsDraft();
-		ShowMsg(Todo.I18n($"Saved Filter Item #{ItemIdx}"));
+		ShowDialog(Todo.I18n($"Saved Filter Item #{ItemIdx}"));
 		ViewNavi?.Back();
 		return NIL;
 	}
 
 	public nil Delete(){
 		if(Target is null || Owner is null){
-			ShowMsg(Todo.I18n("Editor not ready"));
+			ShowDialog(Todo.I18n("Editor not ready"));
 			return NIL;
 		}
 		Owner.RemoveItem(Target);
-		ShowMsg(Todo.I18n($"Deleted Filter Item #{ItemIdx}"));
+		ShowDialog(Todo.I18n($"Deleted Filter Item #{ItemIdx}"));
 		ViewNavi?.Back();
 		return NIL;
 	}

@@ -314,7 +314,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(err);
+			ShowDialog(err);
 			return NIL;
 		}
 		LastError = "";
@@ -337,7 +337,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(err);
+			ShowDialog(err);
 			return false;
 		}
 
@@ -345,7 +345,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		OnPropertyChanged(nameof(HasError));
 		BoPreFilter = bo;
 		RefreshTextPreview();
-		ShowMsg(Todo.I18n("PreFilter draft updated"));
+		ShowDialog(Todo.I18n("PreFilter draft updated"));
 		return true;
 	}
 
@@ -356,7 +356,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(err);
+			ShowDialog(err);
 			return NIL;
 		}
 
@@ -374,7 +374,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Saved"));
+			ShowDialog(Todo.I18n("Saved"));
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -395,7 +395,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = Todo.I18n("");
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Deleted"));
+			ShowDialog(Todo.I18n("Deleted"));
 		}catch(Exception e){
 			HandleErr(e);
 		}

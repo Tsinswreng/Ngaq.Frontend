@@ -160,7 +160,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 
 	public nil Save(){
 		if(Target is null || Owner is null){
-			ShowMsg(Todo.I18n("Editor not ready"));
+			ShowDialog(Todo.I18n("Editor not ready"));
 			return NIL;
 		}
 
@@ -178,7 +178,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 
 		Owner.RefreshFieldsFilterCards();
 		var kind = IsCore ? Todo.I18n("Core") : Todo.I18n("Prop");
-		ShowMsg(Todo.I18n($"Saved {kind} Filter #{RowIdx}"));
+		ShowDialog(Todo.I18n($"Saved {kind} Filter #{RowIdx}"));
 		ViewNavi?.Back();
 		return NIL;
 	}

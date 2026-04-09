@@ -134,7 +134,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			PoNormLangToUserLang = po;
 			IsCreateMode = false;
 			SyncFromPo();
-			ShowMsg(Todo.I18n("Saved"));
+			ShowDialog(Todo.I18n("Saved"));
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -155,7 +155,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			};
 			IsCreateMode = true;
 			SyncFromPo();
-			ShowMsg(Todo.I18n("Deleted"));
+			ShowDialog(Todo.I18n("Deleted"));
 		}catch(Exception e){
 			HandleErr(e);
 		}

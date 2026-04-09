@@ -306,11 +306,11 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		if(!TryApplyFormToDraft(out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(err);
+			ShowDialog(err);
 			return NIL;
 		}
 		if(Draft is null){
-			ShowMsg(Todo.I18n("No draft"));
+			ShowDialog(Todo.I18n("No draft"));
 			return NIL;
 		}
 		try{
@@ -320,7 +320,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			IsDirty = false;
-			ShowMsg(Todo.I18n("Saved"));
+			ShowDialog(Todo.I18n("Saved"));
 		}catch(Exception ex){
 			LastError = ex.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -333,7 +333,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		if(Draft is null){
-			ShowMsg(Todo.I18n("No draft"));
+			ShowDialog(Todo.I18n("No draft"));
 			return NIL;
 		}
 		try{
@@ -345,7 +345,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			IsDirty = false;
-			ShowMsg(Todo.I18n("Deleted"));
+			ShowDialog(Todo.I18n("Deleted"));
 			ViewNavi?.Back();
 		}catch(Exception ex){
 			LastError = ex.Message;

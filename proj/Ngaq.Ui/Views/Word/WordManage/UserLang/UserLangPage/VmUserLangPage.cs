@@ -189,7 +189,7 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 		}
 		try{
 			await SvcUserLang.AddAllUnregisteredUserLangs(UserCtxMgr.GetDbUserCtx(), Ct);
-			ShowMsg(Todo.I18n("Added all unregistered user langs"));
+			ShowDialog(Todo.I18n("Added all unregistered user langs"));
 			return await InitSearch(Ct);
 		}catch(Exception e){
 			HandleErr(e);

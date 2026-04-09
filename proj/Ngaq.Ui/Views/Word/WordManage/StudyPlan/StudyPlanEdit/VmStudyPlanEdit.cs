@@ -157,7 +157,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			IsCreateMode = false;
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Saved"));
+			ShowDialog(Todo.I18n("Saved"));
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -181,7 +181,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Deleted"));
+			ShowDialog(Todo.I18n("Deleted"));
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));

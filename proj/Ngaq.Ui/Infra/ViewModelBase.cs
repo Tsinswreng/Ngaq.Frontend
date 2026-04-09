@@ -67,8 +67,8 @@ public partial class ViewModelBase
 	}
 
 	/// 彈窗ʹ抽象。調用方宜無需知其內ʹ叶
-	public nil ShowMsg(str Msg){
-		LogInfo(nameof(ShowMsg)+": "+Msg);
+	public nil ShowDialog(str Msg){
+		LogInfo(nameof(ShowDialog)+": "+Msg);
 		Dispatcher.UIThread.Post(()=>{
 			MainView.Inst.ShowDialog(Msg);
 		});
@@ -76,13 +76,18 @@ public partial class ViewModelBase
 	}
 
 	/// 彈窗ʹ抽象(帶操作按鈕)。調用方傳入操作列表即可、彈窗內負責綁定按鈕並執行。
-	public nil ShowMsg(str Msg, IList<Button> Operations){
-		LogInfo(nameof(ShowMsg)+": "+Msg);
+	public nil ShowDialog(str Msg, IList<Button> Operations){
+		LogInfo(nameof(ShowDialog)+": "+Msg);
 		Dispatcher.UIThread.Post(()=>{
 			MainView.Inst.ShowDialog(Msg, Operations);
 		});
 		return NIL;
 	}
+
+	public nil ShowToast(str Msg, u64 DurationMs = 3000){
+		return MainView.Inst.ShowToast(Msg, DurationMs);
+	}
+
 	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
 	public nil HandleErr(obj? Ex){
 		return MainView.Inst.HandleErr(Ex);

@@ -55,7 +55,7 @@ public class VmWeightArgPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		if(!TryValidateJson(out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(err);
+			ShowDialog(err);
 			return NIL;
 		}
 		LastError = "";

@@ -45,7 +45,7 @@ public partial class ViewWordEdit
 			o.Click += (s,e)=>{
 				var vj = new ViewEditJsonWord();
 				if(AnyNull(vj.Ctx, Ctx?.JnWord)){
-					Ctx?.ShowMsg(Todo.I18n("No Word or Ctx"));
+					Ctx?.ShowDialog(Todo.I18n("No Word or Ctx"));
 					return;
 				}
 				vj.Ctx.FromJnWord(Ctx.JnWord);
@@ -58,7 +58,7 @@ public partial class ViewWordEdit
 			o.Click += (s,e)=>{
 				var v2 = new ViewWordEditV2();
 				if(AnyNull(v2.Ctx, Ctx?.JnWord)){
-					Ctx?.ShowMsg("No Word or Ctx");
+					Ctx?.ShowDialog("No Word or Ctx");
 					return;
 				}
 				v2.Ctx.FromJnWord(Ctx.JnWord);

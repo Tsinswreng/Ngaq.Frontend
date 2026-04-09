@@ -134,7 +134,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Saved"));
+			ShowDialog(Todo.I18n("Saved"));
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -158,7 +158,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowMsg(Todo.I18n("Deleted"));
+			ShowDialog(Todo.I18n("Deleted"));
 		}catch(Exception e){
 			HandleErr(e);
 		}

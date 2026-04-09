@@ -210,7 +210,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 用編輯後的原始文本重新解析詞典結果，不重調 LLM。
 	public Task<nil> ReparseFromRawOutput(str RawOutput, CT Ct){
 		if(str.IsNullOrWhiteSpace(RawOutput)){
-			ShowMsg(Todo.I18n("原始輸出為空，無法解析"));
+			ShowDialog(Todo.I18n("原始輸出為空，無法解析"));
 			return Task.FromResult<nil>(NIL);
 		}
 		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
@@ -291,7 +291,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 注意: 此函數本身不落庫；最終保存由 ViewWordEditV2 的 Save 按鈕執行。
 	public async Task<nil> ToWordEdit(CT Ct){
 		if(AnyNull(SvcWordV2, FrontendUserCtxMgr, LastReqLlmDict, LastRespLlmDict)){
-			ShowMsg(Todo.I18n("請先完成一次詞典查詢，再嘗試保存到詞庫"));
+			ShowDialog(Todo.I18n("請先完成一次詞典查詢，再嘗試保存到詞庫"));
 			return NIL;
 		}
 		var Req = LastReqLlmDict!;
@@ -317,7 +317,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				BtnSkipCfg.Click += (s,e)=>{
 					_ = GoToWordEditPage(BuildFallbackJnWord(Req, Resp));
 				};
-				ShowMsg(
+				ShowDialog(
 					Todo.I18n(
 						"未設定轉換語言映射。\n"+
 						"請選擇後續操作："
@@ -360,7 +360,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	obj? GoToWordEditPage(JnWord JnWord){
 		var View = new ViewWordEditV2();
 		if(View.Ctx is null){
-			ShowMsg(Todo.I18n("Word editor context is null"));
+			ShowDialog(Todo.I18n("Word editor context is null"));
 			return NIL;
 		}
 		View.Ctx.FromJnWord(JnWord);
