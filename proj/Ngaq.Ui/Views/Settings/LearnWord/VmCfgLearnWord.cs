@@ -39,6 +39,7 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 			return;
 		}
 		EnableRandomBackground = Cfg.Get(ItemsClientCfg.Word.EnableRandomBackground);
+		EnableAutoPronounce = Cfg.Get(ItemsClientCfg.Word.EnableAutoPronounce);
 		var langs = Cfg.Get(ItemsClientCfg.Word.FilterLanguage) as IList<obj>;
 		LanguageFilterExpr = str.Join("\n", langs??[]);
 
@@ -47,6 +48,11 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 	}
 
 	public bool EnableRandomBackground{
+		get;
+		set{SetProperty(ref field, value);}
+	} = false;
+
+	public bool EnableAutoPronounce{
 		get;
 		set{SetProperty(ref field, value);}
 	} = false;
@@ -69,6 +75,7 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 		await Task.Run(async()=>{
 			Cfg.Set(ItemsClientCfg.Word.FilterLanguage, langs);
 			Cfg.Set(ItemsClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
+			Cfg.Set(ItemsClientCfg.Word.EnableAutoPronounce, EnableAutoPronounce);
 			await Cfg.Save(Ct);
 		});
 		return NIL;

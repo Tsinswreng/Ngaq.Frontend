@@ -81,7 +81,9 @@ public partial class VmLearnWords
 	}
 
 	nil _Init(){
-		return _InitLearnMgr();
+		_InitLearnMgr();
+		_InitAutoPronounceListener();
+		return NIL;
 	}
 	nil _InitLearnMgr(){
 		if(AnyNull(MgrLearn)){return NIL;}
@@ -96,6 +98,29 @@ public partial class VmLearnWords
 				}
 			});
 		};
+		return NIL;
+	}
+
+	/// 單詞卡片點擊事件（供業務監聽，避免把邏輯寫死在按鈕回調中）。
+	public event Action<VmWordListCard>? OnWordCardClicked;
+
+	/// 自動朗讀結果事件，由 View 層監聽後決定提示/導航。
+	public event Action<DtoWordCardPronounceResult>? OnAutoPronounceResult;
+
+	nil _InitAutoPronounceListener(){
+		OnWordCardClicked += (Vm)=>{
+			_ = HandleAutoPronounceOnWordCardClick(Vm, default);
+		};
+		return NIL;
+	}
+
+	async Task<nil> HandleAutoPronounceOnWordCardClick(VmWordListCard Vm, CT Ct){
+		var enableAutoPronounce = Cfg.Get(ItemsClientCfg.Word.EnableAutoPronounce);
+		if(!enableAutoPronounce){
+			return NIL;
+		}
+		var result = await PronounceWord(Vm?.WordForLearn?.JnWord, Ct);
+		OnAutoPronounceResult?.Invoke(result);
 		return NIL;
 	}
 
@@ -163,6 +188,7 @@ public partial class VmLearnWords
 			_LearnOrUndo(Vm, ELearn.Fgt);//Make it undo
 			Vm.LearnedColor = CfgUi.ColorNone;
 		}
+		OnWordCardClicked?.Invoke(Vm);
 		return NIL;
 	}
 

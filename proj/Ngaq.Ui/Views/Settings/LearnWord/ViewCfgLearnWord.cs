@@ -49,6 +49,10 @@ public partial class ViewCfgLearnWord
 					o.Content = "Enable Random Background";
 					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableRandomBackground);
 				})
+				.A(new CheckBox(), o=>{
+					o.Content = "Enable Auto Pronounce";
+					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableAutoPronounce);
+				})
 
 				;
 			});

@@ -34,6 +34,9 @@ public partial class ViewLearnWords
 
 	public ViewLearnWords(){
 		Ctx = App.GetRSvc<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnAutoPronounceResult += OnAutoPronounceResult;
+		}
 		Style();
 		Menu = _Menu();
 		//Menu.IsVisible = false;
@@ -41,6 +44,10 @@ public partial class ViewLearnWords
 		Loaded += (s,e)=>{
 			_OnLoad();
 		};
+	}
+
+	void OnAutoPronounceResult(DtoWordCardPronounceResult Result){
+		ViewWordListCard.HandlePronounceResult(Ctx, Result);
 	}
 
 	public partial class Cls_{
