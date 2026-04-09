@@ -7,6 +7,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Icons;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary;
@@ -25,7 +26,7 @@ using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
 
 public partial class ViewWordManage
-	:UserControl
+	:AppViewBase
 {
 
 	public II18n I = I18n.Inst;

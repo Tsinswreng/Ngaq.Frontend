@@ -8,6 +8,7 @@ using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Icons;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
@@ -22,7 +23,7 @@ using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmLearnWords;
 using K = Infra.I18n.ItemsUiI18n.LearnWord;
 public partial class ViewLearnWords
-	:UserControl
+	:AppViewBase
 {
 
 	public II18n I = I18n.Inst;

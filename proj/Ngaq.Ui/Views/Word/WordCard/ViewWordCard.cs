@@ -19,7 +19,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 
 public partial class ViewWordListCard
-	:UserControl
+	:AppViewBase
 {
 
 	public static ContextMenu MkWordCardCtxMenu(
@@ -41,7 +41,7 @@ public partial class ViewWordListCard
                                     return;
                 }
                 editView.Ctx.FromJnWord(JnWord);
-                ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
+				MgrViewNavi.Inst.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
 			};
 		})
 		.A(new MenuItem(), o=>{
@@ -79,7 +79,7 @@ public partial class ViewWordListCard
 					View.Ctx.Input = R.WordLang;
 					_ = View.Ctx.InitSearch(default);
 				}
-				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("UserLang"), View));
+				MgrViewNavi.Inst.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("UserLang"), View));
 			};
 			MainView.Inst.ShowDialog(
 				Todo.I18n("當前單詞語言未映射到標準語言，無法朗讀。"),
