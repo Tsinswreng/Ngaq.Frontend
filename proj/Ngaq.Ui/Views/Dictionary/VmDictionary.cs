@@ -356,6 +356,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	}
 
 	/// 跳到 WordEditV2，由用戶在編輯頁手動點 Save 才真正保存。
+	/// TODO 違反MVVM
 	obj? GoToWordEditPage(JnWord JnWord){
 		var View = new ViewWordEditV2();
 		if(View.Ctx is null){

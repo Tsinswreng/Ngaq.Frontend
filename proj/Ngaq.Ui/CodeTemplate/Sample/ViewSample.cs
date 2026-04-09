@@ -128,6 +128,7 @@ public partial class ViewSample
 		//帶標題跳轉
 		Btn.Click += (s,e)=>{
 			//若不要標題就直接傳進Goto
+			// 界面跳轉 只能在View層操作。不要在Vm層做頁面跳轉 或使用任何View層的東西
 			var TargetView = MkTargetView(); //用Func<>實現延遲加載
 			Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("頂欄標題"), TargetView));
 			_ = @$"如果你希望頂欄標題有自定義菜單按鈕 需讓TargetView實現{nameof(I_MkTitleMenu)}";
