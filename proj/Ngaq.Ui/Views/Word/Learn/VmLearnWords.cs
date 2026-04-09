@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.Learn;
 
+using System;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -19,6 +20,7 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Tsinswreng.CsCfg;
 using Ngaq.Core.Infra.Cfg;
+using Ngaq.Core.Infra;
 using System.Diagnostics;
 using Tsinswreng.CsTools;
 using Ngaq.Core.Tools;
@@ -26,10 +28,10 @@ using Avalonia.Logging;
 using Ngaq.Core.Shared.Base.Models.Po;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Svc;
-using Ngaq.Core.Infra;
 
 public partial class VmLearnWords
 	:ViewModelBase
+	,IWordCardMenuAction
 {
 
 	public partial class Cfg_{
@@ -57,6 +59,7 @@ public partial class VmLearnWords
 	MgrLearn MgrLearn;
 	IImgGetter SvcImg;
 	ICfgAccessor Cfg;
+	IWordCardPronounceBiz? WordCardPronounceBiz;
 	public VmLearnWords(
 		ISvcWord SvcWord
 		,ISvcWordV2 SvcWordV2
@@ -64,6 +67,7 @@ public partial class VmLearnWords
 		,MgrLearn MgrLearn
 		,IImgGetter SvcImg
 		,ICfgAccessor Cfg
+		,IWordCardPronounceBiz? WordCardPronounceBiz
 	){
 		this.SvcImg = SvcImg;
 		this.SvcWordV1 = SvcWord;
@@ -71,6 +75,7 @@ public partial class VmLearnWords
 		this.UserCtxMgr = UserCtxMgr;
 		this.MgrLearn = MgrLearn;
 		this.Cfg = Cfg;
+		this.WordCardPronounceBiz = WordCardPronounceBiz;
 		CurWordInfo.SetPromptBeforeStart();
 		_Init();
 	}
@@ -159,6 +164,20 @@ public partial class VmLearnWords
 			Vm.LearnedColor = CfgUi.ColorNone;
 		}
 		return NIL;
+	}
+
+	/// 卡片菜單朗讀：先以 UserLang 找 NormLang，再調用 TTS 播放。
+	public async Task<DtoWordCardPronounceResult> PronounceWord(IJnWord? JnWord, CT Ct){
+		if(AnyNull(WordCardPronounceBiz, UserCtxMgr)){
+			return new DtoWordCardPronounceResult{
+				Status = EWordCardPronounceStatus.ServiceUnavailable,
+			};
+		}
+		return await WordCardPronounceBiz.PronounceWord(
+			UserCtxMgr.GetDbUserCtx(),
+			JnWord,
+			Ct
+		);
 	}
 
 	// public nil ClickVmWordCard(

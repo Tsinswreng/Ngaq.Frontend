@@ -1,17 +1,21 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
 
+using System;
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
+using Ngaq.Core.Infra;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word.WordCard;
 using Tsinswreng.CsPage;
 using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
 
-public partial class VmSearchWords: ViewModelBase{
+public partial class VmSearchWords: ViewModelBase, IWordCardMenuAction{
 	void Init(){
 		PageBar = VmPageBar.Mk();
 		PageBar.PageSize = 10;
@@ -39,12 +43,15 @@ public partial class VmSearchWords: ViewModelBase{
 
 	ISvcWord? SvcWord;
 	IFrontendUserCtxMgr? IUserCtxMgr;
+	IWordCardPronounceBiz? WordCardPronounceBiz;
 	public VmSearchWords(
 		IFrontendUserCtxMgr? IUserCtxMgr
 		,ISvcWord? SvcWord
+		,IWordCardPronounceBiz? WordCardPronounceBiz
 	):this(){
 		this.SvcWord = SvcWord;
 		this.IUserCtxMgr = IUserCtxMgr;
+		this.WordCardPronounceBiz = WordCardPronounceBiz;
 	}
 
 	public VmPageBar PageBar{get;set;} = null!;
@@ -106,5 +113,19 @@ public partial class VmSearchWords: ViewModelBase{
 		}
 		PageBar.PageNum++;
 		return await SearchAsy(Ct);
+	}
+
+	/// 卡片菜單朗讀：先以 UserLang 找 NormLang，再調用 TTS 播放。
+	public async Task<DtoWordCardPronounceResult> PronounceWord(IJnWord? JnWord, CT Ct){
+		if(AnyNull(WordCardPronounceBiz, IUserCtxMgr)){
+			return new DtoWordCardPronounceResult{
+				Status = EWordCardPronounceStatus.ServiceUnavailable,
+			};
+		}
+		return await WordCardPronounceBiz.PronounceWord(
+			IUserCtxMgr.GetDbUserCtx(),
+			JnWord,
+			Ct
+		);
 	}
 }
