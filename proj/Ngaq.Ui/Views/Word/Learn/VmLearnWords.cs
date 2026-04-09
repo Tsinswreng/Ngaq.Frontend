@@ -120,7 +120,6 @@ public partial class VmLearnWords
 			return NIL;
 		}
 		var result = await PronounceWord(Vm?.WordForLearn?.JnWord, Ct);
-		OnAutoPronounceResult?.Invoke(result);
 		return NIL;
 	}
 

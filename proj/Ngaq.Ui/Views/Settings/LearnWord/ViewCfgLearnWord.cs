@@ -62,6 +62,7 @@ public partial class ViewCfgLearnWord
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;
 			o.BtnContent = Todo.I18n("Save");
+			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 
