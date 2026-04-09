@@ -188,7 +188,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		]);
 		g.A(new Button(), o=>{
 			o.Content = Todo.I18n("Back");
-			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
+			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Group"));

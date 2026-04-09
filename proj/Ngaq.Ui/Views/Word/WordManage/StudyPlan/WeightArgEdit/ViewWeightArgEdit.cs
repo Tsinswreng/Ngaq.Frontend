@@ -105,9 +105,9 @@ public partial class ViewWeightArgEdit
 				var view = new ViewWeightCalculatorPage();
 				view.Ctx?.SetSelectMode(po=>{
 					Ctx?.ApplySelectedWeightCalculator(po);
-					view.Ctx?.ViewNavi?.Back();
+					view.ViewNavi?.Back();
 				});
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇權重算法"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇權重算法"), view));
 			},
 			ReadOnly: true
 		))

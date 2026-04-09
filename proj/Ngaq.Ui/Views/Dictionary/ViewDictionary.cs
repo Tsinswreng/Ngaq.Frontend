@@ -147,15 +147,15 @@ public partial class ViewDictionary
 		if(IsSrc){
 			view.Ctx?.SetSelectMode(po=>{
 				Ctx?.ApplySrcNormLang(po);
-				view.Ctx?.ViewNavi?.Back();
+				view.ViewNavi?.Back();
 			});
 		}else{
 			view.Ctx?.SetSelectMode(po=>{
 				Ctx?.ApplyTgtNormLang(po);
-				view.Ctx?.ViewNavi?.Back();
+				view.ViewNavi?.Back();
 			});
 		}
-		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
 	}
 
 	public Control MkTitleMenu(){
@@ -164,7 +164,7 @@ public partial class ViewDictionary
 			o.Header = Todo.I18n("配置語言映射");
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangToUserLangPage();
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("配置語言映射"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("配置語言映射"), view));
 			};
 		});
 		menu.Items.A(new MenuItem(), o=>{
@@ -181,7 +181,7 @@ public partial class ViewDictionary
 						return DictCtx.ReparseFromRawOutput(raw, ct);
 					});
 				}
-				DictCtx.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("查看LLM原始輸出"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("查看LLM原始輸出"), view));
 			};
 		});
 		return menu;

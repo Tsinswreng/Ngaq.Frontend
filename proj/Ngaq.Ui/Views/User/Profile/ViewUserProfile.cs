@@ -84,7 +84,7 @@ public partial class ViewUserProfile
 						o.StretchCenter();
 						o.Content = "Change Account"; //TODO i18n
 						o.Click += (s,e)=>{
-							Ctx?.ViewNavi?.GoTo(
+							ViewNavi?.GoTo(
 								ToolView.WithTitle("Change Account", new ViewLoginRegister())
 							);
 						};

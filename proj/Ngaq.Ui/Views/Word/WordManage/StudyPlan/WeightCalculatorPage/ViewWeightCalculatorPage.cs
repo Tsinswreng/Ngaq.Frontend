@@ -177,6 +177,6 @@ public partial class ViewWeightCalculatorPage
 		view.Ctx?.FromPoWeightCalculator(row?.Raw);
 		var title = row?.Raw?.UniqName ?? Todo.I18n("新增權重算法");
 		var titled = ToolView.WithTitle(title, view);
-		Ctx?.ViewNavi?.GoTo(titled);
+		ViewNavi?.GoTo(titled);
 	}
 }

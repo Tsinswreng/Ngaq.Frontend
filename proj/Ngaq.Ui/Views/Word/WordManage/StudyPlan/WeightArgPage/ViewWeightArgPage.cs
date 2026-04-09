@@ -182,6 +182,6 @@ public partial class ViewWeightArgPage
 		view.Ctx?.FromPoWeightArg(row?.Raw);
 		var title = row?.Raw?.UniqName ?? Todo.I18n("新增權重參數");
 		var titled = ToolView.WithTitle(title, view);
-		Ctx?.ViewNavi?.GoTo(titled);
+		ViewNavi?.GoTo(titled);
 	}
 }

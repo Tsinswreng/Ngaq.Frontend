@@ -145,7 +145,7 @@ public partial class ViewSetCurStudyPlan
 				var view = new ViewStudyPlanEdit();
 				view.Ctx?.SetCreateMode(false);
 				view.Ctx?.FromPoStudyPlan(po);
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(po.UniqName ?? Todo.I18n("編輯StudyPlan"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(po.UniqName ?? Todo.I18n("編輯StudyPlan"), view));
 			};
 		});
 
@@ -184,9 +184,9 @@ public partial class ViewSetCurStudyPlan
 		view.Ctx?.SetSelectMode(po=>{
 			Ctx.SelectCandidateStudyPlan(po);
 			tcs.TrySetResult(po);
-			view.Ctx?.ViewNavi?.Back();
+			view.ViewNavi?.Back();
 		});
-		Ctx.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
 		Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan.PoStudyPlan? selected = null;
 		try{
 			using var reg = Ct.Register(()=>tcs.TrySetCanceled(Ct));

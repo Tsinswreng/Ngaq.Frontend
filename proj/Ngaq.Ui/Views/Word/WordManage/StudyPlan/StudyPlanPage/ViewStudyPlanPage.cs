@@ -174,6 +174,6 @@ public partial class ViewStudyPlanPage
 		view.Ctx?.FromPoStudyPlan(row?.Raw);
 		var title = row?.Raw?.UniqName ?? Todo.I18n("新增學習方案");
 		var titled = ToolView.WithTitle(title, view);
-		Ctx?.ViewNavi?.GoTo(titled);
+		ViewNavi?.GoTo(titled);
 	}
 }

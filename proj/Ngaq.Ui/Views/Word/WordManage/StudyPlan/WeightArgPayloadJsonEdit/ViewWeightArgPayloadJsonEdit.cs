@@ -67,7 +67,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 		]);
 		g.A(new Button(), o=>{
 			o.Content = Todo.I18n("Back");
-			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
+			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new OpBtn(), o=>{
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Apply"));

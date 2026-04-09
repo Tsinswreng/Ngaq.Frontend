@@ -176,6 +176,6 @@ public partial class ViewNormLangToUserLangPage
 		view.Ctx?.FromPoNormLangToUserLang(row?.Raw);
 		var title = row?.Raw?.NormLang ?? Todo.I18n("Add NormLangToUserLang");
 		var titled = ToolView.WithTitle(title, view);
-		Ctx?.ViewNavi?.GoTo(titled);
+		ViewNavi?.GoTo(titled);
 	}
 }

@@ -102,9 +102,9 @@ public partial class ViewStudyPlanEdit
 				var view = new ViewPreFilterPage();
 				view.Ctx?.SetSelectMode(po=>{
 					Ctx?.ApplySelectedPreFilter(po);
-					view.Ctx?.ViewNavi?.Back();
+					view.ViewNavi?.Back();
 				});
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇PreFilter"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇PreFilter"), view));
 			},
 			ReadOnly: true
 		))
@@ -116,9 +116,9 @@ public partial class ViewStudyPlanEdit
 				var view = new ViewWeightCalculatorPage();
 				view.Ctx?.SetSelectMode(po=>{
 					Ctx?.ApplySelectedWeightCalculator(po);
-					view.Ctx?.ViewNavi?.Back();
+					view.ViewNavi?.Back();
 				});
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇WeightCalculator"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇WeightCalculator"), view));
 			},
 			ReadOnly: true
 		))
@@ -130,9 +130,9 @@ public partial class ViewStudyPlanEdit
 				var view = new ViewWeightArgPage();
 				view.Ctx?.SetSelectMode(po=>{
 					Ctx?.ApplySelectedWeightArg(po);
-					view.Ctx?.ViewNavi?.Back();
+					view.ViewNavi?.Back();
 				});
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇WeightArg"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇WeightArg"), view));
 			},
 			ReadOnly: true
 		))

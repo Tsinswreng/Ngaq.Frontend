@@ -202,7 +202,7 @@ public partial class ViewUserLangPage
 		view.Ctx?.FromPoUserLang(row?.Raw);
 		var title = row?.Raw?.UniqName ?? Todo.I18n("新增UserLang");
 		var titled = ToolView.WithTitle(title, view);
-		Ctx?.ViewNavi?.GoTo(titled);
+		ViewNavi?.GoTo(titled);
 	}
 }
 

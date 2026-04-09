@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.Settings;
 
 using Avalonia.Controls;
 using Avalonia.Styling;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.About;
@@ -11,7 +12,7 @@ using Tsinswreng.AvlnTools.Navigation;
 using Ctx = VmSettings;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Settings;
 public partial class ViewSettings
-	:UserControl
+	:AppViewBase
 {
 
 	public Ctx? Ctx{
@@ -36,7 +37,7 @@ public partial class ViewSettings
 	}
 
 	protected nil Render(){
-		var _Item = FnSettingItem(Ctx?.ViewNavi);
+		var _Item = FnSettingItem(this.ViewNavi);
 		this.SetContent(new StackPanel(), S=>{
 			S.A(_Item(I[K.About], new ViewAbout()));
 			S.A(_Item(I[K.UIConfig], new ViewCfgUi()));

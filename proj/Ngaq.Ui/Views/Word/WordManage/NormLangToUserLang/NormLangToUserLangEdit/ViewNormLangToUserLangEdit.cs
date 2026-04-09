@@ -195,10 +195,10 @@ public partial class ViewNormLangToUserLangEdit
 			view.Ctx.Input = Ctx?.PoNormLang ?? "";
 			view.Ctx.SetSelectMode(po=>{
 				Ctx?.ApplyNormLangSelection(po);
-				view.Ctx?.ViewNavi?.Back();
+				view.ViewNavi?.Back();
 			});
 		}
-		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
 	}
 
 	void OpenUserLangSelector(){
@@ -207,10 +207,10 @@ public partial class ViewNormLangToUserLangEdit
 			view.Ctx.Input = Ctx?.PoUserLang ?? "";
 			view.Ctx.SetSelectMode(po=>{
 				Ctx?.ApplyUserLangSelection(po);
-				view.Ctx?.ViewNavi?.Back();
+				view.ViewNavi?.Back();
 			});
 		}
-		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select UserLang"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select UserLang"), view));
 	}
 }
 

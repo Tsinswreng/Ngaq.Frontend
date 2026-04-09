@@ -101,7 +101,7 @@ public partial class ViewWordManage
 		Control? titled = null;
 		R.Click += (s,e)=>{
 			titled ??= ToolView.WithTitle(Title, MkTarget());
-			Ctx?.ViewNavi?.GoTo(titled);
+			ViewNavi?.GoTo(titled);
 		};
 		R.HorizontalContentAlignment = HAlign.Stretch;
 		R.MinHeight = UiCfg.Inst.BaseFontSize * 4.8;

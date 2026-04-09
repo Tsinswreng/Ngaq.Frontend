@@ -175,7 +175,7 @@ public partial class ViewNormLangPage
 		view.Ctx?.FromPoNormLang(row?.Raw);
 		var title = row?.Raw?.Code ?? Todo.I18n("Add NormLang");
 		var titled = ToolView.WithTitle(title, view);
-		Ctx?.ViewNavi?.GoTo(titled);
+		ViewNavi?.GoTo(titled);
 	}
 
 	public Control MkTitleMenu(){

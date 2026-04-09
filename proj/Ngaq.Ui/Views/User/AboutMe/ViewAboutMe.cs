@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Controls;
 using Ngaq.Ui.Icons;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings;
 using Ngaq.Ui.Views.User.Profile;
@@ -14,7 +15,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmAboutMe;
 public partial class ViewAboutMe
-	:UserControl
+	:AppViewBase
 {
 
 	public Ctx? Ctx{
@@ -64,7 +65,7 @@ public partial class ViewAboutMe
 				o.CBind<Ctx>(o.PropSource,x=>x.AvatarImg);
 			});
 			o.Click += (o, e) => {
-				Ctx?.ViewNavi?.GoTo(
+				ViewNavi?.GoTo(
 					ToolView.WithTitle(Todo.I18n("UserProfile"), new ViewUserProfile())
 				);
 			};
@@ -79,7 +80,7 @@ public partial class ViewAboutMe
 				);
 			});
 			o.Click += (s,e)=>{
-				Ctx?.ViewNavi?.GoTo(
+				ViewNavi?.GoTo(
 					ToolView.WithTitle("", new ViewLoginRegister())
 				);
 			};
@@ -95,7 +96,7 @@ public partial class ViewAboutMe
 				//o.Content = "⚙️";
 				o.Content = Svgs.GearFill().ToIcon();
 				o.Click += (s,e)=>{
-					Ctx?.ViewNavi?.GoTo(
+					ViewNavi?.GoTo(
 						ToolView.WithTitle(Todo.I18n("Settings"), new ViewSettings())
 					);
 				};

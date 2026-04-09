@@ -11,7 +11,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = ViewModelBase;
 public partial class ViewTitle
-	:UserControl
+	:AppViewBase
 {
 
 	public Border BdrTitle{get;set;} = new();
@@ -69,7 +69,7 @@ public partial class ViewTitle
 			TitleBar.A(_Button(), o=>{
 				o.Content = Svgs.ArrowCircleLeftFill().ToIcon();
 				o.Click += (s,e)=>{
-					Ctx?.ViewNavi?.Back();
+					this.ViewNavi?.Back();
 				};
 				o.Background = Brushes.Transparent;
 			})

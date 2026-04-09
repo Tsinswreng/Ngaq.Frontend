@@ -209,7 +209,7 @@ public partial class ViewLearnWords
 					,T(I[K.Settings])
 				));
 				o._Button.Click += (s,e)=>{
-					Ctx?.ViewNavi?.GoTo(
+					ViewNavi?.GoTo(
 						ToolView.WithTitle(
 							I[K.LearnWordSettings]
 							,new ViewCfgLearnWord()

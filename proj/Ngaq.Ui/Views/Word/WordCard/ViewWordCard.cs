@@ -41,7 +41,7 @@ public partial class ViewWordListCard
                                     return;
                 }
                 editView.Ctx.FromJnWord(JnWord);
-                Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
+                ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
 			};
 		})
 		.A(new MenuItem(), o=>{
@@ -79,7 +79,7 @@ public partial class ViewWordListCard
 					View.Ctx.Input = R.WordLang;
 					_ = View.Ctx.InitSearch(default);
 				}
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("UserLang"), View));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("UserLang"), View));
 			};
 			MainView.Inst.ShowDialog(
 				Todo.I18n("當前單詞語言未映射到標準語言，無法朗讀。"),

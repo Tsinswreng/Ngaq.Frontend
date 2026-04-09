@@ -203,14 +203,14 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		]);
 		g.A(new Button(), o=>{
 			o.Content = Todo.I18n("Back");
-			o.Click += (s,e)=>Ctx?.ViewNavi?.Back();
+			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Draft"));
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>{
 				if(Ctx?.CommitPreFilterDataDraft() == true){
-					Ctx.ViewNavi?.Back();
+					ViewNavi?.Back();
 				}
 			};
 		});

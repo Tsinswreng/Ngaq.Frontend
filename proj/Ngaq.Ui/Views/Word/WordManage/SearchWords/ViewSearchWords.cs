@@ -120,7 +120,7 @@ public partial class ViewSearchWords
 				Target.Ctx.FromJnWord(jnWord);
 				var titleStr = jnWord.Head;
 				var titled = ToolView.WithTitle(titleStr, Target);
-				Ctx?.ViewNavi?.GoTo(titled);
+				ViewNavi?.GoTo(titled);
 			};
 			R.Styles.Add(new Style().Set(
 				BackgroundProperty

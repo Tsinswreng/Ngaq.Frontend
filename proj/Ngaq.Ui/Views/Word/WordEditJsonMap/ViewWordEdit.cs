@@ -50,7 +50,7 @@ public partial class ViewWordEdit
 				}
 				vj.Ctx.FromJnWord(Ctx.JnWord);
 
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", vj));
+				ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", vj));
 			};
 		});
 		R.Items.A(new MenuItem(), o=>{
@@ -62,7 +62,7 @@ public partial class ViewWordEdit
 					return;
 				}
 				v2.Ctx.FromJnWord(Ctx.JnWord);
-				Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", v2));
+				ViewNavi?.GoTo(ToolView.WithTitle(Ctx?.JnWord.Word.Head??"", v2));
 			};
 		});
 		return R;

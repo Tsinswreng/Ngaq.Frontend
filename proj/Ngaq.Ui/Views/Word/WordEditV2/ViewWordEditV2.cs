@@ -286,13 +286,13 @@ public partial class ViewWordEditV2: AppViewBase{
 	void OpenPropDetail(VmWordPropRow Row){
 		var view = new UserControl();
 		view.SetContent(MkPropDetailContent(Row));
-		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Edit Prop"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Edit Prop"), view));
 	}
 
 	void OpenLearnDetail(VmWordLearnRow Row){
 		var view = new UserControl();
 		view.SetContent(MkLearnDetailContent(Row));
-		Ctx?.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Edit Learn"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Edit Learn"), view));
 	}
 
 	Control MkPropDetailContent(VmWordPropRow Row){
@@ -322,7 +322,7 @@ public partial class ViewWordEditV2: AppViewBase{
 			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove"));
 			o.Click += (s, e)=>{
 				Ctx?.RemovePropRow(Row);
-				Ctx?.ViewNavi?.Back();
+				ViewNavi?.Back();
 			};
 		});
 		return root.Grid;
@@ -351,7 +351,7 @@ public partial class ViewWordEditV2: AppViewBase{
 			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove"));
 			o.Click += (s, e)=>{
 				Ctx?.RemoveLearnRow(Row);
-				Ctx?.ViewNavi?.Back();
+				ViewNavi?.Back();
 			};
 		});
 		return root.Grid;
