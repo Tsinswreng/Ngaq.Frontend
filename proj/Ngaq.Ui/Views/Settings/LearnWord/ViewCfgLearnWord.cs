@@ -47,43 +47,9 @@ public partial class ViewCfgLearnWord
 				.A(new CheckBox(), o=>{
 					//o.Tag = new TextBlock{Text = "Enable Random Background"};
 					o.Content = "Enable Random Background";
-					o.CBind<Ctx>(
-						o.PropIsChecked
-						,x=>x.EnableRandomBackground);
-				})
-				.A(new TextBlock(), o=>{
-					o.Text = "Language Filter(One per line)";// TODO i18n
-				})
-				.A(new TextBox(), o=>{
-					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
-					o.AcceptsReturn = true;
-					o.Height = 100;
-					o.CBind<Ctx>(
-						o.PropText
-						,x=>x.LanguageFilterExpr);
-				})
-				.A(new TextBlock{
-					Text = "Lua Filter",// TODO i18n
-				})
-				.A(new TextBox{
-					TextWrapping = Avalonia.Media.TextWrapping.Wrap,
-					AcceptsReturn = true,
-					Height = 100,
-					//Bind = (o.PropText, CBE.Mk<Ctx>(x=>x.LuaFilterExpr)),
-					Init=o=>{o.CBind<Ctx>(
-						o.PropText
-						,x=>x.LuaFilterExpr);},
+					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableRandomBackground);
 				})
 
-				// .AddInit(new TextBox(), o=>{
-				// 	o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
-				// 	o.AcceptsReturn = true;
-				// 	o.Height = 100;
-				// 	o.CBind(
-				// 		o.PropText
-				// 		,CBE.Mk<Ctx>(x=>x.LuaFilterExpr)
-				// 	);
-				// })
 				;
 			});
 		})
@@ -91,8 +57,8 @@ public partial class ViewCfgLearnWord
 			DockPanel.SetDock(o, Dock.Bottom);
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;
-			o.BtnContent = "Save";//TODO i18n
-			o.SetExe((Ct)=>Ctx?.SaveAsy(Ct));
+			o.BtnContent = Todo.I18n("Save");
+			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 
 

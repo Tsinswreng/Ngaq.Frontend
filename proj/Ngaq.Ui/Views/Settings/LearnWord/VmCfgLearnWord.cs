@@ -47,22 +47,17 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 	}
 
 	public bool EnableRandomBackground{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = false;
 
-	public str LuaFilterExpr{
-		get{return field;}
-		set{SetProperty(ref field, value);}
-	} = "";
-
 	public str LanguageFilterExpr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 
-	public async Task<nil> SaveAsy(CT Ct){
+	public async Task<nil> Save(CT Ct){
 		if(AnyNull(Cfg)){
 			return NIL;
 		}
