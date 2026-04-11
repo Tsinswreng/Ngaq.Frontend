@@ -131,7 +131,7 @@ public partial class VmWordSync: ViewModelBase{
 				return;
 			}
 			var bytes = await File.ReadAllBytesAsync(PathImport, Ct);
-			var textWithBlob = ToolTextWithBlob.Parse(bytes);
+			var textWithBlob = NgaqTextWithBlob.Parse(bytes);
 			await SvcWord.SyncFromTextWithBlob(UserCtxMgr.GetUserCtx(), textWithBlob, Ct);
 			Cfg?.Set(ItemsClientCfg.Word.WordsPackImportPath, PathImport);
 			Cfg?.Save(default);

@@ -56,7 +56,7 @@ public class ClientWordSync{
 			,Ct
 		);
 		var bytes = await resp.Content.ReadAsByteArrayAsync(Ct);//t
-		var textWithBlob = ToolTextWithBlob.Parse(bytes);
+		var textWithBlob = NgaqTextWithBlob.Parse(bytes);
 		await SvcWord.SyncFromTextWithBlob(User, textWithBlob, Ct);
 		return NIL;
 	}

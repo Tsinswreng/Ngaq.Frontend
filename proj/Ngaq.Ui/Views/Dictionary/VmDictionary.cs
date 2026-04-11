@@ -25,6 +25,7 @@ using Tsinswreng.CsErr;
 
 using Ctx = VmDictionary;
 using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.CsTools;
 
 public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	protected VmDictionary(){}
@@ -45,14 +46,17 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	IFrontendUserCtxMgr? FrontendUserCtxMgr;
 	ISvcDictionary? SvcDictionary;
 	ISvcWordV2? SvcWordV2;
+	ISvcNormLang? SvcNormLang;
 	public VmDictionary(
 		ISvcDictionary? SvcDictionary
 		,IFrontendUserCtxMgr? FrontendUserCtxMgr
 		,ISvcWordV2? SvcWordV2
+		,ISvcNormLang? SvcNormLang
 	){
 		this.SvcDictionary = SvcDictionary;
 		this.FrontendUserCtxMgr = FrontendUserCtxMgr;
 		this.SvcWordV2 = SvcWordV2;
+		this.SvcNormLang = SvcNormLang;
 	}
 
 	/// 最近一次字典查詢請求。轉換到詞庫單詞時必須一起傳入。
@@ -129,7 +133,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		if(string.IsNullOrWhiteSpace(Input)){
 			return NIL;
 		}
-		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
+		if(AnyNull(SvcDictionary, FrontendUserCtxMgr, SvcNormLang)){
 			return NIL;
 		}
 		var User = FrontendUserCtxMgr.GetUserCtx();
@@ -143,11 +147,16 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
 
+		var normLang = await SvcNormLang.BatGetNormLangByTypeCode(
+			User.ToDbUserCtx()
+			,ToolAsyE.ToAsyE([(ELangIdentType.Bcp47, TgtLang)])
+			,Ct
+		).FirstAsync(Ct);
 		IList<NormLangWithName> TgtLangs = [new NormLangWithName{
 			Type = ELangIdentType.Bcp47,
 			Code = TgtLang,
+			NativeName = normLang?.NativeName?? "",
 		}];
-
 		var Req = new ReqLlmDictEvt{
 			Query = new Query{
 				Term = Input.Trim(),
@@ -415,7 +424,6 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			Word = new PoWord{
 				Head = Head ?? "",
 				Lang = Lang,
-				StoredAt = Tempus.Now(),
 			},
 			Props = Props,
 			Learns = [],
