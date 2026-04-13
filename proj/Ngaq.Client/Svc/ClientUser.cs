@@ -16,6 +16,7 @@ using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Frontend.Kv;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
+using Tsinswreng.CsTempus;
 
 public partial class ClientUser
 	:ISvcUser

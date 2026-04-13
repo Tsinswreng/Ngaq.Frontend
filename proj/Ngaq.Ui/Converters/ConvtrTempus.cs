@@ -3,8 +3,7 @@ namespace Ngaq.Ui.Converters;
 using Avalonia.Data;
 using Ngaq.Core.Infra;
 using Tsinswreng.AvlnTools.Tools;
-
-
+using Tsinswreng.CsTempus;
 
 public class ConvtrTempus{
 	protected static ConvtrTempus? _Inst = null;

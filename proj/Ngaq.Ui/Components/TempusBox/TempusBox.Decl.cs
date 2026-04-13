@@ -8,6 +8,7 @@ using Ngaq.Core.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
+using Tsinswreng.CsTempus;
 
 public class InvalidCommandParam{
 	public TempusBox Self{get;set;} = null!;

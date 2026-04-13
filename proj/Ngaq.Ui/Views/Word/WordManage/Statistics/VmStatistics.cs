@@ -11,6 +11,7 @@ using Ngaq.Ui.Infra;
 using ScottPlot;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsPage;
+using Tsinswreng.CsTempus;
 using Ctx = VmStatistics;
 
 public partial class VmStatistics: ViewModelBase{

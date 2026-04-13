@@ -4,6 +4,7 @@ using Avalonia.Data.Converters;
 using Ngaq.Core.Infra;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
+using Tsinswreng.CsTempus;
 
 namespace Ngaq.Ui.Components.TempusBox;
 

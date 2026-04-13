@@ -7,6 +7,7 @@ using Avalonia.Data;
 using Ngaq.Core.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsTempus;
 
 /// StudyPlan 相关页面的通用视图拼装工具。
 

@@ -20,6 +20,7 @@ using JsonNode = System.Text.Json.Nodes.JsonNode;
 
 using Ctx = VmWordEditV2;
 using Ngaq.Core.Tools;
+using Tsinswreng.CsTempus;
 
 public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	protected VmWordEditV2(){

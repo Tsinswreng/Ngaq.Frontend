@@ -24,7 +24,7 @@ using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-
+using Tsinswreng.CsTempus;
 using Ctx = VmWordEditV2;
 
 public partial class ViewWordEditV2: AppViewBase{

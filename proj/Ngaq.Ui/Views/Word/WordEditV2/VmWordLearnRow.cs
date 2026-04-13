@@ -6,6 +6,7 @@ using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;
+using Tsinswreng.CsTempus;
 
 /// 單詞學習記錄行編輯 ViewModel。
 public partial class VmWordLearnRow: ViewModelBase{
