@@ -54,6 +54,7 @@
 		<PackageReference Include="Semi.Avalonia" />
 		<PackageReference Include="Microsoft.Extensions.Logging" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+		<PackageReference Include="TestableIO.System.IO.Abstractions" />
 		<PackageReference Include="TextMateSharp.Grammars" />
 
 	</ItemGroup>

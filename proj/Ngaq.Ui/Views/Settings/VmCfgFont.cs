@@ -6,6 +6,7 @@ using Ctx = VmCfgFont;
 using Ngaq.Core.Infra.Cfg;
 using Tsinswreng.CsCfg;
 
+
 public partial class VmCfgFont: ViewModelBase{
 	ILogger<VmCfgFont>? Log{get;set;}
 	public VmCfgFont(

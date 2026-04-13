@@ -59,6 +59,8 @@ sealed class Program {
 			);
 			var DualSrcCfg = AppCfg.Inst;
 			var CfgPath = GetCfgFilePath(args);
+
+			//用戶手寫的配置文件、不允許 在運行時 由程序 更改
 			var RoCfg = new JsonFileCfgAccessor();
 			DualSrcCfg.RoCfg = RoCfg;
 			RoCfg.FromFile(CfgPath);
