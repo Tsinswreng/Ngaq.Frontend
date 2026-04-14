@@ -1,4 +1,4 @@
-import type { TI18nKv } from "./i18n";
+import type { TI18nKv } from "../i18n";
 const a: TI18nKv = {
 	View: {
 		Common: {

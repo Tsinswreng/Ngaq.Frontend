@@ -24,9 +24,10 @@
 		"MaxDisplayedWordCount": 999999
 	},
 	"LlmDictionary":{
-		"ApiUrl": "https://api.moonshot.cn/v1/chat/completions",
-		"ApiKey": "",
-		"Model": "moonshot-v1-8k"
+		"ApiUrl": "https://api.siliconflow.cn/v1/chat/completions",
+		"Model": "Qwen/Qwen2.5-72B-Instruct",
+		"ApiKey": ""
+		
 	}
 
 
