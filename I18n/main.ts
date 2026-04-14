@@ -1,11 +1,11 @@
 /*
 # pwd = Ngaq.Frontend
 cd I18n
-mkdir -p Languages
-esno main.ts ./Languages
+mkdir -p json
+esno main.ts ./json
 cd ..
 mkdir -p ./proj/Ngaq.Windows/bin/Debug/net10.0/Languages
-cp -r ./I18n/Languages/* ./proj/Ngaq.Windows/bin/Debug/net10.0/Languages/
+cp -r ./I18n/json/* ./proj/Ngaq.Windows/bin/Debug/net10.0/Languages/
 */
 
 import { I18nForOne, I18nMgr, TI18nKv } from "./i18n"

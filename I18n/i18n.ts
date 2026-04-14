@@ -1,6 +1,6 @@
 //@ts-ignore
 import * as fs from "fs"
-import type {TI18nKv} from "./default"
+import type {TI18nKv} from "./keys"
 export type {TI18nKv}
 
 function writeFile(path:string, content:string){
