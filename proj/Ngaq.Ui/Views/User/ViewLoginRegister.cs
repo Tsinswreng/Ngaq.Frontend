@@ -1,15 +1,16 @@
 namespace Ngaq.Ui.Views.User;
 
 using Avalonia.Controls;
-using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
+using Tsinswreng.CsI18n;
 using Ctx = VmLoginRegister;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
 public partial class ViewLoginRegister
-	:UserControl
+	:AppViewBase
 {
-	public II18n I = I18n.Inst;
+
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}

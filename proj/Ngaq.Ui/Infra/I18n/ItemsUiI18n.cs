@@ -1,9 +1,13 @@
+using Tsinswreng.CsI18n;
+
 namespace Ngaq.Ui.Infra.I18n;
-using static Ngaq.Ui.Infra.I18n.I18nKey;
+using static Tsinswreng.CsI18n.I18nKey;
 using K = II18nKey;
 
 public static partial class ItemsUiI18n{
 	public static K? View = Mk(null, [nameof(View)]);
+	public static K? Error = Mk(null, [nameof(Error)]);
+	public static K? Lang = Mk(null, [nameof(Lang)]);
 
 public class Common{
 	public static readonly K _R = Mk(View, [nameof(Common)]);

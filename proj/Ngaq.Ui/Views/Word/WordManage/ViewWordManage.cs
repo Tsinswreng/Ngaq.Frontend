@@ -8,7 +8,6 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
@@ -22,6 +21,7 @@ using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
 
@@ -29,7 +29,6 @@ public partial class ViewWordManage
 	:AppViewBase
 {
 
-	public II18n I = I18n.Inst;
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}

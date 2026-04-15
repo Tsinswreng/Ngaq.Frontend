@@ -10,10 +10,9 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-
+using Tsinswreng.CsI18n;
 using Ctx = VmWeightCalculatorEdit;
 
 public partial class ViewWeightCalculatorEdit
@@ -30,7 +29,6 @@ public partial class ViewWeightCalculatorEdit
 		Render();
 	}
 
-	public II18n I = I18n.Inst;
 	public partial class Cls{}
 
 	protected nil Style(){

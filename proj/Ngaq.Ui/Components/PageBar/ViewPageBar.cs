@@ -10,9 +10,9 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmPageBar;
 public partial class ViewPageBar
 	:AppViewBase
@@ -28,7 +28,7 @@ public partial class ViewPageBar
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+	
 	public partial class Cls{
 		public static str CenterInput = nameof(CenterInput);
 		public static str CenterText = nameof(CenterText);

@@ -5,9 +5,9 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmPronunciation;
 public partial class ViewPronunciation
 	:AppViewBase
@@ -23,7 +23,7 @@ public partial class ViewPronunciation
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+
 	public partial class Cls{
 
 	}

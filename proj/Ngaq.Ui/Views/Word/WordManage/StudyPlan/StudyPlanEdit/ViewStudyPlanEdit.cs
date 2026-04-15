@@ -8,7 +8,6 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
@@ -16,6 +15,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmStudyPlanEdit;
 
 public partial class ViewStudyPlanEdit
@@ -31,7 +31,6 @@ public partial class ViewStudyPlanEdit
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
 	public partial class Cls{}
 
 	protected nil Style(){

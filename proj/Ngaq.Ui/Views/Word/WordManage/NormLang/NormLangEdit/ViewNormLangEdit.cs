@@ -10,10 +10,9 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-
+using Tsinswreng.CsI18n;
 using Ctx = VmNormLangEdit;
 
 /// NormLang 詳情編輯頁。
@@ -31,7 +30,6 @@ public partial class ViewNormLangEdit
 		Render();
 	}
 
-	public II18n I = I18n.Inst;
 	public partial class Cls{}
 
 	protected nil Style(){

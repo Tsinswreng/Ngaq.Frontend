@@ -9,12 +9,12 @@ using Ngaq.Ui;
 using Ngaq.Ui.Components.KvMap.JsonMap;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Tsinswreng.Srefl;
 using Ctx = VmWordEdit;
 public partial class ViewWordEdit
@@ -32,7 +32,7 @@ public partial class ViewWordEdit
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+	
 	public partial class Cls{
 
 	}

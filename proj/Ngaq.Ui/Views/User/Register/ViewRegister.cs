@@ -10,20 +10,18 @@ using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
 
 using Ctx = VmLoginRegister;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.CsI18n;
+using Ngaq.Ui.Infra;
 
 public partial class ViewRegister
-	:UserControl
+	:AppViewBase
 {
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
 	}
-
-	public II18n I = I18n.Inst;
-
 
 	public ViewRegister(){
 		Ctx = Ctx.Mk();

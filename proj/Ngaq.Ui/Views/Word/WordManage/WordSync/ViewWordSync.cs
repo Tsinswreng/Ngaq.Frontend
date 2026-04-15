@@ -3,18 +3,19 @@ namespace Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using Ngaq.Ui.Icons;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmWordSync;
 using K = Infra.I18n.ItemsUiI18n.SyncWord;
 
 public partial class ViewWordSync
-	:UserControl
+	:AppViewBase
 {
-	public II18n I = I18n.Inst;
+
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}

@@ -6,6 +6,7 @@ interface ITypedTemplate{
 export type TTemplate = string|ITypedTemplate
 type K = TTemplate
 type Full = {
+	//UI層顯示的文本
 	View:{
 		Common:{
 			Confirm: K
@@ -47,7 +48,7 @@ type Full = {
 			Website:K
 		}
 	}
-	//----Errors----
+	//異常鍵翻譯
 	Error:{
 		Common: {
 			ArgErr: K
@@ -61,6 +62,7 @@ type Full = {
 			TokenExpired: K
 		}
 	}
+	//語言名稱本身的翻譯
 	Lang:{
 		zh: K
 		zh_CN: K

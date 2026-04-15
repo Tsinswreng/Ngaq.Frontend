@@ -11,13 +11,12 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-
+using Tsinswreng.CsI18n;
 using Ctx = VmNormLangToUserLangEdit;
 
 /// 標準語言到用戶語言映射詳情編輯頁。
@@ -35,7 +34,6 @@ public partial class ViewNormLangToUserLangEdit
 		Render();
 	}
 
-	public II18n I = I18n.Inst;
 	public partial class Cls{}
 
 	protected nil Style(){

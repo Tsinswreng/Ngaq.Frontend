@@ -4,9 +4,9 @@ using System.ComponentModel;
 using Avalonia.Controls;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmUiJsonMap;
 public partial class ViewUiJsonMap
 	:AppViewBase
@@ -22,7 +22,7 @@ public partial class ViewUiJsonMap
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+
 	public partial class Cls{
 
 	}

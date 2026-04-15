@@ -8,18 +8,17 @@ using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmHome;
 using Ngaq.Ui.Views.Word.WordManage;
 using Ngaq.Ui.Views.User.AboutMe;
-using Ngaq.Ui.Infra.I18n;
 
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Home;
 using Ngaq.Ui.Icons;
 using Avalonia;
 using Ngaq.Ui.Views.Word.Learn;
+using Tsinswreng.CsI18n;
+using Ngaq.Ui.Infra;
 
 public partial class ViewHome
-	:UserControl
+	:AppViewBase
 {
-
-	public II18n I = I18n.Inst;
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}

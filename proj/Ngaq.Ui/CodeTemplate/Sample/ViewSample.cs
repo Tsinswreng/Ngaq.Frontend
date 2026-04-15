@@ -31,7 +31,6 @@ public partial class ViewSample
 			//如果希望在進入界面的時候做一些其他的初始化操作 如調用接口獲取數據/耗時操作 等、應放在Loaded回調中
 		};
 	}
-	public II18n I = I18n.Inst;
 
 	//大多數場景下我們用AutoGrid作爲視圖的根節點。
 	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號 因此不要手動設計行/列號

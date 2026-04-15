@@ -8,12 +8,12 @@ using Avalonia.Styling;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmSetCurStudyPlan;
 
 /// <summary>
@@ -41,7 +41,7 @@ public partial class ViewSetCurStudyPlan
 		};
 	}
 
-	public II18n I = I18n.Inst;
+	
 	public partial class Cls{
 		public static str FullStretch = nameof(FullStretch);
 	}

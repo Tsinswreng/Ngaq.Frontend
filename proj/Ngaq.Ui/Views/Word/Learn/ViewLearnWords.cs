@@ -10,7 +10,6 @@ using Avalonia.Styling;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
@@ -19,14 +18,13 @@ using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmLearnWords;
 using K = Infra.I18n.ItemsUiI18n.LearnWord;
 public partial class ViewLearnWords
 	:AppViewBase
 {
-
-	public II18n I = I18n.Inst;
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}

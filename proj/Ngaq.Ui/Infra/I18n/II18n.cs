@@ -1,22 +1,28 @@
-using Tsinswreng.CsCore;
+
 using Tsinswreng.CsErr;
+using Tsinswreng.CsI18n;
 
 namespace Ngaq.Ui.Infra.I18n;
-
-[Doc("國際化/本地化")]
-public interface II18n{
-	[Doc(@$"")]
-	public str Get(II18nKey Key, params obj[] Args);
-	public str this[II18nKey Key]{get;}
+using I18n = Tsinswreng.CsI18n.I18n;
+public class AppI18n{
+	public static I18n Inst{get;set;} = null!;
 }
 
-public static class AppExtnErrItem{
-	public static I18nKey ToI18nKey(this IErrNode z){
-		return new I18nKey{
-			RelaPathSegs=["Error", ..z.RelaPathSegs],
+public static class AppExtnErrItem {
+	extension(I18n z){
+		public static I18n Inst{
+			get => AppI18n.Inst;
+			set => AppI18n.Inst = value;
+		}
+	}
+	public static I18nKey ToI18nKey(this IErrNode z) {
+		return new I18nKey {
+			RelaPathSegs = ["Error", .. z.RelaPathSegs],
 			DfltValueObj = z.DfltValueObj
-			,Parent = z.Parent
-			,Children = z.Children
+			,
+			Parent = z.Parent
+			,
+			Children = z.Children
 		};
 	}
 }

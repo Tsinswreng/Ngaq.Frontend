@@ -3,9 +3,9 @@ namespace Ngaq.Ui.Views.About;
 using Avalonia.Controls;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 
 //using Ctx = VmXxx;
 using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.About;
@@ -17,7 +17,6 @@ public partial class ViewAbout
 	// 	get{return DataContext as Ctx;}
 	// 	set{DataContext = value;}
 	// }
-	public II18n I = I18n.Inst;
 	public ViewAbout(){
 		//Ctx = Ctx.Mk();
 		Style();

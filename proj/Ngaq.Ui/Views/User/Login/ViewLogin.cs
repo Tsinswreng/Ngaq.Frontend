@@ -15,14 +15,15 @@ using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
 using Ctx = VmLoginRegister;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Infra;
 
 public partial class ViewLogin
-	:UserControl
+	:AppViewBase
 	//,IHasViewNavigator
 {
 
 	//public IViewNavigator? ViewNavigator{get;set;}
-	public II18n I = I18n.Inst;
+
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}

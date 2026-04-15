@@ -4,10 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmCfgLearnWord;
 public partial class ViewCfgLearnWord
 	:AppViewBase
@@ -23,7 +23,7 @@ public partial class ViewCfgLearnWord
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+	
 	public partial class Cls_{
 
 	}

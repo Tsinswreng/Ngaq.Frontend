@@ -11,10 +11,11 @@ using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
 using Ngaq.Ui.Views;
 using Ngaq.Core.Infra.Errors;
-using Ngaq.Ui.Infra.I18n;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using Tsinswreng.CsErr;
+using Tsinswreng.CsI18n;
+using Ngaq.Ui.Infra.I18n;
 
 public class EvtArgMsg:EventArgs{
 
@@ -91,7 +92,7 @@ public partial class ViewModelBase
 		return MainView.Inst.ShowToast(Msg, DurationMs);
 	}
 
-	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
+	public II18n I18n{get;set;} = AppI18n.Inst;
 	public nil HandleErr(obj? Ex){
 		return MainView.Inst.HandleErr(Ex);
 	}

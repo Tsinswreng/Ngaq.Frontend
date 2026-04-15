@@ -17,8 +17,7 @@ using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
 using MediaManager;
-
-
+using Tsinswreng.CsI18n;
 
 sealed class Program {
 
@@ -74,7 +73,7 @@ sealed class Program {
 			var Lang = ItemsClientCfg.Lang.GetFrom(AppCfg.Inst)??"default";
 
 			var I18nCfg = new JsonFileCfgAccessor();
-			I18n.Inst.CfgAccessor = I18nCfg;
+			AppI18n.Inst=new(I18nCfg);
 			try{
 				I18nCfg.FromFile($"Languages/{Lang}.json");
 			}catch{

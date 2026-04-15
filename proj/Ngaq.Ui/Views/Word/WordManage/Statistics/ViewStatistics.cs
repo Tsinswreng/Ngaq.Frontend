@@ -12,11 +12,11 @@ using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using ScottPlot.Avalonia;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmStatistics;
 
 public partial class ViewStatistics: AppViewBase{
@@ -32,7 +32,7 @@ public partial class ViewStatistics: AppViewBase{
 		Render();
 	}
 
-	public II18n I = I18n.Inst;
+	
 
 	protected nil Style(){
 		new Style(x=>

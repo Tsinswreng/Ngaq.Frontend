@@ -6,12 +6,12 @@ using Avalonia.Media.Imaging;
 using Ngaq.Ui.Controls;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.User;
 using Ngaq.Ui.Views.User.Login;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ursa.Controls;
 using Ctx = VmXxx;
 
@@ -29,7 +29,7 @@ public partial class ViewUserProfile
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+	
 	public partial class Cls_{
 
 	}

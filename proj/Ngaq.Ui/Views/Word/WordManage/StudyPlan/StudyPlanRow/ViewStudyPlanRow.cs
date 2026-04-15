@@ -2,8 +2,8 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanRow;
 
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmStudyPlanRow;
 public partial class ViewStudyPlanRow
 	:AppViewBase
@@ -19,7 +19,7 @@ public partial class ViewStudyPlanRow
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+	
 	public partial class Cls{
 
 	}

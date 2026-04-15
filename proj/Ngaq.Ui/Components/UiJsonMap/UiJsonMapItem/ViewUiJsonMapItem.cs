@@ -5,10 +5,10 @@ using Avalonia.Media;
 using Ngaq.Core.Tools.JsonMap;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Infra.I18n;
 using ScottPlot.Plottables;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
 using Ctx = VmJsonMapItem;
 public partial class ViewJsonMapItem
 	:AppViewBase
@@ -24,7 +24,7 @@ public partial class ViewJsonMapItem
 		Style();
 		Render();
 	}
-	public II18n I = I18n.Inst;
+	
 	public partial class Cls{
 
 	}

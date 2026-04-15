@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
+using Tsinswreng.CsI18n;
 
 namespace Ngaq.Ui.Views;
 
@@ -20,7 +21,7 @@ public partial class MainView : UserControl {
 		Func<Control> MkTarget
 		,str? Title = null
 	);
-	public II18n I18n{get;set;} = Ngaq.Ui.Infra.I18n.I18n.Inst;
+	public II18n I18n{get;set;} = AppI18n.Inst;
 	public SvcPopup SvcPopup{get;set;}
 	public AutoGrid AutoGrid = new (IsRow: true);
 	public Grid Root{get{return AutoGrid.Grid;}}
