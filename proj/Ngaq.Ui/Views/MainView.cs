@@ -289,7 +289,7 @@ public partial class MainView : UserControl {
 		}
 		else if(Ex is Exception Exception){
 			toLog = Exception+"";
-			ShowDialog(Todo.I18n("Unknown Error"));
+			ShowDialog(I18n.Get(KeysErr.Common.UnknownErr.ToI18nKey()));
 		}
 		else{//非Exception 非 IAppErr
 			toLog??="";

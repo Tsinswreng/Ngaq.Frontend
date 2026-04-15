@@ -13,7 +13,8 @@ using Ngaq.Ui.Views.User.Profile;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmAboutMe;
+using Tsinswreng.AvlnTools.Tools;
+using Ngaq.Ui.Infra.I18n;
 public partial class ViewAboutMe
 	:AppViewBase
 {
@@ -66,7 +67,7 @@ public partial class ViewAboutMe
 			});
 			o.Click += (o, e) => {
 				ViewNavi?.GoTo(
-					ToolView.WithTitle(Todo.I18n("UserProfile"), new ViewUserProfile())
+					ToolView.WithTitle(I[KeysUiI18n.About.UserProfile], new ViewUserProfile())
 				);
 			};
 		});
@@ -97,7 +98,7 @@ public partial class ViewAboutMe
 				o.Content = Svgs.GearFill().ToIcon();
 				o.Click += (s,e)=>{
 					ViewNavi?.GoTo(
-						ToolView.WithTitle(Todo.I18n("Settings"), new ViewSettings())
+					ToolView.WithTitle(I[KeysUiI18n.Settings.SettingsTitle], new ViewSettings())
 					);
 				};
 				o.Styles.Add(new Style(

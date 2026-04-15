@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using Ngaq.Ui.Infra;
 using Ngaq.Core.Frontend.User;
 using Avalonia.Threading;
-
+using Ngaq.Ui.Infra.I18n;
 using Ctx = VmChangePassword;
 public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
@@ -54,11 +54,11 @@ public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		if(NewPassword != ConfirmPassword){
-			ShowDialog(Todo.I18n("新密碼和確認密碼不一致"));
+			ShowDialog(I18n.Get(KeysUiI18n.LoginRegister.PasswordMismatch));
 			return NIL;
 		}
 		if(str.IsNullOrWhiteSpace(OldPassword) || str.IsNullOrWhiteSpace(NewPassword)){
-			ShowDialog(Todo.I18n("請填寫所有密碼字段"));
+			ShowDialog(I18n.Get(KeysUiI18n.LoginRegister.FillAllFields));
 			return NIL;
 		}
 		try{
@@ -67,7 +67,8 @@ public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 				// 目前先模擬成功
 				await Task.Delay(1000); // 模擬網絡延遲
 				Dispatcher.UIThread.Post(()=>{
-					ShowDialog(Todo.I18n("密碼修改成功"));
+					ShowDialog(I18n.Get(KeysUiI18n.LoginRegister.PasswordChangeSuccess));
+
 					ClearFields();
 				});
 			},Ct);

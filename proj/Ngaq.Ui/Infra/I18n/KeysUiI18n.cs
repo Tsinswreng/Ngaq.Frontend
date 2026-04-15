@@ -45,7 +45,6 @@ public class Library{
 	public static readonly K AddWords = Mk(_R, [nameof(AddWords)]);
 	public static readonly K BackupEtSync = Mk(_R, [nameof(BackupEtSync)]);
 }
-
 public class LoginRegister{
 	public static readonly K _R = Mk(View, [nameof(LoginRegister)]);
 	public static readonly K Login = Mk(_R, [nameof(Login)]);
@@ -55,7 +54,9 @@ public class LoginRegister{
 	public static readonly K Password = Mk(_R, [nameof(Password)]);
 	public static readonly K ConfirmPassword = Mk(_R, [nameof(ConfirmPassword)]);
 	public static readonly K __CannotBeEmpty = Mk(_R, [nameof(__CannotBeEmpty)]);
-
+	public static readonly K PasswordMismatch = Mk(_R, [nameof(PasswordMismatch)]);
+	public static readonly K FillAllFields = Mk(_R, [nameof(FillAllFields)]);
+	public static readonly K PasswordChangeSuccess = Mk(_R, [nameof(PasswordChangeSuccess)]);
 }
 
 public class SyncWord{
@@ -72,12 +73,20 @@ public class Settings{
 	public static readonly K _R = Mk(View, [nameof(Settings)]);
 	public static readonly K UIConfig = Mk(_R, [nameof(UIConfig)]);
 	public static readonly K About = Mk(_R, [nameof(About)]);
-}
+	public static readonly K BaseFontSize = Mk(_R, [nameof(BaseFontSize)]);
+	public static readonly K Try = Mk(_R, [nameof(Try)]);
+	public static readonly K Apply = Mk(_R, [nameof(Apply)]);
+	public static readonly K FontSize = Mk(_R, [nameof(FontSize)]);
+		public static readonly K FontChangeRelaunchNotice = Mk(_R, [nameof(FontChangeRelaunchNotice)]);
+		public static readonly K FontSizeRangeError = Mk(_R, [nameof(FontSizeRangeError)]);
+		public static readonly K SettingsTitle = Mk(_R, [nameof(SettingsTitle)]);
+		}
 
 public class About{
 	public static readonly K _R = Mk(View, [nameof(About)]);
 	public static readonly K AppVersion = Mk(_R, [nameof(AppVersion)]);
 	public static readonly K Website = Mk(_R, [nameof(Website)]);
+	public static readonly K UserProfile = Mk(_R, [nameof(UserProfile)]);
 }
 
 public class Dictionary{

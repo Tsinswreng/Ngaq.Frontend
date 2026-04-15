@@ -1,4 +1,4 @@
-interface ITypedTemplate{
+﻿interface ITypedTemplate{
 	type:string
 	data:string
 }

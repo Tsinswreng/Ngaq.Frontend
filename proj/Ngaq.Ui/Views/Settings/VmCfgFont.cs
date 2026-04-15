@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Ctx = VmCfgFont;
 using Ngaq.Core.Infra.Cfg;
 using Tsinswreng.CsCfg;
-
+using Ngaq.Ui.Infra.I18n;
 
 public partial class VmCfgFont: ViewModelBase{
 	ILogger<VmCfgFont>? Log{get;set;}
@@ -50,7 +50,7 @@ public partial class VmCfgFont: ViewModelBase{
 			//輸入0旹會崩潰 //TODO: avalonia 全局異常處理
 			if(f64.TryParse(InputFontSize, out var numSize)){
 				if(numSize <=0 || numSize > 64){
-					this.ShowDialog(Todo.I18n("Font size must be betwen in (0, 64]"));
+					this.ShowDialog(I18n.Get(KeysUiI18n.Settings.FontSizeRangeError));
 					return NIL;
 				}
 				FontSize = numSize;

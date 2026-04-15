@@ -8,6 +8,7 @@ using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
+using Ngaq.Ui.Infra.I18n;
 using Ctx = VmCfgLearnWord;
 public partial class ViewCfgLearnWord
 	:AppViewBase
@@ -23,7 +24,7 @@ public partial class ViewCfgLearnWord
 		Style();
 		Render();
 	}
-	
+
 	public partial class Cls_{
 
 	}
@@ -61,7 +62,7 @@ public partial class ViewCfgLearnWord
 			DockPanel.SetDock(o, Dock.Bottom);
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;
-			o.BtnContent = Todo.I18n("Save");
+			o.BtnContent = I[KeysUiI18n.LearnWord.Save];
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});

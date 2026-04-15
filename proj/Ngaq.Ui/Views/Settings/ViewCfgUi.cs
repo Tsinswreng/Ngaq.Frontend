@@ -4,7 +4,8 @@ using Avalonia.Controls;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
-
+using Tsinswreng.AvlnTools.Tools;
+using Ngaq.Ui.Infra.I18n;
 public partial class ViewCfgUi
 	:AppViewBase
 {
@@ -32,7 +33,7 @@ public partial class ViewCfgUi
 	protected nil Render(){
 		var _Item = ViewSettings.FnSettingItem(ViewNavi);
 		this.SetContent(new StackPanel(), S=>{
-			S.A(_Item(Todo.I18n("Font Size"), new ViewCfgFont()));
+			S.A(_Item(I[KeysUiI18n.Settings.FontSize], new ViewCfgFont()));
 		});
 		return NIL;
 	}

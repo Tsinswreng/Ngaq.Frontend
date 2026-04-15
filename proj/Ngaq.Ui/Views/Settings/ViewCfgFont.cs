@@ -6,7 +6,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmCfgFont;
-
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Settings;
 public partial class ViewCfgFont
 	:AppViewBase
 {
@@ -62,17 +62,17 @@ public partial class ViewCfgFont
 			]);
 		});
 		Root.A(new TextBlock(), o=>{
-			o.Text = Todo.I18n("Base Font Size");
+				o.Text = I[K.BaseFontSize];
 		});
 		Root.A(InputFontSize())
 		.A(new SwipeLongPressBtn(), o=>{
-			o.Content = Todo.I18n("Try");
+				o.Content = I[K.Try];
 			o.Click += (s,e)=>{
 				Ctx?.TryNeoFontSize();
 			};
 		})
 		.A(new SwipeLongPressBtn(), o=>{
-			o.Content = Todo.I18n("Apply");
+				o.Content = I[K.Apply];
 			o.Click += (s,e)=>{
 				Ctx?.ApplyNeoFontSize();
 			};
@@ -88,8 +88,8 @@ public partial class ViewCfgFont
 		return NIL;
 	}
 
-str SampleText =
-Todo.I18n("You need to relaunch the application after changing the font size.")+
+str SampleText =>
+	I[K.FontChangeRelaunchNotice] +
 """
 !"#$%&'()*+,-./0123456789:;<=>?@
 ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`
