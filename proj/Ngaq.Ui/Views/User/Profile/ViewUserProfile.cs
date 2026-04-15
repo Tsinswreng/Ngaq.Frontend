@@ -29,7 +29,7 @@ public partial class ViewUserProfile
 		Style();
 		Render();
 	}
-	
+
 	public partial class Cls_{
 
 	}
@@ -82,17 +82,17 @@ public partial class ViewUserProfile
 					Sp
 						.A(new Button(), o=>{
 						o.StretchCenter();
-						o.Content = "Change Account"; //TODO i18n
+						o.Content = Todo.I18n("Change Account");
 						o.Click += (s,e)=>{
 							ViewNavi?.GoTo(
-								ToolView.WithTitle("Change Account", new ViewLoginRegister())
+								ToolView.WithTitle(Todo.I18n("Change Account"), new ViewLoginRegister())
 							);
 						};
 					})
 					.A(new OpBtn(), o=>{
 						o._Button.StretchCenter();
 						o.Background = Brushes.Red;
-						o.BtnContent = "Logout"; //TODO i18n
+						o.BtnContent = Todo.I18n("Logout");
 						o.SetExe((Ct)=>Ctx?.LogoutAsy(Ct));
 					});
 				});

@@ -54,11 +54,11 @@ public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		if(NewPassword != ConfirmPassword){
-			ShowDialog("新密碼和確認密碼不一致");
+			ShowDialog(Todo.I18n("新密碼和確認密碼不一致"));
 			return NIL;
 		}
 		if(str.IsNullOrWhiteSpace(OldPassword) || str.IsNullOrWhiteSpace(NewPassword)){
-			ShowDialog("請填寫所有密碼字段");
+			ShowDialog(Todo.I18n("請填寫所有密碼字段"));
 			return NIL;
 		}
 		try{
@@ -67,7 +67,7 @@ public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 				// 目前先模擬成功
 				await Task.Delay(1000); // 模擬網絡延遲
 				Dispatcher.UIThread.Post(()=>{
-					ShowDialog("密碼修改成功");
+					ShowDialog(Todo.I18n("密碼修改成功"));
 					ClearFields();
 				});
 			},Ct);

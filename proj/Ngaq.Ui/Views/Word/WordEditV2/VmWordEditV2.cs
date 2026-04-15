@@ -409,7 +409,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		for(i32 i = 0; i < PropRows.Count; i++){
 			var row = PropRows[i];
 			if(!row.TryToPo(Draft.Word.Id, out var po, out var rowErr)){
-				propErrs.Add($"Prop#{i+1}: {rowErr}");
+				propErrs.Add(Todo.I18n($"Prop#{i+1}: {rowErr}"));
 				continue;
 			}
 			nextProps.Add(po);
@@ -424,7 +424,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		for(i32 i = 0; i < LearnRows.Count; i++){
 			var row = LearnRows[i];
 			if(!row.TryToPo(Draft.Word.Id, out var po, out var rowErr)){
-				learnErrs.Add($"Learn#{i+1}: {rowErr}");
+				learnErrs.Add(Todo.I18n($"Learn#{i+1}: {rowErr}"));
 				continue;
 			}
 			nextLearns.Add(po);
