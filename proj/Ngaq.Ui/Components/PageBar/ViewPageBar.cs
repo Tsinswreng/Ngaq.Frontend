@@ -13,6 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
+using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Common;
 using Ctx = VmPageBar;
 public partial class ViewPageBar
 	:AppViewBase
@@ -28,7 +29,7 @@ public partial class ViewPageBar
 		Style();
 		Render();
 	}
-	
+
 	public partial class Cls{
 		public static str CenterInput = nameof(CenterInput);
 		public static str CenterText = nameof(CenterText);
@@ -138,7 +139,7 @@ public partial class ViewPageBar
 			};
 
 			panel.A(new TextBlock(), o=>{
-				o.Text = Todo.I18n("Page Size:");
+				o.Text = I[CommonK.PageSize];
 			})
 			.A(new ComboBox(), o=>{
 				o.IsEditable = true;

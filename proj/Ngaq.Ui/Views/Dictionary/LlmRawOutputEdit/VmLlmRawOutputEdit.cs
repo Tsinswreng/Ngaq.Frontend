@@ -1,6 +1,8 @@
 namespace Ngaq.Ui.Views.Dictionary.LlmRawOutputEdit;
 
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
+using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Common;
 
 using Ctx = VmLlmRawOutputEdit;
 
@@ -33,7 +35,7 @@ public partial class VmLlmRawOutputEdit: ViewModelBase, IMk<Ctx>{
 	/// 點擊「確認更改」後執行：先回調解析，再返回上一頁。
 	public async Task<nil> Confirm(CT Ct){
 		if(OnConfirm is null){
-			ShowDialog(Todo.I18n("未綁定確認回調"));
+			ShowDialog(AppI18n.Inst[CommonK.UnboundConfirmCallback]);
 			return NIL;
 		}
 		await OnConfirm(RawOutput, Ct);

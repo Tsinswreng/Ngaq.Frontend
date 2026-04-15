@@ -15,6 +15,9 @@ public class Common{
 	public static readonly K _R = Mk(View, [nameof(Common)]);
 	public static readonly K Confirm = Mk(_R, [nameof(Confirm)]);
 	public static readonly K Cancel = Mk(_R, [nameof(Cancel)]);
+	public static readonly K PageSize = Mk(_R, [nameof(PageSize)]);
+	public static readonly K ConfirmChange = Mk(_R, [nameof(ConfirmChange)]);
+	public static readonly K UnboundConfirmCallback = Mk(_R, [nameof(UnboundConfirmCallback)]);
 }
 
 public class Home{
@@ -77,6 +80,11 @@ public class About{
 	public static readonly K Website = Mk(_R, [nameof(Website)]);
 }
 
+public class Dictionary{
+	public static readonly K _R = Mk(View, [nameof(Dictionary)]);
+	public static readonly K SelectNormLang = Mk(_R, [nameof(SelectNormLang)]);
+	public static readonly K ConfigureLangMapping = Mk(_R, [nameof(ConfigureLangMapping)]);
+	public static readonly K ViewLlmRawOutput = Mk(_R, [nameof(ViewLlmRawOutput)]);
 }
 
-
+}

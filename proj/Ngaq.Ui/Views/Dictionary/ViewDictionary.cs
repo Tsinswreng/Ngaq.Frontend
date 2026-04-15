@@ -14,6 +14,8 @@ using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
+using DictK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Dictionary;
+using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Common;
 using Ctx = VmDictionary;
 
 public partial class ViewDictionary
@@ -35,7 +37,7 @@ public partial class ViewDictionary
 			_ = Ctx?.InitLang(default);
 		};
 	}
-	
+
 	public partial class Cls{}
 
 	protected nil Style(){
@@ -155,20 +157,20 @@ public partial class ViewDictionary
 				view.ViewNavi?.Back();
 			});
 		}
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.SelectNormLang], view));
 	}
 
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
-			o.Header = Todo.I18n("配置語言映射");
+			o.Header = I[DictK.ConfigureLangMapping];
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangToUserLangPage();
-				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("配置語言映射"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.ConfigureLangMapping], view));
 			};
 		});
 		menu.Items.A(new MenuItem(), o=>{
-			o.Header = Todo.I18n("查看LLM原始輸出");
+			o.Header = I[DictK.ViewLlmRawOutput];
 			o.Click += (s,e)=>{
 				var DictCtx = Ctx;
 				if(DictCtx is null){
@@ -181,7 +183,7 @@ public partial class ViewDictionary
 						return DictCtx.ReparseFromRawOutput(raw, ct);
 					});
 				}
-				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("查看LLM原始輸出"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.ViewLlmRawOutput], view));
 			};
 		});
 		return menu;
