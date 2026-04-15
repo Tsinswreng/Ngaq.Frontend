@@ -21,7 +21,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmLearnWords;
-using K = Infra.I18n.ItemsUiI18n.LearnWord;
+using K = Infra.I18n.KeysUiI18n.LearnWord;
 public partial class ViewLearnWords
 	:AppViewBase
 {

@@ -10,7 +10,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmWordSync;
-using K = Infra.I18n.ItemsUiI18n.SyncWord;
+using K = Infra.I18n.KeysUiI18n.SyncWord;
 
 public partial class ViewWordSync
 	:AppViewBase

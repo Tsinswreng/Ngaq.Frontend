@@ -294,7 +294,7 @@ public partial class MainView : UserControl {
 		else{//非Exception 非 IAppErr
 			toLog??="";
 			toLog += "\n"+Ex+"";
-			var err = ItemsErr.Common.UnknownErr.ToErr();
+			var err = KeysErr.Common.UnknownErr.ToErr();
 			if(err.Type is not null){
 				var Str = I18n.Get(err.Type.ToI18nKey(), err.Args??[]);
 				ShowDialog(Str);

@@ -6,11 +6,11 @@ namespace Ngaq.Ui.Infra.I18n;
 using static Tsinswreng.CsI18n.I18nKey;
 using K = II18nKey;
 [Doc(@$"僅定義Ngaq.Ui 界面上的文字。
-異常鍵 在 {nameof(ItemsErr)}
+如需定義異常鍵 移步 {nameof(KeysErr)}。
 ")]
-public static partial class ItemsUiI18n{
+public static partial class KeysUiI18n{
 	public static K? View = Mk(null, [nameof(View)]);
-
+	//此層 不應再有其他屬性
 public class Common{
 	public static readonly K _R = Mk(View, [nameof(Common)]);
 	public static readonly K Confirm = Mk(_R, [nameof(Confirm)]);

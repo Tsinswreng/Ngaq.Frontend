@@ -38,9 +38,9 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 		if(AnyNull(Cfg)){
 			return;
 		}
-		EnableRandomBackground = Cfg.Get(ItemsClientCfg.Word.EnableRandomBackground);
-		EnableAutoPronounce = Cfg.Get(ItemsClientCfg.Word.EnableAutoPronounce);
-		var langs = Cfg.Get(ItemsClientCfg.Word.FilterLanguage) as IList<obj>;
+		EnableRandomBackground = Cfg.Get(KeysClientCfg.Word.EnableRandomBackground);
+		EnableAutoPronounce = Cfg.Get(KeysClientCfg.Word.EnableAutoPronounce);
+		var langs = Cfg.Get(KeysClientCfg.Word.FilterLanguage) as IList<obj>;
 		LanguageFilterExpr = str.Join("\n", langs??[]);
 
 		// var lua = Cfg.Get(ItemsClientCfg.Word.LuaFilterExpr);
@@ -73,9 +73,9 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 			langs = LanguageFilterExpr.Split('\n').AsOrToList();
 		}
 		await Task.Run(async()=>{
-			Cfg.Set(ItemsClientCfg.Word.FilterLanguage, langs);
-			Cfg.Set(ItemsClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
-			Cfg.Set(ItemsClientCfg.Word.EnableAutoPronounce, EnableAutoPronounce);
+			Cfg.Set(KeysClientCfg.Word.FilterLanguage, langs);
+			Cfg.Set(KeysClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
+			Cfg.Set(KeysClientCfg.Word.EnableAutoPronounce, EnableAutoPronounce);
 			await Cfg.Save(Ct);
 		});
 		return NIL;

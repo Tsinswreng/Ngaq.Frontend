@@ -23,7 +23,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
-using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.Library;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Library;
 
 public partial class ViewWordManage
 	:AppViewBase

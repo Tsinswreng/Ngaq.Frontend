@@ -346,7 +346,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 判斷是否爲「NormLangToUserLang 未映射」的指定業務異常。
 	bool IsNormLangMappingErr(Exception Ex){
 		if(Ex is IAppErr AppErr){
-			return ReferenceEquals(AppErr.Type, ItemsErr.Word.NormLangToUserLangIsNotMapped);
+			return ReferenceEquals(AppErr.Type, KeysErr.Word.NormLangToUserLangIsNotMapped);
 		}
 		return false;
 	}

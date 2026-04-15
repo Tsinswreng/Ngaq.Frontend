@@ -6,7 +6,7 @@ using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
 using Tsinswreng.CsI18n;
 using Ctx = VmLoginRegister;
-using K = Ngaq.Ui.Infra.I18n.ItemsUiI18n.LoginRegister;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.LoginRegister;
 public partial class ViewLoginRegister
 	:AppViewBase
 {

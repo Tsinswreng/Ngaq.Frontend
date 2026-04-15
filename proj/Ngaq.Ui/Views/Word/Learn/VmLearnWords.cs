@@ -115,7 +115,7 @@ public partial class VmLearnWords
 	}
 
 	async Task<nil> HandleAutoPronounceOnWordCardClick(VmWordListCard Vm, CT Ct){
-		var enableAutoPronounce = Cfg.Get(ItemsClientCfg.Word.EnableAutoPronounce);
+		var enableAutoPronounce = Cfg.Get(KeysClientCfg.Word.EnableAutoPronounce);
 		if(!enableAutoPronounce){
 			return NIL;
 		}
@@ -238,7 +238,7 @@ public partial class VmLearnWords
 	public IAsyncEnumerable<IJnWord> FilterWord(
 		IAsyncEnumerable<IJnWord> Words
 	){
-		var langs = Cfg.Get(ItemsClientCfg.Word.FilterLanguage)??[];
+		var langs = Cfg.Get(KeysClientCfg.Word.FilterLanguage)??[];
 		if(langs.Count == 0){
 			return Words;
 		}
@@ -302,7 +302,7 @@ public partial class VmLearnWords
 
 	public nil RenderWordList(){
 		WordCards.Clear();
-		var MaxDisplayedWordCount = Cfg?.Get(ItemsClientCfg.Word.MaxDisplayedWordCount)??50;
+		var MaxDisplayedWordCount = Cfg?.Get(KeysClientCfg.Word.MaxDisplayedWordCount)??50;
 		MgrLearn.State.WordsToLearn.Select(x=>{
 			if((u64)WordCards.Count < MaxDisplayedWordCount){
 				var vm = new VmWordListCard();
@@ -376,7 +376,7 @@ public partial class VmLearnWords
 			return NIL;
 		}
 		try{
-			var EnableRandomBackground = Cfg.Get(ItemsClientCfg.Word.EnableRandomBackground);
+			var EnableRandomBackground = Cfg.Get(KeysClientCfg.Word.EnableRandomBackground);
 			if(!EnableRandomBackground){
 				return NIL;
 			}
