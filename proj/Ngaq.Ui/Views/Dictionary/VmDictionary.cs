@@ -152,7 +152,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			,ToolAsyE.ToAsyE([(ELangIdentType.Bcp47, TgtLang)])
 			,Ct
 		).FirstAsync(Ct);
-		IList<NormLangWithName> TgtLangs = [new NormLangWithName{
+		IList<NormLangDetail> TgtLangs = [new NormLangDetail{
 			Type = ELangIdentType.Bcp47,
 			Code = TgtLang,
 			NativeName = normLang?.NativeName?? "",
@@ -162,7 +162,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				Term = Input.Trim(),
 			},
 			OptLang = new OptLang{
-				SrcLang = new NormLangWithName{
+				SrcLang = new NormLangDetail{
 					Type = ELangIdentType.Bcp47,
 					Code = SrcLang,
 				},
@@ -235,11 +235,11 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 					Term = Input.Trim(),
 				},
 				OptLang = new OptLang{
-					SrcLang = new NormLangWithName{
+					SrcLang = new NormLangDetail{
 						Type = ELangIdentType.Bcp47,
 						Code = SrcLang,
 					},
-					TgtLangs = [new NormLangWithName{
+					TgtLangs = [new NormLangDetail{
 						Type = ELangIdentType.Bcp47,
 						Code = TgtLang,
 					}],

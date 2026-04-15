@@ -4,13 +4,13 @@ using Ngaq.Core.Shared.Dictionary.Models;
 
 public class LanguageOption {
 	public string DisplayName { get; set; } = "";
-	public NormLangWithName LangInfo { get; set; } = new();
+	public NormLangDetail LangInfo { get; set; } = new();
 
 	public LanguageOption() { }
 
 	public LanguageOption(string displayName, string code) {
 		DisplayName = displayName;
-		LangInfo = new NormLangWithName {
+		LangInfo = new NormLangDetail {
 			Type = ELangIdentType.Bcp47,
 			Code = code,
 			NativeName = displayName,

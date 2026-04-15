@@ -1,13 +1,15 @@
+using Ngaq.Core.Infra.Errors;
+using Tsinswreng.CsCore;
 using Tsinswreng.CsI18n;
 
 namespace Ngaq.Ui.Infra.I18n;
 using static Tsinswreng.CsI18n.I18nKey;
 using K = II18nKey;
-
+[Doc(@$"僅定義Ngaq.Ui 界面上的文字。
+異常鍵 在 {nameof(ItemsErr)}
+")]
 public static partial class ItemsUiI18n{
 	public static K? View = Mk(null, [nameof(View)]);
-	public static K? Error = Mk(null, [nameof(Error)]);
-	public static K? Lang = Mk(null, [nameof(Lang)]);
 
 public class Common{
 	public static readonly K _R = Mk(View, [nameof(Common)]);
