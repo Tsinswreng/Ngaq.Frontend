@@ -52,7 +52,7 @@ public partial class TempusBox: ContentControl{
 	o.InvalidInputCommand = new RelayCommand<InvalidCommandParam?>((param)=>{
 			var badText = param?.Text ?? "";
 			var self = param?.Self ?? o;
-			ToolTip.SetTip(self, $"{Todo.I18n("Time format is invalid")}: {badText}");
+			ToolTip.SetTip(self, $"Time format is invalid: {badText}");
 			self._Input.BorderBrush = Brushes.Goldenrod;
 			self._Input.Foreground = Brushes.Goldenrod;
 		});

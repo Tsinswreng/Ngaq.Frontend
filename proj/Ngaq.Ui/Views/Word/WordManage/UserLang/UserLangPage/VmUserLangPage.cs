@@ -12,6 +12,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Ctx = VmUserLangPage;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserLangPage;
 
 /// UserLang 列表頁 ViewModel。
 /// 負責分頁查詢、行模型映射與打開詳情事件派發。
@@ -189,7 +190,7 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 		}
 		try{
 			await SvcUserLang.AddAllUnregisteredUserLangs(UserCtxMgr.GetDbUserCtx(), Ct);
-			ShowDialog(Todo.I18n("Added all unregistered user langs"));
+			ShowDialog(I18n[K.AddedAllUnregisteredUserLangs]);
 			return await InitSearch(Ct);
 		}catch(Exception e){
 			HandleErr(e);

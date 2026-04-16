@@ -26,6 +26,7 @@ using Tsinswreng.CsErr;
 using Ctx = VmDictionary;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.CsTools;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Dictionary;
 
 public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	protected VmDictionary(){}
@@ -219,7 +220,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 用編輯後的原始文本重新解析詞典結果，不重調 LLM。
 	public Task<nil> ReparseFromRawOutput(str RawOutput, CT Ct){
 		if(str.IsNullOrWhiteSpace(RawOutput)){
-			ShowDialog(Todo.I18n("原始輸出為空，無法解析"));
+			ShowDialog(I18n[K.RawOutputEmptyCannotParse]);
 			return Task.FromResult<nil>(NIL);
 		}
 		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
@@ -300,7 +301,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 注意: 此函數本身不落庫；最終保存由 ViewWordEditV2 的 Save 按鈕執行。
 	public async Task<nil> ToWordEdit(CT Ct){
 		if(AnyNull(SvcWordV2, FrontendUserCtxMgr, LastReqLlmDict, LastRespLlmDict)){
-			ShowToast(Todo.I18n("請先完成一次詞典查詢，再嘗試保存到詞庫"));
+			ShowToast(I18n[K.CompleteDictionaryQueryBeforeSave]);
 			return NIL;
 		}
 		var Req = LastReqLlmDict!;
@@ -319,20 +320,17 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				HandleErr(Ex);
 			}
 			var BtnGoCfg = new Button();
-			BtnGoCfg.SetContent(Todo.I18n("轉到語言配置頁"));
+			BtnGoCfg.SetContent(I18n[K.GoToLanguageConfigPage]);
 			BtnGoCfg.Click += (s,e)=>{
 				_ = OpenNormLangMappingPage();
 			};
 			var BtnSkipCfg = new Button();
-			BtnSkipCfg.SetContent(Todo.I18n("暫不配置，直接轉到編輯頁"));
+			BtnSkipCfg.SetContent(I18n[K.SkipConfigAndGoEditPage]);
 			BtnSkipCfg.Click += (s,e)=>{
 				_ = GoToWordEditPage(BuildFallbackJnWord(Req, Resp));
 			};
 			ShowDialog(
-				Todo.I18n(
-					"未設定轉換語言映射。\n"+
-					"請選擇後續操作："
-				),
+				I18n[K.LanguageMappingNotConfiguredChooseNext],
 				[
 					BtnGoCfg,
 					BtnSkipCfg,
@@ -360,7 +358,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			View.Ctx.FromPoNormLangToUserLang(null);
 			View.Ctx.PoNormLang = SrcLang;
 		}
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Add NormLangToUserLang"), View));
+		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.AddNormLangToUserLang], View));
 		return NIL;
 	}
 
@@ -369,12 +367,12 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	obj? GoToWordEditPage(JnWord JnWord){
 		var View = new ViewWordEditV2();
 		if(View.Ctx is null){
-			ShowDialog(Todo.I18n("Word editor context is null"));
+			ShowDialog(I18n[K.WordEditorContextIsNull]);
 			return NIL;
 		}
 		View.Ctx.FromJnWord(JnWord);
 		var Title = str.IsNullOrWhiteSpace(JnWord.Word.Head)
-			? Todo.I18n("Word Edit")
+			? I18n[K.WordEdit]
 			: JnWord.Word.Head
 		;
 		ViewNavi?.GoTo(ToolView.WithTitle(Title, View));

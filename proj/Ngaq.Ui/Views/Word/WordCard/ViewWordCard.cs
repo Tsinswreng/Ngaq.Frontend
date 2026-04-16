@@ -16,7 +16,9 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordCard;
 
 public partial class ViewWordListCard
 	:AppViewBase
@@ -29,11 +31,11 @@ public partial class ViewWordListCard
 		var R = new ContextMenu();
 		R.Items.A(new MenuItem(), o=>{
 
-			o.Header = Svgs.CreateMD().ToIcon().WithText(Todo.I18n("Edit"));
+			o.Header = Svgs.CreateMD().ToIcon().WithText(AppI18n.Inst[K.Edit]);
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
 
-					MainView.Inst.ShowDialog(Todo.I18n("No word selected"));
+					MainView.Inst.ShowDialog(AppI18n.Inst[K.NoWordSelected]);
 					return;
 				}
                 var editView = new ViewWordEditV2();
@@ -45,14 +47,14 @@ public partial class ViewWordListCard
 			};
 		})
 		.A(new MenuItem(), o=>{
-			o.Header = Svgs.VolHigh().ToIcon().WithText(Todo.I18n("朗讀"));
+			o.Header = Svgs.VolHigh().ToIcon().WithText(AppI18n.Inst[K.Pronounce]);
 			o.Click += async(s,e)=>{
 				if(Ctx is IWordCardMenuAction Action){
 					var R = await Action.PronounceWord(JnWord, default);
 					HandlePronounceResult(Ctx, R);
 					return;
 				}
-				MainView.Inst.ShowDialog(Todo.I18n("Current page does not support word pronounce action"));
+				MainView.Inst.ShowDialog(AppI18n.Inst[K.CurrentPageNoPronounceAction]);
 			};
 		});
 		return R;
@@ -63,7 +65,7 @@ public partial class ViewWordListCard
 		DtoWordCardPronounceResult? R
 	){
 		if(R is null){
-			MainView.Inst.ShowDialog(Todo.I18n("Pronounce failed"));
+			MainView.Inst.ShowDialog(AppI18n.Inst[K.PronounceFailed]);
 			return NIL;
 		}
 		if(R.Status == EWordCardPronounceStatus.Played){
@@ -71,7 +73,7 @@ public partial class ViewWordListCard
 		}
 		if(R.Status == EWordCardPronounceStatus.UserLangNotMapped){
 			var BtnGoCfg = new Button{
-				Content = Todo.I18n("去配置 UserLang"),
+				Content = AppI18n.Inst[K.GoConfigureUserLang],
 			};
 			BtnGoCfg.Click += (bs,be)=>{
 				var View = new ViewUserLangPage();
@@ -79,31 +81,31 @@ public partial class ViewWordListCard
 					View.Ctx.Input = R.WordLang;
 					_ = View.Ctx.InitSearch(default);
 				}
-				MgrViewNavi.Inst.ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("UserLang"), View));
+				MgrViewNavi.Inst.ViewNavi?.GoTo(ToolView.WithTitle(AppI18n.Inst[K.UserLang], View));
 			};
 			MainView.Inst.ShowDialog(
-				Todo.I18n("當前單詞語言未映射到標準語言，無法朗讀。"),
+				AppI18n.Inst[K.WordLangNotMappedCannotPronounce],
 				[BtnGoCfg]
 			);
 			return NIL;
 		}
 		if(R.Status == EWordCardPronounceStatus.NoWordSelected){
-			MainView.Inst.ShowDialog(Todo.I18n("No word selected"));
+			MainView.Inst.ShowDialog(AppI18n.Inst[K.NoWordSelected]);
 			return NIL;
 		}
 		if(R.Status == EWordCardPronounceStatus.WordLangEmpty){
-			MainView.Inst.ShowDialog(Todo.I18n("Word lang is empty"));
+			MainView.Inst.ShowDialog(AppI18n.Inst[K.WordLangIsEmpty]);
 			return NIL;
 		}
 		if(R.Status == EWordCardPronounceStatus.ServiceUnavailable){
-			MainView.Inst.ShowDialog(Todo.I18n("Service unavailable"));
+			MainView.Inst.ShowDialog(AppI18n.Inst[K.ServiceUnavailable]);
 			return NIL;
 		}
 		if(R.Status == EWordCardPronounceStatus.Failed){
 			if(R.Error is not null){
 				Ctx?.HandleErr(R.Error);
 			}else{
-				MainView.Inst.ShowDialog(Todo.I18n("Pronounce failed"));
+				MainView.Inst.ShowDialog(AppI18n.Inst[K.PronounceFailed]);
 			}
 			return NIL;
 		}

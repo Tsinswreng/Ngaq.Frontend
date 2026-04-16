@@ -21,6 +21,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmUserLangPage;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserLangPage;
 
 /// UserLang 列表頁視圖。
 /// 上部爲搜索與新增，主體爲 TreeDataGrid，底部爲分頁條。
@@ -120,7 +121,7 @@ public partial class ViewUserLangPage
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
-			o.Header = Svgs.DatabaseImport().ToIcon().WithText(Todo.I18n("Auto Add Missing"));
+			o.Header = Svgs.DatabaseImport().ToIcon().WithText(I[K.AutoAddMissing]);
 			o.Click += (s,e)=>{
 				_ = Ctx?.AddAllUnregisteredUserLangs(default);
 			};
@@ -161,11 +162,11 @@ public partial class ViewUserLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowUserLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("Name"), x=>x.Name),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("RelLangType"), x=>x.RelLangType),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("RelLang"), x=>x.RelLang),
-				new TextColumn<Ctx.RowUserLang, str>(Todo.I18n("Modified"), x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowUserLang, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowUserLang, str>(I[K.Name], x=>x.Name),
+				new TextColumn<Ctx.RowUserLang, str>(I[K.RelLangType], x=>x.RelLangType),
+				new TextColumn<Ctx.RowUserLang, str>(I[K.RelLang], x=>x.RelLang),
+				new TextColumn<Ctx.RowUserLang, str>(I[K.Modified], x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;
@@ -199,7 +200,7 @@ public partial class ViewUserLangPage
 		var view = new ViewUserLangEdit();
 		view.Ctx?.SetCreateMode(row?.Raw is null);
 		view.Ctx?.FromPoUserLang(row?.Raw);
-		var title = row?.Raw?.UniqName ?? Todo.I18n("新增UserLang");
+		var title = row?.Raw?.UniqName ?? I[K.NewUserLang];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 	}

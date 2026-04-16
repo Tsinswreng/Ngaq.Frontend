@@ -14,6 +14,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ursa.Controls;
 using Ctx = VmXxx;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserProfile;
 
 public partial class ViewUserProfile
 	:AppViewBase
@@ -82,17 +83,17 @@ public partial class ViewUserProfile
 					Sp
 						.A(new Button(), o=>{
 						o.StretchCenter();
-						o.Content = Todo.I18n("Change Account");
+						o.Content = I[K.ChangeAccount];
 						o.Click += (s,e)=>{
 							ViewNavi?.GoTo(
-								ToolView.WithTitle(Todo.I18n("Change Account"), new ViewLoginRegister())
+								ToolView.WithTitle(I[K.ChangeAccount], new ViewLoginRegister())
 							);
 						};
 					})
 					.A(new OpBtn(), o=>{
 						o._Button.StretchCenter();
 						o.Background = Brushes.Red;
-						o.BtnContent = Todo.I18n("Logout");
+						o.BtnContent = I[K.Logout];
 						o.SetExe((Ct)=>Ctx?.LogoutAsy(Ct));
 					});
 				});

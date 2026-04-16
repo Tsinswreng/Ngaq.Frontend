@@ -13,6 +13,7 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
 using Ctx = VmWordSync;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordSync;
 public partial class VmWordSync: ViewModelBase{
 	ISvcKv? SvcKv;
 	ClientWordSync? ClientWordSync;
@@ -93,7 +94,7 @@ public partial class VmWordSync: ViewModelBase{
 
 	public async Task<nil> ExportAsy(CT Ct=default){
 		if(File.Exists(PathExport)){
-			ShowDialog(Todo.I18n("File already exists. We won't overwrite it. Please change the path."));
+			ShowDialog(I18n[K.FileAlreadyExistsNoOverwriteChangePath]);
 			return NIL;
 		}
 		await Task.Run(async()=>{
@@ -105,7 +106,7 @@ public partial class VmWordSync: ViewModelBase{
 			ToolFile.EnsureFile(PathExport);
 			if(!File.Exists(PathExport)){
 				Dispatcher.UIThread.Post(()=>{
-					this.ShowDialog(Todo.I18n("Invalid Path."));
+					this.ShowDialog(I18n[K.InvalidPath]);
 				});
 				return;
 			}

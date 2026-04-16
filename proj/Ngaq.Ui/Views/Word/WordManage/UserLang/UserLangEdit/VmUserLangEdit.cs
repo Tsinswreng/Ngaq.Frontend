@@ -13,6 +13,7 @@ using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
 using Ctx = VmUserLangEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserLangEdit;
 
 /// UserLang 編輯頁 ViewModel。
 /// 支持新增與修改（不顯示 Owner，Id 只讀）。
@@ -154,7 +155,7 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));

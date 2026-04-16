@@ -18,6 +18,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.SearchWords;
 
 public partial class ViewSearchWords
 	:AppViewBase
@@ -109,7 +110,7 @@ public partial class ViewSearchWords
 			if(!AnyNull(View.Ctx.WordForLearn?.JnWord)){
 				R.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, View.Ctx.WordForLearn.JnWord);
 			}else{
-				Ctx?.ShowDialog(Todo.I18n("Word not found."));
+				Ctx?.ShowDialog(I[K.WordNotFound]);
 			}
 			R.Click += (s,e)=>{
 				var Target = new ViewWordEditV2();

@@ -24,6 +24,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Library;
+using LK = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordManage;
 
 public partial class ViewWordManage
 	:AppViewBase
@@ -77,14 +78,14 @@ public partial class ViewWordManage
 			menuGrid.Children.Add(item);
 		}
 
-		addItem(_Item(Todo.I18n("Dictionary"), ()=>new ViewDictionary(), Svgs.BookA().ToIcon()), 0, 0);
+		addItem(_Item(I[LK.Dictionary], ()=>new ViewDictionary(), Svgs.BookA().ToIcon()), 0, 0);
 		addItem(_Item(I[K.SearchMyWords], ()=>new ViewSearchWords(), Svgs.Search().ToIcon()), 0, 1);
 		addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 1, 0);
-		addItem(_Item(Todo.I18n("Study Plan"), ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
+		addItem(_Item(I[LK.StudyPlan], ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
 		addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
-		addItem(_Item(Todo.I18n("Statistics"), ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
-		addItem(_Item(Todo.I18n("UserLang"), ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 0);
-		addItem(_Item(Todo.I18n("NormLang"), ()=>new ViewNormLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 1);
+		addItem(_Item(I[LK.Statistics], ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
+		addItem(_Item(I[LK.UserLang], ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 0);
+		addItem(_Item(I[LK.NormLang], ()=>new ViewNormLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 1);
 
 		Root.A(menuGrid);
 

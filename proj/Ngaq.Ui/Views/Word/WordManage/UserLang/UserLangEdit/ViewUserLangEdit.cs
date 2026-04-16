@@ -14,6 +14,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmUserLangEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserLangEdit;
 
 /// UserLang 詳情編輯頁。
 /// 僅顯示業務字段；`Id` 只讀，`Owner` 不顯示。
@@ -31,7 +32,7 @@ public partial class ViewUserLangEdit
 		Render();
 	}
 
-	
+
 	public partial class Cls{}
 
 	/// 當前頁面暫無額外樣式覆蓋。
@@ -93,18 +94,18 @@ public partial class ViewUserLangEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = Todo.I18n("PoUserLang"),
+			Text = I[K.PoUserLang],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkIdRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
-		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
-		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
+		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
+		.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
+		.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
 		;
-		var typeRow = MkComboRow(Todo.I18n("RelLangType"), Ctx?.RelLangTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoRelLangTypeIndex, Mode: BindingMode.TwoWay));
+		var typeRow = MkComboRow(I[K.RelLangType], Ctx?.RelLangTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoRelLangTypeIndex, Mode: BindingMode.TwoWay));
 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowRelLangTypeField, Mode: BindingMode.OneWay);
 		sp.A(typeRow)
-		 .A(MkInputRow(Todo.I18n("RelLang"), CBE.Mk<Ctx>(x=>x.PoRelLang, Mode: BindingMode.TwoWay)));
+		 .A(MkInputRow(I[K.RelLang], CBE.Mk<Ctx>(x=>x.PoRelLang, Mode: BindingMode.TwoWay)));
 		return bdr;
 	}
 
@@ -117,7 +118,7 @@ public partial class ViewUserLangEdit
 		bar.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;

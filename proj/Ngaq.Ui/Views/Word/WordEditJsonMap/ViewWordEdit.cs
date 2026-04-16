@@ -17,6 +17,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Tsinswreng.Srefl;
 using Ctx = VmWordEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditJsonMap;
 public partial class ViewWordEdit
 	:AppViewBase
 	,I_MkTitleMenu
@@ -32,7 +33,7 @@ public partial class ViewWordEdit
 		Style();
 		Render();
 	}
-	
+
 	public partial class Cls{
 
 	}
@@ -45,7 +46,7 @@ public partial class ViewWordEdit
 			o.Click += (s,e)=>{
 				var vj = new ViewEditJsonWord();
 				if(AnyNull(vj.Ctx, Ctx?.JnWord)){
-					Ctx?.ShowDialog(Todo.I18n("No Word or Ctx"));
+					Ctx?.ShowDialog(I[K.NoWordOrCtx]);
 					return;
 				}
 				vj.Ctx.FromJnWord(Ctx.JnWord);
@@ -90,7 +91,7 @@ public partial class ViewWordEdit
 		Root.A(new ScrollViewer(), Sv=>{
 			Sv.SetContent(new StackPanel(), root2=>{
 				root2.A(_Expander(), Ex=>{
-					Ex.Header = Todo.I18n("Word Core");
+					Ex.Header = I[K.WordCore];
 					Ex.IsExpanded = true;
 					Ex.SetContent(new ScrollViewer(), Sv=>{
 						Sv.SetContent(new ViewUiJsonMap(), jm=>{
@@ -109,7 +110,7 @@ public partial class ViewWordEdit
 		});
 
 		Root.A(new OpBtn(), o=>{
-			o.BtnContent = Todo.I18n("Save");
+			o.BtnContent = I[K.Save];
 		});
 
 		return NIL;
