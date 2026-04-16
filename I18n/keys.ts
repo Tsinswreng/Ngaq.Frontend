@@ -63,12 +63,20 @@ const Full = {
 			TokenExpired: K,
 		},
 	},
-	//語言名稱本身的翻譯
+	//語言名稱本身的翻譯(不帶地區) 按Bcp47格式
 	Lang:{
 		zh: K,
-		zh_CN: K,
+		en: K,
 		//...
 	},
+	//地區標識翻譯 按Bcp47格式。
+	Region:{
+		CN: K,
+		TW: K,
+		US: K,
+		//...
+	}
+
 }
 
 type TI18nKv = typeof Full;
