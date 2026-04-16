@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 
 using System;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Tsinswreng.CsTools;
-using Ctx = VmStudyPlanEdit;
+using Ctx = VmStudyPlanEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.StudyPlanEdit;
 
 /// StudyPlan 編輯頁 ViewModel。
 /// 支持新增、修改與刪除。
@@ -157,7 +157,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			IsCreateMode = false;
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -181,7 +181,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Deleted"));
+			ShowDialog(I18n[K.Deleted]);
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -332,3 +332,4 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		};
 	}
 }
+

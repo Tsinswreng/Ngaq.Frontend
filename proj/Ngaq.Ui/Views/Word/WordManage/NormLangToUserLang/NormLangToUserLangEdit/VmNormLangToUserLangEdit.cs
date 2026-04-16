@@ -13,7 +13,7 @@ using Ngaq.Core.Shared.Word.Models.Po.UserLang;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
-using Ctx = VmNormLangToUserLangEdit;
+using Ctx = VmNormLangToUserLangEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangToUserLangEdit;
 
 /// 標準語言到用戶語言映射編輯頁 ViewModel。
 public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
@@ -134,7 +134,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			PoNormLangToUserLang = po;
 			IsCreateMode = false;
 			SyncFromPo();
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -155,7 +155,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			};
 			IsCreateMode = true;
 			SyncFromPo();
-			ShowDialog(Todo.I18n("Deleted"));
+			ShowDialog(I18n[K.Deleted]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -234,3 +234,4 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 		return NormLangTypeValues[i];
 	}
 }
+

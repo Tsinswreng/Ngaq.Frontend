@@ -144,6 +144,73 @@ public class SearchWords{
 	public static readonly K WordNotFound = Mk(_R, [nameof(WordNotFound)]);
 }
 
+public class Statistics{
+	public static readonly K _R = Mk(View, [nameof(Statistics)]);
+	public static readonly K Second = Mk(_R, [nameof(Second)]);
+	public static readonly K Minute = Mk(_R, [nameof(Minute)]);
+	public static readonly K Hour = Mk(_R, [nameof(Hour)]);
+	public static readonly K Day = Mk(_R, [nameof(Day)]);
+	public static readonly K Week = Mk(_R, [nameof(Week)]);
+	public static readonly K Month = Mk(_R, [nameof(Month)]);
+	public static readonly K Year = Mk(_R, [nameof(Year)]);
+	public static readonly K StartTime = Mk(_R, [nameof(StartTime)]);
+	public static readonly K EndTime = Mk(_R, [nameof(EndTime)]);
+	public static readonly K Interval = Mk(_R, [nameof(Interval)]);
+	public static readonly K LearnResult = Mk(_R, [nameof(LearnResult)]);
+	public static readonly K Count = Mk(_R, [nameof(Count)]);
+}
+
+public class NormLangPage{
+	public static readonly K _R = Mk(View, [nameof(NormLangPage)]);
+	public static readonly K InitializedBuiltinNormLang = Mk(_R, [nameof(InitializedBuiltinNormLang)]);
+	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	public static readonly K Code = Mk(_R, [nameof(Code)]);
+	public static readonly K NativeName = Mk(_R, [nameof(NativeName)]);
+	public static readonly K AddNormLang = Mk(_R, [nameof(AddNormLang)]);
+	public static readonly K InitBuiltin = Mk(_R, [nameof(InitBuiltin)]);
+}
+
+public class NormLangEdit{
+	public static readonly K _R = Mk(View, [nameof(NormLangEdit)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K PoNormLang = Mk(_R, [nameof(PoNormLang)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K Code = Mk(_R, [nameof(Code)]);
+	public static readonly K NativeName = Mk(_R, [nameof(NativeName)]);
+	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+}
+
+public class NormLangToUserLangPage{
+	public static readonly K _R = Mk(View, [nameof(NormLangToUserLangPage)]);
+	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	public static readonly K NormLangType = Mk(_R, [nameof(NormLangType)]);
+	public static readonly K NormLang = Mk(_R, [nameof(NormLang)]);
+	public static readonly K UserLang = Mk(_R, [nameof(UserLang)]);
+	public static readonly K Descr = Mk(_R, [nameof(Descr)]);
+	public static readonly K Modified = Mk(_R, [nameof(Modified)]);
+	public static readonly K AddNormLangToUserLang = Mk(_R, [nameof(AddNormLangToUserLang)]);
+}
+
+public class NormLangToUserLangEdit{
+	public static readonly K _R = Mk(View, [nameof(NormLangToUserLangEdit)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K PoNormLangToUserLang = Mk(_R, [nameof(PoNormLangToUserLang)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K NormLangType = Mk(_R, [nameof(NormLangType)]);
+	public static readonly K NormLang = Mk(_R, [nameof(NormLang)]);
+	public static readonly K UserLang = Mk(_R, [nameof(UserLang)]);
+	public static readonly K Descr = Mk(_R, [nameof(Descr)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	public static readonly K Pick = Mk(_R, [nameof(Pick)]);
+	public static readonly K SelectNormLang = Mk(_R, [nameof(SelectNormLang)]);
+	public static readonly K SelectUserLang = Mk(_R, [nameof(SelectUserLang)]);
+}
+
 public class UserLangPage{
 	public static readonly K _R = Mk(View, [nameof(UserLangPage)]);
 	public static readonly K AddedAllUnregisteredUserLangs = Mk(_R, [nameof(AddedAllUnregisteredUserLangs)]);
@@ -175,6 +242,287 @@ public class WordEditJsonMap{
 	public static readonly K NoWordOrCtx = Mk(_R, [nameof(NoWordOrCtx)]);
 	public static readonly K WordCore = Mk(_R, [nameof(WordCore)]);
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
+}
+
+public class WordEditV2{
+	public static readonly K _R = Mk(View, [nameof(WordEditV2)]);
+	public static readonly K InvalidKI64 = Mk(_R, [nameof(InvalidKI64)]);
+	public static readonly K InvalidKType = Mk(_R, [nameof(InvalidKType)]);
+	public static readonly K InvalidVI64 = Mk(_R, [nameof(InvalidVI64)]);
+	public static readonly K InvalidVType = Mk(_R, [nameof(InvalidVType)]);
+	public static readonly K NoJsonSerializer = Mk(_R, [nameof(NoJsonSerializer)]);
+	public static readonly K JsonParseFailed = Mk(_R, [nameof(JsonParseFailed)]);
+	public static readonly K NoDraft = Mk(_R, [nameof(NoDraft)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K HeadIsRequired = Mk(_R, [nameof(HeadIsRequired)]);
+	public static readonly K LangIsRequired = Mk(_R, [nameof(LangIsRequired)]);
+	public static readonly K StoredAtMustBeIsoTime = Mk(_R, [nameof(StoredAtMustBeIsoTime)]);
+	public static readonly K DelAtMustBeUnixMilliseconds = Mk(_R, [nameof(DelAtMustBeUnixMilliseconds)]);
+	public static readonly K BizCreatedAtMustBeIsoTime = Mk(_R, [nameof(BizCreatedAtMustBeIsoTime)]);
+	public static readonly K BizUpdatedAtMustBeIsoTime = Mk(_R, [nameof(BizUpdatedAtMustBeIsoTime)]);
+	public static readonly K Prop__Err__ = Mk(_R, [nameof(Prop__Err__)]);
+	public static readonly K Learn__Err__ = Mk(_R, [nameof(Learn__Err__)]);
+	public static readonly K Basic = Mk(_R, [nameof(Basic)]);
+	public static readonly K Props = Mk(_R, [nameof(Props)]);
+	public static readonly K Learns = Mk(_R, [nameof(Learns)]);
+	public static readonly K WordId = Mk(_R, [nameof(WordId)]);
+	public static readonly K Head = Mk(_R, [nameof(Head)]);
+	public static readonly K Lang = Mk(_R, [nameof(Lang)]);
+	public static readonly K StoredAt = Mk(_R, [nameof(StoredAt)]);
+	public static readonly K BizCreatedAt = Mk(_R, [nameof(BizCreatedAt)]);
+	public static readonly K BizUpdatedAt = Mk(_R, [nameof(BizUpdatedAt)]);
+	public static readonly K DelAtUnixMs = Mk(_R, [nameof(DelAtUnixMs)]);
+	public static readonly K AddProp = Mk(_R, [nameof(AddProp)]);
+	public static readonly K AddLearn = Mk(_R, [nameof(AddLearn)]);
+	public static readonly K NumberSign = Mk(_R, [nameof(NumberSign)]);
+	public static readonly K Key = Mk(_R, [nameof(Key)]);
+	public static readonly K KType = Mk(_R, [nameof(KType)]);
+	public static readonly K VType = Mk(_R, [nameof(VType)]);
+	public static readonly K LearnResult = Mk(_R, [nameof(LearnResult)]);
+	public static readonly K EditProp = Mk(_R, [nameof(EditProp)]);
+	public static readonly K EditLearn = Mk(_R, [nameof(EditLearn)]);
+	public static readonly K KeyStr = Mk(_R, [nameof(KeyStr)]);
+	public static readonly K KeyI64 = Mk(_R, [nameof(KeyI64)]);
+	public static readonly K VStr = Mk(_R, [nameof(VStr)]);
+	public static readonly K VI64 = Mk(_R, [nameof(VI64)]);
+	public static readonly K Remove = Mk(_R, [nameof(Remove)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	public static readonly K KvTypeStr = Mk(_R, [nameof(KvTypeStr)]);
+	public static readonly K KvTypeI64 = Mk(_R, [nameof(KvTypeI64)]);
+	public static readonly K LearnAdd = Mk(_R, [nameof(LearnAdd)]);
+	public static readonly K LearnRmb = Mk(_R, [nameof(LearnRmb)]);
+	public static readonly K LearnFgt = Mk(_R, [nameof(LearnFgt)]);
+}
+
+public class AddWord{
+	public static readonly K _R = Mk(View, [nameof(AddWord)]);
+	public static readonly K WordTxtFile = Mk(_R, [nameof(WordTxtFile)]);
+	public static readonly K JsonsFile = Mk(_R, [nameof(JsonsFile)]);
+	public static readonly K Text = Mk(_R, [nameof(Text)]);
+	public static readonly K Json = Mk(_R, [nameof(Json)]);
+	public static readonly K Submit = Mk(_R, [nameof(Submit)]);
+	public static readonly K Browse = Mk(_R, [nameof(Browse)]);
+}
+
+public class EditJsonWord{
+	public static readonly K _R = Mk(View, [nameof(EditJsonWord)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+}
+
+public class StudyPlan{
+	public static readonly K _R = Mk(View, [nameof(StudyPlan)]);
+	public static readonly K SetCurrentStudyPlan = Mk(_R, [nameof(SetCurrentStudyPlan)]);
+	public static readonly K PoStudyPlan = Mk(_R, [nameof(PoStudyPlan)]);
+	public static readonly K PoWeightCalculator = Mk(_R, [nameof(PoWeightCalculator)]);
+	public static readonly K PreFilter = Mk(_R, [nameof(PreFilter)]);
+	public static readonly K WeightArgWithSpace = Mk(_R, [nameof(WeightArgWithSpace)]);
+}
+
+public class SetCurStudyPlan{
+	public static readonly K _R = Mk(View, [nameof(SetCurStudyPlan)]);
+	public static readonly K RestoreBuiltinDone = Mk(_R, [nameof(RestoreBuiltinDone)]);
+	public static readonly K SetCurrentStudyPlan = Mk(_R, [nameof(SetCurrentStudyPlan)]);
+	public static readonly K Reload = Mk(_R, [nameof(Reload)]);
+	public static readonly K RestoreBuiltin = Mk(_R, [nameof(RestoreBuiltin)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K UniqName = Mk(_R, [nameof(UniqName)]);
+	public static readonly K Descr = Mk(_R, [nameof(Descr)]);
+	public static readonly K Select = Mk(_R, [nameof(Select)]);
+	public static readonly K Edit = Mk(_R, [nameof(Edit)]);
+	public static readonly K NoEditableStudyPlan = Mk(_R, [nameof(NoEditableStudyPlan)]);
+	public static readonly K EditStudyPlan = Mk(_R, [nameof(EditStudyPlan)]);
+	public static readonly K SelectStudyPlan = Mk(_R, [nameof(SelectStudyPlan)]);
+}
+
+public class StudyPlanPage{
+	public static readonly K _R = Mk(View, [nameof(StudyPlanPage)]);
+	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
+	public static readonly K NewStudyPlan = Mk(_R, [nameof(NewStudyPlan)]);
+}
+
+public class StudyPlanEdit{
+	public static readonly K _R = Mk(View, [nameof(StudyPlanEdit)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K PoStudyPlan = Mk(_R, [nameof(PoStudyPlan)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	public static readonly K PreFilter = Mk(_R, [nameof(PreFilter)]);
+	public static readonly K Choose = Mk(_R, [nameof(Choose)]);
+	public static readonly K SelectPreFilter = Mk(_R, [nameof(SelectPreFilter)]);
+	public static readonly K WeightCalculator = Mk(_R, [nameof(WeightCalculator)]);
+	public static readonly K SelectWeightCalculator = Mk(_R, [nameof(SelectWeightCalculator)]);
+	public static readonly K WeightArg = Mk(_R, [nameof(WeightArg)]);
+	public static readonly K SelectWeightArg = Mk(_R, [nameof(SelectWeightArg)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+}
+
+public class PreFilterPage{
+	public static readonly K _R = Mk(View, [nameof(PreFilterPage)]);
+	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
+	public static readonly K NewPreFilter = Mk(_R, [nameof(NewPreFilter)]);
+}
+
+public class PreFilterVisualEdit{
+	public static readonly K _R = Mk(View, [nameof(PreFilterVisualEdit)]);
+	public static readonly K PoPreFilterJson = Mk(_R, [nameof(PoPreFilterJson)]);
+	public static readonly K PreFilter = Mk(_R, [nameof(PreFilter)]);
+	public static readonly K PreFilterDraftUpdated = Mk(_R, [nameof(PreFilterDraftUpdated)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K Row__InvalidCoreFilterField__ = Mk(_R, [nameof(Row__InvalidCoreFilterField__)]);
+	public static readonly K __IsNotValidNumber = Mk(_R, [nameof(__IsNotValidNumber)]);
+	public static readonly K PoPreFilter = Mk(_R, [nameof(PoPreFilter)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	public static readonly K TextPreview = Mk(_R, [nameof(TextPreview)]);
+	public static readonly K TextPayload = Mk(_R, [nameof(TextPayload)]);
+	public static readonly K EditPreFilterTextInGui = Mk(_R, [nameof(EditPreFilterTextInGui)]);
+	public static readonly K OpenJson = Mk(_R, [nameof(OpenJson)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+}
+
+public class PreFilterDataEdit{
+	public static readonly K _R = Mk(View, [nameof(PreFilterDataEdit)]);
+	public static readonly K NumberSign = Mk(_R, [nameof(NumberSign)]);
+	public static readonly K Fields = Mk(_R, [nameof(Fields)]);
+	public static readonly K Items = Mk(_R, [nameof(Items)]);
+	public static readonly K CoreFilter = Mk(_R, [nameof(CoreFilter)]);
+	public static readonly K PropFilter = Mk(_R, [nameof(PropFilter)]);
+	public static readonly K AddGroup = Mk(_R, [nameof(AddGroup)]);
+	public static readonly K Back = Mk(_R, [nameof(Back)]);
+	public static readonly K SaveDraft = Mk(_R, [nameof(SaveDraft)]);
+}
+
+public class PreFilterJsonEdit{
+	public static readonly K _R = Mk(View, [nameof(PreFilterJsonEdit)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K NoPersistedIdToDelete = Mk(_R, [nameof(NoPersistedIdToDelete)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K PoPreFilterJsonParseFailed = Mk(_R, [nameof(PoPreFilterJsonParseFailed)]);
+	public static readonly K Back = Mk(_R, [nameof(Back)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+}
+
+public class FieldsFilterCardEdit{
+	public static readonly K _R = Mk(View, [nameof(FieldsFilterCardEdit)]);
+	public static readonly K EditorNotReady = Mk(_R, [nameof(EditorNotReady)]);
+	public static readonly K Core = Mk(_R, [nameof(Core)]);
+	public static readonly K Prop = Mk(_R, [nameof(Prop)]);
+	public static readonly K Saved__Filter__No__ = Mk(_R, [nameof(Saved__Filter__No__)]);
+	public static readonly K IncludeAny = Mk(_R, [nameof(IncludeAny)]);
+	public static readonly K IncludeAll = Mk(_R, [nameof(IncludeAll)]);
+	public static readonly K ExcludeAll = Mk(_R, [nameof(ExcludeAll)]);
+	public static readonly K String = Mk(_R, [nameof(String)]);
+	public static readonly K Number = Mk(_R, [nameof(Number)]);
+	public static readonly K Null = Mk(_R, [nameof(Null)]);
+	public static readonly K Fields = Mk(_R, [nameof(Fields)]);
+	public static readonly K FilterItems = Mk(_R, [nameof(FilterItems)]);
+	public static readonly K AddField = Mk(_R, [nameof(AddField)]);
+	public static readonly K Remove = Mk(_R, [nameof(Remove)]);
+	public static readonly K TapRowToEditOneFilterItem = Mk(_R, [nameof(TapRowToEditOneFilterItem)]);
+	public static readonly K AddItem = Mk(_R, [nameof(AddItem)]);
+	public static readonly K NumberSign = Mk(_R, [nameof(NumberSign)]);
+	public static readonly K Operation = Mk(_R, [nameof(Operation)]);
+	public static readonly K ValueType = Mk(_R, [nameof(ValueType)]);
+	public static readonly K Values = Mk(_R, [nameof(Values)]);
+	public static readonly K Back = Mk(_R, [nameof(Back)]);
+	public static readonly K SaveGroup = Mk(_R, [nameof(SaveGroup)]);
+}
+
+public class FilterItemEdit{
+	public static readonly K _R = Mk(View, [nameof(FilterItemEdit)]);
+	public static readonly K EditorNotReady = Mk(_R, [nameof(EditorNotReady)]);
+	public static readonly K SavedFilterItem__No__ = Mk(_R, [nameof(SavedFilterItem__No__)]);
+	public static readonly K DeletedFilterItem__No__ = Mk(_R, [nameof(DeletedFilterItem__No__)]);
+	public static readonly K Operation = Mk(_R, [nameof(Operation)]);
+	public static readonly K ValueType = Mk(_R, [nameof(ValueType)]);
+	public static readonly K ValuesNewlineSeparated = Mk(_R, [nameof(ValuesNewlineSeparated)]);
+	public static readonly K Back = Mk(_R, [nameof(Back)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+}
+
+public class WeightCalculatorPage{
+	public static readonly K _R = Mk(View, [nameof(WeightCalculatorPage)]);
+	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
+	public static readonly K NewWeightCalculator = Mk(_R, [nameof(NewWeightCalculator)]);
+}
+
+public class WeightCalculatorEdit{
+	public static readonly K _R = Mk(View, [nameof(WeightCalculatorEdit)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K PoWeightCalculator = Mk(_R, [nameof(PoWeightCalculator)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	public static readonly K PayloadText = Mk(_R, [nameof(PayloadText)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+}
+
+public class WeightArgPage{
+	public static readonly K _R = Mk(View, [nameof(WeightArgPage)]);
+	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
+	public static readonly K NewWeightArg = Mk(_R, [nameof(NewWeightArg)]);
+}
+
+public class WeightArgEdit{
+	public static readonly K _R = Mk(View, [nameof(WeightArgEdit)]);
+	public static readonly K WeightArgPayloadJson = Mk(_R, [nameof(WeightArgPayloadJson)]);
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K PoWeightArg = Mk(_R, [nameof(PoWeightArg)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K WeightCalculator = Mk(_R, [nameof(WeightCalculator)]);
+	public static readonly K Choose = Mk(_R, [nameof(Choose)]);
+	public static readonly K SelectWeightAlgorithm = Mk(_R, [nameof(SelectWeightAlgorithm)]);
+	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	public static readonly K PayloadTextPreview = Mk(_R, [nameof(PayloadTextPreview)]);
+	public static readonly K Payload = Mk(_R, [nameof(Payload)]);
+	public static readonly K EditPayloadJson = Mk(_R, [nameof(EditPayloadJson)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+}
+
+public class WeightArgPayloadJsonEdit{
+	public static readonly K _R = Mk(View, [nameof(WeightArgPayloadJsonEdit)]);
+	public static readonly K Back = Mk(_R, [nameof(Back)]);
+	public static readonly K Apply = Mk(_R, [nameof(Apply)]);
+}
+
+public class Sample{
+	public static readonly K _R = Mk(View, [nameof(Sample)]);
+	public static readonly K ButtonOne = Mk(_R, [nameof(ButtonOne)]);
+	public static readonly K CallBackendService = Mk(_R, [nameof(CallBackendService)]);
+	public static readonly K TopbarTitle = Mk(_R, [nameof(TopbarTitle)]);
+	public static readonly K CorrectExample = Mk(_R, [nameof(CorrectExample)]);
+	public static readonly K File = Mk(_R, [nameof(File)]);
+	public static readonly K Edit = Mk(_R, [nameof(Edit)]);
 }
 
 }

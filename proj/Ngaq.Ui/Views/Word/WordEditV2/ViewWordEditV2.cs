@@ -25,7 +25,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTempus;
-using Ctx = VmWordEditV2;
+using Ctx = VmWordEditV2;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
 
 public partial class ViewWordEditV2: AppViewBase{
 	public Ctx? Ctx{
@@ -60,14 +60,14 @@ public partial class ViewWordEditV2: AppViewBase{
 	FlatTreeDataGridSource<VmWordLearnRow>? LearnGridSource;
 
 	readonly IReadOnlyList<str> _KvTypeOptions = [
-		Todo.I18n(nameof(EKvType.Str)),
-		Todo.I18n(nameof(EKvType.I64)),
+		I[K.KvTypeStr],
+		I[K.KvTypeI64],
 	];
 
 	readonly IReadOnlyList<str> _LearnResultOptions = [
-		Todo.I18n(nameof(ELearn.Add)),
-		Todo.I18n(nameof(ELearn.Rmb)),
-		Todo.I18n(nameof(ELearn.Fgt)),
+		I[K.LearnAdd],
+		I[K.LearnRmb],
+		I[K.LearnFgt],
 	];
 
 	static readonly IValueConverter _IsoTempusConverter = new IsoToTempusConverter();
@@ -111,15 +111,15 @@ public partial class ViewWordEditV2: AppViewBase{
 		tab.Bind(tab.PropSelectedIndex, CBE.Mk<Ctx>(x=>x.TabIndex, Mode: BindingMode.TwoWay));
 
 		tab.Items.A(new TabItem(), o=>{
-			o.Header = Todo.I18n("Basic");
+			o.Header = I[K.Basic];
 			o.Content = MkBasicTab();
 		})
 		.A(new TabItem(), o=>{
-			o.Header = Todo.I18n("Props");
+			o.Header = I[K.Props];
 			o.Content = MkPropsTab();
 		})
 		.A(new TabItem(), o=>{
-			o.Header = Todo.I18n("Learns");
+			o.Header = I[K.Learns];
 			o.Content = MkLearnsTab();
 		});
 		return tab;
@@ -133,14 +133,14 @@ public partial class ViewWordEditV2: AppViewBase{
 		};
 		sv.Content = sp;
 
-		sp.A(MkIdSelectableRow(Todo.I18n("WordId"), CBE.Mk<Ctx>(x=>x.WordIdText, Mode: BindingMode.OneWay)));
-		sp.A(MkInputRow(Todo.I18n("Head"), CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay)));
-		sp.A(MkInputRow(Todo.I18n("Lang"), CBE.Mk<Ctx>(x=>x.Lang, Mode: BindingMode.TwoWay)));
-		sp.A(MkTempusRow(Todo.I18n("StoredAt"), CBE.Mk<Ctx>(x=>x.StoredAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
-		sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
-		sp.A(MkTempusRow(Todo.I18n("BizUpdatedAt"), CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+		sp.A(MkIdSelectableRow(I[K.WordId], CBE.Mk<Ctx>(x=>x.WordIdText, Mode: BindingMode.OneWay)));
+		sp.A(MkInputRow(I[K.Head], CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay)));
+		sp.A(MkInputRow(I[K.Lang], CBE.Mk<Ctx>(x=>x.Lang, Mode: BindingMode.TwoWay)));
+		sp.A(MkTempusRow(I[K.StoredAt], CBE.Mk<Ctx>(x=>x.StoredAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+		sp.A(MkTempusRow(I[K.BizCreatedAt], CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+		sp.A(MkTempusRow(I[K.BizUpdatedAt], CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
 		sp.A(MkTempusRow(
-			Todo.I18n("DelAt(unix ms)"),
+			I[K.DelAtUnixMs],
 			CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay, Converter: _DelAtUnixMsConverter)
 		));
 		return sv;
@@ -148,7 +148,7 @@ public partial class ViewWordEditV2: AppViewBase{
 
 	Control MkPropsTab(){
 		return MkRowsTab(
-			Todo.I18n("Add Prop"),
+			I[K.AddProp],
 			()=>Ctx?.AddPropRow(),
 			MkPropGridHost
 		);
@@ -156,7 +156,7 @@ public partial class ViewWordEditV2: AppViewBase{
 
 	Control MkLearnsTab(){
 		return MkRowsTab(
-			Todo.I18n("Add Learn"),
+			I[K.AddLearn],
 			()=>Ctx?.AddLearnRow(),
 			MkLearnGridHost
 		);
@@ -212,10 +212,10 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 		PropGridSource = new FlatTreeDataGridSource<VmWordPropRow>(Ctx.PropRows){
 			Columns = {
-				new TextColumn<VmWordPropRow, str>(Todo.I18n("#"), x=>GetPropRowIdxText(x)),
-				new TextColumn<VmWordPropRow, str>(Todo.I18n("Key"), x=>x.KeyText),
-				new TextColumn<VmWordPropRow, str>(Todo.I18n("KType"), x=>x.KTypeText),
-				new TextColumn<VmWordPropRow, str>(Todo.I18n("VType"), x=>x.VTypeText),
+				new TextColumn<VmWordPropRow, str>(I[K.NumberSign], x=>GetPropRowIdxText(x)),
+				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyText),
+				new TextColumn<VmWordPropRow, str>(I[K.KType], x=>x.KTypeText),
+				new TextColumn<VmWordPropRow, str>(I[K.VType], x=>x.VTypeText),
 			},
 		};
 		PropGrid.Source = PropGridSource;
@@ -227,9 +227,9 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 		LearnGridSource = new FlatTreeDataGridSource<VmWordLearnRow>(Ctx.LearnRows){
 			Columns = {
-				new TextColumn<VmWordLearnRow, str>(Todo.I18n("#"), x=>GetLearnRowIdxText(x)),
-				new TextColumn<VmWordLearnRow, str>(Todo.I18n("LearnResult"), x=>x.LearnResultText),
-				new TextColumn<VmWordLearnRow, str>(Todo.I18n("BizCreatedAt"), x=>x.BizCreatedAtDisplay),
+				new TextColumn<VmWordLearnRow, str>(I[K.NumberSign], x=>GetLearnRowIdxText(x)),
+				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultText),
+				new TextColumn<VmWordLearnRow, str>(I[K.BizCreatedAt], x=>x.BizCreatedAtDisplay),
 			},
 		};
 		LearnGrid.Source = LearnGridSource;
@@ -286,13 +286,13 @@ public partial class ViewWordEditV2: AppViewBase{
 	void OpenPropDetail(VmWordPropRow Row){
 		var view = new UserControl();
 		view.SetContent(MkPropDetailContent(Row));
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Edit Prop"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.EditProp], view));
 	}
 
 	void OpenLearnDetail(VmWordLearnRow Row){
 		var view = new UserControl();
 		view.SetContent(MkLearnDetailContent(Row));
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Edit Learn"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.EditLearn], view));
 	}
 
 	Control MkPropDetailContent(VmWordPropRow Row){
@@ -306,12 +306,12 @@ public partial class ViewWordEditV2: AppViewBase{
 			sv.SetContent(new StackPanel(), sp=>{
 				sp.Margin = new Thickness(10);
 				sp.Spacing = 8;
-				sp.A(MkComboRow(Todo.I18n("KType"), _KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkEditableComboRow(Todo.I18n("Key(Str)"), GetPropKeyOptions(), CBE.Mk<VmWordPropRow>(x=>x.KStrText, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(Todo.I18n("Key(I64)"), CBE.Mk<VmWordPropRow>(x=>x.KI64Text, Mode: BindingMode.TwoWay)));
-				sp.A(MkComboRow(Todo.I18n("VType"), _KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.VTypeIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(Todo.I18n("VStr"), CBE.Mk<VmWordPropRow>(x=>x.VStrText, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(Todo.I18n("VI64"), CBE.Mk<VmWordPropRow>(x=>x.VI64Text, Mode: BindingMode.TwoWay)));
+				sp.A(MkComboRow(I[K.KType], _KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay)));
+				sp.A(MkEditableComboRow(I[K.KeyStr], GetPropKeyOptions(), CBE.Mk<VmWordPropRow>(x=>x.KStrText, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(I[K.KeyI64], CBE.Mk<VmWordPropRow>(x=>x.KI64Text, Mode: BindingMode.TwoWay)));
+				sp.A(MkComboRow(I[K.VType], _KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.VTypeIndex, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(I[K.VStr], CBE.Mk<VmWordPropRow>(x=>x.VStrText, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(I[K.VI64], CBE.Mk<VmWordPropRow>(x=>x.VI64Text, Mode: BindingMode.TwoWay)));
 				sp.DataContext = Row;
 			});
 		});
@@ -319,7 +319,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		root.A(new Button(), o=>{
 			o.Margin = new Thickness(10, 6, 10, 10);
 			o.Background = Brushes.Red;
-			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove"));
+			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Remove]);
 			o.Click += (s, e)=>{
 				Ctx?.RemovePropRow(Row);
 				ViewNavi?.Back();
@@ -339,8 +339,8 @@ public partial class ViewWordEditV2: AppViewBase{
 			sv.SetContent(new StackPanel(), sp=>{
 				sp.Margin = new Thickness(10);
 				sp.Spacing = 8;
-				sp.A(MkComboRow(Todo.I18n("LearnResult"), _LearnResultOptions, CBE.Mk<VmWordLearnRow>(x=>x.LearnResultIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkTempusRow(Todo.I18n("BizCreatedAt"), CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+				sp.A(MkComboRow(I[K.LearnResult], _LearnResultOptions, CBE.Mk<VmWordLearnRow>(x=>x.LearnResultIndex, Mode: BindingMode.TwoWay)));
+				sp.A(MkTempusRow(I[K.BizCreatedAt], CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
 				sp.DataContext = Row;
 			});
 		});
@@ -348,7 +348,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		root.A(new Button(), o=>{
 			o.Margin = new Thickness(10, 6, 10, 10);
 			o.Background = Brushes.Red;
-			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove"));
+			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Remove]);
 			o.Click += (s, e)=>{
 				Ctx?.RemoveLearnRow(Row);
 				ViewNavi?.Back();
@@ -360,19 +360,19 @@ public partial class ViewWordEditV2: AppViewBase{
 	IReadOnlyList<str> GetPropKeyOptions(){
 		var k = KeysProp.Inst;
 		return [
-			Todo.I18n(k.summary),
-			Todo.I18n(k.description),
-			Todo.I18n(k.note),
-			Todo.I18n(k.tag),
-			Todo.I18n(k.source),
-			Todo.I18n(k.alias),
-			Todo.I18n(k.pronunciation),
-			Todo.I18n(k.weight),
-			Todo.I18n(k.learn),
-			Todo.I18n(k.usage),
-			Todo.I18n(k.example),
-			Todo.I18n(k.relation),
-			Todo.I18n(k.Ref),
+			k.summary,
+			k.description,
+			k.note,
+			k.tag,
+			k.source,
+			k.alias,
+			k.pronunciation,
+			k.weight,
+			k.learn,
+			k.usage,
+			k.example,
+			k.relation,
+			k.Ref,
 		];
 	}
 
@@ -400,12 +400,12 @@ public partial class ViewWordEditV2: AppViewBase{
 		g.A(new OpBtn(), o=>{
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe(ct=>Ctx?.Delete(ct));
 		})
 		.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.CBind<Ctx>(IsEnabledProperty, x=>x.IsDirty, Mode: BindingMode.OneWay);
 			o.SetExe(ct=>Ctx?.Save(ct));
 		});
@@ -510,6 +510,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 	}
 }
+
 
 
 

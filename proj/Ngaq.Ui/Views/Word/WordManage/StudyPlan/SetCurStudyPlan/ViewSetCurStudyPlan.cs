@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -14,7 +14,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmSetCurStudyPlan;
+using Ctx = VmSetCurStudyPlan;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.SetCurStudyPlan;
 
 /// <summary>
 /// 設置當前學習方案頁。
@@ -80,18 +80,18 @@ public partial class ViewSetCurStudyPlan
 			ColDef(1, GUT.Auto),
 		]);
 		top.A(new TextBlock(), o=>{
-			o.Text = Todo.I18n("設置當前學習方案");
+			o.Text = I[K.SetCurrentStudyPlan];
 			o.VerticalAlignment = VAlign.Center;
 			o.Margin = new Thickness(8, 0);
 		})
 		.A(new OpBtn(), o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = Todo.I18n("Reload");
+			o.BtnContent = I[K.Reload];
 			o.SetExe((Ct)=>Ctx?.LoadCurStudyPlan(Ct)!);
 		})
 		.A(new OpBtn(), o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = Todo.I18n("RestoreBuiltin");
+			o.BtnContent = I[K.RestoreBuiltin];
 			o.SetExe((Ct)=>Ctx?.RestoreBuiltin(Ct)!);
 		});
 		return top.Grid;
@@ -127,25 +127,25 @@ public partial class ViewSetCurStudyPlan
 		};
 		bdr.Child = sp;
 
-		sp.A(MkInputRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.CurId, Mode: BindingMode.OneWay), ReadOnly: true))
-		.A(MkInputRow(Todo.I18n("UniqName"), CBE.Mk<Ctx>(x=>x.CurUniqName, Mode: BindingMode.OneWay), ReadOnly: true))
-		.A(MkInputRow(Todo.I18n("descr"), CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
+		sp.A(MkInputRow(I[K.Id], CBE.Mk<Ctx>(x=>x.CurId, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkInputRow(I[K.UniqName], CBE.Mk<Ctx>(x=>x.CurUniqName, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkInputRow(I[K.Descr], CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
 		.A(new OpBtn(), o=>{
-			o.BtnContent = Todo.I18n("選擇");
+			o.BtnContent = I[K.Select];
 			o.SetExe((Ct)=>ChooseAndApplyStudyPlan(Ct));
 		})
 		.A(new Button(), o=>{
-			o.Content = Todo.I18n("編輯");
+			o.Content = I[K.Edit];
 			o.Click += (s,e)=>{
 				var po = Ctx?.CurPoStudyPlan;
 				if(po is null){
-					Ctx?.ShowDialog(Todo.I18n("當前無可編輯StudyPlan"));
+					Ctx?.ShowDialog(I[K.NoEditableStudyPlan]);
 					return;
 				}
 				var view = new ViewStudyPlanEdit();
 				view.Ctx?.SetCreateMode(false);
 				view.Ctx?.FromPoStudyPlan(po);
-				ViewNavi?.GoTo(ToolView.WithTitle(po.UniqName ?? Todo.I18n("編輯StudyPlan"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(po.UniqName ?? I[K.EditStudyPlan], view));
 			};
 		});
 
@@ -186,7 +186,7 @@ public partial class ViewSetCurStudyPlan
 			tcs.TrySetResult(po);
 			view.ViewNavi?.Back();
 		});
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇StudyPlan"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectStudyPlan], view));
 		Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan.PoStudyPlan? selected = null;
 		try{
 			using var reg = Ct.Register(()=>tcs.TrySetCanceled(Ct));
@@ -203,3 +203,4 @@ public partial class ViewSetCurStudyPlan
 		}
 	}
 }
+

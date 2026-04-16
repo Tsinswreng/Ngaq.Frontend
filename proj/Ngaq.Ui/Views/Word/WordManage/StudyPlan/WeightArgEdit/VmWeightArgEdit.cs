@@ -16,7 +16,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPayloadJsonEdit;
 using Tsinswreng.CsTools;
 
-using Ctx = VmWeightArgEdit;
+using Ctx = VmWeightArgEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgEdit;
 
 /// WeightArg 編輯頁 ViewModel。
 /// 負責新增/修改/刪除，並提供 Payload JSON 子頁入口。
@@ -143,7 +143,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 	public nil OpenPayloadJsonEditor(){
 		var view = new ViewWeightArgPayloadJsonEdit();
 		view.Ctx?.Load(PayloadText, OnPayloadJsonApplied);
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("WeightArg Payload(JSON)"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.WeightArgPayloadJson], view));
 		return NIL;
 	}
 
@@ -166,7 +166,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -190,7 +190,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Deleted"));
+			ShowDialog(I18n[K.Deleted]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -328,3 +328,4 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		return TypeValues[i];
 	}
 }
+

@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -20,7 +20,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightCalculatorPage;
+using Ctx = VmWeightCalculatorPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightCalculatorPage;
 
 public partial class ViewWeightCalculatorPage
 	:AppViewBase
@@ -140,10 +140,10 @@ public partial class ViewWeightCalculatorPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightCalculator>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("名稱"), x=>x.Name),
-				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("類型"), x=>x.Type),
-				new TextColumn<Ctx.RowWeightCalculator, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.Name], x=>x.Name),
+				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.Type], x=>x.Type),
+				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;
@@ -175,8 +175,9 @@ public partial class ViewWeightCalculatorPage
 		var view = new ViewWeightCalculatorEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoWeightCalculator(row?.Raw);
-		var title = row?.Raw?.UniqName ?? Todo.I18n("新增權重算法");
+		var title = row?.Raw?.UniqName ?? I[K.NewWeightCalculator];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 	}
 }
+

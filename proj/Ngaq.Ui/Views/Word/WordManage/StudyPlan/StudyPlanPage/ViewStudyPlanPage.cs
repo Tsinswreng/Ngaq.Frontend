@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -19,7 +19,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStudyPlanPage;
+using Ctx = VmStudyPlanPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.StudyPlanPage;
 
 public partial class ViewStudyPlanPage
 	:AppViewBase
@@ -138,9 +138,9 @@ public partial class ViewStudyPlanPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowStudyPlan>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("名稱"), x=>x.Name),
-				new TextColumn<Ctx.RowStudyPlan, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowStudyPlan, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowStudyPlan, str>(I[K.Name], x=>x.Name),
+				new TextColumn<Ctx.RowStudyPlan, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;
@@ -172,8 +172,9 @@ public partial class ViewStudyPlanPage
 		var view = new ViewStudyPlanEdit();
 		view.Ctx?.SetCreateMode(row?.Raw is null);
 		view.Ctx?.FromPoStudyPlan(row?.Raw);
-		var title = row?.Raw?.UniqName ?? Todo.I18n("新增學習方案");
+		var title = row?.Raw?.UniqName ?? I[K.NewStudyPlan];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 	}
 }
+

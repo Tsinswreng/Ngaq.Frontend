@@ -81,9 +81,9 @@ public class ViewPreFilterDataEdit: AppViewBase{
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(ObservableCollection<Ctx.RowFieldsFilterCard> Rows){
 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(Rows){
 			Columns = {
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(Todo.I18n("#"), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(Todo.I18n("Fields"), x=>x.FieldsPreview),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(Todo.I18n("Items"), x=>x.FilterCountText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.NumberSign], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Fields], x=>x.FieldsPreview),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
 			},
 		};
 	}
@@ -116,7 +116,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		]);
 		box.Child = root.Grid;
 
-		var title = IsCore ? Todo.I18n("CoreFilter") : Todo.I18n("PropFilter");
+		var title = IsCore ? I[K.CoreFilter] : I[K.PropFilter];
 		var top = new AutoGrid(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
@@ -128,7 +128,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 			o.VerticalAlignment = VAlign.Center;
 		});
 		top.A(new Button(), o=>{
-			o.Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Group"));
+			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddGroup]);
 			o.HorizontalAlignment = HAlign.Right;
 			o.Click += (s,e)=>{
 				if(IsCore){
@@ -202,11 +202,11 @@ public class ViewPreFilterDataEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Back");
+			o.Content = I[K.Back];
 			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Draft"));
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveDraft]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>{
 				if(Ctx?.CommitPreFilterDataDraft() == true){
@@ -217,3 +217,4 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		return g.Grid;
 	}
 }
+

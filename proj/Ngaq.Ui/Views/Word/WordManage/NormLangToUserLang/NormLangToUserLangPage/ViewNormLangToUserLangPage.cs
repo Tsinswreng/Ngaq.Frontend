@@ -19,7 +19,7 @@ using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangToUserLangPage;
+using Ctx = VmNormLangToUserLangPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangToUserLangPage;
 
 /// 標準語言到用戶語言映射列表頁視圖。
 public partial class ViewNormLangToUserLangPage
@@ -137,12 +137,12 @@ public partial class ViewNormLangToUserLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("NormLangType"), x=>x.NormLangType),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("NormLang"), x=>x.NormLang),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("UserLang"), x=>x.UserLang),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("Descr"), x=>x.Descr),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(Todo.I18n("Modified"), x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLangType], x=>x.NormLangType),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.Descr], x=>x.Descr),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.Modified], x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;
@@ -174,8 +174,9 @@ public partial class ViewNormLangToUserLangPage
 		var view = new ViewNormLangToUserLangEdit();
 		view.Ctx?.SetCreateMode(row?.Raw is null);
 		view.Ctx?.FromPoNormLangToUserLang(row?.Raw);
-		var title = row?.Raw?.NormLang ?? Todo.I18n("Add NormLangToUserLang");
+		var title = row?.Raw?.NormLang ?? I[K.AddNormLangToUserLang];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 	}
 }
+

@@ -10,7 +10,7 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmFilterItemEdit;
+using Ctx = VmFilterItemEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FilterItemEdit;
 
 /// <summary>
 /// View for editing a single FilterItem.
@@ -53,17 +53,17 @@ public class ViewFilterItemEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		top.A(MkComboRow(
-			Todo.I18n("Operation"),
+			I[K.Operation],
 			CBE.Mk<Ctx>(x=>x.OperationOptions, Mode: BindingMode.OneWay),
 			CBE.Mk<Ctx>(x=>x.SelectedOperationIndex, Mode: BindingMode.TwoWay)
 		));
 		top.A(MkComboRow(
-			Todo.I18n("Value Type"),
+			I[K.ValueType],
 			CBE.Mk<Ctx>(x=>x.ValueTypeOptions, Mode: BindingMode.OneWay),
 			CBE.Mk<Ctx>(x=>x.SelectedValueTypeIndex, Mode: BindingMode.TwoWay)
 		));
 		root.Children.Add(top.Grid);
-		root.Children.Add(MkInputRow(Todo.I18n("Values (newline separated)"), CBE.Mk<Ctx>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true, MaxHeight: 180));
+		root.Children.Add(MkInputRow(I[K.ValuesNewlineSeparated], CBE.Mk<Ctx>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true, MaxHeight: 180));
 		return sv;
 	}
 
@@ -75,16 +75,16 @@ public class ViewFilterItemEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Back");
+			o.Content = I[K.Back];
 			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o.Click += (s,e)=>Ctx?.Delete();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
 		});
@@ -114,3 +114,4 @@ public class ViewFilterItemEdit: AppViewBase{
 		return sp;
 	}
 }
+

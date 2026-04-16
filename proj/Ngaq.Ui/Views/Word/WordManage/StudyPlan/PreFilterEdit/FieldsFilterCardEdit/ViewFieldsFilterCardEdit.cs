@@ -17,7 +17,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmFieldsFilterCardEdit;
+using Ctx = VmFieldsFilterCardEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FieldsFilterCardEdit;
 
 /// <summary>
 /// Editor view for a single fields-filter group.
@@ -52,11 +52,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	Control MkBody(){
 		var tabs = new TabControl();
 		tabs.Items.Add(new TabItem{
-			Header = Todo.I18n("Fields"),
+			Header = I[K.Fields],
 			Content = MkFieldsTab(),
 		});
 		tabs.Items.Add(new TabItem{
-			Header = Todo.I18n("FilterItems"),
+			Header = I[K.FilterItems],
 			Content = MkFilterItemsTab(),
 		});
 		return tabs;
@@ -71,7 +71,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		sv.Content = root;
 
 		var addBtn = new Button{
-			Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Field")),
+			Content = Svgs.Add().ToIcon().WithText(I[K.AddField]),
 			HorizontalAlignment = HAlign.Left,
 		};
 		addBtn.Click += (s,e)=>Ctx?.AddField();
@@ -96,7 +96,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			row.A(cb);
 
 			var rm = new Button{
-				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Remove")),
+				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Remove]),
 				Background = new SolidColorBrush(Color.FromRgb(210, 56, 56)),
 			};
 			rm.Click += (s,e)=>Ctx?.RemoveField(item);
@@ -120,11 +120,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			ColDef(1, GUT.Auto),
 		]);
 		top.A(new TextBlock(), o=>{
-			o.Text = Todo.I18n("Tap row to edit one FilterItem");
+			o.Text = I[K.TapRowToEditOneFilterItem];
 			o.VerticalAlignment = VAlign.Center;
 		});
 		top.A(new Button(), o=>{
-			o.Content = Svgs.Add().ToIcon().WithText(Todo.I18n("Add Item"));
+			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddItem]);
 			o.Click += (s,e)=>Ctx?.AddItem();
 		});
 		root.A(top.Grid);
@@ -150,10 +150,10 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		}
 		ItemGridSource = new FlatTreeDataGridSource<Ctx.RowFilterItemCard>(Ctx.ItemCards){
 			Columns = {
-				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("#"), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("Operation"), x=>x.Operation),
-				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("ValueType"), x=>x.ValueType),
-				new TextColumn<Ctx.RowFilterItemCard, str>(Todo.I18n("Values"), x=>x.ValuesPreview),
+				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.NumberSign], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Operation], x=>x.Operation),
+				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.ValueType], x=>x.ValueType),
+				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Values], x=>x.ValuesPreview),
 			},
 		};
 		ItemGrid.Source = ItemGridSource;
@@ -187,14 +187,15 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Back");
+			o.Content = I[K.Back];
 			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save Group"));
+			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveGroup]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
 		});
 		return g.Grid;
 	}
 }
+

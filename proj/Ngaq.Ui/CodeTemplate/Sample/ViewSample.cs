@@ -12,7 +12,7 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmSample;
+using Ctx = VmSample;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Sample;
 public partial class ViewSample
 	:AppViewBase
 {
@@ -66,7 +66,7 @@ public partial class ViewSample
 		.A(new Button(), o=>{
 			//初始化ContentControl.Content時使用SetContent擴展方法、不要直接給Content賦值
 			o.SetContent(new TextBlock(), t=>{
-				t.Text = Todo.I18n("按鈕一");//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
+				t.Text = I[K.ButtonOne];//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
 			});
 //你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
 //按鈕綁定事件的寫法
@@ -78,7 +78,7 @@ public partial class ViewSample
 			Sv.SetContent(new StackPanel(), Sp=>{
 				Sp.A(new OpBtn(), o=>{
 					//UI中硬編碼的字符串都要這樣寫Todo
-					o._Button.Content = Todo.I18n("調用後端服務");
+					o._Button.Content = I[K.CallBackendService];
 					o.SetExe(Ct=>Ctx?.CallService(Ct));
 				});
 				Sp.A(MkList());
@@ -129,7 +129,7 @@ public partial class ViewSample
 			//若不要標題就直接傳進Goto
 			// 界面跳轉 只能在View層操作。不要在Vm層做頁面跳轉 或使用任何View層的東西
 			var TargetView = MkTargetView(); //用Func<>實現延遲加載
-			ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("頂欄標題"), TargetView));
+			ViewNavi?.GoTo(ToolView.WithTitle(I[K.TopbarTitle], TargetView));
 			_ = @$"如果你希望頂欄標題有自定義菜單按鈕 需讓TargetView實現{nameof(I_MkTitleMenu)}";
 		};
 	}
@@ -151,7 +151,7 @@ public partial class ViewSample
 			//所有Panel都能用.A()擴展方法
 			p.A(new TextBox(), o=>{
 				//在這裏通過o.Xxx初始化
-				o.Text = Todo.I18n("正確示例");
+				o.Text = I[K.CorrectExample];
 			})
 			//鏈試調用
 			.A(new Control())//第二個Action<>可省略不傳
@@ -187,13 +187,13 @@ public partial class ViewSample
 				o.Background = Brushes.Gray;
 				o.VAlign(x=>x.Center);
 				o.HAlign(x=>x.Center);
-				o.SetContent(Todo.I18n("文件"));
+				o.SetContent(I[K.File]);
 			})
 			.A(new Button(), o=>{
 				o.Background = Brushes.Gray;
 				o.VAlign(x=>x.Center);
 				o.HAlign(x=>x.Center);
-				o.SetContent(Todo.I18n("編輯"));
+				o.SetContent(I[K.Edit]);
 			})
 			;
 		};
@@ -206,10 +206,10 @@ public partial class ViewSample
 				return o;
 			};
 			P.A(_Btn(), o=>{
-				o.SetContent(Todo.I18n("文件"));
+				o.SetContent(I[K.File]);
 			})
 			.A(_Btn(), o=>{
-				o.SetContent(Todo.I18n("編輯"));
+				o.SetContent(I[K.Edit]);
 			})
 			;
 		};
@@ -224,14 +224,15 @@ public partial class ViewSample
 			;
 			P.A(new Button(), o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o.SetContent(Todo.I18n("文件"));
+				o.SetContent(I[K.File]);
 			})
 			.A(new Button(), o=>{
 				o.Classes.Add(Cls.MenuBtn);
-				o.SetContent(Todo.I18n("編輯"));
+				o.SetContent(I[K.Edit]);
 			});
 		};
 	}
 
 
 }
+

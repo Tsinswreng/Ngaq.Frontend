@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Avalonia.Controls;
 using Ngaq.Ui;
@@ -12,7 +12,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStudyPlan;
+using Ctx = VmStudyPlan;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.StudyPlan;
 public partial class ViewStudyPlan
 	:AppViewBase
 {
@@ -52,19 +52,19 @@ public partial class ViewStudyPlan
 		var o = new StackPanel();
 		o
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewSetCurStudyPlan(),Todo.I18n("設置當前學習方案"))
+			MainView.Inst.MkBtnToView(()=>new ViewSetCurStudyPlan(),I[K.SetCurrentStudyPlan])
 		)
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),Todo.I18n("PoStudyPlan"))
+			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),I[K.PoStudyPlan])
 		)
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewWeightCalculatorPage(),Todo.I18n("PoWeightCalculator"))
+			MainView.Inst.MkBtnToView(()=>new ViewWeightCalculatorPage(),I[K.PoWeightCalculator])
 		)
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewPreFilterPage(),Todo.I18n("PreFilter"))
+			MainView.Inst.MkBtnToView(()=>new ViewPreFilterPage(),I[K.PreFilter])
 		)
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewWeightArgPage(),Todo.I18n("Weight Arg"))
+			MainView.Inst.MkBtnToView(()=>new ViewWeightArgPage(),I[K.WeightArgWithSpace])
 		)
 		;
 		return o;
@@ -72,3 +72,4 @@ public partial class ViewStudyPlan
 
 
 }
+

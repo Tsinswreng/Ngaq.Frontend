@@ -20,7 +20,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmPreFilterPage;
+using Ctx = VmPreFilterPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterPage;
 public partial class ViewPreFilterPage
 	:AppViewBase
 {
@@ -142,10 +142,10 @@ public partial class ViewPreFilterPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowPreFilter>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("名稱"), x=>x.Name),
-				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("類型"), x=>x.Type),
-				new TextColumn<Ctx.RowPreFilter, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowPreFilter, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowPreFilter, str>(I[K.Name], x=>x.Name),
+				new TextColumn<Ctx.RowPreFilter, str>(I[K.Type], x=>x.Type),
+				new TextColumn<Ctx.RowPreFilter, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},
 		};
 		PreFilterGrid.Source = GridSource;
@@ -180,8 +180,9 @@ public partial class ViewPreFilterPage
 		var view = new ViewPreFilterVisualEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoPreFilter(row?.Raw);
-		var title = row?.Raw?.UniqName ?? Todo.I18n("新增預篩選器");
+		var title = row?.Raw?.UniqName ?? I[K.NewPreFilter];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 	}
 }
+

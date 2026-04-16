@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -20,7 +20,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightArgPage;
+using Ctx = VmWeightArgPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgPage;
 public partial class ViewWeightArgPage
 	:AppViewBase
 {
@@ -142,9 +142,9 @@ public partial class ViewWeightArgPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightArg>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n("名稱"), x=>x.Name),
-				new TextColumn<Ctx.RowWeightArg, str>(Todo.I18n("修改時間"), x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowWeightArg, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowWeightArg, str>(I[K.Name], x=>x.Name),
+				new TextColumn<Ctx.RowWeightArg, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},
 		};
 		WeightArgGrid.Source = GridSource;
@@ -179,8 +179,9 @@ public partial class ViewWeightArgPage
 		var view = new ViewWeightArgEdit();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoWeightArg(row?.Raw);
-		var title = row?.Raw?.UniqName ?? Todo.I18n("新增權重參數");
+		var title = row?.Raw?.UniqName ?? I[K.NewWeightArg];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 	}
 }
+

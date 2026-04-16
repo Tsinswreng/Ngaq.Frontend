@@ -17,7 +17,7 @@ using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangToUserLangEdit;
+using Ctx = VmNormLangToUserLangEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangToUserLangEdit;
 
 /// 標準語言到用戶語言映射詳情編輯頁。
 public partial class ViewNormLangToUserLangEdit
@@ -90,17 +90,17 @@ public partial class ViewNormLangToUserLangEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = Todo.I18n("PoNormLangToUserLang"),
+			Text = I[K.PoNormLangToUserLang],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkIdRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)));
-		var typeRow = MkComboRow(Todo.I18n("NormLangType"), Ctx?.NormLangTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoNormLangTypeIndex, Mode: BindingMode.TwoWay));
+		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)));
+		var typeRow = MkComboRow(I[K.NormLangType], Ctx?.NormLangTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoNormLangTypeIndex, Mode: BindingMode.TwoWay));
 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowNormLangTypeField, Mode: BindingMode.OneWay);
 		sp.A(typeRow)
-			.A(MkPickerRow(Todo.I18n("NormLang"), CBE.Mk<Ctx>(x=>x.PoNormLang, Mode: BindingMode.TwoWay), ()=>OpenNormLangSelector()))
-			.A(MkPickerRow(Todo.I18n("UserLang"), CBE.Mk<Ctx>(x=>x.PoUserLang, Mode: BindingMode.TwoWay), ()=>OpenUserLangSelector()))
-			.A(MkInputRow(Todo.I18n("Descr"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true));
+			.A(MkPickerRow(I[K.NormLang], CBE.Mk<Ctx>(x=>x.PoNormLang, Mode: BindingMode.TwoWay), ()=>OpenNormLangSelector()))
+			.A(MkPickerRow(I[K.UserLang], CBE.Mk<Ctx>(x=>x.PoUserLang, Mode: BindingMode.TwoWay), ()=>OpenUserLangSelector()))
+			.A(MkInputRow(I[K.Descr], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true));
 		return bdr;
 	}
 
@@ -113,13 +113,13 @@ public partial class ViewNormLangToUserLangEdit
 		bar.A(new OpBtn(), o=>{
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		})
 		.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;
@@ -163,7 +163,7 @@ public partial class ViewNormLangToUserLangEdit
 			tb.Bind(TextBox.TextProperty, Binding);
 		})
 		.A(new Button(), o=>{
-			o.Content = Svgs.Search().ToIcon().WithText(Todo.I18n("Pick"));
+			o.Content = Svgs.Search().ToIcon().WithText(I[K.Pick]);
 			o.Click += (s,e)=>OnPick();
 		});
 		root.Children.Add(row.Grid);
@@ -196,7 +196,7 @@ public partial class ViewNormLangToUserLangEdit
 				view.ViewNavi?.Back();
 			});
 		}
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select NormLang"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectNormLang], view));
 	}
 
 	void OpenUserLangSelector(){
@@ -208,7 +208,8 @@ public partial class ViewNormLangToUserLangEdit
 				view.ViewNavi?.Back();
 			});
 		}
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Select UserLang"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectUserLang], view));
 	}
 }
+
 

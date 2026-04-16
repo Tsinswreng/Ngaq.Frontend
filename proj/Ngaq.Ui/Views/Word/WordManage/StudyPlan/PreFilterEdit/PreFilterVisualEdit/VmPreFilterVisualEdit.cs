@@ -22,7 +22,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 using Tsinswreng.CsTools;
 
-using Ctx = VmPreFilterVisualEdit;
+using Ctx = VmPreFilterVisualEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterVisualEdit;
 using Ngaq.Core.Infra.IF;
 
 /// <summary>
@@ -323,13 +323,13 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 		var view = new ViewPreFilterJsonEdit();
 		view.Ctx?.FromPoPreFilter(bo.PoPreFilter);
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("PoPreFilter JSON"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.PoPreFilterJson], view));
 		return NIL;
 	}
 
 	public nil OpenPreFilterDataEditor(){
 		var view = new ViewPreFilterDataEdit(this);
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("PreFilter"), view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.PreFilter], view));
 		return NIL;
 	}
 
@@ -345,7 +345,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		OnPropertyChanged(nameof(HasError));
 		BoPreFilter = bo;
 		RefreshTextPreview();
-		ShowDialog(Todo.I18n("PreFilter draft updated"));
+		ShowDialog(I18n[K.PreFilterDraftUpdated]);
 		return true;
 	}
 
@@ -374,7 +374,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -393,9 +393,9 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			BoPreFilter = MkEmptyBoPreFilter();
 			IsCreateMode = true;
 			SyncFromBo();
-			LastError = Todo.I18n("");
+			LastError = I18n[K.Empty];
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Deleted"));
+			ShowDialog(I18n[K.Deleted]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -574,7 +574,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			if(IsCore){
 				var invalid = fields.Where(x=>!CoreWordFieldSet.Contains(x)).ToList();
 				if(invalid.Count > 0){
-					Err = Todo.I18n($"Row#{rowIdx}: invalid CoreFilter field: {invalid[0]}");
+					Err = I18n.Get(K.Row__InvalidCoreFilterField__, rowIdx, invalid[0]);
 					return [];
 				}
 			}
@@ -629,7 +629,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 					ans.Add(d);
 					continue;
 				}
-				Err = Todo.I18n($"'{p}' is not a valid number");
+				Err = I18n.Get(K.__IsNotValidNumber, p);
 				return [];
 			}
 			return ans;
@@ -746,3 +746,4 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		return PoTypeValues[clamped];
 	}
 }
+

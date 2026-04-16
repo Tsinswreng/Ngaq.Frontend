@@ -10,7 +10,7 @@ using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
 
-using Ctx = VmPreFilterJsonEdit;
+using Ctx = VmPreFilterJsonEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterJsonEdit;
 
 /// PoPreFilter JSON 專用編輯 ViewModel。
 /// 與 GUI 編輯 ViewModel 分離，不做雙向同步。
@@ -91,7 +91,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 			PoPreFilterJson = FormatJson(JsonSerializer.Stringify(po));
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -111,7 +111,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		}
 		if(po.Id == IdPreFilter.Zero){
 			PoPreFilterJson = "";
-			ShowDialog(Todo.I18n("No persisted Id to delete"));
+			ShowDialog(I18n[K.NoPersistedIdToDelete]);
 			return NIL;
 		}
 
@@ -120,7 +120,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 			PoPreFilterJson = "";
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Deleted"));
+			ShowDialog(I18n[K.Deleted]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -133,7 +133,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var parsed = JsonSerializer.Parse<PoPreFilter>(PoPreFilterJson);
 			if(parsed is null){
-				Err = Todo.I18n("PoPreFilter JSON parse failed");
+				Err = I18n[K.PoPreFilterJsonParseFailed];
 				return false;
 			}
 			Po = parsed;
@@ -159,3 +159,4 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		}
 	}
 }
+

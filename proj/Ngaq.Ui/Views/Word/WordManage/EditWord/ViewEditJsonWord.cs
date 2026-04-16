@@ -5,7 +5,7 @@ using AvaloniaEdit;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmEditJsonWord;
+using Ctx = VmEditJsonWord;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.EditJsonWord;
 
 #if false //TODO 寫到Ui㕥示用戶
 
@@ -65,14 +65,14 @@ public partial class ViewEditJsonWord
 			BottomBtnGrid
 			.A(new Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
-				o.Content = Todo.I18n("Save");
+				o.Content = I[K.Save];
 				o.Click += (s,e)=>{
 					Ctx?.Save();
 				};
 			})
 			.A(new Button(), o=>{
 				o.HorizontalContentAlignment = HAlign.Center;
-				o.Content = Todo.I18n("Delete");
+				o.Content = I[K.Delete];
 				o.Click += (s,e)=>{
 					Ctx?.Delete();
 				};
@@ -83,3 +83,4 @@ public partial class ViewEditJsonWord
 		return NIL;
 	}
 }
+

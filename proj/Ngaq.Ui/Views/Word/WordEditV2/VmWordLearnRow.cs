@@ -6,7 +6,7 @@ using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;
-using Tsinswreng.CsTempus;
+using Tsinswreng.CsTempus;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
 
 /// 單詞學習記錄行編輯 ViewModel。
 public partial class VmWordLearnRow: ViewModelBase{
@@ -70,7 +70,7 @@ public partial class VmWordLearnRow: ViewModelBase{
 		try{
 			Po.BizCreatedAt = Tempus.FromIso(BizCreatedAtIso);
 		}catch{
-			Err = Todo.I18n("BizCreatedAt must be ISO time.");
+			Err = I18n[K.BizCreatedAtMustBeIsoTime];
 			return false;
 		}
 		return true;
@@ -92,3 +92,4 @@ public partial class VmWordLearnRow: ViewModelBase{
 		return LearnResults[Index];
 	}
 }
+

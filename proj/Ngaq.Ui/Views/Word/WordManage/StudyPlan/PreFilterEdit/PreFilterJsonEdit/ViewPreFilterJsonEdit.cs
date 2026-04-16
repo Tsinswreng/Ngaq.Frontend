@@ -12,7 +12,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmPreFilterJsonEdit;
+using Ctx = VmPreFilterJsonEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterJsonEdit;
 
 /// <summary>
 /// PoPreFilter JSON 專用編輯視圖。
@@ -68,16 +68,16 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Back");
+			o.Content = I[K.Back];
 			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new OpBtn(), o=>{
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		g.A(new OpBtn(), o=>{
-			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		});
@@ -97,3 +97,4 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 		return box;
 	}
 }
+

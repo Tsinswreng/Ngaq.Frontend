@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
-using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
 
 /// 單詞屬性行編輯 ViewModel。
 /// 約束：當前 UI 只允許 Str / I64 兩種鍵值類型。
@@ -92,13 +92,13 @@ public partial class VmWordPropRow: ViewModelBase{
 			Po.KI64 = 0;
 		}else if(kt == EKvType.I64){
 			if(!i64.TryParse(KI64Text, out var kI64)){
-				Err = Todo.I18n("Invalid KI64.");
+				Err = I18n[K.InvalidKI64];
 				return false;
 			}
 			Po.KI64 = kI64;
 			Po.KStr = null;
 		}else{
-			Err = Todo.I18n("Invalid KType.");
+			Err = I18n[K.InvalidKType];
 			return false;
 		}
 
@@ -107,13 +107,13 @@ public partial class VmWordPropRow: ViewModelBase{
 			Po.VI64 = 0;
 		}else if(vt == EKvType.I64){
 			if(!i64.TryParse(VI64Text, out var vI64)){
-				Err = Todo.I18n("Invalid VI64.");
+				Err = I18n[K.InvalidVI64];
 				return false;
 			}
 			Po.VI64 = vI64;
 			Po.VStr = null;
 		}else{
-			Err = Todo.I18n("Invalid VType.");
+			Err = I18n[K.InvalidVType];
 			return false;
 		}
 
@@ -138,3 +138,4 @@ public partial class VmWordPropRow: ViewModelBase{
 		return KvTypes[Index];
 	}
 }
+

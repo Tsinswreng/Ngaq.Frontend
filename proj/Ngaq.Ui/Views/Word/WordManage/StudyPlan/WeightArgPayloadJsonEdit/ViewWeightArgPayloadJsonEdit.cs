@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmWeightArgPayloadJsonEdit;
+using Ctx = VmWeightArgPayloadJsonEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgPayloadJsonEdit;
 
 /// WeightArg Payload(JSON) 編輯視圖。
 public class ViewWeightArgPayloadJsonEdit: AppViewBase{
@@ -66,11 +66,11 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = Todo.I18n("Back");
+			o.Content = I[K.Back];
 			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new OpBtn(), o=>{
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Apply"));
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Apply]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>{
 				Ctx?.ApplyAndBack();
@@ -93,3 +93,4 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 		return box;
 	}
 }
+

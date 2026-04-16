@@ -18,7 +18,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightArgEdit;
+using Ctx = VmWeightArgEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgEdit;
 
 public partial class ViewWeightArgEdit
 	:AppViewBase
@@ -90,29 +90,29 @@ public partial class ViewWeightArgEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = Todo.I18n("PoWeightArg"),
+			Text = I[K.PoWeightArg],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkIdRow(Todo.I18n("ID"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
-		.A(MkInputRow(Todo.I18n("Name"), CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
+		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
+		.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			Todo.I18n("WeightCalculator"),
+			I[K.WeightCalculator],
 			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
-			Todo.I18n("Choose"),
+			I[K.Choose],
 			()=>{
 				var view = new ViewWeightCalculatorPage();
 				view.Ctx?.SetSelectMode(po=>{
 					Ctx?.ApplySelectedWeightCalculator(po);
 					view.ViewNavi?.Back();
 				});
-				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("選擇權重算法"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectWeightAlgorithm], view));
 			},
 			ReadOnly: true
 		))
-		.A(MkInputRow(Todo.I18n("Description"), CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
+		.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
 		;
-		var typeRow = MkComboRow(Todo.I18n("Type"), Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
+		var typeRow = MkComboRow(I[K.Type], Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowTypeField, Mode: BindingMode.OneWay);
 		sp.A(typeRow);
 		return bdr;
@@ -128,13 +128,13 @@ public partial class ViewWeightArgEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = Todo.I18n("Payload(Text Preview)"),
+			Text = I[K.PayloadTextPreview],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkInputRow(Todo.I18n("Payload"), CBE.Mk<Ctx>(x=>x.PayloadTextPreview), ReadOnly: true, AcceptsReturn: true))
+		.A(MkInputRow(I[K.Payload], CBE.Mk<Ctx>(x=>x.PayloadTextPreview), ReadOnly: true, AcceptsReturn: true))
 		.A(new Button(), o=>{
-			o.Content = Todo.I18n("Edit Payload JSON");
+			o.Content = I[K.EditPayloadJson];
 			o.HorizontalAlignment = HAlign.Left;
 			o.Click += (s,e)=>Ctx?.OpenPayloadJsonEditor();
 		});
@@ -150,13 +150,13 @@ public partial class ViewWeightArgEdit
 		bar.A(new OpBtn(), o=>{
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		})
 		.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;
@@ -206,3 +206,4 @@ public partial class ViewWeightArgEdit
 	}
 
 }
+

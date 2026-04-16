@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 
 using System;
 using System.Collections.ObjectModel;
@@ -11,7 +11,7 @@ using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
-using Ctx = VmNormLangPage;
+using Ctx = VmNormLangPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangPage;
 
 public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	void Init(){
@@ -163,7 +163,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 		}
 		try{
 			await SvcNormLang.InitBuiltinNormLang(UserCtxMgr.GetDbUserCtx(), Ct);
-			ShowDialog(Todo.I18n("Initialized builtin norm lang"));
+			ShowDialog(I18n[K.InitializedBuiltinNormLang]);
 			return await InitSearch(Ct);
 		}catch(Exception e){
 			HandleErr(e);
@@ -173,3 +173,4 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 
 	public event Action<RowNormLang?>? OnOpenDetailRequested;
 }
+

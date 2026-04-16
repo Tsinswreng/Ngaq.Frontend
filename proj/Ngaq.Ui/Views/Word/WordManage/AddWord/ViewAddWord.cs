@@ -1,7 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 using Avalonia.Controls;
-using Ctx = VmAddWord;
+using Ctx = VmAddWord;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.AddWord;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Data;
 using Avalonia.Styling;
@@ -114,24 +114,24 @@ public partial class ViewAddWord
 					)
 				);
 				Tab.Items.A(new TabItem(), o=>{
-					o.Header = Todo.I18n("Word Txt File");
+					o.Header = I[K.WordTxtFile];
 					o.Content = ByFile();
 				});
 				Tab.Items.A(new TabItem(), o=>{
-					o.Header = Todo.I18n("Jsons File");
+					o.Header = I[K.JsonsFile];
 					o.Content = ByJsonFile();
 				});
 				Tab.Items.A(new TabItem(), o=>{
-					o.Header = Todo.I18n("Text");
+					o.Header = I[K.Text];
 					o.Content = ByText();
 				});
 				Tab.Items.A(new TabItem(), o=>{
-					o.Header = Todo.I18n("Json");
+					o.Header = I[K.Json];
 					o.Content = ByJson();
 				});
 			});
 			Root.A(new OpBtn(), o=>{
-				o.BtnContent = Todo.I18n("Submit");
+				o.BtnContent = I[K.Submit];
 				o.HorizontalAlignment = HAlign.Center;
 				o.HorizontalContentAlignment = HAlign.Center;
 				o.SetExe((Ct)=>Ctx?.Confirm(Ct));
@@ -159,7 +159,7 @@ public partial class ViewAddWord
 			});
 			{{
 				Path.A(new Button(), o=>{
-					o.Content = Todo.I18n("Browse");
+					o.Content = I[K.Browse];
 					o.HorizontalAlignment = HAlign.Stretch;
 					o.HorizontalContentAlignment = HAlign.Stretch;
 					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色�?
@@ -274,3 +274,4 @@ public partial class ViewAddWord
 		return R.Grid;
 	}
 }
+

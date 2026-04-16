@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangEdit;
+using Ctx = VmNormLangEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangEdit;
 
 /// NormLang 詳情編輯頁。
 public partial class ViewNormLangEdit
@@ -86,14 +86,14 @@ public partial class ViewNormLangEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = Todo.I18n("PoNormLang"),
+			Text = I[K.PoNormLang],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkIdRow(Todo.I18n("Id"), CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
-		.A(MkInputRow(Todo.I18n("Code"), CBE.Mk<Ctx>(x=>x.PoCode, Mode: BindingMode.TwoWay)))
-		.A(MkInputRow(Todo.I18n("NativeName"), CBE.Mk<Ctx>(x=>x.PoNativeName, Mode: BindingMode.TwoWay)));
-		var typeRow = MkComboRow(Todo.I18n("Type"), Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
+		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
+		.A(MkInputRow(I[K.Code], CBE.Mk<Ctx>(x=>x.PoCode, Mode: BindingMode.TwoWay)))
+		.A(MkInputRow(I[K.NativeName], CBE.Mk<Ctx>(x=>x.PoNativeName, Mode: BindingMode.TwoWay)));
+		var typeRow = MkComboRow(I[K.Type], Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowTypeField, Mode: BindingMode.OneWay);
 		sp.A(typeRow);
 		return bdr;
@@ -108,13 +108,13 @@ public partial class ViewNormLangEdit
 		bar.A(new OpBtn(), o=>{
 			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(Todo.I18n("Delete"));
+			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		})
 		.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(Todo.I18n("Save"));
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;
@@ -163,3 +163,4 @@ public partial class ViewNormLangEdit
 		return row;
 	}
 }
+

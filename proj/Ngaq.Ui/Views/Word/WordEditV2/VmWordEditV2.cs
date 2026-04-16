@@ -20,7 +20,7 @@ using JsonNode = System.Text.Json.Nodes.JsonNode;
 
 using Ctx = VmWordEditV2;
 using Ngaq.Core.Tools;
-using Tsinswreng.CsTempus;
+using Tsinswreng.CsTempus;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
 
 public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	protected VmWordEditV2(){
@@ -279,14 +279,14 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 
 	public nil ApplyJsonToForm(){
 		if(JsonSerializer is null){
-			LastError = Todo.I18n("No JsonSerializer");
+			LastError = I18n[K.NoJsonSerializer];
 			OnPropertyChanged(nameof(HasError));
 			return NIL;
 		}
 		try{
 			var neo = JsonSerializer.Parse<JnWord>(JsonText);
 			if(neo is null){
-				LastError = Todo.I18n("Json parse failed.");
+				LastError = I18n[K.JsonParseFailed];
 				OnPropertyChanged(nameof(HasError));
 				return NIL;
 			}
@@ -311,7 +311,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		if(Draft is null){
-			ShowDialog(Todo.I18n("No draft"));
+			ShowDialog(I18n[K.NoDraft]);
 			return NIL;
 		}
 		try{
@@ -321,7 +321,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			IsDirty = false;
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception ex){
 			LastError = ex.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -334,7 +334,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		if(Draft is null){
-			ShowDialog(Todo.I18n("No draft"));
+			ShowDialog(I18n[K.NoDraft]);
 			return NIL;
 		}
 		try{
@@ -346,7 +346,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			IsDirty = false;
-			ShowDialog(Todo.I18n("Deleted"));
+			ShowDialog(I18n[K.Deleted]);
 			ViewNavi?.Back();
 		}catch(Exception ex){
 			LastError = ex.Message;
@@ -359,15 +359,15 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	bool TryApplyFormToDraft(out str Err){
 		Err = "";
 		if(Draft is null){
-			Err = Todo.I18n("No draft");
+			Err = I18n[K.NoDraft];
 			return false;
 		}
 		if(str.IsNullOrWhiteSpace(Head)){
-			Err = Todo.I18n("Head is required.");
+			Err = I18n[K.HeadIsRequired];
 			return false;
 		}
 		if(str.IsNullOrWhiteSpace(Lang)){
-			Err = Todo.I18n("Lang is required.");
+			Err = I18n[K.LangIsRequired];
 			return false;
 		}
 
@@ -377,7 +377,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		try{
 			Draft.Word.StoredAt = Tempus.FromIso(StoredAtIso.Trim());
 		}catch{
-			Err = Todo.I18n("StoredAt must be ISO time.");
+			Err = I18n[K.StoredAtMustBeIsoTime];
 			return false;
 		}
 
@@ -385,7 +385,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			Draft.Word.DelAt = new IdDel();
 		}else{
 			if(!i64.TryParse(DelAtUnixMs.Trim(), out var delMs)){
-				Err = Todo.I18n("DelAt must be Unix milliseconds.");
+				Err = I18n[K.DelAtMustBeUnixMilliseconds];
 				return false;
 			}
 			Draft.Word.DelAt = IdDel.FromUnixMs(delMs);
@@ -394,13 +394,13 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		try{
 			Draft.Word.BizCreatedAt = Tempus.FromIso(BizCreatedAtIso.Trim());
 		}catch{
-			Err = Todo.I18n("BizCreatedAt must be ISO time.");
+			Err = I18n[K.BizCreatedAtMustBeIsoTime];
 			return false;
 		}
 		try{
 			Draft.Word.BizUpdatedAt = Tempus.FromIso(BizUpdatedAtIso.Trim());
 		}catch{
-			Err = Todo.I18n("BizUpdatedAt must be ISO time.");
+			Err = I18n[K.BizUpdatedAtMustBeIsoTime];
 			return false;
 		}
 
@@ -409,7 +409,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		for(i32 i = 0; i < PropRows.Count; i++){
 			var row = PropRows[i];
 			if(!row.TryToPo(Draft.Word.Id, out var po, out var rowErr)){
-				propErrs.Add(Todo.I18n($"Prop#{i+1}: {rowErr}"));
+				propErrs.Add(I18n.Get(K.Prop__Err__, i+1, rowErr));
 				continue;
 			}
 			nextProps.Add(po);
@@ -424,7 +424,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		for(i32 i = 0; i < LearnRows.Count; i++){
 			var row = LearnRows[i];
 			if(!row.TryToPo(Draft.Word.Id, out var po, out var rowErr)){
-				learnErrs.Add(Todo.I18n($"Learn#{i+1}: {rowErr}"));
+				learnErrs.Add(I18n.Get(K.Learn__Err__, i+1, rowErr));
 				continue;
 			}
 			nextLearns.Add(po);
@@ -457,6 +457,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		}
 	}
 }
+
 
 
 

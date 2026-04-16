@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -20,7 +20,7 @@ using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangPage;
+using Ctx = VmNormLangPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangPage;
 
 public partial class ViewNormLangPage
 	:AppViewBase
@@ -139,9 +139,9 @@ public partial class ViewNormLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n(""), x=>x.UiIdxText),
-				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("Code"), x=>x.Code),
-				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("NativeName"), x=>x.NativeName),
+				new TextColumn<Ctx.RowNormLang, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowNormLang, str>(I[K.Code], x=>x.Code),
+				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName),
 			},
 		};
 		Grid.Source = GridSource;
@@ -173,7 +173,7 @@ public partial class ViewNormLangPage
 		var view = new ViewNormLangEdit();
 		view.Ctx?.SetCreateMode(row?.Raw is null);
 		view.Ctx?.FromPoNormLang(row?.Raw);
-		var title = row?.Raw?.Code ?? Todo.I18n("Add NormLang");
+		var title = row?.Raw?.Code ?? I[K.AddNormLang];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
 	}
@@ -181,7 +181,7 @@ public partial class ViewNormLangPage
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
-			o.Header = Todo.I18n("Init Builtin");
+			o.Header = I[K.InitBuiltin];
 			o.Click += async(s,e)=>{
 				if(Ctx is null){
 					return;
@@ -192,3 +192,4 @@ public partial class ViewNormLangPage
 		return menu;
 	}
 }
+

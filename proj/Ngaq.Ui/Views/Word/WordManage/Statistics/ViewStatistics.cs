@@ -17,7 +17,7 @@ using ScottPlot.Avalonia;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStatistics;
+using Ctx = VmStatistics;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Statistics;
 
 public partial class ViewStatistics: AppViewBase{
 
@@ -78,13 +78,13 @@ public partial class ViewStatistics: AppViewBase{
 
 		var unitBox = new ComboBox{
 			ItemsSource = new str[]{
-				Todo.I18n("Second"),
-				Todo.I18n("Minute"),
-				Todo.I18n("Hour"),
-				Todo.I18n("Day"),
-				Todo.I18n("Week"),
-				Todo.I18n("Month"),
-				Todo.I18n("Year"),
+				I[K.Second],
+				I[K.Minute],
+				I[K.Hour],
+				I[K.Day],
+				I[K.Week],
+				I[K.Month],
+				I[K.Year],
 			}
 		};
 		unitBox.CBind<Ctx>(unitBox.PropSelectedIndex, x=>x.IntervalUnit, Mode: BindingMode.TwoWay);
@@ -132,10 +132,10 @@ public partial class ViewStatistics: AppViewBase{
 			row++;
 		}
 
-		AddRow(Todo.I18n("StartTime"), MkTempusInput(x=>x.TimeStart));
-		AddRow(Todo.I18n("EndTime"), MkTempusInput(x=>x.TimeEnd));
-		AddRow(Todo.I18n("Interval"), MkIntervalInput());
-		AddRow(Todo.I18n("Learn Result"), MkLearnResultInput());
+		AddRow(I[K.StartTime], MkTempusInput(x=>x.TimeStart));
+		AddRow(I[K.EndTime], MkTempusInput(x=>x.TimeEnd));
+		AddRow(I[K.Interval], MkIntervalInput());
+		AddRow(I[K.LearnResult], MkLearnResultInput());
 
 		return grid;
 	}
@@ -157,7 +157,7 @@ public partial class ViewStatistics: AppViewBase{
 			o.Margin = new Thickness(8, 4, 8, 8);
 			o._Button.HAlign(x=>x.Stretch);
 			o._Button.StretchCenter();
-			o.BtnContent = Todo.I18n("Count");
+			o.BtnContent = I[K.Count];
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.GetDataAsy(Ct));
 		});
@@ -247,3 +247,4 @@ public partial class ViewStatistics: AppViewBase{
 		return NIL;
 	}
 }
+

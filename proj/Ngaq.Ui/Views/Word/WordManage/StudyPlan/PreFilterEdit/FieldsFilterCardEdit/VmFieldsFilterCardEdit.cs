@@ -9,7 +9,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit.FilterItemEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
-using Ctx = VmFieldsFilterCardEdit;
+using Ctx = VmFieldsFilterCardEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FieldsFilterCardEdit;
 
 /// <summary>
 /// Editor VM for one FieldsFilter group.
@@ -160,7 +160,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 
 	public nil Save(){
 		if(Target is null || Owner is null){
-			ShowDialog(Todo.I18n("Editor not ready"));
+			ShowDialog(I18n[K.EditorNotReady]);
 			return NIL;
 		}
 
@@ -177,8 +177,8 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		}
 
 		Owner.RefreshFieldsFilterCards();
-		var kind = IsCore ? Todo.I18n("Core") : Todo.I18n("Prop");
-		ShowDialog(Todo.I18n($"Saved {kind} Filter #{RowIdx}"));
+		var kind = IsCore ? I18n[K.Core] : I18n[K.Prop];
+		ShowDialog(I18n.Get(K.Saved__Filter__No__, kind, RowIdx));
 		ViewNavi?.Back();
 		return NIL;
 	}
@@ -244,7 +244,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	static str I18nOrSelf(str text){
-		var localized = Todo.I18n(text);
+		var localized = text;
 		return str.IsNullOrWhiteSpace(localized) ? text : localized;
 	}
 
@@ -288,3 +288,5 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		};
 	}
 }
+
+

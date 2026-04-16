@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
@@ -8,7 +8,7 @@ using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Infra;
 
-using Ctx = VmSetCurStudyPlan;
+using Ctx = VmSetCurStudyPlan;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.SetCurStudyPlan;
 
 /// 「設置當前學習方案」頁面的 ViewModel。
 /// 負責讀取當前學習方案，並提供恢復內置方案的操作。
@@ -117,7 +117,7 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 		}
 		try{
 			await SvcStudyPlan.RestoreBuiltinStudyPlan(UserCtxMgr.GetDbUserCtx(), Ct);
-			ShowDialog(Todo.I18n("RestoreBuiltinDone"));
+			ShowDialog(I18n[K.RestoreBuiltinDone]);
 			return await LoadCurStudyPlan(Ct);
 		}catch(Exception e){
 			HandleErr(e);
@@ -132,3 +132,4 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 		CurDescr = poStudyPlan?.Descr ?? "";
 	}
 }
+

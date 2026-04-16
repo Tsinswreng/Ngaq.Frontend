@@ -11,7 +11,7 @@ using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
-using Ctx = VmNormLangEdit;
+using Ctx = VmNormLangEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangEdit;
 
 /// NormLang 編輯頁 ViewModel。
 public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
@@ -125,7 +125,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Saved"));
+			ShowDialog(I18n[K.Saved]);
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -150,7 +150,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromPo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(Todo.I18n("Deleted"));
+			ShowDialog(I18n[K.Deleted]);
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));
@@ -230,3 +230,4 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 		return TypeValues[i];
 	}
 }
+

@@ -5,7 +5,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
-using Ctx = VmFilterItemEdit;
+using Ctx = VmFilterItemEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FilterItemEdit;
 
 /// <summary>
 /// Editor VM for a single filter item row.
@@ -57,26 +57,27 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 
 	public nil Save(){
 		if(Target is null || Owner is null){
-			ShowDialog(Todo.I18n("Editor not ready"));
+			ShowDialog(I18n[K.EditorNotReady]);
 			return NIL;
 		}
 		Target.OperationIndex = Owner.ToOperationRawIndex(SelectedOperationIndex);
 		Target.ValueTypeIndex = Owner.ToValueTypeRawIndex(SelectedValueTypeIndex);
 		Target.ValuesText = ValuesText;
 		Owner.CommitItemsDraft();
-		ShowDialog(Todo.I18n($"Saved Filter Item #{ItemIdx}"));
+		ShowDialog(I18n.Get(K.SavedFilterItem__No__, ItemIdx));
 		ViewNavi?.Back();
 		return NIL;
 	}
 
 	public nil Delete(){
 		if(Target is null || Owner is null){
-			ShowDialog(Todo.I18n("Editor not ready"));
+			ShowDialog(I18n[K.EditorNotReady]);
 			return NIL;
 		}
 		Owner.RemoveItem(Target);
-		ShowDialog(Todo.I18n($"Deleted Filter Item #{ItemIdx}"));
+		ShowDialog(I18n.Get(K.DeletedFilterItem__No__, ItemIdx));
 		ViewNavi?.Back();
 		return NIL;
 	}
 }
+
