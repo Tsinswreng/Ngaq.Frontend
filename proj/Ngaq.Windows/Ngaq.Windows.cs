@@ -74,6 +74,12 @@ sealed class Program {
 
 			var I18nCfg = new JsonFileCfgAccessor();
 			AppI18n.Inst=new(I18nCfg);
+#if DEBUG
+			AppI18n.Inst.OnKeyNotFound = (self, key, args)=>{
+				throw new Exception(key.GetFullPath()+"\nnot found");
+			};
+#endif
+//TODO 統一 AppI18n 配置 勿只在windows專用入口配置
 			try{
 				I18nCfg.FromFile($"Languages/{Lang}.json");
 			}catch{
