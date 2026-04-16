@@ -139,7 +139,7 @@ public partial class ViewNormLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowNormLang, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowNormLang, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowNormLang, str>(I[K.Code], x=>x.Code),
 				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName),
 			},

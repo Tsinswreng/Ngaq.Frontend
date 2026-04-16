@@ -1,4 +1,5 @@
 using Ngaq.Core.Infra.Errors;
+using Ngaq.Core.Shared.Base.Models.Po;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsI18n;
 
@@ -11,13 +12,54 @@ using K = II18nKey;
 public static partial class KeysUiI18n{
 	public static K? View = Mk(null, [nameof(View)]);
 	//此層 不應再有其他屬性
+//通用&常用
 public class Common{
 	public static readonly K _R = Mk(View, [nameof(Common)]);
 	public static readonly K Confirm = Mk(_R, [nameof(Confirm)]);
 	public static readonly K Cancel = Mk(_R, [nameof(Cancel)]);
 	public static readonly K PageSize = Mk(_R, [nameof(PageSize)]);
 	public static readonly K ConfirmChange = Mk(_R, [nameof(ConfirmChange)]);
-	public static readonly K UnboundConfirmCallback = Mk(_R, [nameof(UnboundConfirmCallback)]);
+	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	public static readonly K Start = Mk(_R, [nameof(Start)]);
+	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	public static readonly K Reset = Mk(_R, [nameof(Reset)]);
+	public static readonly K Clear = Mk(_R, [nameof(Clear)]);
+	public static readonly K Settings = Mk(_R, [nameof(Settings)]);
+	public static readonly K Search = Mk(_R, [nameof(Search)]);
+	public static readonly K Login = Mk(_R, [nameof(Login)]);
+	public static readonly K Register = Mk(_R, [nameof(Register)]);
+	public static readonly K UserName = Mk(_R, [nameof(UserName)]);
+	public static readonly K Email = Mk(_R, [nameof(Email)]);
+	public static readonly K Password = Mk(_R, [nameof(Password)]);
+	public static readonly K __CannotBeEmpty = Mk(_R, [nameof(__CannotBeEmpty)]);
+	public static readonly K Export = Mk(_R, [nameof(Export)]);
+	public static readonly K Import = Mk(_R, [nameof(Import)]);
+	public static readonly K Edit = Mk(_R, [nameof(Edit)]);
+	public static readonly K Second = Mk(_R, [nameof(Second)]);
+	public static readonly K Minute = Mk(_R, [nameof(Minute)]);
+	public static readonly K Hour = Mk(_R, [nameof(Hour)]);
+	public static readonly K Day = Mk(_R, [nameof(Day)]);
+	public static readonly K Week = Mk(_R, [nameof(Week)]);
+	public static readonly K Month = Mk(_R, [nameof(Month)]);
+	public static readonly K Year = Mk(_R, [nameof(Year)]);
+	[Doc(@$"已保存")]
+	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	[Doc(@$"已刪除")]
+	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
+	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	public static readonly K Remove = Mk(_R, [nameof(Remove)]);
+
+	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	public static readonly K Select = Mk(_R, [nameof(Select)]);
+	public static readonly K Type = Mk(_R, [nameof(Type)]);
+
+	[Doc(@$"實指{nameof(IBizCreateUpdateTime)}")]
+	public static readonly K CreatedAt = Mk(_R, [nameof(CreatedAt)]);
+	[Doc(@$"實指{nameof(IBizCreateUpdateTime)}")]
+	public static readonly K UpdatedAt = Mk(_R, [nameof(UpdatedAt)]);
+	[Doc(@$"返回")]
+	public static readonly K Back = Mk(_R, [nameof(Back)]);
 }
 
 public class Home{
@@ -30,10 +72,15 @@ public class Home{
 
 public class LearnWord{
 	public static readonly K _R = Mk(View, [nameof(LearnWord)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Start = Mk(_R, [nameof(Start)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Reset = Mk(_R, [nameof(Reset)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Clear = Mk(_R, [nameof(Clear)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Settings = Mk(_R, [nameof(Settings)]);
 	public static readonly K LearnWordSettings = Mk(_R, [nameof(LearnWordSettings)]);
 }
@@ -47,12 +94,18 @@ public class Library{
 }
 public class LoginRegister{
 	public static readonly K _R = Mk(View, [nameof(LoginRegister)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Login = Mk(_R, [nameof(Login)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Register = Mk(_R, [nameof(Register)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K UserName = Mk(_R, [nameof(UserName)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Email = Mk(_R, [nameof(Email)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Password = Mk(_R, [nameof(Password)]);
 	public static readonly K ConfirmPassword = Mk(_R, [nameof(ConfirmPassword)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K __CannotBeEmpty = Mk(_R, [nameof(__CannotBeEmpty)]);
 	public static readonly K PasswordMismatch = Mk(_R, [nameof(PasswordMismatch)]);
 	public static readonly K FillAllFields = Mk(_R, [nameof(FillAllFields)]);
@@ -127,6 +180,7 @@ public class UserProfile{
 
 public class WordCard{
 	public static readonly K _R = Mk(View, [nameof(WordCard)]);
+	[Obsolete(@$"{nameof(Common)}")]
 	public static readonly K Edit = Mk(_R, [nameof(Edit)]);
 	public static readonly K NoWordSelected = Mk(_R, [nameof(NoWordSelected)]);
 	public static readonly K Pronounce = Mk(_R, [nameof(Pronounce)]);
@@ -146,24 +200,31 @@ public class SearchWords{
 
 public class Statistics{
 	public static readonly K _R = Mk(View, [nameof(Statistics)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Second = Mk(_R, [nameof(Second)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Minute = Mk(_R, [nameof(Minute)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Hour = Mk(_R, [nameof(Hour)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Day = Mk(_R, [nameof(Day)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Week = Mk(_R, [nameof(Week)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Month = Mk(_R, [nameof(Month)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Year = Mk(_R, [nameof(Year)]);
 	public static readonly K StartTime = Mk(_R, [nameof(StartTime)]);
 	public static readonly K EndTime = Mk(_R, [nameof(EndTime)]);
 	public static readonly K Interval = Mk(_R, [nameof(Interval)]);
 	public static readonly K LearnResult = Mk(_R, [nameof(LearnResult)]);
+	[Doc(@$"統計, 計數")]
 	public static readonly K Count = Mk(_R, [nameof(Count)]);
 }
 
 public class NormLangPage{
 	public static readonly K _R = Mk(View, [nameof(NormLangPage)]);
 	public static readonly K InitializedBuiltinNormLang = Mk(_R, [nameof(InitializedBuiltinNormLang)]);
-	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
 	public static readonly K Code = Mk(_R, [nameof(Code)]);
 	public static readonly K NativeName = Mk(_R, [nameof(NativeName)]);
 	public static readonly K AddNormLang = Mk(_R, [nameof(AddNormLang)]);
@@ -172,40 +233,52 @@ public class NormLangPage{
 
 public class NormLangEdit{
 	public static readonly K _R = Mk(View, [nameof(NormLangEdit)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K PoNormLang = Mk(_R, [nameof(PoNormLang)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
 	public static readonly K Code = Mk(_R, [nameof(Code)]);
 	public static readonly K NativeName = Mk(_R, [nameof(NativeName)]);
 	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
 }
 
 public class NormLangToUserLangPage{
 	public static readonly K _R = Mk(View, [nameof(NormLangToUserLangPage)]);
-	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
 	public static readonly K NormLangType = Mk(_R, [nameof(NormLangType)]);
 	public static readonly K NormLang = Mk(_R, [nameof(NormLang)]);
 	public static readonly K UserLang = Mk(_R, [nameof(UserLang)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Descr = Mk(_R, [nameof(Descr)]);
-	public static readonly K Modified = Mk(_R, [nameof(Modified)]);
+	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
 	public static readonly K AddNormLangToUserLang = Mk(_R, [nameof(AddNormLangToUserLang)]);
 }
 
 public class NormLangToUserLangEdit{
 	public static readonly K _R = Mk(View, [nameof(NormLangToUserLangEdit)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K PoNormLangToUserLang = Mk(_R, [nameof(PoNormLangToUserLang)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
 	public static readonly K NormLangType = Mk(_R, [nameof(NormLangType)]);
 	public static readonly K NormLang = Mk(_R, [nameof(NormLang)]);
 	public static readonly K UserLang = Mk(_R, [nameof(UserLang)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Descr = Mk(_R, [nameof(Descr)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	[Obsolete($"{nameof(Common.Select)}")]
 	public static readonly K Pick = Mk(_R, [nameof(Pick)]);
 	public static readonly K SelectNormLang = Mk(_R, [nameof(SelectNormLang)]);
 	public static readonly K SelectUserLang = Mk(_R, [nameof(SelectUserLang)]);
@@ -215,23 +288,29 @@ public class UserLangPage{
 	public static readonly K _R = Mk(View, [nameof(UserLangPage)]);
 	public static readonly K AddedAllUnregisteredUserLangs = Mk(_R, [nameof(AddedAllUnregisteredUserLangs)]);
 	public static readonly K AutoAddMissing = Mk(_R, [nameof(AutoAddMissing)]);
-	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
 	public static readonly K RelLangType = Mk(_R, [nameof(RelLangType)]);
 	public static readonly K RelLang = Mk(_R, [nameof(RelLang)]);
-	public static readonly K Modified = Mk(_R, [nameof(Modified)]);
+	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
 	public static readonly K NewUserLang = Mk(_R, [nameof(NewUserLang)]);
 }
 
 public class UserLangEdit{
 	public static readonly K _R = Mk(View, [nameof(UserLangEdit)]);
 	public static readonly K PoUserLang = Mk(_R, [nameof(PoUserLang)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	[Obsolete($"{nameof(Common.Description)}")]
 	public static readonly K Description = Mk(_R, [nameof(Description)]);
 	public static readonly K RelLangType = Mk(_R, [nameof(RelLangType)]);
 	public static readonly K RelLang = Mk(_R, [nameof(RelLang)]);
+
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
 }
 
@@ -241,6 +320,7 @@ public class WordEditJsonMap{
 	public static readonly K _R = Mk(View, [nameof(WordEditJsonMap)]);
 	public static readonly K NoWordOrCtx = Mk(_R, [nameof(NoWordOrCtx)]);
 	public static readonly K WordCore = Mk(_R, [nameof(WordCore)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
 }
 
@@ -253,7 +333,9 @@ public class WordEditV2{
 	public static readonly K NoJsonSerializer = Mk(_R, [nameof(NoJsonSerializer)]);
 	public static readonly K JsonParseFailed = Mk(_R, [nameof(JsonParseFailed)]);
 	public static readonly K NoDraft = Mk(_R, [nameof(NoDraft)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K HeadIsRequired = Mk(_R, [nameof(HeadIsRequired)]);
 	public static readonly K LangIsRequired = Mk(_R, [nameof(LangIsRequired)]);
@@ -270,7 +352,9 @@ public class WordEditV2{
 	public static readonly K Head = Mk(_R, [nameof(Head)]);
 	public static readonly K Lang = Mk(_R, [nameof(Lang)]);
 	public static readonly K StoredAt = Mk(_R, [nameof(StoredAt)]);
+	[Obsolete($"{nameof(Common.CreatedAt)}")]
 	public static readonly K BizCreatedAt = Mk(_R, [nameof(BizCreatedAt)]);
+	[Obsolete($"{nameof(Common.UpdatedAt)}")]
 	public static readonly K BizUpdatedAt = Mk(_R, [nameof(BizUpdatedAt)]);
 	public static readonly K DelAtUnixMs = Mk(_R, [nameof(DelAtUnixMs)]);
 	public static readonly K AddProp = Mk(_R, [nameof(AddProp)]);
@@ -286,8 +370,11 @@ public class WordEditV2{
 	public static readonly K KeyI64 = Mk(_R, [nameof(KeyI64)]);
 	public static readonly K VStr = Mk(_R, [nameof(VStr)]);
 	public static readonly K VI64 = Mk(_R, [nameof(VI64)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Remove = Mk(_R, [nameof(Remove)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
 	public static readonly K KvTypeStr = Mk(_R, [nameof(KvTypeStr)]);
 	public static readonly K KvTypeI64 = Mk(_R, [nameof(KvTypeI64)]);
@@ -308,7 +395,9 @@ public class AddWord{
 
 public class EditJsonWord{
 	public static readonly K _R = Mk(View, [nameof(EditJsonWord)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
 }
 
@@ -327,10 +416,14 @@ public class SetCurStudyPlan{
 	public static readonly K SetCurrentStudyPlan = Mk(_R, [nameof(SetCurrentStudyPlan)]);
 	public static readonly K Reload = Mk(_R, [nameof(Reload)]);
 	public static readonly K RestoreBuiltin = Mk(_R, [nameof(RestoreBuiltin)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
 	public static readonly K UniqName = Mk(_R, [nameof(UniqName)]);
+	[Obsolete($"{nameof(Common.Description)}")]
 	public static readonly K Descr = Mk(_R, [nameof(Descr)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Select = Mk(_R, [nameof(Select)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Edit = Mk(_R, [nameof(Edit)]);
 	public static readonly K NoEditableStudyPlan = Mk(_R, [nameof(NoEditableStudyPlan)]);
 	public static readonly K EditStudyPlan = Mk(_R, [nameof(EditStudyPlan)]);
@@ -339,7 +432,7 @@ public class SetCurStudyPlan{
 
 public class StudyPlanPage{
 	public static readonly K _R = Mk(View, [nameof(StudyPlanPage)]);
-	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
 	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
 	public static readonly K NewStudyPlan = Mk(_R, [nameof(NewStudyPlan)]);
@@ -347,28 +440,40 @@ public class StudyPlanPage{
 
 public class StudyPlanEdit{
 	public static readonly K _R = Mk(View, [nameof(StudyPlanEdit)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K PoStudyPlan = Mk(_R, [nameof(PoStudyPlan)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Description = Mk(_R, [nameof(Description)]);
 	public static readonly K PreFilter = Mk(_R, [nameof(PreFilter)]);
+	[Obsolete($"{nameof(Common.Select)}")]
 	public static readonly K Choose = Mk(_R, [nameof(Choose)]);
 	public static readonly K SelectPreFilter = Mk(_R, [nameof(SelectPreFilter)]);
 	public static readonly K WeightCalculator = Mk(_R, [nameof(WeightCalculator)]);
 	public static readonly K SelectWeightCalculator = Mk(_R, [nameof(SelectWeightCalculator)]);
 	public static readonly K WeightArg = Mk(_R, [nameof(WeightArg)]);
 	public static readonly K SelectWeightArg = Mk(_R, [nameof(SelectWeightArg)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
 }
 
 public class PreFilterPage{
 	public static readonly K _R = Mk(View, [nameof(PreFilterPage)]);
-	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	[Obsolete($"{nameof(Common)}")]
+	public static readonly K Select = Mk(_R, [nameof(Select)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	[Obsolete($"{nameof(Common.UpdatedAt)}")]
 	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
 	public static readonly K NewPreFilter = Mk(_R, [nameof(NewPreFilter)]);
 }
@@ -378,21 +483,28 @@ public class PreFilterVisualEdit{
 	public static readonly K PoPreFilterJson = Mk(_R, [nameof(PoPreFilterJson)]);
 	public static readonly K PreFilter = Mk(_R, [nameof(PreFilter)]);
 	public static readonly K PreFilterDraftUpdated = Mk(_R, [nameof(PreFilterDraftUpdated)]);
+	[Obsolete($"{nameof(Common.UpdatedAt)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
-	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K Row__InvalidCoreFilterField__ = Mk(_R, [nameof(Row__InvalidCoreFilterField__)]);
 	public static readonly K __IsNotValidNumber = Mk(_R, [nameof(__IsNotValidNumber)]);
 	public static readonly K PoPreFilter = Mk(_R, [nameof(PoPreFilter)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Type = Mk(_R, [nameof(Type)]);
 	public static readonly K TextPreview = Mk(_R, [nameof(TextPreview)]);
 	public static readonly K TextPayload = Mk(_R, [nameof(TextPayload)]);
 	public static readonly K EditPreFilterTextInGui = Mk(_R, [nameof(EditPreFilterTextInGui)]);
 	public static readonly K OpenJson = Mk(_R, [nameof(OpenJson)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
 }
 
@@ -404,18 +516,24 @@ public class PreFilterDataEdit{
 	public static readonly K CoreFilter = Mk(_R, [nameof(CoreFilter)]);
 	public static readonly K PropFilter = Mk(_R, [nameof(PropFilter)]);
 	public static readonly K AddGroup = Mk(_R, [nameof(AddGroup)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Back = Mk(_R, [nameof(Back)]);
 	public static readonly K SaveDraft = Mk(_R, [nameof(SaveDraft)]);
 }
 
 public class PreFilterJsonEdit{
 	public static readonly K _R = Mk(View, [nameof(PreFilterJsonEdit)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
 	public static readonly K NoPersistedIdToDelete = Mk(_R, [nameof(NoPersistedIdToDelete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K PoPreFilterJsonParseFailed = Mk(_R, [nameof(PoPreFilterJsonParseFailed)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Back = Mk(_R, [nameof(Back)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
 }
 
@@ -441,6 +559,7 @@ public class FieldsFilterCardEdit{
 	public static readonly K Operation = Mk(_R, [nameof(Operation)]);
 	public static readonly K ValueType = Mk(_R, [nameof(ValueType)]);
 	public static readonly K Values = Mk(_R, [nameof(Values)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Back = Mk(_R, [nameof(Back)]);
 	public static readonly K SaveGroup = Mk(_R, [nameof(SaveGroup)]);
 }
@@ -453,38 +572,53 @@ public class FilterItemEdit{
 	public static readonly K Operation = Mk(_R, [nameof(Operation)]);
 	public static readonly K ValueType = Mk(_R, [nameof(ValueType)]);
 	public static readonly K ValuesNewlineSeparated = Mk(_R, [nameof(ValuesNewlineSeparated)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Back = Mk(_R, [nameof(Back)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
 }
 
 public class WeightCalculatorPage{
 	public static readonly K _R = Mk(View, [nameof(WeightCalculatorPage)]);
-	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Type = Mk(_R, [nameof(Type)]);
+	[Obsolete($"{nameof(Common.UpdatedAt)}")]
 	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
 	public static readonly K NewWeightCalculator = Mk(_R, [nameof(NewWeightCalculator)]);
 }
 
 public class WeightCalculatorEdit{
 	public static readonly K _R = Mk(View, [nameof(WeightCalculatorEdit)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K PoWeightCalculator = Mk(_R, [nameof(PoWeightCalculator)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Type = Mk(_R, [nameof(Type)]);
 	public static readonly K PayloadText = Mk(_R, [nameof(PayloadText)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
 }
 
 public class WeightArgPage{
 	public static readonly K _R = Mk(View, [nameof(WeightArgPage)]);
 	public static readonly K Empty = Mk(_R, [nameof(Empty)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
+	[Obsolete($"{nameof(Common.UpdatedAt)}")]
 	public static readonly K ModifiedTime = Mk(_R, [nameof(ModifiedTime)]);
 	public static readonly K NewWeightArg = Mk(_R, [nameof(NewWeightArg)]);
 }
@@ -492,25 +626,34 @@ public class WeightArgPage{
 public class WeightArgEdit{
 	public static readonly K _R = Mk(View, [nameof(WeightArgEdit)]);
 	public static readonly K WeightArgPayloadJson = Mk(_R, [nameof(WeightArgPayloadJson)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Saved = Mk(_R, [nameof(Saved)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Deleted = Mk(_R, [nameof(Deleted)]);
 	public static readonly K PoWeightArg = Mk(_R, [nameof(PoWeightArg)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Id = Mk(_R, [nameof(Id)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Name = Mk(_R, [nameof(Name)]);
 	public static readonly K WeightCalculator = Mk(_R, [nameof(WeightCalculator)]);
+	[Obsolete($"{nameof(Common.Select)}")]
 	public static readonly K Choose = Mk(_R, [nameof(Choose)]);
 	public static readonly K SelectWeightAlgorithm = Mk(_R, [nameof(SelectWeightAlgorithm)]);
 	public static readonly K Description = Mk(_R, [nameof(Description)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Type = Mk(_R, [nameof(Type)]);
 	public static readonly K PayloadTextPreview = Mk(_R, [nameof(PayloadTextPreview)]);
 	public static readonly K Payload = Mk(_R, [nameof(Payload)]);
 	public static readonly K EditPayloadJson = Mk(_R, [nameof(EditPayloadJson)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Delete = Mk(_R, [nameof(Delete)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Save = Mk(_R, [nameof(Save)]);
 }
 
 public class WeightArgPayloadJsonEdit{
 	public static readonly K _R = Mk(View, [nameof(WeightArgPayloadJsonEdit)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Back = Mk(_R, [nameof(Back)]);
 	public static readonly K Apply = Mk(_R, [nameof(Apply)]);
 }
@@ -522,6 +665,7 @@ public class Sample{
 	public static readonly K TopbarTitle = Mk(_R, [nameof(TopbarTitle)]);
 	public static readonly K CorrectExample = Mk(_R, [nameof(CorrectExample)]);
 	public static readonly K File = Mk(_R, [nameof(File)]);
+	[Obsolete($"{nameof(Common)}")]
 	public static readonly K Edit = Mk(_R, [nameof(Edit)]);
 }
 

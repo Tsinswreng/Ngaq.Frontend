@@ -35,7 +35,6 @@ public partial class VmLlmRawOutputEdit: ViewModelBase, IMk<Ctx>{
 	/// 點擊「確認更改」後執行：先回調解析，再返回上一頁。
 	public async Task<nil> Confirm(CT Ct){
 		if(OnConfirm is null){
-			ShowDialog(AppI18n.Inst[CommonK.UnboundConfirmCallback]);
 			return NIL;
 		}
 		await OnConfirm(RawOutput, Ct);

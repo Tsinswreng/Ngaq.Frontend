@@ -140,7 +140,7 @@ public partial class ViewWeightCalculatorPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightCalculator>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowWeightCalculator, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.Name], x=>x.Name),
 				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.Type], x=>x.Type),
 				new TextColumn<Ctx.RowWeightCalculator, str>(I[K.ModifiedTime], x=>x.ModifiedTime),

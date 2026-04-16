@@ -138,7 +138,7 @@ public partial class ViewStudyPlanPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowStudyPlan>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowStudyPlan, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowStudyPlan, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowStudyPlan, str>(I[K.Name], x=>x.Name),
 				new TextColumn<Ctx.RowStudyPlan, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},

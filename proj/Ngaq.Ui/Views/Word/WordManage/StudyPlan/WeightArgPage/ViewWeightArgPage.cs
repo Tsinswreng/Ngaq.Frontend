@@ -142,7 +142,7 @@ public partial class ViewWeightArgPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightArg>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowWeightArg, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowWeightArg, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowWeightArg, str>(I[K.Name], x=>x.Name),
 				new TextColumn<Ctx.RowWeightArg, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},

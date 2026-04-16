@@ -130,7 +130,6 @@ const Full = {
 		},
 		NormLangPage:{
 			InitializedBuiltinNormLang: K,
-			Empty: K,
 			Code: K,
 			NativeName: K,
 			AddNormLang: K,
@@ -148,7 +147,6 @@ const Full = {
 			Save: K,
 		},
 		NormLangToUserLangPage:{
-			Empty: K,
 			NormLangType: K,
 			NormLang: K,
 			UserLang: K,
@@ -174,7 +172,6 @@ const Full = {
 		UserLangPage:{
 			AddedAllUnregisteredUserLangs: K,
 			AutoAddMissing: K,
-			Empty: K,
 			Name: K,
 			RelLangType: K,
 			RelLang: K,
@@ -280,7 +277,6 @@ const Full = {
 			SelectStudyPlan: K,
 		},
 		StudyPlanPage:{
-			Empty: K,
 			Name: K,
 			ModifiedTime: K,
 			NewStudyPlan: K,
@@ -303,7 +299,6 @@ const Full = {
 			Save: K,
 		},
 		PreFilterPage:{
-			Empty: K,
 			Name: K,
 			Type: K,
 			ModifiedTime: K,
@@ -314,7 +309,6 @@ const Full = {
 			PreFilter: K,
 			PreFilterDraftUpdated: K,
 			Saved: K,
-			Empty: K,
 			Deleted: K,
 			Row__InvalidCoreFilterField__: K,
 			__IsNotValidNumber: K,
@@ -385,7 +379,6 @@ const Full = {
 			Save: K,
 		},
 		WeightCalculatorPage:{
-			Empty: K,
 			Name: K,
 			Type: K,
 			ModifiedTime: K,
@@ -404,7 +397,6 @@ const Full = {
 			Save: K,
 		},
 		WeightArgPage:{
-			Empty: K,
 			Name: K,
 			ModifiedTime: K,
 			NewWeightArg: K,

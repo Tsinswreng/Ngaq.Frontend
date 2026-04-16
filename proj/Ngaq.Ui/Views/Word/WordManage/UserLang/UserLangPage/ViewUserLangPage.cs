@@ -162,11 +162,11 @@ public partial class ViewUserLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowUserLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowUserLang, str>(I[K.Empty], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowUserLang, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowUserLang, str>(I[K.Name], x=>x.Name),
 				new TextColumn<Ctx.RowUserLang, str>(I[K.RelLangType], x=>x.RelLangType),
 				new TextColumn<Ctx.RowUserLang, str>(I[K.RelLang], x=>x.RelLang),
-				new TextColumn<Ctx.RowUserLang, str>(I[K.Modified], x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},
 		};
 		Grid.Source = GridSource;

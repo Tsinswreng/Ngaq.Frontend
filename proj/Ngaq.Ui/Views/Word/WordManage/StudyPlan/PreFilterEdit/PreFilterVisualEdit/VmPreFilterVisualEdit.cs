@@ -393,7 +393,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			BoPreFilter = MkEmptyBoPreFilter();
 			IsCreateMode = true;
 			SyncFromBo();
-			LastError = I18n[K.Empty];
+			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			ShowDialog(I18n[K.Deleted]);
 		}catch(Exception e){
