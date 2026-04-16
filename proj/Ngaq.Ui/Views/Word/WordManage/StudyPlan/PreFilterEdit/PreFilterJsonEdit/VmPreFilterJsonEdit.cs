@@ -10,7 +10,8 @@ using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
 
-using Ctx = VmPreFilterJsonEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterJsonEdit;
+using Ctx = VmPreFilterJsonEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterJsonEdit;
 
 /// PoPreFilter JSON 專用編輯 ViewModel。
 /// 與 GUI 編輯 ViewModel 分離，不做雙向同步。

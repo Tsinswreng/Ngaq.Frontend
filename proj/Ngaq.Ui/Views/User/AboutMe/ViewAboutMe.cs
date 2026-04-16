@@ -13,8 +13,8 @@ using Ngaq.Ui.Views.User.Profile;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.AvlnTools.Tools;
 using Ngaq.Ui.Infra.I18n;
+using Ctx = VmAboutMe;
 public partial class ViewAboutMe
 	:AppViewBase
 {

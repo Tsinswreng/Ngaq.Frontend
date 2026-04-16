@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmPreFilterVisualEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterVisualEdit;
+using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterVisualEdit;
 
 /// PreFilter GUI 主頁。
 /// 僅顯示 Po 主信息 + Text 預覽，並提供跳轉到子編輯頁和 JSON 編輯頁。

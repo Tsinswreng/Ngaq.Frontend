@@ -12,7 +12,7 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmSample;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Sample;
+using Ctx = VmSample;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Sample;
 public partial class ViewSample
 	:AppViewBase
 {

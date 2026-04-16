@@ -9,7 +9,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit.FilterItemEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
-using Ctx = VmFieldsFilterCardEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FieldsFilterCardEdit;
+using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FieldsFilterCardEdit;
 
 /// <summary>
 /// Editor VM for one FieldsFilter group.

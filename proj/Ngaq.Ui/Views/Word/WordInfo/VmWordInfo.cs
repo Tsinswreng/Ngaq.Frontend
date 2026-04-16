@@ -44,30 +44,32 @@ public partial class VmWordInfo
 	}
 
 	public nil SetPromptBeforeStart(){
-		Descrs = ["Press start button to begin learning."];
+		Descrs = [Todo.I18n("Press start button to begin learning.")];
 		return NIL;
 	}
 
 	public nil SetPromptAfterStart(){
-		Descrs = [
-			"• Click on a word card above to start learning a word."+'\n'+
-			""+'\n'+
-			"• Top menu buttons:"+'\n'+
-			"  - ▶️ Start: Load and begin learning words."+'\n'+
-			"  - 💾 Save: Save your learning progress."+'\n'+
-			"  - 🔄 Reset: Clear all progress and start over."+'\n'+
-			"  - ⚙️ Settings: Configure learning preferences."+'\n'+
-			""+'\n'+
-			"• Learning a word:"+'\n'+
-			"  - Click a word card to mark as remembered (green)."+'\n'+
-			"  - Click again to mark as forgotten (red)."+'\n'+
-			"  - Click once more to clear the mark (transparent)."+'\n'+
-			""+'\n'+
-			"• Other operations:"+'\n'+
-			"  - Long-press a word card for context menu options."+'\n'+
-			"  - Use the settings button to edit or add words."+'\n'+
-			"  - Save progress regularly to avoid data loss."
-		];
+string helpText = """
+• Click on a word card above to start learning a word.
+
+• Top menu buttons:
+	- ▶️ Start: Load and begin learning words.
+	- 💾 Save: Save your learning progress.
+	- 🔄 Reset: Clear all progress and start over.
+	- ⚙️ Settings: Configure learning preferences.
+
+• Learning a word:
+	- Click a word card to mark as remembered (green).
+	- Click again to mark as forgotten (red).
+	- Click once more to clear the mark (transparent).
+
+• Other operations:
+	- Long-press a word card for context menu options.
+	- Use the settings button to edit or add words.
+	- Save progress regularly to avoid data loss.
+""";
+
+		Descrs = [Todo.I18n(helpText)];
 		return NIL;
 	}
 

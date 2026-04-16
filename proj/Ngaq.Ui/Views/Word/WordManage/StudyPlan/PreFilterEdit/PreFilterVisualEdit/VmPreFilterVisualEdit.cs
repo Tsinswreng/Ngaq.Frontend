@@ -22,7 +22,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 using Tsinswreng.CsTools;
 
-using Ctx = VmPreFilterVisualEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterVisualEdit;
+using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterVisualEdit;
 using Ngaq.Core.Infra.IF;
 
 /// <summary>

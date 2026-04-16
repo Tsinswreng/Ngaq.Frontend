@@ -19,7 +19,7 @@ using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangToUserLangPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangToUserLangPage;
+using Ctx = VmNormLangToUserLangPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangToUserLangPage;
 
 /// 標準語言到用戶語言映射列表頁視圖。
 public partial class ViewNormLangToUserLangPage
@@ -43,7 +43,7 @@ public partial class ViewNormLangToUserLangPage
 		};
 	}
 
-	
+
 
 	public partial class Cls{
 		public static str FullStretch = nameof(FullStretch);

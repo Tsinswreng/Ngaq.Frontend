@@ -18,10 +18,9 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit.VmPreFilterVisualEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterDataEdit;
 
-/// <summary>
 /// GUI editor for PreFilter payload data (without Po fields).
-/// </summary>
 public class ViewPreFilterDataEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}

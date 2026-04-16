@@ -47,11 +47,11 @@ public partial class ViewCfgLearnWord
 				sp
 				.A(new CheckBox(), o=>{
 					//o.Tag = new TextBlock{Text = "Enable Random Background"};
-					o.Content = "Enable Random Background";
+					o.Content = Todo.I18n("Enable Random Background");
 					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableRandomBackground);
 				})
 				.A(new CheckBox(), o=>{
-					o.Content = "Enable Auto Pronounce";
+					o.Content = Todo.I18n("Enable Auto Pronounce");
 					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableAutoPronounce);
 				})
 

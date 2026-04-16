@@ -20,7 +20,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightCalculatorPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightCalculatorPage;
+using Ctx = VmWeightCalculatorPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightCalculatorPage;
 
 public partial class ViewWeightCalculatorPage
 	:AppViewBase
@@ -42,7 +42,7 @@ public partial class ViewWeightCalculatorPage
 			_ = Ctx?.InitSearch(default);
 		};
 	}
-	
+
 	public partial class Cls{
 		public static str FullStretch = nameof(FullStretch);
 	}

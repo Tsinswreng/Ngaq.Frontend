@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmWeightArgPayloadJsonEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgPayloadJsonEdit;
+using Ctx = VmWeightArgPayloadJsonEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgPayloadJsonEdit;
 
 /// WeightArg Payload(JSON) 編輯視圖。
 public class ViewWeightArgPayloadJsonEdit: AppViewBase{

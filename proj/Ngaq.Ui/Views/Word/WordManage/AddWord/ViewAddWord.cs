@@ -1,7 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 using Avalonia.Controls;
-using Ctx = VmAddWord;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.AddWord;
+using Ctx = VmAddWord;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.AddWord;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Data;
 using Avalonia.Styling;
@@ -12,9 +12,10 @@ using Avalonia.Controls.Primitives;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Infra;
 
 public partial class ViewAddWord
-	:UserControl
+	:AppViewBase
 {
 
 	public Ctx? Ctx{

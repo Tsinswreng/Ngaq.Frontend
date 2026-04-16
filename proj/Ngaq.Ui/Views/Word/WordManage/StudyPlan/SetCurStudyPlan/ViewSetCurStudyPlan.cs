@@ -14,7 +14,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmSetCurStudyPlan;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.SetCurStudyPlan;
+using Ctx = VmSetCurStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.SetCurStudyPlan;
 
 /// <summary>
 /// 設置當前學習方案頁。
@@ -41,7 +41,7 @@ public partial class ViewSetCurStudyPlan
 		};
 	}
 
-	
+
 	public partial class Cls{
 		public static str FullStretch = nameof(FullStretch);
 	}

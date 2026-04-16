@@ -16,7 +16,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPayloadJsonEdit;
 using Tsinswreng.CsTools;
 
-using Ctx = VmWeightArgEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgEdit;
+using Ctx = VmWeightArgEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgEdit;
 
 /// WeightArg 編輯頁 ViewModel。
 /// 負責新增/修改/刪除，並提供 Payload JSON 子頁入口。

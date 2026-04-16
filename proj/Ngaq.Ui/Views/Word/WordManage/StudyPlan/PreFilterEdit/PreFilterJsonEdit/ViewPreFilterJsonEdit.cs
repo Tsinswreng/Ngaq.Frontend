@@ -12,7 +12,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmPreFilterJsonEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterJsonEdit;
+using Ctx = VmPreFilterJsonEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.PreFilterJsonEdit;
 
 /// <summary>
 /// PoPreFilter JSON 專用編輯視圖。

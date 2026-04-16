@@ -10,7 +10,7 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmFilterItemEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FilterItemEdit;
+using Ctx = VmFilterItemEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FilterItemEdit;
 
 /// <summary>
 /// View for editing a single FilterItem.

@@ -25,7 +25,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTempus;
-using Ctx = VmWordEditV2;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
+using Ctx = VmWordEditV2;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
 
 public partial class ViewWordEditV2: AppViewBase{
 	public Ctx? Ctx{
@@ -59,12 +59,12 @@ public partial class ViewWordEditV2: AppViewBase{
 	TreeDataGrid? LearnGrid;
 	FlatTreeDataGridSource<VmWordLearnRow>? LearnGridSource;
 
-	readonly IReadOnlyList<str> _KvTypeOptions = [
+	IReadOnlyList<str> _KvTypeOptions => [
 		I[K.KvTypeStr],
 		I[K.KvTypeI64],
 	];
 
-	readonly IReadOnlyList<str> _LearnResultOptions = [
+	IReadOnlyList<str> _LearnResultOptions => [
 		I[K.LearnAdd],
 		I[K.LearnRmb],
 		I[K.LearnFgt],

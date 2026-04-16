@@ -17,7 +17,7 @@ using ScottPlot.Avalonia;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStatistics;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Statistics;
+using Ctx = VmStatistics;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Statistics;
 
 public partial class ViewStatistics: AppViewBase{
 
@@ -32,7 +32,7 @@ public partial class ViewStatistics: AppViewBase{
 		Render();
 	}
 
-	
+
 
 	protected nil Style(){
 		new Style(x=>

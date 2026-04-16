@@ -19,7 +19,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStudyPlanPage;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.StudyPlanPage;
+using Ctx = VmStudyPlanPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.StudyPlanPage;
 
 public partial class ViewStudyPlanPage
 	:AppViewBase
@@ -41,7 +41,7 @@ public partial class ViewStudyPlanPage
 			_ = Ctx?.InitSearch(default);
 		};
 	}
-	
+
 	public partial class Cls{
 		public static str FullStretch = nameof(FullStretch);
 	}

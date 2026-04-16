@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
-using Ngaq.Ui.Infra;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
+using Ngaq.Ui.Infra;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
 
 /// 單詞屬性行編輯 ViewModel。
 /// 約束：當前 UI 只允許 Str / I64 兩種鍵值類型。

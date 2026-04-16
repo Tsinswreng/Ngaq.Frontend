@@ -5,7 +5,7 @@ using AvaloniaEdit;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmEditJsonWord;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.EditJsonWord;
+using Ctx = VmEditJsonWord;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.EditJsonWord;
 
 #if false //TODO 寫到Ui㕥示用戶
 

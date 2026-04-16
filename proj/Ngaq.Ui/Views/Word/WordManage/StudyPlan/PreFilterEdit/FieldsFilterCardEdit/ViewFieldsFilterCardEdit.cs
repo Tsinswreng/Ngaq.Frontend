@@ -17,7 +17,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmFieldsFilterCardEdit;`r`nusing K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FieldsFilterCardEdit;
+using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FieldsFilterCardEdit;
 
 /// <summary>
 /// Editor view for a single fields-filter group.
