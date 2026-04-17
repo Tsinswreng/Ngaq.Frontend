@@ -2,9 +2,11 @@ namespace Ngaq.Ui.Views.User.Register;
 
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Ui;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
@@ -54,33 +56,39 @@ public partial class ViewRegister
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Star),
+				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),
 			]);
 		});
 
 
+		// 上下保留等比空白，避免內容貼邊與按鈕過度下沉。
+		Root.A(new Border(), _=>{});
 		Root.A(new StackPanel(), Stk=>{
-			Stk.Spacing = 4.0;
+			Stk.Spacing = 8.0;
 			var formItem = _fn_addLabelBox(Stk);
 
-			formItem(I[K.Email], CBE.Pth<Ctx>(x=>x.Email));
-			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password));
-			formItem(I[K.ConfirmPassword], CBE.Pth<Ctx>(x=>x.ConfirmPassword));
-			//formItem("Captcha", CBE.pth<Ctx>(x=>x.Captcha));
+			formItem(I[K.Email], CBE.Pth<Ctx>(x=>x.Email), false);
+			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password), true);
+			formItem(I[K.ConfirmPassword], CBE.Pth<Ctx>(x=>x.ConfirmPassword), true);
 			var errMsgSclv = new ScrollViewer{};
 			Stk.Children.Add(errMsgSclv);
 
 			errMsgSclv.Content = _ErrorList();
-		})
-		.A(new OpBtn(), o=>{
-			var b = o._Button;
-			b.SetContent(new TextBlock(), t=>{
-				t.Text = I[K.Register];
-				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+			Stk.A(new OpBtn(), o=>{
+				var b = o._Button;
+				b.SetContent(new TextBlock(), t=>{
+					t.Text = I[K.Register];
+					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+					t.TextAlignment = TextAlignment.Center;
+					t.HorizontalAlignment = HAlign.Center;
+				});
+				b.HorizontalAlignment = HAlign.Stretch;
+				b.Background = UiCfg.Inst.MainColor;
+				o.SetExe((Ct)=>Ctx?.RegisterAsy(Ct));
 			});
-			b.HorizontalAlignment = HAlign.Stretch;
-			o.SetExe((Ct)=>Ctx?.RegisterAsy(Ct));
 		});
+		Root.A(new Border(), _=>{});
 
 		return NIL;
 	}
@@ -103,27 +111,44 @@ public partial class ViewRegister
 	}
 
 
-	protected Func<str, CompiledBindingPath, nil> _fn_addLabelBox(Panel container){
-		return (labelText, pth)=>{
+	protected Func<str, CompiledBindingPath, bool, nil> _fn_addLabelBox(Panel Container){
+		return (LabelText, Pth, IsPassword)=>{
 			var label = new Label{};
-			container.Children.Add(label);
+			Container.Children.Add(label);
 			{
 				var o = label;
-				o.Content = labelText;
+				o.Content = LabelText;
 			}
 
-			var box = new TextBox{};
-			container.Children.Add(box);
-			{
-				var o = box;
-				o.Classes.Add(Cls.inputBox);
-				label.Target = o;
-				o.Bind(
-					o.PropText
-					,new CBE(pth){
-						Mode = BindingMode.TwoWay
-					}
-				);
+			if(IsPassword){
+				var box = new TextBox{};
+				Container.Children.Add(box);
+				{
+					var o = box;
+					o.Classes.Add(Cls.inputBox);
+					o.PasswordChar = '*';
+					label.Target = o;
+					o.Bind(
+						o.PropText
+						,new CBE(Pth){
+							Mode = BindingMode.TwoWay
+						}
+					);
+				}
+			}else{
+				var box = new TextBox{};
+				Container.Children.Add(box);
+				{
+					var o = box;
+					o.Classes.Add(Cls.inputBox);
+					label.Target = o;
+					o.Bind(
+						o.PropText
+						,new CBE(Pth){
+							Mode = BindingMode.TwoWay
+						}
+					);
+				}
 			}
 			return NIL;
 		};
