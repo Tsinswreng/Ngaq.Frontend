@@ -119,6 +119,7 @@ public class KeysUiI18nCommon{
 	public static readonly K Count = Mk(_R, [nameof(Count)]);
 	public static readonly K InitializedBuiltinNormLang = Mk(_R, [nameof(InitializedBuiltinNormLang)]);
 	public static readonly K Code = Mk(_R, [nameof(Code)]);
+	[Doc(@$"用于 語言; 如 意大利語之NativeName爲 Italiano")]
 	public static readonly K NativeName = Mk(_R, [nameof(NativeName)]);
 	public static readonly K AddNormLang = Mk(_R, [nameof(AddNormLang)]);
 	public static readonly K InitBuiltin = Mk(_R, [nameof(InitBuiltin)]);

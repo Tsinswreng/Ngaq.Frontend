@@ -112,6 +112,7 @@ const Full = {
 			Count: K,
 			InitializedBuiltinNormLang: K,
 			Code: K,
+			/// 用于 語言; 如 意大利語之NativeName爲 Italiano
 			NativeName: K,
 			AddNormLang: K,
 			InitBuiltin: K,
