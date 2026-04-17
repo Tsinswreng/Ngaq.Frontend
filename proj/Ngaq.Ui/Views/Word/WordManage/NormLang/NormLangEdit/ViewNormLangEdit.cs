@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangEdit;
+using Ctx = VmNormLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// NormLang 詳情編輯頁。
 public partial class ViewNormLangEdit

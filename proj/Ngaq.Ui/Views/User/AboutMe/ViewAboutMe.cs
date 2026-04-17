@@ -67,7 +67,7 @@ public partial class ViewAboutMe
 			});
 			o.Click += (o, e) => {
 				ViewNavi?.GoTo(
-					ToolView.WithTitle(I[KeysUiI18n.About.UserProfile], new ViewUserProfile())
+					ToolView.WithTitle(I[KeysUiI18nCommon.UserProfile], new ViewUserProfile())
 				);
 			};
 		});
@@ -98,7 +98,7 @@ public partial class ViewAboutMe
 				o.Content = Svgs.GearFill().ToIcon();
 				o.Click += (s,e)=>{
 					ViewNavi?.GoTo(
-					ToolView.WithTitle(I[KeysUiI18n.Settings.SettingsTitle], new ViewSettings())
+					ToolView.WithTitle(I[KeysUiI18nCommon.SettingsTitle], new ViewSettings())
 					);
 				};
 				o.Styles.Add(new Style(

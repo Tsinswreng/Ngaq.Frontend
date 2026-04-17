@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Common;
+using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmPageBar;
 public partial class ViewPageBar
 	:AppViewBase

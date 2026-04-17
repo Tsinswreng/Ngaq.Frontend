@@ -9,7 +9,7 @@ using Ctx = VmHome;
 using Ngaq.Ui.Views.Word.WordManage;
 using Ngaq.Ui.Views.User.AboutMe;
 
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Home;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ngaq.Ui.Icons;
 using Avalonia;
 using Ngaq.Ui.Views.Word.Learn;

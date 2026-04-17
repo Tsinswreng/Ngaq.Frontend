@@ -12,7 +12,7 @@ using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Tsinswreng.CsTools;
-using Ctx = VmWeightCalculatorEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightCalculatorEdit;
+using Ctx = VmWeightCalculatorEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// WeightCalculator 編輯頁 ViewModel。
 /// 負責新增/修改/刪除。
@@ -239,4 +239,5 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 		return TypeValues[i];
 	}
 }
+
 

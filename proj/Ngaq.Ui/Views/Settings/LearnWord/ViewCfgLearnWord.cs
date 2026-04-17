@@ -62,7 +62,7 @@ public partial class ViewCfgLearnWord
 			DockPanel.SetDock(o, Dock.Bottom);
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;
-			o.BtnContent = I[KeysUiI18n.LearnWord.Save];
+			o.BtnContent = I[KeysUiI18nCommon.Save];
 			o.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});

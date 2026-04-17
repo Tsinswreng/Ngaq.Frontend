@@ -18,7 +18,7 @@ using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordCard;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWordListCard
 	:AppViewBase

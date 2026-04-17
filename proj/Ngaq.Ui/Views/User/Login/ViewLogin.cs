@@ -9,7 +9,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.LoginRegister;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 
 using Ctx = VmLoginRegister;

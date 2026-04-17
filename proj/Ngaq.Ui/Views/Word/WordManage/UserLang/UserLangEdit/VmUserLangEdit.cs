@@ -13,7 +13,7 @@ using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
 using Ctx = VmUserLangEdit;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserLangEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// UserLang 編輯頁 ViewModel。
 /// 支持新增與修改（不顯示 Owner，Id 只讀）。

@@ -33,7 +33,7 @@ public partial class ViewCfgUi
 	protected nil Render(){
 		var _Item = ViewSettings.FnSettingItem(ViewNavi);
 		this.SetContent(new StackPanel(), S=>{
-			S.A(_Item(I[KeysUiI18n.Settings.FontSize], new ViewCfgFont()));
+			S.A(_Item(I[KeysUiI18nCommon.FontSize], new ViewCfgFont()));
 		});
 		return NIL;
 	}

@@ -11,7 +11,7 @@ using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
-using Ctx = VmNormLangPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangPage;
+using Ctx = VmNormLangPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	void Init(){

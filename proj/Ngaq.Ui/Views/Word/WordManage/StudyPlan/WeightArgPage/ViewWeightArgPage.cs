@@ -20,7 +20,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightArgPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightArgPage;
+using Ctx = VmWeightArgPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewWeightArgPage
 	:AppViewBase
 {
@@ -184,4 +184,5 @@ public partial class ViewWeightArgPage
 		ViewNavi?.GoTo(titled);
 	}
 }
+
 

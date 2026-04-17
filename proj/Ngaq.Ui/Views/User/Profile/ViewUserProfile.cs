@@ -14,7 +14,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ursa.Controls;
 using Ctx = VmXxx;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserProfile;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewUserProfile
 	:AppViewBase

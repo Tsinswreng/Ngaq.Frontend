@@ -20,7 +20,7 @@ using JsonNode = System.Text.Json.Nodes.JsonNode;
 
 using Ctx = VmWordEditV2;
 using Ngaq.Core.Tools;
-using Tsinswreng.CsTempus;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
+using Tsinswreng.CsTempus;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	protected VmWordEditV2(){
@@ -457,6 +457,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		}
 	}
 }
+
 
 
 

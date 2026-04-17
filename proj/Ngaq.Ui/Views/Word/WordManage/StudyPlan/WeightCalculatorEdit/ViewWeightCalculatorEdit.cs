@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightCalculatorEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WeightCalculatorEdit;
+using Ctx = VmWeightCalculatorEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWeightCalculatorEdit
 	:AppViewBase
@@ -163,4 +163,5 @@ public partial class ViewWeightCalculatorEdit
 		return row;
 	}
 }
+
 

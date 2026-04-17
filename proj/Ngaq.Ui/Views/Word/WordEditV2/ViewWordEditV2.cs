@@ -25,7 +25,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTempus;
-using Ctx = VmWordEditV2;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditV2;
+using Ctx = VmWordEditV2;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWordEditV2: AppViewBase{
 	public Ctx? Ctx{
@@ -510,6 +510,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 	}
 }
+
 
 
 

@@ -9,7 +9,7 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit.FilterItemEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
-using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FieldsFilterCardEdit;
+using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// <summary>
 /// Editor VM for one FieldsFilter group.
@@ -288,5 +288,6 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		};
 	}
 }
+
 
 

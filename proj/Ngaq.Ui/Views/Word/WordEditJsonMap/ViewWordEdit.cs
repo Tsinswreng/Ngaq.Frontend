@@ -17,7 +17,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Tsinswreng.Srefl;
 using Ctx = VmWordEdit;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordEditJsonMap;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewWordEdit
 	:AppViewBase
 	,I_MkTitleMenu

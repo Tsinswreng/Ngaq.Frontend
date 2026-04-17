@@ -13,7 +13,7 @@ using Ngaq.Core.Shared.Word.Models.Po.UserLang;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
-using Ctx = VmNormLangToUserLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangToUserLangEdit;
+using Ctx = VmNormLangToUserLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 標準語言到用戶語言映射編輯頁 ViewModel。
 public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{

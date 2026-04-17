@@ -12,7 +12,7 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.StudyPlan;
+using Ctx = VmStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewStudyPlan
 	:AppViewBase
 {
@@ -72,4 +72,5 @@ public partial class ViewStudyPlan
 
 
 }
+
 

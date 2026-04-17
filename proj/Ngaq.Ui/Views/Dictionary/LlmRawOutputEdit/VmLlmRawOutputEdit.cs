@@ -2,7 +2,7 @@ namespace Ngaq.Ui.Views.Dictionary.LlmRawOutputEdit;
 
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
-using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Common;
+using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 using Ctx = VmLlmRawOutputEdit;
 

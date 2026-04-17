@@ -17,7 +17,7 @@ using ScottPlot.Avalonia;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStatistics;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Statistics;
+using Ctx = VmStatistics;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewStatistics: AppViewBase{
 

@@ -18,7 +18,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.SearchWords;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewSearchWords
 	:AppViewBase

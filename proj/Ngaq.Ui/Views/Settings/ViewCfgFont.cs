@@ -6,7 +6,7 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmCfgFont;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Settings;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewCfgFont
 	:AppViewBase
 {

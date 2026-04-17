@@ -10,7 +10,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsI18n;
 using Ctx = VmSettings;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Settings;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewSettings
 	:AppViewBase
 {

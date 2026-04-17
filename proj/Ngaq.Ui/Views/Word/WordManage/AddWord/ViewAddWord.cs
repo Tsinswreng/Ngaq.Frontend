@@ -1,7 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 using Avalonia.Controls;
-using Ctx = VmAddWord;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.AddWord;
+using Ctx = VmAddWord;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Data;
 using Avalonia.Styling;

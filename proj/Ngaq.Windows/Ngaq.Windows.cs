@@ -76,7 +76,10 @@ sealed class Program {
 			AppI18n.Inst=new(I18nCfg);
 #if DEBUG
 			AppI18n.Inst.OnKeyNotFound = (self, key, args)=>{
-				throw new Exception(key.GetFullPath()+"\nnot found");
+				var msg = "❗"+key.GetFullPath()+"❗";
+				System.Console.WriteLine(msg);
+				return msg;
+				//throw new Exception();
 			};
 #endif
 //TODO 統一 AppI18n 配置 勿只在windows專用入口配置

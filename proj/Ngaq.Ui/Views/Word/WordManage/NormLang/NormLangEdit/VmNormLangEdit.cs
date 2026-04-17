@@ -11,7 +11,7 @@ using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
-using Ctx = VmNormLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangEdit;
+using Ctx = VmNormLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// NormLang 編輯頁 ViewModel。
 public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{

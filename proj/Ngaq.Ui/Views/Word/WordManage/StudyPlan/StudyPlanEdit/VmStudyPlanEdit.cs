@@ -15,7 +15,7 @@ using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Tsinswreng.CsTools;
-using Ctx = VmStudyPlanEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.StudyPlanEdit;
+using Ctx = VmStudyPlanEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// StudyPlan 編輯頁 ViewModel。
 /// 支持新增、修改與刪除。
@@ -332,4 +332,5 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		};
 	}
 }
+
 

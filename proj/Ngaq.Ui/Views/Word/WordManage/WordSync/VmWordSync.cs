@@ -13,7 +13,7 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
 using Ctx = VmWordSync;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.WordSync;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class VmWordSync: ViewModelBase{
 	ISvcKv? SvcKv;
 	ClientWordSync? ClientWordSync;

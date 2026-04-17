@@ -54,11 +54,11 @@ public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		if(NewPassword != ConfirmPassword){
-			ShowDialog(I18n.Get(KeysUiI18n.LoginRegister.PasswordMismatch));
+			ShowDialog(I18n.Get(KeysUiI18nCommon.PasswordMismatch));
 			return NIL;
 		}
 		if(str.IsNullOrWhiteSpace(OldPassword) || str.IsNullOrWhiteSpace(NewPassword)){
-			ShowDialog(I18n.Get(KeysUiI18n.LoginRegister.FillAllFields));
+			ShowDialog(I18n.Get(KeysUiI18nCommon.FillAllFields));
 			return NIL;
 		}
 		try{
@@ -67,7 +67,7 @@ public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 				// 目前先模擬成功
 				await Task.Delay(1000); // 模擬網絡延遲
 				Dispatcher.UIThread.Post(()=>{
-					ShowDialog(I18n.Get(KeysUiI18n.LoginRegister.PasswordChangeSuccess));
+					ShowDialog(I18n.Get(KeysUiI18nCommon.PasswordChangeSuccess));
 
 					ClearFields();
 				});

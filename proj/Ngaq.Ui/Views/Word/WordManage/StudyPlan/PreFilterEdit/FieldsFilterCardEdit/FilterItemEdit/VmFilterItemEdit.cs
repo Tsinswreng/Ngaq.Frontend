@@ -5,7 +5,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 
-using Ctx = VmFilterItemEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.FilterItemEdit;
+using Ctx = VmFilterItemEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// <summary>
 /// Editor VM for a single filter item row.
@@ -80,4 +80,5 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 }
+
 

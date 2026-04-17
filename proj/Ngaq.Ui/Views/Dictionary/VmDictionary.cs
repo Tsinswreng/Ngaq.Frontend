@@ -26,7 +26,7 @@ using Tsinswreng.CsErr;
 using Ctx = VmDictionary;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.CsTools;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.Dictionary;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	protected VmDictionary(){}

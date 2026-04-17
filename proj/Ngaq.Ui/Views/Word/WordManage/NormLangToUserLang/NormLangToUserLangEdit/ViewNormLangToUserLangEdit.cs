@@ -17,7 +17,7 @@ using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangToUserLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.NormLangToUserLangEdit;
+using Ctx = VmNormLangToUserLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 標準語言到用戶語言映射詳情編輯頁。
 public partial class ViewNormLangToUserLangEdit

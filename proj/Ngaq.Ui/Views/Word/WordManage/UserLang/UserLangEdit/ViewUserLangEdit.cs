@@ -14,7 +14,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmUserLangEdit;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.UserLangEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// UserLang 詳情編輯頁。
 /// 僅顯示業務字段；`Id` 只讀，`Owner` 不顯示。

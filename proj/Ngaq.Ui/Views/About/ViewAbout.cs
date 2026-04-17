@@ -8,7 +8,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 
 //using Ctx = VmXxx;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.About;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewAbout
 	:AppViewBase
 {

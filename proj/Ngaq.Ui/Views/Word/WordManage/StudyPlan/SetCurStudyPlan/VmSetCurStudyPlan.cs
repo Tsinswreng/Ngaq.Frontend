@@ -8,7 +8,7 @@ using Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan;
 using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Infra;
 
-using Ctx = VmSetCurStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18n.SetCurStudyPlan;
+using Ctx = VmSetCurStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 「設置當前學習方案」頁面的 ViewModel。
 /// 負責讀取當前學習方案，並提供恢復內置方案的操作。

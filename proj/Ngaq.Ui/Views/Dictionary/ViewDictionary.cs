@@ -14,8 +14,8 @@ using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using DictK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Dictionary;
-using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18n.Common;
+using DictK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmDictionary;
 
 public partial class ViewDictionary
