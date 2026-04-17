@@ -60,7 +60,7 @@ public class KeysUiI18nCommon{
 	public static readonly K Me = Mk(_R, [nameof(Me)]);
 	public static readonly K LearnWordSettings = Mk(_R, [nameof(LearnWordSettings)]);
 	public static readonly K SearchWords = Mk(_R, [nameof(SearchWords)]);
-	public static readonly K SearchMyWords = Mk(_R, [nameof(SearchMyWords)]);
+	public static readonly K UserWordManage = Mk(_R, [nameof(UserWordManage)]);
 	public static readonly K AddWords = Mk(_R, [nameof(AddWords)]);
 	public static readonly K BackupEtSync = Mk(_R, [nameof(BackupEtSync)]);
 	public static readonly K ConfirmPassword = Mk(_R, [nameof(ConfirmPassword)]);

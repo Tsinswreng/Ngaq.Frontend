@@ -53,7 +53,7 @@ const Full = {
 			Me: K,
 			LearnWordSettings: K,
 			SearchWords: K,
-			SearchMyWords: K,
+			UserWordManage: K,
 			AddWords: K,
 			BackupEtSync: K,
 			ConfirmPassword: K,

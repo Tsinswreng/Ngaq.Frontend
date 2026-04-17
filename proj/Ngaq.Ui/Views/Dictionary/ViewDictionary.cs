@@ -123,7 +123,7 @@ public partial class ViewDictionary
 			.A(SaveToWordBtn, o=>{
 				// 保存到詞庫按鈕只負責「轉換 + 跳編輯頁」；最終保存仍在編輯頁完成。
 				o._Button.StretchCenter();
-				o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon();
+				o.BtnContent = Svgs.BookmarkOutlineAdd().ToIcon();
 				o.SetExe(Ct=>Ctx?.ToWordEdit(Ct));
 			});
 		}}

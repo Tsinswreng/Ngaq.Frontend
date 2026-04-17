@@ -20,6 +20,7 @@ using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
+//TODO 改名爲 UserWordPage / UserWordManage
 public partial class ViewSearchWords
 	:AppViewBase
 {
@@ -76,6 +77,7 @@ public partial class ViewSearchWords
 				o.BtnContent = Svgs.Search().ToIcon();
 				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
 				o._Button.StretchCenter();
+				o.Background = UiCfg.Inst.MainColor;
 			});
 		}}
 		Root.A(new ScrollViewer(), scrl=>{

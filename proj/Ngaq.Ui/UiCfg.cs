@@ -11,7 +11,7 @@ public partial class UiCfg{
 	public static UiCfg Inst => _Inst??= new UiCfg();
 
 	public UiCfg(){
-		BaseFontSize = KeysClientCfg.BaseFontSize.GetFrom(AppCfg.Inst);
+		BaseFontSize = KeysClientCfg.Ui.BaseFontSize.GetFrom(AppCfg.Inst);
 		MainColor = ResolveThemeBrush();
 	}
 

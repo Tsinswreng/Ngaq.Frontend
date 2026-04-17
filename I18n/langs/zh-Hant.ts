@@ -10,7 +10,7 @@ const a: TI18nKv = {
 			Library: "詞庫",
 			Me: "我的",
 			SearchWords: "搜索單詞",
-			SearchMyWords: "搜索我的單詞",
+			UserWordManage: "用戶詞庫管理",
 			AddWords: "新增單詞",
 			BackupEtSync: "備份與同步",
 			Start: "開始",

@@ -26,6 +26,7 @@ using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using LK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
+//TODO 改名叫菜單
 public partial class ViewWordManage
 	:AppViewBase
 {
@@ -64,32 +65,30 @@ public partial class ViewWordManage
 			]);
 		});
 
-		var menuGrid = new Grid{
-			ColumnDefinitions = new ColumnDefinitions("*,*"),
-			RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto"),
-			ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.4,
-			RowSpacing = UiCfg.Inst.BaseFontSize * 0.6,
-			Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.4),
-		};
+		Root.A(new ScrollViewer(), Sv=>{
+			Sv.SetContent(new Grid(), g=>{
+				g.ColumnDefinitions = new ColumnDefinitions("*,*");
+				g.RowDefinitions = new RowDefinitions("Auto,Auto,Auto,Auto");
+				g.ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.4;
+				g.RowSpacing = UiCfg.Inst.BaseFontSize * 0.6;
+				g.Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.4);
 
-		void addItem(Control item, int row, int col){
-			Grid.SetRow(item, row);
-			Grid.SetColumn(item, col);
-			menuGrid.Children.Add(item);
-		}
+				void addItem(Control item, int row, int col){
+					Grid.SetRow(item, row);
+					Grid.SetColumn(item, col);
+					g.A(item);
+				}
 
-		addItem(_Item(I[LK.Dictionary], ()=>new ViewDictionary(), Svgs.BookA().ToIcon()), 0, 0);
-		addItem(_Item(I[K.SearchMyWords], ()=>new ViewSearchWords(), Svgs.Search().ToIcon()), 0, 1);
-		addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 1, 0);
-		addItem(_Item(I[LK.StudyPlan], ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
-		addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
-		addItem(_Item(I[LK.Statistics], ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
-		addItem(_Item(I[LK.UserLang], ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 0);
-		addItem(_Item(I[LK.NormLang], ()=>new ViewNormLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 1);
-
-		Root.A(menuGrid);
-
-
+				addItem(_Item(I[LK.Dictionary], ()=>new ViewDictionary(), Svgs.BookAlphabet().ToIcon()), 0, 0);
+				addItem(_Item(I[K.UserWordManage], ()=>new ViewSearchWords(), Svgs.BookBookmarkFill().ToIcon()), 0, 1);
+				addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 1, 0);
+				addItem(_Item(I[LK.StudyPlan], ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 1);
+				addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSync(), Svgs.SyncCircle().ToIcon()), 2, 0);
+				addItem(_Item(I[LK.Statistics], ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 2, 1);
+				addItem(_Item(I[LK.UserLang], ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 0);
+				addItem(_Item(I[LK.NormLang], ()=>new ViewNormLangPage(), Svgs.BookOpenTextFill().ToIcon()), 3, 1);
+			});
+		});
 		return NIL;
 	}
 

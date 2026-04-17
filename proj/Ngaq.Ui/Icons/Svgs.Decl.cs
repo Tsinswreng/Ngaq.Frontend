@@ -87,6 +87,10 @@ public partial class Svgs{
 
 	//<iconPacks:PackIconMaterial Kind="FormatLineStyle" />
 	public static partial Svg FormatLineStyle();
+	//<iconPacks:PackIconZondicons Kind="BookmarkOutlineAdd" />
+	public static partial Svg BookmarkOutlineAdd();
+	//<iconPacks:PackIconMaterial Kind="BookAlphabet" />
+	public static partial Svg BookAlphabet();
 	//public static partial Svg a;
 }
 
