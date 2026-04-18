@@ -8,24 +8,32 @@ using Ngaq.Ui;
 using Ngaq.Client;
 namespace Ngaq.Browser;
 internal sealed partial class Program {
-	private static Task Main(string[] args){
+	private static async Task Main(string[] args){
+		System.Console.WriteLine(114514);//t
+		try
+		{
+			var svc = new ServiceCollection();
+			svc
+				.SetupCore()
+				.SetupUi()
+				.SetupBrowser()
+				//.SetUpLocal()//TODO 改成按需API調用
+				.SetupClient()
+			;
+			var servicesProvider = svc.BuildServiceProvider();
 
-		var svc = new ServiceCollection();
-		svc
-			.SetupCore()
-			.SetupUi()
-			.SetupBrowser()
-			//.SetUpLocal()//TODO 改成按需API調用
-			.SetupClient()
-		;
-		var servicesProvider = svc.BuildServiceProvider();
-
-		return BuildAvaloniaApp()
-		.AfterSetup(e=>{
-			App.SetSvcProvider(servicesProvider);
-		})
-		.WithInterFont()
-		.StartBrowserAppAsync("out");//avalonia窗口 ʃʰ掛載ʹhtml元素
+			await BuildAvaloniaApp()
+			.AfterSetup(e=>{
+				App.SetSvcProvider(servicesProvider);
+			})
+			.WithInterFont()
+			.StartBrowserAppAsync("out");//avalonia窗口 ʃʰ掛載ʹhtml元素
+			return;
+			}
+		catch (System.Exception e){
+			System.Console.WriteLine(e);
+		}
+		return;
 
 	}
 
