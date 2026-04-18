@@ -42,7 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="../../../Ngaq.Local/Ngaq.Local.csproj" />
+		<ProjectReference Include="../../../Ngaq.Backend/Ngaq.Backend.csproj" />
 	</ItemGroup>
 
 

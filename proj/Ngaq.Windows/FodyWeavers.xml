@@ -9,7 +9,7 @@
     <AssemblyNames>
       <Name>Ngaq.Windows</Name>
       <Name>Ngaq.Core</Name>
-      <Name>Ngaq.Local</Name>
+      <Name>Ngaq.Backend</Name>
     </AssemblyNames>
     <!-- 3. 给「所有」方法都打上这个属性（含私有、构造器、属性 getter/setter） -->
     <ApplyToAllMethods>true</ApplyToAllMethods>
