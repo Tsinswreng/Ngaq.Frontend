@@ -32,7 +32,7 @@ public class ClientWordSync{
 		var textWithBlob = await SvcWord.PackAllWordsToTextWithBlobNoStream(User, Req, Ct);
 
 		await HttpCaller.PostByteStream<DtoCompressedWords, nil>(
-			ConstUrl.UrlWord.Push
+			KeysUrl.Word.Push
 			,textWithBlob.ToByteArr(), Ct
 		);
 
@@ -46,7 +46,7 @@ public class ClientWordSync{
 			Type = EWordsPack.LineSepJnWordJsonGZip
 		};
 		using var resp = await HttpCaller.SendWithRetry(
-			ConstUrl.UrlWord.Pull
+			KeysUrl.Word.Pull
 			,JsonS.Stringify(Req)
 			,(json)=>new StringContent(
 				json

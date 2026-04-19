@@ -45,7 +45,7 @@ public partial class ClientUser
 		,CT Ct
 	){
 		await HttpCaller.Post<ReqAddUser, nil>(
-			ConstUrl.OpenUser.AddUser
+			KeysUrl.OpenUser.AddUser
 			,Req
 			,Ct
 		);
@@ -58,7 +58,7 @@ public partial class ClientUser
 		,ReqLogin ReqLogin, CT Ct
 	){
 		var R = await HttpCaller.Post<ReqLogin, RespLogin>(
-			ConstUrl.OpenUser.Login
+			KeysUrl.OpenUser.Login
 			,ReqLogin
 			,Ct
 		);
@@ -85,7 +85,7 @@ public partial class ClientUser
 	[Impl]
 	public async Task<nil> Logout(IUserCtx User, ReqLogout ReqLogout, CT Ct){
 		await HttpCaller.Post<ReqLogout, nil>(
-			ConstUrl.ApiUser.Logout
+			KeysUrl.ApiUser.Logout
 			,ReqLogout
 			,Ct
 		);
