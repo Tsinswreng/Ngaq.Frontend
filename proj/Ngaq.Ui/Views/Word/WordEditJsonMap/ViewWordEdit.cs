@@ -111,6 +111,7 @@ public partial class ViewWordEdit
 
 		Root.A(new OpBtn(), o=>{
 			o.BtnContent = I[K.Save];
+			o._Button.StretchCenter();
 		});
 
 		return NIL;

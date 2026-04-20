@@ -212,7 +212,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 		PropGridSource = new FlatTreeDataGridSource<VmWordPropRow>(Ctx.PropRows){
 			Columns = {
-				new TextColumn<VmWordPropRow, str>(I[K.NumberSign], x=>GetPropRowIdxText(x)),
+				new TextColumn<VmWordPropRow, str>("", x=>GetPropRowIdxText(x)),
 				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyText),
 				new TextColumn<VmWordPropRow, str>(I[K.KType], x=>x.KTypeText),
 				new TextColumn<VmWordPropRow, str>(I[K.VType], x=>x.VTypeText),
@@ -360,19 +360,19 @@ public partial class ViewWordEditV2: AppViewBase{
 	IReadOnlyList<str> GetPropKeyOptions(){
 		var k = KeysProp.Inst;
 		return [
-			k.summary,
-			k.description,
-			k.note,
-			k.tag,
-			k.source,
-			k.alias,
-			k.pronunciation,
-			k.weight,
-			k.learn,
-			k.usage,
-			k.example,
-			k.relation,
-			k.Ref,
+			Todo.I18n(k.summary),
+			Todo.I18n(k.description),
+			Todo.I18n(k.note),
+			Todo.I18n(k.tag),
+			Todo.I18n(k.source),
+			Todo.I18n(k.alias),
+			Todo.I18n(k.pronunciation),
+			Todo.I18n(k.weight),
+			Todo.I18n(k.learn),
+			Todo.I18n(k.usage),
+			Todo.I18n(k.example),
+			Todo.I18n(k.relation),
+			Todo.I18n(k.Ref),
 		];
 	}
 
@@ -406,6 +406,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		.A(new OpBtn(), o=>{
 			o.Background = UiCfg.Inst.MainColor;
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
+			o._Button.StretchCenter();
 			o.CBind<Ctx>(IsEnabledProperty, x=>x.IsDirty, Mode: BindingMode.OneWay);
 			o.SetExe(ct=>Ctx?.Save(ct));
 		});
