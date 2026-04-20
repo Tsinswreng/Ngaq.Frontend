@@ -14,6 +14,8 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
+using Ngaq.Ui.Views.Word.WordManage.WordSync;
+using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTools;
@@ -23,6 +25,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 //TODO 改名爲 UserWordPage / UserWordManage
 public partial class ViewSearchWords
 	:AppViewBase
+	,I_MkTitleMenu
 {
 
 	public Ctx? Ctx{
@@ -141,5 +144,38 @@ public partial class ViewSearchWords
 			view.Ctx = Ctx.PageBar;
 		}
 		return view;
+	}
+
+	/// <summary>
+	/// 頂欄菜單：收納單詞同步頁入口（V1 + V2）。
+	/// </summary>
+	/// <returns>標題菜單控件。</returns>
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			var title = I[K.BackupEtSync] + " V1";
+			o.Header = title;
+			o.Click += (s,e)=>{
+				ViewNavi?.GoTo(
+					ToolView.WithTitle(
+						title,
+						new ViewWordSync()
+					)
+				);
+			};
+		});
+		menu.Items.A(new MenuItem(), o=>{
+			var title = I[K.BackupEtSync] + " V2";
+			o.Header = title;
+			o.Click += (s,e)=>{
+				ViewNavi?.GoTo(
+					ToolView.WithTitle(
+						title,
+						new ViewWordSyncV2()
+					)
+				);
+			};
+		});
+		return menu;
 	}
 }

@@ -12,6 +12,7 @@ using Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.WordSync;
+using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 using Tsinswreng.AvlnTools.Navigation;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
@@ -50,6 +51,7 @@ public static class DiUi{
 		z.AddTransient<VmEditJsonWord>();
 		z.AddTransient<VmAboutMe>();
 		z.AddTransient<VmWordSync>();
+		z.AddTransient<VmWordSyncV2>();
 		z.AddTransient<VmStatistics>();
 		z.AddTransient<VmCfgLearnWord>();
 		z.AddTransient<VmPronunciation>();

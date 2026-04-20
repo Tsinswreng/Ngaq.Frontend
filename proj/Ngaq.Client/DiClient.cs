@@ -12,6 +12,7 @@ public static class DiClient{
 		z.AddSingleton<IHttpCaller, HttpCaller>();
 		z.AddScoped<HttpClient>();
 		z.AddScoped<ClientWordSync>();
+		z.AddScoped<ClientWordSyncV2>();
 #if false //TODO 移至DiBrowser
 		z.AddScoped<ISvcWord, ClientWord>();
 		z.AddScoped<IUserCtxMgr, UserCtxMgr>();

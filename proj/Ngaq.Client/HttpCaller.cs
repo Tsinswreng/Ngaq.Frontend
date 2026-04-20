@@ -119,7 +119,10 @@ public class HttpCaller:IHttpCaller{
 		try{
 			Ans = WebAns.Deserialize<TResp>(body);
 		}catch(Exception e){
-			System.Console.WriteLine("Json反序列化失敗: "+e);//t
+			throw new InvalidOperationException(
+				$"Json反序列化失敗。Url={RelaUrl}, Body={body}",
+				e
+			);
 		}
 
 		if(Ans.Errors is not null && Ans.Errors.Count > 0){
