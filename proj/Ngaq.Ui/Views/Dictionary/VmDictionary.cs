@@ -1,4 +1,4 @@
-﻿namespace Ngaq.Ui.Views.Dictionary;
+namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
 using System.Collections.ObjectModel;
@@ -371,6 +371,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		View.Ctx.FromJnWord(JnWord);
+		View.Ctx.SaveMode = VmWordEditV2.ESaveMode.Merge;
 		var Title = str.IsNullOrWhiteSpace(JnWord.Word.Head)
 			? I18n[K.WordEdit]
 			: JnWord.Word.Head
@@ -476,3 +477,4 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 }
+
