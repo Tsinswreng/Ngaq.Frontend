@@ -321,7 +321,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
 			IsDirty = false;
-			ShowDialog(I18n[K.Saved]);
+			ShowToast(I18n[K.Saved]);
 		}catch(Exception ex){
 			LastError = ex.Message;
 			OnPropertyChanged(nameof(HasError));

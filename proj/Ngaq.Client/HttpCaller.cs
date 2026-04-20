@@ -111,6 +111,7 @@ public class HttpCaller:IHttpCaller{
 
 		var body = await resp.Content.ReadAsStringAsync(Ct);
 		if(str.IsNullOrEmpty(body)){
+			resp.EnsureSuccessStatusCode();
 			return default;
 		}
 

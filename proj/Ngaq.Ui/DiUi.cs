@@ -32,6 +32,7 @@ using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Word.WordCard;
+using Ngaq.Ui.Views.Word.WordEditV2;
 
 namespace Ngaq.Ui;
 
@@ -70,6 +71,8 @@ public static class DiUi{
 		z.AddTransient<VmNormLangToUserLangPage>();
 		z.AddTransient<VmNormLangToUserLangEdit>();
 		z.AddTransient<VmSimpleWord>();
+		z.AddTransient<VmWordEditV2>();
+
 		z.AddTransient<IWordCardPronounceBiz, SvcWordCardPronounceBiz>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
