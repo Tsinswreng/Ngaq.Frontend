@@ -45,13 +45,14 @@ public partial class ViewAboutMe
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(2, GUT.Auto),
-				RowDef(1, GUT.Auto),
 				RowDef(1, GUT.Star),
 			]);
 		});
-		Root.A(_ToolBar(), o=>{});
-		Root.A(_UserCard());
-		Root.A(new ViewWordManage());
+		Root.A(_ToolBar(), o=>{})
+		.A(_UserCard())
+		.A(new ScrollViewer(), sv=>{
+			sv.SetContent(new ViewWordManage());
+		});
 		return NIL;
 	}
 
