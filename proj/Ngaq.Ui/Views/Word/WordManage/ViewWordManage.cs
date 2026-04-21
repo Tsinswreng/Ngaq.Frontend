@@ -102,36 +102,34 @@ public partial class ViewWordManage
 		R.HorizontalContentAlignment = HAlign.Stretch;
 		R.MinHeight = UiCfg.Inst.BaseFontSize * 4.8;
 
-		var content = new StackPanel{
-			Orientation = Orientation.Vertical,
-			Spacing = UiCfg.Inst.BaseFontSize * 0.35,
-			HorizontalAlignment = HorizontalAlignment.Center,
-			VerticalAlignment = VerticalAlignment.Center,
-		};
-
-		if(Icon is not null){
-			Icon.Width = UiCfg.Inst.BaseFontSize * 2.0;
-			Icon.Height = UiCfg.Inst.BaseFontSize * 2.0;
-			content.Children.Add(Icon);
-		}
-
-		var titleText = new TextBlock();
-		titleText.Text = Title;
-		titleText.FontSize = UiCfg.Inst.BaseFontSize * 1.1;
-		titleText.TextAlignment = TextAlignment.Center;
-		//titleText.FontWeight = FontWeight.SemiBold;
-		content.Children.Add(titleText);
-
-		R.Content = new Border{
-			Padding = new Thickness(
+		R.SetContent(new Border(), b=>{
+			b.Padding = new Thickness(
 				UiCfg.Inst.BaseFontSize * 0.7,
 				UiCfg.Inst.BaseFontSize * 0.55
-			),
-			BorderThickness = new Thickness(1.5),
-			BorderBrush = Brushes.Gray,
-			Background = new SolidColorBrush(Color.FromArgb(28, 255, 255, 255)),
-			Child = content,
-		};
+			);
+			b.BorderThickness = new Thickness(1.5);
+			b.BorderBrush = Brushes.Gray;
+			b.Background = new SolidColorBrush(Color.FromArgb(28, 255, 255, 255));
+			b.SetChild(new StackPanel(), content=>{
+				{var o = content;
+					o.Orientation = Orientation.Vertical;
+					o.Spacing = UiCfg.Inst.BaseFontSize * 0.35;
+					o.HorizontalAlignment = HorizontalAlignment.Center;
+					o.VerticalAlignment = VerticalAlignment.Center;
+				}
+				if(Icon is not null){
+					content.A(Icon, o=>{
+						o.Width = UiCfg.Inst.BaseFontSize * 2.0;
+						o.Height = UiCfg.Inst.BaseFontSize * 2.0;
+					});
+				}
+				content.A(new TextBlock(), o=>{
+					o.Text = Title;
+					o.FontSize = UiCfg.Inst.BaseFontSize * 1.1;
+					o.TextAlignment = TextAlignment.Center;
+				});
+			});
+		});
 
 		return R;
 	}
