@@ -8,9 +8,12 @@ using Tsinswreng.CsCore;
 using Ctx = VmCfgLearnWord;
 public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
-	protected VmCfgLearnWord(){}
+	protected VmCfgLearnWord(){
+		Cfg = AppCfg.Inst;
+		Init();
+	}
 	public static Ctx Mk(){
-		return new Ctx();
+		return new Ctx(AppCfg.Inst);
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];
@@ -29,7 +32,7 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 		ICfgAccessor? Cfg
 	){
 		var z = this;
-		z.Cfg = Cfg;
+		z.Cfg = Cfg??AppCfg.Inst;
 
 		Init();
 	}
@@ -40,6 +43,7 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 		}
 		EnableRandomBackground = Cfg.Get(KeysClientCfg.Word.EnableRandomBackground);
 		EnableAutoPronounce = Cfg.Get(KeysClientCfg.Word.EnableAutoPronounce);
+		MaxDisplayedWordCount = (Cfg.Get(KeysClientCfg.Word.MaxDisplayedWordCount)).ToString();
 		var langs = Cfg.Get(KeysClientCfg.Word.FilterLanguage) as IList<obj>;
 		LanguageFilterExpr = str.Join("\n", langs??[]);
 
@@ -62,9 +66,18 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "";
 
+	public str MaxDisplayedWordCount{
+		get;
+		set{SetProperty(ref field, value);}
+	} = "500";
+
 
 	public async Task<nil> Save(CT Ct){
 		if(AnyNull(Cfg)){
+			return NIL;
+		}
+		if(!u64.TryParse(MaxDisplayedWordCount, out var maxDisplayedWordCount)){
+			ShowDialog(Todo.I18n("MaxDisplayedWordCount must be an unsigned integer."));
 			return NIL;
 		}
 		//var langs = LanguageFilterExpr.Split('\n').AsOrToList();
@@ -76,6 +89,7 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 			Cfg.Set(KeysClientCfg.Word.FilterLanguage, langs);
 			Cfg.Set(KeysClientCfg.Word.EnableRandomBackground, EnableRandomBackground);
 			Cfg.Set(KeysClientCfg.Word.EnableAutoPronounce, EnableAutoPronounce);
+			Cfg.Set(KeysClientCfg.Word.MaxDisplayedWordCount, maxDisplayedWordCount);
 			await Cfg.Save(Ct);
 		});
 		return NIL;

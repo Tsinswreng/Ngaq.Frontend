@@ -1,0 +1,59 @@
+namespace Ngaq.Ui.Views.Settings.ServerStorage;
+
+using Avalonia.Controls;
+using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Tools;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
+
+using Ctx = VmCfgServerStorage;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+
+public partial class ViewCfgServerStorage: AppViewBase{
+
+	public Ctx? Ctx{
+		get{return DataContext as Ctx;}
+		set{DataContext = value;}
+	}
+
+	public ViewCfgServerStorage(){
+		Ctx = App.DiOrMk<Ctx>();
+		Render();
+	}
+
+	public AutoGrid Root = new(IsRow:true);
+
+	protected nil Render(){
+		this.SetContent(Root.Grid, o=>{
+			o.RowDefinitions.AddRange([
+				RowDef(1, GUT.Star),
+				RowDef(1, GUT.Auto),
+			]);
+		});
+		Root.A(new StackPanel(), sp=>{
+			sp.A(new TextBlock(), o=>{
+				o.Text = Todo.I18n("ServerBaseUrl");
+			});
+			sp.A(new TextBox(), o=>{
+				o.CBind<Ctx>(o.PropText, x=>x.ServerBaseUrl);
+			});
+			sp.A(new TextBlock(), o=>{
+				o.Text = Todo.I18n("SqlitePath");
+			});
+			sp.A(new TextBox(), o=>{
+				o.CBind<Ctx>(o.PropText, x=>x.SqlitePath);
+			});
+		});
+		Root.A(new OpBtn(), o=>{
+			o._Button.StretchCenter();
+			o.VerticalAlignment = VAlign.Bottom;
+			o.BtnContent = I[K.Save];
+			o.Background = UiCfg.Inst.MainColor;
+			o.SetExe(Ct=>Ctx?.Save(Ct));
+		});
+		return NIL;
+	}
+}
+
