@@ -72,7 +72,7 @@ public partial class ViewRegister
 			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password), true);
 			formItem(I[K.ConfirmPassword], CBE.Pth<Ctx>(x=>x.ConfirmPassword), true);
 			var errMsgSclv = new ScrollViewer{};
-			Stk.Children.Add(errMsgSclv);
+			Stk.A(errMsgSclv);
 
 			errMsgSclv.Content = _ErrorList();
 			Stk.A(new OpBtn(), o=>{
@@ -114,7 +114,7 @@ public partial class ViewRegister
 	protected Func<str, CompiledBindingPath, bool, nil> _fn_addLabelBox(Panel Container){
 		return (LabelText, Pth, IsPassword)=>{
 			var label = new Label{};
-			Container.Children.Add(label);
+			Container.A(label);
 			{
 				var o = label;
 				o.Content = LabelText;
@@ -122,7 +122,7 @@ public partial class ViewRegister
 
 			if(IsPassword){
 				var box = new TextBox{};
-				Container.Children.Add(box);
+				Container.A(box);
 				{
 					var o = box;
 					o.Classes.Add(Cls.inputBox);
@@ -137,7 +137,7 @@ public partial class ViewRegister
 				}
 			}else{
 				var box = new TextBox{};
-				Container.Children.Add(box);
+				Container.A(box);
 				{
 					var o = box;
 					o.Classes.Add(Cls.inputBox);

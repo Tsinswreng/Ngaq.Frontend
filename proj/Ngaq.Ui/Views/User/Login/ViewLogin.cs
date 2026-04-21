@@ -81,7 +81,7 @@ public partial class Cls_{
 			formItem(I[K.Email], CBE.Pth<Ctx>(x=>x.Email), false);
 			formItem(I[K.Password], CBE.Pth<Ctx>(x=>x.Password), true);
 			var errMsgSclv = new ScrollViewer{};
-			Stk.Children.Add(errMsgSclv);
+			Stk.A(errMsgSclv);
 			{
 			}
 			errMsgSclv.Content = _ErrorList();
@@ -126,7 +126,7 @@ public partial class Cls_{
 	protected Func<str, CompiledBindingPath, bool, nil?> FnAddLabelBox(Panel Container){
 		return (LabelText, Pth, IsPassword)=>{
 			var label = new Label{};
-			Container.Children.Add(label);
+			Container.A(label);
 			{
 				var o = label;
 				o.Content = LabelText;
@@ -134,7 +134,7 @@ public partial class Cls_{
 
 			if(IsPassword){
 				var box = new TextBox{};
-				Container.Children.Add(box);
+				Container.A(box);
 				{
 					var o = box;
 					o.Classes.Add(Cls.InputBox);
@@ -149,7 +149,7 @@ public partial class Cls_{
 				}
 			}else{
 				var box = new TextBox{};
-				Container.Children.Add(box);
+				Container.A(box);
 				{
 					var o = box;
 					o.Classes.Add(Cls.InputBox);

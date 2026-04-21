@@ -1,16 +1,15 @@
 namespace Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
 
 using System.IO;
+using System.IO.Abstractions;
 using Avalonia.Threading;
 using Ngaq.Client.Word.Svc;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Shared.Word.Svc;
-using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsCfg;
-using Tsinswreng.CsTools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 單詞同步 V2 頁面的 ViewModel。
@@ -19,6 +18,7 @@ public partial class VmWordSyncV2: ViewModelBase{
 	ISvcWordV2? SvcWordV2;
 	IFrontendUserCtxMgr? UserCtxMgr;
 	ICfgAccessor? Cfg;
+	IFileSystem? FileSystem;
 
 	/// 構造函數（依賴注入）。
 	/// <param name="ClientWordSyncV2">雲端同步客戶端。</param>
@@ -30,11 +30,13 @@ public partial class VmWordSyncV2: ViewModelBase{
 		,ISvcWordV2? SvcWordV2
 		,IFrontendUserCtxMgr? UserCtxMgr
 		,ICfgAccessor? Cfg
+		,IFileSystem? FileSystem
 	){
 		this.ClientWordSyncV2 = ClientWordSyncV2;
 		this.SvcWordV2 = SvcWordV2;
 		this.UserCtxMgr = UserCtxMgr;
 		this.Cfg = Cfg;
+		this.FileSystem = FileSystem;
 
 		if(Cfg is not null){
 			PathExport = Cfg.Get(KeysClientCfg.Word.WordsPackExportPath)??"";
@@ -43,7 +45,9 @@ public partial class VmWordSyncV2: ViewModelBase{
 	}
 
 	/// 供設計期使用的保底構造。
-	protected VmWordSyncV2(){}
+	protected VmWordSyncV2(){
+
+	}
 
 	/// 導出文件路徑。
 	public str PathExport{
@@ -96,22 +100,21 @@ public partial class VmWordSyncV2: ViewModelBase{
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>成功返回 NIL。</returns>
 	public async Task<nil> ExportAsy(CT Ct){
+		if(AnyNull(SvcWordV2, UserCtxMgr, FileSystem)){
+			return NIL;
+		}
 		if(str.IsNullOrWhiteSpace(PathExport)){
 			ShowDialog(I18n[K.InvalidPath]);
 			return NIL;
 		}
-		if(File.Exists(PathExport)){
+		if(FileSystem.File.Exists(PathExport)){
 			ShowDialog(I18n[K.FileAlreadyExistsNoOverwriteChangePath]);
-			return NIL;
-		}
-		if(AnyNull(SvcWordV2, UserCtxMgr)){
 			return NIL;
 		}
 		try{
 			// 先確保目標文件可建立，避免導出後才發現路徑不合法。
 			await Task.Run(async()=>{
-				ToolFile.EnsureFile(PathExport);
-				if(!File.Exists(PathExport)){
+				if(!TryEnsureExportFile(PathExport)){
 					Dispatcher.UIThread.Post(()=>{
 						ShowDialog(I18n[K.InvalidPath]);
 					});
@@ -119,7 +122,7 @@ public partial class VmWordSyncV2: ViewModelBase{
 				}
 
 				using var packed = await SvcWordV2.PackAllWordsWithDel(UserCtxMgr.GetDbUserCtx(), Ct);
-				using var file = File.Open(PathExport, FileMode.Create, FileAccess.Write, FileShare.None);
+				using var file = FileSystem.File.Open(PathExport, FileMode.Create, FileAccess.Write, FileShare.None);
 				await packed.CopyToAsync(file, Ct);
 
 				Cfg?.Set(KeysClientCfg.Word.WordsPackExportPath, PathExport);
@@ -136,16 +139,17 @@ public partial class VmWordSyncV2: ViewModelBase{
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>成功返回 NIL。</returns>
 	public async Task<nil> ImportAsy(CT Ct){
-		if(str.IsNullOrWhiteSpace(PathImport) || !File.Exists(PathImport)){
+		if(AnyNull(SvcWordV2, UserCtxMgr, FileSystem)){
+			return NIL;
+		}
+		if(str.IsNullOrWhiteSpace(PathImport) || !FileSystem.File.Exists(PathImport)){
 			ShowDialog(I18n[K.InvalidPath]);
 			return NIL;
 		}
-		if(AnyNull(SvcWordV2, UserCtxMgr)){
-			return NIL;
-		}
+
 		try{
 			await Task.Run(async()=>{
-				using var file = File.OpenRead(PathImport);
+				using var file = FileSystem.File.OpenRead(PathImport);
 				await foreach(var _ in SvcWordV2.BatSyncJnWordByBizIdFromStream(
 					UserCtxMgr.GetDbUserCtx(),
 					file,
@@ -162,5 +166,24 @@ public partial class VmWordSyncV2: ViewModelBase{
 			HandleErr(Ex);
 		}
 		return NIL;
+	}
+
+	/// 在抽象文件系統上確保導出路徑可寫，兼容多平台測試與Web兜底。
+	bool TryEnsureExportFile(str FilePath){
+		if(AnyNull(FileSystem)){
+			return false;
+		}
+		try{
+			var dir = FileSystem.Path.GetDirectoryName(FilePath);
+			if(!str.IsNullOrWhiteSpace(dir)){
+				FileSystem.Directory.CreateDirectory(dir);
+			}
+			if(!FileSystem.File.Exists(FilePath)){
+				using var _ = FileSystem.File.Create(FilePath);
+			}
+			return FileSystem.File.Exists(FilePath);
+		}catch{
+			return false;
+		}
 	}
 }

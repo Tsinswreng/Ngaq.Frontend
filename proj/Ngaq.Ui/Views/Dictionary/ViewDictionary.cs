@@ -3,12 +3,14 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
+using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.LlmRawOutputEdit;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
+using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
 using Tsinswreng.AvlnTools.Dsl;
@@ -16,6 +18,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using DictK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmDictionary;
+using Ngaq.Core.Shared.Word.Models;
 
 public partial class ViewDictionary
 	:AppViewBase
@@ -29,6 +32,10 @@ public partial class ViewDictionary
 
 	public ViewDictionary(){
 		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			// 把導航職責留在 View 層，VM 只產生要編輯的業務對象。
+			Ctx.OnOpenWordEdit = OpenWordEditPage;
+		}
 		Style();
 		Render();
 		this.Loaded += (s, e) => {
@@ -206,6 +213,22 @@ public partial class ViewDictionary
 		}
 		// 顯式傳入錨點控件，避免 ContextMenu 內部取到空 PlacementTarget。
 		menu.Open(Anchor);
+	}
+
+	nil OpenWordEditPage(JnWord JnWord){
+		var view = new ViewWordEditV2();
+		if(view.Ctx is null){
+			Ctx?.ShowDialog(I[DictK.WordEditorContextIsNull]);
+			return NIL;
+		}
+		view.Ctx.FromJnWord(JnWord);
+		view.Ctx.SaveMode = VmWordEditV2.ESaveMode.Merge;
+		var title = str.IsNullOrWhiteSpace(JnWord.Word.Head)
+			? I[DictK.WordEdit]
+			: JnWord.Word.Head
+		;
+		ViewNavi?.GoTo(ToolView.WithTitle(title, view));
+		return NIL;
 	}
 
 	public void ClickLookupBtn(str? SearchText = null){

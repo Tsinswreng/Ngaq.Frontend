@@ -19,7 +19,6 @@ using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
-using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Tsinswreng.CsErr;
 
@@ -69,6 +68,9 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
+
+	/// 由 View 注入的「打開單詞編輯頁」動作，避免 VM 直接依賴 View 類型。
+	public Func<JnWord, nil>? OnOpenWordEdit{get;set;}
 
 	public str Input{
 		get{return field;}
@@ -363,20 +365,12 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	}
 
 	/// 跳到 WordEditV2，由用戶在編輯頁手動點 Save 才真正保存。
-	/// TODO 違反MVVM
 	obj? GoToWordEditPage(JnWord JnWord){
-		var View = new ViewWordEditV2();
-		if(View.Ctx is null){
-			ShowDialog(I18n[K.WordEditorContextIsNull]);
+		if(OnOpenWordEdit is null){
+			ShowDialog(Todo.I18n("Word editor opener is not ready."));
 			return NIL;
 		}
-		View.Ctx.FromJnWord(JnWord);
-		View.Ctx.SaveMode = VmWordEditV2.ESaveMode.Merge;
-		var Title = str.IsNullOrWhiteSpace(JnWord.Word.Head)
-			? I18n[K.WordEdit]
-			: JnWord.Word.Head
-		;
-		ViewNavi?.GoTo(ToolView.WithTitle(Title, View));
+		OnOpenWordEdit(JnWord);
 		return NIL;
 	}
 

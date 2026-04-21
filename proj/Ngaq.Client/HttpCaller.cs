@@ -119,8 +119,8 @@ public class HttpCaller:IHttpCaller{
 		try{
 			Ans = WebAns.Deserialize<TResp>(body);
 		}catch(Exception e){
-			throw new InvalidOperationException(
-				$"Json反序列化失敗。Url={RelaUrl}, Body={body}",
+			throw new Exception(
+				Todo.I18n($"Json反序列化失敗。Url={RelaUrl}, Body={body}"),
 				e
 			);
 		}

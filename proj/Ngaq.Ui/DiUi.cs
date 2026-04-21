@@ -34,6 +34,7 @@ using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordEditV2;
+using System.IO.Abstractions;
 
 namespace Ngaq.Ui;
 
@@ -74,7 +75,6 @@ public static class DiUi{
 		z.AddTransient<VmNormLangToUserLangEdit>();
 		z.AddTransient<VmSimpleWord>();
 		z.AddTransient<VmWordEditV2>();
-
 		z.AddTransient<IWordCardPronounceBiz, SvcWordCardPronounceBiz>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
