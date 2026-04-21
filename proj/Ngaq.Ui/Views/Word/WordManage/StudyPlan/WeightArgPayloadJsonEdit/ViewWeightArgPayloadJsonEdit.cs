@@ -71,7 +71,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 		});
 		g.A(new OpBtn(), o=>{
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Apply]);
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>{
 				Ctx?.ApplyAndBack();
 				return Task.FromResult(NIL);

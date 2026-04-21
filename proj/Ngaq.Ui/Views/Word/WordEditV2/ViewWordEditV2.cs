@@ -399,13 +399,13 @@ public partial class ViewWordEditV2: AppViewBase{
 		g.Grid.Margin = new Thickness(10, 8, 10, 10);
 
 		g.A(new OpBtn(), o=>{
-			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe(ct=>Ctx?.Delete(ct));
 		})
 		.A(new OpBtn(), o=>{
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o._Button.StretchCenter();
 			o.CBind<Ctx>(IsEnabledProperty, x=>x.IsDirty, Mode: BindingMode.OneWay);

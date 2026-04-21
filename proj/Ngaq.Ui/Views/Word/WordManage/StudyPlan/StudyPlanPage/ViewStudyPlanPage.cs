@@ -95,7 +95,7 @@ public partial class ViewStudyPlanPage
 		})
 		.A(searchBtn, o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o.BtnContent = Svgs.Search().ToIcon();
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})

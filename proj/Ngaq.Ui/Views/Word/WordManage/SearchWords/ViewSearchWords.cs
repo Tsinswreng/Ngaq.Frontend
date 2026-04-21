@@ -80,7 +80,7 @@ public partial class ViewSearchWords
 				o.BtnContent = Svgs.Search().ToIcon();
 				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
 				o._Button.StretchCenter();
-				o.Background = UiCfg.Inst.MainColor;
+				o._Button.Background = UiCfg.Inst.MainColor;
 			});
 		}}
 		Root.A(new ScrollViewer(), scrl=>{

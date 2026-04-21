@@ -14,6 +14,7 @@ using Ctx = VmOpBtn;
 
 [Doc(@$"Operation Button.
 when processing, underline will have rolling bar.
+設置背景要用 _Button.Background、不能直接.Backround
 ")]
 public partial class OpBtn : ContentControl {
 
@@ -136,6 +137,7 @@ public partial class OpBtn : ContentControl {
 		// 2. 包一層「零尺寸」殼，讓 Grid 量不到
 		return new ZeroDecorator { Child = bar };
 	}
+
 }
 
 class ZeroDecorator : Decorator {

@@ -53,7 +53,7 @@ public partial class ViewCfgLlmDictionary: AppViewBase{
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;
 			o.BtnContent = I[K.Save];
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe(Ct=>Ctx?.Save(Ct));
 		});
 		return NIL;

@@ -73,12 +73,12 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 		});
 		g.A(new OpBtn(), o=>{
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		g.A(new OpBtn(), o=>{
 			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
-			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		});
 		return g.Grid;

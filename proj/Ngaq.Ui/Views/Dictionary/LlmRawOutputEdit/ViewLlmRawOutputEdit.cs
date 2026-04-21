@@ -45,7 +45,7 @@ public partial class ViewLlmRawOutputEdit: AppViewBase{
 			o.MinHeight = 200;
 		})
 		.A(new OpBtn(), o=>{
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalAlignment = HAlign.Stretch;
 			o._Button.VerticalAlignment = VAlign.Stretch;
 			o._Button.HorizontalContentAlignment = HAlign.Center;

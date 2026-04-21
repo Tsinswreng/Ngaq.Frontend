@@ -146,13 +146,13 @@ public partial class ViewStudyPlanEdit
 			ColDef(1, GUT.Star),
 		]);
 		bar.A(new OpBtn(), o=>{
-			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		})
 		.A(new OpBtn(), o=>{
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));

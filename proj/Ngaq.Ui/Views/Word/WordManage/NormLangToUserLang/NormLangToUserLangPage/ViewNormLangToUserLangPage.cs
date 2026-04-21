@@ -96,7 +96,7 @@ public partial class ViewNormLangToUserLangPage
 		.A(searchBtn, o=>{
 			o.Classes.Add(Cls.FullStretch);
 			o.BtnContent = Svgs.Search().ToIcon();
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
 		.A(new Button(), o=>{

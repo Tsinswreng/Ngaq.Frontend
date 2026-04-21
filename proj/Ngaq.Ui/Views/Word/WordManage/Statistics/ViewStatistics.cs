@@ -158,7 +158,7 @@ public partial class ViewStatistics: AppViewBase{
 			o._Button.HAlign(x=>x.Stretch);
 			o._Button.StretchCenter();
 			o.BtnContent = I[K.Count];
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.GetDataAsy(Ct));
 		});
 

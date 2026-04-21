@@ -92,7 +92,7 @@ public partial class ViewUserProfile
 					})
 					.A(new OpBtn(), o=>{
 						o._Button.StretchCenter();
-						o.Background = Brushes.Red;
+						o._Button.Background = Brushes.Red;
 						o.BtnContent = I[K.Logout];
 						o.SetExe((Ct)=>Ctx?.LogoutAsy(Ct));
 					});
