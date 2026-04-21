@@ -5,11 +5,14 @@ using Avalonia.Controls.Primitives;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ngaq.Ui.Infra.I18n;
 using Ctx = VmCfgLearnWord;
+using Tsinswreng.AvlnTools.Controls;
+
 public partial class ViewCfgLearnWord
 	:AppViewBase
 {
@@ -45,6 +48,15 @@ public partial class ViewCfgLearnWord
 		Root.A(new ScrollViewer(), sc=>{
 			sc.SetContent(new StackPanel(), sp=>{
 				sp
+				.A(new SwipeLongPressBtn(), o=>{
+					// 在背詞設置中直接提供學習計劃入口，避免多層跳轉。
+					o.Content = I[KeysUiI18nCommon.StudyPlan];
+					o.Click += (s,e)=>{
+						ViewNavi?.GoTo(
+							ToolView.WithTitle(I[KeysUiI18nCommon.StudyPlan], new ViewStudyPlan())
+						);
+					};
+				})
 				.A(new CheckBox(), o=>{
 					//o.Tag = new TextBlock{Text = "Enable Random Background"};
 					o.Content = Todo.I18n("Enable Random Background");

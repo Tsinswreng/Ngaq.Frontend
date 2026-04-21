@@ -7,9 +7,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmHome;
 using Ngaq.Ui.Views.Word.WordManage;
-using Ngaq.Ui.Views.User.AboutMe;
+using Ngaq.Ui.Views.Dictionary;
 
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ngaq.Ui.Icons;
 using Avalonia;
 using Ngaq.Ui.Views.Word.Learn;
@@ -61,7 +60,7 @@ public partial class ViewHome
 
 		Root.A(new ViewBottomBar(), ViewBottomBar=>{
 			ViewBottomBar.Items.A(new Btn_Control(
-					BarItem(I[K.Learn], Svgs.BookOpenTextFill().ToIcon())//📖
+					BarItem(Todo.I18n("學習"), Svgs.BookOpenTextFill().ToIcon())//📖
 					,()=>new ViewLearnWords()
 				),
 				o=>{
@@ -70,13 +69,13 @@ public partial class ViewHome
 				}
 			).A(
 				new Btn_Control(
-					BarItem(I[K.Library], Svgs.BookBookmarkFill().ToIcon())//📚
-					,()=>new ViewWordManage()
+					BarItem(Todo.I18n("字典"), Svgs.BookBookmarkFill().ToIcon())//📚
+					,()=>new ViewDictionary()
 				)
 			).A(
 				new Btn_Control(
-					BarItem(I[K.Me], Svgs.UserCircleFill().ToIcon())//👤
-					,()=>new ViewAboutMe()
+					BarItem(Todo.I18n("我的"), Svgs.UserCircleFill().ToIcon())//👤
+					,()=>new ViewWordManage()
 				)
 			)
 			;
