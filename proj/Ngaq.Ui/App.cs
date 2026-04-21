@@ -110,6 +110,9 @@ public partial class App :Application
 			).Set(
 				TemplatedControl.HorizontalAlignmentProperty
 				, HAlign.Stretch
+			).Set(
+				Button.BackgroundProperty
+				,new SolidColorBrush(Color.FromArgb(255, 32,32,32))
 			)
 		);
 

@@ -83,7 +83,10 @@ public partial class OpBtn : ContentControl {
 			RowDef(1, GUT.Star),
 			//RowDef(1, GUT.Auto),
 		]);
-		Grid.Children.Add(_Button);
+		Grid.A(_Button, b=>{
+			b.VAlign(x=>x.Stretch);
+			b.HAlign(x=>x.Stretch);
+		});
 
 		var FnMkOverlay = () => {
 			return MkOverlay();
