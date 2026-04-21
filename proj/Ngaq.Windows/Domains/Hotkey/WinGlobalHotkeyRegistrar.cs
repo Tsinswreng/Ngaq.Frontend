@@ -33,9 +33,9 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 	//TODO 叶 ˋ有蠹、AOT編譯後運行即卡住不動、頁面不出
 	public IAnswer<obj?> RegisterGlobalHotKeys(){
 		var R = new Answer<obj?>();
-		R.AddErr("Not implemented");
-		return R;
-		
+		// R.AddErr("Not implemented");
+		// return R;
+
 		try{
 			var hotkey = new HotKey{
 				Id = "alt_e",
@@ -49,7 +49,7 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 							var view = new ViewDictionary();
 							MgrViewNavi.Inst.GetViewNavi().GoTo(ToolView.WithTitle("Dictionary", view));
 
-							var clipText = _svcClipboard.GetText(Ct)?.Trim();
+							var clipText = await _svcClipboard.GetText(Ct);
 							if(!string.IsNullOrWhiteSpace(clipText)){
 								view.ClickLookupBtn();
 							}

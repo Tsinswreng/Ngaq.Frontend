@@ -11,6 +11,7 @@ namespace Ngaq.Ui.Views;
 
 public partial class MainView {
 	void Try() {
+		return;
 		var editor = new TextEditor {
 			Text = "{\n  \"name\": \"Ngaq\",\n  \"enabled\": true,\n  \"items\": [\n    1,\n    2,\n    3\n  ]\n}",
 			ShowLineNumbers = true,
