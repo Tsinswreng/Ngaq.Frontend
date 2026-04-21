@@ -19,6 +19,7 @@ using Tsinswreng.CsI18n;
 using DictK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmDictionary;
 using Ngaq.Core.Shared.Word.Models;
+using Avalonia.Media;
 
 public partial class ViewDictionary
 	:AppViewBase
@@ -125,7 +126,7 @@ public partial class ViewDictionary
 			.A(SearchBtn, o=>{
 				o._Button.StretchCenter();
 				o._Button.Content = Svgs.Search().ToIcon();
-				o.Background = UiCfg.Inst.MainColor;
+				o._Button.Background = UiCfg.Inst.MainColor;
 				o.SetExe(Ct=>Ctx?.Lookup(Ct));
 			})
 			.A(SaveToWordBtn, o=>{

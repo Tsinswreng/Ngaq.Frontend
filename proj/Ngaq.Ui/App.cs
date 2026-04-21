@@ -104,18 +104,17 @@ public partial class App :Application
 			,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
 		).AddTo(Styles);
 		//按鈕舒展
-		var ButtonSty = new Style(x=>
-			x.Is<Button>()
-		).Set(
-			TemplatedControl.HorizontalAlignmentProperty
-			, HAlign.Stretch
+
+		Styles.A(new Style(x=>
+				x.Is<Button>()
+			).Set(
+				TemplatedControl.HorizontalAlignmentProperty
+				, HAlign.Stretch
+			)
 		);
 
-		Styles.Add(ButtonSty);
-
 		/*
-		我想把按鈕的邊框顏色綁定到和他自己的背景顏色一樣、並把這當成一種優先級最低的默認行爲
-
+我想把按鈕的邊框顏色綁定到和他自己的背景顏色一樣、並把這當成一種優先級最低的默認行爲
 如果 在 局部 顯示指定了按鈕的邊框 再不再使用默認行爲。
 		 */
 		TemplatedControl.BackgroundProperty.Changed.AddClassHandler<Button>((btn, e) => {
@@ -156,6 +155,15 @@ public partial class App :Application
 		} else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
 			singleViewPlatform.MainView = MainView.Inst;
 		}
+
+ 		// var overrideStyle = new Style();
+		// overrideStyle.Resources.Add("ButtonBackground", new SolidColorBrush(Colors.Black));
+		// // overrideStyle.Resources.Add("ButtonBackgroundPointerOver", new SolidColorBrush(Colors.DarkGray));
+
+		// // 3. 将这个 Style 添加到 Application.Styles 集合中，并确保它在 FluentTheme 之后
+		// //    注意：如果 App.Styles 中已有 FluentTheme，直接 Add 即可
+		// Application.Current?.Styles.Add(overrideStyle);
+
 
 		base.OnFrameworkInitializationCompleted();
 	}
