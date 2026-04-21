@@ -9,10 +9,14 @@ using Avalonia.Media;
 using Avalonia.Threading;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.CsCore;
 using Ctx = VmOpBtn;
 
-
+[Doc(@$"Operation Button.
+when processing, underline will have rolling bar.
+")]
 public partial class OpBtn : ContentControl {
+
 	public enum EState {
 		Ready,
 		Working,
