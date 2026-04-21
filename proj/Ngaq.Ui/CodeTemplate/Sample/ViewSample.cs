@@ -12,6 +12,7 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsCore;
 using Ctx = VmSample;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewSample
 	:AppViewBase
@@ -146,6 +147,12 @@ public partial class ViewSample
 		b2.SetContent(Svgs.Add().ToIcon().WithText("Add"));
 	}
 
+
+	[Doc(@$"使用Tsinswreng.AvlnTool的Dsl。
+	要求:
+	- 在lambda中 用o.Xxx = Yyy的寫法初始化 加入控件樹的子控件、而不是使用屬性初始化塊
+	- 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
+	")]
 	public void SampleOfUsingDsl(){
 		var 正確示例 = (Panel p)=>{
 			//所有Panel都能用.A()擴展方法
@@ -163,6 +170,14 @@ public partial class ViewSample
 					o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				});
 			})
+			.A(new Border(), bdr=>{ // 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
+				bdr.SetChild(new ScrollViewer(), sv=>{
+					sv.SetContent(new StackPanel(), sp=>{
+						sp.A(new TextBlock())
+						.A(new TextBox());
+					});
+				});
+			})
 			;
 		};
 		var 錯誤示例 = (Panel p)=>{
@@ -178,6 +193,7 @@ public partial class ViewSample
 			btn.Content = textBlock;
 			//錯誤原因: 未使用A和SetContent擴展方法;
 			// 初始化控件屬性寫法不符合規範; 硬編碼字體大小; 硬編碼文本未使用Todo.I18n
+			// 代碼塊的嵌套 未和 樹的邏輯結構 保持一致
 		};
 	}
 

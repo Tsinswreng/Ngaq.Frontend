@@ -107,9 +107,9 @@ public partial class ViewWordManage
 				UiCfg.Inst.BaseFontSize * 0.7,
 				UiCfg.Inst.BaseFontSize * 0.55
 			);
-			b.BorderThickness = new Thickness(1.5);
-			b.BorderBrush = Brushes.Gray;
-			b.Background = new SolidColorBrush(Color.FromArgb(28, 255, 255, 255));
+			//b.BorderThickness = new Thickness(1.5);
+			//b.BorderBrush = Brushes.Gray;
+			//b.Background = new SolidColorBrush(Color.FromArgb(28, 255, 255, 255));
 			b.SetChild(new StackPanel(), content=>{
 				{var o = content;
 					o.Orientation = Orientation.Vertical;
