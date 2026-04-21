@@ -15,7 +15,6 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using DictK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
-using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmDictionary;
 
 public partial class ViewDictionary
@@ -48,6 +47,7 @@ public partial class ViewDictionary
 	public TextBox SearchTextBox = new();
 	public OpBtn SearchBtn = new();
 	public OpBtn SaveToWordBtn = new();
+	public OpBtn MenuBtn = new();
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -101,6 +101,7 @@ public partial class ViewDictionary
 				ColDef(8, GUT.Star),
 				ColDef(1, GUT.Star),
 				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Star),
 			]);
 		});
 		{{
@@ -125,6 +126,12 @@ public partial class ViewDictionary
 				o._Button.StretchCenter();
 				o.BtnContent = Svgs.BookmarkOutlineAdd().ToIcon();
 				o.SetExe(Ct=>Ctx?.ToWordEdit(Ct));
+			})
+			.A(MenuBtn, o=>{
+				// 與搜尋/收藏按鈕統一使用 OpBtn 風格。
+				o._Button.StretchCenter();
+				o.BtnContent = Svgs.MoreV().ToIcon();
+				o._Button.Click += (s,e)=>OpenTitleMenuNear(o._Button);
 			});
 		}}
 
@@ -188,6 +195,19 @@ public partial class ViewDictionary
 		});
 		return menu;
 	}
+
+	void OpenTitleMenuNear(Control? Anchor){
+		if(Anchor is null){
+			return;
+		}
+		var menu = MkTitleMenu() as ContextMenu;
+		if(menu is null){
+			return;
+		}
+		// 顯式傳入錨點控件，避免 ContextMenu 內部取到空 PlacementTarget。
+		menu.Open(Anchor);
+	}
+
 	public void ClickLookupBtn(str? SearchText = null){
 		if(SearchText != null){
 			SearchTextBox.Text = SearchText;

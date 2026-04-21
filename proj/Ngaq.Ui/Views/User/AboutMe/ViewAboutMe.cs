@@ -10,6 +10,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings;
 using Ngaq.Ui.Views.User.Profile;
+using Ngaq.Ui.Views.Word.WordManage;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -44,10 +45,13 @@ public partial class ViewAboutMe
 			o.RowDefinitions.AddRange([
 				RowDef(1, GUT.Auto),
 				RowDef(2, GUT.Auto),
+				RowDef(1, GUT.Auto),
+				RowDef(1, GUT.Star),
 			]);
 		});
 		Root.A(_ToolBar(), o=>{});
 		Root.A(_UserCard());
+		Root.A(new ViewWordManage());
 		return NIL;
 	}
 

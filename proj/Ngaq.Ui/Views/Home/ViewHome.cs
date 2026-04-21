@@ -6,8 +6,8 @@ using Ngaq.Ui.Views.BottomBar;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Ctx = VmHome;
-using Ngaq.Ui.Views.Word.WordManage;
 using Ngaq.Ui.Views.Dictionary;
+using Ngaq.Ui.Views.User.AboutMe;
 
 using Ngaq.Ui.Icons;
 using Avalonia;
@@ -75,7 +75,7 @@ public partial class ViewHome
 			).A(
 				new Btn_Control(
 					BarItem(Todo.I18n("我的"), Svgs.UserCircleFill().ToIcon())//👤
-					,()=>new ViewWordManage()
+					,()=>new ViewAboutMe()
 				)
 			)
 			;
