@@ -13,12 +13,11 @@ using Tsinswreng.CsI18n;
 using Ctx = VmWordSyncV2;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-/// <summary>
+
 /// 單詞同步 V2 頁面。
 /// 提供：
 /// - 文件導入/導出（含文件選擇器）
 /// - 雲端 Push / Pull
-/// </summary>
 public partial class ViewWordSyncV2
 	:AppViewBase
 {
@@ -140,9 +139,7 @@ public partial class ViewWordSyncV2
 		return row.Grid;
 	}
 
-	/// <summary>
 	/// 打開導入文件選擇器。
-	/// </summary>
 	/// <returns>選中文件絕對路徑；取消時返回 null。</returns>
 	async Task<str?> PickImportPathAsy(){
 		var provider = TopLevel.GetTopLevel(this)?.StorageProvider;
@@ -160,9 +157,7 @@ public partial class ViewWordSyncV2
 		return null;
 	}
 
-	/// <summary>
 	/// 打開導出文件保存選擇器。
-	/// </summary>
 	/// <returns>目標文件絕對路徑；取消時返回 null。</returns>
 	async Task<str?> PickExportPathAsy(){
 		var provider = TopLevel.GetTopLevel(this)?.StorageProvider;
@@ -177,9 +172,7 @@ public partial class ViewWordSyncV2
 		return file is null ? null : ToPath(file);
 	}
 
-	/// <summary>
 	/// 把 Avalonia Storage 路徑轉成字符串路徑。
-	/// </summary>
 	/// <param name="File">文件句柄。</param>
 	/// <returns>可用路徑字符串。</returns>
 	static str ToPath(IStorageFile File){
