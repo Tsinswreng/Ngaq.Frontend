@@ -304,12 +304,13 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
-	void Try(){
-	}
+	
 
 	public MainView() {
 		Inst ??= this;
+		#if DEBUG
 		Try();
+		#endif
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
 		this.SetContent(AutoGrid.Grid);
