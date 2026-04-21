@@ -39,7 +39,7 @@ public class ClientWordSyncV2{
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>成功返回 NIL。</returns>
 	public async Task<nil> Push(CT Ct){
-		using var resp = await HttpCaller.SendWithRetryAsy(
+		using var resp = await HttpCaller.SendWithRetry(
 			KeysUrl.WordV2.Push
 				,0
 				,async(_, ct)=>{

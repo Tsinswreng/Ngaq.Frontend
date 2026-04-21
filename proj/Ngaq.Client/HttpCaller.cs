@@ -11,29 +11,6 @@ using Ngaq.Core.Infra.Errors;
 using Ngaq.Core.Tools;
 using Tsinswreng.CsErr;
 namespace Ngaq.Client;
-public interface IHttpCaller {
-	public Task<TResp?> Post<TReq, TResp>(
-		str RelaUrl,TReq Req,CT Ct
-	);
-	public Task<TResp?> PostByteStream<TReq, TResp>(
-		str RelaUrl,u8[] Req,CT Ct
-	);
-
-	public Task<HttpResponseMessage> SendWithRetry<TContent>(
-		string RelaUrl,
-		TContent RawContent,
-		Func<TContent, HttpContent> ContentFactory,
-		CT Ct
-	);
-
-	public Task<HttpResponseMessage> SendWithRetryAsy<TContent>(
-		string RelaUrl,
-		TContent RawContent,
-		Func<TContent, CT, Task<HttpContent>> ContentFactory,
-		CT Ct
-	);
-}
-
 
 public class HttpCaller:IHttpCaller{
 	//IHttpClientFactory
@@ -57,7 +34,7 @@ public class HttpCaller:IHttpCaller{
 	public async Task<HttpResponseMessage> SendWithRetry<TContent>(
 		string RelaUrl,
 		TContent Content,
-		Func<TContent, HttpContent> ContentFactory,
+		Func<TContent, HttpContent> MkContent,
 		CT Ct
 	){
 		using var dl = DisposableList.Mk();
@@ -70,7 +47,7 @@ public class HttpCaller:IHttpCaller{
 			var token   = userCtx?.AccessToken;
 			var clientId = userCtx?.ClientId;
 
-			var httpContent = ContentFactory(Content);
+			var httpContent = MkContent(Content);
 			dl.Add(httpContent);
 			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url) { Content = httpContent };
 			dl.Add(reqMsg);
@@ -98,20 +75,18 @@ public class HttpCaller:IHttpCaller{
 		return resp;
 	}
 
-	/// <summary>
 	/// 發送 POST 請求（最多重試一次）；每次嘗試都由異步工廠重新創建 HttpContent。
 	/// 這可避免不可 seek 的流在 401 重試時被重放為空內容。
-	/// </summary>
 	/// <typeparam name="TContent">內容工廠所需的狀態類型。</typeparam>
 	/// <param name="RelaUrl">相對 URL。</param>
 	/// <param name="Content">內容工廠狀態。</param>
-	/// <param name="ContentFactory">每次嘗試都會調用一次，用於創建全新 HttpContent。</param>
+	/// <param name="MkContentAsy">每次嘗試都會調用一次，用於創建全新 HttpContent。</param>
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>最終響應（401 之外的狀態不在此方法內拋錯）。</returns>
-	public async Task<HttpResponseMessage> SendWithRetryAsy<TContent>(
+	public async Task<HttpResponseMessage> SendWithRetry<TContent>(
 		string RelaUrl,
 		TContent Content,
-		Func<TContent, CT, Task<HttpContent>> ContentFactory,
+		Func<TContent, CT, Task<HttpContent>> MkContentAsy,
 		CT Ct
 	){
 		using var dl = DisposableList.Mk();
@@ -125,7 +100,7 @@ public class HttpCaller:IHttpCaller{
 			var clientId = userCtx?.ClientId;
 
 			// 每輪都新建 content，確保流式上傳可重試而不必整包進內存。
-			var httpContent = await ContentFactory(Content, Ct);
+			var httpContent = await MkContentAsy(Content, Ct);
 			dl.Add(httpContent);
 			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url){ Content = httpContent };
 			dl.Add(reqMsg);
