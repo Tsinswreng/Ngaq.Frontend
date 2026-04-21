@@ -25,6 +25,13 @@ public interface IHttpCaller {
 		Func<TContent, HttpContent> ContentFactory,
 		CT Ct
 	);
+
+	public Task<HttpResponseMessage> SendWithRetryAsy<TContent>(
+		string RelaUrl,
+		TContent RawContent,
+		Func<TContent, CT, Task<HttpContent>> ContentFactory,
+		CT Ct
+	);
 }
 
 
@@ -83,6 +90,59 @@ public class HttpCaller:IHttpCaller{
 				dl.Add(resp);
 				var refresh = await RefreshBothToken(Ct);
 				// TODO: 处理 refresh 失败
+				continue;
+			}
+			break;
+		}
+
+		return resp;
+	}
+
+	/// <summary>
+	/// 發送 POST 請求（最多重試一次）；每次嘗試都由異步工廠重新創建 HttpContent。
+	/// 這可避免不可 seek 的流在 401 重試時被重放為空內容。
+	/// </summary>
+	/// <typeparam name="TContent">內容工廠所需的狀態類型。</typeparam>
+	/// <param name="RelaUrl">相對 URL。</param>
+	/// <param name="Content">內容工廠狀態。</param>
+	/// <param name="ContentFactory">每次嘗試都會調用一次，用於創建全新 HttpContent。</param>
+	/// <param name="Ct">取消令牌。</param>
+	/// <returns>最終響應（401 之外的狀態不在此方法內拋錯）。</returns>
+	public async Task<HttpResponseMessage> SendWithRetryAsy<TContent>(
+		string RelaUrl,
+		TContent Content,
+		Func<TContent, CT, Task<HttpContent>> ContentFactory,
+		CT Ct
+	){
+		using var dl = DisposableList.Mk();
+
+		var url = ToolPath.SlashTrimEtJoin([BaseUrlGetter.GetBaseUrl(), RelaUrl]);
+		HttpResponseMessage resp = null!;
+
+		for(var i = 0; i < 2; i++){
+			var userCtx = UserCtxMgr.GetUserCtx();
+			var token = userCtx?.AccessToken;
+			var clientId = userCtx?.ClientId;
+
+			// 每輪都新建 content，確保流式上傳可重試而不必整包進內存。
+			var httpContent = await ContentFactory(Content, Ct);
+			dl.Add(httpContent);
+			var reqMsg = new HttpRequestMessage(HttpMethod.Post, url){ Content = httpContent };
+			dl.Add(reqMsg);
+
+			reqMsg.Headers.Add("App-Version", AppVer.Inst.Ver+"");
+			if(!str.IsNullOrEmpty(token)){
+				reqMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			}
+			if(!clientId.IsNullOrDefault()){
+				reqMsg.Headers.Add("X-Client-Id", clientId+"");
+			}
+
+			resp = await HttpClient.SendAsync(reqMsg, Ct);
+
+			if(resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
+				dl.Add(resp);
+				_ = await RefreshBothToken(Ct);
 				continue;
 			}
 			break;

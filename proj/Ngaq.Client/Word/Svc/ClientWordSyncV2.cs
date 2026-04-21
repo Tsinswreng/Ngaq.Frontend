@@ -39,19 +39,13 @@ public class ClientWordSyncV2{
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>成功返回 NIL。</returns>
 	public async Task<nil> Push(CT Ct){
-		using var packed = await SvcWordV2.PackAllWordsWithDel(UserCtxMgr.GetDbUserCtx(), Ct);
-		if(packed.CanSeek){
-			packed.Position = 0;
-		}
-		using var resp = await HttpCaller.SendWithRetry(
+		using var resp = await HttpCaller.SendWithRetryAsy(
 			KeysUrl.WordV2.Push
-			,packed
-			,(stream)=>{
-				// SendWithRetry 可能重發，流可 seek 時每次都重置位置，避免重試發送空包。
-				if(stream.CanSeek){
-					stream.Position = 0;
-				}
-				var content = new StreamContent(stream);
+				,0
+				,async(_, ct)=>{
+				// 每次嘗試都重新打包，避免不可 seek 流在 401 重試時發空包。
+				var packed = await SvcWordV2.PackAllWordsWithDel(UserCtxMgr.GetDbUserCtx(), ct);
+				var content = new StreamContent(packed);
 				content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 				return content;
 			}
