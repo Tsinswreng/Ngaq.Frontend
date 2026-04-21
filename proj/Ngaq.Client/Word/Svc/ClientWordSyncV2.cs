@@ -1,7 +1,7 @@
 namespace Ngaq.Client.Word.Svc;
 
 using System.IO;
-using System.Text;
+using System.Net.Http.Headers;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Url;
@@ -40,13 +40,24 @@ public class ClientWordSyncV2{
 	/// <returns>成功返回 NIL。</returns>
 	public async Task<nil> Push(CT Ct){
 		using var packed = await SvcWordV2.PackAllWordsWithDel(UserCtxMgr.GetDbUserCtx(), Ct);
-		using var ms = new MemoryStream();
-		await packed.CopyToAsync(ms, Ct);
-		await HttpCaller.PostByteStream<obj, nil>(
+		if(packed.CanSeek){
+			packed.Position = 0;
+		}
+		using var resp = await HttpCaller.SendWithRetry(
 			KeysUrl.WordV2.Push
-			,ms.ToArray()
+			,packed
+			,(stream)=>{
+				// SendWithRetry 可能重發，流可 seek 時每次都重置位置，避免重試發送空包。
+				if(stream.CanSeek){
+					stream.Position = 0;
+				}
+				var content = new StreamContent(stream);
+				content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+				return content;
+			}
 			,Ct
 		);
+		resp.EnsureSuccessStatusCode();
 		return NIL;
 	}
 
@@ -58,14 +69,13 @@ public class ClientWordSyncV2{
 	public async Task<nil> Pull(CT Ct){
 		using var resp = await HttpCaller.SendWithRetry(
 			KeysUrl.WordV2.Pull
-			,str.Empty
-			,(json)=>new StringContent(json, Encoding.UTF8, "application/json")
+			,Array.Empty<u8>()
+			,(bytes)=>new ByteArrayContent(bytes)
 			,Ct
 		);
 		resp.EnsureSuccessStatusCode();
 
-		var bytes = await resp.Content.ReadAsByteArrayAsync(Ct);
-		using var stream = new MemoryStream(bytes, writable: false);
+		using var stream = await resp.Content.ReadAsStreamAsync(Ct);
 		await foreach(var _ in SvcWordV2.BatSyncJnWordByBizIdFromStream(
 			UserCtxMgr.GetDbUserCtx(),
 			stream,
