@@ -79,6 +79,9 @@ public static class DiUi{
 		z.AddTransient<IWordCardPronounceBiz, SvcWordCardPronounceBiz>();
 		// 使用 Avalonia 跨平臺能力實現剪貼板服務，供各平臺共用。
 		z.AddSingleton<ISvcClipboard, SvcClipboard>();
+		// 熱鍵字典入口：重用頁面並避免重複壓棧。
+		z.AddSingleton<ISvcDictionaryHotkeyNavigator, SvcDictionaryHotkeyNavigator>();
+		z.AddSingleton<IHotkeyDictionaryLookupAction, HotkeyDictionaryLookupAction>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}

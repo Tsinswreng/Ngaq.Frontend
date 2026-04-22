@@ -6,11 +6,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
-using Ngaq.Core.Frontend.Clipboard;
 using Ngaq.Core.Frontend.Hotkey;
 using Ngaq.Core.Infra.Cfg;
-using Ngaq.Ui.Infra;
-using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsErr;
@@ -21,16 +18,16 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 	private const str DictionaryLookupHotkeyId = "dictionary_lookup_from_clipboard";
 
 	private readonly IHotkeyListener _hotkeyListener;
-	private readonly ISvcClipboard _svcClipboard;
+	private readonly IHotkeyDictionaryLookupAction _dictionaryLookupAction;
 	private readonly ILogger _logger;
 
 	public WinGlobalHotkeyRegistrar(
 		IHotkeyListener hotkeyListener,
-		ISvcClipboard svcClipboard,
+		IHotkeyDictionaryLookupAction dictionaryLookupAction,
 		ILogger logger
 	){
 		_hotkeyListener = hotkeyListener;
-		_svcClipboard = svcClipboard;
+		_dictionaryLookupAction = dictionaryLookupAction;
 		_logger = logger;
 	}
 
@@ -49,15 +46,7 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 					Dispatcher.UIThread.Post(async () => {
 						try{
 							ShowMainWindow();
-
-							var view = new ViewDictionary();
-							MgrViewNavi.Inst.GetViewNavi().GoTo(ToolView.WithTitle("Dictionary", view));
-
-							var clipText = await _svcClipboard.GetText(Ct);
-							if(!string.IsNullOrWhiteSpace(clipText)){
-								// 把剪貼板內容傳給字典查詢，而不只是點擊查詢按鈕。
-								view.ClickLookupBtn(clipText);
-							}
+							await _dictionaryLookupAction.Run(Ct);
 						}catch(Exception ex){
 							_logger?.LogError(ex, "Dictionary lookup hotkey handler failed");
 						}
@@ -123,6 +112,7 @@ public class WinGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 		return merged == EHotkeyModifiers.None ? Fallback : merged;
 	}
 
+	//TODO 違背單一職責 可慮抽取複用
 	/// 解析主鍵字符串。
 	/// <param name="Raw">原始配置值。</param>
 	/// <param name="Fallback">解析失敗時的回退值。</param>

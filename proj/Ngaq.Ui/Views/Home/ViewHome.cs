@@ -41,6 +41,7 @@ public partial class ViewHome
 	}
 
 	AutoGrid Root = new(IsRow:true);
+	readonly ViewDictionary DictionaryView = new();
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -70,7 +71,7 @@ public partial class ViewHome
 			).A(
 				new Btn_Control(
 					BarItem(Todo.I18n("字典"), Svgs.BookAlphabet().ToIcon())//📚
-					,()=>new ViewDictionary()
+					,DictionaryView
 				)
 			).A(
 				new Btn_Control(
