@@ -123,6 +123,27 @@ public partial class ViewBottomBar
 		}
 	}
 
+	/// <summary>
+	/// 切換到底欄中對應的目標頁面（按控件實例匹配）。
+	/// </summary>
+	/// <param name="Target">目標內容控件。</param>
+	/// <returns>空值。</returns>
+	public nil SelectControl(Control Target){
+		foreach(var item in Items){
+			var control = item.GetOrCreateControl();
+			if(object.ReferenceEquals(control, Target)){
+				Cur.Content = control;
+				UpdateSelectedHighlight();
+				return NIL;
+			}
+		}
+
+		// 若目標不在底欄列表中，仍嘗試顯示，避免調用方無感失敗。
+		Cur.Content = Target;
+		UpdateSelectedHighlight();
+		return NIL;
+	}
+
 
 }
 

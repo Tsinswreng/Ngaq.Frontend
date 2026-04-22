@@ -42,6 +42,7 @@ public partial class ViewHome
 
 	AutoGrid Root = new(IsRow:true);
 	readonly ViewDictionary DictionaryView = new();
+	ViewBottomBar? BottomBar;
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -60,6 +61,7 @@ public partial class ViewHome
 		};
 
 		Root.A(new ViewBottomBar(), ViewBottomBar=>{
+			BottomBar = ViewBottomBar;
 			ViewBottomBar.Items.A(new Btn_Control(
 					BarItem(Todo.I18n("學習"), Svgs.BookOpenTextFill().ToIcon())//📖
 					,()=>new ViewLearnWords()
@@ -100,6 +102,17 @@ public partial class ViewHome
 			// ));
 		});
 
+		return NIL;
+	}
+
+	/// 切換到「字典」底欄頁簽，並可選擇直接查詞。
+	/// <param name="Term">待查詞條；空則僅切換頁簽。</param>
+	/// <returns>空值。</returns>
+	public nil OpenDictionaryTab(str? Term = null){
+		BottomBar?.SelectControl(DictionaryView);
+		if(!str.IsNullOrWhiteSpace(Term)){
+			DictionaryView.ClickLookupBtn(Term);
+		}
 		return NIL;
 	}
 
