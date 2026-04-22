@@ -130,7 +130,7 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 		// 3. 初始化国际化配置
 		var lang = KeysClientCfg.Lang.GetFrom(AppCfg.Inst) ?? "default";
 		var i18nCfg = new JsonFileCfgAccessor();
-		I18n.Inst.CfgAccessor = i18nCfg;
+		AppI18n.Inst.CfgAccessor = i18nCfg;
 
 		// var langFilePath = Path.Combine(appContext.FilesDir.AbsolutePath, $"Languages/{lang}.json");
 		// if (!File.Exists(langFilePath)) {
@@ -228,49 +228,4 @@ public partial class MainActivity : AvaloniaMainActivity<App> {
 			return false;
 		}
 	}
-
-
-
 }
-
-
-
-#if false
-using Android.App;
-using Android.Util;
-using Android.Content.PM;
-using Android.OS;
-using Android.Widget;
-using Avalonia;
-using Avalonia.Android;
-using Microsoft.Extensions.DependencyInjection;
-using Ngaq.Client;
-using Ngaq.Core;
-using Ngaq.Core.Infra.Cfg;
-using Ngaq.Backend;
-using Ngaq.Backend.Di;
-using Ngaq.Ui;
-using Ngaq.Ui.Infra.I18n;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using Tsinswreng.CsCfg;
-using Tsinswreng.CsTools;
-
-namespace Ngaq.Android;
-
-[Activity(
-	Label = "Ngaq",
-	Theme = "@style/MyTheme.NoActionBar",
-	Icon = "@drawable/icon",
-	MainLauncher = true,
-	ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
-public class MainActivity : AvaloniaMainActivity<App> {
-	protected override AppBuilder CustomizeAppBuilder(AppBuilder builder) {
-		return base.CustomizeAppBuilder(builder)
-			.WithInterFont();
-	}
-}
-
-#endif

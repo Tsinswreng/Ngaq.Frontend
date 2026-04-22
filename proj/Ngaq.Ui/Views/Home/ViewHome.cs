@@ -69,7 +69,7 @@ public partial class ViewHome
 				}
 			).A(
 				new Btn_Control(
-					BarItem(Todo.I18n("字典"), Svgs.BookBookmarkFill().ToIcon())//📚
+					BarItem(Todo.I18n("字典"), Svgs.BookAlphabet().ToIcon())//📚
 					,()=>new ViewDictionary()
 				)
 			).A(
