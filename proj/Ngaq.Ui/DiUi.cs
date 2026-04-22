@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Ngaq.Core.Frontend.Clipboard;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Dictionary;
@@ -76,6 +77,8 @@ public static class DiUi{
 		z.AddTransient<VmSimpleWord>();
 		z.AddTransient<VmWordEditV2>();
 		z.AddTransient<IWordCardPronounceBiz, SvcWordCardPronounceBiz>();
+		// 使用 Avalonia 跨平臺能力實現剪貼板服務，供各平臺共用。
+		z.AddSingleton<ISvcClipboard, SvcClipboard>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}

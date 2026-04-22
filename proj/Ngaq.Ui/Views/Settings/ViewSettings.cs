@@ -9,6 +9,7 @@ using Ngaq.Ui.Views.Settings.Lang;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Settings.LlmDictionary;
 using Ngaq.Ui.Views.Settings.ServerStorage;
+using Ngaq.Ui.Views.Settings.Hotkey;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
@@ -49,6 +50,7 @@ public partial class ViewSettings
 			S.A(_Item(Todo.I18n("語言"), new ViewCfgLang()));
 			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage()));
 			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary()));
+			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey()));
 		});
 		return NIL;
 	}
