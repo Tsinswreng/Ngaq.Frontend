@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Controls;
+namespace Ngaq.Ui.Components;
 // CircleAvatar.cs
 using Avalonia;
 using Avalonia.Controls;

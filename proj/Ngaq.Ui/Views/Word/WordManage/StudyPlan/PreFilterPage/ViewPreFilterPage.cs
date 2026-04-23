@@ -144,7 +144,6 @@ public partial class ViewPreFilterPage
 			Columns = {
 				new TextColumn<Ctx.RowPreFilter, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowPreFilter, str>(I[K.Name], x=>x.Name),
-				new TextColumn<Ctx.RowPreFilter, str>(I[K.Type], x=>x.Type),
 				new TextColumn<Ctx.RowPreFilter, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},
 		};

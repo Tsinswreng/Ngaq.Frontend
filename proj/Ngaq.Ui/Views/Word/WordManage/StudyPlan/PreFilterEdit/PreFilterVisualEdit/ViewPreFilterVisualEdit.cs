@@ -122,14 +122,8 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
 		]);
-		bar.A(new Button(), o=>{
-			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = I[K.OpenJson];
-			o.Click += (s,e)=>Ctx?.OpenJsonEditor();
-		})
-		.A(new OpBtn(), o=>{
+		bar.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
@@ -179,7 +173,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 			Text = Label + ":",
 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
 		});
-		var value = new TextBlock{
+		var value = new SelectableTextBlock{
 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
 		};
 		value.Bind(TextBlock.TextProperty, Binding);

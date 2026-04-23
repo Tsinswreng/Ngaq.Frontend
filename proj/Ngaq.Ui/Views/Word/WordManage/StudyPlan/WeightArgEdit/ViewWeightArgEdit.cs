@@ -197,7 +197,7 @@ public partial class ViewWeightArgEdit
 			Text = Label + ":",
 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
 		});
-		var value = new TextBlock{
+		var value = new SelectableTextBlock{
 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
 		};
 		value.Bind(TextBlock.TextProperty, Binding);

@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.User.Profile;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Ngaq.Ui.Controls;
+using Ngaq.Ui.Components;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;

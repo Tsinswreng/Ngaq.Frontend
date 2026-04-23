@@ -47,12 +47,12 @@ public static class ToolStudyPlanView{
 	/// 创建“只读文本 + 选择按钮”的一行输入控件。
 	/// <param name="Label">行标题文本。</param>
 	/// <param name="Binding">文本框绑定。</param>
-	/// <param name="BtnText">按钮文本。</param>
+	/// <param name="BtnContent">按钮内容（可传图标+文本）。</param>
 	/// <param name="OnBtnClick">按钮点击回调。</param>
 	/// <param name="ReadOnly">文本框是否只读。</param>
 	/// <returns>可直接加入布局树的控件。</returns>
 	public static Control MkInputWithBtnRow(
-		str Label, IBinding Binding, str BtnText, Action OnBtnClick, bool ReadOnly = false
+		str Label, IBinding Binding, object BtnContent, Action OnBtnClick, bool ReadOnly = false
 	){
 		var sp = new StackPanel{Spacing = 3};
 		sp.Children.Add(new TextBlock{Text = Label});
@@ -66,7 +66,8 @@ public static class ToolStudyPlanView{
 			o.Bind(TextBox.TextProperty, Binding);
 		})
 		.A(new Button(), o=>{
-			o.Content = BtnText;
+			o.HorizontalContentAlignment = HAlign.Center;
+			o.Content = BtnContent;
 			o.Click += (s,e)=>OnBtnClick();
 		});
 		sp.Children.Add(row.Grid);

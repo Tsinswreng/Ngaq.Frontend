@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
@@ -90,13 +91,13 @@ public partial class ViewStudyPlanEdit
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
-		.A(MkInputRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true))
+		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
 		.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			I[K.PreFilter],
 			CBE.Mk<Ctx>(x=>x.PreFilterUniqNameText, Mode: BindingMode.OneWay),
-			I[K.Choose],
+			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
 			()=>{
 				var view = new ViewPreFilterPage();
 				view.Ctx?.SetSelectMode(po=>{
@@ -110,7 +111,7 @@ public partial class ViewStudyPlanEdit
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			I[K.WeightCalculator],
 			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
-			I[K.Choose],
+			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
 			()=>{
 				var view = new ViewWeightCalculatorPage();
 				view.Ctx?.SetSelectMode(po=>{
@@ -124,7 +125,7 @@ public partial class ViewStudyPlanEdit
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			I[K.WeightArg],
 			CBE.Mk<Ctx>(x=>x.WeightArgUniqNameText, Mode: BindingMode.OneWay),
-			I[K.Choose],
+			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
 			()=>{
 				var view = new ViewWeightArgPage();
 				view.Ctx?.SetSelectMode(po=>{
@@ -172,6 +173,23 @@ public partial class ViewStudyPlanEdit
 		tb.Bind(TextBox.TextProperty, Binding);
 		sp.Children.Add(tb);
 		return sp;
+	}
+
+	Control MkIdRow(str Label, IBinding Binding){
+		var row = new StackPanel{
+			Spacing = 6,
+			Orientation = Orientation.Horizontal,
+		};
+		row.Children.Add(new TextBlock{
+			Text = Label + ":",
+			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+		});
+		var value = new SelectableTextBlock{
+			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+		};
+		value.Bind(TextBlock.TextProperty, Binding);
+		row.Children.Add(value);
+		return row;
 	}
 
 }

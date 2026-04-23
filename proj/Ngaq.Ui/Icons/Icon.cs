@@ -22,7 +22,7 @@ public class Icon:SPath{
 public static class ExtnIcon{
 	extension(Icon z){
 		public HoriCloseCtrls WithText(str Text){
-			return HoriCloseCtrls.Mk(z, new TextBlock{Text=Text});
+			return HoriCloseCtrls.Mk(z, new TextBlock{Text=" "+Text});
 		}
 	}
 

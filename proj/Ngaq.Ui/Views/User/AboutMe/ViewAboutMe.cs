@@ -4,7 +4,6 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Ngaq.Ui.Controls;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
@@ -16,6 +15,8 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ngaq.Ui.Infra.I18n;
 using Ctx = VmAboutMe;
+using Ngaq.Ui.Components;
+
 public partial class ViewAboutMe
 	:AppViewBase
 {

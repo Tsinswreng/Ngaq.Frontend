@@ -51,16 +51,25 @@ public class ViewPreFilterDataEdit: AppViewBase{
 	}
 
 	Control MkBody(){
-		var sv = new ScrollViewer();
-		var root = new StackPanel{
-			Spacing = 10,
-			Margin = new Thickness(10),
+		var root = new AutoGrid(IsRow:true);
+		root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Star),
+		]);
+		root.A(MkErrorBar());
+		var tabs = new TabControl{
+			Margin = new Thickness(10, 8, 10, 10),
 		};
-		sv.Content = root;
-		root.Children.Add(MkErrorBar());
-		root.Children.Add(MkFieldsFilterGridSection(true));
-		root.Children.Add(MkFieldsFilterGridSection(false));
-		return sv;
+		tabs.Items.Add(new TabItem{
+			Header = I[K.CoreFilter],
+			Content = MkFieldsFilterGridSection(true),
+		});
+		tabs.Items.Add(new TabItem{
+			Header = I[K.PropFilter],
+			Content = MkFieldsFilterGridSection(false),
+		});
+		root.A(tabs);
+		return root.Grid;
 	}
 
 	void InitVisualGridSource(){
@@ -82,6 +91,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 			Columns = {
 				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Fields], x=>x.FieldsPreview),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview),
 				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
 			},
 		};

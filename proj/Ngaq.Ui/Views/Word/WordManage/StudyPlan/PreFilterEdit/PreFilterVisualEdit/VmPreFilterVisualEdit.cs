@@ -116,6 +116,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		public str UiIdxText{get;set;} = "";
 		public str Kind{get;set;} = "";
 		public str FieldsPreview{get;set;} = "";
+		public str ContentPreview{get;set;} = "";
 		public str FilterCountText{get;set;} = "";
 		public VmFieldsFilterRow? Raw{get;set;}
 	}
@@ -271,6 +272,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 				UiIdxText = (i + 1).ToString(),
 				Kind = "Core",
 				FieldsPreview = JoinFieldPreview(row),
+				ContentPreview = BuildContentPreview(row),
 				FilterCountText = (row.Items?.Count ?? 0).ToString(),
 				Raw = row,
 			});
@@ -283,6 +285,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 				UiIdxText = (i + 1).ToString(),
 				Kind = "Prop",
 				FieldsPreview = JoinFieldPreview(row),
+				ContentPreview = BuildContentPreview(row),
 				FilterCountText = (row.Items?.Count ?? 0).ToString(),
 				Raw = row,
 			});
@@ -724,6 +727,45 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			return "-";
 		}
 		return string.Join(", ", fields);
+	}
+
+	str BuildContentPreview(VmFieldsFilterRow row){
+		if(row.Fields.Count != 1 || row.Items.Count != 1){
+			return "-";
+		}
+
+		var field = row.Fields[0].Value?.Trim() ?? "";
+		if(str.IsNullOrWhiteSpace(field)){
+			return "-";
+		}
+
+		var item = row.Items[0];
+		var values = item.ValuesText
+			.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
+			.Select(x=>x.Trim())
+			.Where(x=>!str.IsNullOrWhiteSpace(x))
+			.ToArray();
+		if(values.Length != 1){
+			return "-";
+		}
+
+		return $"{field} {ToOpSymbol(item.OperationIndex)} {values[0]}";
+	}
+
+	static str ToOpSymbol(i32 operationIndex){
+		var values = Enum.GetValues<EFilterOperationMode>();
+		if(operationIndex < 0 || operationIndex >= values.Length){
+			return "=";
+		}
+		return values[operationIndex] switch{
+			EFilterOperationMode.Eq => "=",
+			EFilterOperationMode.Ne => "!=",
+			EFilterOperationMode.Gt => ">",
+			EFilterOperationMode.Ge => ">=",
+			EFilterOperationMode.Lt => "<",
+			EFilterOperationMode.Le => "<=",
+			_ => "=",
+		};
 	}
 
 	i32 GetTypeIndex(EPreFilterType type){

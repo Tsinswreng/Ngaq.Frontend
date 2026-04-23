@@ -6,6 +6,7 @@ using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
@@ -129,11 +130,13 @@ public partial class ViewSetCurStudyPlan
 		.A(MkInputRow(I[K.UniqName], CBE.Mk<Ctx>(x=>x.CurUniqName, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(MkInputRow(I[K.Descr], CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
 		.A(new OpBtn(), o=>{
-			o.BtnContent = I[K.Select];
+			o._Button.HorizontalContentAlignment = HAlign.Center;
+			o.BtnContent = Svgs.ListSelect().ToIcon().WithText(I[K.Select]);
 			o.SetExe((Ct)=>ChooseAndApplyStudyPlan(Ct));
 		})
 		.A(new Button(), o=>{
-			o.Content = I[K.Edit];
+			o.HorizontalContentAlignment = HAlign.Center;
+			o.Content = Svgs.CreateMD().ToIcon().WithText(I[K.Edit]);
 			o.Click += (s,e)=>{
 				var po = Ctx?.CurPoStudyPlan;
 				if(po is null){

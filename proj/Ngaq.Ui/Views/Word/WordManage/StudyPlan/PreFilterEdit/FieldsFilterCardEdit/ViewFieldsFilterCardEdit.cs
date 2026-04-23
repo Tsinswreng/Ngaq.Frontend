@@ -187,8 +187,10 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = I[K.Back];
-			o.Click += (s,e)=>ViewNavi?.Back();
+			o.HorizontalContentAlignment = HAlign.Center;
+			o.Background = UiCfg.Inst.DelBtnBg;
+			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
+			o.Click += (s,e)=>Ctx?.Delete();
 		});
 		g.A(new Button(), o=>{
 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveGroup]);

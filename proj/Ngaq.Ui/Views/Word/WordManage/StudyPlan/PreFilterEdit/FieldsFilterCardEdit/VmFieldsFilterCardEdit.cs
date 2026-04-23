@@ -183,6 +183,22 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
+	public nil Delete(){
+		if(Target is null || Owner is null){
+			ShowDialog(I18n[K.EditorNotReady]);
+			return NIL;
+		}
+		if(IsCore){
+			Owner.CoreFilterRows.Remove(Target);
+		}else{
+			Owner.PropFilterRows.Remove(Target);
+		}
+		Owner.RefreshFieldsFilterCards();
+		ShowDialog(I18n[K.Deleted]);
+		ViewNavi?.Back();
+		return NIL;
+	}
+
 	public i32 ToOperationOptionIndex(i32 rawIndex){
 		for(i32 i = 0; i < OperationRawIndices.Count; i++){
 			if(OperationRawIndices[i] == rawIndex){

@@ -79,6 +79,16 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		ViewNavi?.Back();
 		return NIL;
 	}
+
+	public nil AddItem(){
+		if(Owner is null){
+			ShowDialog(I18n[K.EditorNotReady]);
+			return NIL;
+		}
+		Owner.AddItem();
+		ViewNavi?.Back();
+		return NIL;
+	}
 }
 
 
