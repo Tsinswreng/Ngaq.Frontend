@@ -1,17 +1,23 @@
 namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
+using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+using Tsinswreng.CsTools;
 
 using Ctx = VmNormLangPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.CsCfg;
 
 public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	void Init(){
@@ -75,6 +81,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 		public str Type{get;set;} = "";
 		public str Code{get;set;} = "";
 		public str NativeName{get;set;} = "";
+		public str TranslatedName{get;set;} = "";
 		public str ModifiedTime{get;set;} = "";
 		public PoNormLang? Raw{get;set;} = null;
 	}
@@ -93,7 +100,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 			pageQry.WantTotCnt = true;
 			var req = new ReqPageNormLang{
 				PageQry = pageQry,
-				Code = str.IsNullOrWhiteSpace(Input) ? null : Input.Trim(),
+				SearchText = str.IsNullOrWhiteSpace(Input) ? null : Input.Trim(),
 			};
 
 			var page = await SvcNormLang.PageNormLang(UserCtxMgr.GetDbUserCtx(), req, Ct);
@@ -102,25 +109,68 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 			Rows.Clear();
 			var startUiIdx = page.PageIdx * page.PageSize;
 			var localIdx = 0UL;
-			if(page.DataAsyE is not null){
-				await foreach(var po in page.DataAsyE){
-					localIdx++;
-					var uiIdx = startUiIdx + localIdx;
-					Rows.Add(new RowNormLang{
-						UiIdx = uiIdx,
-						UiIdxText = uiIdx.ToString(),
-						Type = po.Type.ToString(),
-						Code = po.Code ?? "",
-						NativeName = po.NativeName ?? "",
-						ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.BizUpdatedAt, po.BizCreatedAt),
-						Raw = po,
-					});
-				}
+			var Pos = await CollectRows(page.DataAsyE, Ct);
+			var TranslatedNames = await GetTranslatedNames(Pos, Ct);
+			for(var i = 0; i < Pos.Count; i++){
+				var po = Pos[i];
+				localIdx++;
+				var uiIdx = startUiIdx + localIdx;
+				Rows.Add(new RowNormLang{
+					UiIdx = uiIdx,
+					UiIdxText = uiIdx.ToString(),
+					Type = po.Type.ToString(),
+					Code = po.Code ?? "",
+					NativeName = po.NativeName ?? "",
+					TranslatedName = i < TranslatedNames.Count ? (TranslatedNames[i] ?? "") : "",
+					ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.BizUpdatedAt, po.BizCreatedAt),
+					Raw = po,
+				});
 			}
 		}catch(Exception e){
 			HandleErr(e);
 		}
 		return NIL;
+	}
+
+	/// 收集當前頁結果。單頁數量有限，便於後續按序填充翻譯名稱。
+	private static async Task<List<PoNormLang>> CollectRows(
+		IAsyncEnumerable<PoNormLang>? Rows,
+		CT Ct
+	){
+		List<PoNormLang> Ans = [];
+		if(Rows is null){
+			return Ans;
+		}
+		await foreach(var Row in Rows.WithCancellation(Ct)){
+			Ans.Add(Row);
+		}
+		return Ans;
+	}
+
+	/// 按頁面語言批量獲取翻譯名稱，返回順序與 Pos 一一對應。
+	private async Task<List<str?>> GetTranslatedNames(IList<PoNormLang> Pos, CT Ct){
+		List<str?> Ans = [];
+		if(AnyNull(SvcNormLang, UserCtxMgr) || Pos.Count == 0){
+			return Ans;
+		}
+		var UiLang = KeysClientCfg.Lang.GetFrom(AppCfg.Inst) ?? "en";
+		var TargetLang = new NormLang{
+			Type = ELangIdentType.Bcp47,
+			Code = UiLang,
+		};
+		var Names = SvcNormLang.BatGetTranslatedName(
+			UserCtxMgr.GetDbUserCtx(),
+			TargetLang,
+			ToolAsyE.ToAsyE(Pos.Select(x=>(INormLang)new NormLang{
+				Type = x.Type,
+				Code = x.Code,
+			})),
+			Ct
+		);
+		await foreach(var Name in Names.WithCancellation(Ct)){
+			Ans.Add(Name);
+		}
+		return Ans;
 	}
 
 	protected async Task<nil> OnPrevPage(VmPageBar PageBar, CT Ct){

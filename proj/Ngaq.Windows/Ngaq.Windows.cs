@@ -95,6 +95,7 @@ sealed class Program {
 		}
 
 		var svc = new ServiceCollection();
+		svc.AddSingleton<II18n>(AppI18n.Inst);
 		svc
 			.SetupCore()
 			.SetupLocal()//TODO 改成按需API調用
