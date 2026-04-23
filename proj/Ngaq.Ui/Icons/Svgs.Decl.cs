@@ -91,6 +91,9 @@ public partial class Svgs{
 	public static partial Svg BookmarkOutlineAdd();
 	//<iconPacks:PackIconMaterial Kind="BookAlphabet" />
 	public static partial Svg BookAlphabet();
+	
+	//<iconPacks:PackIconModern Kind="ListSelect" />
+	public static partial Svg ListSelect();
 	//public static partial Svg a;
 }
 

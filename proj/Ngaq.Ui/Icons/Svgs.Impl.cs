@@ -89,5 +89,7 @@ public partial class Svgs{
 	public static partial Svg BookmarkOutlineAdd() => "M2 2c0-1.1.9-2 2-2h12a2 2 0 0 1 2 2v18l-8-4-8 4V2zm2 0v15l6-3 6 3V2H4zm5 5V5h2v2h2v2h-2v2H9V9H7V7h2z";
 	//<iconPacks:PackIconMaterial Kind="BookAlphabet" />
 	public static partial Svg BookAlphabet() => "M5.81,2C4.83,2.09 4,3 4,4V20C4,21.05 4.95,22 6,22H18C19.05,22 20,21.05 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6C5.94,2 5.87,2 5.81,2M12,13H13A1,1 0 0,1 14,14V18H13V16H12V18H11V14A1,1 0 0,1 12,13M12,14V15H13V14H12M15,15H18V16L16,19H18V20H15V19L17,16H15V15Z";
+	//<iconPacks:PackIconModern Kind="ListSelect" />
+	public static partial Svg ListSelect() => "M 21,36L 25,36L 25,40L 21,40L 21,36 Z M 19,23L 27,23L 27,31L 19,31L 19,23 Z M 19,34L 27,34L 27,42L 19,42L 19,34 Z M 31,23L 57,23L 57,31L 31,31L 31,23 Z M 19,45L 27,45L 27,53L 19,53L 19,45 Z M 31,34L 57,34L 57,42L 31,42L 31,34 Z M 31,45L 57,45L 57,53L 31,53L 31,45 Z M 20,35L 20,41L 26,41L 26,35L 20,35 Z ";
 	//public static partial Svg a() => "";
 }

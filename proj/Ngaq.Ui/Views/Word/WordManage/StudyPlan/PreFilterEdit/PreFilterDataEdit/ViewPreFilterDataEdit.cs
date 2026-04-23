@@ -80,7 +80,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(ObservableCollection<Ctx.RowFieldsFilterCard> Rows){
 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(Rows){
 			Columns = {
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.NumberSign], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Fields], x=>x.FieldsPreview),
 				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
 			},

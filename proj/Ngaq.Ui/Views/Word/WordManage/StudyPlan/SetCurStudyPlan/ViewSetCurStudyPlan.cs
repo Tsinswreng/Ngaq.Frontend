@@ -16,10 +16,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmSetCurStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-/// <summary>
 /// 設置當前學習方案頁。
 /// 頁面打開後即讀取後端當前學習方案，僅展示關鍵字段並支持重新選擇。
-/// </summary>
 public partial class ViewSetCurStudyPlan
 	:AppViewBase
 {
@@ -104,9 +102,9 @@ public partial class ViewSetCurStudyPlan
 		return host.Grid;
 	}
 
-	/// <summary>
+
 	/// 當前方案字段展示區。
-	/// </summary>
+
 	Control MkFieldsPanel(){
 		var sv = new ScrollViewer();
 		var root = new StackPanel{

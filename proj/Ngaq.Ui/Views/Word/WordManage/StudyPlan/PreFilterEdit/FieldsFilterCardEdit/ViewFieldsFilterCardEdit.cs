@@ -150,7 +150,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		}
 		ItemGridSource = new FlatTreeDataGridSource<Ctx.RowFilterItemCard>(Ctx.ItemCards){
 			Columns = {
-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.NumberSign], x=>x.UiIdxText),
+				new TextColumn<Ctx.RowFilterItemCard, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Operation], x=>x.Operation),
 				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.ValueType], x=>x.ValueType),
 				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Values], x=>x.ValuesPreview),

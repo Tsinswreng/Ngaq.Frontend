@@ -12,9 +12,7 @@ using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = VmFilterItemEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-/// <summary>
 /// View for editing a single FilterItem.
-/// </summary>
 public class ViewFilterItemEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}

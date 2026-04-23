@@ -196,7 +196,7 @@ const a: TI18nKv = {
 			TextPayload: "文字負載",
 			EditPreFilterTextInGui: "在圖形介面中編輯前置篩選器文字",
 			OpenJson: "開啟 JSON",
-			Fields: "欄位",
+			Fields: "字段",
 			Items: "項目",
 			CoreFilter: "核心篩選器",
 			PropFilter: "屬性篩選器",

@@ -228,7 +228,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 		LearnGridSource = new FlatTreeDataGridSource<VmWordLearnRow>(Ctx.LearnRows){
 			Columns = {
-				new TextColumn<VmWordLearnRow, str>(I[K.NumberSign], x=>GetLearnRowIdxText(x)),
+				new TextColumn<VmWordLearnRow, str>("", x=>GetLearnRowIdxText(x)),
 				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultText),
 				new TextColumn<VmWordLearnRow, str>(I[K.BizCreatedAt], x=>x.BizCreatedAtDisplay),
 			},
