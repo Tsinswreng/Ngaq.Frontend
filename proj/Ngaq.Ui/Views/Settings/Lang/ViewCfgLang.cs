@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Settings.Lang;
 
 using Avalonia.Controls;
+using Avalonia.Data;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
@@ -21,6 +22,12 @@ public partial class ViewCfgLang: AppViewBase{
 	public ViewCfgLang(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();
+		Loaded += async (s,e)=>{
+			if(Ctx is null){
+				return;
+			}
+			await Ctx.InitUiLangOptions(default);
+		};
 	}
 
 	public AutoGrid Root = new(IsRow:true);
@@ -36,8 +43,17 @@ public partial class ViewCfgLang: AppViewBase{
 			sp.A(new TextBlock(), o=>{
 				o.Text = Todo.I18n("Lang");
 			});
-			sp.A(new TextBox(), o=>{
-				o.CBind<Ctx>(o.PropText, x=>x.Lang);
+			sp.A(new AutoCompleteBox(), o=>{
+				o.FilterMode = AutoCompleteFilterMode.Contains;
+				o.MinimumPrefixLength = 0;
+				o.Bind(
+					AutoCompleteBox.ItemsSourceProperty,
+					CBE.Mk<Ctx>(x=>x.UiLangCodes, Mode: BindingMode.OneWay)
+				);
+				o.Bind(
+					AutoCompleteBox.TextProperty,
+					CBE.Mk<Ctx>(x=>x.Lang, Mode: BindingMode.TwoWay)
+				);
 			});
 		});
 		Root.A(new OpBtn(), o=>{

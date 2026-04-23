@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.Settings;
 
 using Avalonia.Controls;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Settings.Lang;
 using Tsinswreng.AvlnTools.Dsl;
 using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 using Tsinswreng.AvlnTools.Tools;
@@ -34,6 +35,7 @@ public partial class ViewCfgUi
 		var _Item = ViewSettings.FnSettingItem(ViewNavi);
 		this.SetContent(new StackPanel(), S=>{
 			S.A(_Item(I[KeysUiI18nCommon.FontSize], new ViewCfgFont()));
+			S.A(_Item(Todo.I18n("語言"), new ViewCfgLang()));
 		});
 		return NIL;
 	}

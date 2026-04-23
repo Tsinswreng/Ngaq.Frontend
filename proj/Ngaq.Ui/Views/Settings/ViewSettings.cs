@@ -5,7 +5,6 @@ using Avalonia.Styling;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.About;
-using Ngaq.Ui.Views.Settings.Lang;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Settings.LlmDictionary;
 using Ngaq.Ui.Views.Settings.ServerStorage;
@@ -47,7 +46,6 @@ public partial class ViewSettings
 			S.A(_Item(I[K.About], new ViewAbout()));
 			S.A(_Item(I[K.UIConfig], new ViewCfgUi()));
 			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord()));
-			S.A(_Item(Todo.I18n("語言"), new ViewCfgLang()));
 			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage()));
 			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary()));
 			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey()));
