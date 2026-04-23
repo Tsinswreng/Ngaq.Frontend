@@ -10,13 +10,14 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// PreFilter GUI 主頁。
-/// 僅顯示 Po 主信息 + Text 預覽，並提供跳轉到子編輯頁和 JSON 編輯頁。
+/// 顯示 Po 主信息與直接內嵌的數據編輯區。
 public class ViewPreFilterVisualEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -41,16 +42,16 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 	}
 
 	Control MkBody(){
-		var sv = new ScrollViewer();
-		var root = new StackPanel{
-			Spacing = 10,
-			Margin = new Thickness(10),
-		};
-		sv.Content = root;
-		root.Children.Add(MkErrorBar());
-		root.Children.Add(MkPoSection());
-		root.Children.Add(MkTextSection());
-		return sv;
+		var root = new AutoGrid(IsRow:true);
+		root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Star),
+		]);
+		root.A(MkErrorBar());
+		root.A(MkPoSection(), o=>o.Margin = new Thickness(10, 10, 10, 8));
+		root.A(MkDataEditorHost(), o=>o.Margin = new Thickness(10, 0, 10, 10));
+		return root.Grid;
 	}
 
 	Control MkErrorBar(){
@@ -93,29 +94,11 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		return bdr;
 	}
 
-	Control MkTextSection(){
-		var bdr = new Border{
-			BorderBrush = Brushes.DimGray,
-			BorderThickness = new Thickness(1),
-			Padding = new Thickness(10),
-		};
-		var sp = new StackPanel{Spacing = 8};
-		bdr.Child = sp;
-
-		sp.A(new TextBlock{
-			Text = I[K.TextPreview],
-			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
-			FontWeight = FontWeight.SemiBold,
-		})
-		.A(MkInputRow(I[K.TextPayload], CBE.Mk<Ctx>(x=>x.PoTextPreview, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
-		.A(new Button(), o=>{
-			o.Content = I[K.EditPreFilterTextInGui];
-			o.HorizontalAlignment = HAlign.Left;
-			o.Click += (s,e)=>Ctx?.OpenPreFilterDataEditor();
-		});
-
-
-		return bdr;
+	Control MkDataEditorHost(){
+		if(Ctx is null){
+			return new TextBlock{Text = I[K.EditorNotReady]};
+		}
+		return new ViewPreFilterDataEdit(Ctx);
 	}
 
 	Control MkBottomBar(){

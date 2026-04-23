@@ -1,11 +1,13 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
 
+using System.ComponentModel;
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
+using AvaloniaEdit;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -36,6 +38,8 @@ public partial class ViewWeightCalculatorEdit
 	}
 
 	AutoGrid Root = new(IsRow: true);
+	TextEditor? PayloadEditor;
+	bool IsSyncingPayloadText = false;
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -95,7 +99,7 @@ public partial class ViewWeightCalculatorEdit
 		var typeRow = MkComboRow(I[K.Type], Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowTypeField, Mode: BindingMode.OneWay);
 		sp.A(typeRow)
-		 .A(MkInputRow(I[K.PayloadText], CBE.Mk<Ctx>(x=>x.PayloadText, Mode: BindingMode.TwoWay), AcceptsReturn: true));
+		 .A(MkJsonInputRow(I[K.PayloadText], CBE.Mk<Ctx>(x=>x.PayloadText, Mode: BindingMode.TwoWay)));
 		return bdr;
 	}
 
@@ -144,6 +148,43 @@ public partial class ViewWeightCalculatorEdit
 		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
 		sp.Children.Add(cb);
 		return sp;
+	}
+
+	Control MkJsonInputRow(str Label, IBinding Binding){
+		var sp = new StackPanel{Spacing = 3};
+		sp.Children.Add(new TextBlock{Text = Label});
+		var editor = JsonTextEditorCtrl.Mk(Ctx?.PayloadText, IsReadOnly: false, MinHeight: 200);
+		PayloadEditor = editor;
+		editor.TextChanged += (s,e)=>{
+			if(IsSyncingPayloadText || Ctx is null){
+				return;
+			}
+			IsSyncingPayloadText = true;
+			Ctx.PayloadText = editor.Text;
+			IsSyncingPayloadText = false;
+		};
+		if(Ctx is not null){
+			Ctx.PropertyChanged += OnVmPropertyChanged;
+		}
+		DetachedFromVisualTree += (s,e)=>{
+			if(Ctx is not null){
+				Ctx.PropertyChanged -= OnVmPropertyChanged;
+			}
+		};
+		sp.Children.Add(editor);
+		return sp;
+	}
+
+	void OnVmPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName != nameof(Ctx.PayloadText) || PayloadEditor is null || Ctx is null || IsSyncingPayloadText){
+			return;
+		}
+		if(PayloadEditor.Text == Ctx.PayloadText){
+			return;
+		}
+		IsSyncingPayloadText = true;
+		PayloadEditor.Text = Ctx.PayloadText;
+		IsSyncingPayloadText = false;
 	}
 
 	Control MkIdRow(str Label, IBinding Binding){

@@ -1,11 +1,13 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPayloadJsonEdit;
 
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Media;
+using AvaloniaEdit;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -28,6 +30,8 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 	}
 
 	AutoGrid Root = new(IsRow: true);
+	TextEditor? PayloadEditor;
+	bool IsSyncingPayloadText = false;
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -36,9 +40,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 			RowDef(1, GUT.Auto),
 		]);
 		Root.A(MkErrorBar());
-		Root.A(JsonText(), o=>{
-			o.CBind<Ctx>(o.PropText, x=>x.PayloadJson, Mode: BindingMode.TwoWay);
-		});
+		Root.A(JsonText());
 		Root.A(MkBottomBar());
 		return NIL;
 	}
@@ -74,17 +76,39 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 		return g.Grid;
 	}
 
-	TextBox JsonText(){
-		var box = new TextBox{
-			AcceptsReturn = true,
-			AcceptsTab = true,
-			TextWrapping = TextWrapping.Wrap,
-			HorizontalAlignment = HAlign.Stretch,
-			VerticalAlignment = VAlign.Stretch,
-			Margin = new Thickness(10, 4, 10, 10),
+	Control JsonText(){
+		var editor = JsonTextEditorCtrl.Mk(Ctx?.PayloadJson, IsReadOnly: false, MinHeight: 220);
+		editor.Margin = new Thickness(10, 4, 10, 10);
+		PayloadEditor = editor;
+		editor.TextChanged += (s,e)=>{
+			if(IsSyncingPayloadText || Ctx is null){
+				return;
+			}
+			IsSyncingPayloadText = true;
+			Ctx.PayloadJson = editor.Text;
+			IsSyncingPayloadText = false;
 		};
-		box.SetValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
-		return box;
+		if(Ctx is not null){
+			Ctx.PropertyChanged += OnVmPropertyChanged;
+		}
+		DetachedFromVisualTree += (s,e)=>{
+			if(Ctx is not null){
+				Ctx.PropertyChanged -= OnVmPropertyChanged;
+			}
+		};
+		return editor;
+	}
+
+	void OnVmPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName != nameof(Ctx.PayloadJson) || PayloadEditor is null || Ctx is null || IsSyncingPayloadText){
+			return;
+		}
+		if(PayloadEditor.Text == Ctx.PayloadJson){
+			return;
+		}
+		IsSyncingPayloadText = true;
+		PayloadEditor.Text = Ctx.PayloadJson;
+		IsSyncingPayloadText = false;
 	}
 }
 
