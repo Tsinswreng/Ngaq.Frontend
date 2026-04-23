@@ -99,7 +99,7 @@ public partial class ViewWeightArgEdit
 		.A(ToolStudyPlanView.MkInputWithBtnRow(
 			I[K.WeightCalculator],
 			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
-			I[K.Choose],
+			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
 			()=>{
 				var view = new ViewWeightCalculatorPage();
 				view.Ctx?.SetSelectMode(po=>{
@@ -154,7 +154,7 @@ public partial class ViewWeightArgEdit
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		})
 		.A(new OpBtn(), o=>{
-			o.Background = UiCfg.Inst.MainColor;
+			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));

@@ -90,9 +90,8 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(Rows){
 			Columns = {
 				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Fields], x=>x.FieldsPreview),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview),
 				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview),
 			},
 		};
 	}
@@ -206,15 +205,9 @@ public class ViewPreFilterDataEdit: AppViewBase{
 
 	Control MkBottomBar(){
 		var g = new AutoGrid(IsRow:false);
-		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
-		]);
+		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
 		g.A(new Button(), o=>{
-			o.Content = I[K.Back];
-			o.Click += (s,e)=>ViewNavi?.Back();
-		});
-		g.A(new Button(), o=>{
+			o.HorizontalContentAlignment = HAlign.Center;
 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveDraft]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>{

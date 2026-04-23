@@ -61,15 +61,9 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 
 	Control MkBottomBar(){
 		var g = new AutoGrid(IsRow:false);
-		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
-		]);
-		g.A(new Button(), o=>{
-			o.Content = I[K.Back];
-			o.Click += (s,e)=>ViewNavi?.Back();
-		});
+		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
 		g.A(new OpBtn(), o=>{
+			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Apply]);
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>{

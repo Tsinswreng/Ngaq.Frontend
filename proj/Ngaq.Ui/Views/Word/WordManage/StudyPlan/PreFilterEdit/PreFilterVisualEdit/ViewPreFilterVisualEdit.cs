@@ -77,11 +77,12 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		var sp = new StackPanel{Spacing = 8};
 		bdr.Child = sp;
 
-		sp.A(new TextBlock{
-			Text = I[K.PoPreFilter],
-			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
-			FontWeight = FontWeight.SemiBold,
-		})
+		sp
+		// .A(new TextBlock{
+		// 	Text = I[K.PoPreFilter],
+		// 	FontSize = UiCfg.Inst.BaseFontSize * 1.1,
+		// 	FontWeight = FontWeight.SemiBold,
+		// })
 		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
 		.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
 		.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
@@ -124,16 +125,16 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		bar.A(new OpBtn(), o=>{
-			o._Button.Background = UiCfg.Inst.MainColor;
-			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
-			o.SetExe((Ct)=>Ctx?.Save(Ct));
-		})
-		.A(new OpBtn(), o=>{
 			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
+		})
+		.A(new OpBtn(), o=>{
+			o._Button.Background = UiCfg.Inst.MainColor;
+			o._Button.HorizontalContentAlignment = HAlign.Center;
+			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
+			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;
 	}
