@@ -105,7 +105,8 @@ public partial class App :Application
 		).AddTo(Styles);
 		//按鈕舒展
 
-		Styles.A(new Style(x=>
+		Styles.A(
+			new Style(x=>
 				x.Is<Button>()
 			).Set(
 				TemplatedControl.HorizontalAlignmentProperty

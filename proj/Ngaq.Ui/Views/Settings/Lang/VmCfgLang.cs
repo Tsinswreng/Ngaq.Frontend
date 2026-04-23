@@ -10,9 +10,7 @@ using Tsinswreng.CsCfg;
 using Ctx = VmCfgLang;
 
 public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
-	/// <summary>
 	/// 语言下拉项：显示 Code + NativeName。
-	/// </summary>
 	public sealed class UiLangOption{
 		public str Code{get;set;} = "";
 		public str NativeName{get;set;} = "";
@@ -60,9 +58,7 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "en";
 
-	/// <summary>
 	/// 绑定到可编辑下拉框输入文本。
-	/// </summary>
 	public str LangInput{
 		get;
 		set{SetProperty(ref field, value);}
@@ -101,10 +97,8 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-	/// <summary>
 	/// 把输入文本规范化为语言 Code。
 	/// 支持纯 Code、下拉展示文本、以及 "code - NativeName" 形式。
-	/// </summary>
 	str NormalizeInputToLangCode(str Input){
 		var Text = (Input ?? "").Trim();
 		if(Text == ""){
