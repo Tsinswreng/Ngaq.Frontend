@@ -10,6 +10,18 @@ using Tsinswreng.CsCfg;
 using Ctx = VmCfgLang;
 
 public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
+	/// <summary>
+	/// 语言下拉项：显示 Code + NativeName。
+	/// </summary>
+	public sealed class UiLangOption{
+		public str Code{get;set;} = "";
+		public str NativeName{get;set;} = "";
+		public str DisplayText => NativeName == "" ? Code : $"{Code} - {NativeName}";
+		public override str ToString(){
+			return DisplayText;
+		}
+	}
+
 	protected VmCfgLang(){
 		Cfg = AppCfg.Inst;
 		Init();
@@ -35,13 +47,23 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 			return;
 		}
 		Lang = Cfg.Get(KeysClientCfg.Lang)??"en";
+		LangInput = Lang;
 	}
 
-	public ObservableCollection<str> UiLangCodes{get;set;} = [];
+	public ObservableCollection<UiLangOption> UiLangOptions{get;set;} = [];
 
 	HashSet<str> UiLangCodeSet{get;set;} = new(StringComparer.OrdinalIgnoreCase);
+	Dictionary<str, str> UiLangDisplayToCode{get;set;} = new(StringComparer.OrdinalIgnoreCase);
 
 	public str Lang{
+		get;
+		set{SetProperty(ref field, value);}
+	} = "en";
+
+	/// <summary>
+	/// 绑定到可编辑下拉框输入文本。
+	/// </summary>
+	public str LangInput{
 		get;
 		set{SetProperty(ref field, value);}
 	} = "en";
@@ -52,29 +74,64 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		try{
-			UiLangCodes.Clear();
+			UiLangOptions.Clear();
 			UiLangCodeSet.Clear();
+			UiLangDisplayToCode.Clear();
 			await foreach(var LangInfo in SvcNormLang.BatGetUiLangs(Ct).WithCancellation(Ct)){
 				var Code = (LangInfo.Code ?? "").Trim();
+				var NativeName = (LangInfo.NativeName ?? "").Trim();
 				if(Code == ""){
 					continue;
 				}
 				if(!UiLangCodeSet.Add(Code)){
 					continue;
 				}
-				UiLangCodes.Add(Code);
+				var Option = new UiLangOption{
+					Code = Code,
+					NativeName = NativeName,
+				};
+				UiLangOptions.Add(Option);
+				UiLangDisplayToCode[Option.DisplayText] = Option.Code;
 			}
+			var CurOpt = UiLangOptions.FirstOrDefault(x=>x.Code.Equals(Lang, StringComparison.OrdinalIgnoreCase));
+			LangInput = CurOpt?.DisplayText ?? Lang;
 		}catch(Exception E){
 			HandleErr(E);
 		}
 		return NIL;
 	}
 
+	/// <summary>
+	/// 把输入文本规范化为语言 Code。
+	/// 支持纯 Code、下拉展示文本、以及 "code - NativeName" 形式。
+	/// </summary>
+	str NormalizeInputToLangCode(str Input){
+		var Text = (Input ?? "").Trim();
+		if(Text == ""){
+			return "";
+		}
+		if(UiLangCodeSet.Contains(Text)){
+			return Text;
+		}
+		if(UiLangDisplayToCode.TryGetValue(Text, out var CodeByDisplay)){
+			return CodeByDisplay;
+		}
+		var Idx = Text.IndexOf(" - ", StringComparison.Ordinal);
+		if(Idx > 0){
+			var MaybeCode = Text[..Idx].Trim();
+			if(UiLangCodeSet.Contains(MaybeCode)){
+				return MaybeCode;
+			}
+		}
+		return Text;
+	}
+
 	public async Task<nil> Save(CT Ct){
 		if(AnyNull(Cfg)){
 			return NIL;
 		}
-		var LangCode = Lang.Trim();
+		var LangCode = NormalizeInputToLangCode(LangInput);
+		Lang = LangCode;
 		// 設置頁只允許保存接口給出的候選語言。
 		if(UiLangCodeSet.Count > 0 && !UiLangCodeSet.Contains(LangCode)){
 			ShowDialog(Todo.I18n("請選擇候選語言列表中的值"));

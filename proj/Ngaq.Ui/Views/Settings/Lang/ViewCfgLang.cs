@@ -44,15 +44,15 @@ public partial class ViewCfgLang: AppViewBase{
 				o.Text = Todo.I18n("Lang");
 			});
 			sp.A(new AutoCompleteBox(), o=>{
-				o.FilterMode = AutoCompleteFilterMode.Contains;
+				o.FilterMode = AutoCompleteFilterMode.StartsWith;
 				o.MinimumPrefixLength = 0;
 				o.Bind(
 					AutoCompleteBox.ItemsSourceProperty,
-					CBE.Mk<Ctx>(x=>x.UiLangCodes, Mode: BindingMode.OneWay)
+					CBE.Mk<Ctx>(x=>x.UiLangOptions, Mode: BindingMode.OneWay)
 				);
 				o.Bind(
 					AutoCompleteBox.TextProperty,
-					CBE.Mk<Ctx>(x=>x.Lang, Mode: BindingMode.TwoWay)
+					CBE.Mk<Ctx>(x=>x.LangInput, Mode: BindingMode.TwoWay)
 				);
 			});
 		});
