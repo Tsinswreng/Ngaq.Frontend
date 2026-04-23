@@ -14,7 +14,7 @@ public class ConvtrTempus{
 	ConvtrTempus(){
 		Int64 = new SimpleFnConvtr<obj?, obj?>(
 			(tempusO)=>{
-				if(tempusO is Tempus t){
+				if(tempusO is UnixMs t){
 					return t.Value;
 				}
 				return BindingNotification.UnsetValue;
@@ -22,20 +22,20 @@ public class ConvtrTempus{
 			,(i64O)=>{
 				try{
 					var I64 = Convert.ToInt64(i64O);
-					return new Tempus(I64);
+					return new UnixMs(I64);
 				}catch{}
 				return BindingNotification.UnsetValue;
 			}
 		);
 		Iso = new SimpleFnConvtr<obj?, obj?>(
 			(tempus)=>{
-				if(tempus is Tempus t){
+				if(tempus is UnixMs t){
 					return t.ToIso();
 				}
 				return BindingNotification.UnsetValue;
 			}
 			,(iso)=>{
-				if(iso is str strIso && Tempus.TryFromIso(strIso, out var R)){
+				if(iso is str strIso && UnixMs.TryFromIso(strIso, out var R)){
 					return R;
 				}
 				// 轉不過 → 告訴綁定引擎「維持現狀」

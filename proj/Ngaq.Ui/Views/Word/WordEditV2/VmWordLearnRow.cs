@@ -27,13 +27,13 @@ public partial class VmWordLearnRow: ViewModelBase{
 	public str BizCreatedAtIso{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = Tempus.Now().ToIso();
+	} = UnixMs.Now().ToIso();
 
 	/// 概要表格顯示用時間格式：yy-MM-dd HH:mm:ss。
 	public str BizCreatedAtDisplay{
 		get{
 			try{
-				var t = Tempus.FromIso(BizCreatedAtIso);
+				var t = UnixMs.FromIso(BizCreatedAtIso);
 				var dto = DateTimeOffset.FromUnixTimeMilliseconds(t.Value);
 				var local = TimeZoneInfo.ConvertTime(dto, TimeZoneInfo.Local);
 				return local.ToString("yy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
@@ -68,7 +68,7 @@ public partial class VmWordLearnRow: ViewModelBase{
 		Po.LearnResult = GetLearnResultByIndex(LearnResultIndex);
 
 		try{
-			Po.BizCreatedAt = Tempus.FromIso(BizCreatedAtIso);
+			Po.BizCreatedAt = UnixMs.FromIso(BizCreatedAtIso);
 		}catch{
 			Err = I18n[K.BizCreatedAtMustBeIsoTime];
 			return false;

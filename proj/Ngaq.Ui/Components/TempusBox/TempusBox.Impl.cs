@@ -13,7 +13,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Ui.Icons;
 
 public partial class TempusBox: ContentControl{
-	Tempus _Tempus = Tempus.Now();
+	UnixMs _Tempus = UnixMs.Now();
 	bool _IsReadOnly = false;
 	i32 _SelectedFormatIndex = 0;
 	f64 _ControlHeight = 34;
@@ -27,7 +27,7 @@ public partial class TempusBox: ContentControl{
 	];
 	bool _LastParseOk = true;
 
-	public partial Tempus Tempus{
+	public partial UnixMs Tempus{
 		get{return _Tempus;}
 		set{
 			SetAndRaise(TempusProperty, ref _Tempus, value);
@@ -211,7 +211,7 @@ public partial class TempusBox: ContentControl{
 				currentLocal.Millisecond,
 				DateTimeKind.Local
 			);
-			Tempus = Tempus.FromDateTime(merged);
+			Tempus = UnixMs.FromDateTime(merged);
 		};
 		wrap.Child = calendar;
 		panel.A(wrap);
@@ -276,7 +276,7 @@ public partial class TempusBox: ContentControl{
 		}
 	}
 
-	str FormatBySelectedFormat(Tempus Value){
+	str FormatBySelectedFormat(UnixMs Value){
 		var item = SelectedFormat;
 		var converted = item.Converter.Convert(Value, typeof(str), null, CultureInfo.InvariantCulture);
 		if(converted is str s){
@@ -285,14 +285,14 @@ public partial class TempusBox: ContentControl{
 		return Value.Value.ToString(CultureInfo.InvariantCulture);
 	}
 
-	bool TryParseBySelectedFormat(str Text, out Tempus Result){
+	bool TryParseBySelectedFormat(str Text, out UnixMs Result){
 		Result = default;
 		if(string.IsNullOrWhiteSpace(Text)){
 			return false;
 		}
 		var item = SelectedFormat;
-		var converted = item.Converter.ConvertBack(Text, typeof(Tempus), null, CultureInfo.InvariantCulture);
-		if(converted is Tempus t){
+		var converted = item.Converter.ConvertBack(Text, typeof(UnixMs), null, CultureInfo.InvariantCulture);
+		if(converted is UnixMs t){
 			Result = t;
 			return true;
 		}

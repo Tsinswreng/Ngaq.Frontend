@@ -527,7 +527,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		Draft.Word.Lang = Lang.Trim();
 
 		try{
-			Draft.Word.StoredAt = Tempus.FromIso(StoredAtIso.Trim());
+			Draft.Word.StoredAt = UnixMs.FromIso(StoredAtIso.Trim());
 		}catch{
 			Err = I18n[K.StoredAtMustBeIsoTime];
 			return false;
@@ -544,13 +544,13 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		}
 
 		try{
-			Draft.Word.BizCreatedAt = Tempus.FromIso(BizCreatedAtIso.Trim());
+			Draft.Word.BizCreatedAt = UnixMs.FromIso(BizCreatedAtIso.Trim());
 		}catch{
 			Err = I18n[K.BizCreatedAtMustBeIsoTime];
 			return false;
 		}
 		try{
-			Draft.Word.BizUpdatedAt = Tempus.FromIso(BizUpdatedAtIso.Trim());
+			Draft.Word.BizUpdatedAt = UnixMs.FromIso(BizUpdatedAtIso.Trim());
 		}catch{
 			Err = I18n[K.BizUpdatedAtMustBeIsoTime];
 			return false;

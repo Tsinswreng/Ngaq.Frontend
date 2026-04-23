@@ -31,7 +31,7 @@ public partial class TempusFormatItem{
 	static IValueConverter MkIsoLocalConverter(){
 		return new ParamFnConvtr<obj?, obj?>(
 			(v, p)=>{
-				if(v is Tempus t){
+				if(v is UnixMs t){
 					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)
 					.ToLocalTime()
 					.ToString("yyyy-MM-ddTHH:mm:ss.fffzzz", CultureInfo.InvariantCulture);
@@ -46,7 +46,7 @@ public partial class TempusFormatItem{
 					DateTimeStyles.None,
 					out var dto
 				)){
-					return Tempus.FromUnixMs(dto.ToUnixTimeMilliseconds());
+					return Tsinswreng.CsTempus.UnixMs.FromUnixMs(dto.ToUnixTimeMilliseconds());
 				}
 				return BindingNotification.UnsetValue;
 			}
@@ -56,14 +56,14 @@ public partial class TempusFormatItem{
 	static IValueConverter MkUnixMsConverter(){
 		return new ParamFnConvtr<obj?, obj?>(
 			(v, p)=>{
-				if(v is Tempus t){
+				if(v is UnixMs t){
 					return t.Value.ToString(CultureInfo.InvariantCulture);
 				}
 				return BindingNotification.UnsetValue;
 			},
 			(v, p)=>{
 				if(v is str s && i64.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ms)){
-					return Tempus.FromUnixMs(ms);
+					return Tsinswreng.CsTempus.UnixMs.FromUnixMs(ms);
 				}
 				return BindingNotification.UnsetValue;
 			}
@@ -74,7 +74,7 @@ public partial class TempusFormatItem{
 		var fmt = NormalizePattern(Pattern);
 		return new ParamFnConvtr<obj?, obj?>(
 			(v, p)=>{
-				if(v is Tempus t){
+				if(v is UnixMs t){
 					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)
 					.ToLocalTime()
 					.DateTime
@@ -90,7 +90,7 @@ public partial class TempusFormatItem{
 					DateTimeStyles.None,
 					out var dt
 				)){
-					return Tempus.FromDateTime(new DateTime(
+					return Tsinswreng.CsTempus.UnixMs.FromDateTime(new DateTime(
 						dt.Year, dt.Month, dt.Day,
 						dt.Hour, dt.Minute, dt.Second,
 						dt.Millisecond,

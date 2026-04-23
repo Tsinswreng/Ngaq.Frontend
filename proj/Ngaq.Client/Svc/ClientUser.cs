@@ -105,9 +105,9 @@ public partial class ClientUser
 		var OldCtx = UserCtxMgr.GetUserCtx();
 		OldCtx.LoginUserId = IdUser.Zero;
 		OldCtx.RefreshToken = null;
-		OldCtx.RefreshTokenExpireAt = Tempus.Zero;
+		OldCtx.RefreshTokenExpireAt = UnixMs.Zero;
 		OldCtx.AccessToken = null;
-		OldCtx.AccessTokenExpireAt = Tempus.Zero;
+		OldCtx.AccessTokenExpireAt = UnixMs.Zero;
 
 		await SvcTokenStorage.SetRefreshToken(new ReqSetRefreshToken{
 			RefreshToken = OldCtx.RefreshToken,

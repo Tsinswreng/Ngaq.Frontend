@@ -28,8 +28,8 @@ public static class ToolStudyPlanView{
 
 	/// 统一格式化日期：按当前用户所在时区显示短格式 yy-MM-dd。
 
-	public static str FormatDateShort(Tempus Time, TimeZoneInfo? TimeZone = null){
-		if(Time == Tempus.Zero){
+	public static str FormatDateShort(UnixMs Time, TimeZoneInfo? TimeZone = null){
+		if(Time == UnixMs.Zero){
 			return "-";
 		}
 		var tz = TimeZone ?? TimeZoneInfo.Local;
@@ -39,8 +39,8 @@ public static class ToolStudyPlanView{
 	}
 
 	/// 统一处理“更新时间优先，否则创建时间”的短日期显示。
-	public static str FormatUpdatedDateShort(Tempus UpdatedAt, Tempus CreatedAt, TimeZoneInfo? TimeZone = null){
-		var t = UpdatedAt == Tempus.Zero ? CreatedAt : UpdatedAt;
+	public static str FormatUpdatedDateShort(UnixMs UpdatedAt, UnixMs CreatedAt, TimeZoneInfo? TimeZone = null){
+		var t = UpdatedAt == UnixMs.Zero ? CreatedAt : UpdatedAt;
 		return FormatDateShort(t, TimeZone);
 	}
 

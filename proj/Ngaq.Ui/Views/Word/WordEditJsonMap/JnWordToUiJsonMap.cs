@@ -26,7 +26,7 @@ public class JnWordToUiJsonMap{
 
 			u.FnGet = ()=>{
 				var v = oldGet();
-				if(v is Tempus t){
+				if(v is UnixMs t){
 					return t.ToIso();
 				}
 				if(v is IIdUInt128 id){
@@ -42,8 +42,8 @@ public class JnWordToUiJsonMap{
 				if(v is not str s){
 					return false;
 				}
-				if( u.Type?.IsAssignableTo(typeof(Tempus))==true ){
-					return oldSet(Tempus.FromIso(s));
+				if( u.Type?.IsAssignableTo(typeof(UnixMs))==true ){
+					return oldSet(UnixMs.FromIso(s));
 				}
 				if( u.Type?.IsAssignableTo(typeof(IdWord))==true ){
 					return IdWord.FromLow64Base(s);

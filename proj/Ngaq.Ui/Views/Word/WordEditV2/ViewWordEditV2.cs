@@ -483,14 +483,14 @@ public partial class ViewWordEditV2: AppViewBase{
 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture){
 			if(value is str s && !str.IsNullOrWhiteSpace(s)){
 				try{
-					return Tempus.FromIso(s.Trim());
+					return UnixMs.FromIso(s.Trim());
 				}catch{}
 			}
-			return Tempus.Now();
+			return UnixMs.Now();
 		}
 
 		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture){
-			if(value is Tempus t){
+			if(value is UnixMs t){
 				return t.ToIso();
 			}
 			return "";
@@ -499,13 +499,13 @@ public partial class ViewWordEditV2: AppViewBase{
 	sealed class DelAtUnixMsToTempusConverter: IValueConverter{
 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture){
 			if(value is str s && i64.TryParse(s.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var unixMs)){
-				return Tempus.FromUnixMs(unixMs);
+				return UnixMs.FromUnixMs(unixMs);
 			}
-			return Tempus.Now();
+			return UnixMs.Now();
 		}
 
 		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture){
-			if(value is Tempus t){
+			if(value is UnixMs t){
 				return t.Value.ToString(CultureInfo.InvariantCulture);
 			}
 			return "";

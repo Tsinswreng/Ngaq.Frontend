@@ -75,15 +75,15 @@ public partial class VmStatistics: ViewModelBase{
 		set{PageBar.PageSize = value;}
 	}
 
-	public Tempus TimeStart{
+	public UnixMs TimeStart{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}=Tempus.FromDateTime(DateTime.Now.AddMonths(-2));
+	}=UnixMs.FromDateTime(DateTime.Now.AddMonths(-2));
 
-	public Tempus TimeEnd{
+	public UnixMs TimeEnd{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}=new Tempus();
+	}=new UnixMs();
 
 	public i64 IntervalNoUnit{
 		get{return field;}
@@ -103,7 +103,7 @@ public partial class VmStatistics: ViewModelBase{
 		}
 	}=ETimeUnit.Week;
 
-	public Tempus TimeInterval{
+	public UnixMs TimeInterval{
 		get{return ValueUnitToTempus(IntervalNoUnit, IntervalUnit);}
 		//set{SetProperty(ref field, value);}
 	}
@@ -138,15 +138,15 @@ public partial class VmStatistics: ViewModelBase{
 	// 	set{SetProperty(ref field, value);}
 	// }=[];
 
-	public static Tempus ValueUnitToTempus(i64 Value, ETimeUnit Unit){
+	public static UnixMs ValueUnitToTempus(i64 Value, ETimeUnit Unit){
 		return Unit switch{
-			ETimeUnit.Second => new Tempus(Value*InMillisecond.Second),
-			ETimeUnit.Minute => new Tempus(Value*InMillisecond.Minute),
-			ETimeUnit.Hour => new Tempus(Value*InMillisecond.Hour),
-			ETimeUnit.Day => new Tempus(Value*InMillisecond.Day),
-			ETimeUnit.Week => new Tempus(Value*InMillisecond.Week),
-			ETimeUnit.Month => new Tempus(Value*InMillisecond.Month),
-			ETimeUnit.Year => new Tempus(Value*InMillisecond.Year),
+			ETimeUnit.Second => new UnixMs(Value*InMillisecond.Second),
+			ETimeUnit.Minute => new UnixMs(Value*InMillisecond.Minute),
+			ETimeUnit.Hour => new UnixMs(Value*InMillisecond.Hour),
+			ETimeUnit.Day => new UnixMs(Value*InMillisecond.Day),
+			ETimeUnit.Week => new UnixMs(Value*InMillisecond.Week),
+			ETimeUnit.Month => new UnixMs(Value*InMillisecond.Month),
+			ETimeUnit.Year => new UnixMs(Value*InMillisecond.Year),
 			_ => throw new Exception("Invalid TimeUnit"),
 		};
 	}
