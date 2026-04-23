@@ -107,7 +107,7 @@ public partial class ViewWordSyncV2
 			o.CBind<Ctx>(o.PropText, x=>x.PathImport);
 		})
 		.A(new Button(), o=>{
-			o.Content = Svgs.FolderOpened().ToIcon().WithText(I[K.Browse]);
+			o.Content = Svgs.FolderOutlinepenOutline().ToIcon().WithText(I[K.Browse]);
 			o.Click += async (s,e)=>{
 				var path = await PickImportPathAsy();
 				if(!str.IsNullOrWhiteSpace(path) && Ctx is not null){
@@ -128,7 +128,7 @@ public partial class ViewWordSyncV2
 			o.CBind<Ctx>(o.PropText, x=>x.PathExport);
 		})
 		.A(new Button(), o=>{
-			o.Content = Svgs.FolderOpened().ToIcon().WithText(I[K.Browse]);
+			o.Content = Svgs.FolderOutlinepenOutline().ToIcon().WithText(I[K.Browse]);
 			o.Click += async (s,e)=>{
 				var path = await PickExportPathAsy();
 				if(!str.IsNullOrWhiteSpace(path) && Ctx is not null){

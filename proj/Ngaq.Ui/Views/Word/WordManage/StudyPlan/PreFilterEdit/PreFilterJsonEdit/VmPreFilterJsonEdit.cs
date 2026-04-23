@@ -121,7 +121,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 			PoPreFilterJson = "";
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(I18n[K.Deleted]);
+			ShowToast(I18n[K.Deleted]);
 		}catch(Exception e){
 			HandleErr(e);
 		}

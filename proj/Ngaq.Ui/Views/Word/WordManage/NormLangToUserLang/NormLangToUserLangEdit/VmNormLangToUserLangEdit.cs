@@ -155,7 +155,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			};
 			IsCreateMode = true;
 			SyncFromPo();
-			ShowDialog(I18n[K.Deleted]);
+			ShowToast(I18n[K.Deleted]);
 		}catch(Exception e){
 			HandleErr(e);
 		}

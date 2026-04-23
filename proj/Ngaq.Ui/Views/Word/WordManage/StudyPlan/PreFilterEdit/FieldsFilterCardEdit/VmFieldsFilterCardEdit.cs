@@ -194,7 +194,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 			Owner.PropFilterRows.Remove(Target);
 		}
 		Owner.RefreshFieldsFilterCards();
-		ShowDialog(I18n[K.Deleted]);
+		ShowToast(I18n[K.Deleted]);
 		ViewNavi?.Back();
 		return NIL;
 	}

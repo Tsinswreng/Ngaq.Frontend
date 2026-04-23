@@ -181,7 +181,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(I18n[K.Deleted]);
+			ShowToast(I18n[K.Deleted]);
 		}catch(Exception e){
 			LastError = e.Message;
 			OnPropertyChanged(nameof(HasError));

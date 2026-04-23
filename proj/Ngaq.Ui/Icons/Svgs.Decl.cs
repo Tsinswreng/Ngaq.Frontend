@@ -94,8 +94,12 @@ public partial class Svgs{
 	
 	//<iconPacks:PackIconModern Kind="ListSelect" />
 	public static partial Svg ListSelect();
-	//<iconPacks:PackIconCodicons Kind="FolderOpened" />
+	
+	//倒
+	//<iconPacks:PackIconCodicons Kind="FolderOpened" /> 
 	public static partial Svg FolderOpened();
+	//<iconPacks:PackIconVaadinIcons Kind="FolderOutlinepenOutline" />
+	public static partial Svg FolderOutlinepenOutline();
 	//public static partial Svg a;
 }
 

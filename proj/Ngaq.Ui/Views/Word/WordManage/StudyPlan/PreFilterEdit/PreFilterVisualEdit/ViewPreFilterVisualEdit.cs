@@ -3,21 +3,25 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualE
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Models.TreeDataGrid;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Styling;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// PreFilter GUI 主頁。
-/// 顯示 Po 主信息與直接內嵌的數據編輯區。
+/// 顯示 Po 主信息與內嵌的篩選器編輯表格。
 public class ViewPreFilterVisualEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -27,9 +31,14 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 	public ViewPreFilterVisualEdit(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();
+		InitVisualGridSource();
 	}
 
 	AutoGrid Root = new(IsRow: true);
+	TreeDataGrid? CoreGrid;
+	TreeDataGrid? PropGrid;
+	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? CoreGridSource;
+	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? PropGridSource;
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -50,7 +59,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		]);
 		root.A(MkErrorBar());
 		root.A(MkPoSection(), o=>o.Margin = new Thickness(10, 10, 10, 8));
-		root.A(MkDataEditorHost(), o=>o.Margin = new Thickness(10, 0, 10, 10));
+		root.A(MkIntegratedDataEditor(), o=>o.Margin = new Thickness(10, 0, 10, 10));
 		return root.Grid;
 	}
 
@@ -94,11 +103,127 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		return bdr;
 	}
 
-	Control MkDataEditorHost(){
+	void InitVisualGridSource(){
+		if(Ctx is null){
+			return;
+		}
+		if(CoreGrid is not null){
+			CoreGridSource = MkGridSource(Ctx.CoreFilterCards);
+			CoreGrid.Source = CoreGridSource;
+		}
+		if(PropGrid is not null){
+			PropGridSource = MkGridSource(Ctx.PropFilterCards);
+			PropGrid.Source = PropGridSource;
+		}
+	}
+
+	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(IList<Ctx.RowFieldsFilterCard> rows){
+		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(rows){
+			Columns = {
+				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview),
+			},
+		};
+	}
+
+	Control MkIntegratedDataEditor(){
 		if(Ctx is null){
 			return new TextBlock{Text = I[K.EditorNotReady]};
 		}
-		return new ViewPreFilterDataEdit(Ctx);
+		var tabs = new TabControl();
+		tabs.Items.Add(new TabItem{
+			Header = I[K.CoreFilter],
+			Content = MkFilterTab(true),
+		});
+		tabs.Items.Add(new TabItem{
+			Header = I[K.PropFilter],
+			Content = MkFilterTab(false),
+		});
+		return tabs;
+	}
+
+	Control MkFilterTab(bool isCore){
+		var root = new AutoGrid(IsRow:true);
+		root.Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Star),
+		]);
+
+		var top = new AutoGrid(IsRow:false);
+		top.Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Auto),
+		]);
+		top.A(new TextBlock(), o=>{
+			o.Text = "";
+		});
+		top.A(new Button(), o=>{
+			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddGroup]);
+			o.HorizontalContentAlignment = HAlign.Center;
+			o.Click += (s,e)=>{
+				if(isCore){
+					Ctx?.AddCoreGroup();
+				}else{
+					Ctx?.AddPropGroup();
+				}
+			};
+		});
+		root.A(top.Grid);
+
+		var grid = new TreeDataGrid{
+			MinHeight = 220,
+		};
+		grid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+		);
+		grid.Styles.Add(
+			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+		);
+		if(isCore){
+			CoreGrid = grid;
+			grid.AddHandler(InputElement.TappedEvent, OnCoreGridTapped, RoutingStrategies.Bubble, true);
+		}else{
+			PropGrid = grid;
+			grid.AddHandler(InputElement.TappedEvent, OnPropGridTapped, RoutingStrategies.Bubble, true);
+		}
+		root.A(grid);
+		return root.Grid;
+	}
+
+	void OnCoreGridTapped(object? sender, TappedEventArgs e){
+		OnFieldsGridTapped(e, true);
+	}
+
+	void OnPropGridTapped(object? sender, TappedEventArgs e){
+		OnFieldsGridTapped(e, false);
+	}
+
+	void OnFieldsGridTapped(TappedEventArgs e, bool isCore){
+		if(Ctx is null){
+			return;
+		}
+		if(e.Source is not StyledElement src){
+			return;
+		}
+		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
+			if(cur is ToggleButton){
+				return;
+			}
+			if(cur is TreeDataGridRow row){
+				if(row.DataContext is Ctx.RowFieldsFilterCard vmRow){
+					if(isCore){
+						Ctx.OpenCoreFilterCard(vmRow);
+					}else{
+						Ctx.OpenPropFilterCard(vmRow);
+					}
+					e.Handled = true;
+				}
+				return;
+			}
+		}
 	}
 
 	Control MkBottomBar(){
