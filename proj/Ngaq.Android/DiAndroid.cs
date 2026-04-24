@@ -2,7 +2,9 @@ namespace Ngaq.Android;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Ngaq.Android.Domains.Clipboard;
 using Ngaq.Core.Android.Audio;
+using Ngaq.Core.Frontend.Clipboard;
 using Ngaq.Core.Shared.Audio;
 
 public static class DiAndroid{
@@ -15,6 +17,8 @@ adb logcat Tsinswreng.Ngaq:V *:S -v time
 		var AndroidLogger = new AndroidLogger("Tsinswreng.Ngaq");
 		z.AddSingleton<ILogger>(AndroidLogger);
 		z.AddSingleton<IAudioPlayer, AndroidAudioPlayer>();
+		// 覆蓋 UI 層默認剪貼板服務，改用 Android 原生 ClipboardManager。
+		z.AddSingleton<ISvcClipboard, AndroidSvcClipboard>();
 		return z;
 	}
 }
