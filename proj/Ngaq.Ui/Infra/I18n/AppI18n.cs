@@ -5,7 +5,7 @@ using Tsinswreng.CsI18n;
 namespace Ngaq.Ui.Infra.I18n;
 using I18n = Tsinswreng.CsI18n.I18n;
 public class AppI18n{
-	public static I18n Inst{get;set;} = null!;
+	public static I18n Inst{get;set;} = new();
 }
 
 public static class AppExtnErrItem {

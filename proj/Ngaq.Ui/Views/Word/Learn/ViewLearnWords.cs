@@ -167,7 +167,7 @@ public partial class ViewLearnWords
 				R.Padding = R._Button.Margin = new Thickness(0);
 				return R;
 			};
-			Row1.A(Btn(), (o)=>{
+			Row1.A(Btn(), o=>{
 				o._Button.SetContent(Hc(
 					Ic(Svgs.PlayCircleFill())//▶️
 					,T(I[K.Start])

@@ -16,6 +16,7 @@ internal sealed partial class Program {
 				.SetupCore()
 				.SetupUi()
 				.SetupBrowser()
+				.SetupBrowser()
 				//.SetUpLocal()//TODO 改成按需API調用
 				.SetupClient()
 			;
