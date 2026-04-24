@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
+using Avalonia.Threading;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
@@ -146,6 +147,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var PrevResp = LastRespLlmDict;
 		var PrevRawOutput = LastLlmRawOutput;
 		var StreamedResp = new StringBuilder();
+		var streamLock = new object();
 
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
@@ -173,9 +175,13 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			},
 			OnNewSeg = (dto, ct) => {
 				if(dto.NewSeg is not null){
-					StreamedResp.Append(dto.NewSeg);
+					lock(streamLock){
+						StreamedResp.Append(dto.NewSeg);
+					}
 				}
-				Result.GotNewSeg(dto);
+				Dispatcher.UIThread.Post(()=>{
+					Result.GotNewSeg(dto);
+				});
 				return 0;
 			},
 			OnDone = (dto, ct) => {
@@ -190,7 +196,9 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			// 先記住流式階段已展示的文本；若最終結構化解析結果缺失描述，則回退到它。
 			var StreamedDescription = Result.Description;
 			var Resp = await SvcDictionary.Lookup(User, Req, Ct);
-			LastLlmRawOutput = StreamedResp.ToString();
+			lock(streamLock){
+				LastLlmRawOutput = StreamedResp.ToString();
+			}
 			Result.FromRespLlmDict(Resp);
 			if(
 				str.IsNullOrWhiteSpace(Result.Description)
@@ -204,6 +212,10 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			}
 			LastRespLlmDict = Resp;
 		}catch(Exception ex){
+			str streamedText;
+			lock(streamLock){
+				streamedText = StreamedResp.ToString();
+			}
 			RestoreResultSnapshot(PrevResult);
 			LastReqLlmDict = PrevReq;
 			LastRespLlmDict = PrevResp;
@@ -211,7 +223,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			LogError(
 				$"Dictionary lookup failed. " +
 				$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
-				$"LlmResponse={StreamedResp}"
+				$"LlmResponse={streamedText}"
 			);
 			HandleErr(ex);
 		}

@@ -2,6 +2,7 @@ namespace Ngaq.Android;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Ngaq.Core.Android.Audio;
 using Ngaq.Core.Shared.Audio;
 
 public static class DiAndroid{
@@ -13,7 +14,7 @@ adb logcat Tsinswreng.Ngaq:V *:S -v time
  */
 		var AndroidLogger = new AndroidLogger("Tsinswreng.Ngaq");
 		z.AddSingleton<ILogger>(AndroidLogger);
-		z.AddSingleton<IAudioPlayer, FakeAudioPlayer>();
+		z.AddSingleton<IAudioPlayer, AndroidAudioPlayer>();
 		return z;
 	}
 }
