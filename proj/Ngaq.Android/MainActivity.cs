@@ -192,8 +192,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 			? new Notification.Builder(this, DictionaryLookupNotificationChannelId)
 			: new Notification.Builder(this);
 		builder
-			.SetContentTitle("Ngaq 查詞")
-			.SetContentText("點擊後讀取剪貼板並自動查詞")
+			.SetContentTitle(Todo.I18n("Ngaq 查詞"))
+			.SetContentText(Todo.I18n("點擊後讀取剪貼板並自動查詞"))
 			.SetSmallIcon(global::Android.Resource.Drawable.IcMenuSearch)
 			.SetOngoing(true)
 			.SetOnlyAlertOnce(true)
