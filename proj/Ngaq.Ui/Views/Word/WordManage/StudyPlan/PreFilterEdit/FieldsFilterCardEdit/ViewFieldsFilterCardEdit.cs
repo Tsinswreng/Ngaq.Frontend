@@ -13,15 +13,15 @@ using Avalonia.Styling;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
 using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-/// <summary>
+
 /// Editor view for a single fields-filter group.
-/// </summary>
 public class ViewFieldsFilterCardEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -196,6 +196,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveGroup]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
+			o.StretchCenter();
 		});
 		return g.Grid;
 	}

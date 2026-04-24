@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.User.AboutMe;
 using System.Collections.ObjectModel;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Tools;
@@ -27,22 +28,43 @@ public partial class VmAboutMe: ViewModelBase{
 		IFrontendUserCtxMgr? UserCtxMgr
 	){
 		this.UserCtxMgr = UserCtxMgr;
+		if(this.UserCtxMgr is not null){
+			this.UserCtxMgr.OnUserCtxChanged += HandleUserCtxChanged;
+		}
 		Init();
 	}
 
 	public nil Init(){
-		if(UserCtxMgr is null){
-			return NIL;
+		RefreshByUserCtx();
+		return NIL;
+	}
+
+	/// 監聽登錄上下文變更後，刷新界面關聯字段。
+	protected void HandleUserCtxChanged(object? Sender, EvtArgUserCtxChanged Evt){
+		Dispatcher.UIThread.Post(()=>{
+			RefreshByUserCtx(Evt.UserCtx);
+		});
+	}
+
+	protected nil RefreshByUserCtx(IFrontendUserCtx? User = null){
+		if(User is null){
+			if(UserCtxMgr is null){
+				return NIL;
+			}
+			User = UserCtxMgr.GetUserCtx();
 		}
-		var User = UserCtxMgr.GetUserCtx();
-		if(!User.LoginUserId.IsNullOrDefault()){
+
+		if(User.LoginUserId.IsNullOrDefault()){
+			UserIdRepr = Todo.I18n("Not Logged in");
+		}else{
 			UserIdRepr = User.LoginUserId+"";
 		}
+		AvatarImg = DfltAvatar.Img;
 		return NIL;
 	}
 
 
-	protected str _UserIdRepr = "Not Logged in";//TODO i18n
+	protected str _UserIdRepr = Todo.I18n("Not Logged in");
 	public str UserIdRepr{
 		get{return _UserIdRepr;}
 		set{SetProperty(ref _UserIdRepr, value);}

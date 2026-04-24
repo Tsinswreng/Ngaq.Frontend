@@ -72,6 +72,9 @@ public partial class VmLoginRegister: ViewModelBase{
 			return this;
 		}
 
+	/// 登錄成功事件。由View層決定跳轉行爲，避免在Vm層直接操作導航。
+	public event EventHandler<EvtArgMsg>? OnLoginSucceeded;
+
 
 	public bool CheckRegister(){
 		//TODO 一次校驗多條
@@ -110,28 +113,47 @@ public partial class VmLoginRegister: ViewModelBase{
 		return NIL;
 	}
 	public async Task<nil> LoginAsy(CT Ct){
-		var z = this;
-		await Task.Run(async()=>{
-			if(z.UserCtxMgr is null
-				|| z.SvcUser is null || z.SvcKv is null
-			){
-				return;
-			}
-			var User = z.UserCtxMgr.GetUserCtx();
+		Msgs.Clear();
+		if(str.IsNullOrWhiteSpace(Email)){
+			AddMsg("Email is empty.");
+			return NIL;
+		}
+		if(str.IsNullOrWhiteSpace(Password)){
+			AddMsg("Password is empty.");
+			return NIL;
+		}
 
-			var ClientId = await z.SvcKv.GetByOwnerEtKStr(IdUser.Zero, KeysClientKv.ClientId, Ct);
-			if(ClientId is null){
-				throw new FatalLogicErr("ClientId is null. ClientId should be in Db when App is launched");
-			}
-			var reqLogin = new ReqLogin{
-				Email = Email
-				,Password = Password
-				,KeepLogin = true
-				,UserIdentityMode = ReqLogin.EUserIdentityMode.Email
-				,CliendId = IdClient.FromLow64Base(ClientId.GetVStr()??"")
-			};
-			await z.SvcUser.Login(User, reqLogin, Ct);
-		});
+		var z = this;
+		try{
+			await Task.Run(async()=>{
+				if(z.UserCtxMgr is null
+					|| z.SvcUser is null || z.SvcKv is null
+				){
+					return;
+				}
+				var User = z.UserCtxMgr.GetUserCtx();
+
+				var ClientId = await z.SvcKv.GetByOwnerEtKStr(IdUser.Zero, KeysClientKv.ClientId, Ct);
+				if(ClientId is null){
+					throw new FatalLogicErr("ClientId is null. ClientId should be in Db when App is launched");
+				}
+				var reqLogin = new ReqLogin{
+					Email = Email
+					,Password = Password
+					,KeepLogin = true
+					,UserIdentityMode = ReqLogin.EUserIdentityMode.Email
+					,CliendId = IdClient.FromLow64Base(ClientId.GetVStr()??"")
+				};
+				await z.SvcUser.Login(User, reqLogin, Ct);
+			}, Ct);
+		}
+		catch(Exception Ex){
+			AddMsg(Ex.Message);
+			HandleErr(Ex);
+			return NIL;
+		}
+
+		OnLoginSucceeded?.Invoke(this, new EvtArgMsg());
 		return NIL;
 	}
 

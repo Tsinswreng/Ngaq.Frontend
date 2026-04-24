@@ -5,16 +5,16 @@ using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Shared.User.Svc;
 using Ngaq.Ui.Infra;
 
-using Ctx = VmXxx;
-public partial class VmXxx: ViewModelBase{
+using Ctx = VmUserProfile;
+public partial class VmUserProfile: ViewModelBase{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
-	protected VmXxx(){}
+	protected VmUserProfile(){}
 	public static Ctx Mk(){
 		return new Ctx();
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];
-	static VmXxx(){
+	static VmUserProfile(){
 		#if DEBUG
 		{
 			var o = new Ctx();
@@ -25,7 +25,9 @@ public partial class VmXxx: ViewModelBase{
 
 	ISvcUser? SvcUser;
 	IFrontendUserCtxMgr? UserCtxMgr;
-	public VmXxx(
+	/// 登出成功後通知View層執行頁面跳轉。
+	public event EventHandler<EvtArgMsg>? OnLogoutSucceeded;
+	public VmUserProfile(
 		ISvcUser? SvcUser
 		,IFrontendUserCtxMgr? UserCtxMgr
 	){
@@ -51,6 +53,7 @@ public partial class VmXxx: ViewModelBase{
 		await Task.Run(async()=>{
 			await SvcUser.Logout(User, new ReqLogout{}, Ct);
 		});
+		OnLogoutSucceeded?.Invoke(this, new EvtArgMsg());
 		return NIL;
 	}
 }

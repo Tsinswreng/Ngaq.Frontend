@@ -1,7 +1,10 @@
 namespace Ngaq.Ui.Views.User;
 
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.User.AboutMe;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
 using Tsinswreng.CsI18n;
@@ -14,7 +17,14 @@ public partial class ViewLoginRegister
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
-		set{DataContext = value;}
+		set{
+			if(ReferenceEquals(DataContext, value)){
+				return;
+			}
+			BindVm(DataContext as Ctx, false);
+			DataContext = value;
+			BindVm(value, true);
+		}
 	}
 
 	public ViewLoginRegister(){
@@ -22,6 +32,31 @@ public partial class ViewLoginRegister
 		Ctx=App.GetRSvc<Ctx>();
 		Style();
 		Render();
+		DetachedFromVisualTree += (s,e)=>{
+			BindVm(Ctx, false);
+		};
+	}
+
+	protected nil BindVm(Ctx? Vm, bool Enable){
+		if(Vm is null){
+			return NIL;
+		}
+		if(Enable){
+			Vm.OnLoginSucceeded += HandleLoginSucceeded;
+		}else{
+			Vm.OnLoginSucceeded -= HandleLoginSucceeded;
+		}
+		return NIL;
+	}
+
+	protected void HandleLoginSucceeded(object? Sender, EvtArgMsg Evt){
+		Dispatcher.UIThread.Post(()=>{
+			Ctx?.ShowToast(Todo.I18n("Login Succeeded"));
+			if(ViewNavi?.Back() == true){
+				return;
+			}
+			ViewNavi?.GoTo(ToolView.WithTitle("", new ViewAboutMe()));
+		});
 	}
 
 	public  partial class Cls_{

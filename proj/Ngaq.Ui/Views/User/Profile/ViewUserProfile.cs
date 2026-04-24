@@ -1,19 +1,18 @@
 namespace Ngaq.Ui.Views.User.Profile;
 
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Ngaq.Ui.Components;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.User;
-using Ngaq.Ui.Views.User.Login;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ursa.Controls;
-using Ctx = VmXxx;
+using Ctx = VmUserProfile;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewUserProfile
@@ -22,13 +21,41 @@ public partial class ViewUserProfile
 
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
-		set{DataContext = value;}
+		set{
+			if(ReferenceEquals(DataContext, value)){
+				return;
+			}
+			BindVm(DataContext as Ctx, false);
+			DataContext = value;
+			BindVm(value, true);
+		}
 	}
 
 	public ViewUserProfile(){
-		Ctx = Ctx.Mk();
+		Ctx = App.GetRSvc<Ctx>();
 		Style();
 		Render();
+		DetachedFromVisualTree += (s,e)=>{
+			BindVm(Ctx, false);
+		};
+	}
+
+	protected nil BindVm(Ctx? Vm, bool Enable){
+		if(Vm is null){
+			return NIL;
+		}
+		if(Enable){
+			Vm.OnLogoutSucceeded += HandleLogoutSucceeded;
+		}else{
+			Vm.OnLogoutSucceeded -= HandleLogoutSucceeded;
+		}
+		return NIL;
+	}
+
+	protected void HandleLogoutSucceeded(object? Sender, EvtArgMsg Evt){
+		Dispatcher.UIThread.Post(()=>{
+			ViewNavi?.GoTo(ToolView.WithTitle(I[K.Login], new ViewLoginRegister()));
+		});
 	}
 
 	public partial class Cls_{

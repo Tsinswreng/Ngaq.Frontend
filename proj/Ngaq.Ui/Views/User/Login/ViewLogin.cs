@@ -33,8 +33,8 @@ public partial class ViewLogin
 
 
 	public ViewLogin(){
-		Ctx = Ctx.Mk();
-		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
+		// Ctx由父容器ViewLoginRegister注入，避免登錄與註冊頁分別持有不同Vm實例。
+		Ctx = Ctx.Mk();//前置兜底
 		_Style();
 		_Render();
 	}

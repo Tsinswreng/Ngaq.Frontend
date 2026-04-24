@@ -37,6 +37,7 @@ using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using System.IO.Abstractions;
 using Ngaq.Ui.Views.Settings.Lang;
+using Ngaq.Ui.Views.User.Profile;
 
 namespace Ngaq.Ui;
 
@@ -78,6 +79,7 @@ public static class DiUi{
 		z.AddTransient<VmSimpleWord>();
 		z.AddTransient<VmWordEditV2>();
 		z.AddTransient<VmCfgLang>();
+		z.AddTransient<VmUserProfile>();
 		z.AddTransient<IWordCardPronounceBiz, SvcWordCardPronounceBiz>();
 		// 使用 Avalonia 跨平臺能力實現剪貼板服務，供各平臺共用。
 		z.AddSingleton<ISvcClipboard, SvcClipboard>();

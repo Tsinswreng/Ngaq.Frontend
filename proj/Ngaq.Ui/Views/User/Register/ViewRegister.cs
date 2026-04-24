@@ -26,8 +26,8 @@ public partial class ViewRegister
 	}
 
 	public ViewRegister(){
+		// Ctx由父容器ViewLoginRegister注入，避免登錄與註冊頁分別持有不同Vm實例。
 		Ctx = Ctx.Mk();
-		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
 		_Style();
 		_Render();
 
