@@ -162,6 +162,8 @@ public partial class ViewLearnWords
 				R.Classes.Add(Cls.MenuBtn);
 				R._Button.VerticalAlignment = VAlign.Stretch;
 				R._Button.VerticalContentAlignment = VAlign.Stretch;
+				R._Button.StretchCenter();
+				R._Button.Background = Brushes.Transparent;
 				R.Padding = R._Button.Margin = new Thickness(0);
 				return R;
 			};
