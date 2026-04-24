@@ -100,6 +100,10 @@ public partial class Svgs{
 	public static partial Svg FolderOpened();
 	//<iconPacks:PackIconVaadinIcons Kind="FolderOutlinepenOutline" />
 	public static partial Svg FolderOutlinepenOutline();
+	//<iconPacks:PackIconBoxIcons Kind="RegularLogOutCircle" />
+	public static partial Svg RegularLogOutCircle();
+	//<iconPacks:PackIconPhosphorIcons Kind="UserSwitch" />
+	public static partial Svg UserSwitch();
 	//public static partial Svg a;
 }
 

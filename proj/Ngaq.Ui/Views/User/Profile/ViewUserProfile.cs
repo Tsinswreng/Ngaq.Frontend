@@ -14,6 +14,7 @@ using Tsinswreng.CsI18n;
 using Ursa.Controls;
 using Ctx = VmUserProfile;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ngaq.Ui.Icons;
 
 public partial class ViewUserProfile
 	:AppViewBase
@@ -110,7 +111,7 @@ public partial class ViewUserProfile
 					Sp
 						.A(new Button(), o=>{
 						o.StretchCenter();
-						o.Content = I[K.ChangeAccount];
+						o.Content = Svgs.UserSwitch().ToIcon().WithText(I[K.ChangeAccount]);
 						o.Click += (s,e)=>{
 							ViewNavi?.GoTo(
 								ToolView.WithTitle(I[K.ChangeAccount], new ViewLoginRegister())
@@ -120,7 +121,7 @@ public partial class ViewUserProfile
 					.A(new OpBtn(), o=>{
 						o._Button.StretchCenter();
 						o._Button.Background = Brushes.Red;
-						o.BtnContent = I[K.Logout];
+						o.BtnContent = Svgs.RegularLogOutCircle().ToIcon().WithText(I[K.Logout]);;
 						o.SetExe((Ct)=>Ctx?.LogoutAsy(Ct));
 					});
 				});
