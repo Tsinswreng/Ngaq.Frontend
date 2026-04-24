@@ -26,13 +26,16 @@ using Tsinswreng.CsTools;
 
 namespace Ngaq.Android;
 
+// [Activity] 是 Android 的 Activity 屬性，用來定義這個 Activity 的
+// 標籤(Label)、主題(Theme)、圖示(Icon)、啟動模式(LaunchMode)等。
 [Activity(
 	Label = "Ngaq",
 	Theme = "@style/MyTheme.NoActionBar",
 	Icon = "@drawable/icon",
-	MainLauncher = true,
+	MainLauncher = true, //表示應用程式從這個 Activity 開始執行。
 	LaunchMode = LaunchMode.SingleTop,
 	ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize | ConfigChanges.UiMode)]
+// MainActivity 繼承自 AvaloniaMainActivity<App>，這是 Avalonia 與 Android 整合的橋樑。泛型 App 是 Avalonia 應用程式的進入點。
 public partial class MainActivity : AvaloniaMainActivity<App>{
 	private const int DictionaryLookupNotificationId = 43001;
 	private const int NotificationPermissionRequestCode = 43002;
@@ -43,6 +46,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 	private readonly CancellationTokenSource _cts = new();
 	private bool _pendingLookupFromNotificationTap = false;
 
+	// OnCreate 是 Android Activity 的第一個生命週期方法，當 Activity 被建立時呼叫。
+	// 參數 Bundle 儲存了先前被銷毀前的狀態。一定要呼叫 base.OnCreate 以確保 Avalonia 正常初始化。
 	protected override void OnCreate(Bundle? savedInstanceState){
 		Log.Info("Ngaq.Android", "MainActivity.OnCreate");
 		Init();
@@ -58,6 +63,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		base.OnDestroy();
 	}
 
+	// OnNewIntent 在 Activity 使用 SingleTop 啟動模式且已存在於回退棧頂時觸發。
+	// 透過這個方法可以接收到新的 Intent（例如從點擊通知重新喚起 Activity）。
 	protected override void OnNewIntent(Intent? intent){
 		base.OnNewIntent(intent);
 		CaptureDictionaryLookupIntent(intent);
@@ -75,6 +82,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 			});
 	}
 
+	// OnRequestPermissionsResult 是處理 Android 執行時期權限請求結果的 callback。
+	// 這裡用來處理 POST_NOTIFICATIONS 權限（Android 13+ 需要）。
 	public override void OnRequestPermissionsResult(
 		int requestCode, string[]? permissions, Permission[]? grantResults
 	){
@@ -146,6 +155,12 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		App.SetSvcProvider(serviceProvider);
 	}
 
+	// EnsureDictionaryLookupNotification 建立一則持續顯示的通知，讓使用者點擊後可以查詢剪貼簿內容。
+	// 主要 Android 機制：
+	// - Android 8.0+ 必須建立 NotificationChannel，並指定重要性等級。
+	// - Android 13+ 需要動態請求 POST_NOTIFICATIONS 權限（透過 RequestPermissions）。
+	// - 使用 PendingIntent 包裝點擊意圖，以便在通知被點擊時啟動 MainActivity。
+	// - Notification.Builder 用來組合通知的標題、內容、小圖示、觸發意圖等。
 	private void EnsureDictionaryLookupNotification(){
 		if(
 			Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu
@@ -203,6 +218,7 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		nm.Notify(DictionaryLookupNotificationId, builder.Build());
 	}
 
+	// CaptureDictionaryLookupIntent 檢查傳入的 Intent 是否來自通知點擊（透過 Action 或 Extra 標記），並設定旗標 _pendingLookupFromNotificationTap。
 	private void CaptureDictionaryLookupIntent(Intent? intent){
 		if(intent is null){
 			return;
@@ -214,6 +230,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		}
 	}
 
+	// TryConsumePendingDictionaryLookupIntent 在 Activity 準備好（App.SvcProvider 非 null）且旗標為 true 時，
+	// 透過 Dispatcher.UIThread 切換到 UI 執行緒執行實際的查詞動作（IHotkeyDictionaryLookupAction）。
 	private void TryConsumePendingDictionaryLookupIntent(){
 		if(!_pendingLookupFromNotificationTap){
 			return;
@@ -238,6 +256,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 	}
 
 	/// 将 Assets 中的文件复制到指定目标路径。
+	/// 將 Android Assets（內建檔案）複製到外部儲存目錄。
+	/// Assets 是 Android 專案中 /Assets 資料夾內的資源，無法直接當成檔案系統存取，必須透過 AssetManager 開啟 Stream。
 	public static bool CopyAssetToDirectory(string assetFileName, string targetDir){
 		try{
 			var context = global::Android.App.Application.Context;
