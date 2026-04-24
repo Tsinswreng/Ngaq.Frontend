@@ -9,9 +9,8 @@ using Ngaq.Client;
 namespace Ngaq.Browser;
 internal sealed partial class Program {
 	private static async Task Main(string[] args){
-		System.Console.WriteLine(114514);//t
-		try
-		{
+		var I = 0;
+		try{
 			var svc = new ServiceCollection();
 			svc
 				.SetupCore()
@@ -21,7 +20,7 @@ internal sealed partial class Program {
 				.SetupClient()
 			;
 			var servicesProvider = svc.BuildServiceProvider();
-
+			//從此後即報錯
 			await BuildAvaloniaApp()
 			.AfterSetup(e=>{
 				App.SetSvcProvider(servicesProvider);
@@ -34,7 +33,6 @@ internal sealed partial class Program {
 			System.Console.WriteLine(e);
 		}
 		return;
-
 	}
 
 	public static AppBuilder BuildAvaloniaApp()

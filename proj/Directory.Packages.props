@@ -34,7 +34,7 @@
     <PackageVersion Include="ReactiveUI" Version="22.2.1" />
     <PackageVersion Include="ReactiveUI.Fody" Version="19.5.41" />
     <PackageVersion Include="ScottPlot.Avalonia" Version="5.1.57" />
-    <PackageVersion Include="SkiaSharp" Version="3.119.1" />
+    <!-- <PackageVersion Include="SkiaSharp" Version="3.119.1" /> -->
     <PackageVersion Include="TestableIO.System.IO.Abstractions" Version="22.1.1" />
     <PackageVersion Include="TextMateSharp.Grammars" Version="1.0.70" />
     <PackageVersion Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
@@ -42,6 +42,7 @@
     <PackageVersion Include="Irihi.Ursa" Version="1.9.0" />
     <PackageVersion Include="Irihi.Ursa.Themes.Semi" Version="1.9.0" />
     <PackageVersion Include="Semi.Avalonia" Version="11.2.1.5" />
+		<PackageVersion Include="SkiaSharp.NativeAssets.WebAssembly" Version="3.119.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />

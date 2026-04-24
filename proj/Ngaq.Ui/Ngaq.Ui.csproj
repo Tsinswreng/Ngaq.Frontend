@@ -46,7 +46,7 @@
 		<PackageReference Include="ReactiveUI" />
 		<PackageReference Include="ReactiveUI.Fody" />
 		<PackageReference Include="ScottPlot.Avalonia" />
-		<PackageReference Include="SkiaSharp" />
+		<!-- <PackageReference Include="SkiaSharp" /> -->
 		<PackageReference Include="System.Reactive" />
 
 		<PackageReference Include="Irihi.Ursa" />
