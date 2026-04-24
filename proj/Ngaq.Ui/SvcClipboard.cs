@@ -3,6 +3,7 @@ namespace Ngaq.Ui;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Input.Platform;
 using Ngaq.Core.Frontend.Clipboard;
 
 /// 基於 Avalonia 的跨平臺剪貼板服務。
@@ -17,7 +18,7 @@ public class SvcClipboard : ISvcClipboard{
 		if(clipboard is null){
 			return null;
 		}
-		return await clipboard.GetTextAsync();
+		return await clipboard.TryGetTextAsync();
 	}
 
 	/// 從桌面主窗口對應的 TopLevel 拿到 Avalonia Clipboard。

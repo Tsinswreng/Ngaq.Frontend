@@ -40,7 +40,7 @@ public partial class ViewDictionary
 		Style();
 		Render();
 		this.Loaded += (s, e) => {
-			SearchTextBox?.Focus();
+			//SearchTextBox?.Focus(); //在手機端會直接彈出輸入法、效果不佳
 			_ = Ctx?.InitLang(default);
 		};
 	}
