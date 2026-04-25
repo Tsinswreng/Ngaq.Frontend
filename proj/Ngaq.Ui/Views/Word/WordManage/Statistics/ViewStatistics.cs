@@ -172,8 +172,10 @@ public partial class ViewStatistics: AppViewBase{
 		// 統一套用黑底白字主題，避免刷新後回到默認配色。
 		o.Plot.FigureBackground.Color = ScottPlot.Colors.Black;
 		o.Plot.DataBackground.Color = ScottPlot.Colors.Black;
+		var frameColor = ScottPlot.Colors.Gray;
 		o.Plot.Axes.Color(ScottPlot.Colors.White);
-		o.Plot.Grid.MajorLineColor = ScottPlot.Colors.Gray;
+		o.Plot.Axes.FrameColor(frameColor);
+		o.Plot.Grid.MajorLineColor = frameColor;
 		o.Plot.Grid.MajorLineWidth = 0.5f;
 
 		o.Plot.Clear();
