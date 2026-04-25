@@ -106,7 +106,7 @@ public partial class ViewNormLangEdit
 			ColDef(1, GUT.Star),
 		]);
 		bar.A(new OpBtn(), o=>{
-			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+			o._Button.Background = UiCfg.Inst.DelBtnBg;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));

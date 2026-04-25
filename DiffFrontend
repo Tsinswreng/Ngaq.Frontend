@@ -1,0 +1,2834 @@
+
+ public static class AppExtnErrItem {
+diff --git a/proj/Ngaq.Ui/Ngaq.Ui.csproj b/proj/Ngaq.Ui/Ngaq.Ui.csproj
+index 4d15593..52bb68d 100644
+--- a/proj/Ngaq.Ui/Ngaq.Ui.csproj
++++ b/proj/Ngaq.Ui/Ngaq.Ui.csproj
+@@ -46,7 +46,7 @@
+ 		<PackageReference Include="ReactiveUI" />
+ 		<PackageReference Include="ReactiveUI.Fody" />
+ 		<PackageReference Include="ScottPlot.Avalonia" />
+-		<PackageReference Include="SkiaSharp" />
++		<!-- <PackageReference Include="SkiaSharp" /> -->
+ 		<PackageReference Include="System.Reactive" />
+
+ 		<PackageReference Include="Irihi.Ursa" />
+diff --git a/proj/Ngaq.Ui/SvcClipboard.cs b/proj/Ngaq.Ui/SvcClipboard.cs
+index 4548878..2ec5f2c 100644
+--- a/proj/Ngaq.Ui/SvcClipboard.cs
++++ b/proj/Ngaq.Ui/SvcClipboard.cs
+@@ -3,6 +3,7 @@ namespace Ngaq.Ui;
+ using Avalonia;
+ using Avalonia.Controls;
+ using Avalonia.Controls.ApplicationLifetimes;
++using Avalonia.Input.Platform;
+ using Ngaq.Core.Frontend.Clipboard;
+
+ /// 基於 Avalonia 的跨平臺剪貼板服務。
+@@ -17,7 +18,7 @@ public class SvcClipboard : ISvcClipboard{
+ 		if(clipboard is null){
+ 			return null;
+ 		}
+-		return await clipboard.GetTextAsync();
++		return await clipboard.TryGetTextAsync();
+ 	}
+
+ 	/// 從桌面主窗口對應的 TopLevel 拿到 Avalonia Clipboard。
+diff --git a/proj/Ngaq.Ui/UiCfg.cs b/proj/Ngaq.Ui/UiCfg.cs
+index 03125c9..bf5294c 100644
+--- a/proj/Ngaq.Ui/UiCfg.cs
++++ b/proj/Ngaq.Ui/UiCfg.cs
+@@ -1,4 +1,5 @@
+ using Avalonia;
++using Avalonia.Markup.Declarative;
+ using Avalonia.Media;
+ using Ngaq.Core.Infra.Cfg;
+ using Tsinswreng.CsCfg;
+@@ -20,6 +21,7 @@ public partial class UiCfg{
+ 	public f64 WindowWidth {get;set;}= 400;
+ 	public f64 WindowHeight {get;set;}= 700;
+ 	public IBrush? MainColor {get;set;}= DfltMainColor;
++	public IBrush? DelBtnBg {get;set;} = Color.FromRgb(210, 56, 56).ToBrush();
+ 	public IBrush ForegroundColor {get;set;}= Brushes.White;
+ 	public IBrush BackgroundColor {get;set;}= Brushes.Black;
+ 	public static IBrush DfltMainColor = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x78, 0xD7));
+diff --git a/proj/Ngaq.Ui/Views/Dictionary/ViewDictionary.cs b/proj/Ngaq.Ui/Views/Dictionary/ViewDictionary.cs
+index cc3ac66..ac52030 100644
+--- a/proj/Ngaq.Ui/Views/Dictionary/ViewDictionary.cs
++++ b/proj/Ngaq.Ui/Views/Dictionary/ViewDictionary.cs
+@@ -40,7 +40,7 @@ public partial class ViewDictionary
+ 		Style();
+ 		Render();
+ 		this.Loaded += (s, e) => {
+-			SearchTextBox?.Focus();
++			//SearchTextBox?.Focus(); //在手機端會直接彈出輸入法、效果不佳
+ 			_ = Ctx?.InitLang(default);
+ 		};
+ 	}
+diff --git a/proj/Ngaq.Ui/Views/Dictionary/VmDictionary.cs b/proj/Ngaq.Ui/Views/Dictionary/VmDictionary.cs
+index 1ac4918..dd9c652 100644
+--- a/proj/Ngaq.Ui/Views/Dictionary/VmDictionary.cs
++++ b/proj/Ngaq.Ui/Views/Dictionary/VmDictionary.cs
+@@ -1,6 +1,7 @@
+ namespace Ngaq.Ui.Views.Dictionary;
+
+ using Avalonia.Controls;
++using Avalonia.Threading;
+ using System.Collections.ObjectModel;
+ using System.Collections.Generic;
+ using System.Text;
+@@ -146,6 +147,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
+ 		var PrevResp = LastRespLlmDict;
+ 		var PrevRawOutput = LastLlmRawOutput;
+ 		var StreamedResp = new StringBuilder();
++		var streamLock = new object();
+
+ 		Result ??= App.DiOrMk<VmSimpleWord>();
+ 		Result.StartStreaming(Input.Trim());
+@@ -173,9 +175,13 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
+ 			},
+ 			OnNewSeg = (dto, ct) => {
+ 				if(dto.NewSeg is not null){
+-					StreamedResp.Append(dto.NewSeg);
++					lock(streamLock){
++						StreamedResp.Append(dto.NewSeg);
++					}
+ 				}
+-				Result.GotNewSeg(dto);
++				Dispatcher.UIThread.Post(()=>{
++					Result.GotNewSeg(dto);
++				});
+ 				return 0;
+ 			},
+ 			OnDone = (dto, ct) => {
+@@ -190,7 +196,9 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
+ 			// 先記住流式階段已展示的文本；若最終結構化解析結果缺失描述，則回退到它。
+ 			var StreamedDescription = Result.Description;
+ 			var Resp = await SvcDictionary.Lookup(User, Req, Ct);
+-			LastLlmRawOutput = StreamedResp.ToString();
++			lock(streamLock){
++				LastLlmRawOutput = StreamedResp.ToString();
++			}
+ 			Result.FromRespLlmDict(Resp);
+ 			if(
+ 				str.IsNullOrWhiteSpace(Result.Description)
+@@ -204,15 +212,39 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
+ 			}
+ 			LastRespLlmDict = Resp;
+ 		}catch(Exception ex){
+-			RestoreResultSnapshot(PrevResult);
+-			LastReqLlmDict = PrevReq;
+-			LastRespLlmDict = PrevResp;
+-			LastLlmRawOutput = PrevRawOutput;
+-			LogError(
+-				$"Dictionary lookup failed. " +
+-				$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
+-				$"LlmResponse={StreamedResp}"
+-			);
++			str streamedText;
++			lock(streamLock){
++				streamedText = StreamedResp.ToString();
++			}
++			var isParseFailed = IsLlmResponseParseFailed(ex);
++			if(isParseFailed){
++				// 解析失敗時保留流式已展示內容，並保留原始輸出供「查看/編輯原始響應」使用。
++				LastReqLlmDict = Req;
++				LastRespLlmDict = null;
++				LastLlmRawOutput = streamedText;
++				if(
++					str.IsNullOrWhiteSpace(Result?.Description)
++					&& !str.IsNullOrWhiteSpace(streamedText)
++				){
++					Result ??= App.DiOrMk<VmSimpleWord>();
++					Result.Description = streamedText;
++				}
++				LogWarn(
++					$"Dictionary lookup parse failed, keeping streamed content. " +
++					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
++					$"LlmResponse={streamedText}"
++				);
++			}else{
++				RestoreResultSnapshot(PrevResult);
++				LastReqLlmDict = PrevReq;
++				LastRespLlmDict = PrevResp;
++				LastLlmRawOutput = PrevRawOutput;
++				LogError(
++					$"Dictionary lookup failed. " +
++					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
++					$"LlmResponse={streamedText}"
++				);
++			}
+ 			HandleErr(ex);
+ 		}
+
+@@ -351,6 +383,14 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
+ 		return false;
+ 	}
+
++	/// 判斷是否爲「LLM 響應解析失敗」業務異常。
++	bool IsLlmResponseParseFailed(Exception Ex){
++		if(Ex is IAppErr AppErr){
++			return ReferenceEquals(AppErr.Type, KeysErr.Dictionary.LlmResponseParseFailed);
++		}
++		return false;
++	}
++
+ 	/// 打開語言映射配置頁。
+ 	obj? OpenNormLangMappingPage(){
+ 		// 直接進入新增映射頁，並預填當前源語言，減少用戶操作步驟。
+diff --git a/proj/Ngaq.Ui/Views/Settings/Lang/VmCfgLang.cs b/proj/Ngaq.Ui/Views/Settings/Lang/VmCfgLang.cs
+index 294bad0..d8b6494 100644
+--- a/proj/Ngaq.Ui/Views/Settings/Lang/VmCfgLang.cs
++++ b/proj/Ngaq.Ui/Views/Settings/Lang/VmCfgLang.cs
+@@ -10,9 +10,7 @@ using Tsinswreng.CsCfg;
+ using Ctx = VmCfgLang;
+
+ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
+-	/// <summary>
+ 	/// 语言下拉项：显示 Code + NativeName。
+-	/// </summary>
+ 	public sealed class UiLangOption{
+ 		public str Code{get;set;} = "";
+ 		public str NativeName{get;set;} = "";
+@@ -60,9 +58,7 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
+ 		set{SetProperty(ref field, value);}
+ 	} = "en";
+
+-	/// <summary>
+ 	/// 绑定到可编辑下拉框输入文本。
+-	/// </summary>
+ 	public str LangInput{
+ 		get;
+ 		set{SetProperty(ref field, value);}
+@@ -101,10 +97,8 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
+ 		return NIL;
+ 	}
+
+-	/// <summary>
+ 	/// 把输入文本规范化为语言 Code。
+ 	/// 支持纯 Code、下拉展示文本、以及 "code - NativeName" 形式。
+-	/// </summary>
+ 	str NormalizeInputToLangCode(str Input){
+ 		var Text = (Input ?? "").Trim();
+ 		if(Text == ""){
+diff --git a/proj/Ngaq.Ui/Views/User/AboutMe/ViewAboutMe.cs b/proj/Ngaq.Ui/Views/User/AboutMe/ViewAboutMe.cs
+index c62cece..d4b00b6 100644
+--- a/proj/Ngaq.Ui/Views/User/AboutMe/ViewAboutMe.cs
++++ b/proj/Ngaq.Ui/Views/User/AboutMe/ViewAboutMe.cs
+@@ -4,7 +4,6 @@ using Avalonia.Controls;
+ using Avalonia.Layout;
+ using Avalonia.Media;
+ using Avalonia.Styling;
+-using Ngaq.Ui.Controls;
+ using Ngaq.Ui.Icons;
+ using Ngaq.Ui.Infra;
+ using Ngaq.Ui.Tools;
+@@ -16,6 +15,8 @@ using Tsinswreng.AvlnTools.Dsl;
+ using Tsinswreng.AvlnTools.Tools;
+ using Ngaq.Ui.Infra.I18n;
+ using Ctx = VmAboutMe;
++using Ngaq.Ui.Components;
++
+ public partial class ViewAboutMe
+ 	:AppViewBase
+ {
+diff --git a/proj/Ngaq.Ui/Views/User/AboutMe/VmAboutMe.cs b/proj/Ngaq.Ui/Views/User/AboutMe/VmAboutMe.cs
+index 29dc188..370d350 100644
+--- a/proj/Ngaq.Ui/Views/User/AboutMe/VmAboutMe.cs
++++ b/proj/Ngaq.Ui/Views/User/AboutMe/VmAboutMe.cs
+@@ -1,6 +1,7 @@
+ namespace Ngaq.Ui.Views.User.AboutMe;
+ using System.Collections.ObjectModel;
+ using Avalonia.Media;
++using Avalonia.Threading;
+ using Ngaq.Core.Frontend.User;
+ using Ngaq.Core.Shared.User.UserCtx;
+ using Ngaq.Core.Tools;
+@@ -27,22 +28,43 @@ public partial class VmAboutMe: ViewModelBase{
+ 		IFrontendUserCtxMgr? UserCtxMgr
+ 	){
+ 		this.UserCtxMgr = UserCtxMgr;
++		if(this.UserCtxMgr is not null){
++			this.UserCtxMgr.OnUserCtxChanged += HandleUserCtxChanged;
++		}
+ 		Init();
+ 	}
+
+ 	public nil Init(){
+-		if(UserCtxMgr is null){
+-			return NIL;
++		RefreshByUserCtx();
++		return NIL;
++	}
++
++	/// 監聽登錄上下文變更後，刷新界面關聯字段。
++	protected void HandleUserCtxChanged(object? Sender, EvtArgUserCtxChanged Evt){
++		Dispatcher.UIThread.Post(()=>{
++			RefreshByUserCtx(Evt.UserCtx);
++		});
++	}
++
++	protected nil RefreshByUserCtx(IFrontendUserCtx? User = null){
++		if(User is null){
++			if(UserCtxMgr is null){
++				return NIL;
++			}
++			User = UserCtxMgr.GetUserCtx();
+ 		}
+-		var User = UserCtxMgr.GetUserCtx();
+-		if(!User.LoginUserId.IsNullOrDefault()){
++
++		if(User.LoginUserId.IsNullOrDefault()){
++			UserIdRepr = Todo.I18n("Not Logged in");
++		}else{
+ 			UserIdRepr = User.LoginUserId+"";
+ 		}
++		AvatarImg = DfltAvatar.Img;
+ 		return NIL;
+ 	}
+
+
+-	protected str _UserIdRepr = "Not Logged in";//TODO i18n
++	protected str _UserIdRepr = Todo.I18n("Not Logged in");
+ 	public str UserIdRepr{
+ 		get{return _UserIdRepr;}
+ 		set{SetProperty(ref _UserIdRepr, value);}
+diff --git a/proj/Ngaq.Ui/Views/User/Login/ViewLogin.cs b/proj/Ngaq.Ui/Views/User/Login/ViewLogin.cs
+index 623b3ce..fff860a 100644
+--- a/proj/Ngaq.Ui/Views/User/Login/ViewLogin.cs
++++ b/proj/Ngaq.Ui/Views/User/Login/ViewLogin.cs
+@@ -33,8 +33,8 @@ public partial class ViewLogin
+
+
+ 	public ViewLogin(){
+-		Ctx = Ctx.Mk();
+-		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
++		// Ctx由父容器ViewLoginRegister注入，避免登錄與註冊頁分別持有不同Vm實例。
++		Ctx = Ctx.Mk();//前置兜底
+ 		_Style();
+ 		_Render();
+ 	}
+diff --git a/proj/Ngaq.Ui/Views/User/Profile/ViewUserProfile.cs b/proj/Ngaq.Ui/Views/User/Profile/ViewUserProfile.cs
+index 7db7451..fd3e603 100644
+--- a/proj/Ngaq.Ui/Views/User/Profile/ViewUserProfile.cs
++++ b/proj/Ngaq.Ui/Views/User/Profile/ViewUserProfile.cs
+@@ -1,20 +1,20 @@
+ namespace Ngaq.Ui.Views.User.Profile;
+
+ using Avalonia.Controls;
++using Avalonia.Threading;
+ using Avalonia.Media;
+-using Avalonia.Media.Imaging;
+-using Ngaq.Ui.Controls;
++using Ngaq.Ui.Components;
+ using Ngaq.Ui.Infra;
+ using Ngaq.Ui.Infra.Ctrls;
+ using Ngaq.Ui.Tools;
+ using Ngaq.Ui.User;
+-using Ngaq.Ui.Views.User.Login;
+ using Tsinswreng.AvlnTools.Dsl;
+ using Tsinswreng.AvlnTools.Tools;
+ using Tsinswreng.CsI18n;
+ using Ursa.Controls;
+-using Ctx = VmXxx;
++using Ctx = VmUserProfile;
+ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
++using Ngaq.Ui.Icons;
+
+ public partial class ViewUserProfile
+ 	:AppViewBase
+@@ -22,13 +22,41 @@ public partial class ViewUserProfile
+
+ 	public Ctx? Ctx{
+ 		get{return DataContext as Ctx;}
+-		set{DataContext = value;}
++		set{
++			if(ReferenceEquals(DataContext, value)){
++				return;
++			}
++			BindVm(DataContext as Ctx, false);
++			DataContext = value;
++			BindVm(value, true);
++		}
+ 	}
+
+ 	public ViewUserProfile(){
+-		Ctx = Ctx.Mk();
++		Ctx = App.GetRSvc<Ctx>();
+ 		Style();
+ 		Render();
++		DetachedFromVisualTree += (s,e)=>{
++			BindVm(Ctx, false);
++		};
++	}
++
++	protected nil BindVm(Ctx? Vm, bool Enable){
++		if(Vm is null){
++			return NIL;
++		}
++		if(Enable){
++			Vm.OnLogoutSucceeded += HandleLogoutSucceeded;
++		}else{
++			Vm.OnLogoutSucceeded -= HandleLogoutSucceeded;
++		}
++		return NIL;
++	}
++
++	protected void HandleLogoutSucceeded(object? Sender, EvtArgMsg Evt){
++		Dispatcher.UIThread.Post(()=>{
++			ViewNavi?.GoTo(ToolView.WithTitle(I[K.Login], new ViewLoginRegister()));
++		});
+ 	}
+
+ 	public partial class Cls_{
+@@ -83,7 +111,7 @@ public partial class ViewUserProfile
+ 					Sp
+ 						.A(new Button(), o=>{
+ 						o.StretchCenter();
+-						o.Content = I[K.ChangeAccount];
++						o.Content = Svgs.UserSwitch().ToIcon().WithText(I[K.ChangeAccount]);
+ 						o.Click += (s,e)=>{
+ 							ViewNavi?.GoTo(
+ 								ToolView.WithTitle(I[K.ChangeAccount], new ViewLoginRegister())
+@@ -93,7 +121,7 @@ public partial class ViewUserProfile
+ 					.A(new OpBtn(), o=>{
+ 						o._Button.StretchCenter();
+ 						o._Button.Background = Brushes.Red;
+-						o.BtnContent = I[K.Logout];
++						o.BtnContent = Svgs.RegularLogOutCircle().ToIcon().WithText(I[K.Logout]);;
+ 						o.SetExe((Ct)=>Ctx?.LogoutAsy(Ct));
+ 					});
+ 				});
+diff --git a/proj/Ngaq.Ui/Views/User/Profile/VmUserProfile.cs b/proj/Ngaq.Ui/Views/User/Profile/VmUserProfile.cs
+index b3ac133..e18541a 100644
+--- a/proj/Ngaq.Ui/Views/User/Profile/VmUserProfile.cs
++++ b/proj/Ngaq.Ui/Views/User/Profile/VmUserProfile.cs
+@@ -5,16 +5,16 @@ using Ngaq.Core.Models.Sys.Req;
+ using Ngaq.Core.Shared.User.Svc;
+ using Ngaq.Ui.Infra;
+
+-using Ctx = VmXxx;
+-public partial class VmXxx: ViewModelBase{
++using Ctx = VmUserProfile;
++public partial class VmUserProfile: ViewModelBase{
+ 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
+-	protected VmXxx(){}
++	protected VmUserProfile(){}
+ 	public static Ctx Mk(){
+ 		return new Ctx();
+ 	}
+
+ 	public static ObservableCollection<Ctx> Samples = [];
+-	static VmXxx(){
++	static VmUserProfile(){
+ 		#if DEBUG
+ 		{
+ 			var o = new Ctx();
+@@ -25,7 +25,9 @@ public partial class VmXxx: ViewModelBase{
+
+ 	ISvcUser? SvcUser;
+ 	IFrontendUserCtxMgr? UserCtxMgr;
+-	public VmXxx(
++	/// 登出成功後通知View層執行頁面跳轉。
++	public event EventHandler<EvtArgMsg>? OnLogoutSucceeded;
++	public VmUserProfile(
+ 		ISvcUser? SvcUser
+ 		,IFrontendUserCtxMgr? UserCtxMgr
+ 	){
+@@ -51,6 +53,7 @@ public partial class VmXxx: ViewModelBase{
+ 		await Task.Run(async()=>{
+ 			await SvcUser.Logout(User, new ReqLogout{}, Ct);
+ 		});
++		OnLogoutSucceeded?.Invoke(this, new EvtArgMsg());
+ 		return NIL;
+ 	}
+ }
+diff --git a/proj/Ngaq.Ui/Views/User/Register/ViewRegister.cs b/proj/Ngaq.Ui/Views/User/Register/ViewRegister.cs
+index 9f0098c..b325d79 100644
+--- a/proj/Ngaq.Ui/Views/User/Register/ViewRegister.cs
++++ b/proj/Ngaq.Ui/Views/User/Register/ViewRegister.cs
+@@ -26,8 +26,8 @@ public partial class ViewRegister
+ 	}
+
+ 	public ViewRegister(){
++		// Ctx由父容器ViewLoginRegister注入，避免登錄與註冊頁分別持有不同Vm實例。
+ 		Ctx = Ctx.Mk();
+-		//Ctx = App.ServiceProvider.GetRequiredService<Ctx>();
+ 		_Style();
+ 		_Render();
+
+diff --git a/proj/Ngaq.Ui/Views/User/ViewLoginRegister.cs b/proj/Ngaq.Ui/Views/User/ViewLoginRegister.cs
+index 672863b..411bbb9 100644
+--- a/proj/Ngaq.Ui/Views/User/ViewLoginRegister.cs
++++ b/proj/Ngaq.Ui/Views/User/ViewLoginRegister.cs
+@@ -1,7 +1,10 @@
+ namespace Ngaq.Ui.Views.User;
+
+ using Avalonia.Controls;
++using Avalonia.Threading;
+ using Ngaq.Ui.Infra;
++using Ngaq.Ui.Tools;
++using Ngaq.Ui.Views.User.AboutMe;
+ using Ngaq.Ui.Views.User.Login;
+ using Ngaq.Ui.Views.User.Register;
+ using Tsinswreng.CsI18n;
+@@ -14,7 +17,14 @@ public partial class ViewLoginRegister
+
+ 	public Ctx? Ctx{
+ 		get{return DataContext as Ctx;}
+-		set{DataContext = value;}
++		set{
++			if(ReferenceEquals(DataContext, value)){
++				return;
++			}
++			BindVm(DataContext as Ctx, false);
++			DataContext = value;
++			BindVm(value, true);
++		}
+ 	}
+
+ 	public ViewLoginRegister(){
+@@ -22,6 +32,31 @@ public partial class ViewLoginRegister
+ 		Ctx=App.GetRSvc<Ctx>();
+ 		Style();
+ 		Render();
++		DetachedFromVisualTree += (s,e)=>{
++			BindVm(Ctx, false);
++		};
++	}
++
++	protected nil BindVm(Ctx? Vm, bool Enable){
++		if(Vm is null){
++			return NIL;
++		}
++		if(Enable){
++			Vm.OnLoginSucceeded += HandleLoginSucceeded;
++		}else{
++			Vm.OnLoginSucceeded -= HandleLoginSucceeded;
++		}
++		return NIL;
++	}
++
++	protected void HandleLoginSucceeded(object? Sender, EvtArgMsg Evt){
++		Dispatcher.UIThread.Post(()=>{
++			Ctx?.ShowToast(Todo.I18n("Login Succeeded"));
++			if(ViewNavi?.Back() == true){
++				return;
++			}
++			ViewNavi?.GoTo(ToolView.WithTitle("", new ViewAboutMe()));
++		});
+ 	}
+
+ 	public  partial class Cls_{
+diff --git a/proj/Ngaq.Ui/Views/User/VmLoginRegister.cs b/proj/Ngaq.Ui/Views/User/VmLoginRegister.cs
+index 4c504dc..c51a5aa 100644
+--- a/proj/Ngaq.Ui/Views/User/VmLoginRegister.cs
++++ b/proj/Ngaq.Ui/Views/User/VmLoginRegister.cs
+@@ -72,6 +72,9 @@ public partial class VmLoginRegister: ViewModelBase{
+ 			return this;
+ 		}
+
++	/// 登錄成功事件。由View層決定跳轉行爲，避免在Vm層直接操作導航。
++	public event EventHandler<EvtArgMsg>? OnLoginSucceeded;
++
+
+ 	public bool CheckRegister(){
+ 		//TODO 一次校驗多條
+@@ -110,28 +113,47 @@ public partial class VmLoginRegister: ViewModelBase{
+ 		return NIL;
+ 	}
+ 	public async Task<nil> LoginAsy(CT Ct){
++		Msgs.Clear();
++		if(str.IsNullOrWhiteSpace(Email)){
++			AddMsg("Email is empty.");
++			return NIL;
++		}
++		if(str.IsNullOrWhiteSpace(Password)){
++			AddMsg("Password is empty.");
++			return NIL;
++		}
++
+ 		var z = this;
+-		await Task.Run(async()=>{
+-			if(z.UserCtxMgr is null
+-				|| z.SvcUser is null || z.SvcKv is null
+-			){
+-				return;
+-			}
+-			var User = z.UserCtxMgr.GetUserCtx();
++		try{
++			await Task.Run(async()=>{
++				if(z.UserCtxMgr is null
++					|| z.SvcUser is null || z.SvcKv is null
++				){
++					return;
++				}
++				var User = z.UserCtxMgr.GetUserCtx();
++
++				var ClientId = await z.SvcKv.GetByOwnerEtKStr(IdUser.Zero, KeysClientKv.ClientId, Ct);
++				if(ClientId is null){
++					throw new FatalLogicErr("ClientId is null. ClientId should be in Db when App is launched");
++				}
++				var reqLogin = new ReqLogin{
++					Email = Email
++					,Password = Password
++					,KeepLogin = true
++					,UserIdentityMode = ReqLogin.EUserIdentityMode.Email
++					,CliendId = IdClient.FromLow64Base(ClientId.GetVStr()??"")
++				};
++				await z.SvcUser.Login(User, reqLogin, Ct);
++			}, Ct);
++		}
++		catch(Exception Ex){
++			AddMsg(Ex.Message);
++			HandleErr(Ex);
++			return NIL;
++		}
+
+-			var ClientId = await z.SvcKv.GetByOwnerEtKStr(IdUser.Zero, KeysClientKv.ClientId, Ct);
+-			if(ClientId is null){
+-				throw new FatalLogicErr("ClientId is null. ClientId should be in Db when App is launched");
+-			}
+-			var reqLogin = new ReqLogin{
+-				Email = Email
+-				,Password = Password
+-				,KeepLogin = true
+-				,UserIdentityMode = ReqLogin.EUserIdentityMode.Email
+-				,CliendId = IdClient.FromLow64Base(ClientId.GetVStr()??"")
+-			};
+-			await z.SvcUser.Login(User, reqLogin, Ct);
+-		});
++		OnLoginSucceeded?.Invoke(this, new EvtArgMsg());
+ 		return NIL;
+ 	}
+
+diff --git a/proj/Ngaq.Ui/Views/Word/Learn/ViewLearnWords.cs b/proj/Ngaq.Ui/Views/Word/Learn/ViewLearnWords.cs
+index a85d9ce..0ff9b1d 100644
+--- a/proj/Ngaq.Ui/Views/Word/Learn/ViewLearnWords.cs
++++ b/proj/Ngaq.Ui/Views/Word/Learn/ViewLearnWords.cs
+@@ -162,10 +162,12 @@ public partial class ViewLearnWords
+ 				R.Classes.Add(Cls.MenuBtn);
+ 				R._Button.VerticalAlignment = VAlign.Stretch;
+ 				R._Button.VerticalContentAlignment = VAlign.Stretch;
++				R._Button.StretchCenter();
++				R._Button.Background = Brushes.Transparent;
+ 				R.Padding = R._Button.Margin = new Thickness(0);
+ 				return R;
+ 			};
+-			Row1.A(Btn(), (o)=>{
++			Row1.A(Btn(), o=>{
+ 				o._Button.SetContent(Hc(
+ 					Ic(Svgs.PlayCircleFill())//▶️
+ 					,T(I[K.Start])
+diff --git a/proj/Ngaq.Ui/Views/Word/WordEditJsonMap/JnWordToUiJsonMap.cs b/proj/Ngaq.Ui/Views/Word/WordEditJsonMap/JnWordToUiJsonMap.cs
+index 449b84b..8f90703 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordEditJsonMap/JnWordToUiJsonMap.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordEditJsonMap/JnWordToUiJsonMap.cs
+@@ -26,7 +26,7 @@ public class JnWordToUiJsonMap{
+
+ 			u.FnGet = ()=>{
+ 				var v = oldGet();
+-				if(v is Tempus t){
++				if(v is UnixMs t){
+ 					return t.ToIso();
+ 				}
+ 				if(v is IIdUInt128 id){
+@@ -42,8 +42,8 @@ public class JnWordToUiJsonMap{
+ 				if(v is not str s){
+ 					return false;
+ 				}
+-				if( u.Type?.IsAssignableTo(typeof(Tempus))==true ){
+-					return oldSet(Tempus.FromIso(s));
++				if( u.Type?.IsAssignableTo(typeof(UnixMs))==true ){
++					return oldSet(UnixMs.FromIso(s));
+ 				}
+ 				if( u.Type?.IsAssignableTo(typeof(IdWord))==true ){
+ 					return IdWord.FromLow64Base(s);
+diff --git a/proj/Ngaq.Ui/Views/Word/WordEditV2/ViewWordEditV2.cs b/proj/Ngaq.Ui/Views/Word/WordEditV2/ViewWordEditV2.cs
+index a2a4017..f236425 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordEditV2/ViewWordEditV2.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordEditV2/ViewWordEditV2.cs
+@@ -139,11 +139,10 @@ public partial class ViewWordEditV2: AppViewBase{
+ 		sp.A(MkTempusRow(I[K.StoredAt], CBE.Mk<Ctx>(x=>x.StoredAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+ 		sp.A(MkTempusRow(I[K.BizCreatedAt], CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+ 		sp.A(MkTempusRow(I[K.BizUpdatedAt], CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
+-		// DelAt 允許留空表示「未刪除」；不能用 TempusBox，否則空值會被轉成當前時間。
+-		sp.A(MkInputRow(
+-			I[K.DelAtUnixMs],
+-			CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay)
+-		));
++        sp.A(MkTempusRow(
++            Todo.I18n("SoftDeleteTime"),
++            CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay, Converter: _DelAtUnixMsConverter)
++        ));
+ 		return sv;
+ 	}
+
+@@ -228,7 +227,7 @@ public partial class ViewWordEditV2: AppViewBase{
+ 		}
+ 		LearnGridSource = new FlatTreeDataGridSource<VmWordLearnRow>(Ctx.LearnRows){
+ 			Columns = {
+-				new TextColumn<VmWordLearnRow, str>(I[K.NumberSign], x=>GetLearnRowIdxText(x)),
++				new TextColumn<VmWordLearnRow, str>("", x=>GetLearnRowIdxText(x)),
+ 				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultText),
+ 				new TextColumn<VmWordLearnRow, str>(I[K.BizCreatedAt], x=>x.BizCreatedAtDisplay),
+ 			},
+@@ -483,14 +482,14 @@ public partial class ViewWordEditV2: AppViewBase{
+ 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture){
+ 			if(value is str s && !str.IsNullOrWhiteSpace(s)){
+ 				try{
+-					return Tempus.FromIso(s.Trim());
++					return UnixMs.FromIso(s.Trim());
+ 				}catch{}
+ 			}
+-			return Tempus.Now();
++			return UnixMs.Now();
+ 		}
+
+ 		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture){
+-			if(value is Tempus t){
++			if(value is UnixMs t){
+ 				return t.ToIso();
+ 			}
+ 			return "";
+@@ -498,14 +497,19 @@ public partial class ViewWordEditV2: AppViewBase{
+ 	}
+ 	sealed class DelAtUnixMsToTempusConverter: IValueConverter{
+ 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture){
+-			if(value is str s && i64.TryParse(s.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var unixMs)){
+-				return Tempus.FromUnixMs(unixMs);
++			if(value is str s
++				&& i64.TryParse(s.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var unixMs)
++				&& unixMs > 0){
++				return UnixMs.FromUnixMs(unixMs);
+ 			}
+-			return Tempus.Now();
++			return null;
+ 		}
+
+ 		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture){
+-			if(value is Tempus t){
++			if(value is UnixMs t){
++				if(t.Value <= 0){
++					return "";
++				}
+ 				return t.Value.ToString(CultureInfo.InvariantCulture);
+ 			}
+ 			return "";
+@@ -520,3 +524,5 @@ public partial class ViewWordEditV2: AppViewBase{
+
+
+
++
++
+diff --git a/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordEditV2.cs b/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordEditV2.cs
+index 06f05d9..6b3c0c2 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordEditV2.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordEditV2.cs
+@@ -498,7 +498,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
+ 			LastError = "";
+ 			OnPropertyChanged(nameof(HasError));
+ 			IsDirty = false;
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 			ViewNavi?.Back();
+ 		}catch(Exception ex){
+ 			LastError = ex.Message;
+@@ -527,7 +527,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
+ 		Draft.Word.Lang = Lang.Trim();
+
+ 		try{
+-			Draft.Word.StoredAt = Tempus.FromIso(StoredAtIso.Trim());
++			Draft.Word.StoredAt = UnixMs.FromIso(StoredAtIso.Trim());
+ 		}catch{
+ 			Err = I18n[K.StoredAtMustBeIsoTime];
+ 			return false;
+@@ -544,13 +544,13 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
+ 		}
+
+ 		try{
+-			Draft.Word.BizCreatedAt = Tempus.FromIso(BizCreatedAtIso.Trim());
++			Draft.Word.BizCreatedAt = UnixMs.FromIso(BizCreatedAtIso.Trim());
+ 		}catch{
+ 			Err = I18n[K.BizCreatedAtMustBeIsoTime];
+ 			return false;
+ 		}
+ 		try{
+-			Draft.Word.BizUpdatedAt = Tempus.FromIso(BizUpdatedAtIso.Trim());
++			Draft.Word.BizUpdatedAt = UnixMs.FromIso(BizUpdatedAtIso.Trim());
+ 		}catch{
+ 			Err = I18n[K.BizUpdatedAtMustBeIsoTime];
+ 			return false;
+diff --git a/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordLearnRow.cs b/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordLearnRow.cs
+index 06d6160..4c531a7 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordLearnRow.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordEditV2/VmWordLearnRow.cs
+@@ -27,13 +27,13 @@ public partial class VmWordLearnRow: ViewModelBase{
+ 	public str BizCreatedAtIso{
+ 		get{return field;}
+ 		set{SetProperty(ref field, value);}
+-	} = Tempus.Now().ToIso();
++	} = UnixMs.Now().ToIso();
+
+ 	/// 概要表格顯示用時間格式：yy-MM-dd HH:mm:ss。
+ 	public str BizCreatedAtDisplay{
+ 		get{
+ 			try{
+-				var t = Tempus.FromIso(BizCreatedAtIso);
++				var t = UnixMs.FromIso(BizCreatedAtIso);
+ 				var dto = DateTimeOffset.FromUnixTimeMilliseconds(t.Value);
+ 				var local = TimeZoneInfo.ConvertTime(dto, TimeZoneInfo.Local);
+ 				return local.ToString("yy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+@@ -68,7 +68,7 @@ public partial class VmWordLearnRow: ViewModelBase{
+ 		Po.LearnResult = GetLearnResultByIndex(LearnResultIndex);
+
+ 		try{
+-			Po.BizCreatedAt = Tempus.FromIso(BizCreatedAtIso);
++			Po.BizCreatedAt = UnixMs.FromIso(BizCreatedAtIso);
+ 		}catch{
+ 			Err = I18n[K.BizCreatedAtMustBeIsoTime];
+ 			return false;
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/ViewAddWord.cs b/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/ViewAddWord.cs
+index 063571d..21d3a61 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/ViewAddWord.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/ViewAddWord.cs
+@@ -1,278 +1,123 @@
+ namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
+
++using System.ComponentModel;
++using Avalonia;
+ using Avalonia.Controls;
+-using Ctx = VmAddWord;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+-using Microsoft.Extensions.DependencyInjection;
+ using Avalonia.Data;
+-using Avalonia.Styling;
+-using Tsinswreng.AvlnTools.Tools;
+ using Avalonia.Media;
+-using Avalonia;
+-using Avalonia.Controls.Primitives;
+-using Tsinswreng.AvlnTools.Controls;
+-using Tsinswreng.AvlnTools.Dsl;
+-using Ngaq.Ui.Infra.Ctrls;
++using AvaloniaEdit;
++using Microsoft.Extensions.DependencyInjection;
++using Ngaq.Ui;
+ using Ngaq.Ui.Infra;
++using Ngaq.Ui.Infra.Ctrls;
++using Tsinswreng.AvlnTools.Dsl;
++using Tsinswreng.AvlnTools.Tools;
++using Tsinswreng.CsI18n;
++using Ctx = VmAddWord;
++using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+
+ public partial class ViewAddWord
+ 	:AppViewBase
+ {
+-
+ 	public Ctx? Ctx{
+ 		get{return DataContext as Ctx;}
+ 		set{DataContext = value;}
+ 	}
+
+ 	public ViewAddWord(){
+-		//Ctx = new Ctx();
+ 		Ctx = App.SvcProvider.GetRequiredService<Ctx>();
+-
+ 		Style();
+ 		Render();
+-
+-		this.KeyDown += (s,e)=>{
+-			if(e.Key == Avalonia.Input.Key.Escape){
+-
+-			}
+-		};
+ 	}
+
+-	public  partial class Cls_{
+-
+-	}
+-	public Cls_ Cls{get;set;} = new Cls_();
++	TextEditor? WordEditor;
++	bool IsSyncingText = false;
++	AutoGrid Root = new(IsRow:true);
+
+ 	protected nil Style(){
+-		var AcceptReturn = new Style(x=>
+-			x.Is<TextBox>()
+-		);
+-		Styles.Add(AcceptReturn);
+-		{
+-			var o = AcceptReturn;
+-			o.Set(TextBox.AcceptsReturnProperty, true);
+-		}
+-
+-		//Styles.Add(SugarStyle.GridShowLines());
+ 		return NIL;
+ 	}
+
+ 	protected nil Render(){
+-		var Root = new AutoGrid(IsRow:true);
+ 		this.SetContent(Root.Grid, o=>{
+ 			o.RowDefinitions.AddRange([
+-				RowDef(1, GUT.Auto),//Popup
+-				RowDef(1, GUT.Auto),//empty
+-				RowDef(8, GUT.Star),//tab
+-				RowDef(1, GUT.Auto),//Confirm
+-				RowDef(1, GUT.Star),//empty
++				RowDef(2, GUT.Auto),
++				RowDef(8, GUT.Star),
++				RowDef(1, GUT.Auto),
+ 			]);
+ 		});
+-		{{
+
+-			// Root.AddInit(new MsgPopup(), a=>{
+-			// 	var Cfg = UiCfg.Inst;
+-			// 	a._Popup.Width = Cfg.WindowWidth*0.9;
+-			// 	a._Popup.MaxHeight = Cfg.WindowHeight*0.6;
+-			// 	a._BdrBody.MaxHeight = a._Popup.MaxHeight*0.8;
+-			// 	a._Popup.PlacementTarget = Root.Grid;
+-			// 	a._Title.ContentInit(_TextBlock(), t=>{
+-			// 		t.Text = "Error";
+-			// 		t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+-			// 	});
+-			// 	a._CloseBtn.Click += (s,e)=>{
+-			// 		Ctx!.IsShowMsg = false;
+-			// 	};
+-			// 	a._Popup.Bind(
+-			// 		Popup.IsOpenProperty
+-			// 		,CBE.Mk<Ctx>(x=>x.IsShowMsg
+-			// 			,Mode: BindingMode.OneWay
+-			// 		)
+-			// 	);
++		Root
++		.A(MkFormatHint())
++		.A(MkTextEditor())
++		.A(new OpBtn(), o=>{
++			o.BtnContent = I[K.Submit];
++			o.HorizontalAlignment = HAlign.Center;
++			o.HorizontalContentAlignment = HAlign.Center;
++			o.SetExe((Ct)=>Ctx?.Confirm(Ct));
++		});
+
+-			// 	//a._Body.Content = Body;
+-			// 	a._Body.ContentInit(new SelectableTextBlock{}, b=>{
+-			// 		b.TextWrapping = TextWrapping.Wrap;
+-			// 		b.Bind(
+-			// 			TextBlock.TextProperty
+-			// 			,CBE.Mk<Ctx>(x=>x.Msgs
+-			// 				,Converter: new SimpleFnConvtr<ICollection<object?>, str>(y=>{
+-			// 					var ans = string.Join("\n", y);
+-			// 					return ans;
+-			// 				})
+-			// 			)
+-			// 		);
+-			// 	});
+-			// 	a._Border.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
+-			// });
+-			Root.Add();
+-			Root.Add();
+-			Root.A(new TabControl(), Tab=>{
+-				Tab.Bind(
+-					TabControl.SelectedIndexProperty
+-					,CBE.Mk<Ctx>(
+-						x=>x.TabIndex
+-						,Mode: BindingMode.TwoWay
+-					)
+-				);
+-				Tab.Items.A(new TabItem(), o=>{
+-					o.Header = I[K.WordTxtFile];
+-					o.Content = ByFile();
+-				});
+-				Tab.Items.A(new TabItem(), o=>{
+-					o.Header = I[K.JsonsFile];
+-					o.Content = ByJsonFile();
+-				});
+-				Tab.Items.A(new TabItem(), o=>{
+-					o.Header = I[K.Text];
+-					o.Content = ByText();
+-				});
+-				Tab.Items.A(new TabItem(), o=>{
+-					o.Header = I[K.Json];
+-					o.Content = ByJson();
+-				});
+-			});
+-			Root.A(new OpBtn(), o=>{
+-				o.BtnContent = I[K.Submit];
+-				o.HorizontalAlignment = HAlign.Center;
+-				o.HorizontalContentAlignment = HAlign.Center;
+-				o.SetExe((Ct)=>Ctx?.Confirm(Ct));
+-			});
+-		}}//~IndexGrid
+ 		return NIL;
+ 	}
+
+-	Control? ByFile(){
+-		var Ans = new AutoGrid(IsRow:true);
+-		Ans.Grid.RowDefinitions.AddRange([
+-			RowDef(1, GUT.Star),
+-			RowDef(1, GUT.Auto),
+-			RowDef(8, GUT.Star),
+-		]);
+-		{{
+-			Ans.Add();
+-
+-			var Path = new AutoGrid(IsRow:false);
+-			Ans.A(Path.Grid, o=>{
+-				o.ColumnDefinitions.AddRange([
+-					ColDef(2, GUT.Auto),
+-					ColDef(8, GUT.Star),
+-				]);
+-			});
+-			{{
+-				Path.A(new Button(), o=>{
+-					o.Content = I[K.Browse];
+-					o.HorizontalAlignment = HAlign.Stretch;
+-					o.HorizontalContentAlignment = HAlign.Stretch;
+-					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色�?
+-					o.BorderThickness = new Thickness(1);
+-					o.Bind(
+-						Button.BorderBrushProperty
+-						,o.GetObservable(Button.BackgroundProperty)
+-					);
+-					//o.UseLayoutRounding = true;
+-				});
+-				Path.A(new TextBox(), o=>{
+-					o.HorizontalAlignment = HAlign.Stretch;
+-					o.Bind(
+-						o.PropText
+-						,new CBE(CBE.Pth<Ctx>(x=>x.WordTxtPath)){Mode=BindingMode.TwoWay}
+-					);
+-				});
+-
+-			}}
+-			Ans.Add();
+-
+-		}}
+-		return Ans.Grid;
+-	}
+-
+-	Control? ByJsonFile(){
+-		var Ans = new AutoGrid(IsRow:true);
+-		Ans.Grid.RowDefinitions.AddRange([
+-			RowDef(1, GUT.Star),
+-			RowDef(1, GUT.Auto),
+-			RowDef(8, GUT.Star),
+-		]);
+-		{{
+-			Ans.Add();
+-
+-			var Path = new AutoGrid(IsRow:false);
+-			Ans.A(Path.Grid, o=>{
+-				o.ColumnDefinitions.AddRange([
+-					ColDef(2, GUT.Auto),
+-					ColDef(8, GUT.Star),
+-				]);
+-			});
+-			{{
+-				Path.A(new Button(), o=>{
+-					o.Content = "Browse";
+-					o.HorizontalAlignment = HAlign.Stretch;
+-					o.HorizontalContentAlignment = HAlign.Stretch;
+-					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色�?
+-					o.BorderThickness = new Thickness(1);
+-					o.Bind(
+-						Button.BorderBrushProperty
+-						,o.GetObservable(Button.BackgroundProperty)
+-					);
+-					//o.UseLayoutRounding = true;
+-				});
+-				Path.A(new TextBox(), o=>{
+-					o.HorizontalAlignment = HAlign.Stretch;
+-					o.Bind(
+-						o.PropText
+-						,new CBE(CBE.Pth<Ctx>(x=>x.WordJsonsPath)){Mode=BindingMode.TwoWay}
+-					);
+-				});
+-
+-			}}
+-			Ans.Add();
+-
+-		}}
+-		return Ans.Grid;
+-	}
+-
+-
+-	Control? ByText(){
+-		var Ans = new AutoGrid(IsRow:true);
+-		Ans.Grid.RowDefinitions.AddRange([
+-			RowDef(1, GUT.Star),
+-			RowDef(8, GUT.Star),
+-			RowDef(1, GUT.Star),
+-		]);
+-
+-		Ans.Add();
+-
+-		Ans.A(new TextBox(), o=>{
+-			o.Bind(
+-				o.PropText
+-				,new CBE(CBE.Pth<Ctx>(x=>x.Text)){Mode=BindingMode.TwoWay}
+-			);
++	Control MkFormatHint(){
++		var sp = new StackPanel{
++			Spacing = 4,
++			Margin = new Thickness(10, 10, 10, 6),
++		};
++		sp.A(new TextBlock(), o=>{
++			o.Text = Todo.I18n("FormatHint");
++			o.FontSize = UiCfg.Inst.BaseFontSize * 1.05;
++			o.TextWrapping = TextWrapping.Wrap;
++			o.Foreground = Brushes.LightGray;
++		})
++		.A(new TextBlock(), o=>{
++			o.Text = Todo.I18n("One entry per line; empty lines are ignored.");
++			o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
++			o.TextWrapping = TextWrapping.Wrap;
++			o.Foreground = Brushes.LightGray;
++		})
++		.A(new TextBlock(), o=>{
++			o.Text = Todo.I18n("Example: word<space>description");
++			o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
++			o.TextWrapping = TextWrapping.Wrap;
++			o.Foreground = Brushes.LightGray;
+ 		});
+-
+-		Ans.Add();
+-
+-		return Ans.Grid;
++		return sp;
+ 	}
+
+-	Control? ByJson(){
+-		var R = new AutoGrid(IsRow:true);
+-		R.Grid.RowDefinitions.AddRange([
+-			RowDef(1, GUT.Star),
+-			RowDef(8, GUT.Star),
+-			RowDef(1, GUT.Star),
+-		]);
+-
+-		R.Add();
+-
+-		R.A(new TextBox(), o=>{
+-			o.Bind(
+-				o.PropText
+-				,new CBE(CBE.Pth<Ctx>(x=>x.Json)){Mode=BindingMode.TwoWay}
+-			);
+-		});
++	Control MkTextEditor(){
++		var editor = JsonTextEditorCtrl.Mk(Ctx?.Text, IsReadOnly: false, MinHeight: 320);
++		WordEditor = editor;
++		editor.TextChanged += (s,e)=>{
++			if(IsSyncingText || Ctx is null){
++				return;
++			}
++			IsSyncingText = true;
++			Ctx.Text = editor.Text;
++			IsSyncingText = false;
++		};
++		if(Ctx is not null){
++			Ctx.PropertyChanged += OnVmPropertyChanged;
++		}
++		DetachedFromVisualTree += (s,e)=>{
++			if(Ctx is not null){
++				Ctx.PropertyChanged -= OnVmPropertyChanged;
++			}
++		};
++		editor.Margin = new Thickness(10, 0, 10, 10);
++		return editor;
++	}
+
+-		R.Add();
+-		return R.Grid;
++	void OnVmPropertyChanged(object? Sender, PropertyChangedEventArgs E){
++		if(E.PropertyName != nameof(Ctx.Text) || WordEditor is null || Ctx is null || IsSyncingText){
++			return;
++		}
++		if(WordEditor.Text == Ctx.Text){
++			return;
++		}
++		IsSyncingText = true;
++		WordEditor.Text = Ctx.Text;
++		IsSyncingText = false;
+ 	}
+ }
+-
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/VmAddWord.cs b/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/VmAddWord.cs
+index 6b971d5..aaf97dd 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/VmAddWord.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/AddWord/VmAddWord.cs
+@@ -1,20 +1,18 @@
+ namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
+
+ using System.Collections.ObjectModel;
+-using System.Runtime.CompilerServices;
+ using MethodTimer;
+ using Ngaq.Core.Frontend.User;
+-using Ngaq.Core.Shared.Word.Models;
+ using Ngaq.Core.Shared.Word.Svc;
+-using Ngaq.Core.Tools;
+ using Ngaq.Ui.Infra;
+-
++using Tsinswreng.CsI18n;
++using Tsinswreng.CsTools;
+
+ using Ctx = VmAddWord;
++
+ public partial class VmAddWord
+ 	:ViewModelBase
+ {
+-
+ 	public VmAddWord(){
+
+ 	}
+@@ -23,117 +21,54 @@ public partial class VmAddWord
+ 		ISvcWord? SvcWord = null
+ 		,IFrontendUserCtxMgr? UserCtxMgr = null
+ 	){
+-		this.SvcWord = SvcWord!;
+-		this.UserCtxMgr = UserCtxMgr!;
++		this.SvcWord = SvcWord;
++		this.UserCtxMgr = UserCtxMgr;
+ 	}
+
+-	ISvcWord SvcWord{get;set;} = null!;
+-	IFrontendUserCtxMgr UserCtxMgr{get;set;} = null!;
++	ISvcWord? SvcWord{get;set;}
++	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
+
+ 	public static ObservableCollection<Ctx> Samples = [];
+ 	static VmAddWord(){
++		#if DEBUG
+ 		{
+ 			var o = new Ctx();
++			o.Text = "hello\\ndictionary\\nexample";
+ 			Samples.Add(o);
+-
+ 		}
++		#endif
+ 	}
+
+-	protected str _WordTxtPath = "";
+-	public str WordTxtPath{
+-		get{return _WordTxtPath;}
+-		set{SetProperty(ref _WordTxtPath, value);}
+-	}
+-
+-	protected str _WordJsonsPath = "";
+-	public str WordJsonsPath{
+-		get{return _WordJsonsPath;}
+-		set{SetProperty(ref _WordJsonsPath, value);}
+-	}
+-
+-	protected str _Text = "";
+ 	public str Text{
+-		get{return _Text;}
+-		set{SetProperty(ref _Text, value);}
+-	}
+-
+-	protected str _Json = "";
+-	public str Json{
+-		get{return _Json;}
+-		set{SetProperty(ref _Json, value);}
+-	}
+-
+-	protected i32 _TabIndex = 0;
+-	public i32 TabIndex{
+-		get{return _TabIndex;}
+-		set{SetProperty(ref _TabIndex, value);}
+-	}
+-
+-	public enum ETabIdx{
+-		TxtPath = 0,
+-		JsonsPath=1,
+-		Text = 2,
+-		Json = 3,
+-	}
+-
++		get{return field;}
++		set{SetProperty(ref field, value);}
++	} = "";
+
+-	protected str _ErrStr="";//t
+ 	public str ErrStr{
+-		get{return _ErrStr;}
+-		set{SetProperty(ref _ErrStr, value);}
+-	}
+-
++		get{return field;}
++		set{SetProperty(ref field, value);}
++	} = "";
+
+ 	[Time]
+ 	public async Task<nil> Confirm(CT Ct){
+-		if(SvcWord is null){
++		if(AnyNull(SvcWord, UserCtxMgr)){
+ 			return NIL;
+ 		}
+-		var UserCtx = UserCtxMgr.GetUserCtx();
+-
+-		var eTabIdx = (ETabIdx)TabIndex;
+-
+-		await Task.Run(async()=>{
+-			if(
+-				eTabIdx == ETabIdx.Text
+-				&& !str.IsNullOrEmpty(Text)
+-			){
+-				await SvcWord.AddWordsFromText(
+-					UserCtx,Text,Ct
+-				);
+-			}else if(
+-				eTabIdx == ETabIdx.Json
+-				&& !str.IsNullOrEmpty(Json)
+-			){
+-				var JnWords = JSON.Parse<IList<JnWord>>(Json);// 測AOT兼容
+-				if(JnWords == null){
+-					HandleErr("Json parse error.");//TODO i18n
+-					// ErrStr = "Json parse error.";
+-					// ShowMsg();
+-					return;
+-				}
+-				await SvcWord.AddEtMergeWords(UserCtx,JnWords,Ct);
+-			}else if(
+-				eTabIdx == ETabIdx.JsonsPath
+-				&& !str.IsNullOrEmpty(WordJsonsPath)
+-			){
+-				var Enumr = ReadLinesAsync(WordJsonsPath, Ct);
+-				await SvcWord.AddWordsByJsonLineIter(UserCtx, Enumr, Ct);
+-			}
+-		});
+-		return NIL;
+-	}
+-
+-	public static async IAsyncEnumerable<string> ReadLinesAsync(
+-		string path,
+-		[EnumeratorCancellation] CancellationToken Ct = default
+-	){
+-		using var sr = new StreamReader(path);   // 默认 UTF-8，可带编码参数
+-		string? line;
+-		while ((line = await sr.ReadLineAsync().ConfigureAwait(false)) != null){
+-			Ct.ThrowIfCancellationRequested();
+-			yield return line;
++		if(str.IsNullOrWhiteSpace(Text)){
++			ShowDialog(Todo.I18n("Text is empty"));
++			return NIL;
+ 		}
++		try{
++			await SvcWord.AddWordsFromText(
++				UserCtxMgr.GetUserCtx(),
++				Text,
++				Ct
++			);
++			ShowToast(Todo.I18n("Submitted"));
++		}catch(Exception ex){
++			ErrStr = ex.Message;
++			HandleErr(ex);
++		}
++		return NIL;
+ 	}
+ }
+-
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangEdit/VmNormLangEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangEdit/VmNormLangEdit.cs
+index 2a5d1e0..ff93fa8 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangEdit/VmNormLangEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangEdit/VmNormLangEdit.cs
+@@ -65,7 +65,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
+ 		.Select(x=>x.ToString())
+ 		.ToList();
+
+-	public bool ShowTypeField => TypeOptions.Count > 1;
++	public bool ShowTypeField => true;
+
+ 	public str PoIdText{
+ 		get{return field;}
+@@ -150,7 +150,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
+ 			SyncFromPo();
+ 			LastError = "";
+ 			OnPropertyChanged(nameof(HasError));
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 		}catch(Exception e){
+ 			LastError = e.Message;
+ 			OnPropertyChanged(nameof(HasError));
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/ViewNormLangPage.cs b/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/ViewNormLangPage.cs
+index 7744168..d3ef487 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/ViewNormLangPage.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/ViewNormLangPage.cs
+@@ -141,8 +141,8 @@ public partial class ViewNormLangPage
+ 			Columns = {
+ 				new TextColumn<Ctx.RowNormLang, str>("", x=>x.UiIdxText),
+ 				new TextColumn<Ctx.RowNormLang, str>(I[K.Code], x=>x.Code),
+-				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName),
+ 				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("TranslatedName"), x=>x.TranslatedName),
++				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName),
+ 			},
+ 		};
+ 		Grid.Source = GridSource;
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/VmNormLangPage.cs b/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/VmNormLangPage.cs
+index e176ac5..5edd0a7 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/VmNormLangPage.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/NormLang/NormLangPage/VmNormLangPage.cs
+@@ -194,6 +194,11 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
+ 		if(IsSelectMode){
+ 			if(Row?.Raw is not null){
+ 				FnOnSelected?.Invoke(Row.Raw);
++				return NIL;
++			}
++			// 選擇模式下仍允許從「新增」按鈕進入詳情頁創建語言。
++			if(Row is null){
++				OnOpenDetailRequested?.Invoke(null);
+ 			}
+ 			return NIL;
+ 		}
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/ViewNormLangToUserLangEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/ViewNormLangToUserLangEdit.cs
+index 7bfb502..a46ecac 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/ViewNormLangToUserLangEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/ViewNormLangToUserLangEdit.cs
+@@ -163,7 +163,7 @@ public partial class ViewNormLangToUserLangEdit
+ 			tb.Bind(TextBox.TextProperty, Binding);
+ 		})
+ 		.A(new Button(), o=>{
+-			o.Content = Svgs.Search().ToIcon().WithText(I[K.Pick]);
++			o.Content = Svgs.ListSelect().ToIcon().WithText(I[K.Pick]);
+ 			o.Click += (s,e)=>OnPick();
+ 		});
+ 		root.Children.Add(row.Grid);
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/VmNormLangToUserLangEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/VmNormLangToUserLangEdit.cs
+index 673cca8..afb86ed 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/VmNormLangToUserLangEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangEdit/VmNormLangToUserLangEdit.cs
+@@ -60,7 +60,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
+ 		.Select(x=>x.ToString())
+ 		.ToList();
+
+-	public bool ShowNormLangTypeField => NormLangTypeOptions.Count > 1;
++	public bool ShowNormLangTypeField => true;
+
+ 	public str PoIdText{
+ 		get{return field;}
+@@ -155,7 +155,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
+ 			};
+ 			IsCreateMode = true;
+ 			SyncFromPo();
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 		}catch(Exception e){
+ 			HandleErr(e);
+ 		}
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangPage/ViewNormLangToUserLangPage.cs b/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangPage/ViewNormLangToUserLangPage.cs
+index 9f4c716..cc4d162 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangPage/ViewNormLangToUserLangPage.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/NormLangToUserLang/NormLangToUserLangPage/ViewNormLangToUserLangPage.cs
+@@ -138,10 +138,8 @@ public partial class ViewNormLangToUserLangPage
+ 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>(Ctx.Rows){
+ 			Columns = {
+ 				new TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText),
+-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLangType], x=>x.NormLangType),
+ 				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang),
+ 				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang),
+-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.Descr], x=>x.Descr),
+ 				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
+ 			},
+ 		};
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/ViewStatistics.cs b/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/ViewStatistics.cs
+index 96c39a5..f7417e8 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/ViewStatistics.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/ViewStatistics.cs
+@@ -172,8 +172,10 @@ public partial class ViewStatistics: AppViewBase{
+ 		// 統一套用黑底白字主題，避免刷新後回到默認配色。
+ 		o.Plot.FigureBackground.Color = ScottPlot.Colors.Black;
+ 		o.Plot.DataBackground.Color = ScottPlot.Colors.Black;
++		var frameColor = ScottPlot.Colors.Gray;
+ 		o.Plot.Axes.Color(ScottPlot.Colors.White);
+-		o.Plot.Grid.MajorLineColor = ScottPlot.Colors.Gray;
++		o.Plot.Axes.FrameColor(frameColor);
++		o.Plot.Grid.MajorLineColor = frameColor;
+ 		o.Plot.Grid.MajorLineWidth = 0.5f;
+
+ 		o.Plot.Clear();
+@@ -187,12 +189,13 @@ public partial class ViewStatistics: AppViewBase{
+ 			double ms = Ctx.Points[i].X;
+ 			var dt = DateTimeOffset.FromUnixTimeMilliseconds((long)ms);
+ 			tickPositions.Add(ms);
+-			tickLabels.Add(dt.ToString("MM-dd"));
++			tickLabels.Add(dt.ToString("yy-MM-dd"));
+ 		}
+
+ 		o.Plot.Axes.Bottom.TickGenerator =
+ 			new ScottPlot.TickGenerators.NumericManual(tickPositions.ToArray(), tickLabels.ToArray());
+-		o.Plot.Axes.Bottom.TickLabelStyle.Rotation = 90;
++		o.Plot.Axes.Bottom.TickLabelStyle.Rotation = 60;
++		//o.Plot.Axes.Bottom.MinimumSize = 96;
+
+ 		for(i32 i = 0; i < Ctx.Points.Count; i++){
+ 			var p = Ctx.Points[i];
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/VmStatistics.cs b/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/VmStatistics.cs
+index b821208..7385609 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/VmStatistics.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/Statistics/VmStatistics.cs
+@@ -12,12 +12,13 @@ using ScottPlot;
+ using Tsinswreng.CsCore;
+ using Tsinswreng.CsPage;
+ using Tsinswreng.CsTempus;
++using Tsinswreng.CsI18n;
+ using Ctx = VmStatistics;
+
+ public partial class VmStatistics: ViewModelBase{
+ 	void Init(){
+ 		PageBar = VmPageBar.Mk();
+-		PageBar.PageSize = 20;
++		PageBar.PageSize = 10;
+ 		PageBar.FnPrevPage = OnPrevPage;
+ 		PageBar.FnNextPage = OnNextPage;
+ 	}
+@@ -75,15 +76,15 @@ public partial class VmStatistics: ViewModelBase{
+ 		set{PageBar.PageSize = value;}
+ 	}
+
+-	public Tempus TimeStart{
++	public UnixMs TimeStart{
+ 		get{return field;}
+ 		set{SetProperty(ref field, value);}
+-	}=Tempus.FromDateTime(DateTime.Now.AddMonths(-2));
++	}=UnixMs.FromDateTime(DateTime.Now.AddMonths(-2));
+
+-	public Tempus TimeEnd{
++	public UnixMs TimeEnd{
+ 		get{return field;}
+ 		set{SetProperty(ref field, value);}
+-	}=new Tempus();
++	}=new UnixMs();
+
+ 	public i64 IntervalNoUnit{
+ 		get{return field;}
+@@ -103,15 +104,21 @@ public partial class VmStatistics: ViewModelBase{
+ 		}
+ 	}=ETimeUnit.Week;
+
+-	public Tempus TimeInterval{
++	public UnixMs TimeInterval{
+ 		get{return ValueUnitToTempus(IntervalNoUnit, IntervalUnit);}
+ 		//set{SetProperty(ref field, value);}
+ 	}
+
+-	public static IReadOnlyList<str> LearnResultOptions{get;} = [
+-		nameof(ELearn.Add),
+-		nameof(ELearn.Rmb),
+-		nameof(ELearn.Fgt),
++	static readonly IReadOnlyList<ELearn> LearnResultValues = [
++		ELearn.Add,
++		ELearn.Rmb,
++		ELearn.Fgt,
++	];
++
++	public IReadOnlyList<str> LearnResultOptions => [
++		Todo.I18n(nameof(ELearn.Add)),
++		Todo.I18n(nameof(ELearn.Rmb)),
++		Todo.I18n(nameof(ELearn.Fgt)),
+ 	];
+
+ 	public i32 LearnResultIndex{
+@@ -138,28 +145,24 @@ public partial class VmStatistics: ViewModelBase{
+ 	// 	set{SetProperty(ref field, value);}
+ 	// }=[];
+
+-	public static Tempus ValueUnitToTempus(i64 Value, ETimeUnit Unit){
++	public static UnixMs ValueUnitToTempus(i64 Value, ETimeUnit Unit){
+ 		return Unit switch{
+-			ETimeUnit.Second => new Tempus(Value*InMillisecond.Second),
+-			ETimeUnit.Minute => new Tempus(Value*InMillisecond.Minute),
+-			ETimeUnit.Hour => new Tempus(Value*InMillisecond.Hour),
+-			ETimeUnit.Day => new Tempus(Value*InMillisecond.Day),
+-			ETimeUnit.Week => new Tempus(Value*InMillisecond.Week),
+-			ETimeUnit.Month => new Tempus(Value*InMillisecond.Month),
+-			ETimeUnit.Year => new Tempus(Value*InMillisecond.Year),
++			ETimeUnit.Second => new UnixMs(Value*InMillisecond.Second),
++			ETimeUnit.Minute => new UnixMs(Value*InMillisecond.Minute),
++			ETimeUnit.Hour => new UnixMs(Value*InMillisecond.Hour),
++			ETimeUnit.Day => new UnixMs(Value*InMillisecond.Day),
++			ETimeUnit.Week => new UnixMs(Value*InMillisecond.Week),
++			ETimeUnit.Month => new UnixMs(Value*InMillisecond.Month),
++			ETimeUnit.Year => new UnixMs(Value*InMillisecond.Year),
+ 			_ => throw new Exception("Invalid TimeUnit"),
+ 		};
+ 	}
+
+ 	static ELearn GetLearnResultByIndex(i32 Index){
+-		if(Index < 0 || Index >= LearnResultOptions.Count){
++		if(Index < 0 || Index >= LearnResultValues.Count){
+ 			return ELearn.Add;
+ 		}
+-		var text = LearnResultOptions[Index];
+-		if(Enum.TryParse<ELearn>(text, out var parsed)){
+-			return parsed;
+-		}
+-		return ELearn.Add;
++		return LearnResultValues[Index];
+ 	}
+
+ 	public List<Coordinates> Points{
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/ViewFilterItemEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/ViewFilterItemEdit.cs
+index 1a66ce7..62bf76f 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/ViewFilterItemEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/ViewFilterItemEdit.cs
+@@ -12,9 +12,7 @@ using Tsinswreng.AvlnTools.Tools;
+
+ using Ctx = VmFilterItemEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+
+-/// <summary>
+ /// View for editing a single FilterItem.
+-/// </summary>
+ public class ViewFilterItemEdit: AppViewBase{
+ 	public Ctx? Ctx{
+ 		get{return DataContext as Ctx;}
+@@ -75,8 +73,8 @@ public class ViewFilterItemEdit: AppViewBase{
+ 			ColDef(1, GUT.Star),
+ 		]);
+ 		g.A(new Button(), o=>{
+-			o.Content = I[K.Back];
+-			o.Click += (s,e)=>ViewNavi?.Back();
++			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddItem]);
++			o.Click += (s,e)=>Ctx?.AddItem();
+ 		});
+ 		g.A(new Button(), o=>{
+ 			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
+@@ -84,6 +82,7 @@ public class ViewFilterItemEdit: AppViewBase{
+ 			o.Click += (s,e)=>Ctx?.Delete();
+ 		});
+ 		g.A(new Button(), o=>{
++			o.HorizontalContentAlignment = HAlign.Center;
+ 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
+ 			o.Background = UiCfg.Inst.MainColor;
+ 			o.Click += (s,e)=>Ctx?.Save();
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/VmFilterItemEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/VmFilterItemEdit.cs
+index b11b2c7..1ed4242 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/VmFilterItemEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/FilterItemEdit/VmFilterItemEdit.cs
+@@ -79,6 +79,16 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
+ 		ViewNavi?.Back();
+ 		return NIL;
+ 	}
++
++	public nil AddItem(){
++		if(Owner is null){
++			ShowDialog(I18n[K.EditorNotReady]);
++			return NIL;
++		}
++		Owner.AddItem();
++		ViewNavi?.Back();
++		return NIL;
++	}
+ }
+
+
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/ViewFieldsFilterCardEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/ViewFieldsFilterCardEdit.cs
+index 9df28aa..901fa8e 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/ViewFieldsFilterCardEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/ViewFieldsFilterCardEdit.cs
+@@ -13,15 +13,15 @@ using Avalonia.Styling;
+ using Ngaq.Ui;
+ using Ngaq.Ui.Icons;
+ using Ngaq.Ui.Infra;
++using Ngaq.Ui.Tools;
+ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
+ using Tsinswreng.AvlnTools.Dsl;
+ using Tsinswreng.AvlnTools.Tools;
+
+ using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+
+-/// <summary>
++
+ /// Editor view for a single fields-filter group.
+-/// </summary>
+ public class ViewFieldsFilterCardEdit: AppViewBase{
+ 	public Ctx? Ctx{
+ 		get{return DataContext as Ctx;}
+@@ -150,7 +150,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
+ 		}
+ 		ItemGridSource = new FlatTreeDataGridSource<Ctx.RowFilterItemCard>(Ctx.ItemCards){
+ 			Columns = {
+-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.NumberSign], x=>x.UiIdxText),
++				new TextColumn<Ctx.RowFilterItemCard, str>("", x=>x.UiIdxText),
+ 				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Operation], x=>x.Operation),
+ 				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.ValueType], x=>x.ValueType),
+ 				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Values], x=>x.ValuesPreview),
+@@ -187,13 +187,16 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
+ 			ColDef(1, GUT.Star),
+ 		]);
+ 		g.A(new Button(), o=>{
+-			o.Content = I[K.Back];
+-			o.Click += (s,e)=>ViewNavi?.Back();
++			o.HorizontalContentAlignment = HAlign.Center;
++			o.Background = UiCfg.Inst.DelBtnBg;
++			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
++			o.Click += (s,e)=>Ctx?.Delete();
+ 		});
+ 		g.A(new Button(), o=>{
+ 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveGroup]);
+ 			o.Background = UiCfg.Inst.MainColor;
+ 			o.Click += (s,e)=>Ctx?.Save();
++			o.StretchCenter();
+ 		});
+ 		return g.Grid;
+ 	}
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/VmFieldsFilterCardEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/VmFieldsFilterCardEdit.cs
+index c832d35..92cf337 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/VmFieldsFilterCardEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/FieldsFilterCardEdit/VmFieldsFilterCardEdit.cs
+@@ -183,6 +183,22 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
+ 		return NIL;
+ 	}
+
++	public nil Delete(){
++		if(Target is null || Owner is null){
++			ShowDialog(I18n[K.EditorNotReady]);
++			return NIL;
++		}
++		if(IsCore){
++			Owner.CoreFilterRows.Remove(Target);
++		}else{
++			Owner.PropFilterRows.Remove(Target);
++		}
++		Owner.RefreshFieldsFilterCards();
++		ShowToast(I18n[K.Deleted]);
++		ViewNavi?.Back();
++		return NIL;
++	}
++
+ 	public i32 ToOperationOptionIndex(i32 rawIndex){
+ 		for(i32 i = 0; i < OperationRawIndices.Count; i++){
+ 			if(OperationRawIndices[i] == rawIndex){
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterDataEdit/ViewPreFilterDataEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterDataEdit/ViewPreFilterDataEdit.cs
+index e1da39a..09be502 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterDataEdit/ViewPreFilterDataEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterDataEdit/ViewPreFilterDataEdit.cs
+@@ -51,16 +51,25 @@ public class ViewPreFilterDataEdit: AppViewBase{
+ 	}
+
+ 	Control MkBody(){
+-		var sv = new ScrollViewer();
+-		var root = new StackPanel{
+-			Spacing = 10,
+-			Margin = new Thickness(10),
++		var root = new AutoGrid(IsRow:true);
++		root.Grid.RowDefinitions.AddRange([
++			RowDef(1, GUT.Auto),
++			RowDef(1, GUT.Star),
++		]);
++		root.A(MkErrorBar());
++		var tabs = new TabControl{
++			Margin = new Thickness(10, 8, 10, 10),
+ 		};
+-		sv.Content = root;
+-		root.Children.Add(MkErrorBar());
+-		root.Children.Add(MkFieldsFilterGridSection(true));
+-		root.Children.Add(MkFieldsFilterGridSection(false));
+-		return sv;
++		tabs.Items.Add(new TabItem{
++			Header = I[K.CoreFilter],
++			Content = MkFieldsFilterGridSection(true),
++		});
++		tabs.Items.Add(new TabItem{
++			Header = I[K.PropFilter],
++			Content = MkFieldsFilterGridSection(false),
++		});
++		root.A(tabs);
++		return root.Grid;
+ 	}
+
+ 	void InitVisualGridSource(){
+@@ -80,9 +89,9 @@ public class ViewPreFilterDataEdit: AppViewBase{
+ 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(ObservableCollection<Ctx.RowFieldsFilterCard> Rows){
+ 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(Rows){
+ 			Columns = {
+-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.NumberSign], x=>x.UiIdxText),
+-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Fields], x=>x.FieldsPreview),
++				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText),
+ 				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
++				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview),
+ 			},
+ 		};
+ 	}
+@@ -196,15 +205,9 @@ public class ViewPreFilterDataEdit: AppViewBase{
+
+ 	Control MkBottomBar(){
+ 		var g = new AutoGrid(IsRow:false);
+-		g.Grid.ColumnDefinitions.AddRange([
+-			ColDef(1, GUT.Star),
+-			ColDef(1, GUT.Star),
+-		]);
+-		g.A(new Button(), o=>{
+-			o.Content = I[K.Back];
+-			o.Click += (s,e)=>ViewNavi?.Back();
+-		});
++		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
+ 		g.A(new Button(), o=>{
++			o.HorizontalContentAlignment = HAlign.Center;
+ 			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveDraft]);
+ 			o.Background = UiCfg.Inst.MainColor;
+ 			o.Click += (s,e)=>{
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/ViewPreFilterJsonEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/ViewPreFilterJsonEdit.cs
+index db5b69a..22b1520 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/ViewPreFilterJsonEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/ViewPreFilterJsonEdit.cs
+@@ -71,16 +71,16 @@ public class ViewPreFilterJsonEdit: AppViewBase{
+ 			o.Content = I[K.Back];
+ 			o.Click += (s,e)=>ViewNavi?.Back();
+ 		});
+-		g.A(new OpBtn(), o=>{
+-			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
+-			o._Button.Background = UiCfg.Inst.MainColor;
+-			o.SetExe((Ct)=>Ctx?.Save(Ct));
+-		});
+ 		g.A(new OpBtn(), o=>{
+ 			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
+ 			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+ 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
+ 		});
++		g.A(new OpBtn(), o=>{
++			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
++			o._Button.Background = UiCfg.Inst.MainColor;
++			o.SetExe((Ct)=>Ctx?.Save(Ct));
++		});
+ 		return g.Grid;
+ 	}
+
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/VmPreFilterJsonEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/VmPreFilterJsonEdit.cs
+index 499a318..4948551 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/VmPreFilterJsonEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterJsonEdit/VmPreFilterJsonEdit.cs
+@@ -121,7 +121,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
+ 			PoPreFilterJson = "";
+ 			LastError = "";
+ 			OnPropertyChanged(nameof(HasError));
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 		}catch(Exception e){
+ 			HandleErr(e);
+ 		}
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/ViewPreFilterVisualEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/ViewPreFilterVisualEdit.cs
+index a820ca5..244e5b6 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/ViewPreFilterVisualEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/ViewPreFilterVisualEdit.cs
+@@ -3,9 +3,14 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualE
+ using System.Collections.Generic;
+ using Avalonia;
+ using Avalonia.Controls;
++using Avalonia.Controls.Models.TreeDataGrid;
++using Avalonia.Controls.Primitives;
+ using Avalonia.Data;
++using Avalonia.Input;
++using Avalonia.Interactivity;
+ using Avalonia.Layout;
+ using Avalonia.Media;
++using Avalonia.Styling;
+ using Ngaq.Ui;
+ using Ngaq.Ui.Icons;
+ using Ngaq.Ui.Infra;
+@@ -16,7 +21,7 @@ using Tsinswreng.AvlnTools.Tools;
+ using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+
+ /// PreFilter GUI 主頁。
+-/// 僅顯示 Po 主信息 + Text 預覽，並提供跳轉到子編輯頁和 JSON 編輯頁。
++/// 顯示 Po 主信息與內嵌的篩選器編輯表格。
+ public class ViewPreFilterVisualEdit: AppViewBase{
+ 	public Ctx? Ctx{
+ 		get{return DataContext as Ctx;}
+@@ -26,9 +31,14 @@ public class ViewPreFilterVisualEdit: AppViewBase{
+ 	public ViewPreFilterVisualEdit(){
+ 		Ctx = App.DiOrMk<Ctx>();
+ 		Render();
++		InitVisualGridSource();
+ 	}
+
+ 	AutoGrid Root = new(IsRow: true);
++	TreeDataGrid? CoreGrid;
++	TreeDataGrid? PropGrid;
++	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? CoreGridSource;
++	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? PropGridSource;
+ 	protected nil Render(){
+ 		Content = Root.Grid;
+ 		Root.Grid.RowDefinitions.AddRange([
+@@ -41,16 +51,16 @@ public class ViewPreFilterVisualEdit: AppViewBase{
+ 	}
+
+ 	Control MkBody(){
+-		var sv = new ScrollViewer();
+-		var root = new StackPanel{
+-			Spacing = 10,
+-			Margin = new Thickness(10),
+-		};
+-		sv.Content = root;
+-		root.Children.Add(MkErrorBar());
+-		root.Children.Add(MkPoSection());
+-		root.Children.Add(MkTextSection());
+-		return sv;
++		var root = new AutoGrid(IsRow:true);
++		root.Grid.RowDefinitions.AddRange([
++			RowDef(1, GUT.Auto),
++			RowDef(1, GUT.Auto),
++			RowDef(1, GUT.Star),
++		]);
++		root.A(MkErrorBar());
++		root.A(MkPoSection(), o=>o.Margin = new Thickness(10, 10, 10, 8));
++		root.A(MkIntegratedDataEditor(), o=>o.Margin = new Thickness(10, 0, 10, 10));
++		return root.Grid;
+ 	}
+
+ 	Control MkErrorBar(){
+@@ -77,11 +87,12 @@ public class ViewPreFilterVisualEdit: AppViewBase{
+ 		var sp = new StackPanel{Spacing = 8};
+ 		bdr.Child = sp;
+
+-		sp.A(new TextBlock{
+-			Text = I[K.PoPreFilter],
+-			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
+-			FontWeight = FontWeight.SemiBold,
+-		})
++		sp
++		// .A(new TextBlock{
++		// 	Text = I[K.PoPreFilter],
++		// 	FontSize = UiCfg.Inst.BaseFontSize * 1.1,
++		// 	FontWeight = FontWeight.SemiBold,
++		// })
+ 		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
+ 		.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
+ 		.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
+@@ -92,29 +103,127 @@ public class ViewPreFilterVisualEdit: AppViewBase{
+ 		return bdr;
+ 	}
+
+-	Control MkTextSection(){
+-		var bdr = new Border{
+-			BorderBrush = Brushes.DimGray,
+-			BorderThickness = new Thickness(1),
+-			Padding = new Thickness(10),
++	void InitVisualGridSource(){
++		if(Ctx is null){
++			return;
++		}
++		if(CoreGrid is not null){
++			CoreGridSource = MkGridSource(Ctx.CoreFilterCards);
++			CoreGrid.Source = CoreGridSource;
++		}
++		if(PropGrid is not null){
++			PropGridSource = MkGridSource(Ctx.PropFilterCards);
++			PropGrid.Source = PropGridSource;
++		}
++	}
++
++	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(IList<Ctx.RowFieldsFilterCard> rows){
++		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(rows){
++			Columns = {
++				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText),
++				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
++				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview),
++			},
+ 		};
+-		var sp = new StackPanel{Spacing = 8};
+-		bdr.Child = sp;
++	}
+
+-		sp.A(new TextBlock{
+-			Text = I[K.TextPreview],
+-			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
+-			FontWeight = FontWeight.SemiBold,
+-		})
+-		.A(MkInputRow(I[K.TextPayload], CBE.Mk<Ctx>(x=>x.PoTextPreview, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
+-		.A(new Button(), o=>{
+-			o.Content = I[K.EditPreFilterTextInGui];
+-			o.HorizontalAlignment = HAlign.Left;
+-			o.Click += (s,e)=>Ctx?.OpenPreFilterDataEditor();
++	Control MkIntegratedDataEditor(){
++		if(Ctx is null){
++			return new TextBlock{Text = I[K.EditorNotReady]};
++		}
++		var tabs = new TabControl();
++		tabs.Items.Add(new TabItem{
++			Header = I[K.CoreFilter],
++			Content = MkFilterTab(true),
++		});
++		tabs.Items.Add(new TabItem{
++			Header = I[K.PropFilter],
++			Content = MkFilterTab(false),
+ 		});
++		return tabs;
++	}
+
++	Control MkFilterTab(bool isCore){
++		var root = new AutoGrid(IsRow:true);
++		root.Grid.RowDefinitions.AddRange([
++			RowDef(1, GUT.Auto),
++			RowDef(1, GUT.Star),
++		]);
+
+-		return bdr;
++		var top = new AutoGrid(IsRow:false);
++		top.Grid.ColumnDefinitions.AddRange([
++			ColDef(1, GUT.Star),
++			ColDef(1, GUT.Auto),
++		]);
++		top.A(new TextBlock(), o=>{
++			o.Text = "";
++		});
++		top.A(new Button(), o=>{
++			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddGroup]);
++			o.HorizontalContentAlignment = HAlign.Center;
++			o.Click += (s,e)=>{
++				if(isCore){
++					Ctx?.AddCoreGroup();
++				}else{
++					Ctx?.AddPropGroup();
++				}
++			};
++		});
++		root.A(top.Grid);
++
++		var grid = new TreeDataGrid{
++			MinHeight = 220,
++		};
++		grid.Styles.Add(
++			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
++			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
++		);
++		grid.Styles.Add(
++			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
++			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
++		);
++		if(isCore){
++			CoreGrid = grid;
++			grid.AddHandler(InputElement.TappedEvent, OnCoreGridTapped, RoutingStrategies.Bubble, true);
++		}else{
++			PropGrid = grid;
++			grid.AddHandler(InputElement.TappedEvent, OnPropGridTapped, RoutingStrategies.Bubble, true);
++		}
++		root.A(grid);
++		return root.Grid;
++	}
++
++	void OnCoreGridTapped(object? sender, TappedEventArgs e){
++		OnFieldsGridTapped(e, true);
++	}
++
++	void OnPropGridTapped(object? sender, TappedEventArgs e){
++		OnFieldsGridTapped(e, false);
++	}
++
++	void OnFieldsGridTapped(TappedEventArgs e, bool isCore){
++		if(Ctx is null){
++			return;
++		}
++		if(e.Source is not StyledElement src){
++			return;
++		}
++		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
++			if(cur is ToggleButton){
++				return;
++			}
++			if(cur is TreeDataGridRow row){
++				if(row.DataContext is Ctx.RowFieldsFilterCard vmRow){
++					if(isCore){
++						Ctx.OpenCoreFilterCard(vmRow);
++					}else{
++						Ctx.OpenPropFilterCard(vmRow);
++					}
++					e.Handled = true;
++				}
++				return;
++			}
++		}
+ 	}
+
+ 	Control MkBottomBar(){
+@@ -122,24 +231,18 @@ public class ViewPreFilterVisualEdit: AppViewBase{
+ 		bar.Grid.ColumnDefinitions.AddRange([
+ 			ColDef(1, GUT.Star),
+ 			ColDef(1, GUT.Star),
+-			ColDef(1, GUT.Star),
+ 		]);
+-		bar.A(new Button(), o=>{
+-			o.HorizontalContentAlignment = HAlign.Center;
+-			o.Content = I[K.OpenJson];
+-			o.Click += (s,e)=>Ctx?.OpenJsonEditor();
++		bar.A(new OpBtn(), o=>{
++			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
++			o._Button.HorizontalContentAlignment = HAlign.Center;
++			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
++			o.SetExe((Ct)=>Ctx?.Delete(Ct));
+ 		})
+ 		.A(new OpBtn(), o=>{
+ 			o._Button.Background = UiCfg.Inst.MainColor;
+ 			o._Button.HorizontalContentAlignment = HAlign.Center;
+ 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
+ 			o.SetExe((Ct)=>Ctx?.Save(Ct));
+-		})
+-		.A(new OpBtn(), o=>{
+-			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+-			o._Button.HorizontalContentAlignment = HAlign.Center;
+-			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
+-			o.SetExe((Ct)=>Ctx?.Delete(Ct));
+ 		});
+ 		return bar.Grid;
+ 	}
+@@ -179,7 +282,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
+ 			Text = Label + ":",
+ 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+ 		});
+-		var value = new TextBlock{
++		var value = new SelectableTextBlock{
+ 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+ 		};
+ 		value.Bind(TextBlock.TextProperty, Binding);
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/VmPreFilterVisualEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/VmPreFilterVisualEdit.cs
+index 34c95a9..dc5d0dd 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/VmPreFilterVisualEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterEdit/PreFilterVisualEdit/VmPreFilterVisualEdit.cs
+@@ -116,6 +116,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
+ 		public str UiIdxText{get;set;} = "";
+ 		public str Kind{get;set;} = "";
+ 		public str FieldsPreview{get;set;} = "";
++		public str ContentPreview{get;set;} = "";
+ 		public str FilterCountText{get;set;} = "";
+ 		public VmFieldsFilterRow? Raw{get;set;}
+ 	}
+@@ -271,6 +272,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
+ 				UiIdxText = (i + 1).ToString(),
+ 				Kind = "Core",
+ 				FieldsPreview = JoinFieldPreview(row),
++				ContentPreview = BuildContentPreview(row),
+ 				FilterCountText = (row.Items?.Count ?? 0).ToString(),
+ 				Raw = row,
+ 			});
+@@ -283,6 +285,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
+ 				UiIdxText = (i + 1).ToString(),
+ 				Kind = "Prop",
+ 				FieldsPreview = JoinFieldPreview(row),
++				ContentPreview = BuildContentPreview(row),
+ 				FilterCountText = (row.Items?.Count ?? 0).ToString(),
+ 				Raw = row,
+ 			});
+@@ -395,7 +398,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
+ 			SyncFromBo();
+ 			LastError = "";
+ 			OnPropertyChanged(nameof(HasError));
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 		}catch(Exception e){
+ 			HandleErr(e);
+ 		}
+@@ -726,6 +729,45 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
+ 		return string.Join(", ", fields);
+ 	}
+
++	str BuildContentPreview(VmFieldsFilterRow row){
++		if(row.Fields.Count != 1 || row.Items.Count != 1){
++			return "-";
++		}
++
++		var field = row.Fields[0].Value?.Trim() ?? "";
++		if(str.IsNullOrWhiteSpace(field)){
++			return "-";
++		}
++
++		var item = row.Items[0];
++		var values = item.ValuesText
++			.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
++			.Select(x=>x.Trim())
++			.Where(x=>!str.IsNullOrWhiteSpace(x))
++			.ToArray();
++		if(values.Length != 1){
++			return "-";
++		}
++
++		return $"{field} {ToOpSymbol(item.OperationIndex)} {values[0]}";
++	}
++
++	static str ToOpSymbol(i32 operationIndex){
++		var values = Enum.GetValues<EFilterOperationMode>();
++		if(operationIndex < 0 || operationIndex >= values.Length){
++			return "=";
++		}
++		return values[operationIndex] switch{
++			EFilterOperationMode.Eq => "=",
++			EFilterOperationMode.Ne => "!=",
++			EFilterOperationMode.Gt => ">",
++			EFilterOperationMode.Ge => ">=",
++			EFilterOperationMode.Lt => "<",
++			EFilterOperationMode.Le => "<=",
++			_ => "=",
++		};
++	}
++
+ 	i32 GetTypeIndex(EPreFilterType type){
+ 		if(PoTypeValues.Count == 0){
+ 			return 0;
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterPage/ViewPreFilterPage.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterPage/ViewPreFilterPage.cs
+index 135d541..7cb98ae 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterPage/ViewPreFilterPage.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/PreFilterPage/ViewPreFilterPage.cs
+@@ -144,7 +144,6 @@ public partial class ViewPreFilterPage
+ 			Columns = {
+ 				new TextColumn<Ctx.RowPreFilter, str>("", x=>x.UiIdxText),
+ 				new TextColumn<Ctx.RowPreFilter, str>(I[K.Name], x=>x.Name),
+-				new TextColumn<Ctx.RowPreFilter, str>(I[K.Type], x=>x.Type),
+ 				new TextColumn<Ctx.RowPreFilter, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
+ 			},
+ 		};
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/SetCurStudyPlan/ViewSetCurStudyPlan.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/SetCurStudyPlan/ViewSetCurStudyPlan.cs
+index 2f67015..7103007 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/SetCurStudyPlan/ViewSetCurStudyPlan.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/SetCurStudyPlan/ViewSetCurStudyPlan.cs
+@@ -6,6 +6,7 @@ using Avalonia.Data;
+ using Avalonia.Media;
+ using Avalonia.Styling;
+ using Ngaq.Ui;
++using Ngaq.Ui.Icons;
+ using Ngaq.Ui.Infra;
+ using Ngaq.Ui.Infra.Ctrls;
+ using Ngaq.Ui.Tools;
+@@ -16,10 +17,8 @@ using Tsinswreng.AvlnTools.Tools;
+ using Tsinswreng.CsI18n;
+ using Ctx = VmSetCurStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+
+-/// <summary>
+ /// 設置當前學習方案頁。
+ /// 頁面打開後即讀取後端當前學習方案，僅展示關鍵字段並支持重新選擇。
+-/// </summary>
+ public partial class ViewSetCurStudyPlan
+ 	:AppViewBase
+ {
+@@ -104,9 +103,9 @@ public partial class ViewSetCurStudyPlan
+ 		return host.Grid;
+ 	}
+
+-	/// <summary>
++
+ 	/// 當前方案字段展示區。
+-	/// </summary>
++
+ 	Control MkFieldsPanel(){
+ 		var sv = new ScrollViewer();
+ 		var root = new StackPanel{
+@@ -131,11 +130,13 @@ public partial class ViewSetCurStudyPlan
+ 		.A(MkInputRow(I[K.UniqName], CBE.Mk<Ctx>(x=>x.CurUniqName, Mode: BindingMode.OneWay), ReadOnly: true))
+ 		.A(MkInputRow(I[K.Descr], CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
+ 		.A(new OpBtn(), o=>{
+-			o.BtnContent = I[K.Select];
++			o._Button.HorizontalContentAlignment = HAlign.Center;
++			o.BtnContent = Svgs.ListSelect().ToIcon().WithText(I[K.Select]);
+ 			o.SetExe((Ct)=>ChooseAndApplyStudyPlan(Ct));
+ 		})
+ 		.A(new Button(), o=>{
+-			o.Content = I[K.Edit];
++			o.HorizontalContentAlignment = HAlign.Center;
++			o.Content = Svgs.CreateMD().ToIcon().WithText(I[K.Edit]);
+ 			o.Click += (s,e)=>{
+ 				var po = Ctx?.CurPoStudyPlan;
+ 				if(po is null){
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/ViewStudyPlanEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/ViewStudyPlanEdit.cs
+index 539995f..2e145b0 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/ViewStudyPlanEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/ViewStudyPlanEdit.cs
+@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
+ using Avalonia;
+ using Avalonia.Controls;
+ using Avalonia.Data;
++using Avalonia.Layout;
+ using Avalonia.Media;
+ using Ngaq.Ui;
+ using Ngaq.Ui.Icons;
+@@ -90,13 +91,13 @@ public partial class ViewStudyPlanEdit
+ 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
+ 			FontWeight = FontWeight.SemiBold,
+ 		})
+-		.A(MkInputRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay), ReadOnly: true))
++		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
+ 		.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
+ 		.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
+ 		.A(ToolStudyPlanView.MkInputWithBtnRow(
+ 			I[K.PreFilter],
+ 			CBE.Mk<Ctx>(x=>x.PreFilterUniqNameText, Mode: BindingMode.OneWay),
+-			I[K.Choose],
++			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
+ 			()=>{
+ 				var view = new ViewPreFilterPage();
+ 				view.Ctx?.SetSelectMode(po=>{
+@@ -110,7 +111,7 @@ public partial class ViewStudyPlanEdit
+ 		.A(ToolStudyPlanView.MkInputWithBtnRow(
+ 			I[K.WeightCalculator],
+ 			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
+-			I[K.Choose],
++			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
+ 			()=>{
+ 				var view = new ViewWeightCalculatorPage();
+ 				view.Ctx?.SetSelectMode(po=>{
+@@ -124,7 +125,7 @@ public partial class ViewStudyPlanEdit
+ 		.A(ToolStudyPlanView.MkInputWithBtnRow(
+ 			I[K.WeightArg],
+ 			CBE.Mk<Ctx>(x=>x.WeightArgUniqNameText, Mode: BindingMode.OneWay),
+-			I[K.Choose],
++			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
+ 			()=>{
+ 				var view = new ViewWeightArgPage();
+ 				view.Ctx?.SetSelectMode(po=>{
+@@ -146,7 +147,7 @@ public partial class ViewStudyPlanEdit
+ 			ColDef(1, GUT.Star),
+ 		]);
+ 		bar.A(new OpBtn(), o=>{
+-			o._Button.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
++			o._Button.Background = UiCfg.Inst.DelBtnBg;
+ 			o._Button.HorizontalContentAlignment = HAlign.Center;
+ 			o.BtnContent = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
+ 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
+@@ -174,6 +175,23 @@ public partial class ViewStudyPlanEdit
+ 		return sp;
+ 	}
+
++	Control MkIdRow(str Label, IBinding Binding){
++		var row = new StackPanel{
++			Spacing = 6,
++			Orientation = Orientation.Horizontal,
++		};
++		row.Children.Add(new TextBlock{
++			Text = Label + ":",
++			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
++		});
++		var value = new SelectableTextBlock{
++			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
++		};
++		value.Bind(TextBlock.TextProperty, Binding);
++		row.Children.Add(value);
++		return row;
++	}
++
+ }
+
+
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/VmStudyPlanEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/VmStudyPlanEdit.cs
+index 845ba06..417c753 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/VmStudyPlanEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/StudyPlanEdit/VmStudyPlanEdit.cs
+@@ -181,7 +181,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
+ 			SyncFromBo();
+ 			LastError = "";
+ 			OnPropertyChanged(nameof(HasError));
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 		}catch(Exception e){
+ 			LastError = e.Message;
+ 			OnPropertyChanged(nameof(HasError));
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/ToolStudyPlanView.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/ToolStudyPlanView.cs
+index 26773dd..6e2dcb0 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/ToolStudyPlanView.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/ToolStudyPlanView.cs
+@@ -28,8 +28,8 @@ public static class ToolStudyPlanView{
+
+ 	/// 统一格式化日期：按当前用户所在时区显示短格式 yy-MM-dd。
+
+-	public static str FormatDateShort(Tempus Time, TimeZoneInfo? TimeZone = null){
+-		if(Time == Tempus.Zero){
++	public static str FormatDateShort(UnixMs Time, TimeZoneInfo? TimeZone = null){
++		if(Time == UnixMs.Zero){
+ 			return "-";
+ 		}
+ 		var tz = TimeZone ?? TimeZoneInfo.Local;
+@@ -39,20 +39,20 @@ public static class ToolStudyPlanView{
+ 	}
+
+ 	/// 统一处理“更新时间优先，否则创建时间”的短日期显示。
+-	public static str FormatUpdatedDateShort(Tempus UpdatedAt, Tempus CreatedAt, TimeZoneInfo? TimeZone = null){
+-		var t = UpdatedAt == Tempus.Zero ? CreatedAt : UpdatedAt;
++	public static str FormatUpdatedDateShort(UnixMs UpdatedAt, UnixMs CreatedAt, TimeZoneInfo? TimeZone = null){
++		var t = UpdatedAt == UnixMs.Zero ? CreatedAt : UpdatedAt;
+ 		return FormatDateShort(t, TimeZone);
+ 	}
+
+ 	/// 创建“只读文本 + 选择按钮”的一行输入控件。
+ 	/// <param name="Label">行标题文本。</param>
+ 	/// <param name="Binding">文本框绑定。</param>
+-	/// <param name="BtnText">按钮文本。</param>
++	/// <param name="BtnContent">按钮内容（可传图标+文本）。</param>
+ 	/// <param name="OnBtnClick">按钮点击回调。</param>
+ 	/// <param name="ReadOnly">文本框是否只读。</param>
+ 	/// <returns>可直接加入布局树的控件。</returns>
+ 	public static Control MkInputWithBtnRow(
+-		str Label, IBinding Binding, str BtnText, Action OnBtnClick, bool ReadOnly = false
++		str Label, IBinding Binding, object BtnContent, Action OnBtnClick, bool ReadOnly = false
+ 	){
+ 		var sp = new StackPanel{Spacing = 3};
+ 		sp.Children.Add(new TextBlock{Text = Label});
+@@ -66,7 +66,8 @@ public static class ToolStudyPlanView{
+ 			o.Bind(TextBox.TextProperty, Binding);
+ 		})
+ 		.A(new Button(), o=>{
+-			o.Content = BtnText;
++			o.HorizontalContentAlignment = HAlign.Center;
++			o.Content = BtnContent;
+ 			o.Click += (s,e)=>OnBtnClick();
+ 		});
+ 		sp.Children.Add(row.Grid);
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/ViewWeightArgEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/ViewWeightArgEdit.cs
+index 8b3ecb0..6a42010 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/ViewWeightArgEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/ViewWeightArgEdit.cs
+@@ -99,7 +99,7 @@ public partial class ViewWeightArgEdit
+ 		.A(ToolStudyPlanView.MkInputWithBtnRow(
+ 			I[K.WeightCalculator],
+ 			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
+-			I[K.Choose],
++			Svgs.ListSelect().ToIcon().WithText(I[K.Choose]),
+ 			()=>{
+ 				var view = new ViewWeightCalculatorPage();
+ 				view.Ctx?.SetSelectMode(po=>{
+@@ -154,7 +154,7 @@ public partial class ViewWeightArgEdit
+ 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
+ 		})
+ 		.A(new OpBtn(), o=>{
+-			o.Background = UiCfg.Inst.MainColor;
++			o._Button.Background = UiCfg.Inst.MainColor;
+ 			o._Button.HorizontalContentAlignment = HAlign.Center;
+ 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Save]);
+ 			o.SetExe((Ct)=>Ctx?.Save(Ct));
+@@ -197,7 +197,7 @@ public partial class ViewWeightArgEdit
+ 			Text = Label + ":",
+ 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+ 		});
+-		var value = new TextBlock{
++		var value = new SelectableTextBlock{
+ 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+ 		};
+ 		value.Bind(TextBlock.TextProperty, Binding);
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/VmWeightArgEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/VmWeightArgEdit.cs
+index e0432a9..a5235f0 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/VmWeightArgEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgEdit/VmWeightArgEdit.cs
+@@ -190,7 +190,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
+ 			SyncFromPo();
+ 			LastError = "";
+ 			OnPropertyChanged(nameof(HasError));
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 		}catch(Exception e){
+ 			HandleErr(e);
+ 		}
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgPayloadJsonEdit/ViewWeightArgPayloadJsonEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgPayloadJsonEdit/ViewWeightArgPayloadJsonEdit.cs
+index 3326712..095b47b 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgPayloadJsonEdit/ViewWeightArgPayloadJsonEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightArgPayloadJsonEdit/ViewWeightArgPayloadJsonEdit.cs
+@@ -1,11 +1,13 @@
+ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPayloadJsonEdit;
+
++using System.ComponentModel;
+ using System.Threading.Tasks;
+ using Avalonia;
+ using Avalonia.Controls;
+ using Avalonia.Controls.Primitives;
+ using Avalonia.Data;
+ using Avalonia.Media;
++using AvaloniaEdit;
+ using Ngaq.Ui;
+ using Ngaq.Ui.Icons;
+ using Ngaq.Ui.Infra;
+@@ -28,6 +30,8 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
+ 	}
+
+ 	AutoGrid Root = new(IsRow: true);
++	TextEditor? PayloadEditor;
++	bool IsSyncingPayloadText = false;
+ 	protected nil Render(){
+ 		Content = Root.Grid;
+ 		Root.Grid.RowDefinitions.AddRange([
+@@ -36,9 +40,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
+ 			RowDef(1, GUT.Auto),
+ 		]);
+ 		Root.A(MkErrorBar());
+-		Root.A(JsonText(), o=>{
+-			o.CBind<Ctx>(o.PropText, x=>x.PayloadJson, Mode: BindingMode.TwoWay);
+-		});
++		Root.A(JsonText());
+ 		Root.A(MkBottomBar());
+ 		return NIL;
+ 	}
+@@ -61,15 +63,9 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
+
+ 	Control MkBottomBar(){
+ 		var g = new AutoGrid(IsRow:false);
+-		g.Grid.ColumnDefinitions.AddRange([
+-			ColDef(1, GUT.Star),
+-			ColDef(1, GUT.Star),
+-		]);
+-		g.A(new Button(), o=>{
+-			o.Content = I[K.Back];
+-			o.Click += (s,e)=>ViewNavi?.Back();
+-		});
++		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
+ 		g.A(new OpBtn(), o=>{
++			o._Button.HorizontalContentAlignment = HAlign.Center;
+ 			o.BtnContent = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.Apply]);
+ 			o._Button.Background = UiCfg.Inst.MainColor;
+ 			o.SetExe((Ct)=>{
+@@ -80,17 +76,39 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
+ 		return g.Grid;
+ 	}
+
+-	TextBox JsonText(){
+-		var box = new TextBox{
+-			AcceptsReturn = true,
+-			AcceptsTab = true,
+-			TextWrapping = TextWrapping.Wrap,
+-			HorizontalAlignment = HAlign.Stretch,
+-			VerticalAlignment = VAlign.Stretch,
+-			Margin = new Thickness(10, 4, 10, 10),
++	Control JsonText(){
++		var editor = JsonTextEditorCtrl.Mk(Ctx?.PayloadJson, IsReadOnly: false, MinHeight: 220);
++		editor.Margin = new Thickness(10, 4, 10, 10);
++		PayloadEditor = editor;
++		editor.TextChanged += (s,e)=>{
++			if(IsSyncingPayloadText || Ctx is null){
++				return;
++			}
++			IsSyncingPayloadText = true;
++			Ctx.PayloadJson = editor.Text;
++			IsSyncingPayloadText = false;
+ 		};
+-		box.SetValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
+-		return box;
++		if(Ctx is not null){
++			Ctx.PropertyChanged += OnVmPropertyChanged;
++		}
++		DetachedFromVisualTree += (s,e)=>{
++			if(Ctx is not null){
++				Ctx.PropertyChanged -= OnVmPropertyChanged;
++			}
++		};
++		return editor;
++	}
++
++	void OnVmPropertyChanged(object? Sender, PropertyChangedEventArgs E){
++		if(E.PropertyName != nameof(Ctx.PayloadJson) || PayloadEditor is null || Ctx is null || IsSyncingPayloadText){
++			return;
++		}
++		if(PayloadEditor.Text == Ctx.PayloadJson){
++			return;
++		}
++		IsSyncingPayloadText = true;
++		PayloadEditor.Text = Ctx.PayloadJson;
++		IsSyncingPayloadText = false;
+ 	}
+ }
+
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/ViewWeightCalculatorEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/ViewWeightCalculatorEdit.cs
+index 7d212f7..3eb9122 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/ViewWeightCalculatorEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/ViewWeightCalculatorEdit.cs
+@@ -1,11 +1,13 @@
+ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
+
++using System.ComponentModel;
+ using System.Collections.Generic;
+ using Avalonia;
+ using Avalonia.Controls;
+ using Avalonia.Data;
+ using Avalonia.Layout;
+ using Avalonia.Media;
++using AvaloniaEdit;
+ using Ngaq.Ui;
+ using Ngaq.Ui.Icons;
+ using Ngaq.Ui.Infra;
+@@ -36,6 +38,8 @@ public partial class ViewWeightCalculatorEdit
+ 	}
+
+ 	AutoGrid Root = new(IsRow: true);
++	TextEditor? PayloadEditor;
++	bool IsSyncingPayloadText = false;
+ 	protected nil Render(){
+ 		this.Content = Root.Grid;
+ 		Root.Grid.RowDefinitions.AddRange([
+@@ -95,7 +99,7 @@ public partial class ViewWeightCalculatorEdit
+ 		var typeRow = MkComboRow(I[K.Type], Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
+ 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowTypeField, Mode: BindingMode.OneWay);
+ 		sp.A(typeRow)
+-		 .A(MkInputRow(I[K.PayloadText], CBE.Mk<Ctx>(x=>x.PayloadText, Mode: BindingMode.TwoWay), AcceptsReturn: true));
++		 .A(MkJsonInputRow(I[K.PayloadText], CBE.Mk<Ctx>(x=>x.PayloadText, Mode: BindingMode.TwoWay)));
+ 		return bdr;
+ 	}
+
+@@ -146,6 +150,43 @@ public partial class ViewWeightCalculatorEdit
+ 		return sp;
+ 	}
+
++	Control MkJsonInputRow(str Label, IBinding Binding){
++		var sp = new StackPanel{Spacing = 3};
++		sp.Children.Add(new TextBlock{Text = Label});
++		var editor = JsonTextEditorCtrl.Mk(Ctx?.PayloadText, IsReadOnly: false, MinHeight: 200);
++		PayloadEditor = editor;
++		editor.TextChanged += (s,e)=>{
++			if(IsSyncingPayloadText || Ctx is null){
++				return;
++			}
++			IsSyncingPayloadText = true;
++			Ctx.PayloadText = editor.Text;
++			IsSyncingPayloadText = false;
++		};
++		if(Ctx is not null){
++			Ctx.PropertyChanged += OnVmPropertyChanged;
++		}
++		DetachedFromVisualTree += (s,e)=>{
++			if(Ctx is not null){
++				Ctx.PropertyChanged -= OnVmPropertyChanged;
++			}
++		};
++		sp.Children.Add(editor);
++		return sp;
++	}
++
++	void OnVmPropertyChanged(object? Sender, PropertyChangedEventArgs E){
++		if(E.PropertyName != nameof(Ctx.PayloadText) || PayloadEditor is null || Ctx is null || IsSyncingPayloadText){
++			return;
++		}
++		if(PayloadEditor.Text == Ctx.PayloadText){
++			return;
++		}
++		IsSyncingPayloadText = true;
++		PayloadEditor.Text = Ctx.PayloadText;
++		IsSyncingPayloadText = false;
++	}
++
+ 	Control MkIdRow(str Label, IBinding Binding){
+ 		var row = new StackPanel{
+ 			Spacing = 6,
+@@ -155,7 +196,7 @@ public partial class ViewWeightCalculatorEdit
+ 			Text = Label + ":",
+ 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+ 		});
+-		var value = new TextBlock{
++		var value = new SelectableTextBlock{
+ 			FontSize = UiCfg.Inst.BaseFontSize * 0.8,
+ 		};
+ 		value.Bind(TextBlock.TextProperty, Binding);
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/VmWeightCalculatorEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/VmWeightCalculatorEdit.cs
+index a43c6c6..577a5f6 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/VmWeightCalculatorEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/StudyPlan/WeightCalculatorEdit/VmWeightCalculatorEdit.cs
+@@ -98,7 +98,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
+ 		get{return field;}
+ 		set{SetProperty(ref field, value);}
+ 	} = new PoWeightCalculator{
+-		Type = EWeightCalculatorType.Js,
++		Type = EWeightCalculatorType.JsV1,
+ 	};
+
+ 	/// 顯式設置當前編輯模式，供列表頁跳轉時調用。
+@@ -152,13 +152,13 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
+ 				await SvcStudyPlan.BatSoftDelWeightCalculator(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+ 			}
+ 			PoWeightCalculator = new PoWeightCalculator{
+-				Type = EWeightCalculatorType.Js,
++				Type = EWeightCalculatorType.JsV1,
+ 			};
+ 			IsCreateMode = true;
+ 			SyncFromPo();
+ 			LastError = "";
+ 			OnPropertyChanged(nameof(HasError));
+-			ShowDialog(I18n[K.Deleted]);
++			ShowToast(I18n[K.Deleted]);
+ 		}catch(Exception e){
+ 			HandleErr(e);
+ 		}
+@@ -167,7 +167,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
+
+ 	void SyncFromPo(){
+ 		var po = PoWeightCalculator ?? new PoWeightCalculator{
+-			Type = EWeightCalculatorType.Js,
++			Type = EWeightCalculatorType.JsV1,
+ 		};
+ 		PoIdText = po.Id.ToString();
+ 		PoUniqName = po.UniqName ?? "";
+@@ -190,7 +190,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
+
+ 	static PoWeightCalculator ClonePoWeightCalculator(PoWeightCalculator? src){
+ 		src ??= new PoWeightCalculator{
+-			Type = EWeightCalculatorType.Js,
++			Type = EWeightCalculatorType.JsV1,
+ 		};
+ 		return new PoWeightCalculator{
+ 			DbCreatedAt = src.DbCreatedAt,
+@@ -233,7 +233,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
+
+ 	EWeightCalculatorType GetTypeByIndex(i32 index){
+ 		if(TypeValues.Count == 0){
+-			return EWeightCalculatorType.Js;
++			return EWeightCalculatorType.JsV1;
+ 		}
+ 		var i = ClampIndex(index, TypeValues.Count);
+ 		return TypeValues[i];
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/ViewUserLangEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/ViewUserLangEdit.cs
+index 7281db6..938da8c 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/ViewUserLangEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/ViewUserLangEdit.cs
+@@ -10,6 +10,8 @@ using Ngaq.Ui;
+ using Ngaq.Ui.Icons;
+ using Ngaq.Ui.Infra;
+ using Ngaq.Ui.Infra.Ctrls;
++using Ngaq.Ui.Tools;
++using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+ using Tsinswreng.AvlnTools.Dsl;
+ using Tsinswreng.AvlnTools.Tools;
+ using Tsinswreng.CsI18n;
+@@ -105,7 +107,7 @@ public partial class ViewUserLangEdit
+ 		var typeRow = MkComboRow(I[K.RelLangType], Ctx?.RelLangTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoRelLangTypeIndex, Mode: BindingMode.TwoWay));
+ 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowRelLangTypeField, Mode: BindingMode.OneWay);
+ 		sp.A(typeRow)
+-		 .A(MkInputRow(I[K.RelLang], CBE.Mk<Ctx>(x=>x.PoRelLang, Mode: BindingMode.TwoWay)));
++		 .A(MkPickerRow(I[K.RelLang], CBE.Mk<Ctx>(x=>x.PoRelLang, Mode: BindingMode.TwoWay), OpenNormLangSelector));
+ 		return bdr;
+ 	}
+
+@@ -152,6 +154,26 @@ public partial class ViewUserLangEdit
+ 		return sp;
+ 	}
+
++	/// 建立帶選擇按鈕的關聯語言輸入行。
++	Control MkPickerRow(str Label, IBinding Binding, Action OnPick){
++		var root = new StackPanel{Spacing = 3};
++		root.Children.Add(new TextBlock{Text = Label});
++		var row = new AutoGrid(IsRow:false);
++		row.Grid.ColumnDefinitions.AddRange([
++			ColDef(8, GUT.Star),
++			ColDef(2, GUT.Star),
++		]);
++		row.A(new TextBox(), tb=>{
++			tb.Bind(TextBox.TextProperty, Binding);
++		})
++		.A(new Button(), o=>{
++			o.Content = Svgs.ListSelect().ToIcon().WithText(I[K.Pick]);
++			o.Click += (s,e)=>OnPick();
++		});
++		root.Children.Add(row.Grid);
++		return root;
++	}
++
+ 	/// 建立只讀 Id 顯示行。
+ 	Control MkIdRow(str Label, IBinding Binding){
+ 		var row = new StackPanel{
+@@ -169,5 +191,17 @@ public partial class ViewUserLangEdit
+ 		row.Children.Add(value);
+ 		return row;
+ 	}
++
++	void OpenNormLangSelector(){
++		var view = new ViewNormLangPage();
++		if(view.Ctx is not null){
++			view.Ctx.Input = Ctx?.PoRelLang ?? "";
++			view.Ctx.SetSelectMode(po=>{
++				Ctx?.ApplyRelLangSelection(po);
++				view.ViewNavi?.Back();
++			});
++		}
++		ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectNormLang], view));
++	}
+ }
+
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/VmUserLangEdit.cs b/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/VmUserLangEdit.cs
+index 3b29399..171051f 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/VmUserLangEdit.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/UserLang/UserLangEdit/VmUserLangEdit.cs
+@@ -8,6 +8,7 @@ using Ngaq.Core.Frontend.User;
+ using Ngaq.Core.Infra;
+ using Ngaq.Core.Infra.IF;
+ using Ngaq.Core.Shared.Dictionary.Models;
++using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
+ using Ngaq.Core.Shared.Word.Models.Po.UserLang;
+ using Ngaq.Core.Shared.Word.Svc;
+ using Ngaq.Ui.Infra;
+@@ -80,7 +81,7 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
+ 		.ToList();
+
+ 	/// 當存在多種類型時才顯示下拉。
+-	public bool ShowRelLangTypeField => RelLangTypeOptions.Count > 1;
++	public bool ShowRelLangTypeField => true;
+
+ 	/// Id 只讀文本。
+ 	public str PoIdText{
+@@ -134,6 +135,13 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
+ 		return NIL;
+ 	}
+
++	/// 套用標準語言選擇結果到關聯語言字段。
++	public nil ApplyRelLangSelection(PoNormLang Po){
++		PoRelLangTypeIndex = GetRelLangTypeIndex(Po.Type);
++		PoRelLang = Po.Code ?? "";
++		return NIL;
++	}
++
+ 	/// 保存到後端。新增走 `BatAddUserLang`，編輯走 `BatUpdUserLang`。
+ 	public async Task<nil> Save(CT Ct = default){
+ 		if(AnyNull(SvcUserLang, UserCtxMgr)){
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/ViewWordSyncV2.cs b/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/ViewWordSyncV2.cs
+index 8b357be..ff36fb2 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/ViewWordSyncV2.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/ViewWordSyncV2.cs
+@@ -107,7 +107,7 @@ public partial class ViewWordSyncV2
+ 			o.CBind<Ctx>(o.PropText, x=>x.PathImport);
+ 		})
+ 		.A(new Button(), o=>{
+-			o.Content = I[K.Browse];
++			o.Content = Svgs.FolderOutlinepenOutline().ToIcon().WithText(I[K.Browse]);
+ 			o.Click += async (s,e)=>{
+ 				var path = await PickImportPathAsy();
+ 				if(!str.IsNullOrWhiteSpace(path) && Ctx is not null){
+@@ -128,7 +128,7 @@ public partial class ViewWordSyncV2
+ 			o.CBind<Ctx>(o.PropText, x=>x.PathExport);
+ 		})
+ 		.A(new Button(), o=>{
+-			o.Content = I[K.Browse];
++			o.Content = Svgs.FolderOutlinepenOutline().ToIcon().WithText(I[K.Browse]);
+ 			o.Click += async (s,e)=>{
+ 				var path = await PickExportPathAsy();
+ 				if(!str.IsNullOrWhiteSpace(path) && Ctx is not null){
+diff --git a/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/VmWordSyncV2.cs b/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/VmWordSyncV2.cs
+index 1dcc61a..5008a98 100644
+--- a/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/VmWordSyncV2.cs
++++ b/proj/Ngaq.Ui/Views/Word/WordManage/WordSyncV2/VmWordSyncV2.cs
+@@ -73,6 +73,9 @@ public partial class VmWordSyncV2: ViewModelBase{
+ 				await ClientWordSyncV2.Push(Ct);
+
+ 			});
++			Dispatcher.UIThread.Post(()=>{
++				ShowToast(I18n[K.Push]+" "+I18n[K.Saved]);
++			});
+ 		}catch (System.Exception Ex){
+ 			HandleErr(Ex);
+ 		}
+@@ -90,6 +93,9 @@ public partial class VmWordSyncV2: ViewModelBase{
+ 			await Task.Run(async()=>{
+ 				await ClientWordSyncV2.Pull(Ct);
+ 			});
++			Dispatcher.UIThread.Post(()=>{
++				ShowToast(I18n[K.Pull]+" "+I18n[K.Saved]);
++			});
+ 		}catch(Exception Ex){
+ 			HandleErr(Ex);
+ 		}
+@@ -128,6 +134,9 @@ public partial class VmWordSyncV2: ViewModelBase{
+ 				Cfg?.Set(KeysClientCfg.Word.WordsPackExportPath, PathExport);
+ 				Cfg?.Save(default);
+ 			});
++			Dispatcher.UIThread.Post(()=>{
++				ShowToast(I18n[K.Export]+" "+I18n[K.Saved]);
++			});
+
+ 		}catch(Exception Ex){
+ 			HandleErr(Ex);
+@@ -161,6 +170,9 @@ public partial class VmWordSyncV2: ViewModelBase{
+ 				Cfg?.Set(KeysClientCfg.Word.WordsPackImportPath, PathImport);
+ 				Cfg?.Save(default);
+ 			});
++			Dispatcher.UIThread.Post(()=>{
++				ShowToast(I18n[K.Import]+" "+I18n[K.Saved]);
++			});
+
+ 		}catch(Exception Ex){
+ 			HandleErr(Ex);
+diff --git a/proj/Ngaq.Windows/LogWin b/proj/Ngaq.Windows/LogWin
+new file mode 100644
+index 0000000..e69de29

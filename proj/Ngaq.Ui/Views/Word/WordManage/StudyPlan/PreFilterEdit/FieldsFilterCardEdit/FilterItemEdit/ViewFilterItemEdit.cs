@@ -78,7 +78,7 @@ public class ViewFilterItemEdit: AppViewBase{
 		});
 		g.A(new Button(), o=>{
 			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
-			o.Background = new SolidColorBrush(Color.FromRgb(210, 56, 56));
+			o.Background = UiCfg.Inst.DelBtnBg;
 			o.Click += (s,e)=>Ctx?.Delete();
 		});
 		g.A(new Button(), o=>{
