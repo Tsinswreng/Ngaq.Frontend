@@ -98,7 +98,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = new PoWeightCalculator{
-		Type = EWeightCalculatorType.Js,
+		Type = EWeightCalculatorType.JsV1,
 	};
 
 	/// 顯式設置當前編輯模式，供列表頁跳轉時調用。
@@ -152,7 +152,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 				await SvcStudyPlan.BatSoftDelWeightCalculator(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoWeightCalculator = new PoWeightCalculator{
-				Type = EWeightCalculatorType.Js,
+				Type = EWeightCalculatorType.JsV1,
 			};
 			IsCreateMode = true;
 			SyncFromPo();
@@ -167,7 +167,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 
 	void SyncFromPo(){
 		var po = PoWeightCalculator ?? new PoWeightCalculator{
-			Type = EWeightCalculatorType.Js,
+			Type = EWeightCalculatorType.JsV1,
 		};
 		PoIdText = po.Id.ToString();
 		PoUniqName = po.UniqName ?? "";
@@ -190,7 +190,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 
 	static PoWeightCalculator ClonePoWeightCalculator(PoWeightCalculator? src){
 		src ??= new PoWeightCalculator{
-			Type = EWeightCalculatorType.Js,
+			Type = EWeightCalculatorType.JsV1,
 		};
 		return new PoWeightCalculator{
 			DbCreatedAt = src.DbCreatedAt,
@@ -233,7 +233,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 
 	EWeightCalculatorType GetTypeByIndex(i32 index){
 		if(TypeValues.Count == 0){
-			return EWeightCalculatorType.Js;
+			return EWeightCalculatorType.JsV1;
 		}
 		var i = ClampIndex(index, TypeValues.Count);
 		return TypeValues[i];
