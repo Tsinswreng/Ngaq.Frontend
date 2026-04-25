@@ -497,20 +497,26 @@ public partial class ViewWordEditV2: AppViewBase{
 	}
 	sealed class DelAtUnixMsToTempusConverter: IValueConverter{
 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture){
-			if(value is str s && i64.TryParse(s.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var unixMs)){
+			if(value is str s
+				&& i64.TryParse(s.Trim(), NumberStyles.Integer, CultureInfo.InvariantCulture, out var unixMs)
+				&& unixMs > 0){
 				return UnixMs.FromUnixMs(unixMs);
 			}
-			return UnixMs.Now();
+			return null;
 		}
 
 		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture){
 			if(value is UnixMs t){
+				if(t.Value <= 0){
+					return "";
+				}
 				return t.Value.ToString(CultureInfo.InvariantCulture);
 			}
 			return "";
 		}
 	}
 }
+
 
 
 

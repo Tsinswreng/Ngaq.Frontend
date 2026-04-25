@@ -17,8 +17,9 @@ public class InvalidCommandParam{
 
 public partial class TempusBox: ContentControl{
 	/// `Tempus` 的 Avalonia 可绑定属性。默认双向绑定。
-	public static readonly DirectProperty<TempusBox, UnixMs> TempusProperty =
-		AvaloniaProperty.RegisterDirect<TempusBox, UnixMs>(
+	/// `null` 表示无时间值，输入框应显示为空。
+	public static readonly DirectProperty<TempusBox, UnixMs?> TempusProperty =
+		AvaloniaProperty.RegisterDirect<TempusBox, UnixMs?>(
 			nameof(Tempus),
 			o => o.Tempus,
 			(o, v) => o.Tempus = v,
@@ -26,7 +27,7 @@ public partial class TempusBox: ContentControl{
 		);
 
 	/// 当前 `Tempus` 主值。文本输入和日历选择都会回写到此值。
-	public partial UnixMs Tempus{get;set;}
+	public partial UnixMs? Tempus{get;set;}
 
 	/// 当前选中的格式对象，可直接绑定。
 	public static readonly DirectProperty<TempusBox, ITempusFormatItem> SelectedFormatProperty =

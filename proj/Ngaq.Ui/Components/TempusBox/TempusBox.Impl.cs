@@ -13,7 +13,7 @@ using Tsinswreng.AvlnTools.Dsl;
 using Ngaq.Ui.Icons;
 
 public partial class TempusBox: ContentControl{
-	UnixMs _Tempus = UnixMs.Now();
+	UnixMs? _Tempus = null;
 	bool _IsReadOnly = false;
 	i32 _SelectedFormatIndex = 0;
 	f64 _ControlHeight = 34;
@@ -27,7 +27,7 @@ public partial class TempusBox: ContentControl{
 	];
 	bool _LastParseOk = true;
 
-	public partial UnixMs Tempus{
+	public partial UnixMs? Tempus{
 		get{return _Tempus;}
 		set{
 			SetAndRaise(TempusProperty, ref _Tempus, value);
@@ -149,6 +149,12 @@ public partial class TempusBox: ContentControl{
 			if(_SyncingUi){
 				return;
 			}
+			if(string.IsNullOrWhiteSpace(o.Text)){
+				LastParseOk = true;
+				RestoreInputVisual();
+				Tempus = null;
+				return;
+			}
 			if(TryParseBySelectedFormat(o.Text ?? "", out var parsed)){
 				LastParseOk = true;
 				RestoreInputVisual();
@@ -200,7 +206,9 @@ public partial class TempusBox: ContentControl{
 				return;
 			}
 			var selectedDate = calendar.SelectedDate.Value;
-			var currentLocal = DateTimeOffset.FromUnixTimeMilliseconds(Tempus.Value).ToLocalTime().DateTime;
+			var currentLocal = Tempus is null
+				? DateTime.Now
+				: DateTimeOffset.FromUnixTimeMilliseconds(Tempus.Value.Value).ToLocalTime().DateTime;
 			var merged = new DateTime(
 				selectedDate.Year,
 				selectedDate.Month,
@@ -242,8 +250,12 @@ public partial class TempusBox: ContentControl{
 			_ComboBoxFormat.ItemsSource = FormatItems.Select(x=>x.FmtDisplayName).ToArray();
 			_ComboBoxFormat.SelectedIndex = Math.Clamp(SelectedFormatIndex, 0, Math.Max(0, FormatItems.Count-1));
 		}
-		var localDate = DateTimeOffset.FromUnixTimeMilliseconds(Tempus.Value).ToLocalTime().Date;
-		_Calendar.SelectedDate = localDate;
+		if(Tempus is null){
+			_Calendar.SelectedDate = null;
+		}else{
+			var localDate = DateTimeOffset.FromUnixTimeMilliseconds(Tempus.Value.Value).ToLocalTime().Date;
+			_Calendar.SelectedDate = localDate;
+		}
 		_SyncingUi = false;
 		LastParseOk = true;
 		RestoreInputVisual();
@@ -276,13 +288,16 @@ public partial class TempusBox: ContentControl{
 		}
 	}
 
-	str FormatBySelectedFormat(UnixMs Value){
+	str FormatBySelectedFormat(UnixMs? Value){
+		if(Value is null){
+			return "";
+		}
 		var item = SelectedFormat;
-		var converted = item.Converter.Convert(Value, typeof(str), null, CultureInfo.InvariantCulture);
+		var converted = item.Converter.Convert(Value.Value, typeof(str), null, CultureInfo.InvariantCulture);
 		if(converted is str s){
 			return s;
 		}
-		return Value.Value.ToString(CultureInfo.InvariantCulture);
+		return Value.Value.Value.ToString(CultureInfo.InvariantCulture);
 	}
 
 	bool TryParseBySelectedFormat(str Text, out UnixMs Result){
