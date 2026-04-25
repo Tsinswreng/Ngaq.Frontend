@@ -13,6 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordEditV2;
+using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
@@ -152,6 +153,18 @@ public partial class ViewSearchWords
 	/// <returns>標題菜單控件。</returns>
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			var title = I[K.UserLang];
+			o.Header = title;
+			o.Click += (s,e)=>{
+				ViewNavi?.GoTo(
+					ToolView.WithTitle(
+						title,
+						new ViewUserLangPage()
+					)
+				);
+			};
+		});
 		menu.Items.A(new MenuItem(), o=>{
 			var title = I[K.BackupEtSync] + " V1";
 			o.Header = title;

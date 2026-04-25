@@ -10,11 +10,9 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.AddWord;
-using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
-using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
@@ -24,7 +22,7 @@ using Ctx = Ngaq.Ui.Infra.ViewModelBase;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using LK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-//TODO 改名叫菜單
+
 public partial class ViewWordManage
 	:AppViewBase
 {
@@ -66,7 +64,7 @@ public partial class ViewWordManage
 		Root.A(new ScrollViewer(), Sv=>{
 			Sv.SetContent(new Grid(), g=>{
 				g.ColumnDefinitions = new ColumnDefinitions("*,*");
-				g.RowDefinitions = new RowDefinitions("Auto,Auto,Auto");
+				g.RowDefinitions = new RowDefinitions("Auto,Auto");
 				g.ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.4;
 				g.RowSpacing = UiCfg.Inst.BaseFontSize * 0.6;
 				g.Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.4);
@@ -81,8 +79,6 @@ public partial class ViewWordManage
 				addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 0, 1);
 				addItem(_Item(I[LK.StudyPlan], ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 0);
 				addItem(_Item(I[LK.Statistics], ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 1, 1);
-				addItem(_Item(I[LK.UserLang], ()=>new ViewUserLangPage(), Svgs.Languages().ToIcon()), 2, 0);
-				addItem(_Item(I[LK.NormLang], ()=>new ViewNormLangPage(), Svgs.Languages().ToIcon()), 2, 1);
 			});
 		});
 		return NIL;

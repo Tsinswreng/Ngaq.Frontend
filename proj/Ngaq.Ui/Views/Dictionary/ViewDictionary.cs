@@ -178,6 +178,13 @@ public partial class ViewDictionary
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
+			o.Header = I[DictK.NormLang];
+			o.Click += (s,e)=>{
+				var view = new ViewNormLangPage();
+				ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.NormLang], view));
+			};
+		});
+		menu.Items.A(new MenuItem(), o=>{
 			o.Header = I[DictK.ConfigureLangMapping];
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangToUserLangPage();
