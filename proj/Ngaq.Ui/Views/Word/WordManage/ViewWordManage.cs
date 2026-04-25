@@ -81,8 +81,8 @@ public partial class ViewWordManage
 				addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 0, 1);
 				addItem(_Item(I[LK.StudyPlan], ()=>new ViewStudyPlan(), Svgs.Schema().ToIcon()), 1, 0);
 				addItem(_Item(I[LK.Statistics], ()=>new ViewStatistics(), Svgs.ChartLineUpFill().ToIcon()), 1, 1);
-				addItem(_Item(I[LK.UserLang], ()=>new ViewUserLangPage(), Svgs.BookOpenTextFill().ToIcon()), 2, 0);
-				addItem(_Item(I[LK.NormLang], ()=>new ViewNormLangPage(), Svgs.BookOpenTextFill().ToIcon()), 2, 1);
+				addItem(_Item(I[LK.UserLang], ()=>new ViewUserLangPage(), Svgs.Languages().ToIcon()), 2, 0);
+				addItem(_Item(I[LK.NormLang], ()=>new ViewNormLangPage(), Svgs.Languages().ToIcon()), 2, 1);
 			});
 		});
 		return NIL;

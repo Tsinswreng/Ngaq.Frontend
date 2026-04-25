@@ -97,7 +97,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 
 			var rm = new Button{
 				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Remove]),
-				Background = UiCfg.Inst.DelBtnBg;
+				Background = UiCfg.Inst.DelBtnBg
 			};
 			rm.Click += (s,e)=>Ctx?.RemoveField(item);
 			row.A(rm);

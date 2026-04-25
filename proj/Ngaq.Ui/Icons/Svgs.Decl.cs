@@ -91,12 +91,12 @@ public partial class Svgs{
 	public static partial Svg BookmarkOutlineAdd();
 	//<iconPacks:PackIconMaterial Kind="BookAlphabet" />
 	public static partial Svg BookAlphabet();
-	
+
 	//<iconPacks:PackIconModern Kind="ListSelect" />
 	public static partial Svg ListSelect();
-	
+
 	//倒
-	//<iconPacks:PackIconCodicons Kind="FolderOpened" /> 
+	//<iconPacks:PackIconCodicons Kind="FolderOpened" />
 	public static partial Svg FolderOpened();
 	//<iconPacks:PackIconVaadinIcons Kind="FolderOutlinepenOutline" />
 	public static partial Svg FolderOutlinepenOutline();
@@ -104,6 +104,8 @@ public partial class Svgs{
 	public static partial Svg RegularLogOutCircle();
 	//<iconPacks:PackIconPhosphorIcons Kind="UserSwitch" />
 	public static partial Svg UserSwitch();
+	//<iconPacks:PackIconLucide Kind="Languages" />
+	public static partial Svg Languages();
 	//public static partial Svg a;
 }
 
