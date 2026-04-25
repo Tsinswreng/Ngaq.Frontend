@@ -10,6 +10,8 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -105,7 +107,7 @@ public partial class ViewUserLangEdit
 		var typeRow = MkComboRow(I[K.RelLangType], Ctx?.RelLangTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoRelLangTypeIndex, Mode: BindingMode.TwoWay));
 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowRelLangTypeField, Mode: BindingMode.OneWay);
 		sp.A(typeRow)
-		 .A(MkInputRow(I[K.RelLang], CBE.Mk<Ctx>(x=>x.PoRelLang, Mode: BindingMode.TwoWay)));
+		 .A(MkPickerRow(I[K.RelLang], CBE.Mk<Ctx>(x=>x.PoRelLang, Mode: BindingMode.TwoWay), OpenNormLangSelector));
 		return bdr;
 	}
 
@@ -152,6 +154,26 @@ public partial class ViewUserLangEdit
 		return sp;
 	}
 
+	/// 建立帶選擇按鈕的關聯語言輸入行。
+	Control MkPickerRow(str Label, IBinding Binding, Action OnPick){
+		var root = new StackPanel{Spacing = 3};
+		root.Children.Add(new TextBlock{Text = Label});
+		var row = new AutoGrid(IsRow:false);
+		row.Grid.ColumnDefinitions.AddRange([
+			ColDef(8, GUT.Star),
+			ColDef(2, GUT.Star),
+		]);
+		row.A(new TextBox(), tb=>{
+			tb.Bind(TextBox.TextProperty, Binding);
+		})
+		.A(new Button(), o=>{
+			o.Content = Svgs.ListSelect().ToIcon().WithText(I[K.Pick]);
+			o.Click += (s,e)=>OnPick();
+		});
+		root.Children.Add(row.Grid);
+		return root;
+	}
+
 	/// 建立只讀 Id 顯示行。
 	Control MkIdRow(str Label, IBinding Binding){
 		var row = new StackPanel{
@@ -168,6 +190,18 @@ public partial class ViewUserLangEdit
 		value.Bind(TextBlock.TextProperty, Binding);
 		row.Children.Add(value);
 		return row;
+	}
+
+	void OpenNormLangSelector(){
+		var view = new ViewNormLangPage();
+		if(view.Ctx is not null){
+			view.Ctx.Input = Ctx?.PoRelLang ?? "";
+			view.Ctx.SetSelectMode(po=>{
+				Ctx?.ApplyRelLangSelection(po);
+				view.ViewNavi?.Back();
+			});
+		}
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectNormLang], view));
 	}
 }
 

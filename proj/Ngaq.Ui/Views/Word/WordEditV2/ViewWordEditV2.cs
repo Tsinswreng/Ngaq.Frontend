@@ -139,11 +139,10 @@ public partial class ViewWordEditV2: AppViewBase{
 		sp.A(MkTempusRow(I[K.StoredAt], CBE.Mk<Ctx>(x=>x.StoredAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
 		sp.A(MkTempusRow(I[K.BizCreatedAt], CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
 		sp.A(MkTempusRow(I[K.BizUpdatedAt], CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
-		// DelAt 允許留空表示「未刪除」；不能用 TempusBox，否則空值會被轉成當前時間。
-		sp.A(MkInputRow(
-			I[K.DelAtUnixMs],
-			CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay)
-		));
+        sp.A(MkTempusRow(
+            Todo.I18n("SoftDeleteTime"),
+            CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay, Converter: _DelAtUnixMsConverter)
+        ));
 		return sv;
 	}
 
@@ -512,6 +511,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 	}
 }
+
 
 
 

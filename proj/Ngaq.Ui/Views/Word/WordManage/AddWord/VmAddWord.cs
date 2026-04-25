@@ -1,20 +1,18 @@
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 using System.Collections.ObjectModel;
-using System.Runtime.CompilerServices;
 using MethodTimer;
 using Ngaq.Core.Frontend.User;
-using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Svc;
-using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
-
+using Tsinswreng.CsI18n;
+using Tsinswreng.CsTools;
 
 using Ctx = VmAddWord;
+
 public partial class VmAddWord
 	:ViewModelBase
 {
-
 	public VmAddWord(){
 
 	}
@@ -23,117 +21,54 @@ public partial class VmAddWord
 		ISvcWord? SvcWord = null
 		,IFrontendUserCtxMgr? UserCtxMgr = null
 	){
-		this.SvcWord = SvcWord!;
-		this.UserCtxMgr = UserCtxMgr!;
+		this.SvcWord = SvcWord;
+		this.UserCtxMgr = UserCtxMgr;
 	}
 
-	ISvcWord SvcWord{get;set;} = null!;
-	IFrontendUserCtxMgr UserCtxMgr{get;set;} = null!;
+	ISvcWord? SvcWord{get;set;}
+	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmAddWord(){
+		#if DEBUG
 		{
 			var o = new Ctx();
+			o.Text = "hello\\ndictionary\\nexample";
 			Samples.Add(o);
-
 		}
+		#endif
 	}
 
-	protected str _WordTxtPath = "";
-	public str WordTxtPath{
-		get{return _WordTxtPath;}
-		set{SetProperty(ref _WordTxtPath, value);}
-	}
-
-	protected str _WordJsonsPath = "";
-	public str WordJsonsPath{
-		get{return _WordJsonsPath;}
-		set{SetProperty(ref _WordJsonsPath, value);}
-	}
-
-	protected str _Text = "";
 	public str Text{
-		get{return _Text;}
-		set{SetProperty(ref _Text, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
 
-	protected str _Json = "";
-	public str Json{
-		get{return _Json;}
-		set{SetProperty(ref _Json, value);}
-	}
-
-	protected i32 _TabIndex = 0;
-	public i32 TabIndex{
-		get{return _TabIndex;}
-		set{SetProperty(ref _TabIndex, value);}
-	}
-
-	public enum ETabIdx{
-		TxtPath = 0,
-		JsonsPath=1,
-		Text = 2,
-		Json = 3,
-	}
-
-
-	protected str _ErrStr="";//t
 	public str ErrStr{
-		get{return _ErrStr;}
-		set{SetProperty(ref _ErrStr, value);}
-	}
-
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
 
 	[Time]
 	public async Task<nil> Confirm(CT Ct){
-		if(SvcWord is null){
+		if(AnyNull(SvcWord, UserCtxMgr)){
 			return NIL;
 		}
-		var UserCtx = UserCtxMgr.GetUserCtx();
-
-		var eTabIdx = (ETabIdx)TabIndex;
-
-		await Task.Run(async()=>{
-			if(
-				eTabIdx == ETabIdx.Text
-				&& !str.IsNullOrEmpty(Text)
-			){
-				await SvcWord.AddWordsFromText(
-					UserCtx,Text,Ct
-				);
-			}else if(
-				eTabIdx == ETabIdx.Json
-				&& !str.IsNullOrEmpty(Json)
-			){
-				var JnWords = JSON.Parse<IList<JnWord>>(Json);// 測AOT兼容
-				if(JnWords == null){
-					HandleErr("Json parse error.");//TODO i18n
-					// ErrStr = "Json parse error.";
-					// ShowMsg();
-					return;
-				}
-				await SvcWord.AddEtMergeWords(UserCtx,JnWords,Ct);
-			}else if(
-				eTabIdx == ETabIdx.JsonsPath
-				&& !str.IsNullOrEmpty(WordJsonsPath)
-			){
-				var Enumr = ReadLinesAsync(WordJsonsPath, Ct);
-				await SvcWord.AddWordsByJsonLineIter(UserCtx, Enumr, Ct);
-			}
-		});
+		if(str.IsNullOrWhiteSpace(Text)){
+			ShowDialog(Todo.I18n("Text is empty"));
+			return NIL;
+		}
+		try{
+			await SvcWord.AddWordsFromText(
+				UserCtxMgr.GetUserCtx(),
+				Text,
+				Ct
+			);
+			ShowToast(Todo.I18n("Submitted"));
+		}catch(Exception ex){
+			ErrStr = ex.Message;
+			HandleErr(ex);
+		}
 		return NIL;
 	}
-
-	public static async IAsyncEnumerable<string> ReadLinesAsync(
-		string path,
-		[EnumeratorCancellation] CancellationToken Ct = default
-	){
-		using var sr = new StreamReader(path);   // 默认 UTF-8，可带编码参数
-		string? line;
-		while ((line = await sr.ReadLineAsync().ConfigureAwait(false)) != null){
-			Ct.ThrowIfCancellationRequested();
-			yield return line;
-		}
-	}
 }
-

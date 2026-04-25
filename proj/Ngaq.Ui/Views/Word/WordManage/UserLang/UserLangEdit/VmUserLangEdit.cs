@@ -8,6 +8,7 @@ using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
 using Ngaq.Core.Shared.Dictionary.Models;
+using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
 using Ngaq.Core.Shared.Word.Models.Po.UserLang;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
@@ -80,7 +81,7 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
 		.ToList();
 
 	/// 當存在多種類型時才顯示下拉。
-	public bool ShowRelLangTypeField => RelLangTypeOptions.Count > 1;
+	public bool ShowRelLangTypeField => true;
 
 	/// Id 只讀文本。
 	public str PoIdText{
@@ -131,6 +132,13 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
 		this.PoUserLang = ClonePoUserLang(PoUserLang);
 		IsCreateMode = PoUserLang is null || PoUserLang.Id == IdUserLang.Zero;
 		SyncFromPo();
+		return NIL;
+	}
+
+	/// 套用標準語言選擇結果到關聯語言字段。
+	public nil ApplyRelLangSelection(PoNormLang Po){
+		PoRelLangTypeIndex = GetRelLangTypeIndex(Po.Type);
+		PoRelLang = Po.Code ?? "";
 		return NIL;
 	}
 

@@ -138,10 +138,8 @@ public partial class ViewNormLangToUserLangPage
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>(Ctx.Rows){
 			Columns = {
 				new TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLangType], x=>x.NormLangType),
 				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang),
 				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.Descr], x=>x.Descr),
 				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
 			},
 		};

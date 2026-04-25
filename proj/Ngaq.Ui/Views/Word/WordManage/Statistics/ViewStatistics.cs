@@ -187,12 +187,13 @@ public partial class ViewStatistics: AppViewBase{
 			double ms = Ctx.Points[i].X;
 			var dt = DateTimeOffset.FromUnixTimeMilliseconds((long)ms);
 			tickPositions.Add(ms);
-			tickLabels.Add(dt.ToString("MM-dd"));
+			tickLabels.Add(dt.ToString("yy-MM-dd"));
 		}
 
 		o.Plot.Axes.Bottom.TickGenerator =
 			new ScottPlot.TickGenerators.NumericManual(tickPositions.ToArray(), tickLabels.ToArray());
-		o.Plot.Axes.Bottom.TickLabelStyle.Rotation = 90;
+		o.Plot.Axes.Bottom.TickLabelStyle.Rotation = 60;
+		//o.Plot.Axes.Bottom.MinimumSize = 96;
 
 		for(i32 i = 0; i < Ctx.Points.Count; i++){
 			var p = Ctx.Points[i];

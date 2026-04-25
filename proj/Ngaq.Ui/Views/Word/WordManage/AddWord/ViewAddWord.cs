@@ -1,278 +1,123 @@
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
-using Avalonia.Controls;
-using Ctx = VmAddWord;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
-using Microsoft.Extensions.DependencyInjection;
-using Avalonia.Data;
-using Avalonia.Styling;
-using Tsinswreng.AvlnTools.Tools;
-using Avalonia.Media;
+using System.ComponentModel;
 using Avalonia;
-using Avalonia.Controls.Primitives;
-using Tsinswreng.AvlnTools.Controls;
-using Tsinswreng.AvlnTools.Dsl;
-using Ngaq.Ui.Infra.Ctrls;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Media;
+using AvaloniaEdit;
+using Microsoft.Extensions.DependencyInjection;
+using Ngaq.Ui;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.AvlnTools.Dsl;
+using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsI18n;
+using Ctx = VmAddWord;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewAddWord
 	:AppViewBase
 {
-
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
 	}
 
 	public ViewAddWord(){
-		//Ctx = new Ctx();
 		Ctx = App.SvcProvider.GetRequiredService<Ctx>();
-
 		Style();
 		Render();
-
-		this.KeyDown += (s,e)=>{
-			if(e.Key == Avalonia.Input.Key.Escape){
-
-			}
-		};
 	}
 
-	public  partial class Cls_{
-
-	}
-	public Cls_ Cls{get;set;} = new Cls_();
+	TextEditor? WordEditor;
+	bool IsSyncingText = false;
+	AutoGrid Root = new(IsRow:true);
 
 	protected nil Style(){
-		var AcceptReturn = new Style(x=>
-			x.Is<TextBox>()
-		);
-		Styles.Add(AcceptReturn);
-		{
-			var o = AcceptReturn;
-			o.Set(TextBox.AcceptsReturnProperty, true);
-		}
-
-		//Styles.Add(SugarStyle.GridShowLines());
 		return NIL;
 	}
 
 	protected nil Render(){
-		var Root = new AutoGrid(IsRow:true);
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Auto),//Popup
-				RowDef(1, GUT.Auto),//empty
-				RowDef(8, GUT.Star),//tab
-				RowDef(1, GUT.Auto),//Confirm
-				RowDef(1, GUT.Star),//empty
+				RowDef(2, GUT.Auto),
+				RowDef(8, GUT.Star),
+				RowDef(1, GUT.Auto),
 			]);
 		});
-		{{
 
-			// Root.AddInit(new MsgPopup(), a=>{
-			// 	var Cfg = UiCfg.Inst;
-			// 	a._Popup.Width = Cfg.WindowWidth*0.9;
-			// 	a._Popup.MaxHeight = Cfg.WindowHeight*0.6;
-			// 	a._BdrBody.MaxHeight = a._Popup.MaxHeight*0.8;
-			// 	a._Popup.PlacementTarget = Root.Grid;
-			// 	a._Title.ContentInit(_TextBlock(), t=>{
-			// 		t.Text = "Error";
-			// 		t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
-			// 	});
-			// 	a._CloseBtn.Click += (s,e)=>{
-			// 		Ctx!.IsShowMsg = false;
-			// 	};
-			// 	a._Popup.Bind(
-			// 		Popup.IsOpenProperty
-			// 		,CBE.Mk<Ctx>(x=>x.IsShowMsg
-			// 			,Mode: BindingMode.OneWay
-			// 		)
-			// 	);
+		Root
+		.A(MkFormatHint())
+		.A(MkTextEditor())
+		.A(new OpBtn(), o=>{
+			o.BtnContent = I[K.Submit];
+			o.HorizontalAlignment = HAlign.Center;
+			o.HorizontalContentAlignment = HAlign.Center;
+			o.SetExe((Ct)=>Ctx?.Confirm(Ct));
+		});
 
-			// 	//a._Body.Content = Body;
-			// 	a._Body.ContentInit(new SelectableTextBlock{}, b=>{
-			// 		b.TextWrapping = TextWrapping.Wrap;
-			// 		b.Bind(
-			// 			TextBlock.TextProperty
-			// 			,CBE.Mk<Ctx>(x=>x.Msgs
-			// 				,Converter: new SimpleFnConvtr<ICollection<object?>, str>(y=>{
-			// 					var ans = string.Join("\n", y);
-			// 					return ans;
-			// 				})
-			// 			)
-			// 		);
-			// 	});
-			// 	a._Border.Background = new SolidColorBrush(Color.FromRgb(30,30,30));
-			// });
-			Root.Add();
-			Root.Add();
-			Root.A(new TabControl(), Tab=>{
-				Tab.Bind(
-					TabControl.SelectedIndexProperty
-					,CBE.Mk<Ctx>(
-						x=>x.TabIndex
-						,Mode: BindingMode.TwoWay
-					)
-				);
-				Tab.Items.A(new TabItem(), o=>{
-					o.Header = I[K.WordTxtFile];
-					o.Content = ByFile();
-				});
-				Tab.Items.A(new TabItem(), o=>{
-					o.Header = I[K.JsonsFile];
-					o.Content = ByJsonFile();
-				});
-				Tab.Items.A(new TabItem(), o=>{
-					o.Header = I[K.Text];
-					o.Content = ByText();
-				});
-				Tab.Items.A(new TabItem(), o=>{
-					o.Header = I[K.Json];
-					o.Content = ByJson();
-				});
-			});
-			Root.A(new OpBtn(), o=>{
-				o.BtnContent = I[K.Submit];
-				o.HorizontalAlignment = HAlign.Center;
-				o.HorizontalContentAlignment = HAlign.Center;
-				o.SetExe((Ct)=>Ctx?.Confirm(Ct));
-			});
-		}}//~IndexGrid
 		return NIL;
 	}
 
-	Control? ByFile(){
-		var Ans = new AutoGrid(IsRow:true);
-		Ans.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
-			RowDef(8, GUT.Star),
-		]);
-		{{
-			Ans.Add();
-
-			var Path = new AutoGrid(IsRow:false);
-			Ans.A(Path.Grid, o=>{
-				o.ColumnDefinitions.AddRange([
-					ColDef(2, GUT.Auto),
-					ColDef(8, GUT.Star),
-				]);
-			});
-			{{
-				Path.A(new Button(), o=>{
-					o.Content = I[K.Browse];
-					o.HorizontalAlignment = HAlign.Stretch;
-					o.HorizontalContentAlignment = HAlign.Stretch;
-					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色�?
-					o.BorderThickness = new Thickness(1);
-					o.Bind(
-						Button.BorderBrushProperty
-						,o.GetObservable(Button.BackgroundProperty)
-					);
-					//o.UseLayoutRounding = true;
-				});
-				Path.A(new TextBox(), o=>{
-					o.HorizontalAlignment = HAlign.Stretch;
-					o.Bind(
-						o.PropText
-						,new CBE(CBE.Pth<Ctx>(x=>x.WordTxtPath)){Mode=BindingMode.TwoWay}
-					);
-				});
-
-			}}
-			Ans.Add();
-
-		}}
-		return Ans.Grid;
-	}
-
-	Control? ByJsonFile(){
-		var Ans = new AutoGrid(IsRow:true);
-		Ans.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
-			RowDef(8, GUT.Star),
-		]);
-		{{
-			Ans.Add();
-
-			var Path = new AutoGrid(IsRow:false);
-			Ans.A(Path.Grid, o=>{
-				o.ColumnDefinitions.AddRange([
-					ColDef(2, GUT.Auto),
-					ColDef(8, GUT.Star),
-				]);
-			});
-			{{
-				Path.A(new Button(), o=>{
-					o.Content = "Browse";
-					o.HorizontalAlignment = HAlign.Stretch;
-					o.HorizontalContentAlignment = HAlign.Stretch;
-					//蔿使左ʹ按鈕與右ʹ輸入框 對齊。縱然、按鈕ʹ邊框ʹ色ˋ猶稍異於內ʹ背景色�?
-					o.BorderThickness = new Thickness(1);
-					o.Bind(
-						Button.BorderBrushProperty
-						,o.GetObservable(Button.BackgroundProperty)
-					);
-					//o.UseLayoutRounding = true;
-				});
-				Path.A(new TextBox(), o=>{
-					o.HorizontalAlignment = HAlign.Stretch;
-					o.Bind(
-						o.PropText
-						,new CBE(CBE.Pth<Ctx>(x=>x.WordJsonsPath)){Mode=BindingMode.TwoWay}
-					);
-				});
-
-			}}
-			Ans.Add();
-
-		}}
-		return Ans.Grid;
-	}
-
-
-	Control? ByText(){
-		var Ans = new AutoGrid(IsRow:true);
-		Ans.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(8, GUT.Star),
-			RowDef(1, GUT.Star),
-		]);
-
-		Ans.Add();
-
-		Ans.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,new CBE(CBE.Pth<Ctx>(x=>x.Text)){Mode=BindingMode.TwoWay}
-			);
+	Control MkFormatHint(){
+		var sp = new StackPanel{
+			Spacing = 4,
+			Margin = new Thickness(10, 10, 10, 6),
+		};
+		sp.A(new TextBlock(), o=>{
+			o.Text = Todo.I18n("FormatHint");
+			o.FontSize = UiCfg.Inst.BaseFontSize * 1.05;
+			o.TextWrapping = TextWrapping.Wrap;
+			o.Foreground = Brushes.LightGray;
+		})
+		.A(new TextBlock(), o=>{
+			o.Text = Todo.I18n("One entry per line; empty lines are ignored.");
+			o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
+			o.TextWrapping = TextWrapping.Wrap;
+			o.Foreground = Brushes.LightGray;
+		})
+		.A(new TextBlock(), o=>{
+			o.Text = Todo.I18n("Example: word<space>description");
+			o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
+			o.TextWrapping = TextWrapping.Wrap;
+			o.Foreground = Brushes.LightGray;
 		});
-
-		Ans.Add();
-
-		return Ans.Grid;
+		return sp;
 	}
 
-	Control? ByJson(){
-		var R = new AutoGrid(IsRow:true);
-		R.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(8, GUT.Star),
-			RowDef(1, GUT.Star),
-		]);
+	Control MkTextEditor(){
+		var editor = JsonTextEditorCtrl.Mk(Ctx?.Text, IsReadOnly: false, MinHeight: 320);
+		WordEditor = editor;
+		editor.TextChanged += (s,e)=>{
+			if(IsSyncingText || Ctx is null){
+				return;
+			}
+			IsSyncingText = true;
+			Ctx.Text = editor.Text;
+			IsSyncingText = false;
+		};
+		if(Ctx is not null){
+			Ctx.PropertyChanged += OnVmPropertyChanged;
+		}
+		DetachedFromVisualTree += (s,e)=>{
+			if(Ctx is not null){
+				Ctx.PropertyChanged -= OnVmPropertyChanged;
+			}
+		};
+		editor.Margin = new Thickness(10, 0, 10, 10);
+		return editor;
+	}
 
-		R.Add();
-
-		R.A(new TextBox(), o=>{
-			o.Bind(
-				o.PropText
-				,new CBE(CBE.Pth<Ctx>(x=>x.Json)){Mode=BindingMode.TwoWay}
-			);
-		});
-
-		R.Add();
-		return R.Grid;
+	void OnVmPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName != nameof(Ctx.Text) || WordEditor is null || Ctx is null || IsSyncingText){
+			return;
+		}
+		if(WordEditor.Text == Ctx.Text){
+			return;
+		}
+		IsSyncingText = true;
+		WordEditor.Text = Ctx.Text;
+		IsSyncingText = false;
 	}
 }
-

@@ -12,12 +12,13 @@ using ScottPlot;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsPage;
 using Tsinswreng.CsTempus;
+using Tsinswreng.CsI18n;
 using Ctx = VmStatistics;
 
 public partial class VmStatistics: ViewModelBase{
 	void Init(){
 		PageBar = VmPageBar.Mk();
-		PageBar.PageSize = 20;
+		PageBar.PageSize = 10;
 		PageBar.FnPrevPage = OnPrevPage;
 		PageBar.FnNextPage = OnNextPage;
 	}
@@ -108,10 +109,16 @@ public partial class VmStatistics: ViewModelBase{
 		//set{SetProperty(ref field, value);}
 	}
 
-	public static IReadOnlyList<str> LearnResultOptions{get;} = [
-		nameof(ELearn.Add),
-		nameof(ELearn.Rmb),
-		nameof(ELearn.Fgt),
+	static readonly IReadOnlyList<ELearn> LearnResultValues = [
+		ELearn.Add,
+		ELearn.Rmb,
+		ELearn.Fgt,
+	];
+
+	public IReadOnlyList<str> LearnResultOptions => [
+		Todo.I18n(nameof(ELearn.Add)),
+		Todo.I18n(nameof(ELearn.Rmb)),
+		Todo.I18n(nameof(ELearn.Fgt)),
 	];
 
 	public i32 LearnResultIndex{
@@ -152,14 +159,10 @@ public partial class VmStatistics: ViewModelBase{
 	}
 
 	static ELearn GetLearnResultByIndex(i32 Index){
-		if(Index < 0 || Index >= LearnResultOptions.Count){
+		if(Index < 0 || Index >= LearnResultValues.Count){
 			return ELearn.Add;
 		}
-		var text = LearnResultOptions[Index];
-		if(Enum.TryParse<ELearn>(text, out var parsed)){
-			return parsed;
-		}
-		return ELearn.Add;
+		return LearnResultValues[Index];
 	}
 
 	public List<Coordinates> Points{

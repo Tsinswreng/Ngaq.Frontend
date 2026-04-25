@@ -163,7 +163,7 @@ public partial class ViewNormLangToUserLangEdit
 			tb.Bind(TextBox.TextProperty, Binding);
 		})
 		.A(new Button(), o=>{
-			o.Content = Svgs.Search().ToIcon().WithText(I[K.Pick]);
+			o.Content = Svgs.ListSelect().ToIcon().WithText(I[K.Pick]);
 			o.Click += (s,e)=>OnPick();
 		});
 		root.Children.Add(row.Grid);

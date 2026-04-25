@@ -73,6 +73,9 @@ public partial class VmWordSyncV2: ViewModelBase{
 				await ClientWordSyncV2.Push(Ct);
 
 			});
+			Dispatcher.UIThread.Post(()=>{
+				ShowToast(I18n[K.Push]+" "+I18n[K.Saved]);
+			});
 		}catch (System.Exception Ex){
 			HandleErr(Ex);
 		}
@@ -89,6 +92,9 @@ public partial class VmWordSyncV2: ViewModelBase{
 		try{
 			await Task.Run(async()=>{
 				await ClientWordSyncV2.Pull(Ct);
+			});
+			Dispatcher.UIThread.Post(()=>{
+				ShowToast(I18n[K.Pull]+" "+I18n[K.Saved]);
 			});
 		}catch(Exception Ex){
 			HandleErr(Ex);
@@ -128,6 +134,9 @@ public partial class VmWordSyncV2: ViewModelBase{
 				Cfg?.Set(KeysClientCfg.Word.WordsPackExportPath, PathExport);
 				Cfg?.Save(default);
 			});
+			Dispatcher.UIThread.Post(()=>{
+				ShowToast(I18n[K.Export]+" "+I18n[K.Saved]);
+			});
 
 		}catch(Exception Ex){
 			HandleErr(Ex);
@@ -160,6 +169,9 @@ public partial class VmWordSyncV2: ViewModelBase{
 
 				Cfg?.Set(KeysClientCfg.Word.WordsPackImportPath, PathImport);
 				Cfg?.Save(default);
+			});
+			Dispatcher.UIThread.Post(()=>{
+				ShowToast(I18n[K.Import]+" "+I18n[K.Saved]);
 			});
 
 		}catch(Exception Ex){

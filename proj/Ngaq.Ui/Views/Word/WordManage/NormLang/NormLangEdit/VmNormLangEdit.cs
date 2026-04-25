@@ -65,7 +65,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 		.Select(x=>x.ToString())
 		.ToList();
 
-	public bool ShowTypeField => TypeOptions.Count > 1;
+	public bool ShowTypeField => true;
 
 	public str PoIdText{
 		get{return field;}

@@ -194,6 +194,11 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 		if(IsSelectMode){
 			if(Row?.Raw is not null){
 				FnOnSelected?.Invoke(Row.Raw);
+				return NIL;
+			}
+			// 選擇模式下仍允許從「新增」按鈕進入詳情頁創建語言。
+			if(Row is null){
+				OnOpenDetailRequested?.Invoke(null);
 			}
 			return NIL;
 		}

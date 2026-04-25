@@ -60,7 +60,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 		.Select(x=>x.ToString())
 		.ToList();
 
-	public bool ShowNormLangTypeField => NormLangTypeOptions.Count > 1;
+	public bool ShowNormLangTypeField => true;
 
 	public str PoIdText{
 		get{return field;}

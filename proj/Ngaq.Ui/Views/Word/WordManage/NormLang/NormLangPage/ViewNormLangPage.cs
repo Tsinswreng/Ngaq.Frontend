@@ -141,8 +141,8 @@ public partial class ViewNormLangPage
 			Columns = {
 				new TextColumn<Ctx.RowNormLang, str>("", x=>x.UiIdxText),
 				new TextColumn<Ctx.RowNormLang, str>(I[K.Code], x=>x.Code),
-				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName),
 				new TextColumn<Ctx.RowNormLang, str>(Todo.I18n("TranslatedName"), x=>x.TranslatedName),
+				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName),
 			},
 		};
 		Grid.Source = GridSource;
