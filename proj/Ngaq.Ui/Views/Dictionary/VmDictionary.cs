@@ -216,15 +216,35 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			lock(streamLock){
 				streamedText = StreamedResp.ToString();
 			}
-			RestoreResultSnapshot(PrevResult);
-			LastReqLlmDict = PrevReq;
-			LastRespLlmDict = PrevResp;
-			LastLlmRawOutput = PrevRawOutput;
-			LogError(
-				$"Dictionary lookup failed. " +
-				$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
-				$"LlmResponse={streamedText}"
-			);
+			var isParseFailed = IsLlmResponseParseFailed(ex);
+			if(isParseFailed){
+				// 解析失敗時保留流式已展示內容，並保留原始輸出供「查看/編輯原始響應」使用。
+				LastReqLlmDict = Req;
+				LastRespLlmDict = null;
+				LastLlmRawOutput = streamedText;
+				if(
+					str.IsNullOrWhiteSpace(Result?.Description)
+					&& !str.IsNullOrWhiteSpace(streamedText)
+				){
+					Result ??= App.DiOrMk<VmSimpleWord>();
+					Result.Description = streamedText;
+				}
+				LogWarn(
+					$"Dictionary lookup parse failed, keeping streamed content. " +
+					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
+					$"LlmResponse={streamedText}"
+				);
+			}else{
+				RestoreResultSnapshot(PrevResult);
+				LastReqLlmDict = PrevReq;
+				LastRespLlmDict = PrevResp;
+				LastLlmRawOutput = PrevRawOutput;
+				LogError(
+					$"Dictionary lookup failed. " +
+					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
+					$"LlmResponse={streamedText}"
+				);
+			}
 			HandleErr(ex);
 		}
 
@@ -359,6 +379,14 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	bool IsNormLangMappingErr(Exception Ex){
 		if(Ex is IAppErr AppErr){
 			return ReferenceEquals(AppErr.Type, KeysErr.Word.NormLangToUserLangIsNotMapped);
+		}
+		return false;
+	}
+
+	/// 判斷是否爲「LLM 響應解析失敗」業務異常。
+	bool IsLlmResponseParseFailed(Exception Ex){
+		if(Ex is IAppErr AppErr){
+			return ReferenceEquals(AppErr.Type, KeysErr.Dictionary.LlmResponseParseFailed);
 		}
 		return false;
 	}
