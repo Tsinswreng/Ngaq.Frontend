@@ -26,7 +26,7 @@ public partial class ViewSimpleWord
 		Style();
 		Render();
 	}
-	
+
 	public partial class Cls{
 
 	}
@@ -76,7 +76,7 @@ public partial class ViewSimpleWord
 				ColDef(1, GUT.Auto),
 			]);
 			Row.A(new OpBtn(), o=>{
-				var Icon = Svgs.VolHigh().ToIcon();
+				var Icon = Icons.VolHigh().ToIcon();
 				Icon.Height = UiCfg.Inst.BaseFontSize*0.8;
 				Icon.Width = UiCfg.Inst.BaseFontSize*0.8;
 				o.BtnContent = Icon;

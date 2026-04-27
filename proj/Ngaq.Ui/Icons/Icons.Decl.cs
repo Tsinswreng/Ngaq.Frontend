@@ -4,7 +4,7 @@ namespace Ngaq.Ui.Icons;
 定義成方法而非訪問器、方便在分部類中寫部分聲明、聲明與實現分離 㕥作文檔。
 禁止AI閱讀 Svgs.Impl.cs
 ")]
-public partial class Svgs{
+public partial class Icons{
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleLeftFill" />
 	public static partial Icon ArrowLeft();
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleRightFill" />

@@ -66,7 +66,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
 		g.A(new OpBtn(), o=>{
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.Save().ToIcon().WithText(I[K.Apply]);
+			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Apply]);
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>{
 				Ctx?.ApplyAndBack();

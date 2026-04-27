@@ -159,7 +159,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 			o.Text = "";
 		});
 		top.A(new Button(), o=>{
-			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddGroup]);
+			o.Content = Icons.Add().ToIcon().WithText(I[K.AddGroup]);
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Click += (s,e)=>{
 				if(isCore){
@@ -235,13 +235,13 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		bar.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.DelBtnBg;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.Delete().ToIcon().WithText(I[K.Delete]);
+			o.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		})
 		.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.Save().ToIcon().WithText(I[K.Save]);
+			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;

@@ -49,12 +49,12 @@ public partial class ViewSettings
 		var _Item = FnSettingItem(this.ViewNavi);
 
 		this.SetContent(new StackPanel(), S=>{
-			S.A(_Item(I[K.About], new ViewAbout(), Svgs.Info()));
-			S.A(_Item(I[K.UIConfig], new ViewCfgUi(), Svgs.SolidWindowAlt()));
-			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord(), Svgs.Learn()));
-			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage(), Svgs.Server()));
-			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary(), Svgs.Dictionary()));
-			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey(), Svgs.KeyboardAltSharp()));
+			S.A(_Item(I[K.About], new ViewAbout(), Icons.Info()));
+			S.A(_Item(I[K.UIConfig], new ViewCfgUi(), Icons.SolidWindowAlt()));
+			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord(), Icons.Learn()));
+			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage(), Icons.Server()));
+			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary(), Icons.Dictionary()));
+			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey(), Icons.KeyboardAltSharp()));
 		});
 		return NIL;
 	}

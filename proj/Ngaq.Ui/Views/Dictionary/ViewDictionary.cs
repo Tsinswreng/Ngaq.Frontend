@@ -125,20 +125,20 @@ public partial class ViewDictionary
 			})
 			.A(SearchBtn, o=>{
 				o._Button.StretchCenter();
-				o._Button.Content = Svgs.Search().ToIcon();
+				o._Button.Content = Icons.Search().ToIcon();
 				o._Button.Background = UiCfg.Inst.MainColor;
 				o.SetExe(Ct=>Ctx?.Lookup(Ct));
 			})
 			.A(SaveToWordBtn, o=>{
 				// 保存到詞庫按鈕只負責「轉換 + 跳編輯頁」；最終保存仍在編輯頁完成。
 				o._Button.StretchCenter();
-				o.BtnContent = Svgs.BookmarkOutlineAdd().ToIcon();
+				o.BtnContent = Icons.BookmarkOutlineAdd().ToIcon();
 				o.SetExe(Ct=>Ctx?.ToWordEdit(Ct));
 			})
 			.A(MenuBtn, o=>{
 				// 與搜尋/收藏按鈕統一使用 OpBtn 風格。
 				o._Button.StretchCenter();
-				o.BtnContent = Svgs.Menu().ToIcon();
+				o.BtnContent = Icons.Menu().ToIcon();
 				o._Button.Click += (s,e)=>OpenTitleMenuNear(o._Button);
 			});
 		}}

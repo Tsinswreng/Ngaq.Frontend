@@ -71,7 +71,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		sv.Content = root;
 
 		var addBtn = new Button{
-			Content = Svgs.Add().ToIcon().WithText(I[K.AddField]),
+			Content = Icons.Add().ToIcon().WithText(I[K.AddField]),
 			HorizontalAlignment = HAlign.Left,
 		};
 		addBtn.Click += (s,e)=>Ctx?.AddField();
@@ -96,7 +96,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			row.A(cb);
 
 			var rm = new Button{
-				Content = Svgs.Delete().ToIcon().WithText(I[K.Remove]),
+				Content = Icons.Delete().ToIcon().WithText(I[K.Remove]),
 				Background = UiCfg.Inst.DelBtnBg
 			};
 			rm.Click += (s,e)=>Ctx?.RemoveField(item);
@@ -124,7 +124,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			o.VerticalAlignment = VAlign.Center;
 		});
 		top.A(new Button(), o=>{
-			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddItem]);
+			o.Content = Icons.Add().ToIcon().WithText(I[K.AddItem]);
 			o.Click += (s,e)=>Ctx?.AddItem();
 		});
 		root.A(top.Grid);
@@ -189,11 +189,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Background = UiCfg.Inst.DelBtnBg;
-			o.Content = Svgs.Delete().ToIcon().WithText(I[K.Delete]);
+			o.Content = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.Click += (s,e)=>Ctx?.Delete();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.Save().ToIcon().WithText(I[K.SaveGroup]);
+			o.Content = Icons.Save().ToIcon().WithText(I[K.SaveGroup]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
 			o.StretchCenter();

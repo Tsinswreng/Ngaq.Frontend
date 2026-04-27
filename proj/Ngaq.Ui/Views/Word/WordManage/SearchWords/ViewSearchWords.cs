@@ -78,7 +78,7 @@ public partial class ViewSearchWords
 				);
 			})
 			.A(searchBtn, o=>{
-				o.BtnContent = Svgs.Search().ToIcon();
+				o.BtnContent = Icons.Search().ToIcon();
 				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
 				o._Button.StretchCenter();
 				o._Button.Background = UiCfg.Inst.MainColor;

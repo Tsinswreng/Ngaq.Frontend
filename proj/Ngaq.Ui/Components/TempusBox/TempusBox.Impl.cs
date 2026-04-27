@@ -170,7 +170,7 @@ public partial class TempusBox: ContentControl{
 
 	Button MkMenuBtn(){
 		var btn = new Button{
-			Content = Svgs.Calendar().ToIcon()
+			Content = Icons.Calendar().ToIcon()
 		};
 		btn.HorizontalAlignment = HAlign.Stretch;
 		btn.VerticalAlignment = VAlign.Stretch;

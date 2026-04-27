@@ -95,13 +95,13 @@ public partial class ViewNormLangToUserLangPage
 		})
 		.A(searchBtn, o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = Svgs.Search().ToIcon();
+			o.BtnContent = Icons.Search().ToIcon();
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.Content = Svgs.Add().ToIcon();
+			o.Content = Icons.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;

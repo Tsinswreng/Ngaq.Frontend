@@ -31,7 +31,7 @@ public partial class ViewWordListCard
 		var R = new ContextMenu();
 		R.Items.A(new MenuItem(), o=>{
 
-			o.Header = Svgs.Edit().ToIcon().WithText(AppI18n.Inst[K.Edit]);
+			o.Header = Icons.Edit().ToIcon().WithText(AppI18n.Inst[K.Edit]);
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
 
@@ -47,7 +47,7 @@ public partial class ViewWordListCard
 			};
 		})
 		.A(new MenuItem(), o=>{
-			o.Header = Svgs.VolHigh().ToIcon().WithText(AppI18n.Inst[K.Pronounce]);
+			o.Header = Icons.VolHigh().ToIcon().WithText(AppI18n.Inst[K.Pronounce]);
 			o.Click += async(s,e)=>{
 				if(Ctx is IWordCardMenuAction Action){
 					var R = await Action.PronounceWord(JnWord, default);

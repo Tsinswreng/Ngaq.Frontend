@@ -73,17 +73,17 @@ public class ViewFilterItemEdit: AppViewBase{
 			ColDef(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
-			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddItem]);
+			o.Content = Icons.Add().ToIcon().WithText(I[K.AddItem]);
 			o.Click += (s,e)=>Ctx?.AddItem();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.Delete().ToIcon().WithText(I[K.Delete]);
+			o.Content = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.Click += (s,e)=>Ctx?.Delete();
 		});
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.Save().ToIcon().WithText(I[K.Save]);
+			o.Content = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
 		});

@@ -120,7 +120,7 @@ public partial class ViewUserLangEdit
 		bar.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.Save().ToIcon().WithText(I[K.Save]);
+			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;
@@ -167,7 +167,7 @@ public partial class ViewUserLangEdit
 			tb.Bind(TextBox.TextProperty, Binding);
 		})
 		.A(new Button(), o=>{
-			o.Content = Svgs.ListSelect().ToIcon().WithText(I[K.Pick]);
+			o.Content = Icons.ListSelect().ToIcon().WithText(I[K.Pick]);
 			o.Click += (s,e)=>OnPick();
 		});
 		root.Children.Add(row.Grid);

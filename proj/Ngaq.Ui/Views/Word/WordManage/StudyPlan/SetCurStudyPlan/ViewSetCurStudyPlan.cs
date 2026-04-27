@@ -131,12 +131,12 @@ public partial class ViewSetCurStudyPlan
 		.A(MkInputRow(I[K.Descr], CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
 		.A(new OpBtn(), o=>{
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.ListSelect().ToIcon().WithText(I[K.Select]);
+			o.BtnContent = Icons.ListSelect().ToIcon().WithText(I[K.Select]);
 			o.SetExe((Ct)=>ChooseAndApplyStudyPlan(Ct));
 		})
 		.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.Edit().ToIcon().WithText(I[K.Edit]);
+			o.Content = Icons.Edit().ToIcon().WithText(I[K.Edit]);
 			o.Click += (s,e)=>{
 				var po = Ctx?.CurPoStudyPlan;
 				if(po is null){

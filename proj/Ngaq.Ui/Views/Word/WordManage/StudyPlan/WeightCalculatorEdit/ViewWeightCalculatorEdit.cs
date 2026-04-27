@@ -112,13 +112,13 @@ public partial class ViewWeightCalculatorEdit
 		bar.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.DelBtnBg;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.Delete().ToIcon().WithText(I[K.Delete]);
+			o.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		})
 		.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.Save().ToIcon().WithText(I[K.Save]);
+			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
 		return bar.Grid;

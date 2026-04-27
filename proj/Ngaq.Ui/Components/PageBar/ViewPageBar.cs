@@ -91,7 +91,7 @@ public partial class ViewPageBar
 		]);
 		Root
 		.A(MkPageBtn(), o=>{
-			o.BtnContent = Svgs.ArrowLeft().ToIcon();
+			o.BtnContent = Icons.ArrowLeft().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnPrevPage?.Invoke(Ctx, Ct));
 		})
 		.A(_TextBox(), o=>{
@@ -121,7 +121,7 @@ public partial class ViewPageBar
 			);
 		})
 		.A(MkPageBtn(), o=>{
-			o.BtnContent = Svgs.ArrowRight().ToIcon();
+			o.BtnContent = Icons.ArrowRight().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnNextPage?.Invoke(Ctx, Ct));
 		})
 		.A(MkPageSizeMenuBtn())
@@ -156,7 +156,7 @@ public partial class ViewPageBar
 
 		var btn = new Button(){
 			Init =o=>{
-				o.Content = Svgs.Menu().ToIcon();
+				o.Content = Icons.Menu().ToIcon();
 				StyleBtn(o);
 			}
 		};

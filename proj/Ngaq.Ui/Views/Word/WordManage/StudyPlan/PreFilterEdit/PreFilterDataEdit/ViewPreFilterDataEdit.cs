@@ -136,7 +136,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 			o.VerticalAlignment = VAlign.Center;
 		});
 		top.A(new Button(), o=>{
-			o.Content = Svgs.Add().ToIcon().WithText(I[K.AddGroup]);
+			o.Content = Icons.Add().ToIcon().WithText(I[K.AddGroup]);
 			o.HorizontalAlignment = HAlign.Right;
 			o.Click += (s,e)=>{
 				if(IsCore){
@@ -208,7 +208,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.Save().ToIcon().WithText(I[K.SaveDraft]);
+			o.Content = Icons.Save().ToIcon().WithText(I[K.SaveDraft]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>{
 				if(Ctx?.CommitPreFilterDataDraft() == true){

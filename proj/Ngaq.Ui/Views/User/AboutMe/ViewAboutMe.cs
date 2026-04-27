@@ -107,7 +107,7 @@ public partial class ViewAboutMe
 		{{
 			R.A(new Button(), o=>{
 				//o.Content = "⚙️";
-				o.Content = Svgs.Setting().ToIcon();
+				o.Content = Icons.Setting().ToIcon();
 				o.Click += (s,e)=>{
 					ViewNavi?.GoTo(
 					ToolView.WithTitle(I[KeysUiI18nCommon.SettingsTitle], new ViewSettings())

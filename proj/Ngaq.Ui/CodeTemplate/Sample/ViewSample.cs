@@ -137,14 +137,14 @@ public partial class ViewSample
 
 	public void SampleIcon(){
 		//基礎示例
-		Avalonia.Controls.Shapes.Path addIcon = Svgs.Add().ToIcon();
+		Avalonia.Controls.Shapes.Path addIcon = Icons.Add().ToIcon();
 		var b1 = new Button();
 		b1.SetContent(addIcon);
 // Svgs下 可用的圖標 在 Ngaq.Frontend/proj/Ngaq.Ui/Icons/Svgs.Decl.cs
 // 禁止閱讀 Svgs.Impl.cs !!!!
 		//圖標接文字示例:
 		var b2 = new Button();
-		b2.SetContent(Svgs.Add().ToIcon().WithText("Add"));
+		b2.SetContent(Icons.Add().ToIcon().WithText("Add"));
 	}
 
 

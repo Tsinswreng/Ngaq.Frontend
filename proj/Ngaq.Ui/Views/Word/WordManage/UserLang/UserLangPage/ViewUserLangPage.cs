@@ -104,14 +104,14 @@ public partial class ViewUserLangPage
 		})
 		.A(searchBtn, o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = Svgs.Search().ToIcon();
+			o.BtnContent = Icons.Search().ToIcon();
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
 			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowManageActions, Mode: BindingMode.OneWay);
-			o.Content = Svgs.Add().ToIcon();
+			o.Content = Icons.Add().ToIcon();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
@@ -121,7 +121,7 @@ public partial class ViewUserLangPage
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
-			o.Header = Svgs.DatabaseImport().ToIcon().WithText(I[K.AutoAddMissing]);
+			o.Header = Icons.DatabaseImport().ToIcon().WithText(I[K.AutoAddMissing]);
 			o.Click += (s,e)=>{
 				_ = Ctx?.AddAllUnregisteredUserLangs(default);
 			};

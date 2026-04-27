@@ -319,7 +319,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		root.A(new Button(), o=>{
 			o.Margin = new Thickness(10, 6, 10, 10);
 			o.Background = Brushes.Red;
-			o.Content = Svgs.Delete().ToIcon().WithText(I[K.Remove]);
+			o.Content = Icons.Delete().ToIcon().WithText(I[K.Remove]);
 			o.Click += (s, e)=>{
 				Ctx?.RemovePropRow(Row);
 				ViewNavi?.Back();
@@ -348,7 +348,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		root.A(new Button(), o=>{
 			o.Margin = new Thickness(10, 6, 10, 10);
 			o.Background = Brushes.Red;
-			o.Content = Svgs.Delete().ToIcon().WithText(I[K.Remove]);
+			o.Content = Icons.Delete().ToIcon().WithText(I[K.Remove]);
 			o.Click += (s, e)=>{
 				Ctx?.RemoveLearnRow(Row);
 				ViewNavi?.Back();
@@ -400,12 +400,12 @@ public partial class ViewWordEditV2: AppViewBase{
 		g.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.DelBtnBg;
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Svgs.Delete().ToIcon().WithText(I[K.Delete]);
+			o.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.SetExe(ct=>Ctx?.Delete(ct));
 		})
 		.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.MainColor;
-			o.BtnContent = Svgs.Save().ToIcon().WithText(I[K.Save]);
+			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o._Button.StretchCenter();
 			o.CBind<Ctx>(IsEnabledProperty, x=>x.IsDirty, Mode: BindingMode.OneWay);
 			o.SetExe(ct=>Ctx?.Save(ct));
@@ -416,7 +416,7 @@ public partial class ViewWordEditV2: AppViewBase{
 	Button MkBtnAddItem(str Label){
 		var o = new Button();
 		o.Margin = new Thickness(10, 10, 10, 4);
-		o.Content = Svgs.Add().ToIcon().WithText(" "+Label);
+		o.Content = Icons.Add().ToIcon().WithText(" "+Label);
 		return o;
 	}
 

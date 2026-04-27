@@ -111,7 +111,7 @@ public partial class ViewUserProfile
 					Sp
 						.A(new Button(), o=>{
 						o.StretchCenter();
-						o.Content = Svgs.UserSwitch().ToIcon().WithText(I[K.ChangeAccount]);
+						o.Content = Icons.UserSwitch().ToIcon().WithText(I[K.ChangeAccount]);
 						o.Click += (s,e)=>{
 							ViewNavi?.GoTo(
 								ToolView.WithTitle(I[K.ChangeAccount], new ViewLoginRegister())
@@ -121,7 +121,7 @@ public partial class ViewUserProfile
 					.A(new OpBtn(), o=>{
 						o._Button.StretchCenter();
 						o._Button.Background = Brushes.Red;
-						o.BtnContent = Svgs.RegularLogOutCircle().ToIcon().WithText(I[K.Logout]);;
+						o.BtnContent = Icons.RegularLogOutCircle().ToIcon().WithText(I[K.Logout]);;
 						o.SetExe((Ct)=>Ctx?.LogoutAsy(Ct));
 					});
 				});
