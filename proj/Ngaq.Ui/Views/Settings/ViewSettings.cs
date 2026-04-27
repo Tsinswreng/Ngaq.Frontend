@@ -42,13 +42,6 @@ public partial class ViewSettings
 
 
 	protected nil Style(){
-		Styles.A(new Style(
-			x=>x.Is<TextBox>()
-		).Set(
-				BackgroundProperty
-				,Brushes.Gray
-			)
-		);
 		return NIL;
 	}
 
@@ -77,6 +70,10 @@ public partial class ViewSettings
 		var Fn = (str Title, Control Target, Svg? Icon)=>{
 			var R = new SwipeLongPressBtn();
 			var titled = ToolView.WithTitle(Title, Target);
+			titled.Styles.Add(
+				new Style(x=>x.OfType<TextBox>())
+				.Set(TextBox.BackgroundProperty, new SolidColorBrush(Color.FromArgb(255, 32,32,32)))
+			);
 			R.HorizontalContentAlignment = HAlign.Left;
 			R.SetContent(new StackPanel(), o=>{
 				o.Orientation = Orientation.Horizontal;
