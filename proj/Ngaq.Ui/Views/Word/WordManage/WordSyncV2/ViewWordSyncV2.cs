@@ -44,9 +44,15 @@ public partial class ViewWordSyncV2
 		return NIL;
 	}
 	
-	OpBtn CenterBtn(){
+	OpBtn CenterOpBtn(){
 		var r = new OpBtn();
 		r._Button.StretchCenter();
+		return r;
+	}
+	
+	Button CenterBtn(){
+		var r = new Button();
+		r.StretchCenter();
 		return r;
 	}
 
@@ -56,8 +62,9 @@ public partial class ViewWordSyncV2
 		this.SetContent(Root.Grid);
 		Root.A(new StackPanel(), Sp=>{
 			Sp.Spacing = UiCfg.Inst.BaseFontSize * 0.5;
-			Sp.A(MkCloudSyncSection())
+			Sp
 			.A(MkLocalFileSyncSection())
+			.A(MkCloudSyncSection())
 			;
 		});
 		return NIL;
@@ -92,14 +99,14 @@ public partial class ViewWordSyncV2
 	/// <returns>區塊控件。</returns>
 	Control MkCloudSyncSection(){
 		return MkSection(Todo.I18n("雲端備份同步"), Body=>{
-			Body.A(CenterBtn(), o=>{
+			Body.A(CenterOpBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PushAsy(Ct)!);
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.CloudUpload().ToIcon(),
 					I[K.Push]
 				);
 			})
-			.A(CenterBtn(), o=>{
+			.A(CenterOpBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PullAsy(Ct));
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.CloudDownload().ToIcon(),
@@ -118,7 +125,7 @@ public partial class ViewWordSyncV2
 				o.Text = I[K.ExportPath];
 			})
 			.A(MkExportPathRow())
-			.A(CenterBtn(), o=>{
+			.A(CenterOpBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.DatabaseExport().ToIcon(),
 					I[K.Export]
@@ -132,7 +139,7 @@ public partial class ViewWordSyncV2
 				o.Text = I[K.ImportPath];
 			})
 			.A(MkImportPathRow())
-			.A(CenterBtn(), o=>{
+			.A(CenterOpBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.DatabaseImport().ToIcon(),
 					I[K.Import]
@@ -152,8 +159,8 @@ public partial class ViewWordSyncV2
 		row.A(new TextBox(), o=>{
 			o.CBind<Ctx>(o.PropText, x=>x.PathImport);
 		})
-		.A(new Button(), o=>{
-			o.Content = Icons.FolderOutlinepenOutline().ToIcon().WithText(I[K.Browse]);
+		.A(CenterBtn(), o=>{
+			o.Content = Icons.FolderOutlinepenOutline();
 			o.Click += async (s,e)=>{
 				var path = await PickImportPathAsy();
 				if(!str.IsNullOrWhiteSpace(path) && Ctx is not null){
@@ -173,8 +180,8 @@ public partial class ViewWordSyncV2
 		row.A(new TextBox(), o=>{
 			o.CBind<Ctx>(o.PropText, x=>x.PathExport);
 		})
-		.A(new Button(), o=>{
-			o.Content = Icons.FolderOutlinepenOutline().ToIcon().WithText(I[K.Browse]);
+		.A(CenterBtn(), o=>{
+			o.Content = Icons.FolderOutlinepenOutline();
 			o.Click += async (s,e)=>{
 				var path = await PickExportPathAsy();
 				if(!str.IsNullOrWhiteSpace(path) && Ctx is not null){
