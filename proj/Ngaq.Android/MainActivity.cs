@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 namespace Ngaq.Android;
 
@@ -207,8 +208,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 			? new Notification.Builder(this, DictionaryLookupNotificationChannelId)
 			: new Notification.Builder(this);
 		builder
-			.SetContentTitle(Todo.I18n("Ngaq 查詞"))
-			.SetContentText(Todo.I18n("點擊後讀取剪貼板並自動查詞"))
+			.SetContentTitle(AppI18n.Inst[K.NgaqDictionaryLookup])
+			.SetContentText(AppI18n.Inst[K.TapReadClipboardAndAutoLookup])
 			.SetSmallIcon(global::Android.Resource.Drawable.IcMenuSearch)
 			.SetOngoing(true)
 			.SetOnlyAlertOnce(true)

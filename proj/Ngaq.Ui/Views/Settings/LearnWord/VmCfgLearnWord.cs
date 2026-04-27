@@ -5,6 +5,7 @@ using Ngaq.Core.Shared.Kv.Svc;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsCore;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmCfgLearnWord;
 public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
@@ -77,7 +78,7 @@ public partial class VmCfgLearnWord: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		if(!u64.TryParse(MaxDisplayedWordCount, out var maxDisplayedWordCount)){
-			ShowDialog(Todo.I18n("MaxDisplayedWordCount must be an unsigned integer."));
+			ShowDialog(I18n[K.MaxDisplayedWordCountMustBeUnsignedInteger]);
 			return NIL;
 		}
 		//var langs = LanguageFilterExpr.Split('\n').AsOrToList();

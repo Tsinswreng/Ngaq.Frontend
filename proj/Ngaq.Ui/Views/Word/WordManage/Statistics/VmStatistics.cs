@@ -14,6 +14,7 @@ using Tsinswreng.CsPage;
 using Tsinswreng.CsTempus;
 using Tsinswreng.CsI18n;
 using Ctx = VmStatistics;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmStatistics: ViewModelBase{
 	void Init(){
@@ -116,9 +117,9 @@ public partial class VmStatistics: ViewModelBase{
 	];
 
 	public IReadOnlyList<str> LearnResultOptions => [
-		Todo.I18n(nameof(ELearn.Add)),
-		Todo.I18n(nameof(ELearn.Rmb)),
-		Todo.I18n(nameof(ELearn.Fgt)),
+		I18n[K.LearnAdd],
+		I18n[K.LearnRmb],
+		I18n[K.LearnFgt],
 	];
 
 	public i32 LearnResultIndex{

@@ -34,7 +34,6 @@
 		</PackageReference>
 		<PackageReference Include="MethodDecorator.Fody" />
 		<PackageReference Include="MethodTimer.Fody" />
-		<PackageReference Include="NAudio" />
 	</ItemGroup>
 
 	<ItemGroup>

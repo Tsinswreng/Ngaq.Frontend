@@ -9,6 +9,7 @@ using Tsinswreng.CsI18n;
 using Tsinswreng.CsTools;
 
 using Ctx = VmAddWord;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmAddWord
 	:ViewModelBase
@@ -55,7 +56,7 @@ public partial class VmAddWord
 			return NIL;
 		}
 		if(str.IsNullOrWhiteSpace(Text)){
-			ShowDialog(Todo.I18n("Text is empty"));
+			ShowDialog(I18n[K.TextIsEmpty]);
 			return NIL;
 		}
 		try{
@@ -64,7 +65,7 @@ public partial class VmAddWord
 				Text,
 				Ct
 			);
-			ShowToast(Todo.I18n("Submitted"));
+			ShowToast(I18n[K.Submitted]);
 		}catch(Exception ex){
 			ErrStr = ex.Message;
 			HandleErr(ex);

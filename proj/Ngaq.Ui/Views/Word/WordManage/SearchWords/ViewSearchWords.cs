@@ -154,7 +154,7 @@ public partial class ViewSearchWords
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
-			var title = Todo.I18n("從文本添加單詞");
+			var title = I[K.AddWordsFromText];
 			o.Header = title;
 			o.Click += (s,e)=>{
 				ViewNavi?.GoTo(

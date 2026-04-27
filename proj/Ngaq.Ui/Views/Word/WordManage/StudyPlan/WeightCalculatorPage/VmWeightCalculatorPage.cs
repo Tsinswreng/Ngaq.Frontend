@@ -10,6 +10,7 @@ using Ngaq.Core.Shared.StudyPlan.Svc;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 using Ctx = VmWeightCalculatorPage;
 
@@ -120,7 +121,12 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 						UiIdx = uiIdx,
 						UiIdxText = uiIdx.ToString(),
 						Name = ToolStudyPlanView.FormatUniqName(po.UniqName),
-						Type = Todo.I18n(po.Type.ToString()),
+						Type = po.Type switch{
+							EWeightCalculatorType.Unknown => I18n[K.WeightCalculatorTypeUnknown],
+							EWeightCalculatorType.Builtin => I18n[K.WeightCalculatorTypeBuiltin],
+							EWeightCalculatorType.JsV1 => I18n[K.WeightCalculatorTypeJsV1],
+							_ => po.Type.ToString(),
+						},
 						ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.DbUpdatedAt, po.DbCreatedAt),
 						Raw = po,
 					});

@@ -41,7 +41,7 @@ public partial class ViewCfgLang: AppViewBase{
 		});
 		Root.A(new StackPanel(), sp=>{
 			sp.A(new TextBlock(), o=>{
-				o.Text = Todo.I18n("Lang");
+				o.Text = I[K.Lang];
 			});
 			sp.A(new AutoCompleteBox(), o=>{
 				o.FilterMode = AutoCompleteFilterMode.StartsWith;

@@ -51,7 +51,7 @@ public partial class ViewLoginRegister
 
 	protected void HandleLoginSucceeded(object? Sender, EvtArgMsg Evt){
 		Dispatcher.UIThread.Post(()=>{
-			Ctx?.ShowToast(Todo.I18n("Login Succeeded"));
+			Ctx?.ShowToast(I[K.LoginSucceeded]);
 			if(ViewNavi?.Back() == true){
 				return;
 			}

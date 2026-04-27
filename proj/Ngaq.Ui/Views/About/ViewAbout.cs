@@ -61,7 +61,7 @@ public partial class ViewAbout
 			.A(new HyperlinkButton(), o=>{
 				var url = "https://github.com/Tsinswreng/CsNgaq/blob/master/Doc/Prod/en/JsWeight.md";
 				o.NavigateUri = new Uri(url);
-				o.SetContent(Todo.I18n("權重算法插件開發文檔"), o=>{
+				o.SetContent(I[K.WeightAlgorithmPluginDoc], o=>{
 
 				});
 			})

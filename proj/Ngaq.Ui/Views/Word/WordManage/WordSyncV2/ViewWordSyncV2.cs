@@ -98,7 +98,7 @@ public partial class ViewWordSyncV2
 	/// 雲端備份同步區：僅包含 Push / Pull。
 	/// <returns>區塊控件。</returns>
 	Control MkCloudSyncSection(){
-		return MkSection(Todo.I18n("雲端備份同步"), Body=>{
+		return MkSection(I[K.CloudBackupSync], Body=>{
 			Body.A(CenterOpBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PushAsy(Ct)!);
 				o.BtnContent = ToolIcon.IconWithTitle(
@@ -120,7 +120,7 @@ public partial class ViewWordSyncV2
 	/// 本地文件導入導出區：包含路徑輸入、文件選擇與導入導出按鈕。
 	/// <returns>區塊控件。</returns>
 	Control MkLocalFileSyncSection(){
-		return MkSection(Todo.I18n("本地文件導入導出"), Body=>{
+		return MkSection(I[K.LocalFileImportExport], Body=>{
 			Body.A(new TextBlock(), o=>{
 				o.Text = I[K.ExportPath];
 			})
@@ -197,11 +197,11 @@ public partial class ViewWordSyncV2
 	async Task<str?> PickImportPathAsy(){
 		var provider = TopLevel.GetTopLevel(this)?.StorageProvider;
 		if(provider is null){
-			Ctx?.ShowDialog(Todo.I18n("StorageProvider unavailable"));
+			Ctx?.ShowDialog(I[K.StorageProviderUnavailable]);
 			return null;
 		}
 		var files = await provider.OpenFilePickerAsync(new FilePickerOpenOptions{
-			Title = Todo.I18n("Select import file"),
+			Title = I[K.SelectImportFile],
 			AllowMultiple = false,
 		});
 		foreach(var file in files){
@@ -215,11 +215,11 @@ public partial class ViewWordSyncV2
 	async Task<str?> PickExportPathAsy(){
 		var provider = TopLevel.GetTopLevel(this)?.StorageProvider;
 		if(provider is null){
-			Ctx?.ShowDialog(Todo.I18n("StorageProvider unavailable"));
+			Ctx?.ShowDialog(I[K.StorageProviderUnavailable]);
 			return null;
 		}
 		var file = await provider.SaveFilePickerAsync(new FilePickerSaveOptions{
-			Title = Todo.I18n("Select export file"),
+			Title = I[K.SelectExportFile],
 			SuggestedFileName = "words-sync-v2.bin",
 		});
 		return file is null ? null : ToPath(file);
@@ -242,7 +242,7 @@ public partial class ViewWordSyncV2
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
-			var title = Todo.I18n("轉到舊版備份同步");
+			var title = I[K.GoToLegacyBackupSync];
 			o.Header = title;
 			o.Click += (s,e)=>{
 				ViewNavi?.GoTo(

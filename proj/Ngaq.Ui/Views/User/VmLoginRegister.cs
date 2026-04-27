@@ -13,6 +13,7 @@ using Ngaq.Core.Shared.User.Svc;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsErr;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmLoginRegister;
 public partial class VmLoginRegister: ViewModelBase{
 	protected VmLoginRegister(){}
@@ -110,7 +111,7 @@ public partial class VmLoginRegister: ViewModelBase{
 			};
 			await SvcUser.AddUser(User, reqAddUser, Ct);
 		});
-		ShowToast(Todo.I18n("Registration successful. Please log in."));
+		ShowToast(I18n[K.RegistrationSucceededPleaseLogIn]);
 		return NIL;
 	}
 	public async Task<nil> LoginAsy(CT Ct){

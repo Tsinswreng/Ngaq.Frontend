@@ -5,6 +5,8 @@ using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Shared.User.Svc;
 using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 using Ctx = VmUserProfile;
 public partial class VmUserProfile: ViewModelBase{
@@ -41,17 +43,17 @@ public partial class VmUserProfile: ViewModelBase{
 	public str UserIdRepr{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = Todo.I18n("Not Logged in");
+	} = AppI18n.Inst[K.NotLoggedIn];
 
 	/// 根據當前登錄上下文刷新 UserId 顯示。
 	protected nil RefreshByUserCtx(){
 		if(UserCtxMgr is null){
-			UserIdRepr = Todo.I18n("Not Logged in");
+			UserIdRepr = I18n[K.NotLoggedIn];
 			return NIL;
 		}
 		var User = UserCtxMgr.GetUserCtx();
 		if(User.LoginUserId.IsNullOrDefault()){
-			UserIdRepr = Todo.I18n("Not Logged in");
+			UserIdRepr = I18n[K.NotLoggedIn];
 		}else{
 			UserIdRepr = User.LoginUserId+"";
 		}

@@ -38,13 +38,13 @@ public partial class ViewCfgHotkey: AppViewBase{
 		Root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
 				sp.A(new TextBlock(), o=>{
-					o.Text = Todo.I18n("字典查詞快捷鍵修飾鍵（例如 Alt 或 Ctrl|Shift）");
+					o.Text = I[K.DictionaryLookupHotkeyModifiers];
 				});
 				sp.A(new TextBox(), o=>{
 					o.CBind<Ctx>(o.PropText, x=>x.DictionaryLookupModifiers);
 				});
 				sp.A(new TextBlock(), o=>{
-					o.Text = Todo.I18n("字典查詞快捷鍵主鍵（例如 E / F1 / Enter）");
+					o.Text = I[K.DictionaryLookupHotkeyKey];
 				});
 				sp.A(new TextBox(), o=>{
 					o.CBind<Ctx>(o.PropText, x=>x.DictionaryLookupKey);

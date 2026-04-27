@@ -35,13 +35,13 @@ public partial class ViewCfgLlmDictionary: AppViewBase{
 		Root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
 				sp.Spacing = UiCfg.Inst.BaseFontSize/2;
-				sp.A(new TextBlock(), o=>{o.Text = Todo.I18n("ApiUrl");});
+				sp.A(new TextBlock(), o=>{o.Text = I[K.ApiUrl];});
 				sp.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.ApiUrl);});
-				sp.A(new TextBlock(), o=>{o.Text = Todo.I18n("ApiKey");});
+				sp.A(new TextBlock(), o=>{o.Text = I[K.ApiKey];});
 				sp.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.ApiKey);});
-				sp.A(new TextBlock(), o=>{o.Text = Todo.I18n("Model");});
+				sp.A(new TextBlock(), o=>{o.Text = I[K.Model];});
 				sp.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.Model);});
-				sp.A(new TextBlock(), o=>{o.Text = Todo.I18n("Prompt");});
+				sp.A(new TextBlock(), o=>{o.Text = I[K.Prompt];});
 				sp.A(new TextBox(), o=>{
 					o.AcceptsReturn = true;
 					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;

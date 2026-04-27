@@ -59,15 +59,15 @@ public partial class ViewCfgLearnWord
 				})
 				.A(new CheckBox(), o=>{
 					//o.Tag = new TextBlock{Text = "Enable Random Background"};
-					o.Content = Todo.I18n("Enable Random Background");
+					o.Content = I[KeysUiI18nCommon.EnableRandomBackground];
 					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableRandomBackground);
 				})
 				.A(new CheckBox(), o=>{
-					o.Content = Todo.I18n("Enable Auto Pronounce");
+					o.Content = I[KeysUiI18nCommon.EnableAutoPronounce];
 					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableAutoPronounce);
 				})
 				.A(new TextBlock(), o=>{
-					o.Text = Todo.I18n("MaxDisplayedWordCount");
+					o.Text = I[KeysUiI18nCommon.MaxDisplayedWordCount];
 				})
 				.A(new TextBox(), o=>{
 					o.CBind<Ctx>(o.PropText, x=>x.MaxDisplayedWordCount);

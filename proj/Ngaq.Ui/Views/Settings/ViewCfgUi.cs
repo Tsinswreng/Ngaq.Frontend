@@ -37,7 +37,7 @@ public partial class ViewCfgUi
 		var _Item = ViewSettings.FnSettingItem(ViewNavi);
 		this.SetContent(new StackPanel(), S=>{
 			S.A(_Item(I[KeysUiI18nCommon.FontSize], new ViewCfgFont(), Icons.FontOutline()));
-			S.A(_Item(Todo.I18n("語言"), new ViewCfgLang(), Icons.EarthAmericasSolid()));
+			S.A(_Item(I[KeysUiI18nCommon.Language], new ViewCfgLang(), Icons.EarthAmericasSolid()));
 		});
 		return NIL;
 	}

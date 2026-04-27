@@ -86,6 +86,8 @@ public static class DiUi{
 		// 熱鍵字典入口：重用頁面並避免重複壓棧。
 		z.AddSingleton<ISvcDictionaryHotkeyNavigator, SvcDictionaryHotkeyNavigator>();
 		z.AddSingleton<IHotkeyDictionaryLookupAction, HotkeyDictionaryLookupAction>();
+		// 平臺層共用：統一解析「查詞熱鍵」配置，避免重複解析邏輯。
+		z.AddSingleton<IParseDictionaryLookupHotkeyCfg, DictionaryLookupHotkeyCfgParser>();
 		z.AddSingleton<I_GetViewNavi>(MgrViewNavi.Inst);
 		return z;
 	}

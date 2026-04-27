@@ -407,7 +407,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 跳到 WordEditV2，由用戶在編輯頁手動點 Save 才真正保存。
 	obj? GoToWordEditPage(JnWord JnWord){
 		if(OnOpenWordEdit is null){
-			ShowDialog(Todo.I18n("Word editor opener is not ready."));
+			ShowDialog(I18n[K.WordEditorOpenerNotReady]);
 			return NIL;
 		}
 		OnOpenWordEdit(JnWord);

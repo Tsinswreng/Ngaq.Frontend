@@ -36,7 +36,7 @@ public partial class ViewSettings
 	}
 
 	public partial class Cls{
-
+		public const str CfgSp = nameof(CfgSp);
 	}
 
 
@@ -52,9 +52,9 @@ public partial class ViewSettings
 			S.A(_Item(I[K.About], new ViewAbout(), Icons.Info()));
 			S.A(_Item(I[K.UIConfig], new ViewCfgUi(), Icons.SolidWindowAlt()));
 			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord(), Icons.Learn()));
-			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage(), Icons.Server()));
-			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary(), Icons.Dictionary()));
-			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey(), Icons.KeyboardAltSharp()));
+			S.A(_Item(I[K.ServiceAndStorage], new ViewCfgServerStorage(), Icons.Server()));
+			S.A(_Item(I[K.LlmDictionary], new ViewCfgLlmDictionary(), Icons.Dictionary()));
+			S.A(_Item(I[K.HotkeyConfig], new ViewCfgHotkey(), Icons.KeyboardAltSharp()));
 		});
 		return NIL;
 	}

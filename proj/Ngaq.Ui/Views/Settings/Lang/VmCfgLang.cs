@@ -8,6 +8,7 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.CsCfg;
 
 using Ctx = VmCfgLang;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 	/// 语言下拉项：显示 Code + NativeName。
@@ -128,7 +129,7 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 		Lang = LangCode;
 		// 設置頁只允許保存接口給出的候選語言。
 		if(UiLangCodeSet.Count > 0 && !UiLangCodeSet.Contains(LangCode)){
-			ShowDialog(Todo.I18n("請選擇候選語言列表中的值"));
+			ShowDialog(I18n[K.SelectCandidateLangValue]);
 			return NIL;
 		}
 		await Task.Run(async ()=>{

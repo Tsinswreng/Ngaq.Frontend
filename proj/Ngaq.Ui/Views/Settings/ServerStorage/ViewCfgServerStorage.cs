@@ -34,13 +34,13 @@ public partial class ViewCfgServerStorage: AppViewBase{
 		});
 		Root.A(new StackPanel(), sp=>{
 			sp.A(new TextBlock(), o=>{
-				o.Text = Todo.I18n("ServerBaseUrl");
+				o.Text = I[K.ServerBaseUrl];
 			});
 			sp.A(new TextBox(), o=>{
 				o.CBind<Ctx>(o.PropText, x=>x.ServerBaseUrl);
 			});
 			sp.A(new TextBlock(), o=>{
-				o.Text = Todo.I18n("SqlitePath");
+				o.Text = I[K.SqlitePath];
 			});
 			sp.A(new TextBox(), o=>{
 				o.CBind<Ctx>(o.PropText, x=>x.SqlitePath);

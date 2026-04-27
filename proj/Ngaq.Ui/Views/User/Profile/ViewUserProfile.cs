@@ -102,7 +102,7 @@ public partial class ViewUserProfile
 				})
 				.A(new Border())
 				.A(new TextBlock(), o=>{
-					o.Text = Todo.I18n("UserId");
+					o.Text = I[K.UserId];
 				})
 				.A(new SelectableTextBlock(), o=>{
 					o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.UserIdRepr));

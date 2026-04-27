@@ -140,7 +140,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		sp.A(MkTempusRow(I[K.BizCreatedAt], CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
 		sp.A(MkTempusRow(I[K.BizUpdatedAt], CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: _IsoTempusConverter)));
         sp.A(MkTempusRow(
-            Todo.I18n("SoftDeleteTime"),
+            I[K.SoftDeleteTime],
             CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay, Converter: _DelAtUnixMsConverter)
         ));
 		return sv;
@@ -360,19 +360,19 @@ public partial class ViewWordEditV2: AppViewBase{
 	IReadOnlyList<str> GetPropKeyOptions(){
 		var k = KeysProp.Inst;
 		return [
-			Todo.I18n(k.summary),
-			Todo.I18n(k.description),
-			Todo.I18n(k.note),
-			Todo.I18n(k.tag),
-			Todo.I18n(k.source),
-			Todo.I18n(k.alias),
-			Todo.I18n(k.pronunciation),
-			Todo.I18n(k.weight),
-			Todo.I18n(k.learn),
-			Todo.I18n(k.usage),
-			Todo.I18n(k.example),
-			Todo.I18n(k.relation),
-			Todo.I18n(k.Ref),
+			I[K.Summary],
+			I[K.Description],
+			I[K.Note],
+			I[K.Tag],
+			I[K.Source],
+			I[K.Alias],
+			I[K.Pronunciation],
+			I[K.Weight],
+			I[K.Learn],
+			I[K.Usage],
+			I[K.Example],
+			I[K.Relation],
+			I[K.Ref],
 		];
 	}
 
@@ -516,6 +516,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		}
 	}
 }
+
 
 
 

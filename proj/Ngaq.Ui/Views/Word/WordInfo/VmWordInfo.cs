@@ -3,10 +3,12 @@ using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Word.Models.Samples;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.CsTools;
 
 namespace Ngaq.Ui.Views.Word.WordInfo;
 using Ctx = VmWordInfo;
+using K = KeysUiI18nCommon;
 public partial class VmWordInfo
 	:ViewModelBase
 	//,IVmWord
@@ -44,32 +46,12 @@ public partial class VmWordInfo
 	}
 
 	public nil SetPromptBeforeStart(){
-		Descrs = [Todo.I18n("Press start button to begin learning.")];
+		Descrs = [I18n[K.PressStartButtonToBeginLearning]];
 		return NIL;
 	}
 
 	public nil SetPromptAfterStart(){
-string helpText = """
-• Click on a word card above to start learning a word.
-
-• Top menu buttons:
-	- ▶️ Start: Load and begin learning words.
-	- 💾 Save: Save your learning progress.
-	- 🔄 Reset: Clear all progress and start over.
-	- ⚙️ Settings: Configure learning preferences.
-
-• Learning a word:
-	- Click a word card to mark as remembered (green).
-	- Click again to mark as forgotten (red).
-	- Click once more to clear the mark (transparent).
-
-• Other operations:
-	- Long-press a word card for context menu options.
-	- Use the settings button to edit or add words.
-	- Save progress regularly to avoid data loss.
-""";
-
-		Descrs = [Todo.I18n(helpText)];
+		Descrs = [I18n[K.WordLearningHelpText]];
 		return NIL;
 	}
 

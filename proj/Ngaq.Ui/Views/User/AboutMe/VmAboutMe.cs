@@ -6,7 +6,9 @@ using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.User;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmAboutMe;
 public partial class VmAboutMe: ViewModelBase{
 	protected VmAboutMe(){}
@@ -56,10 +58,10 @@ public partial class VmAboutMe: ViewModelBase{
 
 		if(User.LoginUserId.IsNullOrDefault()){
 			IsLoggedIn = false;
-			UserIdRepr = Todo.I18n("Not Logged in");
+			UserIdRepr = I18n[K.NotLoggedIn];
 		}else{
 			IsLoggedIn = true;
-			UserIdRepr = $"{Todo.I18n("UserId")}: {User.LoginUserId}";
+			UserIdRepr = $"{I18n[K.UserId]}: {User.LoginUserId}";
 		}
 		AvatarImg = DfltAvatar.Img;
 		return NIL;
@@ -71,7 +73,7 @@ public partial class VmAboutMe: ViewModelBase{
 		set{SetProperty(ref field, value);}
 	}
 
-	protected str _UserIdRepr = Todo.I18n("Not Logged in");
+	protected str _UserIdRepr = AppI18n.Inst[K.NotLoggedIn];
 	public str UserIdRepr{
 		get{return _UserIdRepr;}
 		set{SetProperty(ref _UserIdRepr, value);}
