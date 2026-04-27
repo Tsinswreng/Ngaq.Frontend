@@ -34,6 +34,7 @@ public partial class ViewCfgLlmDictionary: AppViewBase{
 		});
 		Root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
+				sp.Spacing = UiCfg.Inst.BaseFontSize/2;
 				sp.A(new TextBlock(), o=>{o.Text = Todo.I18n("ApiUrl");});
 				sp.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.ApiUrl);});
 				sp.A(new TextBlock(), o=>{o.Text = Todo.I18n("ApiKey");});

@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Settings;
 
 using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Styling;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
@@ -16,6 +17,8 @@ using Tsinswreng.CsI18n;
 using Ctx = VmSettings;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ngaq.Ui.Icons;
+using Avalonia.Media;
+using Tsinswreng.AvlnTools.Tools;
 
 public partial class ViewSettings
 	:AppViewBase
@@ -32,13 +35,20 @@ public partial class ViewSettings
 		Render();
 	}
 
-	public partial class Cls_{
+	public partial class Cls{
 
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
+
 
 
 	protected nil Style(){
+		Styles.A(new Style(
+			x=>x.Is<TextBox>()
+		).Set(
+				BackgroundProperty
+				,Brushes.Gray
+			)
+		);
 		return NIL;
 	}
 
@@ -46,12 +56,12 @@ public partial class ViewSettings
 		var _Item = FnSettingItem(this.ViewNavi);
 
 		this.SetContent(new StackPanel(), S=>{
-			S.A(_Item(I[K.About], new ViewAbout()));//Svgs.Info
-			S.A(_Item(I[K.UIConfig], new ViewCfgUi()));//Svgs.SolidWindowAlt
-			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord()));//Svgs.BookOpenTextFill
-			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage()));//Svgs.Server
-			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary()));//Svgs.BookAlphabet
-			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey()));//Svgs.KeyboardAltSharp
+			S.A(_Item(I[K.About], new ViewAbout(), Svgs.Info()));
+			S.A(_Item(I[K.UIConfig], new ViewCfgUi(), Svgs.SolidWindowAlt()));
+			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord(), Svgs.BookOpenTextFill()));
+			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage(), Svgs.Server()));
+			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary(), Svgs.BookAlphabet()));
+			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey(), Svgs.KeyboardAltSharp()));
 		});
 		return NIL;
 	}
@@ -59,17 +69,28 @@ public partial class ViewSettings
 	public static Func<
 		str
 		,Control
+		,Svg?
 		,SwipeLongPressBtn
 	> FnSettingItem(
 		IViewNavi? ViewNavi
 	){
-		var Fn = (str Title, Control Target)=>{
+		var Fn = (str Title, Control Target, Svg? Icon)=>{
 			var R = new SwipeLongPressBtn();
 			var titled = ToolView.WithTitle(Title, Target);
 			R.HorizontalContentAlignment = HAlign.Left;
-			R.SetContent(new TextBlock(), o=>{
-				o.Text = Title;
-				o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+			R.SetContent(new StackPanel(), o=>{
+				o.Orientation = Orientation.Horizontal;
+				o.Spacing = UiCfg.Inst.BaseFontSize * 0.35;
+				if(Icon is not null){
+					o.A(Icon.Value.ToIcon(), iconCtrl=>{
+						iconCtrl.Width = UiCfg.Inst.BaseFontSize * 1.2;
+						iconCtrl.Height = UiCfg.Inst.BaseFontSize * 1.2;
+					});
+				}
+				o.A(new TextBlock(), txt=>{
+					txt.Text = Title;
+					txt.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				});
 			});
 			R.Click += (s,e)=>{
 				ViewNavi?.GoTo(titled);
