@@ -6,118 +6,118 @@ namespace Ngaq.Ui.Icons;
 ")]
 public partial class Svgs{
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleLeftFill" />
-	public static partial Svg ArrowLeft();
+	public static partial Icon ArrowLeft();
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleRightFill" />
-	public static partial Svg ArrowRight();
+	public static partial Icon ArrowRight();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="PlayCircle" />
-	public static partial Svg PlayCircle();
+	public static partial Icon PlayCircle();
 	//<iconPacks:PackIconPhosphorIcons Kind="PlayCircleFill" />
-	public static partial Svg StartLearn();
+	public static partial Icon StartLearn();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="FloppyDiskBackLight" />
-	public static partial Svg FloppyDiskBackLight();
+	public static partial Icon FloppyDiskBackLight();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="FloppyDiskBackFill" />
-	public static partial Svg Save();
+	public static partial Icon Save();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="XCircleFill" />
-	public static partial Svg CloseX();
+	public static partial Icon CloseX();
 	//<iconPacks:PackIconPhosphorIcons Kind="UserCircleFill" />
-	public static partial Svg User();
+	public static partial Icon User();
 	//<iconPacks:PackIconPhosphorIcons Kind="BookOpenTextFill" />
-	public static partial Svg Learn();
+	public static partial Icon Learn();
 	//<iconPacks:PackIconPhosphorIcons Kind="BookBookmarkFill" />
-	public static partial Svg UserWordLib();
+	public static partial Icon UserWordLib();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="GearFill" />
-	public static partial Svg Setting();
+	public static partial Icon Setting();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="GearSix" />
-	public static partial Svg GearSix();
+	public static partial Icon GearSix();
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowClockwiseBold" />
-	public static partial Svg ArrowClockwiseBold();
+	public static partial Icon ArrowClockwiseBold();
 
 	//<iconPacks:PackIconLucide Kind="RotateCcw" />
-	public static partial Svg RotateCcw();
+	public static partial Icon RotateCcw();
 	//<iconPacks:PackIconLucide Kind="RotateCw" />
-	public static partial Svg ResetLearnStatus();
+	public static partial Icon ResetLearnStatus();
 	//<iconPacks:PackIconZondicons Kind="Search" />
-	public static partial Svg Search();
+	public static partial Icon Search();
 	//<iconPacks:PackIconModern Kind="Add" />
-	public static partial Svg Add();
+	public static partial Icon Add();
 	//<iconPacks:PackIconMaterial Kind="SyncCircle" />
-	public static partial Svg SyncCircle();
+	public static partial Icon SyncCircle();
 	//<iconPacks:PackIconPhosphorIcons Kind="ChartLineUpFill" />
-	public static partial Svg Statistics();
+	public static partial Icon Statistics();
 	//<iconPacks:PackIconForkAwesome Kind="CloudUpload" />
-	public static partial Svg CloudUpload();
+	public static partial Icon CloudUpload();
 	//<iconPacks:PackIconForkAwesome Kind="CloudDownload" />
-	public static partial Svg CloudDownload();
+	public static partial Icon CloudDownload();
 	//<iconPacks:PackIconFontisto Kind="Import" />
-	public static partial Svg Import();
+	public static partial Icon Import();
 	//<iconPacks:PackIconBoxIcons Kind="SolidFileImport" />
-	public static partial Svg SolidFileImport();
+	public static partial Icon SolidFileImport();
 	//<iconPacks:PackIconBoxIcons Kind="SolidFileExport" />
-	public static partial Svg SolidFileExport();
+	public static partial Icon SolidFileExport();
 	//<iconPacks:PackIconMaterial Kind="DatabaseExport" />
-	public static partial Svg DatabaseExport();
+	public static partial Icon DatabaseExport();
 	//<iconPacks:PackIconMaterial Kind="DatabaseImport" />
-	public static partial Svg DatabaseImport();
+	public static partial Icon DatabaseImport();
 	//<iconPacks:PackIconLucide Kind="BookA" />
-	public static partial Svg BookA();
+	public static partial Icon BookA();
 
 	//<iconPacks:PackIconMaterialDesign Kind="Schema" />
-	public static partial Svg StudyPlan();
+	public static partial Icon StudyPlan();
 
 	//<iconPacks:PackIconMicrons Kind="VolHigh" />
 
-	public static partial Svg VolHigh();
+	public static partial Icon VolHigh();
 	//<iconPacks:PackIconIonicons Kind="CreateMD" />
-	public static partial Svg Edit();
+	public static partial Icon Edit();
 	//<iconPacks:PackIconMaterial Kind="DotsHorizontalCircleOutline" />
-	public static partial Svg Menu();
+	public static partial Icon Menu();
 	//<iconPacks:PackIconFontisto Kind="MoreV" />
-	public static partial Svg MoreV();
+	public static partial Icon MoreV();
 	//<iconPacks:PackIconMaterialDesign Kind="DeleteForeverSharp" />
-	public static partial Svg Delete();
+	public static partial Icon Delete();
 
 	//<iconPacks:PackIconForkAwesome Kind="Calendar" />
-	public static partial Svg Calendar();
+	public static partial Icon Calendar();
 
 	//<iconPacks:PackIconMaterial Kind="FormatLineStyle" />
-	public static partial Svg FormatLineStyle();
+	public static partial Icon FormatLineStyle();
 	//<iconPacks:PackIconZondicons Kind="BookmarkOutlineAdd" />
-	public static partial Svg BookmarkOutlineAdd();
+	public static partial Icon BookmarkOutlineAdd();
 	//<iconPacks:PackIconMaterial Kind="BookAlphabet" />
-	public static partial Svg Dictionary();
+	public static partial Icon Dictionary();
 
 	//<iconPacks:PackIconModern Kind="ListSelect" />
-	public static partial Svg ListSelect();
+	public static partial Icon ListSelect();
 
 	//倒
 	//<iconPacks:PackIconCodicons Kind="FolderOpened" />
-	public static partial Svg FolderOpened();
+	public static partial Icon FolderOpened();
 	//<iconPacks:PackIconVaadinIcons Kind="FolderOutlinepenOutline" />
-	public static partial Svg FolderOutlinepenOutline();
+	public static partial Icon FolderOutlinepenOutline();
 	//<iconPacks:PackIconBoxIcons Kind="RegularLogOutCircle" />
-	public static partial Svg RegularLogOutCircle();
+	public static partial Icon RegularLogOutCircle();
 	//<iconPacks:PackIconPhosphorIcons Kind="UserSwitch" />
-	public static partial Svg UserSwitch();
+	public static partial Icon UserSwitch();
 	//<iconPacks:PackIconLucide Kind="Languages" />
-	public static partial Svg Languages();
+	public static partial Icon Languages();
 	//<iconPacks:PackIconEvaIcons Kind="Info" />
-	public static partial Svg Info();
+	public static partial Icon Info();
 	//<iconPacks:PackIconBoxIcons Kind="SolidWindowAlt" />
-	public static partial Svg SolidWindowAlt();
+	public static partial Icon SolidWindowAlt();
 	//<iconPacks:PackIconModern Kind="Server" />
-	public static partial Svg Server();
+	public static partial Icon Server();
 	//<iconPacks:PackIconMaterialDesign Kind="KeyboardAltSharp" />
-	public static partial Svg KeyboardAltSharp();
+	public static partial Icon KeyboardAltSharp();
 	//<iconPacks:PackIconFileIcons Kind="FontOutline" />
-	public static partial Svg FontOutline();
+	public static partial Icon FontOutline();
 	//<iconPacks:PackIconFontAwesome Kind="EarthAmericasSolid" />
-	public static partial Svg EarthAmericasSolid();
-	//public static partial Svg a;
+	public static partial Icon EarthAmericasSolid();
+	//public static partial Icon a;
 }
 

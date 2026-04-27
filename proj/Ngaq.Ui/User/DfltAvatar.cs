@@ -6,8 +6,8 @@ namespace Ngaq.Ui.User;
 public class DfltAvatar{
 	public static IImage Img{get;} = new DrawingImage{
 		Drawing = new GeometryDrawing{
-			Geometry = Geometry.Parse(Svgs.User()),
-			Brush = Brushes.White
+			Geometry = Svgs.User().Data,
+			Brush = Brushes.White,
 		}
 	};
 	static DfltAvatar(){

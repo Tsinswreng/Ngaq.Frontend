@@ -6,4 +6,10 @@ public static class ExtnSvg{
 			return Icon.FromSvg(z);
 		}
 	}
+	extension(Icon z){
+		public Icon ToIcon(){
+			return z;
+		}
+	}
+
 }

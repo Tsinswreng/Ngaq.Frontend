@@ -62,12 +62,12 @@ public partial class ViewSettings
 	public static Func<
 		str
 		,Control
-		,Svg?
+		,Icon
 		,SwipeLongPressBtn
 	> FnSettingItem(
 		IViewNavi? ViewNavi
 	){
-		var Fn = (str Title, Control Target, Svg? Icon)=>{
+		var Fn = (str Title, Control Target, Icon? Icon)=>{
 			var R = new SwipeLongPressBtn();
 			var titled = ToolView.WithTitle(Title, Target);
 			titled.Styles.Add(
@@ -79,7 +79,7 @@ public partial class ViewSettings
 				o.Orientation = Orientation.Horizontal;
 				o.Spacing = UiCfg.Inst.BaseFontSize * 0.35;
 				if(Icon is not null){
-					o.A(Icon.Value.ToIcon(), iconCtrl=>{
+					o.A(Icon.ToIcon(), iconCtrl=>{
 						iconCtrl.Width = UiCfg.Inst.BaseFontSize * 1.2;
 						iconCtrl.Height = UiCfg.Inst.BaseFontSize * 1.2;
 					});

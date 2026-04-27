@@ -17,6 +17,10 @@ public class Icon:SPath{
 		R.Stretch = Stretch.Uniform;   // 让图形自动缩放到控件大小
 		return R;
 	}
+	public static implicit operator Icon(str s){
+		Svg svg = s;
+		return svg.ToIcon();
+	}
 }
 
 public static class ExtnIcon{
