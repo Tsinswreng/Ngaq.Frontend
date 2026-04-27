@@ -16,7 +16,7 @@
 
 	</PropertyGroup>
 
-	<PropertyGroup>
+	<PropertyGroup Condition="'$(OS)' == 'Windows_NT' and Exists('app.manifest')">
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 	</PropertyGroup>
 
