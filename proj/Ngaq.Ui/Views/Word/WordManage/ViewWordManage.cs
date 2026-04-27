@@ -9,10 +9,10 @@ using Avalonia.Styling;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
+using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
@@ -76,7 +76,7 @@ public partial class ViewWordManage
 				}
 
 				addItem(_Item(I[K.UserWordManage], ()=>new ViewSearchWords(), Svgs.UserWordLib().ToIcon()), 0, 0);
-				addItem(_Item(I[K.AddWords], ()=>new ViewAddWord(), Svgs.Add().ToIcon()), 0, 1);
+				addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSyncV2(), Svgs.SyncCircle().ToIcon()), 0, 1);
 				addItem(_Item(I[LK.StudyPlan], ()=>new ViewStudyPlan(), Svgs.StudyPlan().ToIcon()), 1, 0);
 				addItem(_Item(I[LK.Statistics], ()=>new ViewStatistics(), Svgs.Statistics().ToIcon()), 1, 1);
 			});

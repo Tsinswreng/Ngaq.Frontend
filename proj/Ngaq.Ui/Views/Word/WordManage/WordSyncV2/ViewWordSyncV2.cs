@@ -7,6 +7,7 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -20,6 +21,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// - 雲端 Push / Pull
 public partial class ViewWordSyncV2
 	:AppViewBase
+	,I_MkTitleMenu
 {
 
 	public Ctx? Ctx{
@@ -180,5 +182,26 @@ public partial class ViewWordSyncV2
 			return File.Path.LocalPath;
 		}
 		return File.Path.AbsolutePath;
+	}
+
+	/// <summary>
+	/// 頂欄菜單：跳轉到舊版備份同步頁。
+	/// </summary>
+	/// <returns>標題菜單控件。</returns>
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			var title = Todo.I18n("轉到舊版備份同步");
+			o.Header = title;
+			o.Click += (s,e)=>{
+				ViewNavi?.GoTo(
+					ToolView.WithTitle(
+						I[K.BackupEtSync],
+						new ViewWordSync()
+					)
+				);
+			};
+		});
+		return menu;
 	}
 }

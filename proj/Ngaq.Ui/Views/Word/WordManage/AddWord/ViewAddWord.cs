@@ -65,24 +65,6 @@ public partial class ViewAddWord
 			Spacing = 4,
 			Margin = new Thickness(10, 10, 10, 6),
 		};
-		sp.A(new TextBlock(), o=>{
-			o.Text = Todo.I18n("FormatHint");
-			o.FontSize = UiCfg.Inst.BaseFontSize * 1.05;
-			o.TextWrapping = TextWrapping.Wrap;
-			o.Foreground = Brushes.LightGray;
-		})
-		.A(new TextBlock(), o=>{
-			o.Text = Todo.I18n("One entry per line; empty lines are ignored.");
-			o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
-			o.TextWrapping = TextWrapping.Wrap;
-			o.Foreground = Brushes.LightGray;
-		})
-		.A(new TextBlock(), o=>{
-			o.Text = Todo.I18n("Example: word<space>description");
-			o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
-			o.TextWrapping = TextWrapping.Wrap;
-			o.Foreground = Brushes.LightGray;
-		});
 		return sp;
 	}
 

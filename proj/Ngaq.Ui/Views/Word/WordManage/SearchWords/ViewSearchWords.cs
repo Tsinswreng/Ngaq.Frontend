@@ -13,9 +13,9 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordEditV2;
+using Ngaq.Ui.Views.Word.WordManage.AddWord;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
-using Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -154,6 +154,18 @@ public partial class ViewSearchWords
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
 		menu.Items.A(new MenuItem(), o=>{
+			var title = Todo.I18n("從文本添加單詞");
+			o.Header = title;
+			o.Click += (s,e)=>{
+				ViewNavi?.GoTo(
+					ToolView.WithTitle(
+						title,
+						new ViewAddWord()
+					)
+				);
+			};
+		});
+		menu.Items.A(new MenuItem(), o=>{
 			var title = I[K.UserLang];
 			o.Header = title;
 			o.Click += (s,e)=>{
@@ -166,19 +178,7 @@ public partial class ViewSearchWords
 			};
 		});
 		menu.Items.A(new MenuItem(), o=>{
-			var title = I[K.BackupEtSync] + " V1";
-			o.Header = title;
-			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(
-					ToolView.WithTitle(
-						title,
-						new ViewWordSync()
-					)
-				);
-			};
-		});
-		menu.Items.A(new MenuItem(), o=>{
-			var title = I[K.BackupEtSync] + " V2";
+			var title = I[K.BackupEtSync];
 			o.Header = title;
 			o.Click += (s,e)=>{
 				ViewNavi?.GoTo(
