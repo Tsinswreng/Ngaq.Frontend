@@ -61,8 +61,13 @@ public class HttpCaller:IHttpCaller{
 				reqMsg.Headers.Add("X-Client-Id", clientId+"");
 			}
 
-			resp = await HttpClient.SendAsync(reqMsg, Ct);
-
+			try{
+				resp = await HttpClient.SendAsync(reqMsg, Ct);
+			}catch(HttpRequestException ex){
+				var e = KeysErr.Common.NetWorkErr.ToErr();
+				e.AddErr(ex);
+				throw e;
+			}
 			if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
 				dl.Add(resp);
 				var refresh = await RefreshBothToken(Ct);
@@ -113,7 +118,13 @@ public class HttpCaller:IHttpCaller{
 				reqMsg.Headers.Add("X-Client-Id", clientId+"");
 			}
 
-			resp = await HttpClient.SendAsync(reqMsg, Ct);
+			try{
+				resp = await HttpClient.SendAsync(reqMsg, Ct);
+			}catch(HttpRequestException ex){
+				var e = KeysErr.Common.NetWorkErr.ToErr();
+				e.AddErr(ex);
+				throw e;
+			}
 
 			if(resp.StatusCode == System.Net.HttpStatusCode.Unauthorized){
 				dl.Add(resp);
@@ -212,8 +223,14 @@ public class HttpCaller:IHttpCaller{
 		using var content = new StringContent(
 			Json, Encoding.UTF8, "application/json"
 		);
-		using var resp = await HttpClient.PostAsync(Url, content, Ct);
-
+		HttpResponseMessage resp;
+		try{
+			resp = await HttpClient.PostAsync(Url, content, Ct);
+		}catch(HttpRequestException ex){
+			var e = KeysErr.Common.NetWorkErr.ToErr();
+			e.AddErr(ex);
+			throw e;
+		}
 
 		var body = await resp.Content.ReadAsStringAsync(Ct);
 		//var R2 = JsonS.Parse<RespRefreshBothToken>(body);

@@ -103,10 +103,10 @@ public partial class ViewUserProfile
 					// 	,CBE.Mk<Ctx>(x=>x.Avatar)
 					// );
 				})
-				.A(new SelectableTextBox(), o=>{
-					o.CBind<Ctx>(
-						o.PropText_(),
-						x=>x.UserIdRepr
+				.A(new Avalonia.Controls.SelectableTextBlock(), o=>{
+					o.Bind(
+						Avalonia.Controls.SelectableTextBlock.TextProperty,
+						CBE.Mk<Ctx>(x=>x.UserIdRepr)
 					);
 				})
 				.A(new StackPanel(), Sp=>{

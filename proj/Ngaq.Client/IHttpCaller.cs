@@ -1,4 +1,11 @@
+using Ngaq.Core.Infra.Errors;
+using Tsinswreng.CsCore;
+
 namespace Ngaq.Client;
+
+[Doc(@$"
+#Throw[{nameof(KeysErr.Common.NetWorkErr)}][網絡錯誤 如連不通時]
+")]
 public interface IHttpCaller {
 	public Task<TResp?> Post<TReq, TResp>(
 		str RelaUrl,TReq Req,CT Ct
