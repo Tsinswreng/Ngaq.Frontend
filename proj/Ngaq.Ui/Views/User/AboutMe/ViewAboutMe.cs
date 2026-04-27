@@ -87,9 +87,15 @@ public partial class ViewAboutMe
 				);
 			});
 			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(
-					ToolView.WithTitle("", new ViewLoginRegister())
-				);
+				if(Ctx?.IsLoggedIn == true){
+					ViewNavi?.GoTo(
+						ToolView.WithTitle(I[KeysUiI18nCommon.UserProfile], new ViewUserProfile())
+					);
+				}else{
+					ViewNavi?.GoTo(
+						ToolView.WithTitle("", new ViewLoginRegister())
+					);
+				}
 			};
 		});
 		return R.Grid;

@@ -59,10 +59,9 @@ public partial class ViewUserProfile
 		});
 	}
 
-	public partial class Cls_{
+	public partial class Cls{
 
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
 	public AutoGrid Root = new(IsRow: true);
 
 	protected nil Style(){
@@ -104,8 +103,11 @@ public partial class ViewUserProfile
 					// 	,CBE.Mk<Ctx>(x=>x.Avatar)
 					// );
 				})
-				.A(new TextBox(), o=>{
-
+				.A(new SelectableTextBox(), o=>{
+					o.CBind<Ctx>(
+						o.PropText_(),
+						x=>x.UserIdRepr
+					);
 				})
 				.A(new StackPanel(), Sp=>{
 					Sp

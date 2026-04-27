@@ -55,14 +55,21 @@ public partial class VmAboutMe: ViewModelBase{
 		}
 
 		if(User.LoginUserId.IsNullOrDefault()){
+			IsLoggedIn = false;
 			UserIdRepr = Todo.I18n("Not Logged in");
 		}else{
-			UserIdRepr = User.LoginUserId+"";
+			IsLoggedIn = true;
+			UserIdRepr = $"{Todo.I18n("UserId")}: {User.LoginUserId}";
 		}
 		AvatarImg = DfltAvatar.Img;
 		return NIL;
 	}
 
+	/// 控制 UserId 區域點擊後的跳轉目標。
+	public bool IsLoggedIn{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	}
 
 	protected str _UserIdRepr = Todo.I18n("Not Logged in");
 	public str UserIdRepr{

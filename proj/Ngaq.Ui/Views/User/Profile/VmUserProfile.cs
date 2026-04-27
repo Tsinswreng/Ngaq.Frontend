@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Models.Sys.Req;
 using Ngaq.Core.Shared.User.Svc;
+using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
 
 using Ctx = VmUserProfile;
@@ -33,10 +34,29 @@ public partial class VmUserProfile: ViewModelBase{
 	){
 		this.SvcUser = SvcUser;
 		this.UserCtxMgr = UserCtxMgr;
+		RefreshByUserCtx();
 	}
 
+	/// 顯示在個人頁面的 UserId 文本。
+	public str UserIdRepr{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = Todo.I18n("Not Logged in");
 
-	
+	/// 根據當前登錄上下文刷新 UserId 顯示。
+	protected nil RefreshByUserCtx(){
+		if(UserCtxMgr is null){
+			UserIdRepr = Todo.I18n("Not Logged in");
+			return NIL;
+		}
+		var User = UserCtxMgr.GetUserCtx();
+		if(User.LoginUserId.IsNullOrDefault()){
+			UserIdRepr = Todo.I18n("Not Logged in");
+		}else{
+			UserIdRepr = User.LoginUserId+"";
+		}
+		return NIL;
+	}
 
 /*
 	public str YYY{
