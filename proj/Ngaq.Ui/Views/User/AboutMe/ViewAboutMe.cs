@@ -77,27 +77,27 @@ public partial class ViewAboutMe
 				);
 			};
 		});
-		R.A(new SwipeLongPressBtn(), o=>{
-			o.VAlign(VAlign.Stretch);
-			o.SetContent(new TextBlock(), t=>{
-				t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
-				t.Bind(
-					t.PropText_()
-					,CBE.Mk<Ctx>(x=>x.UserIdRepr)
-				);
-			});
-			o.Click += (s,e)=>{
-				if(Ctx?.IsLoggedIn == true){
-					ViewNavi?.GoTo(
-						ToolView.WithTitle(I[KeysUiI18nCommon.UserProfile], new ViewUserProfile())
-					);
-				}else{
-					ViewNavi?.GoTo(
-						ToolView.WithTitle("", new ViewLoginRegister())
-					);
-				}
-			};
-		});
+		// R.A(new SwipeLongPressBtn(), o=>{
+		// 	o.VAlign(VAlign.Stretch);
+		// 	o.SetContent(new TextBlock(), t=>{
+		// 		t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+		// 		t.Bind(
+		// 			t.PropText_()
+		// 			,CBE.Mk<Ctx>(x=>x.UserIdRepr)
+		// 		);
+		// 	});
+		// 	o.Click += (s,e)=>{
+		// 		if(Ctx?.IsLoggedIn == true){
+		// 			ViewNavi?.GoTo(
+		// 				ToolView.WithTitle(I[KeysUiI18nCommon.UserProfile], new ViewUserProfile())
+		// 			);
+		// 		}else{
+		// 			ViewNavi?.GoTo(
+		// 				ToolView.WithTitle("", new ViewLoginRegister())
+		// 			);
+		// 		}
+		// 	};
+		// });
 		return R.Grid;
 	}
 

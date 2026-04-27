@@ -85,7 +85,7 @@ public partial class ViewRegister
 				});
 				b.HorizontalAlignment = HAlign.Stretch;
 				b.Background = UiCfg.Inst.MainColor;
-				o.SetExe((Ct)=>Ctx?.RegisterAsy(Ct));
+				o.SetExe((Ct)=>Ctx?.Register(Ct));
 			});
 		});
 		Root.A(new Border(), _=>{});

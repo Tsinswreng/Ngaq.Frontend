@@ -95,7 +95,7 @@ public partial class VmLoginRegister: ViewModelBase{
 	}
 
 
-	public async Task<nil> RegisterAsy(CT Ct){
+	public async Task<nil> Register(CT Ct){
 		if(!CheckRegister()){
 			return NIL;
 		}
@@ -110,6 +110,7 @@ public partial class VmLoginRegister: ViewModelBase{
 			};
 			await SvcUser.AddUser(User, reqAddUser, Ct);
 		});
+		ShowToast(Todo.I18n("Registration successful. Please log in."));
 		return NIL;
 	}
 	public async Task<nil> LoginAsy(CT Ct){
