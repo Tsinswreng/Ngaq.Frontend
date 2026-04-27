@@ -106,6 +106,18 @@ public partial class Svgs{
 	public static partial Svg UserSwitch();
 	//<iconPacks:PackIconLucide Kind="Languages" />
 	public static partial Svg Languages();
+	//<iconPacks:PackIconEvaIcons Kind="Info" />
+	public static partial Svg Info();
+	//<iconPacks:PackIconBoxIcons Kind="SolidWindowAlt" />
+	public static partial Svg SolidWindowAlt();
+	//<iconPacks:PackIconModern Kind="Server" />
+	public static partial Svg Server();
+	//<iconPacks:PackIconMaterialDesign Kind="KeyboardAltSharp" />
+	public static partial Svg KeyboardAltSharp();
+	//<iconPacks:PackIconFileIcons Kind="FontOutline" />
+	public static partial Svg FontOutline();
+	//<iconPacks:PackIconFontAwesome Kind="EarthAmericasSolid" />
+	public static partial Svg EarthAmericasSolid();
 	//public static partial Svg a;
 }
 

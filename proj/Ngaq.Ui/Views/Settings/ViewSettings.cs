@@ -15,6 +15,8 @@ using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsI18n;
 using Ctx = VmSettings;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ngaq.Ui.Icons;
+
 public partial class ViewSettings
 	:AppViewBase
 {
@@ -42,13 +44,14 @@ public partial class ViewSettings
 
 	protected nil Render(){
 		var _Item = FnSettingItem(this.ViewNavi);
+
 		this.SetContent(new StackPanel(), S=>{
-			S.A(_Item(I[K.About], new ViewAbout()));
-			S.A(_Item(I[K.UIConfig], new ViewCfgUi()));
-			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord()));
-			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage()));
-			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary()));
-			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey()));
+			S.A(_Item(I[K.About], new ViewAbout()));//Svgs.Info
+			S.A(_Item(I[K.UIConfig], new ViewCfgUi()));//Svgs.SolidWindowAlt
+			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord()));//Svgs.BookOpenTextFill
+			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage()));//Svgs.Server
+			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary()));//Svgs.BookAlphabet
+			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey()));//Svgs.KeyboardAltSharp
 		});
 		return NIL;
 	}

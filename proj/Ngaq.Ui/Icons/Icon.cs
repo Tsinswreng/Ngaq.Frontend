@@ -25,5 +25,10 @@ public static class ExtnIcon{
 			return HoriCloseCtrls.Mk(z, new TextBlock{Text=" "+Text});
 		}
 	}
+	extension(Svg z){
+		public HoriCloseCtrls WithText(str Text){
+			return HoriCloseCtrls.Mk(z.ToIcon(), new TextBlock{Text=" "+Text});
+		}
+	}
 
 }
