@@ -51,10 +51,48 @@ public partial class ViewWordSyncV2
 	}
 
 	AutoGrid Root = new(IsRow:true);
+	/// 渲染頁面主體：分成雲端同步區與本地文件同步區。
 	protected nil Render(){
 		this.SetContent(Root.Grid);
 		Root.A(new StackPanel(), Sp=>{
-			Sp.A(CenterBtn(), o=>{
+			Sp.Spacing = UiCfg.Inst.BaseFontSize * 0.5;
+			Sp.A(MkCloudSyncSection())
+			.A(MkLocalFileSyncSection())
+			;
+		});
+		return NIL;
+	}
+
+	/// 建立帶標題和邊框的區塊容器。
+	/// <param name="Title">區塊標題。</param>
+	/// <param name="FnFillBody">填充區塊內容的回調。</param>
+	/// <returns>區塊控件。</returns>
+	Control MkSection(str Title, Action<StackPanel> FnFillBody){
+		var bdr = new Border();
+		bdr.BorderBrush = UiCfg.Inst.MainColor;
+		bdr.BorderThickness = new Thickness(1);
+		bdr.Padding = new Thickness(
+			UiCfg.Inst.BaseFontSize * 0.6,
+			UiCfg.Inst.BaseFontSize * 0.5
+		);
+
+		var body = new StackPanel();
+		body.Spacing = UiCfg.Inst.BaseFontSize * 0.4;
+		body.A(new TextBlock(), o=>{
+			o.Text = Title;
+			o.FontSize = UiCfg.Inst.BaseFontSize * 1.1;
+		})
+		;
+		FnFillBody(body);
+		bdr.Child = body;
+		return bdr;
+	}
+
+	/// 雲端備份同步區：僅包含 Push / Pull。
+	/// <returns>區塊控件。</returns>
+	Control MkCloudSyncSection(){
+		return MkSection(Todo.I18n("雲端備份同步"), Body=>{
+			Body.A(CenterBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PushAsy(Ct)!);
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.CloudUpload().ToIcon(),
@@ -68,12 +106,15 @@ public partial class ViewWordSyncV2
 					I[K.Pull]
 				);
 			})
+			;
+		});
+	}
 
-			.A(new Border(), o=>{
-				o.Height = UiCfg.Inst.BaseFontSize * 0.5;
-			})
-
-			.A(new TextBlock(), o=>{
+	/// 本地文件導入導出區：包含路徑輸入、文件選擇與導入導出按鈕。
+	/// <returns>區塊控件。</returns>
+	Control MkLocalFileSyncSection(){
+		return MkSection(Todo.I18n("本地文件導入導出"), Body=>{
+			Body.A(new TextBlock(), o=>{
 				o.Text = I[K.ExportPath];
 			})
 			.A(MkExportPathRow())
@@ -84,11 +125,9 @@ public partial class ViewWordSyncV2
 				);
 				o.SetExe((Ct)=>Ctx?.ExportAsy(Ct));
 			})
-
 			.A(new Border(), o=>{
-				o.Height = UiCfg.Inst.BaseFontSize * 0.5;
+				o.Height = UiCfg.Inst.BaseFontSize * 0.35;
 			})
-
 			.A(new TextBlock(), o=>{
 				o.Text = I[K.ImportPath];
 			})
@@ -102,7 +141,6 @@ public partial class ViewWordSyncV2
 			})
 			;
 		});
-		return NIL;
 	}
 
 	Control MkImportPathRow(){
