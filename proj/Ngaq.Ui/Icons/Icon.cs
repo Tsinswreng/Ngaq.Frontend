@@ -17,6 +17,11 @@ public class Icon:SPath{
 		R.Stretch = Stretch.Uniform;   // 让图形自动缩放到控件大小
 		return R;
 	}
+	public static Icon Invert(Svg Svg){
+		var R = FromSvg(Svg);
+		R.RenderTransform = new ScaleTransform{ScaleY=-1};
+		return R;
+	}
 	public static implicit operator Icon(str s){
 		Svg svg = s;
 		return svg.ToIcon();

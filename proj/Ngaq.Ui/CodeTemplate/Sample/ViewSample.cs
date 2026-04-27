@@ -140,8 +140,8 @@ public partial class ViewSample
 		Avalonia.Controls.Shapes.Path addIcon = Icons.Add().ToIcon();
 		var b1 = new Button();
 		b1.SetContent(addIcon);
-// Svgs下 可用的圖標 在 Ngaq.Frontend/proj/Ngaq.Ui/Icons/Svgs.Decl.cs
-// 禁止閱讀 Svgs.Impl.cs !!!!
+// Svgs下 可用的圖標 在 Ngaq.Frontend/proj/Ngaq.Ui/Icons/Icons.Decl.cs
+// 禁止閱讀 Icons.Impl.cs !!!!
 		//圖標接文字示例:
 		var b2 = new Button();
 		b2.SetContent(Icons.Add().ToIcon().WithText("Add"));
