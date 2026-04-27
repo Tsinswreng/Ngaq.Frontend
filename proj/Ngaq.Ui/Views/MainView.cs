@@ -86,7 +86,7 @@ public partial class MainView : UserControl {
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
 				o.MinWidth = UiCfg.Inst.WindowWidth*0.5;
 				o._Border.BorderThickness = new Avalonia.Thickness(1);
-				o._Border.BorderBrush = Brushes.White;
+				o._Border.BorderBrush = UiCfg.Inst.MainColor;
 				o._BdrTitle.Background = new SolidColorBrush(new Color(255, 40,40,40));
 				o._BdrBody.MaxHeight = UiCfg.Inst.WindowHeight*0.8;
 
@@ -183,7 +183,7 @@ public partial class MainView : UserControl {
 			CloseActiveToast();
 			var Toast = MkToastControl(Msg);
 			_ActiveToast = Toast;
-			Root.Children.Add(Toast);
+			Root.A(Toast);
 			ScheduleCloseToast(DurationMs, Toast);
 		}));
 		return NIL;
@@ -199,7 +199,7 @@ public partial class MainView : UserControl {
 		};
 		var ToastBody = new Border{
 			Background = new SolidColorBrush(new Color(255, 40, 40, 40)),
-			BorderBrush = Brushes.White,
+			BorderBrush = UiCfg.Inst.MainColor,
 			BorderThickness = new Avalonia.Thickness(1),
 			Padding = new Avalonia.Thickness(FontSize*0.55, FontSize*0.45, FontSize*0.45, FontSize*0.45),
 			HorizontalAlignment = HAlign.Stretch,

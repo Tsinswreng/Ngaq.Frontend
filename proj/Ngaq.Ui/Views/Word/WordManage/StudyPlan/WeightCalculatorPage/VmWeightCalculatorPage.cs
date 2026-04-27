@@ -120,7 +120,7 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 						UiIdx = uiIdx,
 						UiIdxText = uiIdx.ToString(),
 						Name = ToolStudyPlanView.FormatUniqName(po.UniqName),
-						Type = po.Type.ToString(),
+						Type = Todo.I18n(po.Type.ToString()),
 						ModifiedTime = ToolStudyPlanView.FormatUpdatedDateShort(po.DbUpdatedAt, po.DbCreatedAt),
 						Raw = po,
 					});
