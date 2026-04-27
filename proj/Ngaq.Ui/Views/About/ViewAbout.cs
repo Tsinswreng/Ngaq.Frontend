@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.About;
 using Avalonia.Controls;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Settings;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -23,10 +24,9 @@ public partial class ViewAbout
 		Render();
 	}
 
-	public partial class Cls_{
+	public partial class Cls{
 
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
 		return NIL;
@@ -40,19 +40,32 @@ public partial class ViewAbout
 			]);
 		});
 		Root.A(new StackPanel(), sp=>{
+			sp.Classes.A(ViewSettings.Cls.CfgSp);
 			sp.A(new SelectableTextBlock(), o=>{
 				o.Text = I[K.AppVersion];
 			})
 			.A(new SelectableTextBlock(), o=>{
 				o.Text = AppVer.Inst.Ver+"";
 			})
-			.A(new Separator())
+
 			.A(new SelectableTextBlock(), o=>{
 				o.Text = I[K.Website];
 			})
-			.A(new SelectableTextBlock(), o=>{
-				o.Text = "https://github.com/Tsinswreng/CsNgaq";
-			});
+			.A(new HyperlinkButton(), o=>{
+				var url = "https://github.com/Tsinswreng/CsNgaq";
+				o.NavigateUri = new Uri(url);
+				o.SetContent(new SelectableTextBlock(), o=>{
+					o.Text = url;
+				});
+			})
+			.A(new HyperlinkButton(), o=>{
+				var url = "https://github.com/Tsinswreng/CsNgaq/blob/master/Doc/Prod/en/JsWeight.md";
+				o.NavigateUri = new Uri(url);
+				o.SetContent(Todo.I18n("權重算法插件開發文檔"), o=>{
+
+				});
+			})
+			;
 		});
 		return NIL;
 	}
