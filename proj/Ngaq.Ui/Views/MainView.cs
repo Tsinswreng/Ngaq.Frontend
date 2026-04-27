@@ -80,7 +80,7 @@ public partial class MainView : UserControl {
 			var msgBox = new MsgBox();
 			{var o = msgBox;
 				o._CloseBtn.Background = null;
-				o._CloseBtn.SetContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
+				o._CloseBtn.SetContent(Icon.FromSvg(Svgs.CloseX()), o=>{
 					o.Fill = Brushes.Red;
 				});
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
@@ -121,7 +121,7 @@ public partial class MainView : UserControl {
 			var msgBox = new MsgBox();
 			{var o = msgBox;
 				o._CloseBtn.Background = null;
-				o._CloseBtn.SetContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
+				o._CloseBtn.SetContent(Icon.FromSvg(Svgs.CloseX()), o=>{
 					o.Fill = Brushes.Red;
 				});
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
@@ -226,7 +226,7 @@ public partial class MainView : UserControl {
 			VerticalAlignment = VAlign.Top,
 			Padding = new Avalonia.Thickness(0),
 		};
-		CloseBtn.SetContent(Icon.FromSvg(Svgs.XCircleFill()), o=>{
+		CloseBtn.SetContent(Icon.FromSvg(Svgs.CloseX()), o=>{
 			o.Fill = Brushes.Red;
 		});
 		CloseBtn.Click += (s,e)=>{
@@ -304,7 +304,7 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
-	
+
 
 	public MainView() {
 		Inst ??= this;

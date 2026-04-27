@@ -6,32 +6,32 @@ namespace Ngaq.Ui.Icons;
 ")]
 public partial class Svgs{
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleLeftFill" />
-	public static partial Svg ArrowCircleLeftFill();
+	public static partial Svg ArrowLeft();
 	//<iconPacks:PackIconPhosphorIcons Kind="ArrowCircleRightFill" />
-	public static partial Svg ArrowCircleRightFill();
+	public static partial Svg ArrowRight();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="PlayCircle" />
 	public static partial Svg PlayCircle();
 	//<iconPacks:PackIconPhosphorIcons Kind="PlayCircleFill" />
-	public static partial Svg PlayCircleFill();
+	public static partial Svg StartLearn();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="FloppyDiskBackLight" />
 	public static partial Svg FloppyDiskBackLight();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="FloppyDiskBackFill" />
-	public static partial Svg FloppyDiskBackFill();
+	public static partial Svg Save();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="XCircleFill" />
-	public static partial Svg XCircleFill();
+	public static partial Svg CloseX();
 	//<iconPacks:PackIconPhosphorIcons Kind="UserCircleFill" />
-	public static partial Svg UserCircleFill();
+	public static partial Svg User();
 	//<iconPacks:PackIconPhosphorIcons Kind="BookOpenTextFill" />
-	public static partial Svg BookOpenTextFill();
+	public static partial Svg Learn();
 	//<iconPacks:PackIconPhosphorIcons Kind="BookBookmarkFill" />
-	public static partial Svg BookBookmarkFill();
+	public static partial Svg UserWordLib();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="GearFill" />
-	public static partial Svg GearFill();
+	public static partial Svg Setting();
 
 	//<iconPacks:PackIconPhosphorIcons Kind="GearSix" />
 	public static partial Svg GearSix();
@@ -41,7 +41,7 @@ public partial class Svgs{
 	//<iconPacks:PackIconLucide Kind="RotateCcw" />
 	public static partial Svg RotateCcw();
 	//<iconPacks:PackIconLucide Kind="RotateCw" />
-	public static partial Svg RotateCw();
+	public static partial Svg ResetLearnStatus();
 	//<iconPacks:PackIconZondicons Kind="Search" />
 	public static partial Svg Search();
 	//<iconPacks:PackIconModern Kind="Add" />
@@ -49,7 +49,7 @@ public partial class Svgs{
 	//<iconPacks:PackIconMaterial Kind="SyncCircle" />
 	public static partial Svg SyncCircle();
 	//<iconPacks:PackIconPhosphorIcons Kind="ChartLineUpFill" />
-	public static partial Svg ChartLineUpFill();
+	public static partial Svg Statistics();
 	//<iconPacks:PackIconForkAwesome Kind="CloudUpload" />
 	public static partial Svg CloudUpload();
 	//<iconPacks:PackIconForkAwesome Kind="CloudDownload" />
@@ -68,19 +68,19 @@ public partial class Svgs{
 	public static partial Svg BookA();
 
 	//<iconPacks:PackIconMaterialDesign Kind="Schema" />
-	public static partial Svg Schema();
+	public static partial Svg StudyPlan();
 
 	//<iconPacks:PackIconMicrons Kind="VolHigh" />
 
 	public static partial Svg VolHigh();
 	//<iconPacks:PackIconIonicons Kind="CreateMD" />
-	public static partial Svg CreateMD();
+	public static partial Svg Edit();
 	//<iconPacks:PackIconMaterial Kind="DotsHorizontalCircleOutline" />
-	public static partial Svg DotsHorizontalCircleOutline();
+	public static partial Svg Menu();
 	//<iconPacks:PackIconFontisto Kind="MoreV" />
 	public static partial Svg MoreV();
 	//<iconPacks:PackIconMaterialDesign Kind="DeleteForeverSharp" />
-	public static partial Svg DeleteForeverSharp();
+	public static partial Svg Delete();
 
 	//<iconPacks:PackIconForkAwesome Kind="Calendar" />
 	public static partial Svg Calendar();
@@ -90,7 +90,7 @@ public partial class Svgs{
 	//<iconPacks:PackIconZondicons Kind="BookmarkOutlineAdd" />
 	public static partial Svg BookmarkOutlineAdd();
 	//<iconPacks:PackIconMaterial Kind="BookAlphabet" />
-	public static partial Svg BookAlphabet();
+	public static partial Svg Dictionary();
 
 	//<iconPacks:PackIconModern Kind="ListSelect" />
 	public static partial Svg ListSelect();

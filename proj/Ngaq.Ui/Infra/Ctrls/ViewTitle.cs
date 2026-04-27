@@ -67,7 +67,7 @@ public partial class ViewTitle
 		Root.A(BdrTitle, o=>{});
 		{{
 			TitleBar.A(_Button(), o=>{
-				o.Content = Svgs.ArrowCircleLeftFill().ToIcon();
+				o.Content = Svgs.ArrowLeft().ToIcon();
 				o.Click += (s,e)=>{
 					this.ViewNavi?.Back();
 				};
@@ -77,7 +77,7 @@ public partial class ViewTitle
 			.A(_Button(), o=>{
 
 				o.IsVisible = false;
-				o.Content = Svgs.DotsHorizontalCircleOutline().ToIcon();
+				o.Content = Svgs.Menu().ToIcon();
 				o.Background = Brushes.Transparent;
 				var CtxMenu = new ContextMenu(){
 					Init=o=>{

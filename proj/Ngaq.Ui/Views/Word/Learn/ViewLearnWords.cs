@@ -169,14 +169,14 @@ public partial class ViewLearnWords
 			};
 			Row1.A(Btn(), o=>{
 				o._Button.SetContent(Hc(
-					Ic(Svgs.PlayCircleFill())//▶️
+					Ic(Svgs.StartLearn())//▶️
 					,T(I[K.Start])
 				));
 				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
 				o.SetExe((Ct)=>Ctx?.LoadEtStartAsy(Ct));
 			}).A(Btn(), o=>{ //📁"💾"
 				o._Button.SetContent(Hc(
-					Ic(Svgs.FloppyDiskBackFill())
+					Ic(Svgs.Save())
 					,T(I[K.Save])
 				));
 
@@ -199,14 +199,14 @@ public partial class ViewLearnWords
 				);
 			}).A(Btn(), o=>{
 				o._Button.SetContent(Hc(//🔄
-					Ic(Svgs.RotateCw())
+					Ic(Svgs.ResetLearnStatus())
 					,T(I[K.Reset])
 				));
 				o.SetExe((Ct)=>Ctx?.ResetAsy(Ct));
 			})
 			.A(Btn(), o=>{
 				o._Button.SetContent(Hc(//?
-					Ic(Svgs.GearFill())
+					Ic(Svgs.Setting())
 					,T(I[K.Settings])
 				));
 				o._Button.Click += (s,e)=>{

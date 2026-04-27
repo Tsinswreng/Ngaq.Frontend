@@ -138,7 +138,7 @@ public partial class ViewDictionary
 			.A(MenuBtn, o=>{
 				// 與搜尋/收藏按鈕統一使用 OpBtn 風格。
 				o._Button.StretchCenter();
-				o.BtnContent = Svgs.DotsHorizontalCircleOutline().ToIcon();
+				o.BtnContent = Svgs.Menu().ToIcon();
 				o._Button.Click += (s,e)=>OpenTitleMenuNear(o._Button);
 			});
 		}}

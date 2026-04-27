@@ -51,9 +51,9 @@ public partial class ViewSettings
 		this.SetContent(new StackPanel(), S=>{
 			S.A(_Item(I[K.About], new ViewAbout(), Svgs.Info()));
 			S.A(_Item(I[K.UIConfig], new ViewCfgUi(), Svgs.SolidWindowAlt()));
-			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord(), Svgs.BookOpenTextFill()));
+			S.A(_Item(I[K.LearnWordSettings], new ViewCfgLearnWord(), Svgs.Learn()));
 			S.A(_Item(Todo.I18n("服務與存儲"), new ViewCfgServerStorage(), Svgs.Server()));
-			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary(), Svgs.BookAlphabet()));
+			S.A(_Item(Todo.I18n("LlmDictionary"), new ViewCfgLlmDictionary(), Svgs.Dictionary()));
 			S.A(_Item(Todo.I18n("快捷鍵配置"), new ViewCfgHotkey(), Svgs.KeyboardAltSharp()));
 		});
 		return NIL;

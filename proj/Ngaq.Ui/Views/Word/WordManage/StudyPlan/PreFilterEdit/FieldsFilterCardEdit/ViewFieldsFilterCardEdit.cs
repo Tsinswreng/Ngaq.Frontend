@@ -96,7 +96,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 			row.A(cb);
 
 			var rm = new Button{
-				Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Remove]),
+				Content = Svgs.Delete().ToIcon().WithText(I[K.Remove]),
 				Background = UiCfg.Inst.DelBtnBg
 			};
 			rm.Click += (s,e)=>Ctx?.RemoveField(item);
@@ -189,11 +189,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Background = UiCfg.Inst.DelBtnBg;
-			o.Content = Svgs.DeleteForeverSharp().ToIcon().WithText(I[K.Delete]);
+			o.Content = Svgs.Delete().ToIcon().WithText(I[K.Delete]);
 			o.Click += (s,e)=>Ctx?.Delete();
 		});
 		g.A(new Button(), o=>{
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveGroup]);
+			o.Content = Svgs.Save().ToIcon().WithText(I[K.SaveGroup]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>Ctx?.Save();
 			o.StretchCenter();

@@ -136,7 +136,7 @@ public partial class ViewSetCurStudyPlan
 		})
 		.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.CreateMD().ToIcon().WithText(I[K.Edit]);
+			o.Content = Svgs.Edit().ToIcon().WithText(I[K.Edit]);
 			o.Click += (s,e)=>{
 				var po = Ctx?.CurPoStudyPlan;
 				if(po is null){

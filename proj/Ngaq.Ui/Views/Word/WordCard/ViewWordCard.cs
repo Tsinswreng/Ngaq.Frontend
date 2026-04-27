@@ -31,7 +31,7 @@ public partial class ViewWordListCard
 		var R = new ContextMenu();
 		R.Items.A(new MenuItem(), o=>{
 
-			o.Header = Svgs.CreateMD().ToIcon().WithText(AppI18n.Inst[K.Edit]);
+			o.Header = Svgs.Edit().ToIcon().WithText(AppI18n.Inst[K.Edit]);
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
 

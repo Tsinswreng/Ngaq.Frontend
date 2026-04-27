@@ -208,7 +208,7 @@ public class ViewPreFilterDataEdit: AppViewBase{
 		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
-			o.Content = Svgs.FloppyDiskBackFill().ToIcon().WithText(I[K.SaveDraft]);
+			o.Content = Svgs.Save().ToIcon().WithText(I[K.SaveDraft]);
 			o.Background = UiCfg.Inst.MainColor;
 			o.Click += (s,e)=>{
 				if(Ctx?.CommitPreFilterDataDraft() == true){

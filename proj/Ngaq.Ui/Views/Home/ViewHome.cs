@@ -63,7 +63,7 @@ public partial class ViewHome
 		Root.A(new ViewBottomBar(), ViewBottomBar=>{
 			BottomBar = ViewBottomBar;
 			ViewBottomBar.Items.A(new Btn_Control(
-					BarItem(Todo.I18n("學習"), Svgs.BookOpenTextFill().ToIcon())//📖
+					BarItem(Todo.I18n("學習"), Svgs.Learn().ToIcon())//📖
 					,()=>new ViewLearnWords()
 				),
 				o=>{
@@ -72,12 +72,12 @@ public partial class ViewHome
 				}
 			).A(
 				new Btn_Control(
-					BarItem(Todo.I18n("字典"), Svgs.BookAlphabet().ToIcon())//📚
+					BarItem(Todo.I18n("字典"), Svgs.Dictionary().ToIcon())//📚
 					,DictionaryView
 				)
 			).A(
 				new Btn_Control(
-					BarItem(Todo.I18n("我的"), Svgs.UserCircleFill().ToIcon())//👤
+					BarItem(Todo.I18n("我的"), Svgs.User().ToIcon())//👤
 					,()=>new ViewAboutMe()
 				)
 			)
