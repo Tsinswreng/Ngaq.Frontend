@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Desktop" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" />
 		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Include="Avalonia.Diagnostics">
 			<IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
