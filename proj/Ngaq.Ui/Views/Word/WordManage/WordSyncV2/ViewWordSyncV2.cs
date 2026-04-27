@@ -43,19 +43,25 @@ public partial class ViewWordSyncV2
 	protected nil Style(){
 		return NIL;
 	}
+	
+	OpBtn CenterBtn(){
+		var r = new OpBtn();
+		r._Button.StretchCenter();
+		return r;
+	}
 
 	AutoGrid Root = new(IsRow:true);
 	protected nil Render(){
 		this.SetContent(Root.Grid);
 		Root.A(new StackPanel(), Sp=>{
-			Sp.A(new OpBtn(), o=>{
+			Sp.A(CenterBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PushAsy(Ct)!);
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.CloudUpload().ToIcon(),
 					I[K.Push]
 				);
 			})
-			.A(new OpBtn(), o=>{
+			.A(CenterBtn(), o=>{
 				o.SetExe((Ct)=>Ctx?.PullAsy(Ct));
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.CloudDownload().ToIcon(),
@@ -71,7 +77,7 @@ public partial class ViewWordSyncV2
 				o.Text = I[K.ExportPath];
 			})
 			.A(MkExportPathRow())
-			.A(new OpBtn(), o=>{
+			.A(CenterBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.DatabaseExport().ToIcon(),
 					I[K.Export]
@@ -87,7 +93,7 @@ public partial class ViewWordSyncV2
 				o.Text = I[K.ImportPath];
 			})
 			.A(MkImportPathRow())
-			.A(new OpBtn(), o=>{
+			.A(CenterBtn(), o=>{
 				o.BtnContent = ToolIcon.IconWithTitle(
 					Icons.DatabaseImport().ToIcon(),
 					I[K.Import]
