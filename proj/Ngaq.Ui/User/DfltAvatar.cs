@@ -1,11 +1,15 @@
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Ngaq.Ui.Tools;
+using Ngaq.Ui.Icons;
 
 namespace Ngaq.Ui.User;
 
 public class DfltAvatar{
-	public static IImage Img{get;} = SolidImageGenerator.Create(100, 100, Colors.Black);
+	public static IImage Img{get;} = new DrawingImage{
+		Drawing = new GeometryDrawing{
+			Geometry = Geometry.Parse(Svgs.User()),
+			Brush = Brushes.White
+		}
+	};
 	static DfltAvatar(){
 	// 	#if DEBUG
 	// 	try{
