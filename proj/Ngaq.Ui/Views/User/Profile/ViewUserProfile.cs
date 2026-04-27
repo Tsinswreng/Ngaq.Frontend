@@ -83,8 +83,10 @@ public partial class ViewUserProfile
 			var ContentGrid = new AutoGrid(IsRow: true);
 			sv.SetContent(ContentGrid.Grid, o=>{
 				o.RowDefinitions.AddRange([
-					RowDef(4, GUT.Auto),
-					RowDef(4, GUT.Auto),
+					RowDef(4, GUT.Star),
+					RowDef(1, GUT.Star),
+					RowDef(1, GUT.Auto),
+					RowDef(1, GUT.Auto),
 					RowDef(1, GUT.Auto),
 				]);
 
@@ -97,17 +99,13 @@ public partial class ViewUserProfile
 						o.Width = 150;
 						o.Height = 150;
 					}catch{}
-					//o.Source = SolidImageGenerator.Create(100,100, Colors.Red);
-					// o.CBind(
-					// 	Avatar.SourceProperty
-					// 	,CBE.Mk<Ctx>(x=>x.Avatar)
-					// );
 				})
-				.A(new Avalonia.Controls.SelectableTextBlock(), o=>{
-					o.Bind(
-						Avalonia.Controls.SelectableTextBlock.TextProperty,
-						CBE.Mk<Ctx>(x=>x.UserIdRepr)
-					);
+				.A(new Border())
+				.A(new TextBlock(), o=>{
+					o.Text = Todo.I18n("UserId");
+				})
+				.A(new SelectableTextBlock(), o=>{
+					o.Bind(o.PropText,CBE.Mk<Ctx>(x=>x.UserIdRepr));
 				})
 				.A(new StackPanel(), Sp=>{
 					Sp
