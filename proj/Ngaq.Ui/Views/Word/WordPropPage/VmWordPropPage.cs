@@ -6,6 +6,7 @@ using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 屬性分頁 ViewModel：管理列表、新增、轉換。
@@ -96,10 +97,7 @@ public partial class VmWordPropRow: ViewModelBase{
 
 	public str KeyText => GetKvTypeByIndex(KTypeIndex) == EKvType.I64 ? KI64Text : KStrText;
 	public str KeyDisplayText => TranslatePropKey(KeyText);
-	public str KTypeText => GetKvTypeByIndex(KTypeIndex).ToString();
-	public str VTypeText => GetKvTypeByIndex(VTypeIndex).ToString();
-	public str KTypeDisplayText => TranslateKvType(GetKvTypeByIndex(KTypeIndex));
-	public str VTypeDisplayText => TranslateKvType(GetKvTypeByIndex(VTypeIndex));
+	public str ValueDisplayText => BuildValueDisplayText();
 
 	public static VmWordPropRow NewRow(){
 		return new VmWordPropRow{
@@ -227,5 +225,34 @@ public partial class VmWordPropRow: ViewModelBase{
 			EKvType.I64 => I18n[K.KvTypeI64],
 			_ => Type.ToString(),
 		};
+	}
+
+	/// 属性表只显示实际值；长文本统一走公用略缩格式。
+	str BuildValueDisplayText(){
+		var raw = GetValueRawText();
+		return ToolText.FormatCompactText(raw, HeadLen: 12, TailLen: 8, EmptyText: "");
+	}
+
+	str GetValueRawText(){
+		var vt = GetKvTypeByIndex(VTypeIndex);
+		if(vt == EKvType.Str){
+			return VStrText ?? "";
+		}
+		if(vt == EKvType.I64){
+			return VI64Text ?? "";
+		}
+		if(!str.IsNullOrWhiteSpace(VStrText)){
+			return VStrText;
+		}
+		if(!str.IsNullOrWhiteSpace(VI64Text)){
+			return VI64Text;
+		}
+		if(Raw.VBinary is not null && Raw.VBinary.Length > 0){
+			return $"<binary:{Raw.VBinary.Length}>";
+		}
+		if(Raw.VF64 != 0){
+			return Raw.VF64.ToString();
+		}
+		return "";
 	}
 }

@@ -16,8 +16,8 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Avalonia;
-using Ngaq.Ui.Tools;
 using Avalonia.Interactivity;
+using Ngaq.Ui.Tools;
 
 /// 屬性分頁：列表 + 新增，點行進入編輯頁。
 public partial class ViewWordPropPage: AppViewBase{
@@ -86,8 +86,7 @@ public partial class ViewWordPropPage: AppViewBase{
 			Columns = {
 				new TextColumn<VmWordPropRow, str>("", x=>GetIdxText(x), width: new GridLength(52, GridUnitType.Pixel)),
 				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyDisplayText, width: new GridLength(2, GridUnitType.Star)),
-				new TextColumn<VmWordPropRow, str>(I[K.KType], x=>x.KTypeDisplayText, width: new GridLength(1, GridUnitType.Star)),
-				new TextColumn<VmWordPropRow, str>(I[K.VType], x=>x.VTypeDisplayText, width: new GridLength(1, GridUnitType.Star)),
+				new TextColumn<VmWordPropRow, str>(I[K.Values], x=>x.ValueDisplayText, width: new GridLength(3, GridUnitType.Star)),
 			},
 		};
 		Grid.Source = source;

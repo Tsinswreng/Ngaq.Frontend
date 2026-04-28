@@ -5,6 +5,7 @@ using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Ngaq.Core.Infra;
+using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTempus;
@@ -15,15 +16,7 @@ public static class ToolStudyPlanView{
 	/// 统一格式化 UniqName：超长时保留头尾，中间用省略号替代。
 
 	public static str FormatUniqName(str? UniqName, int HeadLen = 10, int TailLen = 6){
-		var raw = UniqName?.Trim() ?? "";
-		if(str.IsNullOrWhiteSpace(raw)){
-			return "-";
-		}
-		var minLen = HeadLen + TailLen + 3;
-		if(raw.Length <= minLen){
-			return raw;
-		}
-		return $"{raw[..HeadLen]}...{raw[^TailLen..]}";
+		return ToolText.FormatCompactText(UniqName, HeadLen, TailLen);
 	}
 
 	/// 统一格式化日期：按当前用户所在时区显示短格式 yy-MM-dd。
