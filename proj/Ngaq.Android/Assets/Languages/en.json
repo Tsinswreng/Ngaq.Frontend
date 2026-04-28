@@ -5,28 +5,19 @@
       "Cancel": "Cancel",
       "PageSize": "Page Size",
       "ConfirmChange": "Confirm Change",
-      "UnboundConfirmCallback": "Unbound Confirm Callback"
-    },
-    "Home": {
       "Learn": "Learn",
       "Library": "Library",
-      "Me": "Me"
-    },
-    "Library": {
+      "Me": "Me",
       "SearchWords": "Search Words",
-      "SearchMyWords": "Search My Words",
+      "UserWordManage": "User Word Management",
       "AddWords": "Add Words",
-      "BackupEtSync": "Backup & Sync"
-    },
-    "LearnWord": {
+      "BackupEtSync": "Backup & Sync",
       "Start": "Start",
       "Save": "Save",
       "Reset": "Reset",
       "Clear": "Clear",
       "Settings": "Settings",
-      "LearnWordSettings": "Learn Word Settings"
-    },
-    "LoginRegister": {
+      "LearnWordSettings": "Learn Word Settings",
       "Login": "Login",
       "Register": "Register",
       "UserName": "User Name",
@@ -36,33 +27,25 @@
       "__CannotBeEmpty": "{0} cannot be empty",
       "PasswordMismatch": "Password mismatch",
       "FillAllFields": "Please fill all fields",
-      "PasswordChangeSuccess": "Password changed successfully"
-    },
-    "SyncWord": {
+      "PasswordChangeSuccess": "Password changed successfully",
       "Push": "Push",
       "Pull": "Pull",
       "Export": "Export",
       "ExportPath": "Export Path",
       "Import": "Import",
-      "ImportPath": "Import Path"
-    },
-    "Settings": {
+      "ImportPath": "Import Path",
       "UIConfig": "UI Config",
       "About": "About",
       "BaseFontSize": "Base Font Size",
       "Try": "Try",
       "Apply": "Apply",
       "FontSize": "Font Size",
-      "FontChangeRelaunchNotice": "Font change requires relaunch",
+      "FontChangeRelaunchNotice": "Font change requires restart",
       "FontSizeRangeError": "Font size out of range",
-      "SettingsTitle": "Settings"
-    },
-    "About": {
+      "SettingsTitle": "Settings",
       "AppVersion": "App Version",
       "Website": "Website",
-      "UserProfile": "User Profile"
-    },
-    "Dictionary": {
+      "UserProfile": "User Profile",
       "SelectNormLang": "Select Norm Lang",
       "ConfigureLangMapping": "Configure Language Mapping",
       "ViewLlmRawOutput": "View LLM Raw Output",
@@ -73,39 +56,26 @@
       "LanguageMappingNotConfiguredChooseNext": "Language mapping not configured, choose next",
       "AddNormLangToUserLang": "Add Norm Lang to User Lang",
       "WordEditorContextIsNull": "Word editor context is null",
-      "WordEdit": "Word Edit"
-    },
-    "WordManage": {
+      "WordEdit": "Word Edit",
       "Dictionary": "Dictionary",
       "StudyPlan": "Study Plan",
       "Statistics": "Statistics",
       "UserLang": "User Lang",
-      "NormLang": "Norm Lang"
-    },
-    "WordSync": {
+      "NormLang": "Norm Lang",
       "FileAlreadyExistsNoOverwriteChangePath": "File already exists, no overwrite, change path",
-      "InvalidPath": "Invalid path"
-    },
-    "UserProfile": {
+      "InvalidPath": "Invalid path",
       "ChangeAccount": "Change Account",
-      "Logout": "Logout"
-    },
-    "WordCard": {
+      "Logout": "Logout",
       "Edit": "Edit",
       "NoWordSelected": "No word selected",
       "Pronounce": "Pronounce",
       "CurrentPageNoPronounceAction": "Current page has no pronounce action",
       "PronounceFailed": "Pronounce failed",
       "GoConfigureUserLang": "Go configure user language",
-      "UserLang": "User Lang",
       "WordLangNotMappedCannotPronounce": "Word language not mapped, cannot pronounce",
       "WordLangIsEmpty": "Word language is empty",
-      "ServiceUnavailable": "Service unavailable"
-    },
-    "SearchWords": {
-      "WordNotFound": "Word not found"
-    },
-    "Statistics": {
+      "ServiceUnavailable": "Service unavailable",
+      "WordNotFound": "Word not found",
       "Second": "Second",
       "Minute": "Minute",
       "Hour": "Hour",
@@ -117,77 +87,33 @@
       "EndTime": "End Time",
       "Interval": "Interval",
       "LearnResult": "Learn Result",
-      "Count": "Count"
-    },
-    "NormLangPage": {
+      "Count": "Count",
       "InitializedBuiltinNormLang": "Initialized built-in norm languages",
-      "Empty": "Empty",
       "Code": "Code",
-      "NativeName": "Native Name",
       "AddNormLang": "Add Norm Lang",
-      "InitBuiltin": "Init Built-in"
-    },
-    "NormLangEdit": {
+      "InitBuiltin": "Init Built-in",
       "Saved": "Saved",
       "Deleted": "Deleted",
       "PoNormLang": "Norm Lang",
       "Id": "ID",
-      "Code": "Code",
       "NativeName": "Native Name",
       "Type": "Type",
       "Delete": "Delete",
-      "Save": "Save"
-    },
-    "NormLangToUserLangPage": {
-      "Empty": "Empty",
       "NormLangType": "Norm Lang Type",
-      "NormLang": "Norm Lang",
-      "UserLang": "User Lang",
       "Descr": "Description",
-      "Modified": "Modified",
-      "AddNormLangToUserLang": "Add Norm Lang to User Lang"
-    },
-    "NormLangToUserLangEdit": {
-      "Saved": "Saved",
-      "Deleted": "Deleted",
       "PoNormLangToUserLang": "Norm Lang to User Lang",
-      "Id": "ID",
-      "NormLangType": "Norm Lang Type",
-      "NormLang": "Norm Lang",
-      "UserLang": "User Lang",
-      "Descr": "Description",
-      "Delete": "Delete",
-      "Save": "Save",
       "Pick": "Pick",
-      "SelectNormLang": "Select Norm Lang",
-      "SelectUserLang": "Select User Lang"
-    },
-    "UserLangPage": {
+      "SelectUserLang": "Select User Lang",
       "AddedAllUnregisteredUserLangs": "Added all unregistered user languages",
       "AutoAddMissing": "Auto-add missing",
-      "Empty": "Empty",
       "Name": "Name",
       "RelLangType": "Related Lang Type",
       "RelLang": "Related Lang",
-      "Modified": "Modified",
-      "NewUserLang": "New User Lang"
-    },
-    "UserLangEdit": {
+      "NewUserLang": "New User Lang",
       "PoUserLang": "User Lang",
-      "Id": "ID",
-      "Name": "Name",
       "Description": "Description",
-      "RelLangType": "Related Lang Type",
-      "RelLang": "Related Lang",
-      "Save": "Save",
-      "Saved": "Saved"
-    },
-    "WordEditJsonMap": {
       "NoWordOrCtx": "No word or context",
       "WordCore": "Word Core",
-      "Save": "Save"
-    },
-    "WordEditV2": {
       "InvalidKI64": "Invalid K I64",
       "InvalidKType": "Invalid K Type",
       "InvalidVI64": "Invalid V I64",
@@ -195,8 +121,6 @@
       "NoJsonSerializer": "No JSON serializer",
       "JsonParseFailed": "JSON parse failed",
       "NoDraft": "No draft",
-      "Saved": "Saved",
-      "Deleted": "Deleted",
       "HeadIsRequired": "Head is required",
       "LangIsRequired": "Language is required",
       "StoredAtMustBeIsoTime": "StoredAt must be ISO time",
@@ -221,7 +145,6 @@
       "Key": "Key",
       "KType": "Key Type",
       "VType": "Value Type",
-      "LearnResult": "Learn Result",
       "EditProp": "Edit Property",
       "EditLearn": "Edit Learn",
       "KeyStr": "Key (String)",
@@ -229,118 +152,55 @@
       "VStr": "Value (String)",
       "VI64": "Value (I64)",
       "Remove": "Remove",
-      "Delete": "Delete",
-      "Save": "Save",
       "KvTypeStr": "String",
       "KvTypeI64": "Integer",
       "LearnAdd": "Add",
       "LearnRmb": "Remember",
-      "LearnFgt": "Forgot"
-    },
-    "AddWord": {
+      "LearnFgt": "Forgot",
       "WordTxtFile": "Word Text File",
       "JsonsFile": "JSONs File",
       "Text": "Text",
       "Json": "JSON",
       "Submit": "Submit",
-      "Browse": "Browse"
-    },
-    "EditJsonWord": {
-      "Save": "Save",
-      "Delete": "Delete"
-    },
-    "StudyPlan": {
+      "Browse": "Browse",
       "SetCurrentStudyPlan": "Set Current Study Plan",
-      "PoStudyPlan": "Study Plan",
-      "PoWeightCalculator": "Weight Calculator",
       "PreFilter": "Pre-filter",
-      "WeightArgWithSpace": "Weight Arg (with space)"
-    },
-    "SetCurStudyPlan": {
+      "WeightArgWithSpace": "Weight Arg (with space)",
       "RestoreBuiltinDone": "Restored built-in study plans",
-      "SetCurrentStudyPlan": "Set Current Study Plan",
       "Reload": "Reload",
       "RestoreBuiltin": "Restore Built-in",
-      "Id": "ID",
       "UniqName": "Unique Name",
-      "Descr": "Description",
       "Select": "Select",
-      "Edit": "Edit",
       "NoEditableStudyPlan": "No editable study plan",
       "EditStudyPlan": "Edit Study Plan",
-      "SelectStudyPlan": "Select Study Plan"
-    },
-    "StudyPlanPage": {
-      "Empty": "Empty",
-      "Name": "Name",
+      "SelectStudyPlan": "Select Study Plan",
       "ModifiedTime": "Modified Time",
-      "NewStudyPlan": "New Study Plan"
-    },
-    "StudyPlanEdit": {
-      "Saved": "Saved",
-      "Deleted": "Deleted",
-      "PoStudyPlan": "Study Plan",
-      "Id": "ID",
-      "Name": "Name",
-      "Description": "Description",
-      "PreFilter": "Pre-filter",
+      "NewStudyPlan": "New Study Plan",
       "Choose": "Choose",
       "SelectPreFilter": "Select Pre-filter",
       "WeightCalculator": "Weight Calculator",
       "SelectWeightCalculator": "Select Weight Calculator",
       "WeightArg": "Weight Argument",
       "SelectWeightArg": "Select Weight Argument",
-      "Delete": "Delete",
-      "Save": "Save"
-    },
-    "PreFilterPage": {
-      "Empty": "Empty",
-      "Name": "Name",
-      "Type": "Type",
-      "ModifiedTime": "Modified Time",
-      "NewPreFilter": "New Pre-filter"
-    },
-    "PreFilterVisualEdit": {
+      "NewPreFilter": "New Pre-filter",
       "PoPreFilterJson": "Pre-filter JSON",
-      "PreFilter": "Pre-filter",
       "PreFilterDraftUpdated": "Pre-filter draft updated",
-      "Saved": "Saved",
-      "Empty": "Empty",
-      "Deleted": "Deleted",
       "Row__InvalidCoreFilterField__": "Row {0} invalid core filter field {1}",
       "__IsNotValidNumber": "{0} is not a valid number",
       "PoPreFilter": "Pre-filter",
-      "Id": "ID",
-      "Name": "Name",
-      "Description": "Description",
-      "Type": "Type",
       "TextPreview": "Text Preview",
       "TextPayload": "Text Payload",
       "EditPreFilterTextInGui": "Edit Pre-filter Text in GUI",
       "OpenJson": "Open JSON",
-      "Save": "Save",
-      "Delete": "Delete"
-    },
-    "PreFilterDataEdit": {
-      "NumberSign": "#",
       "Fields": "Fields",
       "Items": "Items",
       "CoreFilter": "Core Filter",
       "PropFilter": "Property Filter",
       "AddGroup": "Add Group",
       "Back": "Back",
-      "SaveDraft": "Save Draft"
-    },
-    "PreFilterJsonEdit": {
-      "Saved": "Saved",
+      "SaveDraft": "Save Draft",
       "NoPersistedIdToDelete": "No persisted ID to delete",
-      "Deleted": "Deleted",
       "PoPreFilterJsonParseFailed": "Pre-filter JSON parse failed",
-      "Back": "Back",
-      "Save": "Save",
-      "Delete": "Delete"
-    },
-    "FieldsFilterCardEdit": {
       "EditorNotReady": "Editor not ready",
       "Core": "Core",
       "Prop": "Property",
@@ -351,84 +211,86 @@
       "String": "String",
       "Number": "Number",
       "Null": "Null",
-      "Fields": "Fields",
       "FilterItems": "Filter Items",
       "AddField": "Add Field",
-      "Remove": "Remove",
       "TapRowToEditOneFilterItem": "Tap row to edit one filter item",
       "AddItem": "Add Item",
-      "NumberSign": "#",
       "Operation": "Operation",
       "ValueType": "Value Type",
       "Values": "Values",
-      "Back": "Back",
-      "SaveGroup": "Save Group"
-    },
-    "FilterItemEdit": {
-      "EditorNotReady": "Editor not ready",
+      "SaveGroup": "Save Group",
       "SavedFilterItem__No__": "Saved filter item {0} no {1}",
       "DeletedFilterItem__No__": "Deleted filter item {0} no {1}",
-      "Operation": "Operation",
-      "ValueType": "Value Type",
       "ValuesNewlineSeparated": "Values (newline separated)",
-      "Back": "Back",
-      "Delete": "Delete",
-      "Save": "Save"
-    },
-    "WeightCalculatorPage": {
-      "Empty": "Empty",
-      "Name": "Name",
-      "Type": "Type",
-      "ModifiedTime": "Modified Time",
-      "NewWeightCalculator": "New Weight Calculator"
-    },
-    "WeightCalculatorEdit": {
-      "Saved": "Saved",
-      "Deleted": "Deleted",
-      "PoWeightCalculator": "Weight Calculator",
-      "Id": "ID",
-      "Name": "Name",
-      "Description": "Description",
-      "Type": "Type",
+      "NewWeightCalculator": "New Weight Calculator",
       "PayloadText": "Payload Text",
-      "Delete": "Delete",
-      "Save": "Save"
-    },
-    "WeightArgPage": {
-      "Empty": "Empty",
-      "Name": "Name",
-      "ModifiedTime": "Modified Time",
-      "NewWeightArg": "New Weight Argument"
-    },
-    "WeightArgEdit": {
+      "NewWeightArg": "New Weight Argument",
       "WeightArgPayloadJson": "Weight Argument Payload JSON",
-      "Saved": "Saved",
-      "Deleted": "Deleted",
-      "PoWeightArg": "Weight Argument",
-      "Id": "ID",
-      "Name": "Name",
-      "WeightCalculator": "Weight Calculator",
-      "Choose": "Choose",
       "SelectWeightAlgorithm": "Select Weight Algorithm",
-      "Description": "Description",
-      "Type": "Type",
       "PayloadTextPreview": "Payload Text Preview",
       "Payload": "Payload",
       "EditPayloadJson": "Edit Payload JSON",
-      "Delete": "Delete",
-      "Save": "Save"
-    },
-    "WeightArgPayloadJsonEdit": {
-      "Back": "Back",
-      "Apply": "Apply"
-    },
-    "Sample": {
       "ButtonOne": "Button One",
       "CallBackendService": "Call Backend Service",
       "TopbarTitle": "Topbar Title",
       "CorrectExample": "Correct Example",
       "File": "File",
-      "Edit": "Edit"
+      "Search": "Search",
+      "CreatedAt": "Created At",
+      "UpdatedAt": "Updated At",
+      "Empty": "Empty",
+      "UserId": "User ID",
+      "Pronunciation": "Pronunciation",
+      "CloudBackupSync": "Cloud Backup Sync",
+      "LocalFileImportExport": "Local File Import/Export",
+      "StorageProviderUnavailable": "Storage provider unavailable",
+      "SelectImportFile": "Select Import File",
+      "SelectExportFile": "Select Export File",
+      "GoToLegacyBackupSync": "Go to Legacy Backup Sync",
+      "AddWordsFromText": "Add Words from Text",
+      "TranslatedName": "Translated Name",
+      "TextIsEmpty": "Text is empty",
+      "Submitted": "Submitted",
+      "PressStartButtonToBeginLearning": "Press Start button to begin learning",
+      "WordLearningHelpText_": "• Tap the word card above to start learning a word.\n\n• Top menu buttons:\n\t- ▶️ Start: Load and start learning words.\n\t- 💾 Save: Save current learning session and start a new round.\n\t- 🔄 Reset: Restore initial state.\n\t- ⚙️ Settings: Configure learning preferences.\n\n• Learning words:\n\t- Tap a word card to mark it as \"Remember\" (green).\n\t- Tap again to mark as \"Forgot\" (red).\n\t- Tap once more to clear the mark (transparent).\n\n• Other actions:\n\t- Long press a word card to open the menu.\n\t- Save your progress periodically to avoid data loss.",
+      "SoftDeleteTime": "Soft Delete Time",
+      "Summary": "Summary",
+      "Note": "Note",
+      "Tag": "Tag",
+      "Source": "Source",
+      "Alias": "Alias",
+      "Weight": "Weight",
+      "Usage": "Usage",
+      "Example": "Example",
+      "Relation": "Relation",
+      "Ref": "Reference",
+      "WeightCalculatorTypeUnknown": "Unknown",
+      "WeightCalculatorTypeBuiltin": "Built-in",
+      "WeightCalculatorTypeJsV1": "JSV1",
+      "RegistrationSucceededPleaseLogIn": "Registration succeeded, please log in",
+      "LoginSucceeded": "Login succeeded",
+      "NotLoggedIn": "Not logged in",
+      "ServiceAndStorage": "Service and Storage",
+      "LlmDictionary": "LLM Dictionary",
+      "HotkeyConfig": "Hotkey Config",
+      "Language": "Language",
+      "ServerBaseUrl": "Server Base URL",
+      "SqlitePath": "SQLite Database Path",
+      "ApiUrl": "API URL",
+      "ApiKey": "API Key",
+      "Model": "Model",
+      "Prompt": "Prompt",
+      "MaxDisplayedWordCountMustBeUnsignedInteger": "Max displayed word count must be an unsigned integer",
+      "EnableRandomBackground": "Enable Random Background",
+      "EnableAutoPronounce": "Enable Auto Pronounce",
+      "MaxDisplayedWordCount": "Max Displayed Word Count",
+      "SelectCandidateLangValue": "Select Candidate Language Value",
+      "DictionaryLookupHotkeyModifiers": "Dictionary Lookup Hotkey Modifiers",
+      "DictionaryLookupHotkeyKey": "Dictionary Lookup Hotkey Key",
+      "WordEditorOpenerNotReady": "Word Editor Opener not ready",
+      "NgaqDictionaryLookup": "Dictionary Lookup",
+      "TapReadClipboardAndAutoLookup": "Tap to read clipboard and auto lookup",
+      "WeightAlgorithmPluginDoc": "Weight Algorithm Plugin Documentation"
     }
   },
   "Error": {
@@ -487,6 +349,9 @@
     "Sync": {
       "BatchGetByIdCountMismatch": "Batch get by ID count mismatch",
       "SyncShouldUseSameId": "Sync should use the same ID"
+    },
+    "Audio": {
+      "AudioPlayFailed": "Audio play failed"
     }
   },
   "Lang": {
