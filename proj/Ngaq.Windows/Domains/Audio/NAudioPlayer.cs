@@ -12,7 +12,7 @@ public class NAudioPlayer : IAudioPlayer {
 		try{
 			// 在后台线程播放，避免阻塞调用方
 			await Task.Run(() => {
-				using var reader = type switch {
+				using WaveStream reader = type switch {
 					EAudioType.Wav => new WaveFileReader(s),
 					EAudioType.Mp3 => new Mp3FileReader(s),
 					_ => throw ToolAudioErr.MkAudioPlayFailedErr(

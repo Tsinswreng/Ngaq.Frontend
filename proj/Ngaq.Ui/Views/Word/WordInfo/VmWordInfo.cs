@@ -51,7 +51,7 @@ public partial class VmWordInfo
 	}
 
 	public nil SetPromptAfterStart(){
-		Descrs = [I18n[K.WordLearningHelpText]];
+		Descrs = [I18n[K.WordLearningHelpText_]];
 		return NIL;
 	}
 

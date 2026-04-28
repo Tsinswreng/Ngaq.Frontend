@@ -254,24 +254,23 @@ const a: TI18nKv = {
 			TextIsEmpty: "文本爲空",
 			Submitted: "已提交",
 			PressStartButtonToBeginLearning: "點擊開始按鈕以開始學習",
-			WordLearningHelpText:
-`• Click on a word card above to start learning a word.
+			WordLearningHelpText_:
+`• 點擊上方單字卡開始學習單詞。
 
-• Top menu buttons:
-	- ▶️ Start: Load and begin learning words.
-	- 💾 Save: Save your learning progress.
-	- 🔄 Reset: Clear all progress and start over.
-	- ⚙️ Settings: Configure learning preferences.
+• 頂端選單按鈕：
+	- ▶️ 開始：載入並開始學習單詞。
+	- 💾 儲存：儲存此論學習情況並再開一輪。
+	- 🔄 重設：還原初始狀態。
+	- ⚙️ 設定：設定學習偏好。
 
-• Learning a word:
-	- Click a word card to mark as remembered (green).
-	- Click again to mark as forgotten (red).
-	- Click once more to clear the mark (transparent).
+• 學習單詞：
+	- 點擊單詞卡標記為「記得」（綠色）。
+	- 再次點擊標記為「忘記」（紅色）。
+	- 再點擊一次可清除標記（透明）。
 
-• Other operations:
-	- Long-press a word card for context menu options.
-	- Use the settings button to edit or add words.
-	- Save progress regularly to avoid data loss.`,
+• 其他操作：
+	- 長按單詞卡顯示進菜單。
+	- 請定時儲存進度，以免資料遺失。`,
 			SoftDeleteTime: "軟刪除時間",
 			Summary: "概要",
 			Note: "筆記",

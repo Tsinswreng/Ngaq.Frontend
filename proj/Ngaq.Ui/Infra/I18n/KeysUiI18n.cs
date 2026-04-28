@@ -268,7 +268,7 @@ public class KeysUiI18nCommon{
 	public static readonly K TextIsEmpty = Mk(_R, [nameof(TextIsEmpty)]);
 	public static readonly K Submitted = Mk(_R, [nameof(Submitted)]);
 	public static readonly K PressStartButtonToBeginLearning = Mk(_R, [nameof(PressStartButtonToBeginLearning)]);
-	public static readonly K WordLearningHelpText = Mk(_R, [nameof(WordLearningHelpText)]);
+	public static readonly K WordLearningHelpText_ = Mk(_R, [nameof(WordLearningHelpText_)]);
 	public static readonly K SoftDeleteTime = Mk(_R, [nameof(SoftDeleteTime)]);
 	public static readonly K Summary = Mk(_R, [nameof(Summary)]);
 	public static readonly K Note = Mk(_R, [nameof(Note)]);
@@ -308,5 +308,5 @@ public class KeysUiI18nCommon{
 	public static readonly K TapReadClipboardAndAutoLookup = Mk(_R, [nameof(TapReadClipboardAndAutoLookup)]);
 	public static readonly K WeightAlgorithmPluginDoc = Mk(_R, [nameof(WeightAlgorithmPluginDoc)]);
 	public static readonly K File = Mk(_R, [nameof(File)]);
-	//public static readonly K File0
 }
+
