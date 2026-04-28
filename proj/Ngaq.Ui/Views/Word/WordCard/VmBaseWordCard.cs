@@ -36,6 +36,7 @@ public partial class VmBaseWordListCard
 			if(Bo == null){
 				return NIL;
 			}
+			FontColor = Brushes.White;
 			Head = Bo.Head;
 			Lang = Bo.Lang;
 			Index = Bo.Index;
@@ -140,7 +141,7 @@ public partial class VmBaseWordListCard
 	public IBrush FontColor{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = Brushes.Black;
+	} = Brushes.White;
 
 
 

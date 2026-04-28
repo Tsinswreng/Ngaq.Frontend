@@ -131,6 +131,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 
 		ItemGrid = new TreeDataGrid{
 			MinHeight = 220,
+			HorizontalAlignment = HAlign.Stretch,
 		};
 		ItemGrid.Styles.A(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
@@ -150,10 +151,10 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		}
 		ItemGridSource = new FlatTreeDataGridSource<Ctx.RowFilterItemCard>(Ctx.ItemCards){
 			Columns = {
-				new TextColumn<Ctx.RowFilterItemCard, str>("", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Operation], x=>x.Operation),
-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.ValueType], x=>x.ValueType),
-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Values], x=>x.ValuesPreview),
+				new TextColumn<Ctx.RowFilterItemCard, str>("", x=>x.UiIdxText, width: new GridLength(52, GridUnitType.Pixel)),
+				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Operation], x=>x.Operation, width: new GridLength(1, GridUnitType.Star)),
+				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.ValueType], x=>x.ValueType, width: new GridLength(1, GridUnitType.Star)),
+				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Values], x=>x.ValuesPreview, width: new GridLength(2, GridUnitType.Star)),
 			},
 		};
 		ItemGrid.Source = ItemGridSource;
@@ -201,5 +202,6 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		return g.Grid;
 	}
 }
+
 
 

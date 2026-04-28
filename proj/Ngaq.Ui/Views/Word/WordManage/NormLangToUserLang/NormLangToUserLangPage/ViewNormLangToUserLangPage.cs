@@ -110,6 +110,7 @@ public partial class ViewNormLangToUserLangPage
 	protected Control MkGridHost(){
 		Grid = new TreeDataGrid{
 			MinHeight = 280,
+			HorizontalAlignment = HAlign.Stretch,
 		};
 		Grid.Styles.Add(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
@@ -137,10 +138,10 @@ public partial class ViewNormLangToUserLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText, width: new GridLength(52, GridUnitType.Pixel)),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang, width: new GridLength(2, GridUnitType.Star)),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang, width: new GridLength(2, GridUnitType.Star)),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime, width: new GridLength(1, GridUnitType.Star)),
 			},
 		};
 		Grid.Source = GridSource;

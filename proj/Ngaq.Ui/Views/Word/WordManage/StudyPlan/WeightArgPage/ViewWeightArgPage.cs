@@ -115,6 +115,7 @@ public partial class ViewWeightArgPage
 	protected Control MkGridHost(){
 		WeightArgGrid = new TreeDataGrid{
 			MinHeight = 280,
+			HorizontalAlignment = HAlign.Stretch,
 		};
 		WeightArgGrid.Styles.Add(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
@@ -142,9 +143,9 @@ public partial class ViewWeightArgPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowWeightArg>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowWeightArg, str>("", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowWeightArg, str>(I[K.Name], x=>x.Name),
-				new TextColumn<Ctx.RowWeightArg, str>(I[K.ModifiedTime], x=>x.ModifiedTime),
+				new TextColumn<Ctx.RowWeightArg, str>("", x=>x.UiIdxText, width: new GridLength(52, GridUnitType.Pixel)),
+				new TextColumn<Ctx.RowWeightArg, str>(I[K.Name], x=>x.Name, width: new GridLength(2, GridUnitType.Star)),
+				new TextColumn<Ctx.RowWeightArg, str>(I[K.ModifiedTime], x=>x.ModifiedTime, width: new GridLength(1, GridUnitType.Star)),
 			},
 		};
 		WeightArgGrid.Source = GridSource;
@@ -184,5 +185,6 @@ public partial class ViewWeightArgPage
 		ViewNavi?.GoTo(titled);
 	}
 }
+
 
 

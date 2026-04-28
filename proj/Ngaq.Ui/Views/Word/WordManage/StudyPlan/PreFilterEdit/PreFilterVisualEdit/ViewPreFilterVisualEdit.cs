@@ -120,9 +120,9 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(IList<Ctx.RowFieldsFilterCard> rows){
 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(rows){
 			Columns = {
-				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText, width: new GridLength(52, GridUnitType.Pixel)),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText, width: new GridLength(1, GridUnitType.Star)),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview, width: new GridLength(3, GridUnitType.Star)),
 			},
 		};
 	}
@@ -173,6 +173,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 
 		var grid = new TreeDataGrid{
 			MinHeight = 220,
+			HorizontalAlignment = HAlign.Stretch,
 		};
 		grid.Styles.Add(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
@@ -290,5 +291,6 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		return row;
 	}
 }
+
 
 
