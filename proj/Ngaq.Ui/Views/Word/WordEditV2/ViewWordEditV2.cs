@@ -65,9 +65,9 @@ public partial class ViewWordEditV2: AppViewBase{
 	];
 
 	IReadOnlyList<str> _LearnResultOptions => [
-		I[K.LearnAdd],
-		I[K.LearnRmb],
-		I[K.LearnFgt],
+		I[K.Learn_Add],
+		I[K.Learn_Rmb],
+		I[K.Learn_Fgt],
 	];
 
 	static readonly IValueConverter _IsoTempusConverter = new IsoToTempusConverter();

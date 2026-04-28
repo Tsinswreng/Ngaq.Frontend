@@ -117,9 +117,9 @@ public partial class VmStatistics: ViewModelBase{
 	];
 
 	public IReadOnlyList<str> LearnResultOptions => [
-		I18n[K.LearnAdd],
-		I18n[K.LearnRmb],
-		I18n[K.LearnFgt],
+		I18n[K.Learn_Add],
+		I18n[K.Learn_Rmb],
+		I18n[K.Learn_Fgt],
 	];
 
 	public i32 LearnResultIndex{

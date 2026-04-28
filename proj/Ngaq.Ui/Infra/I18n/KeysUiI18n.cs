@@ -179,9 +179,9 @@ public class KeysUiI18nCommon{
 	public static readonly K VI64 = Mk(_R, [nameof(VI64)]);
 	public static readonly K KvTypeStr = Mk(_R, [nameof(KvTypeStr)]);
 	public static readonly K KvTypeI64 = Mk(_R, [nameof(KvTypeI64)]);
-	public static readonly K LearnAdd = Mk(_R, [nameof(LearnAdd)]);
-	public static readonly K LearnRmb = Mk(_R, [nameof(LearnRmb)]);
-	public static readonly K LearnFgt = Mk(_R, [nameof(LearnFgt)]);
+	public static readonly K Learn_Add = Mk(_R, [nameof(Learn_Add)]);
+	public static readonly K Learn_Rmb = Mk(_R, [nameof(Learn_Rmb)]);
+	public static readonly K Learn_Fgt = Mk(_R, [nameof(Learn_Fgt)]);
 	public static readonly K WordTxtFile = Mk(_R, [nameof(WordTxtFile)]);
 	public static readonly K JsonsFile = Mk(_R, [nameof(JsonsFile)]);
 	public static readonly K Text = Mk(_R, [nameof(Text)]);
