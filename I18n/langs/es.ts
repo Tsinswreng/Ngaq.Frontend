@@ -253,8 +253,7 @@ const a: TI18nKv = {
 			TextIsEmpty: "El texto está vacío",
 			Submitted: "Enviado",
 			PressStartButtonToBeginLearning: "Presione el botón Iniciar para comenzar a aprender",
-			WordLearningHelpText_:
-`• Pulse la tarjeta de palabra para comenzar a aprender.
+			WordLearningHelpText_: `• Pulse la tarjeta de palabra para comenzar a aprender.
 • Botones del menú superior:
   - ▶️ Iniciar: cargar y empezar a aprender.
   - 💾 Guardar: guardar el progreso actual y empezar una nueva ronda.
@@ -304,7 +303,8 @@ const a: TI18nKv = {
 			WordEditorOpenerNotReady: "El abridor del editor de palabras no está listo",
 			NgaqDictionaryLookup: "Consulta en diccionario",
 			TapReadClipboardAndAutoLookup: "Pulse para leer el portapapeles y consultar automáticamente",
-			WeightAlgorithmPluginDoc: "Documentación del plugin de algoritmo de peso"
+			WeightAlgorithmPluginDoc: "Documentación del plugin de algoritmo de peso",
+			TakeEffectAfterTheProgramIsRestarted: "Toma efecto después de que el programa se reinicie"
 		},//~Common
 	},//~View
 	Error: {

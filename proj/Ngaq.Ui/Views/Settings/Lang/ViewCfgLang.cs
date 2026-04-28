@@ -42,8 +42,8 @@ public partial class ViewCfgLang: AppViewBase{
 		Root.A(new StackPanel(), sp=>{
 			sp.A(new TextBlock(), o=>{
 				o.Text = I[K.Lang];
-			});
-			sp.A(new AutoCompleteBox(), o=>{
+			})
+			.A(new AutoCompleteBox(), o=>{
 				o.FilterMode = AutoCompleteFilterMode.StartsWith;
 				o.MinimumPrefixLength = 0;
 				o.Bind(
@@ -54,7 +54,13 @@ public partial class ViewCfgLang: AppViewBase{
 					AutoCompleteBox.TextProperty,
 					CBE.Mk<Ctx>(x=>x.LangInput, Mode: BindingMode.TwoWay)
 				);
-			});
+			})
+			.A(new TextBlock(), o=>{
+				o.Text = I[K.TakeEffectAfterTheProgramIsRestarted];
+				o.FontSize = UiCfg.Inst.BaseFontSize * 0.9;
+				o.Foreground = UiCfg.Inst.MainColor;
+			})
+			;
 		});
 		Root.A(new OpBtn(), o=>{
 			o._Button.StretchCenter();

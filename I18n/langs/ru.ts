@@ -306,7 +306,8 @@ const a: TI18nKv = {
 			WordEditorOpenerNotReady: "Открыватель редактора слов не готов",
 			NgaqDictionaryLookup: "Поиск в словаре",
 			TapReadClipboardAndAutoLookup: "Нажмите для чтения буфера обмена и автопоиска",
-			WeightAlgorithmPluginDoc: "Документация плагина алгоритма веса"
+			WeightAlgorithmPluginDoc: "Документация плагина алгоритма веса",
+			TakeEffectAfterTheProgramIsRestarted: "Применение после перезапуска программы",
 		},
 	},
 	Error: {

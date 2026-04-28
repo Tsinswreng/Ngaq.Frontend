@@ -290,7 +290,8 @@
       "WordEditorOpenerNotReady": "Word Editor Opener not ready",
       "NgaqDictionaryLookup": "Dictionary Lookup",
       "TapReadClipboardAndAutoLookup": "Tap to read clipboard and auto lookup",
-      "WeightAlgorithmPluginDoc": "Weight Algorithm Plugin Documentation"
+      "WeightAlgorithmPluginDoc": "Weight Algorithm Plugin Documentation",
+      "TakeEffectAfterTheProgramIsRestarted": "Take effect after the program is restarted"
     }
   },
   "Error": {

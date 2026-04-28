@@ -67,7 +67,7 @@ public partial class ViewWordManage
 				g.RowDefinitions = new RowDefinitions("Auto,Auto");
 				g.ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.4;
 				g.RowSpacing = UiCfg.Inst.BaseFontSize * 0.6;
-				g.Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.4);
+				//g.Margin = new Thickness(UiCfg.Inst.BaseFontSize * 0.4);
 
 				void addItem(Control item, int row, int col){
 					Grid.SetRow(item, row);
@@ -99,10 +99,10 @@ public partial class ViewWordManage
 		R.MinHeight = UiCfg.Inst.BaseFontSize * 2;
 
 		R.SetContent(new Border(), b=>{
-			b.Padding = new Thickness(
-				UiCfg.Inst.BaseFontSize * 0.7,
-				UiCfg.Inst.BaseFontSize * 0.55
-			);
+			// b.Padding = new Thickness(
+			// 	UiCfg.Inst.BaseFontSize * 0.7,
+			// 	UiCfg.Inst.BaseFontSize * 0.55
+			// );
 			//b.BorderThickness = new Thickness(1.5);
 			//b.BorderBrush = Brushes.Gray;
 			//b.Background = new SolidColorBrush(Color.FromArgb(28, 255, 255, 255));

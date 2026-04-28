@@ -308,7 +308,8 @@ const a: TI18nKv = {
 			WordEditorOpenerNotReady: "单词编辑器开启器尚未就绪",
 			NgaqDictionaryLookup: "词典查询",
 			TapReadClipboardAndAutoLookup: "点击以读取剪贴板并自动查询",
-			WeightAlgorithmPluginDoc: "权重算法插件开发文档"
+			WeightAlgorithmPluginDoc: "权重算法插件开发文档",
+			TakeEffectAfterTheProgramIsRestarted: "在程序重启后生效",
 		},//~Common
 	},//~View
 	Error: {

@@ -136,6 +136,7 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 			Cfg.Set(KeysClientCfg.Lang, LangCode);
 			await Cfg.Save(Ct);
 		});
+		ShowToast(I18n[K.Saved]);
 		return NIL;
 	}
 }

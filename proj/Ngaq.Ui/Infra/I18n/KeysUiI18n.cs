@@ -308,5 +308,8 @@ public class KeysUiI18nCommon{
 	public static readonly K TapReadClipboardAndAutoLookup = Mk(_R, [nameof(TapReadClipboardAndAutoLookup)]);
 	public static readonly K WeightAlgorithmPluginDoc = Mk(_R, [nameof(WeightAlgorithmPluginDoc)]);
 	public static readonly K File = Mk(_R, [nameof(File)]);
+	public static readonly K TakeEffectAfterTheProgramIsRestarted = Mk(_R, [nameof(TakeEffectAfterTheProgramIsRestarted)]);
+
+
 }
 

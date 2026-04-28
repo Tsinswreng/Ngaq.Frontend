@@ -253,8 +253,7 @@ const a: TI18nKv = {
 			TextIsEmpty: "Text is empty",
 			Submitted: "Submitted",
 			PressStartButtonToBeginLearning: "Press Start button to begin learning",
-			WordLearningHelpText_:
-				`• Tap the word card above to start learning a word.
+			WordLearningHelpText_: `• Tap the word card above to start learning a word.
 
 • Top menu buttons:
 	- ▶️ Start: Load and start learning words.
@@ -307,7 +306,8 @@ const a: TI18nKv = {
 			WordEditorOpenerNotReady: "Word Editor Opener not ready",
 			NgaqDictionaryLookup: "Dictionary Lookup",
 			TapReadClipboardAndAutoLookup: "Tap to read clipboard and auto lookup",
-			WeightAlgorithmPluginDoc: "Weight Algorithm Plugin Documentation"
+			WeightAlgorithmPluginDoc: "Weight Algorithm Plugin Documentation",
+			TakeEffectAfterTheProgramIsRestarted: "Take effect after the program is restarted"
 		}
 	},
 	Error: {

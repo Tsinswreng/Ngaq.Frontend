@@ -307,7 +307,8 @@ const a: TI18nKv = {
 			WordEditorOpenerNotReady: "単語エディタオープナーが準備できていません",
 			NgaqDictionaryLookup: "辞書引き",
 			TapReadClipboardAndAutoLookup: "タップしてクリップボードを読み取り自動検索",
-			WeightAlgorithmPluginDoc: "重みアルゴリズムプラグイン開発ドキュメント"
+			WeightAlgorithmPluginDoc: "重みアルゴリズムプラグイン開発ドキュメント",
+			TakeEffectAfterTheProgramIsRestarted: "プログラムの再起動後に有効になります",
 		}
 	},
 	Error: {

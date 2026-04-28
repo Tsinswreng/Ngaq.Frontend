@@ -301,6 +301,7 @@ const Full = {
 			TapReadClipboardAndAutoLookup: K,
 			WeightAlgorithmPluginDoc: K,
 			File: K,
+			TakeEffectAfterTheProgramIsRestarted: K,
 		},
 	},
 	//異常鍵翻譯

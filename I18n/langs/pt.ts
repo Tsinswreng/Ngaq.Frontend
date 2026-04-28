@@ -307,7 +307,8 @@ const a: TI18nKv = {
 			WordEditorOpenerNotReady: "O abridor do editor de palavras não está pronto",
 			NgaqDictionaryLookup: "Consulta no dicionário",
 			TapReadClipboardAndAutoLookup: "Toque para ler a área de transferência e consultar automaticamente",
-			WeightAlgorithmPluginDoc: "Documentação do plugin de algoritmo de peso"
+			WeightAlgorithmPluginDoc: "Documentação do plugin de algoritmo de peso",
+			TakeEffectAfterTheProgramIsRestarted: "Toma efeito após o programa ser reiniciado"
 		},//~Common
 	},//~View
 	Error: {

@@ -306,7 +306,8 @@ const a: TI18nKv = {
 			WordEditorOpenerNotReady: "단어 편집 실행기가 준비되지 않았습니다",
 			NgaqDictionaryLookup: "Ngaq 사전 검색",
 			TapReadClipboardAndAutoLookup: "클릭해 클립보드 내용을 읽고 자동 검색",
-			WeightAlgorithmPluginDoc: "가중치 알고리즘 플러그인 개발 문서"
+			WeightAlgorithmPluginDoc: "가중치 알고리즘 플러그인 개발 문서",
+			TakeEffectAfterTheProgramIsRestarted: "프로그램을 재시작한 후에 적용됩니다"
 		},
 	},
 	Error: {
