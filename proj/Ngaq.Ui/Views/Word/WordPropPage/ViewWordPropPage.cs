@@ -63,6 +63,7 @@ public partial class ViewWordPropPage: AppViewBase{
 		Grid = new TreeDataGrid{
 			Margin = new Thickness(10, 4, 10, 10),
 			MinHeight = 260,
+			HorizontalAlignment = HAlign.Stretch,
 		};
 		Grid.Styles.Add(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
@@ -83,10 +84,10 @@ public partial class ViewWordPropPage: AppViewBase{
 		}
 		var source = new FlatTreeDataGridSource<VmWordPropRow>(Ctx.Rows){
 			Columns = {
-				new TextColumn<VmWordPropRow, str>("", x=>GetIdxText(x)),
-				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyText),
-				new TextColumn<VmWordPropRow, str>(I[K.KType], x=>x.KTypeText),
-				new TextColumn<VmWordPropRow, str>(I[K.VType], x=>x.VTypeText),
+				new TextColumn<VmWordPropRow, str>("", x=>GetIdxText(x), width: new GridLength(52, GridUnitType.Pixel)),
+				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyDisplayText, width: new GridLength(2, GridUnitType.Star)),
+				new TextColumn<VmWordPropRow, str>(I[K.KType], x=>x.KTypeDisplayText, width: new GridLength(1, GridUnitType.Star)),
+				new TextColumn<VmWordPropRow, str>(I[K.VType], x=>x.VTypeDisplayText, width: new GridLength(1, GridUnitType.Star)),
 			},
 		};
 		Grid.Source = source;

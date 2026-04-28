@@ -95,8 +95,11 @@ public partial class VmWordPropRow: ViewModelBase{
 	} = "0";
 
 	public str KeyText => GetKvTypeByIndex(KTypeIndex) == EKvType.I64 ? KI64Text : KStrText;
+	public str KeyDisplayText => TranslatePropKey(KeyText);
 	public str KTypeText => GetKvTypeByIndex(KTypeIndex).ToString();
 	public str VTypeText => GetKvTypeByIndex(VTypeIndex).ToString();
+	public str KTypeDisplayText => TranslateKvType(GetKvTypeByIndex(KTypeIndex));
+	public str VTypeDisplayText => TranslateKvType(GetKvTypeByIndex(VTypeIndex));
 
 	public static VmWordPropRow NewRow(){
 		return new VmWordPropRow{
@@ -195,5 +198,34 @@ public partial class VmWordPropRow: ViewModelBase{
 			return KeysProp.Inst.description;
 		}
 		return EditorKey?.Trim() ?? "";
+	}
+
+	/// 內置 prop 鍵在 UI 中顯示譯文，非內置鍵保持原樣。
+	public str TranslatePropKey(str? Key){
+		return Key switch{
+			DescriptionAlias => I18n[K.Descr],
+			var x when x == KeysProp.Inst.summary => I18n[K.Summary],
+			var x when x == KeysProp.Inst.description => I18n[K.Descr],
+			var x when x == KeysProp.Inst.note => I18n[K.Note],
+			var x when x == KeysProp.Inst.tag => I18n[K.Tag],
+			var x when x == KeysProp.Inst.source => I18n[K.Source],
+			var x when x == KeysProp.Inst.alias => I18n[K.Alias],
+			var x when x == KeysProp.Inst.pronunciation => I18n[K.Pronunciation],
+			var x when x == KeysProp.Inst.weight => I18n[K.Weight],
+			var x when x == KeysProp.Inst.learn => I18n[K.Learn],
+			var x when x == KeysProp.Inst.usage => I18n[K.Usage],
+			var x when x == KeysProp.Inst.example => I18n[K.Example],
+			var x when x == KeysProp.Inst.relation => I18n[K.Relation],
+			var x when x == KeysProp.Inst.Ref => I18n[K.Ref],
+			_ => Key ?? "",
+		};
+	}
+
+	public str TranslateKvType(EKvType Type){
+		return Type switch{
+			EKvType.Str => I18n[K.KvTypeStr],
+			EKvType.I64 => I18n[K.KvTypeI64],
+			_ => Type.ToString(),
+		};
 	}
 }

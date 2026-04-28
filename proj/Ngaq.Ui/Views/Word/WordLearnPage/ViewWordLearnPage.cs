@@ -62,6 +62,7 @@ public partial class ViewWordLearnPage: AppViewBase{
 		Grid = new TreeDataGrid{
 			Margin = new Thickness(10, 4, 10, 10),
 			MinHeight = 260,
+			HorizontalAlignment = HAlign.Stretch,
 		};
 		Grid.Styles.Add(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
@@ -82,9 +83,9 @@ public partial class ViewWordLearnPage: AppViewBase{
 		}
 		var source = new FlatTreeDataGridSource<VmWordLearnRow>(Ctx.Rows){
 			Columns = {
-				new TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x)),
-				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultText),
-				new TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay),
+				new TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x), width: new GridLength(52, GridUnitType.Pixel)),
+				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultDisplayText, width: new GridLength(1, GridUnitType.Star)),
+				new TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay, width: new GridLength(2, GridUnitType.Star)),
 			},
 		};
 		Grid.Source = source;

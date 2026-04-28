@@ -88,6 +88,7 @@ public partial class VmWordLearnRow: ViewModelBase{
 	}
 
 	public str LearnResultText => GetLearnResultByIndex(LearnResultIndex).ToString();
+	public str LearnResultDisplayText => TranslateLearnResult(GetLearnResultByIndex(LearnResultIndex));
 
 	public static VmWordLearnRow NewRow(){
 		return new VmWordLearnRow{LearnResultIndex = 0};
@@ -129,5 +130,14 @@ public partial class VmWordLearnRow: ViewModelBase{
 			return ELearn.Add;
 		}
 		return LearnResults[Index];
+	}
+
+	public str TranslateLearnResult(ELearn Learn){
+		return Learn switch{
+			ELearn.Add => I18n[K.Learn_Add],
+			ELearn.Rmb => I18n[K.Learn_Rmb],
+			ELearn.Fgt => I18n[K.Learn_Fgt],
+			_ => Learn.ToString(),
+		};
 	}
 }
