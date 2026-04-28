@@ -1,5 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordPropPage;
 
+using System.Collections.Specialized;
+using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
@@ -25,9 +27,12 @@ public partial class ViewWordPropPage: AppViewBase{
 	}
 
 	TreeDataGrid? Grid;
+	INotifyCollectionChanged? RowsNotifier;
+	VmWordPropPage? SubscribedCtx;
 
 	public ViewWordPropPage(){
 		Render();
+		DataContextChanged += (s, e)=>OnCtxChanged();
 	}
 
 	void Render(){
@@ -87,6 +92,47 @@ public partial class ViewWordPropPage: AppViewBase{
 		Grid.Source = source;
 	}
 
+	/// `Ctx` 是在構造後才灌入的，列表頁需在此時補掛監聽並首次建表格源。
+	void OnCtxChanged(){
+		if(SubscribedCtx is not null){
+			SubscribedCtx.PropertyChanged -= OnCtxPropertyChanged;
+			SubscribedCtx = null;
+		}
+		if(RowsNotifier is not null){
+			RowsNotifier.CollectionChanged -= OnRowsChanged;
+			RowsNotifier = null;
+		}
+		if(Ctx is null){
+			return;
+		}
+		SubscribedCtx = Ctx;
+		Ctx.PropertyChanged += OnCtxPropertyChanged;
+		HookRowsChanged();
+		RebuildGrid();
+	}
+
+	/// `LoadFromPoProps` 會整體替換 `Rows`，需重新掛上集合變更監聽。
+	void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName == nameof(VmWordPropPage.Rows)){
+			HookRowsChanged();
+			RebuildGrid();
+		}
+	}
+
+	void HookRowsChanged(){
+		if(RowsNotifier is not null){
+			RowsNotifier.CollectionChanged -= OnRowsChanged;
+		}
+		RowsNotifier = Ctx?.Rows;
+		if(RowsNotifier is not null){
+			RowsNotifier.CollectionChanged += OnRowsChanged;
+		}
+	}
+
+	void OnRowsChanged(object? Sender, NotifyCollectionChangedEventArgs E){
+		RebuildGrid();
+	}
+
 	str GetIdxText(VmWordPropRow Row){
 		if(Ctx is null){
 			return "";
@@ -113,4 +159,3 @@ public partial class ViewWordPropPage: AppViewBase{
 		}
 	}
 }
-

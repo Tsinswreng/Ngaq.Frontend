@@ -73,8 +73,8 @@ public partial class ViewWordPropEdit: AppViewBase{
 
 	IReadOnlyList<str> GetPropKeyOptions(){
 		return [
+			VmWordPropRow.DescriptionAlias,
 			KeysProp.Inst.summary,
-			KeysProp.Inst.description,
 			KeysProp.Inst.note,
 			KeysProp.Inst.tag,
 			KeysProp.Inst.source,

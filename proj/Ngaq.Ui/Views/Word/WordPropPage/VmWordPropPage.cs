@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordPropPage;
 
+using System;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
@@ -53,6 +54,9 @@ public partial class VmWordPropPage: ViewModelBase{
 
 /// 單詞屬性行編輯 ViewModel。
 public partial class VmWordPropRow: ViewModelBase{
+	/// `Descr` 只是編輯頁裏的默認/顯示別名，落庫仍統一回 `description`。
+	public const str DescriptionAlias = "Descr";
+
 	public static IReadOnlyList<EKvType> KvTypes{get;} = [
 		EKvType.Str,
 		EKvType.I64,
@@ -98,7 +102,7 @@ public partial class VmWordPropRow: ViewModelBase{
 		return new VmWordPropRow{
 			KTypeIndex = 0,
 			VTypeIndex = 0,
-			KStrText = KeysProp.Inst.description,
+			KStrText = DescriptionAlias,
 			VStrText = "",
 			KI64Text = "0",
 			VI64Text = "0",
@@ -110,7 +114,7 @@ public partial class VmWordPropRow: ViewModelBase{
 			Raw = (PoWordProp)Po.ShallowCloneSelf(),
 			KTypeIndex = GetKvTypeIndex(Po.KType),
 			VTypeIndex = GetKvTypeIndex(Po.VType),
-			KStrText = Po.KStr ?? "",
+			KStrText = ToEditorKeyText(Po.KStr),
 			KI64Text = Po.KI64 + "",
 			VStrText = Po.VStr ?? "",
 			VI64Text = Po.VI64 + "",
@@ -127,7 +131,7 @@ public partial class VmWordPropRow: ViewModelBase{
 		Po.VType = vt;
 
 		if(kt == EKvType.Str){
-			Po.KStr = KStrText;
+			Po.KStr = ToStoredKeyText(KStrText);
 			Po.KI64 = 0;
 		}else if(kt == EKvType.I64){
 			if(!i64.TryParse(KI64Text, out var kI64)){
@@ -175,5 +179,21 @@ public partial class VmWordPropRow: ViewModelBase{
 			return EKvType.Str;
 		}
 		return KvTypes[Index];
+	}
+
+	/// 將數據庫中的內置鍵轉成更貼近編輯語境的展示文本。
+	static str ToEditorKeyText(str? StoredKey){
+		if(StoredKey == KeysProp.Inst.description){
+			return DescriptionAlias;
+		}
+		return StoredKey ?? "";
+	}
+
+	/// 將編輯頁別名規整回內置鍵，避免破壞既有數據語義。
+	static str ToStoredKeyText(str? EditorKey){
+		if(str.Equals(EditorKey?.Trim(), DescriptionAlias, StringComparison.OrdinalIgnoreCase)){
+			return KeysProp.Inst.description;
+		}
+		return EditorKey?.Trim() ?? "";
 	}
 }

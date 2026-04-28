@@ -156,7 +156,7 @@ const a: TI18nKv = {
 			Remove: "移除",
 			KvTypeStr: "字串",
 			KvTypeI64: "整數",
-			Learn_Add: "新增學習記錄",
+			Learn_Add: "添加",
 			Learn_Rmb: "記住",
 			Learn_Fgt: "忘記",
 			WordTxtFile: "單詞純文本",

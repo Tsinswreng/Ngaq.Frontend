@@ -1,5 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordLearnPage;
 
+using System.Collections.Specialized;
+using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
@@ -24,9 +26,12 @@ public partial class ViewWordLearnPage: AppViewBase{
 	}
 
 	TreeDataGrid? Grid;
+	INotifyCollectionChanged? RowsNotifier;
+	VmWordLearnPage? SubscribedCtx;
 
 	public ViewWordLearnPage(){
 		Render();
+		DataContextChanged += (s, e)=>OnCtxChanged();
 	}
 
 	void Render(){
@@ -85,6 +90,47 @@ public partial class ViewWordLearnPage: AppViewBase{
 		Grid.Source = source;
 	}
 
+	/// `Ctx` 後置注入後才有真正的行數據，這裏補建表格源。
+	void OnCtxChanged(){
+		if(SubscribedCtx is not null){
+			SubscribedCtx.PropertyChanged -= OnCtxPropertyChanged;
+			SubscribedCtx = null;
+		}
+		if(RowsNotifier is not null){
+			RowsNotifier.CollectionChanged -= OnRowsChanged;
+			RowsNotifier = null;
+		}
+		if(Ctx is null){
+			return;
+		}
+		SubscribedCtx = Ctx;
+		Ctx.PropertyChanged += OnCtxPropertyChanged;
+		HookRowsChanged();
+		RebuildGrid();
+	}
+
+	/// `LoadFromPoLearns` 會直接替換 `Rows`，需重新綁定集合事件。
+	void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName == nameof(VmWordLearnPage.Rows)){
+			HookRowsChanged();
+			RebuildGrid();
+		}
+	}
+
+	void HookRowsChanged(){
+		if(RowsNotifier is not null){
+			RowsNotifier.CollectionChanged -= OnRowsChanged;
+		}
+		RowsNotifier = Ctx?.Rows;
+		if(RowsNotifier is not null){
+			RowsNotifier.CollectionChanged += OnRowsChanged;
+		}
+	}
+
+	void OnRowsChanged(object? Sender, NotifyCollectionChangedEventArgs E){
+		RebuildGrid();
+	}
+
 	str GetIdxText(VmWordLearnRow Row){
 		if(Ctx is null){
 			return "";
@@ -111,4 +157,3 @@ public partial class ViewWordLearnPage: AppViewBase{
 		}
 	}
 }
-
