@@ -21,6 +21,9 @@ public partial class ViewWordPropEdit: AppViewBase{
 		set{DataContext = value;}
 	}
 
+	StackPanel? EditorForm;
+	VmWordPropEdit? SubscribedCtx;
+
 	IReadOnlyList<str> KvTypeOptions => [
 		I[K.KvTypeStr],
 		I[K.KvTypeI64],
@@ -28,6 +31,7 @@ public partial class ViewWordPropEdit: AppViewBase{
 
 	public ViewWordPropEdit(){
 		Render();
+		DataContextChanged += (s, e)=>OnCtxChanged();
 	}
 
 	void Render(){
@@ -39,14 +43,15 @@ public partial class ViewWordPropEdit: AppViewBase{
 		]);
 		root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
+				EditorForm = sp;
 				sp.Margin = new Thickness(10);
 				sp.Spacing = 8;
-				sp.A(MkComboRow(I[K.KType], KvTypeOptions, CBE.Mk<VmWordPropEdit>(x=>x.Row.KTypeIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkEditableComboRow(I[K.KeyStr], GetPropKeyOptions(), CBE.Mk<VmWordPropEdit>(x=>x.Row.KStrText, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(I[K.KeyI64], CBE.Mk<VmWordPropEdit>(x=>x.Row.KI64Text, Mode: BindingMode.TwoWay)));
-				sp.A(MkComboRow(I[K.VType], KvTypeOptions, CBE.Mk<VmWordPropEdit>(x=>x.Row.VTypeIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(I[K.VStr], CBE.Mk<VmWordPropEdit>(x=>x.Row.VStrText, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(I[K.VI64], CBE.Mk<VmWordPropEdit>(x=>x.Row.VI64Text, Mode: BindingMode.TwoWay)));
+				sp.A(MkComboRow(I[K.KType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay)));
+				sp.A(MkEditableComboRow(I[K.KeyStr], GetPropKeyOptions(), CBE.Mk<VmWordPropRow>(x=>x.KStrText, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(I[K.KeyI64], CBE.Mk<VmWordPropRow>(x=>x.KI64Text, Mode: BindingMode.TwoWay)));
+				sp.A(MkComboRow(I[K.VType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.VTypeIndex, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(I[K.VStr], CBE.Mk<VmWordPropRow>(x=>x.VStrText, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(I[K.VI64], CBE.Mk<VmWordPropRow>(x=>x.VI64Text, Mode: BindingMode.TwoWay)));
 			});
 		});
 		root.A(new Button(), o=>{
@@ -69,6 +74,35 @@ public partial class ViewWordPropEdit: AppViewBase{
 			};
 		});
 		Content = root.Grid;
+	}
+
+	/// 與 LearnEdit 同理，表單直接綁行 Vm，避免嵌套綁定丟失初值。
+	void OnCtxChanged(){
+		if(SubscribedCtx is not null){
+			SubscribedCtx.PropertyChanged -= OnEditVmPropertyChanged;
+			SubscribedCtx = null;
+		}
+		if(Ctx is null){
+			if(EditorForm is not null){
+				EditorForm.DataContext = null;
+			}
+			return;
+		}
+		SubscribedCtx = Ctx;
+		Ctx.PropertyChanged += OnEditVmPropertyChanged;
+		ApplyRowCtx();
+	}
+
+	void OnEditVmPropertyChanged(object? Sender, System.ComponentModel.PropertyChangedEventArgs E){
+		if(E.PropertyName == nameof(VmWordPropEdit.Row)){
+			ApplyRowCtx();
+		}
+	}
+
+	void ApplyRowCtx(){
+		if(EditorForm is not null){
+			EditorForm.DataContext = Ctx?.Row;
+		}
 	}
 
 	IReadOnlyList<str> GetPropKeyOptions(){

@@ -22,6 +22,9 @@ public partial class ViewWordLearnEdit: AppViewBase{
 		set{DataContext = value;}
 	}
 
+	StackPanel? EditorForm;
+	VmWordLearnEdit? SubscribedCtx;
+
 	IReadOnlyList<str> LearnResultOptions => [
 		I[K.Learn_Add],
 		I[K.Learn_Rmb],
@@ -30,6 +33,7 @@ public partial class ViewWordLearnEdit: AppViewBase{
 
 	public ViewWordLearnEdit(){
 		Render();
+		DataContextChanged += (s, e)=>OnCtxChanged();
 	}
 
 	void Render(){
@@ -41,10 +45,11 @@ public partial class ViewWordLearnEdit: AppViewBase{
 		]);
 		root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
+				EditorForm = sp;
 				sp.Margin = new Thickness(10);
 				sp.Spacing = 8;
-				sp.A(MkComboRow(I[K.LearnResult], LearnResultOptions, CBE.Mk<VmWordLearnEdit>(x=>x.Row.LearnResultIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkTempusRow(I[K.BizCreatedAt], CBE.Mk<VmWordLearnEdit>(x=>x.Row.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: new IsoToTempusConverter())));
+				sp.A(MkComboRow(I[K.LearnResult], LearnResultOptions, CBE.Mk<VmWordLearnRow>(x=>x.LearnResultIndex, Mode: BindingMode.TwoWay)));
+				sp.A(MkTempusRow(I[K.Biz_CreatedAt], CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: new IsoToTempusConverter())));
 			});
 		});
 		root.A(new Button(), o=>{
@@ -67,6 +72,35 @@ public partial class ViewWordLearnEdit: AppViewBase{
 			};
 		});
 		Content = root.Grid;
+	}
+
+	/// 編輯表單直接綁到行 Vm，自避開 `Ctx.Row.Xxx` 這種嵌套綁定在後置注入時失效的問題。
+	void OnCtxChanged(){
+		if(SubscribedCtx is not null){
+			SubscribedCtx.PropertyChanged -= OnEditVmPropertyChanged;
+			SubscribedCtx = null;
+		}
+		if(Ctx is null){
+			if(EditorForm is not null){
+				EditorForm.DataContext = null;
+			}
+			return;
+		}
+		SubscribedCtx = Ctx;
+		Ctx.PropertyChanged += OnEditVmPropertyChanged;
+		ApplyRowCtx();
+	}
+
+	void OnEditVmPropertyChanged(object? Sender, System.ComponentModel.PropertyChangedEventArgs E){
+		if(E.PropertyName == nameof(VmWordLearnEdit.Row)){
+			ApplyRowCtx();
+		}
+	}
+
+	void ApplyRowCtx(){
+		if(EditorForm is not null){
+			EditorForm.DataContext = Ctx?.Row;
+		}
 	}
 
 	Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){

@@ -84,7 +84,7 @@ public partial class ViewWordLearnPage: AppViewBase{
 			Columns = {
 				new TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x)),
 				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultText),
-				new TextColumn<VmWordLearnRow, str>(I[K.BizCreatedAt], x=>x.BizCreatedAtDisplay),
+				new TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay),
 			},
 		};
 		Grid.Source = source;

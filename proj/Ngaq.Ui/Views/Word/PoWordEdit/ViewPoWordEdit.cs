@@ -39,8 +39,8 @@ public partial class ViewPoWordEdit: AppViewBase{
 			sp.A(MkInputRow(I[K.Head], CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay)));
 			sp.A(MkInputRow(I[K.Lang], CBE.Mk<Ctx>(x=>x.Lang, Mode: BindingMode.TwoWay)));
 			sp.A(MkTempusRow(I[K.StoredAt], CBE.Mk<Ctx>(x=>x.StoredAtIso, Mode: BindingMode.TwoWay, Converter: IsoConverter)));
-			sp.A(MkTempusRow(I[K.BizCreatedAt], CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: IsoConverter)));
-			sp.A(MkTempusRow(I[K.BizUpdatedAt], CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: IsoConverter)));
+			sp.A(MkTempusRow(I[K.Biz_CreatedAt], CBE.Mk<Ctx>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: IsoConverter)));
+			sp.A(MkTempusRow(I[K.Biz_UpdatedAt], CBE.Mk<Ctx>(x=>x.BizUpdatedAtIso, Mode: BindingMode.TwoWay, Converter: IsoConverter)));
 			sp.A(MkTempusRow(I[K.SoftDeleteTime], CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay, Converter: DelAtConverter)));
 		});
 		Content = sv;

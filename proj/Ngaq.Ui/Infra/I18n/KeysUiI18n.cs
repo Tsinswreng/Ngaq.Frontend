@@ -162,8 +162,8 @@ public class KeysUiI18nCommon{
 	public static readonly K Head = Mk(_R, [nameof(Head)]);
 	public static readonly K Lang = Mk(_R, [nameof(Lang)]);
 	public static readonly K StoredAt = Mk(_R, [nameof(StoredAt)]);
-	public static readonly K BizCreatedAt = Mk(_R, [nameof(BizCreatedAt)]);
-	public static readonly K BizUpdatedAt = Mk(_R, [nameof(BizUpdatedAt)]);
+	public static readonly K Biz_CreatedAt = Mk(_R, [nameof(Biz_CreatedAt)]);
+	public static readonly K Biz_UpdatedAt = Mk(_R, [nameof(Biz_UpdatedAt)]);
 	public static readonly K DelAtUnixMs = Mk(_R, [nameof(DelAtUnixMs)]);
 	public static readonly K AddProp = Mk(_R, [nameof(AddProp)]);
 	public static readonly K AddLearn = Mk(_R, [nameof(AddLearn)]);
