@@ -189,9 +189,6 @@ public class KeysUiI18nCommon{
 	public static readonly K Submit = Mk(_R, [nameof(Submit)]);
 	public static readonly K Browse = Mk(_R, [nameof(Browse)]);
 	public static readonly K SetCurrentStudyPlan = Mk(_R, [nameof(SetCurrentStudyPlan)]);
-	public static readonly K PoStudyPlan = Mk(_R, [nameof(PoStudyPlan)]);
-	public static readonly K PoWeightCalculator = Mk(_R, [nameof(PoWeightCalculator)]);
-	public static readonly K PoWeightArg = Mk(_R, [nameof(PoWeightArg)]);
 	public static readonly K PreFilter = Mk(_R, [nameof(PreFilter)]);
 	public static readonly K WeightArgWithSpace = Mk(_R, [nameof(WeightArgWithSpace)]);
 	public static readonly K RestoreBuiltinDone = Mk(_R, [nameof(RestoreBuiltinDone)]);
