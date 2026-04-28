@@ -202,7 +202,7 @@ public partial class ViewLearnWords
 					Icons.ResetLearnStatus()
 					,T(I[K.Reset])
 				));
-				o.SetExe((Ct)=>Ctx?.ResetAsy(Ct));
+				o.SetExe((Ct)=>Ctx?.Reset(Ct));
 			})
 			.A(Btn(), o=>{
 				o._Button.SetContent(Hc(//?

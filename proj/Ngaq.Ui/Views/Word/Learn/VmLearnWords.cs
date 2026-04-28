@@ -314,52 +314,21 @@ public partial class VmLearnWords
 		return NIL;
 	}
 
-	public async Task<nil> ResetAsy(CT Ct){
+	public async Task<nil> Reset(CT Ct){
 		//MgrLearn = App.GetSvc<MgrLearn>();
 		BgBrush = CfgUi.ColorDflt;
 		MgrLearn.Reset();
 		WordCards = new();
+		// Reset 後列表為空，右側資訊區應回到學習提示，而不是殘留上一個單詞。
+		CurWordInfo.SetPromptBeforeStart();
 		return NIL;
 	}
 
 
-	// public nil GetAllWords(){
-	// 	CancellationToken Ct = default;
-	// 	SvcWord?.PageBoWord(
-	// 		UserCtxMgr?.GetUserCtx()
-	// 		,PageQuery.SelectAll()
-	// 		,Ct
-	// 	).ContinueWith(d=>{
-	// 		if(d.IsFaulted){
-	// 			System.Console.WriteLine(d.Exception.ToString());//t
-	// 			AddMsg(d.Exception.ToString());
-	// 			ShowMsg();
-	// 		}else{
-	// 			WordCards.Clear();
-	// 			var Page = d.Result;
-	// 			var BoWords = Page.DataAsy?.ToBlockingEnumerable(Ct)??[];
-	// 			foreach(var BoWord in BoWords){
-	// 				WordCards.Add(new VmWordListCard().FromJnWord(BoWord));
-	// 			}
-	// 			MgrLearn.Load(BoWords);
-	// 		}
-	// 	});
-	// 	return Nil;
-	// }
-
-	public nil Save(){
-		CT Ct = default;
-		MgrLearn.Save(Ct).ContinueWith(t=>{
-			HandleErr(t);
-		});
-		return NIL;
-	}
-
-	protected IBrush _BgBrush = Brushes.Black;
 	public IBrush BgBrush{
-		get{return _BgBrush;}
-		set{SetProperty(ref _BgBrush, value);}
-	}
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = Brushes.Black;
 
 	public bool IsSaved{
 		//get{return MgrLearn.State.MgrLearnedWords.GetLearnedWords().Any(w => w.UnsavedLearnRecords.Any());}

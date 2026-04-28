@@ -46,12 +46,23 @@ public partial class VmWordInfo
 	}
 
 	public nil SetPromptBeforeStart(){
+		ClearWordFields();
 		Descrs = [I18n[K.PressStartButtonToBeginLearning]];
 		return NIL;
 	}
 
 	public nil SetPromptAfterStart(){
+		ClearWordFields();
 		Descrs = [I18n[K.WordLearningHelpText_]];
+		return NIL;
+	}
+
+	/// 清空當前單詞展示狀態，避免提示文本與上一個詞的內容混在一起。
+	public nil ClearWordFields(){
+		Id = "";
+		Head = "";
+		Lang = "";
+		StrProps = new Dictionary<str, IList<str>>();
 		return NIL;
 	}
 
