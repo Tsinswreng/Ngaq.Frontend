@@ -90,7 +90,7 @@ public partial class ViewWeightArgEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = I[K.PoWeightArg],
+			Text = I[K.WeightArg],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})

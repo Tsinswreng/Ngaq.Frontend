@@ -65,6 +65,9 @@ public class LinuxGlobalHotkeyRegistrar : I_RegisterGlobalHotKeys{
 					HotkeyCfg.Key,
 					string.Join(";", Result.Errors ?? new[]{""})
 				);
+				return Answer.AddErr(
+					$"Linux hotkey registration failed: {HotkeyCfg.Modifiers}+{HotkeyCfg.Key}"
+				);
 			}else{
 				_logger?.LogInformation(
 					"Linux dictionary lookup hotkey registered: {Modifiers}+{Key}",

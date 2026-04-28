@@ -88,7 +88,7 @@ public partial class ViewWeightCalculatorEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = I[K.PoWeightCalculator],
+			Text = I[K.WeightCalculator],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})

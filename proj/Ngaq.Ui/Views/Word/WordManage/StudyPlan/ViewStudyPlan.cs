@@ -55,10 +55,10 @@ public partial class ViewStudyPlan
 			MainView.Inst.MkBtnToView(()=>new ViewSetCurStudyPlan(),I[K.SetCurrentStudyPlan])
 		)
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),I[K.PoStudyPlan])
+			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),I[K.StudyPlan])
 		)
 		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewWeightCalculatorPage(),I[K.PoWeightCalculator])
+			MainView.Inst.MkBtnToView(()=>new ViewWeightCalculatorPage(),I[K.WeightCalculator])
 		)
 		.A(
 			MainView.Inst.MkBtnToView(()=>new ViewPreFilterPage(),I[K.PreFilter])

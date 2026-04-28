@@ -87,7 +87,7 @@ public partial class ViewStudyPlanEdit
 		bdr.Child = sp;
 
 		sp.A(new TextBlock{
-			Text = I[K.PoStudyPlan],
+			Text = I[K.StudyPlan],
 			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
 			FontWeight = FontWeight.SemiBold,
 		})
