@@ -117,18 +117,18 @@ public partial class ViewAboutMe
 					x=>x.Is<Control>()
 				).BgTrnsp());
 			})
-			.A(new Button(), o=>{
-				o.Content = "Test1";
-				o.Click += (s,e)=>{
-					Ctx?.ShowDialog("ShowDialog");
-				};
-			})
-			.A(new Button(), o=>{
-				o.Content = "Test2";
-				o.Click += (s,e)=>{
-					Ctx?.ShowToast("ShowToast");
-				};
-			})
+			// .A(new Button(), o=>{
+			// 	o.Content = "Test1";
+			// 	o.Click += (s,e)=>{
+			// 		Ctx?.ShowDialog("ShowDialog");
+			// 	};
+			// })
+			// .A(new Button(), o=>{
+			// 	o.Content = "Test2";
+			// 	o.Click += (s,e)=>{
+			// 		Ctx?.ShowToast("ShowToast");
+			// 	};
+			// })
 			;
 		}}
 		return R;

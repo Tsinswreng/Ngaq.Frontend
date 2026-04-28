@@ -41,13 +41,14 @@ public partial class ViewCfgLlmDictionary: AppViewBase{
 				sp.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.ApiKey);});
 				sp.A(new TextBlock(), o=>{o.Text = I[K.Model];});
 				sp.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.Model);});
-				sp.A(new TextBlock(), o=>{o.Text = I[K.Prompt];});
-				sp.A(new TextBox(), o=>{
-					o.AcceptsReturn = true;
-					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
-					o.MinHeight = UiCfg.Inst.BaseFontSize*6;
-					o.CBind<Ctx>(o.PropText, x=>x.Prompt);
-				});
+				//暫未支持
+				// sp.A(new TextBlock(), o=>{o.Text = I[K.Prompt];});
+				// sp.A(new TextBox(), o=>{
+				// 	o.AcceptsReturn = true;
+				// 	o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
+				// 	o.MinHeight = UiCfg.Inst.BaseFontSize*6;
+				// 	o.CBind<Ctx>(o.PropText, x=>x.Prompt);
+				// });
 			});
 		});
 		Root.A(new OpBtn(), o=>{

@@ -96,7 +96,7 @@ public partial class ViewWordManage
 			ViewNavi?.GoTo(titled);
 		};
 		R.HorizontalContentAlignment = HAlign.Stretch;
-		R.MinHeight = UiCfg.Inst.BaseFontSize * 4.8;
+		R.MinHeight = UiCfg.Inst.BaseFontSize * 2;
 
 		R.SetContent(new Border(), b=>{
 			b.Padding = new Thickness(
