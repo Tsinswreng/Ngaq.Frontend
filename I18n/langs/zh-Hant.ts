@@ -368,6 +368,9 @@ const a: TI18nKv = {
 			BatchGetByIdCountMismatch: "批次依識別碼取得數量不符",
 			SyncShouldUseSameId: "同步應使用相同的識別碼",
 		},
+		Audio: {
+			AudioPlayFailed: "音頻播放失敗"
+		}
 	},//~Error
 	Lang: {
 		en: "英語",

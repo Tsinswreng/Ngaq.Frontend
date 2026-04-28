@@ -306,12 +306,15 @@ const Full = {
 	//異常鍵翻譯
 	Error: {
 		Common: {
-			AudioPlayFailed: K,
+			ArgErr: K,
 			NetWorkErr: K,
 			UnknownErr: K,
 			AddFailed: K,
 			PermissionDenied: K,
 			DataIllegalOrConflict: K,
+		},
+		Audio: {
+			AudioPlayFailed: K,
 		},
 		User: {
 			UserNotExist: K,
