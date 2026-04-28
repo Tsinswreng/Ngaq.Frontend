@@ -253,8 +253,25 @@ const a: TI18nKv = {
 			TranslatedName: "譯名",
 			TextIsEmpty: "文本爲空",
 			Submitted: "已提交",
-			PressStartButtonToBeginLearning: "",
-			WordLearningHelpText: "",
+			PressStartButtonToBeginLearning: "點擊開始按鈕以開始學習",
+			WordLearningHelpText:
+`• Click on a word card above to start learning a word.
+
+• Top menu buttons:
+	- ▶️ Start: Load and begin learning words.
+	- 💾 Save: Save your learning progress.
+	- 🔄 Reset: Clear all progress and start over.
+	- ⚙️ Settings: Configure learning preferences.
+
+• Learning a word:
+	- Click a word card to mark as remembered (green).
+	- Click again to mark as forgotten (red).
+	- Click once more to clear the mark (transparent).
+
+• Other operations:
+	- Long-press a word card for context menu options.
+	- Use the settings button to edit or add words.
+	- Save progress regularly to avoid data loss.`,
 			SoftDeleteTime: "軟刪除時間",
 			Summary: "概要",
 			Note: "筆記",

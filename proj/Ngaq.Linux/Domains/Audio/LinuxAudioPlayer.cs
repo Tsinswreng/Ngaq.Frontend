@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ngaq.Core.Shared.Audio;
@@ -12,18 +13,27 @@ using Ngaq.Core.Shared.Audio;
 /// 使用外部命令行播放器進行回放，避免依賴 Windows 專用音頻庫。
 public class LinuxAudioPlayer : IAudioPlayer{
 	private sealed record PlayerCmd(str FileName, str ArgsTemplate);
+	private sealed record PlayerTryResult(bool Ok, str Reason);
+	private sealed record ResolvedPlayerCmd(str OriginalName, str ExecutablePath, str ArgsTemplate);
 
 	// Ubuntu 22 常見播放器命令回退鏈。
 	private static readonly IReadOnlyList<PlayerCmd> Mp3Players = [
 		new("mpg123", "-q \"{0}\""),
 		new("ffplay", "-nodisp -autoexit -loglevel quiet \"{0}\""),
-		new("cvlc", "--play-and-exit --quiet \"{0}\"")
+		new("cvlc", "--play-and-exit --quiet \"{0}\""),
+		new("mpv", "--no-video --really-quiet \"{0}\""),
+		new("gst-play-1.0", "-q \"{0}\""),
+		new("play", "-q \"{0}\"")
 	];
 
 	private static readonly IReadOnlyList<PlayerCmd> WavPlayers = [
 		new("aplay", "\"{0}\""),
 		new("paplay", "\"{0}\""),
-		new("ffplay", "-nodisp -autoexit -loglevel quiet \"{0}\"")
+		new("ffplay", "-nodisp -autoexit -loglevel quiet \"{0}\""),
+		new("cvlc", "--play-and-exit --quiet \"{0}\""),
+		new("mpv", "--no-video --really-quiet \"{0}\""),
+		new("gst-play-1.0", "-q \"{0}\""),
+		new("play", "-q \"{0}\"")
 	];
 
 	/// 播放音頻流。
@@ -32,14 +42,20 @@ public class LinuxAudioPlayer : IAudioPlayer{
 	/// <param name="Ct">取消令牌。</param>
 	/// <returns>暫無可控播放狀態，返回 null。</returns>
 	public async Task<IPlayState?> Play(Stream S, EAudioType Type, CT Ct){
-		var extension = GetAudioExtension(Type);
-		var tempFilePath = await SaveToTempFile(S, extension, Ct);
-
 		try{
-			await Task.Run(() => PlayWithFallbackCommands(tempFilePath, Type, Ct), Ct);
-			return null;
-		}finally{
-			TryDeleteTempFile(tempFilePath);
+			var extension = GetAudioExtension(Type);
+			var tempFilePath = await SaveToTempFile(S, extension, Ct);
+
+			try{
+				await Task.Run(() => PlayWithFallbackCommands(tempFilePath, Type, Ct), Ct);
+				return null;
+			}finally{
+				TryDeleteTempFile(tempFilePath);
+			}
+		}catch(OperationCanceledException) when(Ct.IsCancellationRequested){
+			throw;
+		}catch(Exception ex) when(ex is not Tsinswreng.CsErr.AppErr){
+			throw ToolAudioErr.MkAudioPlayFailedErr(ex, $"Type={Type}", "Platform=Linux");
 		}
 	}
 
@@ -48,7 +64,11 @@ public class LinuxAudioPlayer : IAudioPlayer{
 		return Type switch{
 			EAudioType.Mp3 => ".mp3",
 			EAudioType.Wav => ".wav",
-			_ => throw new NotSupportedException($"Unsupported audio type: {Type}")
+			_ => throw ToolAudioErr.MkAudioPlayFailedErr(
+				null,
+				$"UnsupportedAudioType={Type}",
+				"Platform=Linux"
+			)
 		};
 	}
 
@@ -64,25 +84,38 @@ public class LinuxAudioPlayer : IAudioPlayer{
 	/// 依序嘗試可用播放器，直到成功播放或全部失敗。
 	private static nil PlayWithFallbackCommands(str TempFilePath, EAudioType Type, CT Ct){
 		var players = Type == EAudioType.Mp3 ? Mp3Players : WavPlayers;
+		var reasons = new List<str>();
 
 		foreach(var player in players){
-			var ok = TryPlayByCommand(player, TempFilePath, Ct);
-			if(ok){
+			var result = TryPlayByCommand(player, TempFilePath, Ct);
+			if(result.Ok){
 				return NIL;
 			}
+			reasons.Add($"{player.FileName}:{result.Reason}");
 		}
 
-		throw new NotSupportedException(
-			$"No available Linux audio player was found for {Type}. Tried: {string.Join(", ", players)}"
+		throw ToolAudioErr.MkAudioPlayFailedErr(
+			null,
+			$"NoAvailableLinuxPlayerFor={Type}",
+			$"Tried={string.Join(",", players)}",
+			$"Reasons={string.Join("|", reasons)}",
+			"InstallHint=sudo apt-get update && sudo apt-get install -y mpv ffmpeg vlc mpg123 gstreamer1.0-tools sox alsa-utils pulseaudio-utils",
+			"Platform=Linux"
 		);
 	}
 
 	/// 使用指定命令播放文件；命令不存在或退出失敗時返回 false。
-	private static bool TryPlayByCommand(PlayerCmd Player, str TempFilePath, CT Ct){
+	private static PlayerTryResult TryPlayByCommand(PlayerCmd Player, str TempFilePath, CT Ct){
 		try{
+			var resolved = ResolvePlayerCommand(Player);
+			if(resolved is null){
+				return new PlayerTryResult(false, $"ExecutableNotFound:{Player.FileName}");
+			}
+
+			var sw = Stopwatch.StartNew();
 			var psi = new ProcessStartInfo{
-				FileName = Player.FileName,
-				Arguments = string.Format(Player.ArgsTemplate, TempFilePath),
+				FileName = resolved.ExecutablePath,
+				Arguments = string.Format(resolved.ArgsTemplate, TempFilePath),
 				UseShellExecute = false,
 				CreateNoWindow = true,
 				RedirectStandardOutput = true,
@@ -91,7 +124,7 @@ public class LinuxAudioPlayer : IAudioPlayer{
 
 			using var proc = Process.Start(psi);
 			if(proc == null){
-				return false;
+				return new PlayerTryResult(false, "ProcessStartReturnedNull");
 			}
 
 			using var reg = Ct.Register(() => {
@@ -106,10 +139,53 @@ public class LinuxAudioPlayer : IAudioPlayer{
 
 			proc.WaitForExit();
 			Ct.ThrowIfCancellationRequested();
-			return proc.ExitCode == 0;
-		}catch{
-			return false;
+			sw.Stop();
+			if(proc.ExitCode == 0){
+				if(sw.ElapsedMilliseconds < 200){
+					return new PlayerTryResult(false, $"ExitedTooFastMs={sw.ElapsedMilliseconds}");
+				}
+				return new PlayerTryResult(true, $"ExitCode=0,Executable={resolved.ExecutablePath}");
+			}
+			return new PlayerTryResult(false, $"ExitCode={proc.ExitCode}");
+		}catch(Exception ex){
+			if(ex is System.ComponentModel.Win32Exception w32){
+				return new PlayerTryResult(
+					false,
+					$"{ex.GetType().Name}(NativeErrorCode={w32.NativeErrorCode},Message={w32.Message})"
+				);
+			}
+			return new PlayerTryResult(false, $"{ex.GetType().Name}({ex.Message})");
 		}
+	}
+
+	/// 解析播放器可執行文件的絕對路徑。
+	private static ResolvedPlayerCmd? ResolvePlayerCommand(PlayerCmd Player){
+		if(Path.IsPathRooted(Player.FileName) && File.Exists(Player.FileName)){
+			return new ResolvedPlayerCmd(Player.FileName, Player.FileName, Player.ArgsTemplate);
+		}
+
+		var candidates = new List<str>();
+		var pathValue = Environment.GetEnvironmentVariable("PATH") ?? "";
+		var pathDirs = pathValue
+			.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+		candidates.AddRange(pathDirs.Select(dir => Path.Combine(dir, Player.FileName)));
+
+		candidates.Add($"/usr/bin/{Player.FileName}");
+		candidates.Add($"/bin/{Player.FileName}");
+		candidates.Add($"/usr/local/bin/{Player.FileName}");
+		candidates.Add($"/snap/bin/{Player.FileName}");
+
+		foreach(var candidate in candidates.Distinct(StringComparer.Ordinal)){
+			try{
+				if(File.Exists(candidate)){
+					return new ResolvedPlayerCmd(Player.FileName, candidate, Player.ArgsTemplate);
+				}
+			}catch{
+				// 路徑檢查失敗時跳過，繼續下一候選。
+			}
+		}
+
+		return null;
 	}
 
 	/// 清理臨時文件，避免磁盤遺留。
