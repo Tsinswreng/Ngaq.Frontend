@@ -1,14 +1,60 @@
-namespace Ngaq.Ui.Views.Word.WordEditV2;
+namespace Ngaq.Ui.Views.Word.WordLearnPage;
 
+using System.Collections.ObjectModel;
 using System.Globalization;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;
-using Tsinswreng.CsTempus;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.CsTempus;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-/// 單詞學習記錄行編輯 ViewModel。
+/// 學習記錄分頁 ViewModel：管理列表、新增、轉換。
+public partial class VmWordLearnPage: ViewModelBase{
+	public event Action<VmWordLearnRow>? OnEditRequested;
+
+	public ObservableCollection<VmWordLearnRow> Rows{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = [];
+
+	public nil LoadFromPoLearns(IList<PoWordLearn> Learns){
+		Rows = new ObservableCollection<VmWordLearnRow>(Learns.Select(VmWordLearnRow.FromPo));
+		return NIL;
+	}
+
+	public nil AddRow(){
+		Rows.Add(VmWordLearnRow.NewRow());
+		return NIL;
+	}
+
+	public nil RemoveRow(VmWordLearnRow Row){
+		Rows.Remove(Row);
+		return NIL;
+	}
+
+	public nil RequestEdit(VmWordLearnRow Row){
+		OnEditRequested?.Invoke(Row);
+		return NIL;
+	}
+
+	public bool TryBuildPoLearns(IdWord WordId, out List<PoWordLearn> Learns, out str Err){
+		Learns = [];
+		Err = "";
+		for(i32 i = 0; i < Rows.Count; i++){
+			var row = Rows[i];
+			if(!row.TryToPo(WordId, out var po, out var rowErr)){
+				Err = I18n.Get(K.Learn__Err__, i+1, rowErr);
+				return false;
+			}
+			Learns.Add(po);
+		}
+		return true;
+	}
+}
+
+/// 學習記錄行 ViewModel。
 public partial class VmWordLearnRow: ViewModelBase{
 	public static IReadOnlyList<ELearn> LearnResults{get;} = [
 		ELearn.Add,
@@ -18,7 +64,6 @@ public partial class VmWordLearnRow: ViewModelBase{
 
 	public PoWordLearn Raw{get;set;} = new();
 
-	/// LearnResult 下拉索引。
 	public i32 LearnResultIndex{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -29,7 +74,6 @@ public partial class VmWordLearnRow: ViewModelBase{
 		set{SetProperty(ref field, value);}
 	} = UnixMs.Now().ToIso();
 
-	/// 概要表格顯示用時間格式：yy-MM-dd HH:mm:ss。
 	public str BizCreatedAtDisplay{
 		get{
 			try{
@@ -43,22 +87,18 @@ public partial class VmWordLearnRow: ViewModelBase{
 		}
 	}
 
-	/// 概要列表顯示字段。
 	public str LearnResultText => GetLearnResultByIndex(LearnResultIndex).ToString();
 
 	public static VmWordLearnRow NewRow(){
-		return new VmWordLearnRow{
-			LearnResultIndex = 0,
-		};
+		return new VmWordLearnRow{LearnResultIndex = 0};
 	}
 
 	public static VmWordLearnRow FromPo(PoWordLearn Po){
-		var vm = new VmWordLearnRow{
+		return new VmWordLearnRow{
 			Raw = (PoWordLearn)Po.ShallowCloneSelf(),
 			LearnResultIndex = GetLearnResultIndex(Po.LearnResult),
 			BizCreatedAtIso = Po.BizCreatedAt.ToIso(),
 		};
-		return vm;
 	}
 
 	public bool TryToPo(IdWord WordId, out PoWordLearn Po, out str Err){
@@ -66,7 +106,6 @@ public partial class VmWordLearnRow: ViewModelBase{
 		Po = (PoWordLearn)Raw.ShallowCloneSelf();
 		Po.WordId = WordId;
 		Po.LearnResult = GetLearnResultByIndex(LearnResultIndex);
-
 		try{
 			Po.BizCreatedAt = UnixMs.FromIso(BizCreatedAtIso);
 		}catch{
@@ -92,5 +131,3 @@ public partial class VmWordLearnRow: ViewModelBase{
 		return LearnResults[Index];
 	}
 }
-
-

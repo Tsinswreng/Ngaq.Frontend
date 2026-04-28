@@ -1,12 +1,57 @@
-namespace Ngaq.Ui.Views.Word.WordEditV2;
+namespace Ngaq.Ui.Views.Word.WordPropPage;
 
+using System.Collections.ObjectModel;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
-using Ngaq.Ui.Infra;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ngaq.Ui.Infra;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+
+/// 屬性分頁 ViewModel：管理列表、新增、轉換。
+public partial class VmWordPropPage: ViewModelBase{
+	public event Action<VmWordPropRow>? OnEditRequested;
+
+	public ObservableCollection<VmWordPropRow> Rows{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = [];
+
+	public nil LoadFromPoProps(IList<PoWordProp> Props){
+		Rows = new ObservableCollection<VmWordPropRow>(Props.Select(VmWordPropRow.FromPo));
+		return NIL;
+	}
+
+	public nil AddRow(){
+		Rows.Add(VmWordPropRow.NewRow());
+		return NIL;
+	}
+
+	public nil RemoveRow(VmWordPropRow Row){
+		Rows.Remove(Row);
+		return NIL;
+	}
+
+	public nil RequestEdit(VmWordPropRow Row){
+		OnEditRequested?.Invoke(Row);
+		return NIL;
+	}
+
+	public bool TryBuildPoProps(IdWord WordId, out List<PoWordProp> Props, out str Err){
+		Props = [];
+		Err = "";
+		for(i32 i = 0; i < Rows.Count; i++){
+			var row = Rows[i];
+			if(!row.TryToPo(WordId, out var po, out var rowErr)){
+				Err = I18n.Get(K.Prop__Err__, i+1, rowErr);
+				return false;
+			}
+			Props.Add(po);
+		}
+		return true;
+	}
+}
 
 /// 單詞屬性行編輯 ViewModel。
-/// 約束：當前 UI 只允許 Str / I64 兩種鍵值類型。
 public partial class VmWordPropRow: ViewModelBase{
 	public static IReadOnlyList<EKvType> KvTypes{get;} = [
 		EKvType.Str,
@@ -20,13 +65,11 @@ public partial class VmWordPropRow: ViewModelBase{
 		set{SetProperty(ref field, value);}
 	} = 0;
 
-	/// Key 下拉/可編輯輸入（字符串鍵）。
 	public str KStrText{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
 
-	/// 整數鍵文本（KType=I64 時使用）。
 	public str KI64Text{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -37,20 +80,17 @@ public partial class VmWordPropRow: ViewModelBase{
 		set{SetProperty(ref field, value);}
 	} = 0;
 
-	/// 字符串值（VType=Str 時使用）。
 	public str VStrText{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
 
-	/// 整數值文本（VType=I64 時使用）。
 	public str VI64Text{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "0";
 
 	public str KeyText => GetKvTypeByIndex(KTypeIndex) == EKvType.I64 ? KI64Text : KStrText;
-	public str ValueText => GetKvTypeByIndex(VTypeIndex) == EKvType.I64 ? VI64Text : VStrText;
 	public str KTypeText => GetKvTypeByIndex(KTypeIndex).ToString();
 	public str VTypeText => GetKvTypeByIndex(VTypeIndex).ToString();
 
@@ -58,7 +98,7 @@ public partial class VmWordPropRow: ViewModelBase{
 		return new VmWordPropRow{
 			KTypeIndex = 0,
 			VTypeIndex = 0,
-			KStrText = "",
+			KStrText = KeysProp.Inst.description,
 			VStrText = "",
 			KI64Text = "0",
 			VI64Text = "0",
@@ -81,7 +121,6 @@ public partial class VmWordPropRow: ViewModelBase{
 		Err = "";
 		Po = (PoWordProp)Raw.ShallowCloneSelf();
 		Po.WordId = WordId;
-
 		var kt = GetKvTypeByIndex(KTypeIndex);
 		var vt = GetKvTypeByIndex(VTypeIndex);
 		Po.KType = kt;
@@ -138,5 +177,3 @@ public partial class VmWordPropRow: ViewModelBase{
 		return KvTypes[Index];
 	}
 }
-
-
