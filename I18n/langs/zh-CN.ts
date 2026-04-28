@@ -96,7 +96,7 @@ const a: TI18nKv = {
 			Saved: "已储存",
 			Deleted: "已删除",
 			PoNormLang: "标准语言持久化物件",
-			Id: "识别码",
+			Id: "ID",
 			//用于 语言 如 意大利语之NativeName为 Italiano
 			NativeName: "本土名称",
 			Type: "类型",
@@ -134,7 +134,7 @@ const a: TI18nKv = {
 			Basic: "基本",
 			Props: "属性",
 			Learns: "学习记录",
-			WordId: "单词识别码",
+			WordId: "单词ID",
 			Head: "标头",
 			Lang: "语言",
 			StoredAt: "储存时间",
@@ -201,7 +201,7 @@ const a: TI18nKv = {
 			AddGroup: "新增群组",
 			Back: "返回",
 			SaveDraft: "储存草稿",
-			NoPersistedIdToDelete: "没有可删除的持久化识别码",
+			NoPersistedIdToDelete: "没有可删除的持久化ID",
 			PoPreFilterJsonParseFailed: "前置筛选器 JSON 持久化物件解析失败",
 			EditorNotReady: "编辑器尚未就绪",
 			Core: "核心",
@@ -330,7 +330,7 @@ const a: TI18nKv = {
 			AuthenticationFailed: "验证失败",
 		},
 		Word: {
-			WordOfId__NotFound: "识别码 {0} 的单词不存在",
+			WordOfId__NotFound: "ID为 {0} 的单词不存在",
 			LoadWordListFailed: "载入单词清单失败",
 			SaveWordListFailed: "储存单词清单失败",
 			LoadWordCalcWeightFailed: "载入单词权重计算失败",
@@ -340,7 +340,7 @@ const a: TI18nKv = {
 			WeightCalcRunFailed: "权重计算执行失败",
 			WeightCalcResultHandleFailed: "权重计算结果处理失败",
 			WeightCalcResultStreamNull: "权重计算结果串流为空",
-			WeightCalcResultWordIdInvalid__: "权重计算结果中的单词识别码 {0} 无效",
+			WeightCalcResultWordIdInvalid__: "权重计算结果中的单词ID {0} 无效",
 			JsWeightCalcCodeEmpty: "JavaScript 权重计算程式码为空",
 			JsWeightCalcExecFailed: "JavaScript 权重计算执行失败",
 			JsWeightCalcReturnedEmpty: "JavaScript 权重计算回传空值",
@@ -366,8 +366,8 @@ const a: TI18nKv = {
 			LlmResponseParseFailed: "LLM 回应解析失败",
 		},
 		Sync: {
-			BatchGetByIdCountMismatch: "批次依识别码取得数量不符",
-			SyncShouldUseSameId: "同步应使用相同的识别码",
+			BatchGetByIdCountMismatch: "批次依ID取得数量不符",
+			SyncShouldUseSameId: "同步应使用相同的ID",
 		},
 		Audio: {
 			AudioPlayFailed: "音频播放失败"
