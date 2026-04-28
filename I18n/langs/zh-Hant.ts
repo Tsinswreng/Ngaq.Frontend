@@ -187,7 +187,7 @@ const a: TI18nKv = {
 			NewPreFilter: "新增前置篩選器",
 			PoPreFilterJson: "前置篩選器 JSON 持久化物件",
 			PreFilterDraftUpdated: "前置篩選器草稿已更新",
-			Row__InvalidCoreFilterField__: "列：無效的核心篩選欄位",
+			Row__InvalidCoreFilterField__: "列：{0}無效的核心篩選欄位{1}",
 			__IsNotValidNumber: "不是有效的數字",
 			PoPreFilter: "前置篩選器持久對象",
 			TextPreview: "文字預覽",
