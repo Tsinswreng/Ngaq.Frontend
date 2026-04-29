@@ -10,7 +10,6 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Styling;
-using Avalonia.Themes.Fluent;
 using Live.Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -64,11 +63,18 @@ public partial class App :Application
 		App.SvcProvider = SvcProvider;
 	}
 
+
+	/// App 初始化入口。
+	/// 保持主要 UI 仍爲純 C#；
+	/// 但第三方控件全局主題改由極小的 App.axaml 在編譯期註冊，避免運行時動態載入主題失敗。
+	/// App.xaml中的
+	/// <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml" />
+	/// 目前找不到辦法用等價c#表示 故此項目仍需少量xaml
+
 	public override void Initialize() {
+		this.RequestedThemeVariant = ThemeVariant.Dark;
 		AvaloniaXamlLoader.Load(this);
 		var Sty = MkrStyle.MkStyForAnyControl();
-		Styles.Add(new FluentTheme());
-		this.RequestedThemeVariant = ThemeVariant.Dark;
 		Styles.Add(MkrStyle.NoCornerRadius(Sty));
 		// 在 App 初始化时添加资源（如 App.axaml.cs 的构造函数）
 		App.Current?.Resources.Add(KeysRsrc.ControlContentThemeFontSize, UiCfg.Inst.BaseFontSize);
