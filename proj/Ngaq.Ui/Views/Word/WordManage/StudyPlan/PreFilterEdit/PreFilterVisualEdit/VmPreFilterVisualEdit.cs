@@ -377,7 +377,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(I18n[K.Saved]);
+			ShowToast(I18n[K.Saved]);
 		}catch(Exception e){
 			HandleErr(e);
 		}

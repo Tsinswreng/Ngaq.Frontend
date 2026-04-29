@@ -134,7 +134,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 			PoNormLangToUserLang = po;
 			IsCreateMode = false;
 			SyncFromPo();
-			ShowDialog(I18n[K.Saved]);
+			ShowToast(I18n[K.Saved]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
