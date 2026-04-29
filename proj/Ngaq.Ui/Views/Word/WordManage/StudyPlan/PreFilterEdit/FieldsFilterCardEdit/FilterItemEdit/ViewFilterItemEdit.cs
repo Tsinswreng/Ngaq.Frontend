@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
@@ -18,6 +19,9 @@ public class ViewFilterItemEdit: AppViewBase{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
 	}
+
+	ComboBox? OperationCombo{get;set;}
+	ComboBox? ValueTypeCombo{get;set;}
 
 	public ViewFilterItemEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -37,6 +41,21 @@ public class ViewFilterItemEdit: AppViewBase{
 		return NIL;
 	}
 
+	public nil SyncSelectionFromVm(){
+		if(Ctx is null){
+			return NIL;
+		}
+		if(OperationCombo is not null){
+			OperationCombo.ItemsSource = Ctx.OperationOptions;
+			OperationCombo.SelectedItem = Ctx.SelectedOperation;
+		}
+		if(ValueTypeCombo is not null){
+			ValueTypeCombo.ItemsSource = Ctx.ValueTypeOptions;
+			ValueTypeCombo.SelectedItem = Ctx.SelectedValueType;
+		}
+		return NIL;
+	}
+
 	Control MkBody(){
 		var sv = new ScrollViewer();
 		var root = new StackPanel{
@@ -53,12 +72,14 @@ public class ViewFilterItemEdit: AppViewBase{
 		top.A(MkComboRow(
 			I[K.Operation],
 			CBE.Mk<Ctx>(x=>x.OperationOptions, Mode: BindingMode.OneWay),
-			CBE.Mk<Ctx>(x=>x.SelectedOperationIndex, Mode: BindingMode.TwoWay)
+			CBE.Mk<Ctx>(x=>x.SelectedOperation, Mode: BindingMode.TwoWay),
+			isOperation: true
 		));
 		top.A(MkComboRow(
 			I[K.ValueType],
 			CBE.Mk<Ctx>(x=>x.ValueTypeOptions, Mode: BindingMode.OneWay),
-			CBE.Mk<Ctx>(x=>x.SelectedValueTypeIndex, Mode: BindingMode.TwoWay)
+			CBE.Mk<Ctx>(x=>x.SelectedValueType, Mode: BindingMode.TwoWay),
+			isOperation: false
 		));
 		root.Children.Add(top.Grid);
 		root.Children.Add(MkInputRow(I[K.ValuesNewlineSeparated], CBE.Mk<Ctx>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true, MaxHeight: 180));
@@ -74,12 +95,14 @@ public class ViewFilterItemEdit: AppViewBase{
 		g.A(new Button(), o=>{
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.Background = UiCfg.Inst.DelBtnBg;
+			o.StretchCenter();
 			o.Click += (s,e)=>Ctx?.Delete();
 		});
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Content = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.Background = UiCfg.Inst.MainColor;
+			o.StretchCenter();
 			o.Click += (s,e)=>Ctx?.Save();
 		});
 		return g.Grid;
@@ -98,12 +121,17 @@ public class ViewFilterItemEdit: AppViewBase{
 		return sp;
 	}
 
-	Control MkComboRow(str Label, IBinding ItemsBinding, IBinding SelectedIdxBinding){
+	Control MkComboRow(str Label, IBinding ItemsBinding, IBinding SelectedItemBinding, bool isOperation){
 		var sp = new StackPanel{Spacing = 3};
 		sp.Children.Add(new TextBlock{Text = Label});
 		var cb = new ComboBox();
 		cb.Bind(ComboBox.ItemsSourceProperty, ItemsBinding);
-		cb.Bind(ComboBox.SelectedIndexProperty, SelectedIdxBinding);
+		cb.Bind(ComboBox.SelectedItemProperty, SelectedItemBinding);
+		if(isOperation){
+			OperationCombo = cb;
+		}else{
+			ValueTypeCombo = cb;
+		}
 		sp.Children.Add(cb);
 		return sp;
 	}

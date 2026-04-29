@@ -149,6 +149,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		}
 		var view = new ViewFilterItemEdit();
 		view.Ctx?.Load(this, Card.Raw, Card.UiIdx);
+        view.SyncSelectionFromVm();
 		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Filter Item") + " #" + Card.UiIdx, view));
 		return NIL;
 	}
@@ -295,6 +296,48 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return text;
 	}
 
+	
+	/// <summary>
+	/// 供編輯頁回填下拉框使用：將 raw 值轉成顯示文字。
+	/// </summary>
+	public str ToOperationDisplayByRawIndexForEdit(i32 rawIndex){
+		return ToOperationDisplayByRawIndex(rawIndex);
+	}
+
+	/// <summary>
+	/// 供編輯頁回填下拉框使用：將 raw 值轉成顯示文字。
+	/// </summary>
+	public str ToValueTypeDisplayByRawIndexForEdit(i32 rawIndex){
+		return ToValueTypeDisplayByRawIndex(rawIndex);
+	}
+
+	/// <summary>
+	/// 根據顯示文字反查運算 raw 值；找不到時回退到等於。
+	/// </summary>
+	public i32 OperationDisplayToRawIndex(str? display){
+		var text = display?.Trim() ?? "";
+		for(i32 i = 0; i < OperationRawIndices.Count; i++){
+			var raw = OperationRawIndices[i];
+			if(ToOperationDisplayByRawIndex(raw) == text){
+				return raw;
+			}
+		}
+		return DefaultOperationRawIndex;
+	}
+
+	/// <summary>
+	/// 根據顯示文字反查值類型 raw 值；找不到時回退到字符串。
+	/// </summary>
+	public i32 ValueTypeDisplayToRawIndex(str? display){
+		var text = display?.Trim() ?? "";
+		for(i32 i = 0; i < ValueTypeRawIndices.Count; i++){
+			var raw = ValueTypeRawIndices[i];
+			if(ToValueTypeDisplayByRawIndex(raw) == text){
+				return raw;
+			}
+		}
+		return DefaultValueTypeRawIndex;
+	}
 	str ToOperationDisplayByRawIndex(i32 rawIndex){
 		var mode = EnumByRawIndex<EFilterOperationMode>(rawIndex);
 		return mode switch{
@@ -370,3 +413,5 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		};
 	}
 }
+
+

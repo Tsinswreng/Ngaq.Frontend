@@ -24,15 +24,15 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 	public IReadOnlyList<str> OperationOptions => Owner?.OperationOptionsDisplay ?? [];
 	public IReadOnlyList<str> ValueTypeOptions => Owner?.ValueTypeOptionsDisplay ?? [];
 
-	public i32 SelectedOperationIndex{
+	public str SelectedOperation{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = 0;
+	} = "";
 
-	public i32 SelectedValueTypeIndex{
+	public str SelectedValueType{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	} = 0;
+	} = "";
 
 	public str ValuesText{
 		get{return field;}
@@ -47,13 +47,13 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		this.Owner = Owner;
 		this.Target = Target;
 		this.ItemIdx = ItemIdx;
-		SelectedOperationIndex = Owner.ToOperationOptionIndex(Target.OperationIndex);
-		SelectedValueTypeIndex = Owner.ToValueTypeOptionIndex(Target.ValueTypeIndex);
+		SelectedOperation = Owner.ToOperationDisplayByRawIndexForEdit(Target.OperationIndex);
+		SelectedValueType = Owner.ToValueTypeDisplayByRawIndexForEdit(Target.ValueTypeIndex);
 		ValuesText = Target.ValuesText;
 		OnPropertyChanged(nameof(OperationOptions));
 		OnPropertyChanged(nameof(ValueTypeOptions));
-		OnPropertyChanged(nameof(SelectedOperationIndex));
-		OnPropertyChanged(nameof(SelectedValueTypeIndex));
+		OnPropertyChanged(nameof(SelectedOperation));
+		OnPropertyChanged(nameof(SelectedValueType));
 		return NIL;
 	}
 
@@ -62,8 +62,8 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 			ShowDialog(I18n[K.EditorNotReady]);
 			return NIL;
 		}
-		Target.OperationIndex = Owner.ToOperationRawIndex(SelectedOperationIndex);
-		Target.ValueTypeIndex = Owner.ToValueTypeRawIndex(SelectedValueTypeIndex);
+		Target.OperationIndex = Owner.OperationDisplayToRawIndex(SelectedOperation);
+		Target.ValueTypeIndex = Owner.ValueTypeDisplayToRawIndex(SelectedValueType);
 		Target.ValuesText = ValuesText;
 		Owner.CommitItemsDraft();
 		ShowToast(I18n.Get(K.SavedFilterItem__No__, ItemIdx));
