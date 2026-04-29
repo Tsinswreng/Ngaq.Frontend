@@ -16,6 +16,7 @@ using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
@@ -86,12 +87,12 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		public i32 OperationIndex{
 			get{return field;}
 			set{SetProperty(ref field, value);}
-		} = 0;
+		} = (i32)EFilterOperationMode.Eq;
 
 		public i32 ValueTypeIndex{
 			get{return field;}
 			set{SetProperty(ref field, value);}
-		} = 0;
+		} = (i32)EValueType.String;
 
 		public str ValuesText{
 			get{return field;}
@@ -431,7 +432,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		}
 		var view = new ViewFieldsFilterCardEdit();
 		view.Ctx?.Load(this, Card.Raw, IsCore, Card.UiIdx);
-		var title = $"{(IsCore?"Core":"Prop")} Filter #{Card.UiIdx}";
+		var title = (IsCore ? I18n[K.CoreFilter] : I18n[K.PropFilter]) + " #" + Card.UiIdx;
 		ViewNavi?.GoTo(ToolView.WithTitle(title, view));
 		return NIL;
 	}
@@ -678,8 +679,8 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 	public static VmFilterItemRow MkFilterItemRow(){
 		return new VmFilterItemRow{
-			OperationIndex = 1,
-			ValueTypeIndex = 1,
+			OperationIndex = (i32)EFilterOperationMode.Eq,
+			ValueTypeIndex = (i32)EValueType.String,
 		};
 	}
 
@@ -718,75 +719,107 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			.ToList();
 	}
 
-	str JoinFieldPreview(VmFieldsFilterRow row){
-		var fields = row.Fields
-			.Select(x=>x.Value?.Trim() ?? "")
-			.Where(x=>!str.IsNullOrWhiteSpace(x))
-			.ToList();
-		if(fields.Count == 0){
-			return "-";
-		}
-		return string.Join(", ", fields);
+str JoinFieldPreview(VmFieldsFilterRow row){
+	var fields = row.Fields
+		.Select(x=>x.Value?.Trim() ?? "")
+		.Where(x=>!str.IsNullOrWhiteSpace(x))
+		.Select(LocalizeFieldName)
+		.ToList();
+	if(fields.Count == 0){
+		return "-";
 	}
-
-	str BuildContentPreview(VmFieldsFilterRow row){
-		if(row.Fields.Count != 1 || row.Items.Count != 1){
-			return "-";
-		}
-
-		var field = row.Fields[0].Value?.Trim() ?? "";
-		if(str.IsNullOrWhiteSpace(field)){
-			return "-";
-		}
-
-		var item = row.Items[0];
-		var values = item.ValuesText
-			.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
-			.Select(x=>x.Trim())
-			.Where(x=>!str.IsNullOrWhiteSpace(x))
-			.ToArray();
-		if(values.Length != 1){
-			return "-";
-		}
-
-		return $"{field} {ToOpSymbol(item.OperationIndex)} {values[0]}";
-	}
-
-	static str ToOpSymbol(i32 operationIndex){
-		var values = Enum.GetValues<EFilterOperationMode>();
-		if(operationIndex < 0 || operationIndex >= values.Length){
-			return "=";
-		}
-		return values[operationIndex] switch{
-			EFilterOperationMode.Eq => "=",
-			EFilterOperationMode.Ne => "!=",
-			EFilterOperationMode.Gt => ">",
-			EFilterOperationMode.Ge => ">=",
-			EFilterOperationMode.Lt => "<",
-			EFilterOperationMode.Le => "<=",
-			_ => "=",
-		};
-	}
-
-	i32 GetTypeIndex(EPreFilterType type){
-		if(PoTypeValues.Count == 0){
-			return 0;
-		}
-		for(i32 i = 0; i < PoTypeValues.Count; i++){
-			if(PoTypeValues[i] == type){
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	EPreFilterType GetTypeByIndex(i32 idx){
-		if(PoTypeValues.Count == 0){
-			return EPreFilterType.Json;
-		}
-		var clamped = ClampIndex(idx, PoTypeValues.Count);
-		return PoTypeValues[clamped];
-	}
+	return string.Join(", ", fields);
 }
 
+str BuildContentPreview(VmFieldsFilterRow row){
+	if(row.Fields.Count != 1 || row.Items.Count != 1){
+		return "-";
+	}
+
+	var field = row.Fields[0].Value?.Trim() ?? "";
+	if(str.IsNullOrWhiteSpace(field)){
+		return "-";
+	}
+
+	var item = row.Items[0];
+	var values = item.ValuesText
+		.Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries)
+		.Select(x=>x.Trim())
+		.Where(x=>!str.IsNullOrWhiteSpace(x))
+		.ToArray();
+	if(values.Length != 1){
+		return "-";
+	}
+
+	return $"{LocalizeFieldName(field)} {ToOpText(item.OperationIndex)} {values[0]}";
+}
+
+str ToOpText(i32 operationIndex){
+	var values = Enum.GetValues<EFilterOperationMode>();
+	if(operationIndex < 0 || operationIndex >= values.Length){
+		return "=";
+	}
+	return values[operationIndex] switch{
+		EFilterOperationMode.IncludeAny => I18n[K.IncludeAny],
+		EFilterOperationMode.IncludeAll => I18n[K.IncludeAll],
+		EFilterOperationMode.ExcludeAll => I18n[K.ExcludeAll],
+		EFilterOperationMode.Eq => "=",
+		EFilterOperationMode.Ne => "!=",
+		EFilterOperationMode.Gt => ">",
+		EFilterOperationMode.Ge => ">=",
+		EFilterOperationMode.Lt => "<",
+		EFilterOperationMode.Le => "<=",
+		_ => "=",
+	};
+}
+
+/// <summary>
+/// 將字段原始鍵映射成界面顯示文案，便于預覽使用。
+/// </summary>
+str LocalizeFieldName(str raw){
+	if(str.IsNullOrWhiteSpace(raw)){
+		return raw;
+	}
+	return raw switch{
+		nameof(PoWord.Head) => I18n[K.Head],
+		nameof(PoWord.Lang) => I18n[K.Lang],
+		nameof(PoWord.BizCreatedAt) => I18n[K.Biz_CreatedAt],
+		nameof(PoWord.BizUpdatedAt) => I18n[K.Biz_UpdatedAt],
+		"summary" => I18n[K.Summary],
+		"description" => I18n[K.Description],
+		"note" => I18n[K.Note],
+		"tag" => I18n[K.Tag],
+		"source" => I18n[K.Source],
+		"alias" => I18n[K.Alias],
+		"pronunciation" => I18n[K.Pronunciation],
+		"weight" => I18n[K.Weight],
+		"learn" => I18n[K.Learn],
+		"usage" => I18n[K.Usage],
+		"example" => I18n[K.Example],
+		"relation" => I18n[K.Relation],
+		"ref" => I18n[K.Ref],
+		_ => raw,
+	};
+}
+
+i32 GetTypeIndex(EPreFilterType type){
+	if(PoTypeValues.Count == 0){
+		return 0;
+	}
+	for(i32 i = 0; i < PoTypeValues.Count; i++){
+		if(PoTypeValues[i] == type){
+			return i;
+		}
+	}
+	return 0;
+}
+
+EPreFilterType GetTypeByIndex(i32 idx){
+	if(PoTypeValues.Count == 0){
+		return EPreFilterType.Json;
+	}
+	var clamped = ClampIndex(idx, PoTypeValues.Count);
+	return PoTypeValues[clamped];
+}
+}
 

@@ -70,12 +70,7 @@ public class ViewFilterItemEdit: AppViewBase{
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
 		]);
-		g.A(new Button(), o=>{
-			o.Content = Icons.Add().ToIcon().WithText(I[K.AddItem]);
-			o.Click += (s,e)=>Ctx?.AddItem();
-		});
 		g.A(new Button(), o=>{
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.Background = UiCfg.Inst.DelBtnBg;
@@ -113,5 +108,3 @@ public class ViewFilterItemEdit: AppViewBase{
 		return sp;
 	}
 }
-
-

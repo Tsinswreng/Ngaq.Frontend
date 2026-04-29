@@ -1,13 +1,17 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui;
@@ -91,8 +95,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 				IsEditable = true,
 				HorizontalAlignment = HAlign.Stretch,
 			};
-			cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptions, Source: Ctx, Mode: BindingMode.OneWay));
-			cb.Bind(ComboBox.TextProperty, CBE.Mk<VmPreFilterVisualEdit.VmFieldValueRow>(x=>x.Value, Mode: BindingMode.TwoWay));
+			cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptionRows, Source: Ctx, Mode: BindingMode.OneWay));
+			cb.ItemTemplate = new FuncDataTemplate<Ctx.RowTextOption>((option, _) =>
+				new TextBlock{Text = option?.Display ?? ""}
+			);
+			InitFieldCombo(cb, item);
 			row.A(cb);
 
 			var rm = new Button{
@@ -105,6 +112,46 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		});
 		root.Children.Add(list);
 		return sv;
+	}
+
+	/// <summary>
+	/// 字段下拉框顯示本地化文字，但實際仍回寫原始字段鍵。
+	/// </summary>
+	void InitFieldCombo(ComboBox Combo, VmPreFilterVisualEdit.VmFieldValueRow Row){
+		void RefreshText(){
+			if(Ctx is null){
+				return;
+			}
+			Combo.Text = Ctx.ToFieldDisplay(Row.Value);
+		}
+
+		void CommitText(){
+			if(Ctx is null){
+				return;
+			}
+			var raw = Ctx.ToFieldRaw(Combo.Text);
+			if(Row.Value != raw){
+				Row.Value = raw;
+			}
+			var display = Ctx.ToFieldDisplay(Row.Value);
+			if(Combo.Text != display){
+				Combo.Text = display;
+			}
+		}
+
+		RefreshText();
+		Combo.SelectionChanged += (s,e)=>{
+			if(Combo.SelectedItem is Ctx.RowTextOption option){
+				Row.Value = option.Raw;
+				Combo.Text = option.Display;
+			}
+		};
+		Combo.LostFocus += (s,e)=>CommitText();
+		Row.PropertyChanged += (s,e)=>{
+			if(e.PropertyName == nameof(VmPreFilterVisualEdit.VmFieldValueRow.Value)){
+				RefreshText();
+			}
+		};
 	}
 
 	Control MkFilterItemsTab(){
@@ -202,7 +249,3 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		return g.Grid;
 	}
 }
-
-
-
-

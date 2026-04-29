@@ -3,7 +3,9 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCard
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
+using Ngaq;
 using Ngaq.Core.Shared.StudyPlan.Models.PreFilter;
+using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit.FilterItemEdit;
@@ -18,6 +20,9 @@ using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon
 public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 	protected VmFieldsFilterCardEdit(){}
 
+	static readonly i32 DefaultOperationRawIndex = (i32)EFilterOperationMode.Eq;
+	static readonly i32 DefaultValueTypeRawIndex = (i32)EValueType.String;
+
 	public static Ctx Mk(){
 		return new Ctx();
 	}
@@ -26,6 +31,11 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 	VmPreFilterVisualEdit.VmFieldsFilterRow? Target{get;set;}
 	bool IsCore{get;set;}
 	u64 RowIdx{get;set;}
+
+	public class RowTextOption{
+		public str Raw{get;set;} = "";
+		public str Display{get;set;} = "";
+	}
 
 	public class RowFilterItemCard{
 		public u64 UiIdx{get;set;}
@@ -43,6 +53,12 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 	public IReadOnlyList<str> FieldOptions => IsCore
 		? VmPreFilterVisualEdit.CoreWordFieldOptions
 		: Owner?.PropFieldOptions ?? [];
+	public IReadOnlyList<RowTextOption> FieldOptionRows => FieldOptions
+		.Select(x=>new RowTextOption{
+			Raw = x,
+			Display = ToFieldDisplay(x),
+		})
+		.ToList();
 
 	public IReadOnlyList<i32> OperationRawIndices{get;} = Enum
 		.GetValues<EFilterOperationMode>()
@@ -89,6 +105,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 
 		RefreshItemCards();
 		OnPropertyChanged(nameof(FieldOptions));
+		OnPropertyChanged(nameof(FieldOptionRows));
 		OnPropertyChanged(nameof(OperationOptionsDisplay));
 		OnPropertyChanged(nameof(ValueTypeOptionsDisplay));
 		return NIL;
@@ -132,7 +149,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		}
 		var view = new ViewFilterItemEdit();
 		view.Ctx?.Load(this, Card.Raw, Card.UiIdx);
-		ViewNavi?.GoTo(ToolView.WithTitle($"Filter Item #{Card.UiIdx}", view));
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Filter Item") + " #" + Card.UiIdx, view));
 		return NIL;
 	}
 
@@ -205,12 +222,12 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 				return i;
 			}
 		}
-		return 0;
+		return IndexOfRawOrZero(OperationRawIndices, DefaultOperationRawIndex);
 	}
 
 	public i32 ToOperationRawIndex(i32 optionIndex){
 		if(OperationRawIndices.Count == 0){
-			return 1;
+			return DefaultOperationRawIndex;
 		}
 		var i = ClampIndex(optionIndex, OperationRawIndices.Count);
 		return OperationRawIndices[i];
@@ -222,46 +239,86 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 				return i;
 			}
 		}
-		return 0;
+		return IndexOfRawOrZero(ValueTypeRawIndices, DefaultValueTypeRawIndex);
 	}
 
 	public i32 ToValueTypeRawIndex(i32 optionIndex){
 		if(ValueTypeRawIndices.Count == 0){
-			return 1;
+			return DefaultValueTypeRawIndex;
 		}
 		var i = ClampIndex(optionIndex, ValueTypeRawIndices.Count);
 		return ValueTypeRawIndices[i];
 	}
 
+	/// <summary>
+	/// 將字段原始鍵轉成界面顯示文字；若無對應翻譯則回退原值。
+	/// </summary>
+	public str ToFieldDisplay(str raw){
+		if(str.IsNullOrWhiteSpace(raw)){
+			return "";
+		}
+		return raw switch{
+			nameof(PoWord.Head) => I18n[K.Head],
+			nameof(PoWord.Lang) => I18n[K.Lang],
+			nameof(PoWord.BizCreatedAt) => I18n[K.Biz_CreatedAt],
+			nameof(PoWord.BizUpdatedAt) => I18n[K.Biz_UpdatedAt],
+			"summary" => I18n[K.Summary],
+			"description" => I18n[K.Description],
+			"note" => I18n[K.Note],
+			"tag" => I18n[K.Tag],
+			"source" => I18n[K.Source],
+			"alias" => I18n[K.Alias],
+			"pronunciation" => I18n[K.Pronunciation],
+			"weight" => I18n[K.Weight],
+			"learn" => I18n[K.Learn],
+			"usage" => I18n[K.Usage],
+			"example" => I18n[K.Example],
+			"relation" => I18n[K.Relation],
+			"ref" => I18n[K.Ref],
+			_ => raw,
+		};
+	}
+
+	/// <summary>
+	/// 將界面顯示文字映射回原始字段鍵；找不到對應時保留用戶輸入。
+	/// </summary>
+	public str ToFieldRaw(str? displayOrRaw){
+		var text = displayOrRaw?.Trim() ?? "";
+		if(str.IsNullOrWhiteSpace(text)){
+			return "";
+		}
+		foreach(var option in FieldOptionRows){
+			if(option.Display == text || option.Raw == text){
+				return option.Raw;
+			}
+		}
+		return text;
+	}
+
 	str ToOperationDisplayByRawIndex(i32 rawIndex){
 		var mode = EnumByRawIndex<EFilterOperationMode>(rawIndex);
 		return mode switch{
-			EFilterOperationMode.Eq => "＝",
-			EFilterOperationMode.Ne => "≠",
-			EFilterOperationMode.Gt => "＞",
-			EFilterOperationMode.Ge => "≥",
-			EFilterOperationMode.Lt => "＜",
-			EFilterOperationMode.Le => "≤",
-			EFilterOperationMode.IncludeAny => I18nOrSelf("Include Any"),
-			EFilterOperationMode.IncludeAll => I18nOrSelf("Include All"),
-			EFilterOperationMode.ExcludeAll => I18nOrSelf("Exclude All"),
-			_ => I18nOrSelf(mode.ToString()),
+			EFilterOperationMode.Eq => "=",
+			EFilterOperationMode.Ne => "!=",
+			EFilterOperationMode.Gt => ">",
+			EFilterOperationMode.Ge => ">=",
+			EFilterOperationMode.Lt => "<",
+			EFilterOperationMode.Le => "<=",
+			EFilterOperationMode.IncludeAny => I18n[K.IncludeAny],
+			EFilterOperationMode.IncludeAll => I18n[K.IncludeAll],
+			EFilterOperationMode.ExcludeAll => I18n[K.ExcludeAll],
+			_ => mode.ToString(),
 		};
 	}
 
 	str ToValueTypeDisplayByRawIndex(i32 rawIndex){
 		var type = EnumByRawIndex<EValueType>(rawIndex);
 		return type switch{
-			EValueType.String => I18nOrSelf("String"),
-			EValueType.Number => I18nOrSelf("Number"),
-			EValueType.Null => I18nOrSelf("Null"),
-			_ => I18nOrSelf(type.ToString()),
+			EValueType.String => I18n[K.String],
+			EValueType.Number => I18n[K.Number],
+			EValueType.Null => I18n[K.Null],
+			_ => type.ToString(),
 		};
-	}
-
-	static str I18nOrSelf(str text){
-		var localized = text;
-		return str.IsNullOrWhiteSpace(localized) ? text : localized;
 	}
 
 	static TEnum EnumByRawIndex<TEnum>(i32 rawIndex)
@@ -287,6 +344,15 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return value;
 	}
 
+	static i32 IndexOfRawOrZero(IReadOnlyList<i32> raws, i32 targetRaw){
+		for(i32 i = 0; i < raws.Count; i++){
+			if(raws[i] == targetRaw){
+				return i;
+			}
+		}
+		return 0;
+	}
+
 	static str ValuesPreview(str text){
 		if(str.IsNullOrWhiteSpace(text)){
 			return "";
@@ -304,6 +370,3 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		};
 	}
 }
-
-
-

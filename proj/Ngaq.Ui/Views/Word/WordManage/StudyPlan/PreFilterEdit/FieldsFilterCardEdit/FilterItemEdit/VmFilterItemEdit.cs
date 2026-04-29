@@ -52,6 +52,8 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		ValuesText = Target.ValuesText;
 		OnPropertyChanged(nameof(OperationOptions));
 		OnPropertyChanged(nameof(ValueTypeOptions));
+		OnPropertyChanged(nameof(SelectedOperationIndex));
+		OnPropertyChanged(nameof(SelectedValueTypeIndex));
 		return NIL;
 	}
 
@@ -79,16 +81,4 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		ViewNavi?.Back();
 		return NIL;
 	}
-
-	public nil AddItem(){
-		if(Owner is null){
-			ShowDialog(I18n[K.EditorNotReady]);
-			return NIL;
-		}
-		Owner.AddItem();
-		ViewNavi?.Back();
-		return NIL;
-	}
 }
-
-
