@@ -177,6 +177,19 @@ public partial class MainView : UserControl {
 		return NIL;
 	}
 
+	/// <summary>
+	/// 統一處理桌面 Escape 與 Android 實體返回鍵。
+	/// 先關閉最上層彈窗；沒有彈窗時再嘗試返回上一級視圖。
+	/// </summary>
+	/// <returns>返回事件是否已被當前 UI 消費。</returns>
+	public partial bool TryHandleBackNavigation(){
+		if(SvcPopup.Popups.Count > 0){
+			SvcPopup.ClosePopup();
+			return true;
+		}
+		return MgrViewNavi.Inst.GetViewNavi().Back();
+	}
+
 	/// 在主界面底部顯示可手動關閉的提示條；到期自動關閉。
 	public partial nil ShowToast(str Msg, u64 DurationMs = 3000){
 		Dispatcher.UIThread.Post((Action)(()=>{
@@ -321,10 +334,8 @@ public partial class MainView : UserControl {
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
 				if(e.Key == Avalonia.Input.Key.Escape){
-					if(SvcPopup.Popups.Count > 0){
-						SvcPopup.ClosePopup();
-					}else{
-						MgrViewNavi.Inst.GetViewNavi().Back();
+					if(TryHandleBackNavigation()){
+						e.Handled = true;
 					}
 				}
 			}

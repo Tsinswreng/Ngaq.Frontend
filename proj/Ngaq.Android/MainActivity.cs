@@ -16,6 +16,7 @@ using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Infra.Url;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra.I18n;
+using Ngaq.Ui.Views;
 using Ngaq.Ui.Views.Dictionary;
 using System;
 using System.IO;
@@ -62,6 +63,15 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		_cts.Cancel();
 		_cts.Dispose();
 		base.OnDestroy();
+	}
+
+	/// 攔截 Android 系統返回鍵，優先交給 Avalonia 內部導航處理。
+	/// 只有當前端沒有彈窗且也無上一級頁面可退時，纔回落到系統默認行爲。
+	public override void OnBackPressed(){
+		if(MainView.Inst.TryHandleBackNavigation()){
+			return;
+		}
+		base.OnBackPressed();
 	}
 
 	// OnNewIntent 在 Activity 使用 SingleTop 啟動模式且已存在於回退棧頂時觸發。

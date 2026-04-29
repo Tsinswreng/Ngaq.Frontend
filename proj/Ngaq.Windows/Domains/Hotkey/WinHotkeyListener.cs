@@ -17,12 +17,14 @@ public class WinHotkeyListener : IHotkeyListener{
 	private Dictionary<int, HotkeyRegistration> _idMap = [];
 	private int NextId = 1;
 
-	// thread used to pump Windows messages for hotkey notifications
+	/// 專用消息線程：既處理 Register/Unregister 工作，也接收 WM_HOTKEY。
 	private Thread? _msgThread;
-	private uint _msgThreadId;
 	private const int WM_HOTKEY = 0x0312;
-	// queue for operations that must run on the message thread
+	private const uint PM_REMOVE = 0x0001;
+	/// 註冊/反註冊必須落在消息線程，所以用工作隊列跨線程派發。
 	private readonly System.Collections.Concurrent.BlockingCollection<Action> _workQueue = new System.Collections.Concurrent.BlockingCollection<Action>();
+	/// 確保消息線程已創建消息隊列，避免主線程把工作投遞後無人喚醒。
+	private readonly ManualResetEventSlim _messageThreadReady = new(false);
 
 	private class HotkeyRegistration{
 		public int Id { get; set; }
@@ -41,12 +43,6 @@ public class WinHotkeyListener : IHotkeyListener{
 	[DllImport("user32.dll")]
 	private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
-	[DllImport("kernel32.dll")]
-	private static extern uint GetCurrentThreadId();
-
-	[DllImport("user32.dll", SetLastError = true)]
-	private static extern IntPtr FindWindow(string? lpClassName, string? lpWindowName);
-
 	private const uint MOD_CTRL = 2;
 	private const uint MOD_SHIFT = 4;
 	private const uint MOD_ALT = 1;
@@ -58,6 +54,7 @@ public class WinHotkeyListener : IHotkeyListener{
 		var answer = new Answer<obj?>();
 		// ensure the message thread is running so work queue will be handled
 		EnsureMessageThreadRunning();
+		_messageThreadReady.Wait();
 		var tcs = new TaskCompletionSource<bool>();
 		_workQueue.Add(() => {
 			bool success = false;
@@ -104,6 +101,7 @@ public class WinHotkeyListener : IHotkeyListener{
 		}
 		// perform on message thread to match registration
 		EnsureMessageThreadRunning();
+		_messageThreadReady.Wait();
 		var tcs = new TaskCompletionSource<bool>();
 		_workQueue.Add(()=>{
 			bool success = false;
@@ -144,32 +142,36 @@ public class WinHotkeyListener : IHotkeyListener{
 
 	private void EnsureMessageThreadRunning(){
 		if(_msgThread != null && _msgThread.IsAlive) return;
+		_messageThreadReady.Reset();
 		_msgThread = new Thread(MessageLoop){IsBackground=true};
 		_msgThread.Start();
 	}
 
 	private void MessageLoop(){
-		// record our thread ID so other threads can post messages to wake us
-		_msgThreadId = GetCurrentThreadId();
 		try{
+			// 先顯式創建本線程的 Win32 消息隊列，再允許外部投遞註冊工作。
+			_ = PeekMessage(out _, IntPtr.Zero, 0, 0, 0);
+			_messageThreadReady.Set();
 			while(true){
-				// process any pending work items first
+				// 先盡量清空工作隊列，避免 Register/Unregister 卡住 UI 啟動流程。
 				while(_workQueue.TryTake(out var work, TimeSpan.Zero)){
 					try{ work(); }catch(Exception ex){ Logger?.LogError(ex, "hotkey work queue item failed"); }
 				}
-				MSG msg;
-				int ret = GetMessage(out msg, IntPtr.Zero, 0, 0);
-				if(ret == 0) break; // WM_QUIT
-				if(ret == -1) break;
-				if(msg.message == WM_HOTKEY){
-					int id = (int)msg.wParam;
-					if(_idMap.TryGetValue(id, out var reg)){
-						// fire callback on threadpool
-						_ = Task.Run(()=> reg.HotKey.OnHotkey(null, default));
+
+				// 再非阻塞提取所有待處理消息；避免 GetMessage 提前阻塞導致競態死鎖。
+				while(PeekMessage(out var msg, IntPtr.Zero, 0, 0, PM_REMOVE)){
+					if(msg.message == WM_HOTKEY){
+						int id = (int)msg.wParam;
+						if(_idMap.TryGetValue(id, out var reg)){
+							// fire callback on threadpool
+							_ = Task.Run(()=> reg.HotKey.OnHotkey(null, default));
+						}
 					}
+					TranslateMessage(ref msg);
+					DispatchMessage(ref msg);
 				}
-				TranslateMessage(ref msg);
-				DispatchMessage(ref msg);
+
+				Thread.Sleep(10);
 			}
 		}catch(Exception ex){
 			Logger?.LogError(ex, "Hotkey message loop exception");
@@ -177,14 +179,11 @@ public class WinHotkeyListener : IHotkeyListener{
 	}
 
 	[DllImport("user32.dll")]
-	private static extern int GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+	private static extern bool PeekMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax, uint wRemoveMsg);
 	[DllImport("user32.dll")]
 	private static extern bool TranslateMessage([In] ref MSG lpMsg);
 	[DllImport("user32.dll")]
 	private static extern IntPtr DispatchMessage([In] ref MSG lpMsg);
-
-	[DllImport("user32.dll", SetLastError = true)]
-	private static extern bool PostThreadMessage(uint idThread, uint Msg, UIntPtr wParam, IntPtr lParam);
 
 	[StructLayout(LayoutKind.Sequential)]
 	private struct MSG{
@@ -259,8 +258,5 @@ public class WinHotkeyListener : IHotkeyListener{
 			_ => 0
 		};
 	}
-
-	// 注意：此实现在 Avalonia 中需要额外配置来接收 WM_HOTKEY 消息
-	// 建议在平台启动时设置消息处理器
-	// 具体实现需要根据 Avalonia 的事件系统集成
+	// 此實現使用專用消息線程接收 WM_HOTKEY，不依賴 Avalonia 窗口消息鉤子。
 }

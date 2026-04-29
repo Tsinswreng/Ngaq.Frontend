@@ -41,6 +41,11 @@ public partial class MainView : UserControl {
 	")]
 	public partial nil ShowDialog(str Msg, IList<Button> Operations);
 
+	[Doc(@$"處理返回動作。
+	優先關閉彈窗；若無彈窗則返回上一級導航。
+	#Returns([是否已消費此次返回事件])
+	")]
+	public partial bool TryHandleBackNavigation();
 
 	[Doc(@$"")]
 	public partial nil ShowToast(str Msg, u64 DurationMs = 3000);
