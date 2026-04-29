@@ -9,6 +9,7 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.Rendering;
 
 /// Reusable JSON text editor based on the MainView.Try sample settings.
+/// 注意 TextEditor Text 不可綁定
 public static class JsonTextEditorCtrl{
 	/// Build a JSON editor with the same visual behavior as MainView.Try.
 	public static TextEditor Mk(str? Text = null, bool IsReadOnly = false, double MinHeight = 160){

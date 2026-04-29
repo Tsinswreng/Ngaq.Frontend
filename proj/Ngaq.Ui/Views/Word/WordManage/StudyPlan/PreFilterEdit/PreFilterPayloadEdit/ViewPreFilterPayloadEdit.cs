@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
+namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayloadEdit;
 
 using System.Collections.ObjectModel;
 using Avalonia;
@@ -17,17 +17,17 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit.VmPreFilterVisualEdit;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = PreFilterVisualEdit.VmPreFilterVisualEdit;
+using K = Infra.I18n.KeysUiI18nCommon;
 
 /// GUI editor for PreFilter payload data (without Po fields).
-public class ViewPreFilterDataEdit: AppViewBase{
+public class ViewPreFilterPayloadEdit: AppViewBase{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
 	}
 
-	public ViewPreFilterDataEdit(Ctx Ctx){
+	public ViewPreFilterPayloadEdit(Ctx Ctx){
 		this.Ctx = Ctx;
 		Render();
 		InitVisualGridSource();

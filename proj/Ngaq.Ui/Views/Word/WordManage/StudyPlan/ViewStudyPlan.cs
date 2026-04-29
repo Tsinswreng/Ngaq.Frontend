@@ -53,17 +53,13 @@ public partial class ViewStudyPlan
 		o
 		.A(
 			MainView.Inst.MkBtnToView(()=>new ViewSetCurStudyPlan(),I[K.SetCurrentStudyPlan])
-		)
-		.A(
+		).A(
 			MainView.Inst.MkBtnToView(()=>new ViewStudyPlanPage(),I[K.StudyPlan])
-		)
-		.A(
-			MainView.Inst.MkBtnToView(()=>new ViewWeightCalculatorPage(),I[K.WeightCalculator])
-		)
-		.A(
+		).A(
 			MainView.Inst.MkBtnToView(()=>new ViewPreFilterPage(),I[K.PreFilter])
-		)
-		.A(
+		).A(
+			MainView.Inst.MkBtnToView(()=>new ViewWeightCalculatorPage(),I[K.WeightCalculator])
+		).A(
 			MainView.Inst.MkBtnToView(()=>new ViewWeightArgPage(),I[K.WeightArgWithSpace])
 		)
 		;

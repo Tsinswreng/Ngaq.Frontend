@@ -332,7 +332,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public nil OpenPreFilterDataEditor(){
-		var view = new ViewPreFilterDataEdit(this);
+		var view = new ViewPreFilterPayloadEdit(this);
 		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.PreFilter], view));
 		return NIL;
 	}

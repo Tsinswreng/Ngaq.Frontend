@@ -121,6 +121,7 @@ public partial class ViewAboutMe
 			// 	o.Content = "Test1";
 			// 	o.Click += (s,e)=>{
 			// 		Ctx?.ShowDialog("ShowDialog");
+			// 		throw new Exception("Test Exception");
 			// 	};
 			// })
 			// .A(new Button(), o=>{

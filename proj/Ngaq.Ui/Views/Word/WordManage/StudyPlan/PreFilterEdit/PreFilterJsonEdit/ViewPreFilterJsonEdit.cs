@@ -1,10 +1,12 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Media;
+using AvaloniaEdit;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -29,6 +31,8 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 	}
 
 	AutoGrid Root = new(IsRow: true);
+	TextEditor? JsonEditor;
+	bool IsSyncingJsonText = false;
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -37,9 +41,7 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 			RowDef(1, GUT.Auto),
 		]);
 		Root.A(MkErrorBar());
-		Root.A(JsonText(), o=>{
-			o.CBind<Ctx>(o.PropText, x=>x.PoPreFilterJson, Mode: BindingMode.TwoWay);
-		});
+		Root.A(JsonText());
 		Root.A(MkBottomBar());
 		return NIL;
 	}
@@ -72,11 +74,13 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 			o.Click += (s,e)=>ViewNavi?.Back();
 		});
 		g.A(new OpBtn(), o=>{
+			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o._Button.Background = UiCfg.Inst.DelBtnBg;
 			o.SetExe((Ct)=>Ctx?.Delete(Ct));
 		});
 		g.A(new OpBtn(), o=>{
+			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
@@ -84,18 +88,38 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 		return g.Grid;
 	}
 
-	TextBox JsonText(){
-		var box = new TextBox{
-			AcceptsReturn = true,
-			AcceptsTab = true,
-			TextWrapping = TextWrapping.Wrap,
-			HorizontalAlignment = HAlign.Stretch,
-			VerticalAlignment = VAlign.Stretch,
-			Margin = new Thickness(10, 4, 10, 10),
+	Control JsonText(){
+		var editor = JsonTextEditorCtrl.Mk(Ctx?.PoPreFilterJson, IsReadOnly: false, MinHeight: 220);
+		editor.Margin = new Thickness(10, 4, 10, 10);
+		JsonEditor = editor;
+		editor.TextChanged += (s,e)=>{
+			if(IsSyncingJsonText || Ctx is null){
+				return;
+			}
+			IsSyncingJsonText = true;
+			Ctx.PoPreFilterJson = editor.Text;
+			IsSyncingJsonText = false;
 		};
-		box.SetValue(ScrollViewer.VerticalScrollBarVisibilityProperty, ScrollBarVisibility.Auto);
-		return box;
+		if(Ctx is not null){
+			Ctx.PropertyChanged += OnVmPropertyChanged;
+		}
+		DetachedFromVisualTree += (s,e)=>{
+			if(Ctx is not null){
+				Ctx.PropertyChanged -= OnVmPropertyChanged;
+			}
+		};
+		return editor;
+	}
+
+	void OnVmPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName != nameof(Ctx.PoPreFilterJson) || JsonEditor is null || Ctx is null || IsSyncingJsonText){
+			return;
+		}
+		if(JsonEditor.Text == Ctx.PoPreFilterJson){
+			return;
+		}
+		IsSyncingJsonText = true;
+		JsonEditor.Text = Ctx.PoPreFilterJson;
+		IsSyncingJsonText = false;
 	}
 }
-
-
