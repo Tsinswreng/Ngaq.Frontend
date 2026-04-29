@@ -3,7 +3,6 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayload
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Media;
 using AvaloniaEdit;
@@ -67,12 +66,7 @@ public class ViewPreFilterPayloadJsonEdit: AppViewBase{
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
 		]);
-		g.A(new Button(), o=>{
-			o.Content = I[K.Back];
-			o.Click += (s,e)=>ViewNavi?.Back();
-		});
 		g.A(new OpBtn(), o=>{
 			o._Button.HorizontalContentAlignment = HAlign.Center;
 			o.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);

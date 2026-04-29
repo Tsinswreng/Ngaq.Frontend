@@ -9,18 +9,19 @@ using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.IF;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Svc;
-using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
 using Tsinswreng.CsTools;
 
 using Ctx = VmPreFilterPayloadJsonEdit;
-using PreFilterModel = Ngaq.Core.Shared.StudyPlan.Models.PreFilter.PreFilter;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using JsonNode = System.Text.Json.Nodes.JsonNode;
+using JsonObject = System.Text.Json.Nodes.JsonObject;
+using JsonValue = System.Text.Json.Nodes.JsonValue;
 
-
+/// <summary>
 /// PreFilter 載荷 JSON 子頁 ViewModel。
 /// 只編輯 <see cref="PoPreFilter.Text"/>，保存/刪除直接調後端。
+/// </summary>
 public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 	protected VmPreFilterPayloadJsonEdit(){}
 
@@ -40,16 +41,15 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 
 	ISvcStudyPlan? SvcStudyPlan{get;set;}
 	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
-	IJsonSerializer JsonSerializer{get;set;} = AppJsonSerializer.Inst;
 
-
+	/// <summary>
 	/// 當保存或刪除完成後，把最新實體回寫給父頁；刪除時回傳 null。
-
+	/// </summary>
 	Action<PoPreFilter?>? OnSavedOrDeleted{get;set;}
 
-
+	/// <summary>
 	/// 當前正在編輯的 PreFilter 實體快照。
-
+	/// </summary>
 	PoPreFilter EditingPo{get;set;} = new PoPreFilter{
 		Type = EPreFilterType.Json,
 	};
@@ -57,11 +57,9 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 	public VmPreFilterPayloadJsonEdit(
 		ISvcStudyPlan? SvcStudyPlan
 		,IFrontendUserCtxMgr? UserCtxMgr
-		,IJsonSerializer? JsonSerializer
 	){
 		this.SvcStudyPlan = SvcStudyPlan;
 		this.UserCtxMgr = UserCtxMgr;
-		this.JsonSerializer = JsonSerializer ?? AppJsonSerializer.Inst;
 	}
 
 	public str LastError{
@@ -71,17 +69,17 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
-
+	/// <summary>
 	/// 供文本編輯器雙向同步的載荷 JSON 文本。
-
+	/// </summary>
 	public str PayloadJson{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
 
-
+	/// <summary>
 	/// 由父頁傳入當前實體與回寫回調。
-
+	/// </summary>
 	public nil Load(PoPreFilter? PoPreFilter, Action<PoPreFilter?>? OnSavedOrDeleted){
 		EditingPo = ClonePoPreFilter(PoPreFilter);
 		this.OnSavedOrDeleted = OnSavedOrDeleted;
@@ -91,9 +89,9 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-
+	/// <summary>
 	/// 驗證載荷 JSON 並保存到後端。
-
+	/// </summary>
 	public async Task<nil> Save(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
 			return NIL;
@@ -124,9 +122,9 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-
+	/// <summary>
 	/// 軟刪除當前 PreFilter；新增模式下只提示不可刪。
-
+	/// </summary>
 	public async Task<nil> Delete(CT Ct = default){
 		if(AnyNull(SvcStudyPlan, UserCtxMgr)){
 			return NIL;
@@ -153,20 +151,24 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
-
+	/// <summary>
 	/// 解析載荷 JSON，生成待保存的實體。
-
+	/// 不再依賴強類型反序列化，避免 AOT/元數據缺失導致的保存失敗。
+	/// </summary>
 	bool TryBuildPo(out PoPreFilter Po, out str Err){
 		Po = ClonePoPreFilter(EditingPo);
 		Err = "";
 		try{
-			var parsed = JsonSerializer.Parse<PreFilterModel>(PayloadJson);
-			if(parsed is null){
+			var node = JsonNode.Parse(PayloadJson);
+			if(node is null){
 				Err = I18n[K.JsonParseFailed];
 				return false;
 			}
-			Po.Text = FormatJson(JsonSerializer.Stringify(parsed));
-			Po.DataSchemaVer = parsed.Version ?? new Version(1, 0, 0, 0);
+			Po.Text = node.ToJsonString(new JsonSerializerOptions{
+				WriteIndented = true,
+				Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+			});
+			Po.DataSchemaVer = ReadVersion(node) ?? Po.DataSchemaVer ?? new Version(1, 0, 0, 0);
 			Po.Type = EPreFilterType.Json;
 			Po.Binary = null;
 			return true;
@@ -176,9 +178,27 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		}
 	}
 
+	/// <summary>
+	/// 從 JSON 根節點讀取 Version 字段；缺失或非法時返回 null。
+	/// </summary>
+	static Version? ReadVersion(JsonNode Node){
+		if(Node is not JsonObject obj){
+			return null;
+		}
+		if(!obj.TryGetPropertyValue(nameof(Ngaq.Core.Shared.StudyPlan.Models.PreFilter.PreFilter.Version), out var versionNode) || versionNode is null){
+			return null;
+		}
+		if(versionNode is JsonValue val){
+			if(val.TryGetValue<str>(out var verText) && Version.TryParse(verText, out var parsed)){
+				return parsed;
+			}
+		}
+		return null;
+	}
 
+	/// <summary>
 	/// 格式化 JSON 供編輯器展示；失敗時返回原文。
-
+	/// </summary>
 	static str FormatJson(str UglyJson){
 		if(str.IsNullOrWhiteSpace(UglyJson)){
 			return "";
@@ -194,9 +214,9 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		}
 	}
 
-
+	/// <summary>
 	/// 複製 Po，避免子頁直接修改父頁持有的引用。
-
+	/// </summary>
 	static PoPreFilter ClonePoPreFilter(PoPreFilter? Src){
 		Src ??= new PoPreFilter{
 			Type = EPreFilterType.Json,

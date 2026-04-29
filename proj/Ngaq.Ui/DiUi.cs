@@ -38,6 +38,7 @@ using Ngaq.Ui.Views.Word.WordEditV2;
 using System.IO.Abstractions;
 using Ngaq.Ui.Views.Settings.Lang;
 using Ngaq.Ui.Views.User.Profile;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayloadJsonEdit;
 
 namespace Ngaq.Ui;
 
@@ -62,6 +63,7 @@ public static class DiUi{
 		z.AddTransient<VmDictionary>();
 		z.AddTransient<VmPreFilterVisualEdit>();
 		z.AddTransient<VmPreFilterJsonEdit>();
+		z.AddTransient<VmPreFilterPayloadJsonEdit>();
 		z.AddTransient<VmPreFilterPage>();
 		z.AddTransient<VmStudyPlanPage>();
 		z.AddTransient<VmStudyPlanEdit>();
@@ -92,4 +94,5 @@ public static class DiUi{
 		return z;
 	}
 }
+
 
