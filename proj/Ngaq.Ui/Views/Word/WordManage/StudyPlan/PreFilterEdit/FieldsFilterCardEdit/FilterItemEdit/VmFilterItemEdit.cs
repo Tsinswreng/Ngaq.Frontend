@@ -64,7 +64,7 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 		Target.ValueTypeIndex = Owner.ToValueTypeRawIndex(SelectedValueTypeIndex);
 		Target.ValuesText = ValuesText;
 		Owner.CommitItemsDraft();
-		ShowDialog(I18n.Get(K.SavedFilterItem__No__, ItemIdx));
+		ShowToast(I18n.Get(K.SavedFilterItem__No__, ItemIdx));
 		ViewNavi?.Back();
 		return NIL;
 	}
@@ -75,7 +75,7 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		Owner.RemoveItem(Target);
-		ShowDialog(I18n.Get(K.DeletedFilterItem__No__, ItemIdx));
+		ShowToast(I18n.Get(K.DeletedFilterItem__No__, ItemIdx));
 		ViewNavi?.Back();
 		return NIL;
 	}

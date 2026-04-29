@@ -34,7 +34,6 @@ public partial class ViewWordListCard
 			o.Header = Icons.Edit().ToIcon().WithText(AppI18n.Inst[K.Edit]);
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
-
 					MainView.Inst.ShowDialog(AppI18n.Inst[K.NoWordSelected]);
 					return;
 				}

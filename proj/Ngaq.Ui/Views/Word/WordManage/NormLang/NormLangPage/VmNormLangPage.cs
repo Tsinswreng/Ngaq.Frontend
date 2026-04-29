@@ -218,7 +218,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 		}
 		try{
 			await SvcNormLang.InitBuiltinNormLang(UserCtxMgr.GetDbUserCtx(), Ct);
-			ShowDialog(I18n[K.InitializedBuiltinNormLang]);
+			ShowToast(I18n[K.InitializedBuiltinNormLang]);
 			return await InitSearch(Ct);
 		}catch(Exception e){
 			HandleErr(e);
