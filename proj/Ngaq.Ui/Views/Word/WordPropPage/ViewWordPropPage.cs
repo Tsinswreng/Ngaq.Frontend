@@ -84,9 +84,9 @@ public partial class ViewWordPropPage: AppViewBase{
 		}
 		var source = new FlatTreeDataGridSource<VmWordPropRow>(Ctx.Rows){
 			Columns = {
-				new TextColumn<VmWordPropRow, str>("", x=>GetIdxText(x), width: new GridLength(52, GridUnitType.Pixel)),
-				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyDisplayText, width: new GridLength(2, GridUnitType.Star)),
-				new TextColumn<VmWordPropRow, str>(I[K.Values], x=>x.ValueDisplayText, width: new GridLength(3, GridUnitType.Star)),
+				new TextColumn<VmWordPropRow, str>("", x=>GetIdxText(x), width: new GridLength(1, GUT.Auto)),
+				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyDisplayText, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<VmWordPropRow, str>(I[K.Values], x=>x.ValueDisplayText, width: new GridLength(1, GUT.Star)),
 			},
 		};
 		Grid.Source = source;

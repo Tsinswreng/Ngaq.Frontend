@@ -115,7 +115,7 @@ public partial class App :Application
 			)
 		);
 
-		// TreeDataGrid 統一撐滿父容器；各頁再配合 Star 列寬消除表頭右側空白。
+		// TreeDataGrid 統一撐滿父容器；各頁列寬約定為「前列 Auto，最後一列 1 Star」以消除表頭右側空白。
 		Styles.A(
 			new Style(x=>
 				x.Is<TreeDataGrid>()

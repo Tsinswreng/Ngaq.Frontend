@@ -120,9 +120,9 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(IList<Ctx.RowFieldsFilterCard> rows){
 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(rows){
 			Columns = {
-				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText, width: new GridLength(52, GridUnitType.Pixel)),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText, width: new GridLength(1, GridUnitType.Star)),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview, width: new GridLength(3, GridUnitType.Star)),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview, width: new GridLength(1, GUT.Star)),
 			},
 		};
 	}
@@ -291,6 +291,7 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		return row;
 	}
 }
+
 
 
 

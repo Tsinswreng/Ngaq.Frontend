@@ -138,10 +138,10 @@ public partial class ViewNormLangToUserLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText, width: new GridLength(52, GridUnitType.Pixel)),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang, width: new GridLength(2, GridUnitType.Star)),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang, width: new GridLength(2, GridUnitType.Star)),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime, width: new GridLength(1, GridUnitType.Star)),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime, width: new GridLength(1, GUT.Star)),
 			},
 		};
 		Grid.Source = GridSource;
