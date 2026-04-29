@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangEdit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
@@ -81,6 +82,16 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "";
+
+	public str PoEnglishName{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "";
+
+	public str PoWeightText{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "0";
 
 	public i32 PoTypeIndex{
 		get{return field;}
@@ -166,6 +177,8 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 		PoIdText = po.Id.ToString();
 		PoCode = po.Code ?? "";
 		PoNativeName = po.NativeName ?? "";
+		PoEnglishName = po.EnglishName ?? "";
+		PoWeightText = po.Weight.ToString(CultureInfo.InvariantCulture);
 		PoTypeIndex = GetTypeIndex(po.Type);
 		LastError = "";
 		OnPropertyChanged(nameof(HasError));
@@ -176,6 +189,8 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 		po.Type = GetTypeByIndex(PoTypeIndex);
 		po.Code = PoCode?.Trim() ?? "";
 		po.NativeName = PoNativeName?.Trim() ?? "";
+		po.EnglishName = PoEnglishName?.Trim() ?? "";
+		po.Weight = ParseWeight(PoWeightText);
 		return po;
 	}
 
@@ -194,7 +209,23 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 			Type = Src.Type,
 			Code = Src.Code,
 			NativeName = Src.NativeName,
+			EnglishName = Src.EnglishName,
+			Weight = Src.Weight,
 		};
+	}
+
+	static f64 ParseWeight(str? Text){
+		var raw = Text?.Trim() ?? "";
+		if(str.IsNullOrWhiteSpace(raw)){
+			return 0;
+		}
+		if(f64.TryParse(raw, CultureInfo.InvariantCulture, out var value)){
+			return value;
+		}
+		if(f64.TryParse(raw, CultureInfo.CurrentCulture, out value)){
+			return value;
+		}
+		throw new FormatException($"{nameof(PoNormLang.Weight)} format invalid: {raw}");
 	}
 
 	static i32 ClampIndex(i32 Value, i32 Count){

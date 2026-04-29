@@ -13,6 +13,9 @@ Android 平臺入口與平臺級交互。
 目前已接入兩類平臺級入口：
 - 持續通知點擊後的剪貼簿查詞
 - 系統返回鍵，優先關閉 `MainView` 彈窗，否則回到上一級導航
+
+音頻播放相關注意：
+- 在線 TTS 音頻的下載與釋放不能依賴 Android UI 主線程，否則可能觸發 `NetworkOnMainThreadException`
 ]
 """;
 }

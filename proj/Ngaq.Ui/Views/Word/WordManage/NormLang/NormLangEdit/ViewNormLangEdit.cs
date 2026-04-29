@@ -10,6 +10,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -92,7 +93,9 @@ public partial class ViewNormLangEdit
 		})
 		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
 		.A(MkInputRow(I[K.Code], CBE.Mk<Ctx>(x=>x.PoCode, Mode: BindingMode.TwoWay)))
-		.A(MkInputRow(I[K.NativeName], CBE.Mk<Ctx>(x=>x.PoNativeName, Mode: BindingMode.TwoWay)));
+		.A(MkInputRow(I[K.NativeName], CBE.Mk<Ctx>(x=>x.PoNativeName, Mode: BindingMode.TwoWay)))
+		.A(MkInputRow(nameof(PoNormLang.EnglishName), CBE.Mk<Ctx>(x=>x.PoEnglishName, Mode: BindingMode.TwoWay)))
+		.A(MkInputRow(nameof(PoNormLang.Weight), CBE.Mk<Ctx>(x=>x.PoWeightText, Mode: BindingMode.TwoWay)));
 		var typeRow = MkComboRow(I[K.Type], Ctx?.TypeOptions ?? [], CBE.Mk<Ctx>(x=>x.PoTypeIndex, Mode: BindingMode.TwoWay));
 		typeRow.CBind<Ctx>(IsVisibleProperty, x=>x.ShowTypeField, Mode: BindingMode.OneWay);
 		sp.A(typeRow);

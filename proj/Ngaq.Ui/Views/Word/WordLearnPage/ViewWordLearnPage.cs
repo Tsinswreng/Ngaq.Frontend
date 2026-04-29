@@ -83,9 +83,9 @@ public partial class ViewWordLearnPage: AppViewBase{
 		}
 		var source = new FlatTreeDataGridSource<VmWordLearnRow>(Ctx.Rows){
 			Columns = {
-				new TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x), width: new GridLength(52, GridUnitType.Pixel)),
-				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultDisplayText, width: new GridLength(1, GridUnitType.Star)),
-				new TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay, width: new GridLength(2, GridUnitType.Star)),
+				new TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x), width: new GridLength(1, GUT.Auto)),
+				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultDisplayText, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay, width: new GridLength(1, GUT.Star)),
 			},
 		};
 		Grid.Source = source;

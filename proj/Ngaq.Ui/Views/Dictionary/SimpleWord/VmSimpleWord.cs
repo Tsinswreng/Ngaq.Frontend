@@ -100,31 +100,36 @@ int.	說得對
 		}
 
 		try{
-			// step 1: 取當前詞典源語言，作為 TTS 的語言參數。
-			var SrcLangPo = await SvcDictionary.GetCurSrcNormLang(
-				FrontendUserCtxMgr.GetDbUserCtx(),
-				Ct
-			);
-			var Lang = new NormLang{
-				Type = ELangIdentType.Bcp47,
-				Code = "en",
-			};
-			if(SrcLangPo is not null && !str.IsNullOrWhiteSpace(SrcLangPo.Code)){
-				Lang.Type = SrcLangPo.Type;
-				Lang.Code = SrcLangPo.Code;
-			}else{
-				LogWarn($"{nameof(PlayHead)}: CurSrcNormLang is null, fallback to en.");
-			}
+			str UsedLangCode = "en";
+			// Android 對主線程網絡請求有限制；這裡把「取音頻 + 播放」整段放到後台執行。
+			await Task.Run(async ()=>{
+				// step 1: 取當前詞典源語言，作為 TTS 的語言參數。
+				var SrcLangPo = await SvcDictionary.GetCurSrcNormLang(
+					FrontendUserCtxMgr.GetDbUserCtx(),
+					Ct
+				);
+				var Lang = new NormLang{
+					Type = ELangIdentType.Bcp47,
+					Code = "en",
+				};
+				if(SrcLangPo is not null && !str.IsNullOrWhiteSpace(SrcLangPo.Code)){
+					Lang.Type = SrcLangPo.Type;
+					Lang.Code = SrcLangPo.Code;
+				}else{
+					LogWarn($"{nameof(PlayHead)}: CurSrcNormLang is null, fallback to en.");
+				}
+				UsedLangCode = Lang.Code;
 
-			// step 2: 把詞頭傳給 ISvcTts，獲取音頻數據。
-			var Audio = await SvcTts.GetAudio(
-				Head.Trim(),
-				Lang
-			);
+				// step 2: 把詞頭傳給 ISvcTts，獲取音頻數據。
+				var Audio = await SvcTts.GetAudio(
+					Head.Trim(),
+					Lang
+				);
 
-			// step 3: 調用播放器播放（按返回音頻類型自動處理）。
-			await AudioPlayer.Play(Audio, Ct);
-			LogInfo($"{nameof(PlayHead)} success. Head={Head.Trim()}, Lang={Lang.Code}");
+				// step 3: 調用播放器播放（按返回音頻類型自動處理）。
+				await AudioPlayer.Play(Audio, Ct);
+			}, Ct);
+			LogInfo($"{nameof(PlayHead)} success. Head={Head.Trim()}, Lang={UsedLangCode}");
 		}catch(Exception Ex){
 			LogError($"{nameof(PlayHead)} failed. Head={Head.Trim()}");
 			HandleErr(Ex);

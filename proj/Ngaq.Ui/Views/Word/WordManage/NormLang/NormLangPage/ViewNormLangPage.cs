@@ -140,10 +140,10 @@ public partial class ViewNormLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowNormLang, str>("", x=>x.UiIdxText, width: new GridLength(52, GridUnitType.Pixel)),
-				new TextColumn<Ctx.RowNormLang, str>(I[K.Code], x=>x.Code, width: new GridLength(1, GridUnitType.Star)),
-				new TextColumn<Ctx.RowNormLang, str>(I[K.TranslatedName], x=>x.TranslatedName, width: new GridLength(2, GridUnitType.Star)),
-				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName, width: new GridLength(2, GridUnitType.Star)),
+				new TextColumn<Ctx.RowNormLang, str>("", x=>x.UiIdxText, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowNormLang, str>(I[K.Code], x=>x.Code, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowNormLang, str>(I[K.TranslatedName], x=>x.TranslatedName, width: new GridLength(1, GUT.Auto)),
+				new TextColumn<Ctx.RowNormLang, str>(I[K.NativeName], x=>x.NativeName, width: new GridLength(1, GUT.Star)),
 			},
 		};
 		Grid.Source = GridSource;
