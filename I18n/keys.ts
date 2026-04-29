@@ -116,6 +116,7 @@ const Full = {
 			Pronunciation: K,
 			//[Doc(@$"用于 語言; 如 意大利語之NativeName爲 Italiano")],
 			NativeName: K,
+			EnglishName: K,
 			AddNormLang: K,
 			InitBuiltin: K,
 			PoNormLang: K,

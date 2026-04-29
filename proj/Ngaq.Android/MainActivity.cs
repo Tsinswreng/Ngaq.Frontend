@@ -23,6 +23,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Tsinswreng.CsCfg;
+using Tsinswreng.CsI18n;
 using Tsinswreng.CsTools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
@@ -148,10 +149,10 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		dualSrcCfg.RwCfg = rwCfg;
 		rwCfg.FromFile(rwCfgPath);
 
-		var i18nCfg = new JsonFileCfgAccessor();
-		AppI18n.Inst.CfgAccessor = i18nCfg;
+		InitI18n(baseDir, dualSrcCfg);
 
 		var svc = new ServiceCollection();
+		svc.AddSingleton<II18n>(AppI18n.Inst);
 		svc
 			.SetupCore()
 			.SetupLocal()
@@ -164,6 +165,37 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 			ValidateScopes = false
 		});
 		App.SetSvcProvider(serviceProvider);
+	}
+
+	/// <summary>
+	/// 參照 Windows 入口的做法，按配置中的語言值載入對應語言包，
+	/// 並把 i18n 實例掛到全局與 DI，讓 Android 入口與桌面端初始化行爲一致。
+	/// </summary>
+	private void InitI18n(BaseDirMgr BaseDir, AppCfg DualSrcCfg){
+		var lang = KeysClientCfg.Lang.GetFrom(DualSrcCfg) ?? "default";
+		var i18nCfg = new JsonFileCfgAccessor();
+		AppI18n.Inst = new(i18nCfg);
+#if DEBUG
+		AppI18n.Inst.OnKeyNotFound = (self, key, args)=>{
+			var msg = "❗" + key.GetFullPath() + "❗";
+			System.Console.WriteLine(msg);
+			return msg;
+		};
+#endif
+
+		var langDir = BaseDir.Combine("Languages");
+		Directory.CreateDirectory(langDir);
+		var langRelativeAssetPath = Path.Combine("Languages", lang + ".json");
+		var langFilePath = BaseDir.Combine(langRelativeAssetPath);
+		if(!File.Exists(langFilePath)){
+			CopyAssetToDirectory(langRelativeAssetPath, langDir);
+		}
+
+		try{
+			i18nCfg.FromFile(langFilePath);
+		}catch{
+			System.Console.Error.WriteLine($"Failed to load language file: {lang}");
+		}
 	}
 
 	// EnsureDictionaryLookupNotification 建立一則持續顯示的通知，讓使用者點擊後可以查詢剪貼簿內容。

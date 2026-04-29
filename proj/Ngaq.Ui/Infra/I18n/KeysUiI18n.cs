@@ -123,6 +123,7 @@ public class KeysUiI18nCommon{
 	public static readonly K Pronunciation = Mk(_R, [nameof(Pronunciation)]);
 	[Doc(@$"用于 語言; 如 意大利語之NativeName爲 Italiano")]
 	public static readonly K NativeName = Mk(_R, [nameof(NativeName)]);
+	public static readonly K EnglishName = Mk(_R, [nameof(EnglishName)]);
 	public static readonly K AddNormLang = Mk(_R, [nameof(AddNormLang)]);
 	public static readonly K InitBuiltin = Mk(_R, [nameof(InitBuiltin)]);
 	public static readonly K PoNormLang = Mk(_R, [nameof(PoNormLang)]);

@@ -99,6 +99,7 @@ const a: TI18nKv = {
 			Id: "ID",
 			//用于 語言 如 意大利語之NativeName爲 Italiano
 			NativeName: "本土名稱",
+			EnglishName: "英文名稱",
 			Type: "類型",
 			Delete: "刪除",
 			NormLangType: "標準語言類型",

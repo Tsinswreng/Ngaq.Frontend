@@ -97,6 +97,7 @@
       "PoNormLang": "標準語言持久化物件",
       "Id": "ID",
       "NativeName": "本土名稱",
+      "EnglishName": "英文名稱",
       "Type": "類型",
       "Delete": "刪除",
       "NormLangType": "標準語言類型",
