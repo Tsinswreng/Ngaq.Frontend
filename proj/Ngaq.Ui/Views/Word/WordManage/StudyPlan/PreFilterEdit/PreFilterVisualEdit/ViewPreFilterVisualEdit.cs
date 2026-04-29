@@ -22,7 +22,7 @@ using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// PreFilter GUI 主頁。
 /// 顯示 Po 主信息與內嵌的篩選器編輯表格。
-public class ViewPreFilterVisualEdit: AppViewBase{
+public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
 		set{DataContext = value;}
@@ -290,8 +290,13 @@ public class ViewPreFilterVisualEdit: AppViewBase{
 		row.Children.Add(value);
 		return row;
 	}
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = I[K.OpenJson];
+			o.Click += (s,e)=>Ctx?.OpenPayloadJsonEditor();
+		});
+		return menu;
+	}
 }
-
-
-
 

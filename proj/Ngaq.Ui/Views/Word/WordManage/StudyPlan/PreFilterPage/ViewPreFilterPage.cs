@@ -16,7 +16,6 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -24,7 +23,6 @@ using Tsinswreng.CsI18n;
 using Ctx = VmPreFilterPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewPreFilterPage
 	:AppViewBase
-	,I_MkTitleMenu
 {
 
 	public Ctx? Ctx{
@@ -185,18 +183,5 @@ public partial class ViewPreFilterPage
 		var title = row?.Raw?.UniqName ?? I[K.NewPreFilter];
 		var titled = ToolView.WithTitle(title, view);
 		ViewNavi?.GoTo(titled);
-	}
-
-	public Control MkTitleMenu(){
-		var menu = new ContextMenu();
-		menu.Items.A(new MenuItem(), o=>{
-			o.Header = I[K.PoPreFilterJson];
-			o.Click += (s,e)=>{
-				var view = new ViewPreFilterJsonEdit();
-				view.Ctx?.FromPoPreFilter(null);
-				ViewNavi?.GoTo(ToolView.WithTitle(I[K.PoPreFilterJson], view));
-			};
-		});
-		return menu;
 	}
 }

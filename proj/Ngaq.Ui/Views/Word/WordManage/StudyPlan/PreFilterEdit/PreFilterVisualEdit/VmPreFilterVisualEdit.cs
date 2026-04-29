@@ -19,12 +19,12 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FieldsFilterCardEdit;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterDataEdit;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayloadJsonEdit;
 using Tsinswreng.CsTools;
 
 using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ngaq.Core.Infra.IF;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayloadEdit;
 
 /// <summary>
 /// PreFilter visual editor VM.
@@ -313,8 +313,10 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		this.IsCreateMode = IsCreate;
 		return NIL;
 	}
-
-	public nil OpenJsonEditor(){
+	/// <summary>
+	/// 打開載荷 JSON 文本編輯頁；先把當前 GUI 草稿同步到 Po，再交給子頁編輯。
+	/// </summary>
+	public nil OpenPayloadJsonEditor(){
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
@@ -325,10 +327,24 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		OnPropertyChanged(nameof(HasError));
 		BoPreFilter = bo;
 
-		var view = new ViewPreFilterJsonEdit();
-		view.Ctx?.FromPoPreFilter(bo.PoPreFilter);
-		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.PoPreFilterJson], view));
+		var view = new ViewPreFilterPayloadJsonEdit();
+		view.Ctx?.Load(bo.PoPreFilter, OnPayloadJsonSavedOrDeleted);
+		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.TextPayload], view));
 		return NIL;
+	}
+
+	/// <summary>
+	/// 子頁保存後回寫父頁；刪除時重置為空白 PreFilter。
+	/// </summary>
+	public void OnPayloadJsonSavedOrDeleted(PoPreFilter? Po){
+		if(Po is null){
+			IsCreateMode = true;
+			FromPoPreFilter(null);
+			return;
+		}
+		IsCreateMode = Po.Id == IdPreFilter.Zero;
+		FromPoPreFilter(Po);
+		return;
 	}
 
 	public nil OpenPreFilterDataEditor(){
@@ -822,4 +838,6 @@ EPreFilterType GetTypeByIndex(i32 idx){
 	return PoTypeValues[clamped];
 }
 }
+
+
 
