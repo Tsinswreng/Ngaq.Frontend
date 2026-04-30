@@ -77,7 +77,7 @@ public class KeysUiI18nCommon{
 	public static readonly K Try = Mk(_R, [nameof(Try)]);
 	public static readonly K Apply = Mk(_R, [nameof(Apply)]);
 	public static readonly K FontSize = Mk(_R, [nameof(FontSize)]);
-	public static readonly K FontChangeRelaunchNotice = Mk(_R, [nameof(FontChangeRelaunchNotice)]);
+	public static readonly K FontChangeRelaunchNotice_ = Mk(_R, [nameof(FontChangeRelaunchNotice_)]);
 	public static readonly K FontSizeRangeError = Mk(_R, [nameof(FontSizeRangeError)]);
 	public static readonly K SettingsTitle = Mk(_R, [nameof(SettingsTitle)]);
 	public static readonly K AppVersion = Mk(_R, [nameof(AppVersion)]);

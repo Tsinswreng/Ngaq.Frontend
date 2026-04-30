@@ -41,7 +41,7 @@ const a: TI18nKv = {
 			Try: "Testen",
 			Apply: "Anwenden",
 			FontSize: "Schriftgröße",
-			FontChangeRelaunchNotice: "Schriftgrößenänderung erfordert Neustart der Anwendung",
+			FontChangeRelaunchNotice_: "Schriftgrößenänderung erfordert Neustart der Anwendung",
 			FontSizeRangeError: "Schriftgröße außerhalb des gültigen Bereichs",
 			SettingsTitle: "Einstellungen",
 			AppVersion: "App-Version",

@@ -81,15 +81,15 @@ public partial class VmLoginRegister: ViewModelBase{
 		//TODO 一次校驗多條
 		this.Msgs.Clear();
 		if(str.IsNullOrEmpty(Password)){
-			this.AddMsg("Password is empty.");
+			this.AddMsg(Todo.I18n("Password is empty."));
 			return false;
 		}
 		if(Password != ConfirmPassword){
-			this.AddMsg("Password and Confirm Password must be the same.");
+			this.AddMsg(Todo.I18n("Password and Confirm Password must be the same."));
 			return false;
 		}
 		if(ValidateEmail(Email) == false){
-			this.AddMsg("Email is not valid.");
+			this.AddMsg(Todo.I18n("Email is not valid."));
 			return false;
 		}
 		return true;

@@ -70,7 +70,7 @@ const Full = {
 			Try: K,
 			Apply: K,
 			FontSize: K,
-			FontChangeRelaunchNotice: K,
+			FontChangeRelaunchNotice_: K,
 			FontSizeRangeError: K,
 			SettingsTitle: K,
 			AppVersion: K,

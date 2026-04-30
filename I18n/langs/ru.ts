@@ -41,7 +41,7 @@ const a: TI18nKv = {
 			Try: "Попробовать",
 			Apply: "Применить",
 			FontSize: "Размер шрифта",
-			FontChangeRelaunchNotice: "Для изменения размера шрифта требуется перезапуск приложения",
+			FontChangeRelaunchNotice_: "Для изменения размера шрифта требуется перезапуск приложения",
 			FontSizeRangeError: "Размер шрифта вне допустимого диапазона",
 			SettingsTitle: "Настройки",
 			AppVersion: "Версия приложения",

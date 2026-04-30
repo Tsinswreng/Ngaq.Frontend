@@ -41,7 +41,7 @@ const a: TI18nKv = {
 			Try: "Essayer",
 			Apply: "Appliquer",
 			FontSize: "Taille de police",
-			FontChangeRelaunchNotice: "Redémarrage requis après modification de la taille de police",
+			FontChangeRelaunchNotice_: "Redémarrage requis après modification de la taille de police",
 			FontSizeRangeError: "Taille de police hors limites",
 			SettingsTitle: "Paramètres",
 			AppVersion: "Version de l'application",

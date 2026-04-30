@@ -41,7 +41,7 @@ const a: TI18nKv = {
 			Try: "Prova",
 			Apply: "Applica",
 			FontSize: "Dimensione carattere",
-			FontChangeRelaunchNotice: "È necessario riavviare l'applicazione dopo aver modificato la dimensione del carattere",
+			FontChangeRelaunchNotice_: "È necessario riavviare l'applicazione dopo aver modificato la dimensione del carattere",
 			FontSizeRangeError: "Dimensione carattere fuori intervallo",
 			SettingsTitle: "Impostazioni",
 			AppVersion: "Versione applicazione",

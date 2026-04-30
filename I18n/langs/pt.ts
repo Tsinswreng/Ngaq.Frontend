@@ -41,7 +41,7 @@ const a: TI18nKv = {
 			Try: "Experimentar",
 			Apply: "Aplicar",
 			FontSize: "Tamanho da fonte",
-			FontChangeRelaunchNotice: "É necessário reiniciar a aplicação após alterar o tamanho da fonte",
+			FontChangeRelaunchNotice_: "É necessário reiniciar a aplicação após alterar o tamanho da fonte",
 			FontSizeRangeError: "O tamanho da fonte está fora do intervalo",
 			SettingsTitle: "Definições",
 			AppVersion: "Versão da aplicação",

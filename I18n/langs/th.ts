@@ -41,7 +41,7 @@ const a: TI18nKv = {
 			Try: "ทดลองใช้",
 			Apply: "นำไปใช้",
 			FontSize: "ขนาดตัวอักษร",
-			FontChangeRelaunchNotice: "จำเป็นต้องรีสตาร์ทแอปพลิเคชันหลังจากเปลี่ยนขนาดตัวอักษร",
+			FontChangeRelaunchNotice_: "จำเป็นต้องรีสตาร์ทแอปพลิเคชันหลังจากเปลี่ยนขนาดตัวอักษร",
 			FontSizeRangeError: "ขนาดตัวอักษรอยู่นอกช่วงที่กำหนด",
 			SettingsTitle: "การตั้งค่า",
 			AppVersion: "เวอร์ชันแอปพลิเคชัน",

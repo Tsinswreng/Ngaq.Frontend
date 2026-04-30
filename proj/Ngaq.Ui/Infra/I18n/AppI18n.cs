@@ -16,13 +16,14 @@ public static class AppExtnErrItem {
 		}
 	}
 	public static I18nKey ToI18nKey(this IErrNode z) {
-		return new I18nKey {
-			RelaPathSegs = ["Error", .. z.RelaPathSegs],
-			DfltValueObj = z.DfltValueObj
-			,
-			Parent = z.Parent
-			,
-			Children = z.Children
+		var Parent = ErrNode.MkB(null, ["Error"]);
+		z.Parent?.Parent = Parent;
+		var r = new I18nKey {
+			RelaPathSegs = z.RelaPathSegs,
+			DfltValueObj = z.DfltValueObj,
+			Parent = z.Parent,
+			Children = z.Children,
 		};
+		return r;
 	}
 }

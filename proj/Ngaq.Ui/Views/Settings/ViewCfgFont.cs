@@ -89,7 +89,7 @@ public partial class ViewCfgFont
 	}
 
 str SampleText =>
-	I[K.FontChangeRelaunchNotice] +
+	I[K.FontChangeRelaunchNotice_] +
 """
 !"#$%&'()*+,-./0123456789:;<=>?@
 ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`

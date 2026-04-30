@@ -41,7 +41,7 @@ const a: TI18nKv = {
 			Try: "Try",
 			Apply: "Apply",
 			FontSize: "Font Size",
-			FontChangeRelaunchNotice: "Font change requires restart",
+			FontChangeRelaunchNotice_: "Font change requires restart",
 			FontSizeRangeError: "Font size out of range",
 			SettingsTitle: "Settings",
 			AppVersion: "App Version",
