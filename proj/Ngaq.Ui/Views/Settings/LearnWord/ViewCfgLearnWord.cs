@@ -28,12 +28,13 @@ public partial class ViewCfgLearnWord
 		Render();
 	}
 
-	public partial class Cls_{
+	public partial class Cls{
 
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
+
 
 	protected nil Style(){
+		this.Classes.A(App.Cls.ViewPadding);
 		return NIL;
 	}
 
@@ -47,6 +48,7 @@ public partial class ViewCfgLearnWord
 		});
 		Root.A(new ScrollViewer(), sc=>{
 			sc.SetContent(new StackPanel(), sp=>{
+				sp.Classes.A(App.Cls.SpacedStackPanel);
 				sp
 				.A(new SwipeLongPressBtn(), o=>{
 					// 在背詞設置中直接提供學習計劃入口，避免多層跳轉。

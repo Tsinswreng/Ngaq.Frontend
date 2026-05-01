@@ -22,13 +22,13 @@ public partial class ViewCfgFont
 		Render();
 	}
 
-	public  partial class Cls_{
+	public  partial class Cls{
 
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
 	public AutoGrid Root = new(IsRow: true);
 
 	protected nil Style(){
+		this.Classes.A(App.Cls.ViewPadding);
 		return NIL;
 	}
 
@@ -66,13 +66,13 @@ public partial class ViewCfgFont
 		});
 		Root.A(InputFontSize())
 		.A(new SwipeLongPressBtn(), o=>{
-				o.Content = I[K.Try];
+			o.Content = I[K.Try];
 			o.Click += (s,e)=>{
 				Ctx?.TryNeoFontSize();
 			};
 		})
 		.A(new SwipeLongPressBtn(), o=>{
-				o.Content = I[K.Apply];
+			o.Content = I[K.Apply];
 			o.Click += (s,e)=>{
 				Ctx?.ApplyNeoFontSize();
 			};

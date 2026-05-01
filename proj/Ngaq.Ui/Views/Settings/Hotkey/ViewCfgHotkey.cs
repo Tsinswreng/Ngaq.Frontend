@@ -21,6 +21,7 @@ public partial class ViewCfgHotkey: AppViewBase{
 	public ViewCfgHotkey(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();
+		this.Classes.A(App.Cls.ViewPadding);
 	}
 
 	public AutoGrid Root = new(IsRow:true);
@@ -37,6 +38,7 @@ public partial class ViewCfgHotkey: AppViewBase{
 
 		Root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
+				sp.Classes.A(App.Cls.SpacedStackPanel);
 				sp.A(new TextBlock(), o=>{
 					o.Text = I[K.DictionaryLookupHotkeyModifiers];
 				});

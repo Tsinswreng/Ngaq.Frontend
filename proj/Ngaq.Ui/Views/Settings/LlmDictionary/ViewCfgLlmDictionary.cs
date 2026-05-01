@@ -21,6 +21,7 @@ public partial class ViewCfgLlmDictionary: AppViewBase{
 	public ViewCfgLlmDictionary(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();
+		this.Classes.A(App.Cls.ViewPadding);
 	}
 
 	public AutoGrid Root = new(IsRow:true);
@@ -34,6 +35,7 @@ public partial class ViewCfgLlmDictionary: AppViewBase{
 		});
 		Root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
+				sp.Classes.A(App.Cls.SpacedStackPanel);
 				sp.Spacing = UiCfg.Inst.BaseFontSize/2;
 				sp.A(new TextBlock(), o=>{o.Text = I[K.ApiUrl];});
 				sp.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.ApiUrl);});

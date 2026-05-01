@@ -13,9 +13,52 @@ namespace Ngaq.Ui;
 public partial class App{
 	public class Cls{
 		public const str SpacedStackPanel = nameof(App)+"_"+nameof(SpacedStackPanel);
+		public const str ViewPadding = nameof(App)+"_"+nameof(ViewPadding);
+		public const str CenterBtn = nameof(App)+"_"+nameof(CenterBtn);
+	}
+
+	Styles CenterBtn(Styles S){
+		S.A(new Style(
+			x=>x.Is<Button>().Class(Cls.CenterBtn)
+		).Set(TemplatedControl.HorizontalAlignmentProperty
+		,HAlign.Center)
+		.Set(TemplatedControl.VerticalAlignmentProperty
+		,VAlign.Center)
+		.Set(ContentControl.VerticalContentAlignmentProperty
+		,VAlign.Center)
+		.Set(ContentControl.HorizontalContentAlignmentProperty
+		,HAlign.Center)
+		);
+		return S;
+	}
+
+	Styles SpacedStackPanel(Styles S){
+		S.A(new Style(
+			x=>x.Is<StackPanel>().Class(Cls.SpacedStackPanel)
+		).Set(
+			StackPanel.SpacingProperty
+			,UiCfg.Inst.BaseFontSize*0.5
+		))
+		;
+		return S;
+	}
+
+	Styles ViewPadding(Styles S){
+		S.A(new Style(
+			x=>x.Is<Control>().Class(Cls.ViewPadding)
+		).Set(
+			ContentControl.PaddingProperty
+			,new Thickness(UiCfg.Inst.BaseFontSize)
+		));
+		return S;
 	}
 
 	protected nil _Style(){
+		var S = Styles;
+		SpacedStackPanel(S);
+		ViewPadding(S);
+		CenterBtn(S);
+
 		// 如下設置後 在局部覆蓋全局字體旹 TextBlock生效洏TextBox不效、不效者 字體大小恆不變
 		// var StyBaseFontSize = new Style(x=>
 		// 	x.Is<Control>()

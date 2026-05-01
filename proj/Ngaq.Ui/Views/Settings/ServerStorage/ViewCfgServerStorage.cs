@@ -21,6 +21,7 @@ public partial class ViewCfgServerStorage: AppViewBase{
 	public ViewCfgServerStorage(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();
+		this.Classes.A(App.Cls.ViewPadding);
 	}
 
 	public AutoGrid Root = new(IsRow:true);
@@ -33,6 +34,7 @@ public partial class ViewCfgServerStorage: AppViewBase{
 			]);
 		});
 		Root.A(new StackPanel(), sp=>{
+			sp.Classes.A(App.Cls.SpacedStackPanel);
 			sp.A(new TextBlock(), o=>{
 				o.Text = I[K.ServerBaseUrl];
 			});

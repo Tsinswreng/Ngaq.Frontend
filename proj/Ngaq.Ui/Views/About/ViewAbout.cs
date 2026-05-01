@@ -29,6 +29,7 @@ public partial class ViewAbout
 	}
 
 	protected nil Style(){
+		this.Classes.A(App.Cls.ViewPadding);
 		return NIL;
 	}
 	AutoGrid Root = new (IsRow: true);
@@ -40,7 +41,8 @@ public partial class ViewAbout
 			]);
 		});
 		Root.A(new StackPanel(), sp=>{
-			sp.Classes.A(ViewSettings.Cls.CfgSp);
+			sp.Classes.A(App.Cls.SpacedStackPanel);
+			//sp.Classes.A(ViewSettings.Cls.CfgSp);
 			sp.A(new SelectableTextBlock(), o=>{
 				o.Text = I[K.AppVersion];
 			})
