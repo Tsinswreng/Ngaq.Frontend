@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Media;
@@ -88,10 +89,20 @@ public partial class App{
 				Button.BackgroundProperty
 				,new SolidColorBrush(Color.FromArgb(255, 32,32,32))
 			)
-		);
+		)
+		.A(
+			new Style(x=>
+				x.Is<Button>()
+				.Class(":pointerover")
+				.Template().OfType<ContentPresenter>()
+			).Set(
+				Button.BorderBrushProperty
+				,UiCfg.Inst.MainColor
+			)
+		)
 
 		// TreeDataGrid 統一撐滿父容器；各頁列寬約定為「前列 Auto，最後一列 1 Star」以消除表頭右側空白。
-		Styles.A(
+		.A(
 			new Style(x=>
 				x.Is<TreeDataGrid>()
 			).Set(

@@ -286,7 +286,7 @@
       "EnableAutoPronounce": "允许自动发音",
       "MaxDisplayedWordCount": "最大显示单词数",
       "SelectCandidateLangValue": "选择候选语言值",
-      "DictionaryLookupHotkeyModifiers": "字典查询快捷键修饰键",
+      "DictionaryLookupHotkeyModifiers_": "字典查询快捷键修饰键(例如 Alt 或 Ctrl|Shift 等)",
       "DictionaryLookupHotkeyKey": "字典查询快捷键",
       "WordEditorOpenerNotReady": "单词编辑器开启器尚未就绪",
       "NgaqDictionaryLookup": "词典查询",

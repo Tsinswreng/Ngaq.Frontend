@@ -286,7 +286,7 @@
       "EnableAutoPronounce": "允許自動發音",
       "MaxDisplayedWordCount": "最大顯示單詞數",
       "SelectCandidateLangValue": "選擇候選語言值",
-      "DictionaryLookupHotkeyModifiers": "字典查詢快捷鍵修飾鍵",
+      "DictionaryLookupHotkeyModifiers_": "字典查詢快捷鍵修飾鍵(例如 Alt 或 Ctrl|Shift 等)",
       "DictionaryLookupHotkeyKey": "字典查詢快捷鍵",
       "WordEditorOpenerNotReady": "單詞編輯器開啟器尚未就緒",
       "NgaqDictionaryLookup": "詞典查詢",

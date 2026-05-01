@@ -76,7 +76,7 @@ public partial class ViewWordManage
 				}
 
 				addItem(_Item(I[K.UserWordManage], ()=>new ViewSearchWords(), Icons.UserWordLib().ToIcon()), 0, 0);
-				addItem(_Item(I[K.BackupEtSync], ()=>new ViewWordSyncV2(), Icons.SyncCircle().ToIcon()), 0, 1);
+				addItem(_Item(I[K.WordsLibBackupEtSync], ()=>new ViewWordSyncV2(), Icons.SyncCircle().ToIcon()), 0, 1);
 				addItem(_Item(I[LK.StudyPlan], ()=>new ViewStudyPlan(), Icons.StudyPlan().ToIcon()), 1, 0);
 				addItem(_Item(I[LK.Statistics], ()=>new ViewStatistics(), Icons.Statistics().ToIcon()), 1, 1);
 			});

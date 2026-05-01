@@ -285,7 +285,7 @@
       "EnableAutoPronounce": "Activer la prononciation automatique",
       "MaxDisplayedWordCount": "Nombre maximum de mots affichés",
       "SelectCandidateLangValue": "Sélectionner la valeur de langue candidate",
-      "DictionaryLookupHotkeyModifiers": "Modificateurs du raccourci de recherche dictionnaire",
+      "DictionaryLookupHotkeyModifiers_": "Modificateurs du raccourci de recherche dictionnaire",
       "DictionaryLookupHotkeyKey": "Touche du raccourci de recherche dictionnaire",
       "WordEditorOpenerNotReady": "Ouvreur d'éditeur de mots non prêt",
       "NgaqDictionaryLookup": "Recherche dictionnaire",

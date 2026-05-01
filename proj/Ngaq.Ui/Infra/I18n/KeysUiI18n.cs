@@ -62,7 +62,7 @@ public class KeysUiI18nCommon{
 	public static readonly K SearchWords = Mk(_R, [nameof(SearchWords)]);
 	public static readonly K UserWordManage = Mk(_R, [nameof(UserWordManage)]);
 	public static readonly K AddWords = Mk(_R, [nameof(AddWords)]);
-	public static readonly K BackupEtSync = Mk(_R, [nameof(BackupEtSync)]);
+	public static readonly K WordsLibBackupEtSync = Mk(_R, [nameof(WordsLibBackupEtSync)]);
 	public static readonly K ConfirmPassword = Mk(_R, [nameof(ConfirmPassword)]);
 	public static readonly K PasswordMismatch = Mk(_R, [nameof(PasswordMismatch)]);
 	public static readonly K FillAllFields = Mk(_R, [nameof(FillAllFields)]);
@@ -302,7 +302,7 @@ public class KeysUiI18nCommon{
 	public static readonly K EnableAutoPronounce = Mk(_R, [nameof(EnableAutoPronounce)]);
 	public static readonly K MaxDisplayedWordCount = Mk(_R, [nameof(MaxDisplayedWordCount)]);
 	public static readonly K SelectCandidateLangValue = Mk(_R, [nameof(SelectCandidateLangValue)]);
-	public static readonly K DictionaryLookupHotkeyModifiers = Mk(_R, [nameof(DictionaryLookupHotkeyModifiers)]);
+	public static readonly K DictionaryLookupHotkeyModifiers_ = Mk(_R, [nameof(DictionaryLookupHotkeyModifiers_)]);
 	public static readonly K DictionaryLookupHotkeyKey = Mk(_R, [nameof(DictionaryLookupHotkeyKey)]);
 	public static readonly K WordEditorOpenerNotReady = Mk(_R, [nameof(WordEditorOpenerNotReady)]);
 	public static readonly K NgaqDictionaryLookup = Mk(_R, [nameof(NgaqDictionaryLookup)]);

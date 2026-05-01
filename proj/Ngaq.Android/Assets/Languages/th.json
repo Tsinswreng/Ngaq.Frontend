@@ -285,7 +285,7 @@
       "EnableAutoPronounce": "อนุญาตการออกเสียงอัตโนมัติ",
       "MaxDisplayedWordCount": "จำนวนคำศัพท์ที่แสดงสูงสุด",
       "SelectCandidateLangValue": "เลือกค่าภาษาตัวเลือก",
-      "DictionaryLookupHotkeyModifiers": "ปุ่มปรับแต่งปุ่มลัดค้นหาพจนานุกรม",
+      "DictionaryLookupHotkeyModifiers_": "ปุ่มปรับแต่งปุ่มลัดค้นหาพจนานุกรม",
       "DictionaryLookupHotkeyKey": "ปุ่มลัดค้นหาพจนานุกรม",
       "WordEditorOpenerNotReady": "ตัวเปิดแก้ไขคำศัพท์ยังไม่พร้อม",
       "NgaqDictionaryLookup": "ค้นหาพจนานุกรม",

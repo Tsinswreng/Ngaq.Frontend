@@ -43,13 +43,13 @@ public partial class ViewWordSyncV2
 	protected nil Style(){
 		return NIL;
 	}
-	
+
 	OpBtn CenterOpBtn(){
 		var r = new OpBtn();
 		r._Button.StretchCenter();
 		return r;
 	}
-	
+
 	Button CenterBtn(){
 		var r = new Button();
 		r.StretchCenter();
@@ -247,7 +247,7 @@ public partial class ViewWordSyncV2
 			o.Click += (s,e)=>{
 				ViewNavi?.GoTo(
 					ToolView.WithTitle(
-						I[K.BackupEtSync],
+						I[K.WordsLibBackupEtSync],
 						new ViewWordSync()
 					)
 				);

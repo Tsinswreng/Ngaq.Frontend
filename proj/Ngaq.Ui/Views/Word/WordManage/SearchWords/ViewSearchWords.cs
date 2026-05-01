@@ -178,7 +178,7 @@ public partial class ViewSearchWords
 			};
 		});
 		menu.Items.A(new MenuItem(), o=>{
-			var title = I[K.BackupEtSync];
+			var title = I[K.WordsLibBackupEtSync];
 			o.Header = title;
 			o.Click += (s,e)=>{
 				ViewNavi?.GoTo(

@@ -40,7 +40,7 @@ public partial class ViewCfgHotkey: AppViewBase{
 			sv.SetContent(new StackPanel(), sp=>{
 				sp.Classes.A(App.Cls.SpacedStackPanel);
 				sp.A(new TextBlock(), o=>{
-					o.Text = I[K.DictionaryLookupHotkeyModifiers];
+					o.Text = I[K.DictionaryLookupHotkeyModifiers_];
 				});
 				sp.A(new TextBox(), o=>{
 					o.CBind<Ctx>(o.PropText, x=>x.DictionaryLookupModifiers);
