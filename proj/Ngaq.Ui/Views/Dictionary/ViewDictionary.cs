@@ -195,7 +195,7 @@ public partial class ViewDictionary
 		});
 		Area.Children.Add(ResultScroll);
 
-		UsageGuideText.Text = GuideText();
+		//UsageGuideText.Text = GuideText();
 		UsageGuideText.Foreground = Brushes.LightGray;
 		UsageGuideText.TextWrapping = TextWrapping.Wrap;
 		UsageGuideText.VerticalAlignment = VerticalAlignment.Top;

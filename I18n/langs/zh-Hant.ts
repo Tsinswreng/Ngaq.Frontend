@@ -59,7 +59,7 @@ const a: TI18nKv = {
 			WordEditorContextIsNull: "單詞編輯器內容為空",
 			WordEdit: "編輯單詞",
 			Dictionary: "詞典",
-			StudyPlan: "學習計劃",
+			StudyPlan: "學習方案",
 			Statistics: "統計",
 			UserLang: "用戶語言",
 			NormLang: "標準語言",

@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui;
@@ -22,6 +23,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// 頁面打開後即讀取後端當前學習方案，僅展示關鍵字段並支持重新選擇。
 public partial class ViewSetCurStudyPlan
 	:AppViewBase
+	,I_MkTitleMenu
 {
 	public Ctx? Ctx{
 		get{return DataContext as Ctx;}
@@ -64,37 +66,10 @@ public partial class ViewSetCurStudyPlan
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Star),
 		]);
-		Root.A(MkTopBar());
 		Root.A(MkBody());
 		return NIL;
-	}
-
-	Control MkTopBar(){
-		var top = new AutoGrid(IsRow:false);
-		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-		]);
-		top.A(new TextBlock(), o=>{
-			o.Text = I[K.SetCurrentStudyPlan];
-			o.VerticalAlignment = VAlign.Center;
-			o.Margin = new Thickness(8, 0);
-		})
-		.A(new OpBtn(), o=>{
-			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = I[K.Reload];
-			o.SetExe((Ct)=>Ctx?.LoadCurStudyPlan(Ct)!);
-		})
-		.A(new OpBtn(), o=>{
-			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = I[K.RestoreBuiltin];
-			o.SetExe((Ct)=>Ctx?.RestoreBuiltin(Ct)!);
-		});
-		return top.Grid;
 	}
 
 	Control MkBody(){
@@ -127,12 +102,12 @@ public partial class ViewSetCurStudyPlan
 		};
 		bdr.Child = sp;
 
-		sp.A(MkInputRow(I[K.Id], CBE.Mk<Ctx>(x=>x.CurId, Mode: BindingMode.OneWay), ReadOnly: true))
+		sp.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.CurId, Mode: BindingMode.OneWay)))
 		.A(MkInputRow(I[K.UniqName], CBE.Mk<Ctx>(x=>x.CurUniqName, Mode: BindingMode.OneWay), ReadOnly: true))
 		.A(MkInputRow(I[K.Descr], CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
 		.A(new OpBtn(), o=>{
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Icons.ListSelect().ToIcon().WithText(I[K.Select]);
+			o.BtnContent = Icons.ListSelect().WithText(Todo.I18n("選用其他學習方案"));
 			o.SetExe((Ct)=>ChooseAndApplyStudyPlan(Ct));
 		})
 		.A(new Button(), o=>{
@@ -154,22 +129,41 @@ public partial class ViewSetCurStudyPlan
 		return sv;
 	}
 
+	/// 展示頁正文使用只讀 TextBox 呈現，並禁用聚焦，避免移動端彈出輸入法。
 	Control MkInputRow(str Label, IBinding Binding, bool ReadOnly = false, bool AcceptsReturn = false){
 		var sp = new StackPanel{
 			Spacing = 3,
 		};
-		sp.Children.Add(new TextBlock{
-			Text = Label,
+		sp.A(new TextBlock(), o=>{
+			o.Text = Label;
+		})
+		.A(new TextBox(), o=>{
+			o.IsReadOnly = ReadOnly;
+			o.AcceptsReturn = AcceptsReturn;
+			o.TextWrapping = AcceptsReturn ? TextWrapping.Wrap : TextWrapping.NoWrap;
+			o.MaxHeight = AcceptsReturn ? 140 : double.PositiveInfinity;
+			o.Focusable = false;
+			o.IsTabStop = false;
+			o.Bind(TextBox.TextProperty, Binding);
 		});
-		var tb = new TextBox{
-			IsReadOnly = ReadOnly,
-			AcceptsReturn = AcceptsReturn,
-			TextWrapping = AcceptsReturn ? TextWrapping.Wrap : TextWrapping.NoWrap,
-			MaxHeight = AcceptsReturn ? 140 : double.PositiveInfinity,
-		};
-		tb.Bind(TextBox.TextProperty, Binding);
-		sp.Children.Add(tb);
 		return sp;
+	}
+
+	/// Id 只用於辨識與複製，弱化視覺權重並保持可選中。
+	Control MkIdRow(str Label, IBinding Binding){
+		var row = new StackPanel{
+			Spacing = 6,
+			Orientation = Orientation.Horizontal,
+		};
+		row.A(new TextBlock(), o=>{
+			o.Text = Label + ":";
+			o.FontSize = UiCfg.Inst.BaseFontSize * 0.8;
+		})
+		.A(new SelectableTextBlock(), o=>{
+			o.FontSize = UiCfg.Inst.BaseFontSize * 0.8;
+			o.Bind(TextBlock.TextProperty, Binding);
+		});
+		return row;
 	}
 
 	async System.Threading.Tasks.Task<nil> ChooseAndApplyStudyPlan(CT Ct){
@@ -203,6 +197,23 @@ public partial class ViewSetCurStudyPlan
 			Ctx.HandleErr(e);
 			return NIL;
 		}
+	}
+
+	public Control MkTitleMenu(){
+		var menu = new ContextMenu();
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = I[K.Reload];
+			o.Click += (s, e)=>{
+				_ = Ctx?.LoadCurStudyPlan(default);
+			};
+		});
+		menu.Items.A(new MenuItem(), o=>{
+			o.Header = I[K.RestoreBuiltin];
+			o.Click += (s, e)=>{
+				_ = Ctx?.RestoreBuiltin(default);
+			};
+		});
+		return menu;
 	}
 }
 

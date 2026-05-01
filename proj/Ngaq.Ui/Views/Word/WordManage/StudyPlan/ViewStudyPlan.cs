@@ -14,7 +14,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewStudyPlan
-	:AppViewBase
+	:AppViewBase, I_MkTitleMenu
 {
 
 	public Ctx? Ctx{
@@ -66,7 +66,23 @@ public partial class ViewStudyPlan
 		return o;
 	}
 
+	public Control MkTitleMenu() {
+		var r = new ContextMenu();
+		var items = r.Items;
+		items.A(new MenuItem(), o=>{
+			o.Header = Todo.I18n("幫助");
+			o.Click += (s,e)=>{
+				ViewNavi?.GoTo(ToolView.WithTitle("學習方案說明",new TextBlock{
+					Text = Todo.I18n(
+"""
 
+"""
+					)
+				}));
+			};
+		});
+		return r;
+	}
 }
 
 
