@@ -3,7 +3,6 @@
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Icons;
@@ -79,9 +78,15 @@ public partial class ViewDictionary
 			]);
 		});
 		{{
-			LangGrid.A(MkLangButton(x=>x.SrcLangDisplay, (s,e)=>OpenNormLangSelector(true)))
+			LangGrid.A(MkLangButton(), o=>{
+				o.CBind<Ctx>(o.PropContent, x=>x.SrcLangDisplay);
+				o.Click += (s, e) => OpenNormLangSelector(true);
+			})
 			.A(MkLangSwapButton())
-			.A(MkLangButton(x=>x.TgtLangDisplay, (s,e)=>OpenNormLangSelector(false)));
+			.A(MkLangButton(), o=>{
+				o.CBind<Ctx>(o.PropContent, x=>x.TgtLangDisplay);
+				o.Click += (s, e) => OpenNormLangSelector(false);
+			});
 		}}
 
 		var SearchGrid = new AutoGrid(IsRow: false);
@@ -105,7 +110,7 @@ public partial class ViewDictionary
 			})
 			.A(SearchTextBox, o=>{
 				o.CBind<Ctx>(o.PropText,x=>x.Input);
-				o.Watermark = Todo.I18n("Search a word");
+				o.Watermark = Todo.I18n("輸入生詞以查詢");
 				o.KeyBindings.Add(
 					new KeyBinding{
 						Gesture = new(Key.Enter),
@@ -134,18 +139,13 @@ public partial class ViewDictionary
 		return NIL;
 	}
 
-	/// 語言選擇按鈕：顯示 `code + 譯名`，並保持兩端樣式一致。
-	Button MkLangButton(
-		System.Linq.Expressions.Expression<Func<Ctx, obj?>> BindExpr,
-		EventHandler<RoutedEventArgs> OnClick
-	){
+	/// 語言選擇按鈕：只負責共用樣式，具體綁定與行為在初始化函數中完成。
+	Button MkLangButton(){
 		var R = new Button();
-		R.CBind<Ctx>(R.PropContent, BindExpr);
 		R.HorizontalContentAlignment = HAlign.Center;
 		R.VerticalContentAlignment = VAlign.Center;
 		R.MinHeight = 24;
 		R.Padding = new Avalonia.Thickness(0);
-		R.Click += OnClick;
 		return R;
 	}
 
@@ -186,7 +186,13 @@ public partial class ViewDictionary
 		});
 		Area.Children.Add(ResultScroll);
 
-		UsageGuideText.Text = Todo.I18n("Dictionary usage guide");
+		UsageGuideText.Text = Todo.I18n(
+"""
+詞典內容由AI大模型生成，AI可能犯錯誤。
+點擊收藏按鈕可以把詞條保存到用戶詞庫。
+"""
+
+		);
 		UsageGuideText.Foreground = Brushes.LightGray;
 		UsageGuideText.TextWrapping = TextWrapping.Wrap;
 		UsageGuideText.VerticalAlignment = VerticalAlignment.Top;
@@ -217,7 +223,10 @@ public partial class ViewDictionary
 				view.ViewNavi?.Back();
 			});
 		}
-		ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.SelectNormLang], view));
+		ViewNavi?.GoTo(ToolView.WithTitle(
+			IsSrc ? Todo.I18n("選擇詞典源語言") : Todo.I18n("選擇詞典目標語言"),
+			view
+		));
 	}
 
 	public Control MkTitleMenu(){
@@ -226,7 +235,7 @@ public partial class ViewDictionary
 			o.Header = I[DictK.NormLang];
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangPage();
-				ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.NormLang], view));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("標準語言管理"), view));
 			};
 		});
 		menu.Items.A(new MenuItem(), o=>{
@@ -291,4 +300,3 @@ public partial class ViewDictionary
 		SearchBtn.PerformClick();
 	}
 }
-

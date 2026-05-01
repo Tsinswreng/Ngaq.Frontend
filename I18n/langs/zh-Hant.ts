@@ -49,7 +49,7 @@ const a: TI18nKv = {
 			UserProfile: "用戶個人檔案",
 			SelectNormLang: "選擇標準語言",
 			ConfigureLangMapping: "設定語言對應",
-			ViewLlmRawOutput: "檢視 LLM 原始輸出",
+			ViewLlmRawOutput: "查看大模型原始輸出",
 			RawOutputEmptyCannotParse: "原始輸出為空，無法解析",
 			CompleteDictionaryQueryBeforeSave: "儲存前請完成字典查詢",
 			GoToLanguageConfigPage: "前往語言設定頁面",
@@ -58,7 +58,7 @@ const a: TI18nKv = {
 			AddNormLangToUserLang: "新增標準語言至用戶語言",
 			WordEditorContextIsNull: "單詞編輯器內容為空",
 			WordEdit: "編輯單詞",
-			Dictionary: "字典",
+			Dictionary: "詞典",
 			StudyPlan: "學習計劃",
 			Statistics: "統計",
 			UserLang: "用戶語言",
@@ -271,8 +271,10 @@ const a: TI18nKv = {
 	- 長按單詞卡顯示進菜單。
 	- 請定時儲存進度，以免資料遺失。
 
-• 單詞卡信息介紹:
-示例: 1 en ✅3:2:1  3d 1.2e3
+• 單詞卡信息示例介紹:
+
+1 en ✅3:2:1  3d 1.2e3
+
 	- 1: 序號
 	- en: 語言
 	- ✅: 上次學習結果爲「記得」(🤔: 添加; ❌:忘記)

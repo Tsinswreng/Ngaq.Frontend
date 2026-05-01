@@ -67,9 +67,8 @@ public partial class ViewSearchWords
 		{{
 			var searchBtn = new OpBtn();
 			SearchGrid.A(new TextBox(), o=>{
-				o.CBind<Ctx>(
-					o.PropText
-					,x=>x.Input);
+				o.Watermark = Todo.I18n("查詢用戶單詞");
+				o.CBind<Ctx>(o.PropText,x=>x.Input);
 				o.KeyBindings.Add(
 					new KeyBinding{
 						Gesture = new (Key.Enter),

@@ -93,10 +93,8 @@ public partial class ViewUserLangPage
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
-			o.CBind<Ctx>(
-				o.PropText,
-				x=>x.Input
-			);
+			o.Watermark = Todo.I18n("輸入用戶語言名稱以查詢");
+			o.CBind<Ctx>(o.PropText,x=>x.Input);
 			o.KeyBindings.Add(new KeyBinding{
 				Gesture = new KeyGesture(Key.Enter),
 				Command = new RelayCommand(()=>searchBtn.PerformClick()),
