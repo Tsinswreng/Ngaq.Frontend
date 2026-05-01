@@ -177,7 +177,7 @@ public partial class ViewDictionary
 	}
 
 	str GuideText(){
-		return I[DictK.DictionaryUsageGuide];
+		return I[DictK.DictionaryUsageGuide_];
 	}
 
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
@@ -237,8 +237,9 @@ public partial class ViewDictionary
 				ViewNavi?.GoTo(
 					ToolView.WithTitle(
 						I[DictK.Help],
-						new TextBlock{
-							Text= GuideText()
+						new TextBox{
+							Classes = {App.Cls.RoTextBox},
+							Text= GuideText(),
 						}
 					)
 				);

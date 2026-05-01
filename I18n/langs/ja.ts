@@ -215,7 +215,7 @@ const a: TI18nKv = {
 			FilterItems: "フィルタ項目",
 	FilterItem: "フィルタ項目",
 	AddField: "フィールドを追加",
-	
+
 			TapRowToEditOneFilterItem: "行をタップしてフィルタ項目を編集",
 			AddItem: "項目を追加",
 			Operation: "操作",
@@ -317,27 +317,27 @@ const a: TI18nKv = {
 	SelectDictionarySrcLang: "辞書のソース言語を選択",
 	SelectDictionaryTgtLang: "辞書のターゲット言語を選択",
 	InputNewWordToSearch: "検索する新しい単語を入力",
-	StudyPlanHelpTitle: "学習計画ヘルプのタイトル",
+	StudyPlanHelpTitle_: "学習計画ヘルプのタイトル",
 	StudyPlanHelpText_: `学習計画は、「どの単語を覚えるか」と「どの順番で覚えるか」を決定します。
-	
+
 	コンポーネントの説明:
 	- 学習計画: 各コンポーネントを組み合わせて完全な戦略を形成します
 	- プリフィルタ: 単語ライブラリから覚える単語をフィルタリングします
 	- 重み計算機: 単語のソートルールを決定します
 	- 重みパラメータ: ソートアルゴリズムで使用する具体的なパラメータを調整します
-	
+
 	高度な拡張機能:
 	重みアルゴリズムプラグインのオンラインドキュメントを参照してください`,
 	NormLangManage: "標準言語管理",
 	EnglishName: "英語名",
 	SaveToUserWordLibrary: "ユーザー単語ライブラリに保存",
 	ChooseAnotherStudyPlan: "別の学習計画を選択",
-	DictionaryUsageGuide: `辞書の内容はAI大モデルによって生成されており、AIが間違える可能性があります。
+	DictionaryUsageGuide_: `辞書の内容はAI大モデルによって生成されており、AIが間違える可能性があります。
 	お気に入りボタンをクリックすると、エントリをユーザー単語ライブラリに保存できます。`,
 	InputUserLangNameToSearch: "検索するユーザー言語名を入力",
 	InputLangNameOrCode: "言語名またはコードを入力"
 	}
-	
+
 	},
 	Error: {
 		Common: {

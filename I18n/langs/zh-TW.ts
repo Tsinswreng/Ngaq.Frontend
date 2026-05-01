@@ -66,7 +66,7 @@ const a: TI18nKv = {
 			WordEdit: "編輯單詞",
 			Dictionary: "詞典",
 			StudyPlan: "學習方案",
-			StudyPlanHelpTitle: "學習方案說明",
+			StudyPlanHelpTitle_: "學習方案說明",
 			StudyPlanHelpText_:
 `學習方案用來決定「背哪些單詞」以及「先背哪些單詞」。
 
@@ -273,7 +273,7 @@ const a: TI18nKv = {
 			SelectExportFile: "選擇導出文件",
 			GoToLegacyBackupSync: "轉到舊版備份同步實現",
 			AddWordsFromText: "從文本添加單詞",
-			DictionaryUsageGuide:
+			DictionaryUsageGuide_:
 `詞典內容由AI大模型生成，AI可能犯錯誤。
 點擊收藏按鈕可以把詞條保存到用戶詞庫。`,
 			InputUserLangNameToSearch: "輸入用戶語言名稱以查詢",

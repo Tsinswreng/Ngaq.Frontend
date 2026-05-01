@@ -16,6 +16,25 @@ public partial class App{
 		public const str SpacedStackPanel = nameof(App)+"_"+nameof(SpacedStackPanel);
 		public const str ViewPadding = nameof(App)+"_"+nameof(ViewPadding);
 		public const str CenterBtn = nameof(App)+"_"+nameof(CenterBtn);
+		public const str RoTextBox = nameof(App)+"_"+nameof(RoTextBox);
+	}
+
+	Styles RoTextBox(Styles S){
+		S.A(new Style(
+			x=>x.Is<TextBox>().Class(Cls.RoTextBox)
+			).Set(
+				TextBox.IsReadOnlyProperty, true
+			).Set(
+				TextBox.AcceptsReturnProperty, true
+			).Set(
+				TextBox.TextWrappingProperty, Avalonia.Media.TextWrapping.Wrap
+			).Set(
+				TextBox.FocusableProperty, false
+			).Set(
+				TextBox.IsTabStopProperty, false
+			)
+		);
+		return S;
 	}
 
 	Styles CenterBtn(Styles S){
@@ -59,6 +78,7 @@ public partial class App{
 		SpacedStackPanel(S);
 		ViewPadding(S);
 		CenterBtn(S);
+		RoTextBox(S);
 
 		// 如下設置後 在局部覆蓋全局字體旹 TextBlock生效洏TextBox不效、不效者 字體大小恆不變
 		// var StyBaseFontSize = new Style(x=>

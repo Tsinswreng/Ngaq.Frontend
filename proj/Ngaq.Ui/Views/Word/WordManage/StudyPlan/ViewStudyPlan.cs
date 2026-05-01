@@ -74,7 +74,7 @@ public partial class ViewStudyPlan
 		items.A(new MenuItem(), o=>{
 			o.Header = I[K.Help];
 			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(ToolView.WithTitle(I[K.StudyPlanHelpTitle], MkHelpView()));
+				ViewNavi?.GoTo(ToolView.WithTitle(I[K.StudyPlanHelpTitle_], MkHelpView()));
 			};
 		});
 		return r;
@@ -82,12 +82,8 @@ public partial class ViewStudyPlan
 
 	Control MkHelpView(){
 		var o = new TextBox();
-		o.IsReadOnly = true;
-		o.AcceptsReturn = true;
-		o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
-		o.Focusable = false;
-		o.IsTabStop = false;
-		InputMethod.SetIsInputMethodEnabled(o, false);
+		o.Classes.Add(App.Cls.RoTextBox);
+		//InputMethod.SetIsInputMethodEnabled(o, false);
 		o.Text = I[K.StudyPlanHelpText_] + "\n" + ViewAbout.WeightAlgorithmPluginDocUrl;
 		return o;
 	}

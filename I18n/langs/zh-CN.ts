@@ -66,7 +66,7 @@ const a: TI18nKv = {
 			WordEdit: "编辑单词",
 			Dictionary: "词典",
 			StudyPlan: "学习方案",
-			StudyPlanHelpTitle: "学习方案说明",
+			StudyPlanHelpTitle_: "学习方案说明",
 			StudyPlanHelpText_:
 `学习方案用来决定「背哪些单词」以及「先背哪些单词」。
 
@@ -273,7 +273,7 @@ const a: TI18nKv = {
 			SelectExportFile: "选择导出文件",
 			GoToLegacyBackupSync: "转到旧版备份同步实现",
 			AddWordsFromText: "从文本添加单词",
-			DictionaryUsageGuide:
+			DictionaryUsageGuide_:
 `词典内容由AI大模型生成，AI可能犯错误。
 点击收藏按钮可以把词条保存到用户词库。`,
 			InputUserLangNameToSearch: "输入用户语言名称以查询",

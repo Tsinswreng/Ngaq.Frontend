@@ -102,7 +102,7 @@ public class KeysUiI18nCommon{
 	public static readonly K WordEdit = Mk(_R, [nameof(WordEdit)]);
 	public static readonly K Dictionary = Mk(_R, [nameof(Dictionary)]);
 	public static readonly K StudyPlan = Mk(_R, [nameof(StudyPlan)]);
-	public static readonly K StudyPlanHelpTitle = Mk(_R, [nameof(StudyPlanHelpTitle)]);
+	public static readonly K StudyPlanHelpTitle_ = Mk(_R, [nameof(StudyPlanHelpTitle_)]);
 	public static readonly K StudyPlanHelpText_ = Mk(_R, [nameof(StudyPlanHelpText_)]);
 	public static readonly K Statistics = Mk(_R, [nameof(Statistics)]);
 	public static readonly K UserLang = Mk(_R, [nameof(UserLang)]);
@@ -277,7 +277,7 @@ public class KeysUiI18nCommon{
 	public static readonly K SelectExportFile = Mk(_R, [nameof(SelectExportFile)]);
 	public static readonly K GoToLegacyBackupSync = Mk(_R, [nameof(GoToLegacyBackupSync)]);
 	public static readonly K AddWordsFromText = Mk(_R, [nameof(AddWordsFromText)]);
-	public static readonly K DictionaryUsageGuide = Mk(_R, [nameof(DictionaryUsageGuide)]);
+	public static readonly K DictionaryUsageGuide_ = Mk(_R, [nameof(DictionaryUsageGuide_)]);
 	public static readonly K InputUserLangNameToSearch = Mk(_R, [nameof(InputUserLangNameToSearch)]);
 	public static readonly K InputLangNameOrCode = Mk(_R, [nameof(InputLangNameOrCode)]);
 	public static readonly K TranslatedName = Mk(_R, [nameof(TranslatedName)]);
