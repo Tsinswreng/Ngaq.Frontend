@@ -176,6 +176,15 @@ public partial class ViewDictionary
 		return NIL;
 	}
 
+	str GuideText(){
+		return Todo.I18n(
+"""
+詞典內容由AI大模型生成，AI可能犯錯誤。
+點擊收藏按鈕可以把詞條保存到用戶詞庫。
+"""
+		);
+	}
+
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
 	Control MkResultArea(){
 		var Area = new Grid();
@@ -186,13 +195,7 @@ public partial class ViewDictionary
 		});
 		Area.Children.Add(ResultScroll);
 
-		UsageGuideText.Text = Todo.I18n(
-"""
-詞典內容由AI大模型生成，AI可能犯錯誤。
-點擊收藏按鈕可以把詞條保存到用戶詞庫。
-"""
-
-		);
+		UsageGuideText.Text = GuideText();
 		UsageGuideText.Foreground = Brushes.LightGray;
 		UsageGuideText.TextWrapping = TextWrapping.Wrap;
 		UsageGuideText.VerticalAlignment = VerticalAlignment.Top;
@@ -231,21 +234,34 @@ public partial class ViewDictionary
 
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
-		menu.Items.A(new MenuItem(), o=>{
+		var item = menu.Items;
+		item
+		.A(new MenuItem(), o=>{
+			o.Header = Todo.I18n("幫助");
+			o.Click += (s,e)=>{
+				ViewNavi?.GoTo(
+					ToolView.WithTitle(
+						Todo.I18n("使用說明"),
+						new TextBlock{
+							Text= GuideText()
+						}
+					)
+				);
+			};
+		})
+		.A(new MenuItem(), o=>{
 			o.Header = I[DictK.NormLang];
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangPage();
 				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("標準語言管理"), view));
 			};
-		});
-		menu.Items.A(new MenuItem(), o=>{
+		}).A(new MenuItem(), o=>{
 			o.Header = I[DictK.ConfigureLangMapping];
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangToUserLangPage();
 				ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.ConfigureLangMapping], view));
 			};
-		});
-		menu.Items.A(new MenuItem(), o=>{
+		}).A(new MenuItem(), o=>{
 			o.Header = I[DictK.ViewLlmRawOutput];
 			o.Click += (s,e)=>{
 				var DictCtx = Ctx;

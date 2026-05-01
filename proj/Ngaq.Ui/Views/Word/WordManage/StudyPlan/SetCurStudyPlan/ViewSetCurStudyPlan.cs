@@ -15,7 +15,8 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmSetCurStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmSetCurStudyPlan;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 設置當前學習方案頁。
 /// 頁面打開後即讀取後端當前學習方案，僅展示關鍵字段並支持重新選擇。

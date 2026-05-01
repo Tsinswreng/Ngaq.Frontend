@@ -47,6 +47,7 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 	private const string DictionaryLookupIntentFlagKey = "dictionary_lookup_from_clipboard";
 
 	private readonly CancellationTokenSource _cts = new();
+	private bool _hasWindowFocus = false;
 	private bool _pendingLookupFromNotificationTap = false;
 
 	// OnCreate 是 Android Activity 的第一個生命週期方法，當 Activity 被建立時呼叫。
@@ -81,6 +82,15 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		base.OnNewIntent(intent);
 		CaptureDictionaryLookupIntent(intent);
 		TryConsumePendingDictionaryLookupIntent();
+	}
+
+	public override void OnWindowFocusChanged(bool hasFocus){
+		base.OnWindowFocusChanged(hasFocus);
+		_hasWindowFocus = hasFocus;
+		Log.Info("Ngaq.Android", $"MainActivity.OnWindowFocusChanged hasFocus={hasFocus}");
+		if(hasFocus){
+			TryConsumePendingDictionaryLookupIntent();
+		}
 	}
 
 	protected override AppBuilder CustomizeAppBuilder(AppBuilder builder){
@@ -269,6 +279,10 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 		var fromAction = intent.Action == DictionaryLookupNotificationAction;
 		var fromExtra = intent.GetBooleanExtra(DictionaryLookupIntentFlagKey, false);
 		if(fromAction || fromExtra){
+			Log.Info(
+				"Ngaq.Android",
+				$"Dictionary lookup notification intent captured. action={intent.Action}, fromExtra={fromExtra}, hasWindowFocus={_hasWindowFocus}"
+			);
 			_pendingLookupFromNotificationTap = true;
 		}
 	}
@@ -280,12 +294,18 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 			return;
 		}
 		if(App.SvcProvider is null){
+			Log.Info("Ngaq.Android", "Dictionary lookup pending: App.SvcProvider is not ready yet.");
+			return;
+		}
+		if(!_hasWindowFocus){
+			Log.Info("Ngaq.Android", "Dictionary lookup pending: waiting for window focus before reading clipboard.");
 			return;
 		}
 
 		_pendingLookupFromNotificationTap = false;
 		Dispatcher.UIThread.Post(async ()=>{
 			try{
+				Log.Info("Ngaq.Android", "Consuming dictionary lookup notification after window focus is ready.");
 				var action = App.GetSvc<IHotkeyDictionaryLookupAction>();
 				if(action is null){
 					Log.Warn("Ngaq.Android", "IHotkeyDictionaryLookupAction unavailable.");
