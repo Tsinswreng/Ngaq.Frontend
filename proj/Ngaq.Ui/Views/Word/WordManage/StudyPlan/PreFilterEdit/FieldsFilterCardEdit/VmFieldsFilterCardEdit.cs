@@ -150,7 +150,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		var view = new ViewFilterItemEdit();
 		view.Ctx?.Load(this, Card.Raw, Card.UiIdx);
         view.SyncSelectionFromVm();
-		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Filter Item") + " #" + Card.UiIdx, view));
+		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.FilterItem] + " #" + Card.UiIdx, view));
 		return NIL;
 	}
 
@@ -413,5 +413,6 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		};
 	}
 }
+
 
 

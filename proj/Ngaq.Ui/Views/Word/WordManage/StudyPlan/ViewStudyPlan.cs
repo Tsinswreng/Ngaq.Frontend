@@ -72,9 +72,9 @@ public partial class ViewStudyPlan
 		var r = new ContextMenu();
 		var items = r.Items;
 		items.A(new MenuItem(), o=>{
-			o.Header = Todo.I18n("幫助");
+			o.Header = I[K.Help];
 			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("學習方案說明"), MkHelpView()));
+				ViewNavi?.GoTo(ToolView.WithTitle(I[K.StudyPlanHelpTitle], MkHelpView()));
 			};
 		});
 		return r;
@@ -88,22 +88,7 @@ public partial class ViewStudyPlan
 		o.Focusable = false;
 		o.IsTabStop = false;
 		InputMethod.SetIsInputMethodEnabled(o, false);
-		o.Text = Todo.I18n(
-"""
-學習方案用來決定「背哪些單詞」以及「先背哪些單詞」。
-
-組件說明:
-- 學習方案：把各個組件組合成一套完整策略
-- 前置篩選器：決定要從詞庫中篩出哪些單詞來背
-- 權重計算器：決定單詞的排序規則
-- 權重參數：調整排序算法使用的具體參數
-
-高階擴展功能:
-參照 權重算法插件在線文檔
-"""
-+"\n"
-+ViewAbout.WeightAlgorithmPluginDocUrl
-		);
+		o.Text = I[K.StudyPlanHelpText_] + "\n" + ViewAbout.WeightAlgorithmPluginDocUrl;
 		return o;
 	}
 }

@@ -107,7 +107,7 @@ public partial class ViewSetCurStudyPlan
 		.A(MkInputRow(I[K.Descr], CBE.Mk<Ctx>(x=>x.CurDescr, Mode: BindingMode.OneWay), ReadOnly: true, AcceptsReturn: true))
 		.A(new OpBtn(), o=>{
 			o._Button.HorizontalContentAlignment = HAlign.Center;
-			o.BtnContent = Icons.ListSelect().WithText(Todo.I18n("選用其他學習方案"));
+			o.BtnContent = Icons.ListSelect().WithText(I[K.ChooseAnotherStudyPlan]);
 			o.SetExe((Ct)=>ChooseAndApplyStudyPlan(Ct));
 		})
 		.A(new Button(), o=>{

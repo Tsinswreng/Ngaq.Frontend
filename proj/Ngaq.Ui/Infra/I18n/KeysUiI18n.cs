@@ -29,11 +29,13 @@ public class KeysUiI18nCommon{
 	public static readonly K Clear = Mk(_R, [nameof(Clear)]);
 	public static readonly K Settings = Mk(_R, [nameof(Settings)]);
 	public static readonly K Search = Mk(_R, [nameof(Search)]);
+	public static readonly K Help = Mk(_R, [nameof(Help)]);
 	public static readonly K Login = Mk(_R, [nameof(Login)]);
 	public static readonly K Register = Mk(_R, [nameof(Register)]);
 	public static readonly K UserName = Mk(_R, [nameof(UserName)]);
 	public static readonly K Email = Mk(_R, [nameof(Email)]);
 	public static readonly K Password = Mk(_R, [nameof(Password)]);
+	public static readonly K EmailIsNotValid = Mk(_R, [nameof(EmailIsNotValid)]);
 	public static readonly K __CannotBeEmpty = Mk(_R, [nameof(__CannotBeEmpty)]);
 	public static readonly K Export = Mk(_R, [nameof(Export)]);
 	public static readonly K Import = Mk(_R, [nameof(Import)]);
@@ -60,6 +62,7 @@ public class KeysUiI18nCommon{
 	public static readonly K Me = Mk(_R, [nameof(Me)]);
 	public static readonly K LearnWordSettings = Mk(_R, [nameof(LearnWordSettings)]);
 	public static readonly K SearchWords = Mk(_R, [nameof(SearchWords)]);
+	public static readonly K SearchUserWords = Mk(_R, [nameof(SearchUserWords)]);
 	public static readonly K UserWordManage = Mk(_R, [nameof(UserWordManage)]);
 	public static readonly K AddWords = Mk(_R, [nameof(AddWords)]);
 	public static readonly K WordsLibBackupEtSync = Mk(_R, [nameof(WordsLibBackupEtSync)]);
@@ -84,10 +87,13 @@ public class KeysUiI18nCommon{
 	public static readonly K Website = Mk(_R, [nameof(Website)]);
 	public static readonly K UserProfile = Mk(_R, [nameof(UserProfile)]);
 	public static readonly K SelectNormLang = Mk(_R, [nameof(SelectNormLang)]);
+	public static readonly K SelectDictionarySrcLang = Mk(_R, [nameof(SelectDictionarySrcLang)]);
+	public static readonly K SelectDictionaryTgtLang = Mk(_R, [nameof(SelectDictionaryTgtLang)]);
 	public static readonly K ConfigureLangMapping = Mk(_R, [nameof(ConfigureLangMapping)]);
 	public static readonly K ViewLlmRawOutput = Mk(_R, [nameof(ViewLlmRawOutput)]);
 	public static readonly K RawOutputEmptyCannotParse = Mk(_R, [nameof(RawOutputEmptyCannotParse)]);
 	public static readonly K CompleteDictionaryQueryBeforeSave = Mk(_R, [nameof(CompleteDictionaryQueryBeforeSave)]);
+	public static readonly K InputNewWordToSearch = Mk(_R, [nameof(InputNewWordToSearch)]);
 	public static readonly K GoToLanguageConfigPage = Mk(_R, [nameof(GoToLanguageConfigPage)]);
 	public static readonly K SkipConfigAndGoEditPage = Mk(_R, [nameof(SkipConfigAndGoEditPage)]);
 	public static readonly K LanguageMappingNotConfiguredChooseNext = Mk(_R, [nameof(LanguageMappingNotConfiguredChooseNext)]);
@@ -96,9 +102,12 @@ public class KeysUiI18nCommon{
 	public static readonly K WordEdit = Mk(_R, [nameof(WordEdit)]);
 	public static readonly K Dictionary = Mk(_R, [nameof(Dictionary)]);
 	public static readonly K StudyPlan = Mk(_R, [nameof(StudyPlan)]);
+	public static readonly K StudyPlanHelpTitle = Mk(_R, [nameof(StudyPlanHelpTitle)]);
+	public static readonly K StudyPlanHelpText_ = Mk(_R, [nameof(StudyPlanHelpText_)]);
 	public static readonly K Statistics = Mk(_R, [nameof(Statistics)]);
 	public static readonly K UserLang = Mk(_R, [nameof(UserLang)]);
 	public static readonly K NormLang = Mk(_R, [nameof(NormLang)]);
+	public static readonly K NormLangManage = Mk(_R, [nameof(NormLangManage)]);
 	public static readonly K FileAlreadyExistsNoOverwriteChangePath = Mk(_R, [nameof(FileAlreadyExistsNoOverwriteChangePath)]);
 	public static readonly K InvalidPath = Mk(_R, [nameof(InvalidPath)]);
 	public static readonly K ChangeAccount = Mk(_R, [nameof(ChangeAccount)]);
@@ -140,6 +149,7 @@ public class KeysUiI18nCommon{
 	public static readonly K NewUserLang = Mk(_R, [nameof(NewUserLang)]);
 	public static readonly K PoUserLang = Mk(_R, [nameof(PoUserLang)]);
 	public static readonly K NoWordOrCtx = Mk(_R, [nameof(NoWordOrCtx)]);
+	public static readonly K SaveToUserWordLibrary = Mk(_R, [nameof(SaveToUserWordLibrary)]);
 	public static readonly K WordCore = Mk(_R, [nameof(WordCore)]);
 	public static readonly K InvalidKI64 = Mk(_R, [nameof(InvalidKI64)]);
 	public static readonly K InvalidKType = Mk(_R, [nameof(InvalidKType)]);
@@ -190,6 +200,7 @@ public class KeysUiI18nCommon{
 	public static readonly K Submit = Mk(_R, [nameof(Submit)]);
 	public static readonly K Browse = Mk(_R, [nameof(Browse)]);
 	public static readonly K SetCurrentStudyPlan = Mk(_R, [nameof(SetCurrentStudyPlan)]);
+	public static readonly K ChooseAnotherStudyPlan = Mk(_R, [nameof(ChooseAnotherStudyPlan)]);
 	public static readonly K PreFilter = Mk(_R, [nameof(PreFilter)]);
 	public static readonly K WeightArgWithSpace = Mk(_R, [nameof(WeightArgWithSpace)]);
 	public static readonly K RestoreBuiltinDone = Mk(_R, [nameof(RestoreBuiltinDone)]);
@@ -235,6 +246,7 @@ public class KeysUiI18nCommon{
 	public static readonly K Number = Mk(_R, [nameof(Number)]);
 	public static readonly K Null = Mk(_R, [nameof(Null)]);
 	public static readonly K FilterItems = Mk(_R, [nameof(FilterItems)]);
+	public static readonly K FilterItem = Mk(_R, [nameof(FilterItem)]);
 	public static readonly K AddField = Mk(_R, [nameof(AddField)]);
 	public static readonly K TapRowToEditOneFilterItem = Mk(_R, [nameof(TapRowToEditOneFilterItem)]);
 	public static readonly K AddItem = Mk(_R, [nameof(AddItem)]);
@@ -265,6 +277,9 @@ public class KeysUiI18nCommon{
 	public static readonly K SelectExportFile = Mk(_R, [nameof(SelectExportFile)]);
 	public static readonly K GoToLegacyBackupSync = Mk(_R, [nameof(GoToLegacyBackupSync)]);
 	public static readonly K AddWordsFromText = Mk(_R, [nameof(AddWordsFromText)]);
+	public static readonly K DictionaryUsageGuide = Mk(_R, [nameof(DictionaryUsageGuide)]);
+	public static readonly K InputUserLangNameToSearch = Mk(_R, [nameof(InputUserLangNameToSearch)]);
+	public static readonly K InputLangNameOrCode = Mk(_R, [nameof(InputLangNameOrCode)]);
 	public static readonly K TranslatedName = Mk(_R, [nameof(TranslatedName)]);
 	public static readonly K TextIsEmpty = Mk(_R, [nameof(TextIsEmpty)]);
 	public static readonly K Submitted = Mk(_R, [nameof(Submitted)]);

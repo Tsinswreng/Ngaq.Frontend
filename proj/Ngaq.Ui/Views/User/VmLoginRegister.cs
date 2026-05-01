@@ -81,15 +81,15 @@ public partial class VmLoginRegister: ViewModelBase{
 		//TODO 一次校驗多條
 		this.Msgs.Clear();
 		if(str.IsNullOrEmpty(Password)){
-			this.AddMsg(Todo.I18n("Password is empty."));
+			this.AddMsg(I18n.Get(K.__CannotBeEmpty, I18n[K.Password]));
 			return false;
 		}
 		if(Password != ConfirmPassword){
-			this.AddMsg(Todo.I18n("Password and Confirm Password must be the same."));
+			this.AddMsg(I18n[K.PasswordMismatch]);
 			return false;
 		}
 		if(ValidateEmail(Email) == false){
-			this.AddMsg(Todo.I18n("Email is not valid."));
+			this.AddMsg(I18n[K.EmailIsNotValid]);
 			return false;
 		}
 		return true;
@@ -117,11 +117,11 @@ public partial class VmLoginRegister: ViewModelBase{
 	public async Task<nil> LoginAsy(CT Ct){
 		Msgs.Clear();
 		if(str.IsNullOrWhiteSpace(Email)){
-			AddMsg("Email is empty.");
+			AddMsg(I18n.Get(K.__CannotBeEmpty, I18n[K.Email]));
 			return NIL;
 		}
 		if(str.IsNullOrWhiteSpace(Password)){
-			AddMsg("Password is empty.");
+			AddMsg(I18n.Get(K.__CannotBeEmpty, I18n[K.Password]));
 			return NIL;
 		}
 

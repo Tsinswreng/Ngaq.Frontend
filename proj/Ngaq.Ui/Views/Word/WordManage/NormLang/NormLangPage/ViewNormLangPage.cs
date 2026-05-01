@@ -88,7 +88,7 @@ public partial class ViewNormLangPage
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
-			o.Watermark = Todo.I18n("輸入語言名稱或代碼");
+			o.Watermark = I[K.InputLangNameOrCode];
 			o.CBind<Ctx>(o.PropText, x=>x.Input);
 			o.KeyBindings.Add(new KeyBinding{
 				Gesture = new KeyGesture(Key.Enter),

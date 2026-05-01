@@ -10,6 +10,7 @@ const a: TI18nKv = {
 			Library: "詞庫",
 			Me: "我的",
 			SearchWords: "搜索單詞",
+			SearchUserWords: "查詢用戶單詞",
 			UserWordManage: "用戶詞庫管理",
 			AddWords: "新增單詞",
 			WordsLibBackupEtSync: "詞庫備份與同步",
@@ -19,11 +20,13 @@ const a: TI18nKv = {
 			Clear: "清除",
 			Settings: "設定",
 			LearnWordSettings: "單詞學習設定",
+			Help: "幫助",
 			Login: "登錄",
 			Register: "註冊",
 			UserName: "用戶名稱",
 			Email: "電子郵件",
 			Password: "密碼",
+			EmailIsNotValid: "電子郵件格式無效",
 			ConfirmPassword: "確認密碼",
 			__CannotBeEmpty: "{0} 不可為空",
 			PasswordMismatch: "密碼不相符",
@@ -48,10 +51,13 @@ const a: TI18nKv = {
 			Website: "網站",
 			UserProfile: "用戶個人檔案",
 			SelectNormLang: "選擇標準語言",
+			SelectDictionarySrcLang: "選擇詞典源語言",
+			SelectDictionaryTgtLang: "選擇詞典目標語言",
 			ConfigureLangMapping: "設定語言對應",
 			ViewLlmRawOutput: "查看大模型原始輸出",
 			RawOutputEmptyCannotParse: "原始輸出為空，無法解析",
 			CompleteDictionaryQueryBeforeSave: "儲存前請完成字典查詢",
+			InputNewWordToSearch: "輸入生詞以查詢",
 			GoToLanguageConfigPage: "前往語言設定頁面",
 			SkipConfigAndGoEditPage: "略過設定並前往編輯頁面",
 			LanguageMappingNotConfiguredChooseNext: "語言對應尚未設定，請選擇下一步",
@@ -60,9 +66,22 @@ const a: TI18nKv = {
 			WordEdit: "編輯單詞",
 			Dictionary: "詞典",
 			StudyPlan: "學習方案",
+			StudyPlanHelpTitle: "學習方案說明",
+			StudyPlanHelpText_:
+`學習方案用來決定「背哪些單詞」以及「先背哪些單詞」。
+
+組件說明:
+- 學習方案：把各個組件組合成一套完整策略
+- 前置篩選器：決定要從詞庫中篩出哪些單詞來背
+- 權重計算器：決定單詞的排序規則
+- 權重參數：調整排序算法使用的具體參數
+
+高階擴展功能:
+參照 權重算法插件在線文檔`,
 			Statistics: "統計",
 			UserLang: "用戶語言",
 			NormLang: "標準語言",
+			NormLangManage: "標準語言管理",
 			FileAlreadyExistsNoOverwriteChangePath: "文件已存在，請變更路徑以避免覆寫",
 			InvalidPath: "無效的路徑",
 			ChangeAccount: "切換帳號",
@@ -116,6 +135,7 @@ const a: TI18nKv = {
 			PoUserLang: "用戶語言持久化物件",
 			Description: "描述",
 			NoWordOrCtx: "沒有單詞或上下文",
+			SaveToUserWordLibrary: "保存到用戶詞庫",
 			WordCore: "單詞核心",
 			InvalidKI64: "無效的 Int64 鍵",
 			InvalidKType: "無效的鍵類型",
@@ -167,6 +187,7 @@ const a: TI18nKv = {
 			Submit: "提交",
 			Browse: "瀏覽",
 			SetCurrentStudyPlan: "設定目前學習計劃",
+			ChooseAnotherStudyPlan: "選用其他學習方案",
 			PreFilter: "前置篩選器",
 			WeightArgWithSpace: "權重參數",
 			RestoreBuiltinDone: "已還原內建設定",
@@ -215,6 +236,7 @@ const a: TI18nKv = {
 			Number: "數字",
 			Null: "空值",
 			FilterItems: "篩選項目",
+			FilterItem: "篩選項",
 			AddField: "新增欄位",
 			TapRowToEditOneFilterItem: "點選列以編輯篩選項目",
 			AddItem: "新增項目",
@@ -251,6 +273,11 @@ const a: TI18nKv = {
 			SelectExportFile: "選擇導出文件",
 			GoToLegacyBackupSync: "轉到舊版備份同步實現",
 			AddWordsFromText: "從文本添加單詞",
+			DictionaryUsageGuide:
+`詞典內容由AI大模型生成，AI可能犯錯誤。
+點擊收藏按鈕可以把詞條保存到用戶詞庫。`,
+			InputUserLangNameToSearch: "輸入用戶語言名稱以查詢",
+			InputLangNameOrCode: "輸入語言名稱或代碼",
 			TranslatedName: "譯名",
 			TextIsEmpty: "文本爲空",
 			Submitted: "已提交",

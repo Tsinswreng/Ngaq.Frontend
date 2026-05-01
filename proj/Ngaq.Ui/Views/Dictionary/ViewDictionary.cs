@@ -110,7 +110,7 @@ public partial class ViewDictionary
 			})
 			.A(SearchTextBox, o=>{
 				o.CBind<Ctx>(o.PropText,x=>x.Input);
-				o.Watermark = Todo.I18n("輸入生詞以查詢");
+				o.Watermark = I[DictK.InputNewWordToSearch];
 				o.KeyBindings.Add(
 					new KeyBinding{
 						Gesture = new(Key.Enter),
@@ -120,7 +120,7 @@ public partial class ViewDictionary
 			})
 			.A(SaveToWordBtn, o=>{
 				// 保存到詞庫按鈕只負責「轉換 + 跳編輯頁」；最終保存仍在編輯頁完成。
-				ToolTip.SetTip(o, Todo.I18n("Save to user's word library"));
+				ToolTip.SetTip(o, I[DictK.SaveToUserWordLibrary]);
 				InitToolbarBtn(
 					o,
 					Icons.BookmarkOutlineAdd().ToIcon(),
@@ -177,12 +177,7 @@ public partial class ViewDictionary
 	}
 
 	str GuideText(){
-		return Todo.I18n(
-"""
-詞典內容由AI大模型生成，AI可能犯錯誤。
-點擊收藏按鈕可以把詞條保存到用戶詞庫。
-"""
-		);
+		return I[DictK.DictionaryUsageGuide];
 	}
 
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
@@ -227,7 +222,7 @@ public partial class ViewDictionary
 			});
 		}
 		ViewNavi?.GoTo(ToolView.WithTitle(
-			IsSrc ? Todo.I18n("選擇詞典源語言") : Todo.I18n("選擇詞典目標語言"),
+			IsSrc ? I[DictK.SelectDictionarySrcLang] : I[DictK.SelectDictionaryTgtLang],
 			view
 		));
 	}
@@ -237,11 +232,11 @@ public partial class ViewDictionary
 		var item = menu.Items;
 		item
 		.A(new MenuItem(), o=>{
-			o.Header = Todo.I18n("幫助");
+			o.Header = I[DictK.Help];
 			o.Click += (s,e)=>{
 				ViewNavi?.GoTo(
 					ToolView.WithTitle(
-						Todo.I18n("使用說明"),
+						I[DictK.Help],
 						new TextBlock{
 							Text= GuideText()
 						}
@@ -253,7 +248,7 @@ public partial class ViewDictionary
 			o.Header = I[DictK.NormLang];
 			o.Click += (s,e)=>{
 				var view = new ViewNormLangPage();
-				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("標準語言管理"), view));
+				ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.NormLangManage], view));
 			};
 		}).A(new MenuItem(), o=>{
 			o.Header = I[DictK.ConfigureLangMapping];

@@ -10,20 +10,23 @@ const a: TI18nKv = {
 			Library: "词库",
 			Me: "我的",
 			SearchWords: "搜索单词",
+			SearchUserWords: "查询用户单词",
 			UserWordManage: "用户词库管理",
 			AddWords: "新增单词",
-			WordsLibBackupEtSync: "备份与同步",
+			WordsLibBackupEtSync: "词库备份与同步",
 			Start: "开始",
 			Save: "储存",
 			Reset: "重设",
 			Clear: "清除",
 			Settings: "设定",
 			LearnWordSettings: "单词学习设定",
+			Help: "帮助",
 			Login: "登录",
 			Register: "注册",
 			UserName: "用户名称",
 			Email: "电子邮件",
 			Password: "密码",
+			EmailIsNotValid: "电子邮件格式无效",
 			ConfirmPassword: "确认密码",
 			__CannotBeEmpty: "{0} 不可为空",
 			PasswordMismatch: "密码不相符",
@@ -48,21 +51,37 @@ const a: TI18nKv = {
 			Website: "网站",
 			UserProfile: "用户个人档案",
 			SelectNormLang: "选择标准语言",
+			SelectDictionarySrcLang: "选择词典源语言",
+			SelectDictionaryTgtLang: "选择词典目标语言",
 			ConfigureLangMapping: "设定语言对应",
-			ViewLlmRawOutput: "检视 LLM 原始输出",
+			ViewLlmRawOutput: "查看大模型原始输出",
 			RawOutputEmptyCannotParse: "原始输出为空，无法解析",
 			CompleteDictionaryQueryBeforeSave: "储存前请完成字典查询",
+			InputNewWordToSearch: "输入生词以查询",
 			GoToLanguageConfigPage: "前往语言设定页面",
 			SkipConfigAndGoEditPage: "略过设定并前往编辑页面",
 			LanguageMappingNotConfiguredChooseNext: "语言对应尚未设定，请选择下一步",
 			AddNormLangToUserLang: "新增标准语言至用户语言",
 			WordEditorContextIsNull: "单词编辑器内容为空",
 			WordEdit: "编辑单词",
-			Dictionary: "字典",
-			StudyPlan: "学习计划",
+			Dictionary: "词典",
+			StudyPlan: "学习方案",
+			StudyPlanHelpTitle: "学习方案说明",
+			StudyPlanHelpText_:
+`学习方案用来决定「背哪些单词」以及「先背哪些单词」。
+
+组件说明:
+- 学习方案：把各个组件组合成一套完整策略
+- 前置筛选器：决定要从词库中筛出哪些单词来背
+- 权重计算器：决定单词的排序规则
+- 权重参数：调整排序算法使用的具体参数
+
+高阶扩展功能:
+参照 权重算法插件在线文档`,
 			Statistics: "统计",
 			UserLang: "用户语言",
 			NormLang: "标准语言",
+			NormLangManage: "标准语言管理",
 			FileAlreadyExistsNoOverwriteChangePath: "文件已存在，请变更路径以避免覆写",
 			InvalidPath: "无效的路径",
 			ChangeAccount: "切换帐号",
@@ -116,6 +135,7 @@ const a: TI18nKv = {
 			PoUserLang: "用户语言持久化物件",
 			Description: "描述",
 			NoWordOrCtx: "没有单词或上下文",
+			SaveToUserWordLibrary: "保存到用户词库",
 			WordCore: "单词核心",
 			InvalidKI64: "无效的 Int64 键",
 			InvalidKType: "无效的键类型",
@@ -167,6 +187,7 @@ const a: TI18nKv = {
 			Submit: "提交",
 			Browse: "浏览",
 			SetCurrentStudyPlan: "设定目前学习计划",
+			ChooseAnotherStudyPlan: "选用其他学习方案",
 			PreFilter: "前置筛选器",
 			WeightArgWithSpace: "权重参数",
 			RestoreBuiltinDone: "已还原内建设定",
@@ -215,6 +236,7 @@ const a: TI18nKv = {
 			Number: "数字",
 			Null: "空值",
 			FilterItems: "筛选项目",
+			FilterItem: "筛选项",
 			AddField: "新增栏位",
 			TapRowToEditOneFilterItem: "点选列以编辑筛选项目",
 			AddItem: "新增项目",
@@ -251,6 +273,11 @@ const a: TI18nKv = {
 			SelectExportFile: "选择导出文件",
 			GoToLegacyBackupSync: "转到旧版备份同步实现",
 			AddWordsFromText: "从文本添加单词",
+			DictionaryUsageGuide:
+`词典内容由AI大模型生成，AI可能犯错误。
+点击收藏按钮可以把词条保存到用户词库。`,
+			InputUserLangNameToSearch: "输入用户语言名称以查询",
+			InputLangNameOrCode: "输入语言名称或代码",
 			TranslatedName: "译名",
 			TextIsEmpty: "文本为空",
 			Submitted: "已提交",
@@ -271,8 +298,10 @@ const a: TI18nKv = {
 	- 长按单词卡显示进菜单。
 	- 请定时储存进度，以免资料遗失。
 
-• 单词卡信息介绍:
-示例: 1 en ✅3:2:1  3d 1.2e3
+• 单词卡信息示例介绍:
+
+1 en ✅3:2:1  3d 1.2e3
+
 	- 1: 序号
 	- en: 语言
 	- ✅: 上次学习结果为「记得」(🤔: 添加; ❌:忘记)
