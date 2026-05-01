@@ -1,7 +1,9 @@
 ﻿namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Icons;
@@ -20,6 +22,7 @@ using DictK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmDictionary;
 using Ngaq.Core.Shared.Word.Models;
 using Avalonia.Media;
+using Avalonia.Layout;
 
 public partial class ViewDictionary
 	:AppViewBase
@@ -56,6 +59,7 @@ public partial class ViewDictionary
 	public OpBtn SearchBtn = new();
 	public OpBtn SaveToWordBtn = new();
 	public OpBtn MenuBtn = new();
+	TextBlock UsageGuideText = new();
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -75,47 +79,33 @@ public partial class ViewDictionary
 			]);
 		});
 		{{
-			LangGrid.A(new Button(), o=>{
-				o.CBind<Ctx>(o.PropContent, x=>x.SrcLang);
-				o.HorizontalContentAlignment = HAlign.Center;
-				o.VerticalContentAlignment = VAlign.Center;
-				o.MinHeight = 24;
-				o.Padding = new Avalonia.Thickness(0);
-				o.Click += (s,e)=>OpenNormLangSelector(true);
-			})
-			.A(new Button(), o=>{
-				o.Content = "⇄";
-				o.VerticalAlignment = VAlign.Center;
-				o.HorizontalAlignment = HAlign.Center;
-				o.MinHeight = 24;
-				o.Padding = new Avalonia.Thickness(0);
-				o.Click += (s, e) => {
-					Ctx?.SwapLang();
-				};
-			})
-			.A(new Button(), o=>{
-				o.CBind<Ctx>(o.PropContent, x=>x.TgtLang);
-				o.HorizontalContentAlignment = HAlign.Center;
-				o.VerticalContentAlignment = VAlign.Center;
-				o.MinHeight = 24;
-				o.Padding = new Avalonia.Thickness(0);
-				o.Click += (s,e)=>OpenNormLangSelector(false);
-			});
+			LangGrid.A(MkLangButton(x=>x.SrcLangDisplay, (s,e)=>OpenNormLangSelector(true)))
+			.A(MkLangSwapButton())
+			.A(MkLangButton(x=>x.TgtLangDisplay, (s,e)=>OpenNormLangSelector(false)));
 		}}
 
 		var SearchGrid = new AutoGrid(IsRow: false);
 		Root.A(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs.AddRange([
-				ColDef(8, GUT.Star),
 				ColDef(1, GUT.Star),
+				ColDef(8, GUT.Star),
 				ColDef(1, GUT.Star),
 				ColDef(1, GUT.Star),
 			]);
 		});
 		{{
 			SearchGrid
+			.A(SearchBtn, o=>{
+				InitToolbarBtn(
+					o,
+					Icons.Search().ToIcon(),
+					Ct=>Ctx?.Lookup(Ct),
+					UiCfg.Inst.MainColor
+				);
+			})
 			.A(SearchTextBox, o=>{
 				o.CBind<Ctx>(o.PropText,x=>x.Input);
+				o.Watermark = Todo.I18n("Search a word");
 				o.KeyBindings.Add(
 					new KeyBinding{
 						Gesture = new(Key.Enter),
@@ -123,33 +113,88 @@ public partial class ViewDictionary
 					}
 				);
 			})
-			.A(SearchBtn, o=>{
-				o._Button.StretchCenter();
-				o._Button.Content = Icons.Search().ToIcon();
-				o._Button.Background = UiCfg.Inst.MainColor;
-				o.SetExe(Ct=>Ctx?.Lookup(Ct));
-			})
 			.A(SaveToWordBtn, o=>{
 				// 保存到詞庫按鈕只負責「轉換 + 跳編輯頁」；最終保存仍在編輯頁完成。
-				o._Button.StretchCenter();
-				o.BtnContent = Icons.BookmarkOutlineAdd().ToIcon();
-				o.SetExe(Ct=>Ctx?.ToWordEdit(Ct));
+				ToolTip.SetTip(o, Todo.I18n("Save to user's word library"));
+				InitToolbarBtn(
+					o,
+					Icons.BookmarkOutlineAdd().ToIcon(),
+					Ct=>Ctx?.ToWordEdit(Ct)
+				);
 			})
 			.A(MenuBtn, o=>{
 				// 與搜尋/收藏按鈕統一使用 OpBtn 風格。
-				o._Button.StretchCenter();
-				o.BtnContent = Icons.Menu().ToIcon();
+				InitToolbarBtn(o, Icons.Menu().ToIcon());
 				o._Button.Click += (s,e)=>OpenTitleMenuNear(o._Button);
 			});
 		}}
 
-		Root.A(new ScrollViewer(), sv=>{
-			sv.SetContent(new ViewSimpleWord(), o=>{
-				o.CBind<Ctx>(o.PropDataContext,x=>x.Result);
-			});
-		});
+		Root.A(MkResultArea());
 
 		return NIL;
+	}
+
+	/// 語言選擇按鈕：顯示 `code + 譯名`，並保持兩端樣式一致。
+	Button MkLangButton(
+		System.Linq.Expressions.Expression<Func<Ctx, obj?>> BindExpr,
+		EventHandler<RoutedEventArgs> OnClick
+	){
+		var R = new Button();
+		R.CBind<Ctx>(R.PropContent, BindExpr);
+		R.HorizontalContentAlignment = HAlign.Center;
+		R.VerticalContentAlignment = VAlign.Center;
+		R.MinHeight = 24;
+		R.Padding = new Avalonia.Thickness(0);
+		R.Click += OnClick;
+		return R;
+	}
+
+	/// 語言互換按鈕單獨抽出，避免和左右語言按鈕重複堆屬性。
+	Button MkLangSwapButton(){
+		var R = new Button();
+		R.Content = "⇄";
+		R.VerticalAlignment = VAlign.Center;
+		R.HorizontalAlignment = HAlign.Center;
+		R.MinHeight = 24;
+		R.Padding = new Avalonia.Thickness(0);
+		R.Click += (s, e) => {
+			Ctx?.SwapLang();
+		};
+		return R;
+	}
+
+	/// 搜索/保存/菜單三類工具按鈕共用樣式，避免同文件反覆手抄。
+	nil InitToolbarBtn(OpBtn Btn, Control Content, Func<CT, Task<nil>>? Exe = null, IBrush? Background = null){
+		Btn._Button.StretchCenter();
+		Btn.BtnContent = Content;
+		if(Background is not null){
+			Btn._Button.Background = Background;
+		}
+		if(Exe is not null){
+			Btn.SetExe(Exe);
+		}
+		return NIL;
+	}
+
+	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
+	Control MkResultArea(){
+		var Area = new Grid();
+		var ResultScroll = new ScrollViewer();
+		ResultScroll.CBind<Ctx>(IsVisibleProperty, x=>x.ShowLookupResult, Mode: BindingMode.OneWay);
+		ResultScroll.SetContent(new ViewSimpleWord(), o=>{
+			o.CBind<Ctx>(o.PropDataContext,x=>x.Result);
+		});
+		Area.Children.Add(ResultScroll);
+
+		UsageGuideText.Text = Todo.I18n("Dictionary usage guide");
+		UsageGuideText.Foreground = Brushes.LightGray;
+		UsageGuideText.TextWrapping = TextWrapping.Wrap;
+		UsageGuideText.VerticalAlignment = VerticalAlignment.Top;
+		UsageGuideText.Margin = new Avalonia.Thickness(0, UiCfg.Inst.BaseFontSize * 0.5, 0, 0);
+		UsageGuideText.CBind<Ctx>(IsVisibleProperty, x=>x.ShowUsageGuide, Mode: BindingMode.OneWay);
+		Area.Children.Add(UsageGuideText);
+
+		return Area;
 	}
 
 	void OpenNormLangSelector(bool IsSrc){

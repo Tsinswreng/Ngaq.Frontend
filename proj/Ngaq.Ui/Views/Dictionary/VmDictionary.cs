@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
+using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Infra.Errors;
@@ -26,6 +27,7 @@ using Tsinswreng.CsErr;
 using Ctx = VmDictionary;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.CsTools;
+using Tsinswreng.CsCfg;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
@@ -78,6 +80,23 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	}="";
 
+	/// 是否已執行過查詞。未查詞前用於顯示頁面用法提示。
+	public bool HasLookupStarted{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(ShowUsageGuide));
+				OnPropertyChanged(nameof(ShowLookupResult));
+			}
+		}
+	} = false;
+
+	/// 未查詞前顯示下方引導文案。
+	public bool ShowUsageGuide => !HasLookupStarted;
+
+	/// 查詞後顯示結果區，避免首屏空白。
+	public bool ShowLookupResult => HasLookupStarted;
+
 	public VmSimpleWord? Result{
 		get{return field;}
 		set{SetProperty(ref field, value);}
@@ -85,10 +104,50 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	public str SrcLang{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				UpdateLangDisplayTexts();
+			}
+		}
 	} = "en";
 
 	public str TgtLang{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				UpdateLangDisplayTexts();
+			}
+		}
+	} = "zh";
+
+	/// 源語言的界面譯名，用於按鈕顯示。
+	public str SrcLangTranslatedName{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				UpdateLangDisplayTexts();
+			}
+		}
+	} = "";
+
+	/// 目標語言的界面譯名，用於按鈕顯示。
+	public str TgtLangTranslatedName{
+		get{return field;}
+		set{
+			if(SetProperty(ref field, value)){
+				UpdateLangDisplayTexts();
+			}
+		}
+	} = "";
+
+	/// 源語言按鈕顯示文本，格式如 `en 英語`。
+	public str SrcLangDisplay{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = "en";
+
+	/// 目標語言按鈕顯示文本，格式如 `zh 中文`。
+	public str TgtLangDisplay{
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	} = "zh";
@@ -97,18 +156,24 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var tmp = SrcLang;
 		SrcLang = TgtLang;
 		TgtLang = tmp;
+		var tmpName = SrcLangTranslatedName;
+		SrcLangTranslatedName = TgtLangTranslatedName;
+		TgtLangTranslatedName = tmpName;
+		_ = RefreshLangTranslatedNames(default);
 		_ = PersistCurLangs(default);
 		return NIL;
 	}
 
 	public nil ApplySrcNormLang(PoNormLang Po){
 		SrcLang = Po.Code ?? "";
+		_ = RefreshLangTranslatedNames(default);
 		_ = PersistSrcLang(Po, default);
 		return NIL;
 	}
 
 	public nil ApplyTgtNormLang(PoNormLang Po){
 		TgtLang = Po.Code ?? "";
+		_ = RefreshLangTranslatedNames(default);
 		_ = PersistTgtLang(Po, default);
 		return NIL;
 	}
@@ -127,6 +192,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			if(tgt is not null && !str.IsNullOrWhiteSpace(tgt.Code)){
 				TgtLang = tgt.Code;
 			}
+			await RefreshLangTranslatedNames(Ct);
 		}catch(Exception ex){
 			HandleErr(ex);
 		}
@@ -149,6 +215,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var StreamedResp = new StringBuilder();
 		var streamLock = new object();
 
+		HasLookupStarted = true;
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
 
@@ -265,6 +332,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var PrevResp = LastRespLlmDict;
 		var PrevRawOutput = LastLlmRawOutput;
 		try{
+			HasLookupStarted = true;
 			var Req = new ReqLlmDictEvt{
 				Query = new Query{
 					Term = Input.Trim(),
@@ -509,6 +577,54 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			HandleErr(ex);
 		}
 		return NIL;
+	}
+
+	/// 按當前 UI 語言批量獲取源/目標語言譯名，供語言切換按鈕顯示。
+	async Task<nil> RefreshLangTranslatedNames(CT Ct){
+		if(AnyNull(SvcNormLang, FrontendUserCtxMgr)){
+			UpdateLangDisplayTexts();
+			return NIL;
+		}
+		try{
+			var UiLang = KeysClientCfg.Lang.GetFrom(AppCfg.Inst) ?? "en";
+			var TargetLang = new NormLang{
+				Type = ELangIdentType.Bcp47,
+				Code = UiLang,
+			};
+			List<str?> Names = [];
+			var NameAsyE = SvcNormLang.BatGetTranslatedName(
+				FrontendUserCtxMgr.GetDbUserCtx(),
+				TargetLang,
+				ToolAsyE.ToAsyE([
+					(INormLang)new NormLang{Type = ELangIdentType.Bcp47, Code = SrcLang},
+					(INormLang)new NormLang{Type = ELangIdentType.Bcp47, Code = TgtLang},
+				]),
+				Ct
+			);
+			await foreach(var Name in NameAsyE.WithCancellation(Ct)){
+				Names.Add(Name);
+			}
+			SrcLangTranslatedName = Names.Count > 0 ? (Names[0] ?? "") : "";
+			TgtLangTranslatedName = Names.Count > 1 ? (Names[1] ?? "") : "";
+		}catch(Exception ex){
+			HandleErr(ex);
+		}
+		return NIL;
+	}
+
+	/// 更新語言按鈕最終文本；查不到譯名時僅顯示語言代碼。
+	nil UpdateLangDisplayTexts(){
+		SrcLangDisplay = FormatLangDisplay(SrcLang, SrcLangTranslatedName);
+		TgtLangDisplay = FormatLangDisplay(TgtLang, TgtLangTranslatedName);
+		return NIL;
+	}
+
+	/// 語言代碼與譯名拼成單行顯示，避免 View 層自己拼接字符串。
+	static str FormatLangDisplay(str Code, str? TranslatedName){
+		if(str.IsNullOrWhiteSpace(TranslatedName)){
+			return Code;
+		}
+		return $"{Code} {TranslatedName}";
 	}
 }
 
