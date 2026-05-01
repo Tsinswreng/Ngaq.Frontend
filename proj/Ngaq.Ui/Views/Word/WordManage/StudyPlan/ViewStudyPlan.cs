@@ -1,9 +1,11 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 
 using Avalonia.Controls;
+using Avalonia.Input;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.About;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
@@ -72,16 +74,37 @@ public partial class ViewStudyPlan
 		items.A(new MenuItem(), o=>{
 			o.Header = Todo.I18n("幫助");
 			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(ToolView.WithTitle("學習方案說明",new TextBlock{
-					Text = Todo.I18n(
-"""
-
-"""
-					)
-				}));
+				ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("學習方案說明"), MkHelpView()));
 			};
 		});
 		return r;
+	}
+
+	Control MkHelpView(){
+		var o = new TextBox();
+		o.IsReadOnly = true;
+		o.AcceptsReturn = true;
+		o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
+		o.Focusable = false;
+		o.IsTabStop = false;
+		InputMethod.SetIsInputMethodEnabled(o, false);
+		o.Text = Todo.I18n(
+"""
+學習方案用來決定「背哪些單詞」以及「先背哪些單詞」。
+
+組件說明:
+- 學習方案：把各個組件組合成一套完整策略
+- 前置篩選器：決定要從詞庫中篩出哪些單詞來背
+- 權重計算器：決定單詞的排序規則
+- 權重參數：調整排序算法使用的具體參數
+
+高階擴展功能:
+參照 權重算法插件在線文檔
+"""
++"\n"
++ViewAbout.WeightAlgorithmPluginDocUrl
+		);
+		return o;
 	}
 }
 

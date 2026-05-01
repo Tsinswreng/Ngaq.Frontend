@@ -61,7 +61,7 @@ public partial class ViewAbout
 				});
 			})
 			.A(new HyperlinkButton(), o=>{
-				var url = "https://github.com/Tsinswreng/CsNgaq/blob/master/Doc/Prod/en/JsWeight.md";
+				var url = WeightAlgorithmPluginDocUrl;
 				o.NavigateUri = new Uri(url);
 				o.SetContent(I[K.WeightAlgorithmPluginDoc], o=>{
 
@@ -71,6 +71,7 @@ public partial class ViewAbout
 		});
 		return NIL;
 	}
+	public const str WeightAlgorithmPluginDocUrl = "https://github.com/Tsinswreng/CsNgaq/blob/master/Doc/Prod/en/JsWeight.md";
 
 
 }
