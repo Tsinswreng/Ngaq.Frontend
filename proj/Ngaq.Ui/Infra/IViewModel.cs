@@ -6,7 +6,7 @@ public partial interface I_Arg{
 	public ITypedObj? Arg{get;set;}
 }
 
-public partial interface IViewModel{}
+
 
 
 

@@ -14,6 +14,7 @@ using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPage;
+using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -55,41 +56,28 @@ public partial class ViewDictionary
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			Root.RowDefs.AddRange([
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Star),
-			]);
+			Root.RowDefs = new("Auto,Auto,*");
 		});
 
 		var LangGrid = new AutoGrid(IsRow: false);
 		Root.A(LangGrid.Grid, o=>{
-			LangGrid.ColDefs.AddRange([
-				ColDef(5, GUT.Star),
-				ColDef(1, GUT.Auto),
-				ColDef(5, GUT.Star),
-			]);
+			LangGrid.ColDefs = new("*,Auto,*");
 		});
 		{{
 			LangGrid.A(MkLangButton(), o=>{
-				o.CBind<Ctx>(o.PropContent, x=>x.SrcLangDisplay);
+				Ctx.Bind(o, o.PropContent, x=>x.SrcLangDisplay);
 				o.Click += (s, e) => OpenNormLangSelector(true);
 			})
 			.A(MkLangSwapButton())
 			.A(MkLangButton(), o=>{
-				o.CBind<Ctx>(o.PropContent, x=>x.TgtLangDisplay);
+				Ctx.Bind(o, o.PropContent, x=>x.TgtLangDisplay);
 				o.Click += (s, e) => OpenNormLangSelector(false);
 			});
 		}}
 
 		var SearchGrid = new AutoGrid(IsRow: false);
 		Root.A(SearchGrid.Grid, o=>{
-			SearchGrid.ColDefs.AddRange([
-				ColDef(1, GUT.Star),
-				ColDef(8, GUT.Star),
-				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Star),
-			]);
+			SearchGrid.ColDefs = new("1*,8*,1*,1*");
 		});
 		{{
 			SearchGrid
@@ -102,7 +90,7 @@ public partial class ViewDictionary
 				);
 			})
 			.A(SearchTextBox, o=>{
-				o.CBind<Ctx>(o.PropText,x=>x.Input);
+				Ctx.Bind(o, o.PropText,x=>x.Input);
 				o.Watermark = I[DictK.InputNewWordToSearch];
 				o.KeyBindings.Add(
 					new KeyBinding{
@@ -186,18 +174,18 @@ public partial class ViewDictionary
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
 	Control MkResultArea(){
 		var Area = new Grid();
-		var ResultScroll = new ScrollViewer();
-		ResultScroll.CBind<Ctx>(IsVisibleProperty, x=>x.ShowLookupResult, Mode: BindingMode.OneWay);
-		ResultScroll.SetContent(new ViewSimpleWord(), o=>{
-			o.CBind<Ctx>(o.PropDataContext,x=>x.Result);
-		});
-		Area.A(ResultScroll)
+		Area.A(new ScrollViewer(), o=>{
+			Ctx.Bind(o, IsVisibleProperty, x=>x.ShowLookupResult, Mode: BindingMode.OneWay);
+			o.SetContent(new ViewSimpleWord(), o=>{
+				Ctx.Bind(o,o.PropDataContext,x=>x.Result);
+			});
+		})
 		.A(new TextBlock(), o=>{
 			o.Foreground = Brushes.LightGray;
 			o.TextWrapping = TextWrapping.Wrap;
 			o.VerticalAlignment = VerticalAlignment.Top;
 			o.Margin = new Avalonia.Thickness(0, UiCfg.Inst.BaseFontSize * 0.5, 0, 0);
-			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowUsageGuide, Mode: BindingMode.OneWay);
+			Ctx.Bind(o, IsVisibleProperty, x=>x.ShowUsageGuide, Mode: BindingMode.OneWay);
 		})
 		;
 		return Area;

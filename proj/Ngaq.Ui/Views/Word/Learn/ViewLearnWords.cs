@@ -16,6 +16,7 @@ using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
+using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -23,14 +24,8 @@ using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmLearnWords;
 using K = Infra.I18n.KeysUiI18nCommon;
 public partial class ViewLearnWords
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewLearnWords(){
 		Ctx = App.GetRSvc<Ctx>();
 		if(Ctx is not null){
@@ -245,17 +240,17 @@ public partial class ViewLearnWords
 			.A(_Menu())
 			.A(new ScrollViewer(), Scr=>{
 				Scr.SetContent(_ListWordCard(), o=>{
-					o.CBind<Ctx>(
+					Ctx.Bind(o,
 						ItemsControl.ItemsSourceProperty
-						,x=>x.WordCards, Mode: BindingMode.TwoWay);
+						,x=>x.WordCards, Mode: BindingMode.TwoWay
+					);
 				});
 			})//~ScrollViewer
 			.A(new GridSplitter(), o=>{
 				o.GrayBarWith3Dots();
 			})
 			.A(_WordInfo(), o=>{
-				o.CBind<Ctx>(o.PropDataContext
-					,x=>x.CurWordInfo, Mode: BindingMode.TwoWay);
+				Ctx.Bind(o, o.PropDataContext,x=>x.CurWordInfo, Mode: BindingMode.TwoWay);
 			});
 		}}
 		return NIL;

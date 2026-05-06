@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Styling;
 using Avalonia.Media;
+using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordInfo;
 using Avalonia.Controls.Templates;
@@ -13,15 +14,11 @@ using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui.StrokeText;
 using Avalonia.Controls.Primitives;
 using Tsinswreng.Avln.StrokeText;
+using Ngaq.Ui.Infra;
 
 public partial class ViewWordInfo
-	:UserControl
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewWordInfo(){
 		Ctx = new Ctx();
 		Style();
@@ -91,12 +88,12 @@ public partial class ViewWordInfo
 		});
 		{{
 			LangId.A(TxtBox(), o=>{
-				o.CBind<Ctx>(o.PropText,x=>x.Lang);
+				this.Bind(o, o.PropText,x=>x.Lang);
 				o.HorizontalAlignment = HAlign.Left;
 				o.VerticalAlignment = VAlign.Center;
 			});
 			LangId.A(new SelectableTextBlock(), o=>{
-				o.CBind<Ctx>(o.PropText,x=>x.Id);
+				this.Bind(o, o.PropText,x=>x.Id);
 				o.VerticalAlignment = VAlign.Center;
 				o.HorizontalAlignment = HAlign.Right;
 				o.TextAlignment = TxtAlign.Right;
@@ -108,7 +105,7 @@ public partial class ViewWordInfo
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 			o.SetChild(TxtBox(), o=>{
 				o.Styles.Add(new Style().NoMargin().NoPadding());
-				o.CBind<Ctx>(o.PropText,x=>x.Head, Mode: BindingMode.TwoWay);
+				this.Bind(o, o.PropText,x=>x.Head, Mode: BindingMode.TwoWay);
 				o.VerticalAlignment = VAlign.Stretch;
 				o.FontSize = UiCfg.Inst.BaseFontSize*1.4;
 			});
@@ -161,7 +158,7 @@ public partial class ViewWordInfo
 
 	Control _DescriptionList(){
 		var o = new ItemsControl();
-		o.CBind<Ctx>(
+		this.Bind(o,
 			o.PropItemsSource,x=>x.Descrs
 			,Mode : BindingMode.OneWay
 		);

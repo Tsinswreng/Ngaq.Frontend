@@ -36,10 +36,12 @@ public partial class ViewSample
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto), //GUT成員有Star,Auto,Pixel
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+			RowDef(2, GUT.Star),
+			RowDef(30, GUT.Pixel),
 			//....略
 		]);
+		//也可以寫 Root.Grid.RowDefinitions = new("Auto,2*,30");
+
 		//AutoGrid 與 所有的Panel都有 A<TControl>(TControl C, Action<TControl>? FnInit=null)擴展方法。
 		//常規寫法一
 		Root
@@ -56,7 +58,8 @@ public partial class ViewSample
 				,Mode:
 				#endif
 			);
-//參數不複雜時可只寫一句 o.Bind<Ctx>(o.PropText, x=>x.Cnt);
+//參數不複雜時可只寫一句 o.CBind<Ctx>(o.PropText, x=>x.Cnt);
+//當CBind的泛型參數爲Ctx時 可以簡寫成 Ctx.Bind(o, o.PropText, x=>x.Cnt1);
 //優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
 		})
 		.A(new Button(), o=>{
