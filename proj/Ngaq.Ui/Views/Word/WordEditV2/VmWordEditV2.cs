@@ -3,8 +3,10 @@ namespace Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
+using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.PoWordEdit;
@@ -15,7 +17,7 @@ using Tsinswreng.CsCore;
 using Ctx = VmWordEditV2;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ngaq.Core.Tools;
-using Ngaq.Core.Shared.Word.Models.Po.Word;
+using Tsinswreng.CsTempus;
 
 /// 單詞編輯主頁 ViewModel。職責：協調三個分頁，統一保存/刪除。
 public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
@@ -96,6 +98,34 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	public nil FromJnWord(IJnWord JnWord){
 		Src = JnWord;
 		Draft = JnWord.DeepClone().AsOrToJnWord();
+		LoadFromDraft();
+		return NIL;
+	}
+
+	/// 自由加詞入口：參照詞典保存新詞流程，直接建立可 Merge 的空白草稿。
+	/// 同時補一條 Add 學習記錄，避免新詞缺少首次加入詞庫的事件。
+	public nil InitFreeAddDraft(str Lang = ""){
+		var now = UnixMs.Now();
+		var draft = new JnWord{
+			Word = new PoWord{
+				Head = "",
+				Lang = Lang,
+				StoredAt = now,
+				BizCreatedAt = now,
+				BizUpdatedAt = now,
+			},
+			Props = [],
+			Learns = [
+				new PoWordLearn{
+					LearnResult = ELearn.Add,
+					BizCreatedAt = now,
+				}
+			],
+		};
+		draft.EnsureForeignId();
+		Src = null;
+		Draft = draft;
+		SaveMode = ESaveMode.Merge;
 		LoadFromDraft();
 		return NIL;
 	}
@@ -304,4 +334,5 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		return true;
 	}
 }
+
 

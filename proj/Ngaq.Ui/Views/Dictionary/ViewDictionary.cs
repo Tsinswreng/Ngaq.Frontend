@@ -58,7 +58,6 @@ public partial class ViewDictionary
 	public OpBtn SearchBtn = new();
 	public OpBtn SaveToWordBtn = new();
 	public OpBtn MenuBtn = new();
-	TextBlock UsageGuideText = new();
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -119,12 +118,14 @@ public partial class ViewDictionary
 				);
 			})
 			.A(SaveToWordBtn, o=>{
-				// 保存到詞庫按鈕只負責「轉換 + 跳編輯頁」；最終保存仍在編輯頁完成。
-				ToolTip.SetTip(o, I[DictK.SaveToUserWordLibrary]);
+				// 收藏按鈕有兩種入口：
+				// 1. 已查詞：把詞典結果轉成詞條後進入編輯頁。
+				// 2. 未查詞：直接進入自由加詞頁。
+				ToolTip.SetTip(o, I[DictK.AddWords]);
 				InitToolbarBtn(
 					o,
 					Icons.BookmarkOutlineAdd().ToIcon(),
-					Ct=>Ctx?.ToWordEdit(Ct)
+					OpenSaveOrFreeAdd
 				);
 			})
 			.A(MenuBtn, o=>{
@@ -180,6 +181,14 @@ public partial class ViewDictionary
 		return I[DictK.DictionaryUsageGuide_];
 	}
 
+	/// 收藏按鈕根據當前是否已有查詞結果，決定走「查詞轉編輯」還是「自由加詞」。
+	async Task<nil> OpenSaveOrFreeAdd(CT Ct){
+		if(Ctx?.LastReqLlmDict is not null && Ctx.LastRespLlmDict is not null){
+			return await Ctx.ToWordEdit(Ct);
+		}
+		return OpenFreeAddWordPage();
+	}
+
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
 	Control MkResultArea(){
 		var Area = new Grid();
@@ -188,16 +197,15 @@ public partial class ViewDictionary
 		ResultScroll.SetContent(new ViewSimpleWord(), o=>{
 			o.CBind<Ctx>(o.PropDataContext,x=>x.Result);
 		});
-		Area.Children.Add(ResultScroll);
-
-		//UsageGuideText.Text = GuideText();
-		UsageGuideText.Foreground = Brushes.LightGray;
-		UsageGuideText.TextWrapping = TextWrapping.Wrap;
-		UsageGuideText.VerticalAlignment = VerticalAlignment.Top;
-		UsageGuideText.Margin = new Avalonia.Thickness(0, UiCfg.Inst.BaseFontSize * 0.5, 0, 0);
-		UsageGuideText.CBind<Ctx>(IsVisibleProperty, x=>x.ShowUsageGuide, Mode: BindingMode.OneWay);
-		Area.Children.Add(UsageGuideText);
-
+		Area.A(ResultScroll)
+		.A(new TextBlock(), o=>{
+			o.Foreground = Brushes.LightGray;
+			o.TextWrapping = TextWrapping.Wrap;
+			o.VerticalAlignment = VerticalAlignment.Top;
+			o.Margin = new Avalonia.Thickness(0, UiCfg.Inst.BaseFontSize * 0.5, 0, 0);
+			o.CBind<Ctx>(IsVisibleProperty, x=>x.ShowUsageGuide, Mode: BindingMode.OneWay);
+		})
+		;
 		return Area;
 	}
 
@@ -302,6 +310,19 @@ public partial class ViewDictionary
 			: JnWord.Word.Head
 		;
 		ViewNavi?.GoTo(ToolView.WithTitle(title, view));
+		return NIL;
+	}
+
+
+	/// 未查詞時允許直接進入空白編輯頁，自由手動新增單詞。
+	nil OpenFreeAddWordPage(){
+		var view = new ViewWordEditV2();
+		if(view.Ctx is null){
+			Ctx?.ShowDialog(I[DictK.WordEditorContextIsNull]);
+			return NIL;
+		}
+		view.Ctx.InitFreeAddDraft(Ctx?.SrcLang ?? "");
+		ViewNavi?.GoTo(ToolView.WithTitle(I[DictK.AddWords], view));
 		return NIL;
 	}
 

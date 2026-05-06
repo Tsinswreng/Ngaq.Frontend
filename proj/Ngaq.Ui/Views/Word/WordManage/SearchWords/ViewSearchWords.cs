@@ -60,13 +60,21 @@ public partial class ViewSearchWords
 		Root.A(SearchGrid.Grid);
 		{var o = SearchGrid;
 			o.Grid.ColumnDefinitions.AddRange([
-				ColDef(7, GUT.Star),
+				ColDef(6, GUT.Auto),
 				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Auto),
 			]);
 		}
-		{{
+				{{
 			var searchBtn = new OpBtn();
-			SearchGrid.A(new TextBox(), o=>{
+			var freeAddBtn = new OpBtn();
+			SearchGrid.A(searchBtn, o=>{
+				o.BtnContent = Icons.Search().ToIcon();
+				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
+				o._Button.StretchCenter();
+				o._Button.Background = UiCfg.Inst.MainColor;
+			})
+			.A(new TextBox(), o=>{
 				o.Watermark = I[K.SearchUserWords];
 				o.CBind<Ctx>(o.PropText,x=>x.Input);
 				o.KeyBindings.Add(
@@ -76,11 +84,11 @@ public partial class ViewSearchWords
 					}
 				);
 			})
-			.A(searchBtn, o=>{
-				o.BtnContent = Icons.Search().ToIcon();
-				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
+			.A(freeAddBtn, o=>{
+				// 搜索頁直接提供自由加詞入口，避免必須先搜到既有詞才能進編輯頁。
+				o.BtnContent = Icons.Add().ToIcon();
+				o.SetExe((Ct)=>Task.FromResult(OpenFreeAddWordPage()));
 				o._Button.StretchCenter();
-				o._Button.Background = UiCfg.Inst.MainColor;
 			});
 		}}
 		Root.A(new ScrollViewer(), scrl=>{
@@ -190,4 +198,17 @@ public partial class ViewSearchWords
 		});
 		return menu;
 	}
+
+	/// 搜索頁的自由加詞：直接打開空白的 WordEditV2 草稿。
+	nil OpenFreeAddWordPage(){
+		var view = new ViewWordEditV2();
+		if(view.Ctx is null){
+			Ctx?.ShowDialog(I[K.WordEditorContextIsNull]);
+			return NIL;
+		}
+		view.Ctx.InitFreeAddDraft();
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.AddWords], view));
+		return NIL;
+	}
 }
+
