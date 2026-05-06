@@ -13,16 +13,11 @@ using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
-using Ctx = VmSample;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmSample;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewSample
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewSample(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();

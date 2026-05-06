@@ -24,15 +24,9 @@ using Avalonia.Media;
 using Avalonia.Layout;
 
 public partial class ViewDictionary
-	:AppViewBase
+	:AppViewBase<Ctx>
 	,I_MkTitleMenu
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewDictionary(){
 		Ctx = App.DiOrMk<Ctx>();
 		if(Ctx is not null){
