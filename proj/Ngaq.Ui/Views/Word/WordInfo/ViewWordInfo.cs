@@ -78,34 +78,33 @@ public partial class ViewWordInfo
 				RowDef(1, GUT.Star),
 			]);
 		});
-		var LangId = new AutoGrid(IsRow: false);
-		Root.A(LangId.Grid, o=>{
+		var MkLangId = ()=>{
+			var o = new AutoGrid(IsRow: false);
+			o.A(TxtBox(), o=>{
+				Ctx.Bind(o, o.PropText,x=>x.Lang);
+				o.HorizontalAlignment = HAlign.Left;
+				o.VerticalAlignment = VAlign.Center;
+			}).A(new SelectableTextBlock(), o=>{
+				Ctx.Bind(o, o.PropText,x=>x.Id);
+				o.VerticalAlignment = VAlign.Center;
+				o.HorizontalAlignment = HAlign.Right;
+				o.TextAlignment = TxtAlign.Right;
+			});
+			return o.Grid;
+		};
+
+		Root.A(MkLangId(), o=>{
 			o.ColumnDefinitions.AddRange([
 				ColDef(1, GUT.Star),
 				ColDef(1, GUT.Auto),
 			]);
 			o.Classes.Add(Cls.LightGray);//即o.Classes.Add("LightGray");
-		});
-		{{
-			LangId.A(TxtBox(), o=>{
-				this.Bind(o, o.PropText,x=>x.Lang);
-				o.HorizontalAlignment = HAlign.Left;
-				o.VerticalAlignment = VAlign.Center;
-			});
-			LangId.A(new SelectableTextBlock(), o=>{
-				this.Bind(o, o.PropText,x=>x.Id);
-				o.VerticalAlignment = VAlign.Center;
-				o.HorizontalAlignment = HAlign.Right;
-				o.TextAlignment = TxtAlign.Right;
-			});
-		}}//~LangId
-
-		Root.A(new Border(), o=>{
+		}).A(new Border(), o=>{
 			o.BorderThickness = new Thickness(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Colors.LightGray);
 			o.SetChild(TxtBox(), o=>{
 				o.Styles.Add(new Style().NoMargin().NoPadding());
-				this.Bind(o, o.PropText,x=>x.Head, Mode: BindingMode.TwoWay);
+				Ctx.Bind(o, o.PropText,x=>x.Head, Mode: BindingMode.TwoWay);
 				o.VerticalAlignment = VAlign.Stretch;
 				o.FontSize = UiCfg.Inst.BaseFontSize*1.4;
 			});
@@ -145,10 +144,9 @@ public partial class ViewWordInfo
 		});//~TxtBox
 		#endif
 
-		Root.A(new Border(), BdrScr=>{
-			BdrScr.SetChild(new ScrollViewer(), ScrDescr=>{
-				var Description = _DescriptionList();
-				ScrDescr.Content = Description;
+		Root.A(new Border(), o=>{
+			o.SetChild(new ScrollViewer(), o=>{
+				o.Content = _DescriptionList();;
 			});
 		});
 
