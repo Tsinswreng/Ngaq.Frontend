@@ -15,6 +15,7 @@ using Avalonia.Styling;
 using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Tools;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
@@ -133,7 +134,10 @@ public partial class ViewWordInfo
 
 	/// 其他 prop 集合變更後同步刷新右欄顯示狀態。
 	protected void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
-		if(E.PropertyName == nameof(Ctx.StrProps)){
+		if(
+			E.PropertyName == nameof(Ctx.DescriptionWordProps)
+			|| E.PropertyName == nameof(Ctx.SideWordProps)
+		){
 			SyncSidePaneVisibility();
 		}
 	}
@@ -199,7 +203,7 @@ public partial class ViewWordInfo
 	Control _MainDescriptionPane(){
 		var R = new Border();
 		R.SetChild(new ScrollViewer(), o=>{
-			o.SetContent(_DescriptionList());
+			o.SetContent(_DescriptionPropList());
 		});
 		return R;
 	}
@@ -244,75 +248,86 @@ public partial class ViewWordInfo
 			R.PropItemsSource, x=>x.SideWordProps
 		);
 		R.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
-			var Ans = new Border();
-			{var o = Ans;
-				o.BorderThickness = new Thickness(0, 0, 0, 1);
-				o.BorderBrush = new SolidColorBrush(Gray);
-				o.Padding = new Thickness(8, 8);
-				o.HorizontalAlignment = HAlign.Left;
-			}
-			var Stack = new StackPanel{
-				Orientation = Orientation.Vertical,
-				Spacing = 8,
-				HorizontalAlignment = HAlign.Left,
-			};
-			Ans.Child = Stack;
-			var Header = new Grid();
-			Header.ColumnDefinitions.AddRange([
-				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Auto),
-			]);
-			Header.A(SubTxt(), o=>{
-				o.Text = TranslatePropKey(Prop.KStr);
-				o.HorizontalAlignment = HAlign.Left;
-				o.VerticalAlignment = VAlign.Center;
-			});
-			var EditBtn = new Button();
-			Header.A(EditBtn);
-			Grid.SetColumn(EditBtn, 1);
-			{var o = EditBtn;
-				o.Content = I[K.Edit];
-				o.HorizontalAlignment = HAlign.Right;
-				o.VerticalAlignment = VAlign.Top;
-				o.Padding = new Thickness(6, 2);
-				o.Click += (s,e)=>{
-					OpenPropEditor(Prop);
-				};
-			}
-			Stack
-			.A(Header)
-			.A(SideValueTxt(), o=>{
-				o.Text = GetPropValueText(Prop);
-				o.HorizontalAlignment = HAlign.Left;
-			});
-			return Ans;
+			return MkPropCard(Prop, IsDescriptionPane: false);
 		});
 		return R;
 	}
 
-	/// description 列表作爲主欄正文，每段單獨分隔。
-	Control _DescriptionList(){
+	/// description 在信息頁也按 WordProp 渲染，保證能直接復用既有 prop 編輯流程。
+	Control _DescriptionPropList(){
 		var R = new ItemsControl();
 		this.Bind(
 			R,
-			R.PropItemsSource, x=>x.Descrs
+			R.PropItemsSource, x=>x.DescriptionWordProps
 		);
-		R.ItemTemplate = new FuncDataTemplate<str>((Descr,b)=>{
-			var Ans = new Border();
-			{var o = Ans;
-				o.BorderThickness = new Thickness(0, 1, 0, 0);
-				o.BorderBrush = new SolidColorBrush(Gray);
-				o.Padding = new Thickness(8, 8);
-			}
-			var Grid = new AutoGrid(IsRow: true);
-			Ans.Child = Grid.Grid;
-			Grid.A(TxtBox(), o=>{
-				o.CBind<str>(o.PropText, x=>x);
-				o.FontSize = UiCfg.Inst.BaseFontSize;
-			});
-			return Ans;
+		R.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
+			return MkPropCard(Prop, IsDescriptionPane: true);
 		});
 		return R;
+	}
+
+	/// 所有 WordProp 的卡片統一用同一套頭部結構，右上角固定放貼邊編輯圖標。
+	Control MkPropCard(PoWordProp Prop, bool IsDescriptionPane){
+		var R = new Border();
+		{var o = R;
+			o.BorderThickness = IsDescriptionPane
+				? new Thickness(0, 1, 0, 0)
+				: new Thickness(0, 0, 0, 1);
+			o.BorderBrush = new SolidColorBrush(Gray);
+			o.Padding = new Thickness(8, 8);
+			o.HorizontalAlignment = IsDescriptionPane ? HAlign.Stretch : HAlign.Left;
+		}
+		var Grid = new Grid();
+		Grid.RowDefinitions.AddRange([
+			RowDef(1, GUT.Auto),
+			RowDef(1, GUT.Auto),
+		]);
+		Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Auto),
+		]);
+		Grid.A(SubTxt(), o=>{
+			o.Text = TranslatePropKey(Prop.KStr);
+			o.HorizontalAlignment = HAlign.Left;
+			o.VerticalAlignment = VAlign.Top;
+		})
+		.A(MkEditBtn(Prop), o=>{
+			Grid.SetColumn(o, 1);
+		})
+		.A(MkPropValueTxt(IsDescriptionPane), o=>{
+			o.Text = GetPropValueText(Prop);
+			o.HorizontalAlignment = HAlign.Left;
+			Grid.SetRow(o, 1);
+			Grid.SetColumnSpan(o, 2);
+		});
+		R.Child = Grid;
+		return R;
+	}
+
+	/// 編輯按鈕只放圖標，並去掉額外邊距讓其緊貼卡片右上角。
+	Button MkEditBtn(PoWordProp Prop){
+		var R = new Button();
+		R.SetContent(Icons.Edit().ToIcon());
+		R.HorizontalAlignment = HAlign.Right;
+		R.VerticalAlignment = VAlign.Top;
+		R.Padding = new Thickness(0);
+		R.Margin = new Thickness(0);
+		R.MinWidth = 0;
+		R.MinHeight = 0;
+		R.Click += (Sender, E)=>{
+			OpenPropEditor(Prop);
+		};
+		return R;
+	}
+
+	/// description 區使用正文字樣，其餘 prop 保持側欄字樣。
+	StrokeTextBlock MkPropValueTxt(bool IsDescriptionPane){
+		if(IsDescriptionPane){
+			var R = TxtBox();
+			R.FontSize = UiCfg.Inst.BaseFontSize;
+			return R;
+		}
+		return SideValueTxt();
 	}
 
 	/// 內置 prop 鍵顯示 i18n，未知鍵保留原始文本以兼容自定義 prop。

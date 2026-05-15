@@ -1,11 +1,9 @@
 using System.Collections.ObjectModel;
-using System.Linq;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Word.Models.Samples;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
-using Tsinswreng.CsTools;
 
 namespace Ngaq.Ui.Views.Word.WordInfo;
 using Ctx = VmWordInfo;
@@ -33,33 +31,35 @@ public partial class VmWordInfo
 		Id = Word.Id.ToString();
 		Head = Word.Head;
 		Lang = Word.Lang;
-		var NeoStrProps = new Dictionary<str, IList<str>>();
+		var DescriptionProps = new List<PoWordProp>();
+		var DescriptionTexts = new List<str>();
 		var SideProps = new List<PoWordProp>();
-		foreach(var (strKey, props) in Word.StrKey_Props){
-			if(strKey == KeysProp.Inst.description){
-				Descrs = props.Select(prop => prop.VStr).ToList();
-			}else{
-				foreach(var prop in props){
-					NeoStrProps!.AddInValues(strKey, prop.VStr);
-					var a = ((PoWordProp)prop).ShallowCloneSelf();
-					SideProps.Add((PoWordProp)a);
+		foreach(var (StrKey, Props) in Word.StrKey_Props){
+			foreach(var Prop in Props){
+				var ClonedProp = (PoWordProp)((PoWordProp)Prop).ShallowCloneSelf();
+				if(StrKey == KeysProp.Inst.description){
+					DescriptionProps.Add(ClonedProp);
+					DescriptionTexts.Add(ClonedProp.VStr ?? "");
+					continue;
 				}
+				SideProps.Add(ClonedProp);
 			}
 		}
-		StrProps = NeoStrProps;
+		DescriptionWordProps = DescriptionProps;
+		Descrs = DescriptionTexts;
 		SideWordProps = SideProps;
 		return this;
 	}
 
 	public nil SetPromptBeforeStart(){
 		ClearWordFields();
-		Descrs = [I18n[K.PressStartButtonToBeginLearning]];
+		SetDescriptionPrompt(I18n[K.PressStartButtonToBeginLearning]);
 		return NIL;
 	}
 
 	public nil SetPromptAfterStart(){
 		ClearWordFields();
-		Descrs = [I18n[K.WordLearningHelpText_]];
+		SetDescriptionPrompt(I18n[K.WordLearningHelpText_]);
 		return NIL;
 	}
 
@@ -68,8 +68,23 @@ public partial class VmWordInfo
 		Id = "";
 		Head = "";
 		Lang = "";
-		StrProps = new Dictionary<str, IList<str>>();
+		DescriptionWordProps = [];
+		Descrs = [];
 		SideWordProps = [];
+		return NIL;
+	}
+
+	/// 無當前單詞時，提示文本也走 description prop 形態，避免與正常展示分叉。
+	protected nil SetDescriptionPrompt(str PromptText){
+		Descrs = [PromptText];
+		DescriptionWordProps = [
+			new PoWordProp{
+				KType = EKvType.Str,
+				KStr = KeysProp.Inst.description,
+				VType = EKvType.Str,
+				VStr = PromptText,
+			}
+		];
 		return NIL;
 	}
 
@@ -102,10 +117,11 @@ public partial class VmWordInfo
 	} = [];
 
 
-	public IDictionary<str, IList<str>> StrProps{
+	/// description 在信息頁也保留逐條 prop，便於直接跳到既有 WordProp 編輯框。
+	public IList<PoWordProp> DescriptionWordProps{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}= new Dictionary<str, IList<str>>();
+	} = [];
 
 	/// 側欄按單條 prop 展示，便於每項直接掛編輯入口。
 	public IList<PoWordProp> SideWordProps{
