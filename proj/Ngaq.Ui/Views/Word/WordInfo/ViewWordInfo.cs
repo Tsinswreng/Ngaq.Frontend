@@ -30,20 +30,22 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewWordInfo
 	:AppViewBase<Ctx>
 {
+
 	public ViewWordInfo(){
-		Ctx = new Ctx();
+		Ctx = App.DiOrMk<Ctx>();
 		Style();
 		Render();
-		DataContextChanged += (s,e)=>{
+		DataContextChanged += (S,E)=>{
 			OnCtxChanged();
 		};
 		OnCtxChanged();
 	}
 
-	public partial class Cls_{
-		public str LightGray = nameof(LightGray);
+	/// 樣式類名枚舉，避免直接硬編碼 class 字符串。
+	public partial class Cls{
+		public const str LightGray = nameof(LightGray);
 	}
-	public Cls_ Cls{get;set;} = new();
+
 
 	public Color Gray = Colors.LightGray;
 
@@ -113,7 +115,7 @@ public partial class ViewWordInfo
 				x.Styles.Add(new Style().NoMargin().NoPadding());
 			});
 		})
-		.A(_MainContent());
+		.A(MkMainContent());
 
 		Root.Add();
 		return NIL;
@@ -144,24 +146,34 @@ public partial class ViewWordInfo
 	}
 
 	/// 主內容區爲左右分欄：左側 description，右側其他 prop，中間細分隔條可拖拽。
-	Control _MainContent(){
+	/// 主內容容器負責左側 description、右側其他 prop 與中間拖拽分隔條。
+	Control MkMainContent(){
 		MainGrid = new Grid();
-		Splitter = _ColumnSplitter();
-		SidePropsPane = _SidePropsPane();
-		MainGrid.ColumnDefinitions.AddRange([
+		Splitter = MkColumnSplitter();
+		SidePropsPane = MkSidePropsPane();
+		ConfigureMainGridColumns(MainGrid);
+		MainGrid
+		.A(MkMainDescriptionPane())
+		.A(Splitter, o=>{
+			Grid.SetColumn(o, 1);
+		})
+		.A(SidePropsPane, o=>{
+			Grid.SetColumn(o, 2);
+		});
+		MainGrid.GetObservable(BoundsProperty).Subscribe(Value=>{
+			SyncSidePaneVisibility();
+		});
+		return MainGrid;
+	}
+
+	/// 左右分欄比例固定為主欄 + 分隔條 + 側欄，避免在組裝節點時散落定義。
+	protected nil ConfigureMainGridColumns(Grid TargetGrid){
+		TargetGrid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(2, GUT.Pixel),
 			ColDef(1, GUT.Auto),
 		]);
-		MainGrid.Children.Add(_MainDescriptionPane());
-		MainGrid.Children.Add(Splitter);
-		MainGrid.Children.Add(SidePropsPane);
-		Grid.SetColumn(Splitter, 1);
-		Grid.SetColumn(SidePropsPane, 2);
-		MainGrid.GetObservable(BoundsProperty).Subscribe(_=>{
-			SyncSidePaneVisibility();
-		});
-		return MainGrid;
+		return NIL;
 	}
 
 	/// 沒有其他 prop 時，收起右欄與分隔條，避免留白。
@@ -201,16 +213,16 @@ public partial class ViewWordInfo
 	}
 
 	/// 主欄只展示 description 列表，並提供滾動容器。
-	Control _MainDescriptionPane(){
+	Control MkMainDescriptionPane(){
 		var R = new Border();
 		R.SetChild(new ScrollViewer(), o=>{
-			o.SetContent(_DescriptionPropList());
+			o.SetContent(MkDescriptionPropList());
 		});
 		return R;
 	}
 
 	/// 側欄豎向展示其餘 prop，內容過長時可獨立滾動。
-	Control _SidePropsPane(){
+	Control MkSidePropsPane(){
 		var R = new Border();
 		R.BorderThickness = new Thickness(0);
 		R.MinWidth = UiCfg.Inst.BaseFontSize*2.2;
@@ -218,13 +230,13 @@ public partial class ViewWordInfo
 		R.SetChild(new ScrollViewer(), o=>{
 			o.HorizontalAlignment = HAlign.Stretch;
 			o.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-			o.SetContent(_PropList());
+			o.SetContent(MkPropList());
 		});
 		return R;
 	}
 
 	/// 分隔條保持細線寬度，僅用於拖拽分欄，不搶畫面。
-	Control _ColumnSplitter(){
+	Control MkColumnSplitter(){
 		var R = new GridSplitter();
 		R.ResizeDirection = GridResizeDirection.Columns;
 		R.HorizontalAlignment = HAlign.Stretch;
@@ -235,7 +247,7 @@ public partial class ViewWordInfo
 	}
 
 	/// 右欄屬性列表：prop key 與內容上下分行，避免描邊文字相互遮擋。
-	Control _PropList(){
+	Control MkPropList(){
 		var R = new ItemsControl();
 		R.HorizontalAlignment = HAlign.Stretch;
 		R.SetItemsPanel(()=>{
@@ -255,7 +267,7 @@ public partial class ViewWordInfo
 	}
 
 	/// description 在信息頁也按 WordProp 渲染，保證能直接復用既有 prop 編輯流程。
-	Control _DescriptionPropList(){
+	Control MkDescriptionPropList(){
 		var R = new ItemsControl();
 		this.Bind(
 			R,
@@ -289,7 +301,8 @@ public partial class ViewWordInfo
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
 		]);
-		Grid.A(MkPropValueTxt(IsDescriptionPane: true), o=>{
+		Grid
+		.A(MkPropValueTxt(IsDescriptionPane: true), o=>{
 			o.Text = GetPropValueText(Prop);
 			o.HorizontalAlignment = HAlign.Left;
 			o.VerticalAlignment = VAlign.Top;
@@ -298,7 +311,7 @@ public partial class ViewWordInfo
 			Grid.SetColumn(o, 1);
 			o.Margin = new Thickness(8, 0, 0, 0);
 		});
-		R.Child = Grid;
+		R.SetChild(Grid);
 		return R;
 	}
 
@@ -320,7 +333,8 @@ public partial class ViewWordInfo
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
 		]);
-		Grid.A(SubTxt(), o=>{
+		Grid
+		.A(SubTxt(), o=>{
 			o.Text = TranslatePropKey(Prop.KStr);
 			o.HorizontalAlignment = HAlign.Left;
 			o.VerticalAlignment = VAlign.Top;
@@ -334,7 +348,7 @@ public partial class ViewWordInfo
 			Grid.SetRow(o, 1);
 			Grid.SetColumnSpan(o, 2);
 		});
-		R.Child = Grid;
+		R.SetChild(Grid);
 		return R;
 	}
 
@@ -406,6 +420,7 @@ public partial class ViewWordInfo
 		if(Ctx?.WordForLearn?.JnWord is null){
 			return NIL;
 		}
+		// step 1: 建立並初始化既有編輯頁，保持保存流程完全復用。
 		var EditView = new ViewWordEditV2();
 		if(EditView.Ctx is null){
 			return NIL;
@@ -417,6 +432,7 @@ public partial class ViewWordInfo
 		return NIL;
 
 		void OnLoaded(object? Sender, RoutedEventArgs E){
+			// step 2: 等編輯頁 rows 準備好後，再精確命中對應 prop 並打開現有編輯框。
 			EditView.Loaded -= OnLoaded;
 			var Row = EditView.Ctx?.WordPropPage.Rows.FirstOrDefault(x=>IsSameProp(x.Raw, Prop));
 			if(Row is not null){

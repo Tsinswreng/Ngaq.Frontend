@@ -10,8 +10,12 @@ using Ctx = VmWordInfo;
 using K = KeysUiI18nCommon;
 public partial class VmWordInfo
 	:ViewModelBase
+	,IMk<Ctx>
 	//,IVmWord
 {
+	public static Ctx Mk(){
+		return new Ctx();
+	}
 
 	public static ObservableCollection<Ctx> Samples = [];
 	static VmWordInfo(){
