@@ -194,7 +194,7 @@ public partial class ViewSample
 			//錯誤原因: 未使用A和SetContent擴展方法;
 			// 初始化控件屬性寫法不符合規範; 硬編碼字體大小; 硬編碼文本未使用Todo.I18n
 			// 代碼塊的嵌套 未和 樹的邏輯結構 保持一致
-		};
+		};//以上代碼是*錯誤示例*！
 	}
 
 	public void SampleNoDupliStyle(){
