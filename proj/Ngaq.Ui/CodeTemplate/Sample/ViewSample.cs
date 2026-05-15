@@ -30,6 +30,7 @@ public partial class ViewSample
 
 	//大多數場景下我們用AutoGrid作爲視圖的根節點。
 	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號 因此不要手動設計行/列號
+	//優先使用AutoGrid、別用原生Grid 除非你要顯示手動設置行和列
 	AutoGrid Root = new(IsRow: true);//IsRow: true 表示行佈局
 	//視圖的初始化羅輯寫在Render裏
 	public void Render(){

@@ -48,6 +48,8 @@ public partial class ViewWordInfo
 
 
 	public Color Gray = Colors.LightGray;
+	/// splitter 用 1px 保持可拖拽，同時避免 0.5px 在不同縮放下看起來發虛變粗。
+	public const double SplitterThickness = 1;
 
 	public AutoGrid Root{get;set;} = new(IsRow: true);
 	Grid? MainGrid;
@@ -148,16 +150,17 @@ public partial class ViewWordInfo
 	/// 主內容區爲左右分欄：左側 description，右側其他 prop，中間細分隔條可拖拽。
 	/// 主內容容器負責左側 description、右側其他 prop 與中間拖拽分隔條。
 	Control MkMainContent(){
-		var Ag = new AutoGrid();
-		MainGrid = Ag.Grid;
-		Splitter = MkColumnSplitter();
-		SidePropsPane = new Border();
+		var Root = new AutoGrid(IsRow: false);
+		MainGrid = Root.Grid;
 		MainGrid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
-			ColDef(2, GUT.Pixel),
+			ColDef(SplitterThickness, GUT.Pixel),
 			ColDef(1, GUT.Auto),
 		]);
-		Ag
+		Splitter = MkColumnSplitter();
+		SidePropsPane = new Border();
+
+		Root
 		.A(new Border(), o=>{
 			o.SetChild(new ScrollViewer(), Sv=>{
 				Sv.SetContent(new ItemsControl(), List=>{
@@ -168,35 +171,36 @@ public partial class ViewWordInfo
 				});
 			});
 		})
-		.A(Splitter, o=>{})
+		.A(Splitter)
 		.A(SidePropsPane, o=>{
-			if(o is Border B){
-				B.BorderThickness = new Thickness(0);
-				B.MinWidth = UiCfg.Inst.BaseFontSize*2.2;
-				B.HorizontalAlignment = HAlign.Stretch;
-				B.SetChild(new ScrollViewer(), Sv=>{
-					Sv.HorizontalAlignment = HAlign.Stretch;
-					Sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-					Sv.SetContent(new ItemsControl(), L=>{
-						L.HorizontalAlignment = HAlign.Stretch;
-						L.SetItemsPanel(()=>{
-							return new StackPanel{
-								Orientation = Orientation.Vertical,
-								HorizontalAlignment = HAlign.Stretch,
-							};
-						});
-						this.Bind(L, L.PropItemsSource, x=>x.SideWordProps);
-						L.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
-							return MkPropCard(Prop, IsDescriptionPane: false);
-						});
+			if(o is not Border B){
+				return;
+			}
+			B.BorderThickness = new Thickness(0);
+			B.MinWidth = UiCfg.Inst.BaseFontSize*2.2;
+			B.HorizontalAlignment = HAlign.Stretch;
+			B.SetChild(new ScrollViewer(), Sv=>{
+				Sv.HorizontalAlignment = HAlign.Stretch;
+				Sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+				Sv.SetContent(new ItemsControl(), List=>{
+					List.HorizontalAlignment = HAlign.Stretch;
+					List.SetItemsPanel(()=>{
+						return new StackPanel{
+							Orientation = Orientation.Vertical,
+							HorizontalAlignment = HAlign.Stretch,
+						};
+					});
+					this.Bind(List, List.PropItemsSource, x=>x.SideWordProps);
+					List.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
+						return MkPropCard(Prop, IsDescriptionPane: false);
 					});
 				});
-			}
+			});
 		});
-		MainGrid.GetObservable(BoundsProperty).Subscribe(Value=>{
+		MainGrid.GetObservable(BoundsProperty).Subscribe(_=>{
 			SyncSidePaneVisibility();
 		});
-		return MainGrid;
+		return Root.Grid;
 	}
 
 	/// 沒有其他 prop 時，收起右欄與分隔條，避免留白。
@@ -208,7 +212,7 @@ public partial class ViewWordInfo
 		Splitter.IsVisible = HasAny;
 		SidePropsPane.IsVisible = HasAny;
 		MainGrid.ColumnDefinitions[1].Width = HasAny
-			? new GridLength(2, GUT.Pixel)
+			? new GridLength(SplitterThickness, GUT.Pixel)
 			: new GridLength(0, GUT.Pixel);
 		MainGrid.ColumnDefinitions[2].Width = HasAny
 			? new GridLength(1, GUT.Auto)
@@ -241,7 +245,8 @@ public partial class ViewWordInfo
 		R.ResizeDirection = GridResizeDirection.Columns;
 		R.HorizontalAlignment = HAlign.Stretch;
 		R.VerticalAlignment = VAlign.Stretch;
-		//R.Width = 1;
+		R.Width = SplitterThickness;
+		R.MinWidth = SplitterThickness;
 		R.Background = new SolidColorBrush(Color.FromArgb(180, Gray.R, Gray.G, Gray.B));
 		return R;
 	}
