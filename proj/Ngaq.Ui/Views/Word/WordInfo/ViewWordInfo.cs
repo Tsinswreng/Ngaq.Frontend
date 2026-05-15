@@ -102,6 +102,7 @@ public partial class ViewWordInfo
 		});
 
 		Root
+		//詞頭框
 		.A(new Border(), o=>{
 			o.BorderThickness = new Thickness(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Gray);
@@ -213,9 +214,9 @@ public partial class ViewWordInfo
 		var R = new Border();
 		R.BorderThickness = new Thickness(0);
 		R.MinWidth = UiCfg.Inst.BaseFontSize*2.2;
-		R.HorizontalAlignment = HAlign.Left;
+		R.HorizontalAlignment = HAlign.Stretch;
 		R.SetChild(new ScrollViewer(), o=>{
-			o.HorizontalAlignment = HAlign.Left;
+			o.HorizontalAlignment = HAlign.Stretch;
 			o.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
 			o.SetContent(_PropList());
 		});
@@ -236,11 +237,11 @@ public partial class ViewWordInfo
 	/// 右欄屬性列表：prop key 與內容上下分行，避免描邊文字相互遮擋。
 	Control _PropList(){
 		var R = new ItemsControl();
-		R.HorizontalAlignment = HAlign.Left;
+		R.HorizontalAlignment = HAlign.Stretch;
 		R.SetItemsPanel(()=>{
 			return new StackPanel{
 				Orientation = Orientation.Vertical,
-				HorizontalAlignment = HAlign.Left,
+				HorizontalAlignment = HAlign.Stretch,
 			};
 		});
 		this.Bind(
@@ -268,14 +269,47 @@ public partial class ViewWordInfo
 
 	/// 所有 WordProp 的卡片統一用同一套頭部結構，右上角固定放貼邊編輯圖標。
 	Control MkPropCard(PoWordProp Prop, bool IsDescriptionPane){
+		if(IsDescriptionPane){
+			return MkDescriptionPropCard(Prop);
+		}
+		return MkSidePropCard(Prop);
+	}
+
+	/// description 不顯示灰字標題，正文與編輯圖標分列避免互相覆蓋。
+	Control MkDescriptionPropCard(PoWordProp Prop){
 		var R = new Border();
 		{var o = R;
-			o.BorderThickness = IsDescriptionPane
-				? new Thickness(0, 1, 0, 0)
-				: new Thickness(0, 0, 0, 1);
+			o.BorderThickness = new Thickness(0, 1, 0, 0);
 			o.BorderBrush = new SolidColorBrush(Gray);
 			o.Padding = new Thickness(8, 8);
-			o.HorizontalAlignment = IsDescriptionPane ? HAlign.Stretch : HAlign.Left;
+			o.HorizontalAlignment = HAlign.Stretch;
+		}
+		var Grid = new Grid();
+		Grid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(1, GUT.Auto),
+		]);
+		Grid.A(MkPropValueTxt(IsDescriptionPane: true), o=>{
+			o.Text = GetPropValueText(Prop);
+			o.HorizontalAlignment = HAlign.Left;
+			o.VerticalAlignment = VAlign.Top;
+		})
+		.A(MkEditBtn(Prop), o=>{
+			Grid.SetColumn(o, 1);
+			o.Margin = new Thickness(8, 0, 0, 0);
+		});
+		R.Child = Grid;
+		return R;
+	}
+
+	/// 側欄保留 prop 名稱標題，並讓卡片整欄拉伸，保證分隔線等寬。
+	Control MkSidePropCard(PoWordProp Prop){
+		var R = new Border();
+		{var o = R;
+			o.BorderThickness = new Thickness(0, 0, 0, 1);
+			o.BorderBrush = new SolidColorBrush(Gray);
+			o.Padding = new Thickness(8, 8);
+			o.HorizontalAlignment = HAlign.Stretch;
 		}
 		var Grid = new Grid();
 		Grid.RowDefinitions.AddRange([
@@ -294,7 +328,7 @@ public partial class ViewWordInfo
 		.A(MkEditBtn(Prop), o=>{
 			Grid.SetColumn(o, 1);
 		})
-		.A(MkPropValueTxt(IsDescriptionPane), o=>{
+		.A(MkPropValueTxt(IsDescriptionPane: false), o=>{
 			o.Text = GetPropValueText(Prop);
 			o.HorizontalAlignment = HAlign.Left;
 			Grid.SetRow(o, 1);
