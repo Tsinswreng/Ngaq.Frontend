@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Word.Models.Samples;
@@ -28,20 +29,25 @@ public partial class VmWordInfo
 	}
 
 	public Ctx FromIWordForLearn(IWordForLearn Word){
+		WordForLearn = Word;
 		Id = Word.Id.ToString();
 		Head = Word.Head;
 		Lang = Word.Lang;
 		var NeoStrProps = new Dictionary<str, IList<str>>();
+		var SideProps = new List<PoWordProp>();
 		foreach(var (strKey, props) in Word.StrKey_Props){
 			if(strKey == KeysProp.Inst.description){
 				Descrs = props.Select(prop => prop.VStr).ToList();
 			}else{
 				foreach(var prop in props){
 					NeoStrProps!.AddInValues(strKey, prop.VStr);
+					var a = ((PoWordProp)prop).ShallowCloneSelf();
+					SideProps.Add((PoWordProp)a);
 				}
 			}
 		}
 		StrProps = NeoStrProps;
+		SideWordProps = SideProps;
 		return this;
 	}
 
@@ -63,6 +69,7 @@ public partial class VmWordInfo
 		Head = "";
 		Lang = "";
 		StrProps = new Dictionary<str, IList<str>>();
+		SideWordProps = [];
 		return NIL;
 	}
 
@@ -99,6 +106,12 @@ public partial class VmWordInfo
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}= new Dictionary<str, IList<str>>();
+
+	/// 側欄按單條 prop 展示，便於每項直接掛編輯入口。
+	public IList<PoWordProp> SideWordProps{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = [];
 
 
 

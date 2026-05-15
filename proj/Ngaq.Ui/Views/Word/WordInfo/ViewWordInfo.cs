@@ -3,16 +3,22 @@ namespace Ngaq.Ui.Views.Word.WordInfo;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
+using Ngaq.Core.Tools;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.StrokeText;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word.WordEditV2;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Dsl;
@@ -186,7 +192,7 @@ public partial class ViewWordInfo
 
 	/// 右欄只負責展示 description 之外的屬性。
 	protected bool HasSideProps(){
-		return Ctx?.StrProps?.Count > 0;
+		return Ctx?.SideWordProps?.Count > 0;
 	}
 
 	/// 主欄只展示 description 列表，並提供滾動容器。
@@ -235,9 +241,9 @@ public partial class ViewWordInfo
 		});
 		this.Bind(
 			R,
-			R.PropItemsSource, x=>x.StrProps
+			R.PropItemsSource, x=>x.SideWordProps
 		);
-		R.ItemTemplate = new FuncDataTemplate<KeyValuePair<str, IList<str>>>((Prop,b)=>{
+		R.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
 			var Ans = new Border();
 			{var o = Ans;
 				o.BorderThickness = new Thickness(0, 0, 0, 1);
@@ -251,13 +257,32 @@ public partial class ViewWordInfo
 				HorizontalAlignment = HAlign.Left,
 			};
 			Ans.Child = Stack;
-			Stack
-			.A(SubTxt(), o=>{
-				o.Text = TranslatePropKey(Prop.Key);
+			var Header = new Grid();
+			Header.ColumnDefinitions.AddRange([
+				ColDef(1, GUT.Star),
+				ColDef(1, GUT.Auto),
+			]);
+			Header.A(SubTxt(), o=>{
+				o.Text = TranslatePropKey(Prop.KStr);
 				o.HorizontalAlignment = HAlign.Left;
-			})
+				o.VerticalAlignment = VAlign.Center;
+			});
+			var EditBtn = new Button();
+			Header.A(EditBtn);
+			Grid.SetColumn(EditBtn, 1);
+			{var o = EditBtn;
+				o.Content = I[K.Edit];
+				o.HorizontalAlignment = HAlign.Right;
+				o.VerticalAlignment = VAlign.Top;
+				o.Padding = new Thickness(6, 2);
+				o.Click += (s,e)=>{
+					OpenPropEditor(Prop);
+				};
+			}
+			Stack
+			.A(Header)
 			.A(SideValueTxt(), o=>{
-				o.Text = str.Join("\n", Prop.Value ?? []);
+				o.Text = GetPropValueText(Prop);
 				o.HorizontalAlignment = HAlign.Left;
 			});
 			return Ans;
@@ -308,5 +333,60 @@ public partial class ViewWordInfo
 			var x when x == KeysProp.Inst.Ref => I[K.Ref],
 			_ => Key ?? "",
 		};
+	}
+
+	/// 單條 prop 值完整展示，與編輯頁的字段語義保持一致。
+	protected str GetPropValueText(PoWordProp Prop){
+		if(Prop.VType == EKvType.Str){
+			return Prop.VStr ?? "";
+		}
+		if(Prop.VType == EKvType.I64){
+			return Prop.VI64.ToString();
+		}
+		if(Prop.VF64 != 0){
+			return Prop.VF64.ToString();
+		}
+		if(Prop.VBinary is not null && Prop.VBinary.Length > 0){
+			return $"<binary:{Prop.VBinary.Length}>";
+		}
+		return Prop.VStr ?? "";
+	}
+
+	/// 先進入現有 WordEditV2，再自動打開對應 prop 的編輯框，沿用原有保存流程。
+	protected nil OpenPropEditor(PoWordProp Prop){
+		if(Ctx?.WordForLearn?.JnWord is null){
+			return NIL;
+		}
+		var EditView = new ViewWordEditV2();
+		if(EditView.Ctx is null){
+			return NIL;
+		}
+		EditView.Ctx.FromJnWord(Ctx.WordForLearn.JnWord);
+		EditView.Ctx.TabIndex = 1;
+		EditView.Loaded += OnLoaded;
+		ViewNavi?.GoTo(ToolView.WithTitle(Ctx.Head, EditView));
+		return NIL;
+
+		void OnLoaded(object? Sender, RoutedEventArgs E){
+			EditView.Loaded -= OnLoaded;
+			var Row = EditView.Ctx?.WordPropPage.Rows.FirstOrDefault(x=>IsSameProp(x.Raw, Prop));
+			if(Row is not null){
+				EditView.Ctx?.WordPropPage.RequestEdit(Row);
+			}
+		}
+	}
+
+	/// 優先按 Id 匹配；新建/無 Id 的情況退化到 key 與值匹配。
+	protected bool IsSameProp(PoWordProp A, PoWordProp B){
+		if(!A.Id.IsNullOrDefault() && !B.Id.IsNullOrDefault()){
+			return A.Id == B.Id;
+		}
+		return A.KType == B.KType
+			&& A.KStr == B.KStr
+			&& A.KI64 == B.KI64
+			&& A.VType == B.VType
+			&& A.VStr == B.VStr
+			&& A.VI64 == B.VI64
+			&& A.VF64 == B.VF64;
 	}
 }

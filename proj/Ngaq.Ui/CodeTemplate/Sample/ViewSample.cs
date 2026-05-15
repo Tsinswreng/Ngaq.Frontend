@@ -182,6 +182,8 @@ public partial class ViewSample
 			var textBox = new TextBox{
 				Text = "錯誤示例"
 			};
+			//絕對禁止寫 panel.Children.Add() !
+			//一律用 panel.A()
 			p.Children.Add(textBox);
 			p.Children.Add(new Control());
 			var btn = new Button();
