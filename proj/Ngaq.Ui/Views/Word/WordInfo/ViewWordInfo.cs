@@ -148,32 +148,55 @@ public partial class ViewWordInfo
 	/// 主內容區爲左右分欄：左側 description，右側其他 prop，中間細分隔條可拖拽。
 	/// 主內容容器負責左側 description、右側其他 prop 與中間拖拽分隔條。
 	Control MkMainContent(){
-		MainGrid = new Grid();
+		var Ag = new AutoGrid();
+		MainGrid = Ag.Grid;
 		Splitter = MkColumnSplitter();
-		SidePropsPane = MkSidePropsPane();
-		ConfigureMainGridColumns(MainGrid);
-		MainGrid
-		.A(MkMainDescriptionPane())
-		.A(Splitter, o=>{
-			Grid.SetColumn(o, 1);
+		SidePropsPane = new Border();
+		MainGrid.ColumnDefinitions.AddRange([
+			ColDef(1, GUT.Star),
+			ColDef(2, GUT.Pixel),
+			ColDef(1, GUT.Auto),
+		]);
+		Ag
+		.A(new Border(), o=>{
+			o.SetChild(new ScrollViewer(), Sv=>{
+				Sv.SetContent(new ItemsControl(), List=>{
+					this.Bind(List, List.PropItemsSource, x=>x.DescriptionWordProps);
+					List.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
+						return MkPropCard(Prop, IsDescriptionPane: true);
+					});
+				});
+			});
 		})
+		.A(Splitter, o=>{})
 		.A(SidePropsPane, o=>{
-			Grid.SetColumn(o, 2);
+			if(o is Border B){
+				B.BorderThickness = new Thickness(0);
+				B.MinWidth = UiCfg.Inst.BaseFontSize*2.2;
+				B.HorizontalAlignment = HAlign.Stretch;
+				B.SetChild(new ScrollViewer(), Sv=>{
+					Sv.HorizontalAlignment = HAlign.Stretch;
+					Sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
+					Sv.SetContent(new ItemsControl(), L=>{
+						L.HorizontalAlignment = HAlign.Stretch;
+						L.SetItemsPanel(()=>{
+							return new StackPanel{
+								Orientation = Orientation.Vertical,
+								HorizontalAlignment = HAlign.Stretch,
+							};
+						});
+						this.Bind(L, L.PropItemsSource, x=>x.SideWordProps);
+						L.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
+							return MkPropCard(Prop, IsDescriptionPane: false);
+						});
+					});
+				});
+			}
 		});
 		MainGrid.GetObservable(BoundsProperty).Subscribe(Value=>{
 			SyncSidePaneVisibility();
 		});
 		return MainGrid;
-	}
-
-	/// 左右分欄比例固定為主欄 + 分隔條 + 側欄，避免在組裝節點時散落定義。
-	protected nil ConfigureMainGridColumns(Grid TargetGrid){
-		TargetGrid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(2, GUT.Pixel),
-			ColDef(1, GUT.Auto),
-		]);
-		return NIL;
 	}
 
 	/// 沒有其他 prop 時，收起右欄與分隔條，避免留白。
@@ -212,70 +235,14 @@ public partial class ViewWordInfo
 		return Ctx?.SideWordProps?.Count > 0;
 	}
 
-	/// 主欄只展示 description 列表，並提供滾動容器。
-	Control MkMainDescriptionPane(){
-		var R = new Border();
-		R.SetChild(new ScrollViewer(), o=>{
-			o.SetContent(MkDescriptionPropList());
-		});
-		return R;
-	}
-
-	/// 側欄豎向展示其餘 prop，內容過長時可獨立滾動。
-	Control MkSidePropsPane(){
-		var R = new Border();
-		R.BorderThickness = new Thickness(0);
-		R.MinWidth = UiCfg.Inst.BaseFontSize*2.2;
-		R.HorizontalAlignment = HAlign.Stretch;
-		R.SetChild(new ScrollViewer(), o=>{
-			o.HorizontalAlignment = HAlign.Stretch;
-			o.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-			o.SetContent(MkPropList());
-		});
-		return R;
-	}
-
 	/// 分隔條保持細線寬度，僅用於拖拽分欄，不搶畫面。
 	Control MkColumnSplitter(){
 		var R = new GridSplitter();
 		R.ResizeDirection = GridResizeDirection.Columns;
 		R.HorizontalAlignment = HAlign.Stretch;
 		R.VerticalAlignment = VAlign.Stretch;
-		R.Width = 1;
+		//R.Width = 1;
 		R.Background = new SolidColorBrush(Color.FromArgb(180, Gray.R, Gray.G, Gray.B));
-		return R;
-	}
-
-	/// 右欄屬性列表：prop key 與內容上下分行，避免描邊文字相互遮擋。
-	Control MkPropList(){
-		var R = new ItemsControl();
-		R.HorizontalAlignment = HAlign.Stretch;
-		R.SetItemsPanel(()=>{
-			return new StackPanel{
-				Orientation = Orientation.Vertical,
-				HorizontalAlignment = HAlign.Stretch,
-			};
-		});
-		this.Bind(
-			R,
-			R.PropItemsSource, x=>x.SideWordProps
-		);
-		R.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
-			return MkPropCard(Prop, IsDescriptionPane: false);
-		});
-		return R;
-	}
-
-	/// description 在信息頁也按 WordProp 渲染，保證能直接復用既有 prop 編輯流程。
-	Control MkDescriptionPropList(){
-		var R = new ItemsControl();
-		this.Bind(
-			R,
-			R.PropItemsSource, x=>x.DescriptionWordProps
-		);
-		R.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop,b)=>{
-			return MkPropCard(Prop, IsDescriptionPane: true);
-		});
 		return R;
 	}
 
@@ -362,6 +329,7 @@ public partial class ViewWordInfo
 		R.Margin = new Thickness(0);
 		R.MinWidth = 0;
 		R.MinHeight = 0;
+		R.Background = Brushes.Transparent;
 		R.Click += (Sender, E)=>{
 			OpenPropEditor(Prop);
 		};

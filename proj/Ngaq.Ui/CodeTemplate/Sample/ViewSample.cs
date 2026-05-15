@@ -46,6 +46,7 @@ public partial class ViewSample
 		//常規寫法一
 		Root
 		//可鏈式調用
+		// lambda的形參以一到兩個字母爲宜
 		.A(new TextBox(), o=>{
 			o.AcceptsReturn = true;
 			//靜態綁定寫法。不准用new Binding(字符串)
@@ -88,6 +89,7 @@ public partial class ViewSample
 
 //列表示例
 //當View中縮進層次過多旹、可將Render中的部分代碼抽到一個單獨的函數中、把控件返回出去、再在Render中調用
+//嵌套層數深時 或有高度重複的代碼時纔抽取！不要爲了抽而抽
 	ItemsControl MkList(){
 		var R = new ItemsControl();
 		R.SetItemTemplate<str>((ele, ns)=>{
