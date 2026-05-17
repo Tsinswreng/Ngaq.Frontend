@@ -23,6 +23,7 @@ using Tsinswreng.CsI18n;
 using Ctx = VmLearnWords;
 using K = Infra.I18n.KeysUiI18nCommon;
 using Tsinswreng.Avln.Grid;
+using PC = PsdCls;
 
 public partial class ViewLearnWords
 	:AppViewBase<Ctx>
@@ -356,7 +357,6 @@ public partial class ViewLearnWords
 	}
 
 	Styles StyBtnWordCard(Styles s){
-		var PC = PsdCls.Inst;
 		var Hover = new Style(x=>
 			x.Is<Button>()
 			.Class(PC.pointerover)

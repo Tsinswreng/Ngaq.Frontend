@@ -1,4 +1,4 @@
-using Tsinswreng.AvlnTools.Navigation;
+using Tsinswreng.Avln.Navi;
 
 namespace Ngaq.Ui.Infra;
 

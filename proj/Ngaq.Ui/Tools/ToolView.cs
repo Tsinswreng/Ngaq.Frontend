@@ -4,7 +4,7 @@ using Avalonia.Media;
 using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.AvlnTools.Navigation;
+
 
 
 public partial class ToolView{

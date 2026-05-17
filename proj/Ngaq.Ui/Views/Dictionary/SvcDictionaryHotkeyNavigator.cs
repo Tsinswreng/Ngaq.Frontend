@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.Dictionary;
 using System.Linq;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Home;
-using Tsinswreng.AvlnTools.Navigation;
+using Tsinswreng.Avln.Navi;
 
 /// 熱鍵用字典導航器：
 /// 1) 回到 Home 頁；

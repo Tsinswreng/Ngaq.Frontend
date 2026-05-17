@@ -19,9 +19,9 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views.Home;
+using Tsinswreng.Avln.Navi;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsErr;
 

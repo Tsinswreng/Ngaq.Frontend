@@ -15,7 +15,6 @@ using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.WordSync;
 using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
-using Tsinswreng.AvlnTools.Navigation;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;

@@ -6,7 +6,6 @@ using Avalonia.Controls;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
 using Ngaq.Ui.Views;
@@ -16,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Tsinswreng.CsErr;
 using Tsinswreng.CsI18n;
 using Ngaq.Ui.Infra.I18n;
+using Tsinswreng.Avln.Navi;
 
 public class EvtArgMsg:EventArgs{
 
@@ -29,7 +29,7 @@ public partial class ViewModelBase
 	:ObservableObject
 	,IMk<ViewModelBase>
 	,IViewModel
-	,I_ViewNavi
+	,IViewNaviHolder
 	,I_Arg
 	,I_ForceSetProp
 {
@@ -42,7 +42,7 @@ public partial class ViewModelBase
 		ViewNavi = MgrViewNavi.Inst.ViewNavi;
 	}
 
-	[Impl(typeof(I_ViewNavi))]
+	[Impl(typeof(IViewNaviHolder))]
 	[Obsolete(@$"用 {nameof(AppViewBase.ViewNavi)}。
 	不應該在ViewModel層做視圖跳轉
 	")]

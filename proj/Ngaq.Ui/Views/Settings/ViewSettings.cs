@@ -12,13 +12,13 @@ using Ngaq.Ui.Views.Settings.ServerStorage;
 using Ngaq.Ui.Views.Settings.Hotkey;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsI18n;
 using Ctx = VmSettings;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ngaq.Ui.Icons;
 using Avalonia.Media;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.Avln.Navi;
 
 public partial class ViewSettings
 	:AppViewBase
