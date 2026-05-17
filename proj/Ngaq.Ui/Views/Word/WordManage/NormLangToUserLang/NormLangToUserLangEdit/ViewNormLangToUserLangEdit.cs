@@ -14,10 +14,12 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangToUserLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmNormLangToUserLangEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 標準語言到用戶語言映射詳情編輯頁。
 public partial class ViewNormLangToUserLangEdit
@@ -40,7 +42,7 @@ public partial class ViewNormLangToUserLangEdit
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 	protected nil Render(){
 		this.Content = Root.Grid;
@@ -105,7 +107,7 @@ public partial class ViewNormLangToUserLangEdit
 	}
 
 	Control MkBottomBar(){
-		var bar = new AutoGrid(IsRow:false);
+		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
@@ -154,7 +156,7 @@ public partial class ViewNormLangToUserLangEdit
 	Control MkPickerRow(str Label, IBinding Binding, Action OnPick){
 		var root = new StackPanel{Spacing = 3};
 		root.Children.Add(new TextBlock{Text = Label});
-		var row = new AutoGrid(IsRow:false);
+		var row = new GridStack(IsRow:false);
 		row.Grid.ColumnDefinitions.AddRange([
 			ColDef(8, GUT.Star),
 			ColDef(2, GUT.Star),

@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Ngaq.Core.Shared.Word.Models.DictionaryApi;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -32,7 +33,7 @@ public partial class ViewDictionaryApi
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 	SelectableTextBlock Txt(){
 		return new();
@@ -50,7 +51,7 @@ public partial class ViewDictionaryApi
 			lst.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x => x.Words));
 			// 每條目自己長什麼樣
 			lst.ItemTemplate = new FuncDataTemplate<DictionaryApiWord>((word, _) => {
-				var itemPanel = new AutoGrid(IsRow: true);
+				var itemPanel = new GridStack(IsRow: true);
 
 				// 單詞 + 音標
 				itemPanel.A(Txt(), o=>{

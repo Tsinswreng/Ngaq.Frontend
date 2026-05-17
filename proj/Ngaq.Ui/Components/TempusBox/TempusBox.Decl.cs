@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Ngaq.Core.Infra;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
@@ -63,7 +64,7 @@ public partial class TempusBox: ContentControl{
 	/// 最近一次文本解析是否成功，外层可读取作提示。
 	public partial bool LastParseOk{get;protected set;}
 
-	public readonly AutoGrid Root = new(IsRow: false);
+	public readonly GridStack Root = new(IsRow: false);
 	public TextBox _Input{get;set;} = null!;
 	public Button _BtnMenu{get;set;} = null!;
 	public ComboBox _ComboBoxFormat{get;set;} = null!;

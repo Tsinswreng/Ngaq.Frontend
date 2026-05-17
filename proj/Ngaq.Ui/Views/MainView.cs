@@ -326,11 +326,11 @@ public partial class MainView : UserControl {
 		#endif
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
-		this.SetContent(AutoGrid.Grid);
-		AutoGrid.Grid.RowDefinitions.AddRange([
+		this.SetContent(GridStack.Grid);
+		GridStack.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star),
 		]);
-		AutoGrid.Add(ViewNaviBase);
+		GridStack.Add(ViewNaviBase);
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
 			(s,e)=>{
 				if(e.Key == Avalonia.Input.Key.Escape){

@@ -2,6 +2,7 @@ namespace Xxx;
 
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmXxx;
@@ -23,7 +24,7 @@ public partial class ViewXxx
 	}
 
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([

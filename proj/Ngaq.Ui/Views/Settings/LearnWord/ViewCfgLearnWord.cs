@@ -12,6 +12,7 @@ using Tsinswreng.CsI18n;
 using Ngaq.Ui.Infra.I18n;
 using Ctx = VmCfgLearnWord;
 using Tsinswreng.AvlnTools.Controls;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewCfgLearnWord
 	:AppViewBase
@@ -38,7 +39,7 @@ public partial class ViewCfgLearnWord
 		return NIL;
 	}
 
-	AutoGrid Root = new AutoGrid(IsRow:true);
+	GridStack Root = new GridStack(IsRow:true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([

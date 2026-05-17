@@ -12,6 +12,7 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordPropPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
@@ -53,7 +54,7 @@ public partial class ViewWordPropEdit: AppViewBase{
 	}
 
 	void Render(){
-		var root = new AutoGrid(IsRow: true);
+		var root = new GridStack(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(8, GUT.Star),
 			RowDef(1, GUT.Auto),

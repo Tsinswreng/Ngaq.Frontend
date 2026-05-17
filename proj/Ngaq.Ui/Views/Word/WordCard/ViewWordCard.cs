@@ -19,6 +19,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewWordListCard
 	:AppViewBase
@@ -143,7 +144,7 @@ public partial class ViewWordListCard
 		public str InInfoGrid = nameof(InInfoGrid);
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
-	public AutoGrid Root{get;set;} = new AutoGrid(IsRow:true);
+	public GridStack Root{get;set;} = new GridStack(IsRow:true);
 
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
@@ -174,7 +175,7 @@ public partial class ViewWordListCard
 			]);
 		});
 
-		var LangGrid = new AutoGrid(IsRow:false);
+		var LangGrid = new GridStack(IsRow:false);
 		Root.A(LangGrid.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
@@ -201,7 +202,7 @@ public partial class ViewWordListCard
 		}}//~Header
 
 
-		var HeadBox = new AutoGrid(IsRow:false);
+		var HeadBox = new GridStack(IsRow:false);
 		Root.A(HeadBox.Grid, o=>{
 			o.ColumnDefinitions.AddRange([
 				new ColDef(1, GUT.Star),
@@ -218,7 +219,7 @@ public partial class ViewWordListCard
 	}
 
 	Control _InfoGrid(){
-		var R = new AutoGrid(IsRow:false);
+		var R = new GridStack(IsRow:false);
 		{var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
 			o.ColumnDefinitions.AddRange([
@@ -244,7 +245,7 @@ public partial class ViewWordListCard
 			R.A(TxtBox(), o=>{
 				o.CBind<Ctx>(
 					o.PropText,x=>x
-					,Converter: new SimpleFnConvtr<Ctx?, str>((x)=>x?.ToLearnHistoryRepr()??"")
+					,Converter: new FnConvtr<Ctx?, str>((x)=>x?.ToLearnHistoryRepr()??"")
 				);
 			});
 
@@ -252,7 +253,7 @@ public partial class ViewWordListCard
 			R.A(TxtBox(), o=>{
 				o.CBind<Ctx>(
 					o.PropText,x=>x.LastLearnedTime
-					,Converter: new SimpleFnConvtr<i64, str>(x=>{
+					,Converter: new FnConvtr<i64, str>(x=>{
 						var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 						var Diff = Now - x;
 						return Ctx.FormatUnixMsDiff(Diff);
@@ -263,7 +264,7 @@ public partial class ViewWordListCard
 			.A(TxtBox(), o=>{
 				o.CBind<Ctx>(
 					o.PropText,x=>x.Weight
-					,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
+					,Converter: new FnConvtr<f64?,str>((x,p)=>
 						Ctx.FmtNum(x??0, 1)
 					)
 				);

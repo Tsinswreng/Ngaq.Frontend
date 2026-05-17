@@ -9,6 +9,8 @@ using Avalonia.Controls.Templates;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmBottomBar;
+using Tsinswreng.Avln.Grid;
+
 public partial class ViewBottomBar
 	:UserControl
 {
@@ -54,7 +56,7 @@ public partial class ViewBottomBar
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow:true);
+	GridStack Root = new(IsRow:true);
 
 	public ItemsControl ItemsControl{get;set;} = new ItemsControl();
 

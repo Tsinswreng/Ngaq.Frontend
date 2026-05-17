@@ -23,6 +23,7 @@ using Ctx = VmDictionary;
 using Ngaq.Core.Shared.Word.Models;
 using Avalonia.Media;
 using Avalonia.Layout;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewDictionary
 	:AppViewBase<Ctx>
@@ -48,7 +49,7 @@ public partial class ViewDictionary
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow:true);
+	GridStack Root = new(IsRow:true);
 	public TextBox SearchTextBox = new();
 	public OpBtn SearchBtn = new();
 	public OpBtn SaveToWordBtn = new();
@@ -59,7 +60,7 @@ public partial class ViewDictionary
 			Root.RowDefs = new("Auto,Auto,*");
 		});
 
-		var LangGrid = new AutoGrid(IsRow: false);
+		var LangGrid = new GridStack(IsRow: false);
 		Root.A(LangGrid.Grid, o=>{
 			LangGrid.ColDefs = new("*,Auto,*");
 		});
@@ -75,7 +76,7 @@ public partial class ViewDictionary
 			});
 		}}
 
-		var SearchGrid = new AutoGrid(IsRow: false);
+		var SearchGrid = new GridStack(IsRow: false);
 		Root.A(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs = new("1*,8*,1*,1*");
 		});

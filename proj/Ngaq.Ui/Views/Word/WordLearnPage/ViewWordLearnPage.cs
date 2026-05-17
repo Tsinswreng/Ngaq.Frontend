@@ -17,6 +17,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Avalonia;
 using Ngaq.Ui.Tools;
 using Avalonia.Interactivity;
+using Tsinswreng.Avln.Grid;
 
 /// 學習記錄分頁：列表 + 新增，點行進入編輯頁。
 public partial class ViewWordLearnPage: AppViewBase{
@@ -35,7 +36,7 @@ public partial class ViewWordLearnPage: AppViewBase{
 	}
 
 	void Render(){
-		var root = new AutoGrid(IsRow: true);
+		var root = new GridStack(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(9, GUT.Star),

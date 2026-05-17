@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.Settings;
 
 using Avalonia.Controls;
 using Ngaq.Ui.Infra;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -25,7 +26,7 @@ public partial class ViewCfgFont
 	public  partial class Cls{
 
 	}
-	public AutoGrid Root = new(IsRow: true);
+	public GridStack Root = new(IsRow: true);
 
 	protected nil Style(){
 		this.Classes.A(App.Cls.ViewPadding);
@@ -33,7 +34,7 @@ public partial class ViewCfgFont
 	}
 
 	protected Control InputFontSize(){
-		var R = new AutoGrid(IsRow:false);
+		var R = new GridStack(IsRow:false);
 		R.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),

@@ -6,7 +6,6 @@ using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views;
-using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Navigation;
 using Tsinswreng.CsI18n;

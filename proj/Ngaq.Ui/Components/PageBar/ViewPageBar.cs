@@ -10,6 +10,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -67,7 +68,7 @@ public partial class ViewPageBar
 	}
 
 	IValueConverter ConvU64Str(u64 Dflt){
-		var r = new ParamFnConvtr<u64, str>(
+		var r = new FnConvtr<u64, str>(
 			(x, p)=>x.ToString()
 			,(text, p)=>{
 				if(u64.TryParse(text, out var value)){
@@ -78,7 +79,7 @@ public partial class ViewPageBar
 		);
 		return r;
 	}
-	AutoGrid Root = new(IsRow: false);
+	GridStack Root = new(IsRow: false);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
@@ -108,7 +109,7 @@ public partial class ViewPageBar
 		})
 		.A(_TextBox(), o=>{
 			// o.CBind<Ctx>(o.PropIsVisible, x=>x.TotCnt,
-			// 	Converter: new ParamFnConvtr<u64?, bool>((x,p)=>x is not null)
+			// 	Converter: new FnConvtr<u64?, bool>((x,p)=>x is not null)
 			// );
 			o.IsReadOnly = true;
 			o.Focusable = false;
@@ -116,7 +117,7 @@ public partial class ViewPageBar
 			o.CBind<Ctx>(
 				o.PropText
 				,x=>x.TotPageCnt
-				,Converter: new ParamFnConvtr<u64?, str>((x, p)=>x?.ToString()??"")
+				,Converter: new FnConvtr<u64?, str>((x, p)=>x?.ToString()??"")
 				,Mode: BindingMode.OneWay
 			);
 		})

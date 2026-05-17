@@ -15,10 +15,12 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightArgEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmWeightArgEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWeightArgEdit
 	:AppViewBase
@@ -40,7 +42,7 @@ public partial class ViewWeightArgEdit
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -142,7 +144,7 @@ public partial class ViewWeightArgEdit
 	}
 
 	Control MkBottomBar(){
-		var bar = new AutoGrid(IsRow:false);
+		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

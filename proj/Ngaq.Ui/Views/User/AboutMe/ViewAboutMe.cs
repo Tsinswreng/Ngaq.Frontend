@@ -16,6 +16,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Ngaq.Ui.Infra.I18n;
 using Ctx = VmAboutMe;
 using Ngaq.Ui.Components;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewAboutMe
 	:AppViewBase
@@ -36,7 +37,7 @@ public partial class ViewAboutMe
 
 	}
 	public Cls_ Cls{get;set;} = new Cls_();
-	public AutoGrid Root = new(IsRow: true);
+	public GridStack Root = new(IsRow: true);
 	protected nil Style(){
 		return NIL;
 	}
@@ -58,7 +59,7 @@ public partial class ViewAboutMe
 	}
 
 	protected Control _UserCard(){
-		var R = new AutoGrid(IsRow: false);
+		var R = new GridStack(IsRow: false);
 		R.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Auto),
 			ColDef(1, GUT.Star),

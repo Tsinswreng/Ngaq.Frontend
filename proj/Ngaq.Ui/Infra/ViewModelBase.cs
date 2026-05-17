@@ -16,7 +16,6 @@ using Microsoft.Extensions.Logging;
 using Tsinswreng.CsErr;
 using Tsinswreng.CsI18n;
 using Ngaq.Ui.Infra.I18n;
-using Tsinswreng.AvlnTools;
 
 public class EvtArgMsg:EventArgs{
 

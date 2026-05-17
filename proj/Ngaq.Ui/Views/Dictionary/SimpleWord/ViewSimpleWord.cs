@@ -8,6 +8,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -36,7 +37,7 @@ public partial class ViewSimpleWord
 		return NIL;
 	}
 
-	AutoGrid Root = new (IsRow: true);
+	GridStack Root = new (IsRow: true);
 	SelectableTextBlock Txt(){
 		var R = new SelectableTextBlock();
 		R.TextWrapping = TextWrapping.Wrap;
@@ -70,7 +71,7 @@ public partial class ViewSimpleWord
 		);
 
 		R.SetItemTemplate<Pronunciation>((p,b)=>{
-			var Row = new AutoGrid(IsRow: false);
+			var Row = new GridStack(IsRow: false);
 			Row.ColDefs.AddRange([
 				ColDef(1, GUT.Auto),
 				ColDef(1, GUT.Auto),

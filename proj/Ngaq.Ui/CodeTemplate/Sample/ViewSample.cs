@@ -10,6 +10,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
@@ -28,22 +29,22 @@ public partial class ViewSample
 		};
 	}
 
-	//大多數場景下我們用AutoGrid作爲視圖的根節點。
-	//AutoGrid支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號 因此不要手動設計行/列號
-	//優先使用AutoGrid、別用原生Grid 除非你要顯示手動設置行和列
-	AutoGrid Root = new(IsRow: true);//IsRow: true 表示行佈局
+	//大多數場景下我們用GridStack作爲視圖的根節點。
+	//GridStack支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號 因此不要手動設計行/列號
+	//優先使用GridStack、別用原生Grid 除非你要顯示手動設置行和列
+	GridStack Root = new(IsRow: true);//IsRow: true 表示行佈局
 	//視圖的初始化羅輯寫在Render裏
 	public void Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto), //GUT成員有Star,Auto,Pixel
-			RowDef(2, GUT.Star),
-			RowDef(30, GUT.Pixel),
+			new RowDef(1, GUT.Auto), //GUT成員有Star,Auto,Pixel
+			new RowDef(2, GUT.Star),
+			new RowDef(30, GUT.Pixel),
 			//....略
 		]);
 		//也可以寫 Root.Grid.RowDefinitions = new("Auto,2*,30");
 
-		//AutoGrid 與 所有的Panel都有 A<TControl>(TControl C, Action<TControl>? FnInit=null)擴展方法。
+		//GridStack 與 所有的Panel都有 A<TControl>(TControl C, Action<TControl>? FnInit=null)擴展方法。
 		//常規寫法一
 		Root
 		//可鏈式調用

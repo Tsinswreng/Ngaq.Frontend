@@ -22,6 +22,7 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTools;
 using Ctx = VmSearchWords;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.Avln.Grid;
 
 //TODO 改名爲 UserWordPage / UserWordManage
 public partial class ViewSearchWords
@@ -46,7 +47,7 @@ public partial class ViewSearchWords
 		return NIL;
 	}
 
-	AutoGrid Root = new AutoGrid(IsRow: true);
+	GridStack Root = new GridStack(IsRow: true);
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -56,7 +57,7 @@ public partial class ViewSearchWords
 				RowDef(1, GUT.Auto),
 			]);
 		});
-		var SearchGrid = new AutoGrid(IsRow: false);
+		var SearchGrid = new GridStack(IsRow: false);
 		Root.A(SearchGrid.Grid);
 		{var o = SearchGrid;
 			o.Grid.ColumnDefinitions.AddRange([

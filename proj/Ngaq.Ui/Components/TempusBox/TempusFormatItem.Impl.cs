@@ -29,7 +29,7 @@ public partial class TempusFormatItem{
 	}
 
 	static IValueConverter MkIsoLocalConverter(){
-		return new ParamFnConvtr<obj?, obj?>(
+		return new FnConvtr<obj?, obj?>(
 			(v, p)=>{
 				if(v is UnixMs t){
 					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)
@@ -54,7 +54,7 @@ public partial class TempusFormatItem{
 	}
 
 	static IValueConverter MkUnixMsConverter(){
-		return new ParamFnConvtr<obj?, obj?>(
+		return new FnConvtr<obj?, obj?>(
 			(v, p)=>{
 				if(v is UnixMs t){
 					return t.Value.ToString(CultureInfo.InvariantCulture);
@@ -72,7 +72,7 @@ public partial class TempusFormatItem{
 
 	static IValueConverter MkDateTimePatternConverter(str Pattern){
 		var fmt = NormalizePattern(Pattern);
-		return new ParamFnConvtr<obj?, obj?>(
+		return new FnConvtr<obj?, obj?>(
 			(v, p)=>{
 				if(v is UnixMs t){
 					return DateTimeOffset.FromUnixTimeMilliseconds(t.Value)

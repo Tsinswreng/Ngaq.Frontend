@@ -8,6 +8,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.WordSync;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -56,7 +57,7 @@ public partial class ViewWordSyncV2
 		return r;
 	}
 
-	AutoGrid Root = new(IsRow:true);
+	GridStack Root = new(IsRow:true);
 	/// 渲染頁面主體：分成雲端同步區與本地文件同步區。
 	protected nil Render(){
 		this.SetContent(Root.Grid);
@@ -151,7 +152,7 @@ public partial class ViewWordSyncV2
 	}
 
 	Control MkImportPathRow(){
-		var row = new AutoGrid(IsRow: false);
+		var row = new GridStack(IsRow: false);
 		row.ColDefs.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
@@ -172,7 +173,7 @@ public partial class ViewWordSyncV2
 	}
 
 	Control MkExportPathRow(){
-		var row = new AutoGrid(IsRow: false);
+		var row = new GridStack(IsRow: false);
 		row.ColDefs.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),

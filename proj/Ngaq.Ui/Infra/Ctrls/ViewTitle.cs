@@ -7,6 +7,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using DynamicData.Binding;
 using Ngaq.Ui.Icons;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = ViewModelBase;
@@ -46,7 +47,7 @@ public partial class ViewTitle
 		return R;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
@@ -54,7 +55,7 @@ public partial class ViewTitle
 				RowDef(1, GUT.Star),//Content
 			]);
 		});
-		AutoGrid TitleBar = new(IsRow: false);
+		GridStack TitleBar = new(IsRow: false);
 		BdrTitle.Child=TitleBar.Grid;
 		{
 			var o = TitleBar;

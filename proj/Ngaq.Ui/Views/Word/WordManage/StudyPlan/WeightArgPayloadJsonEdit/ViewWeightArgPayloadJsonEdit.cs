@@ -12,10 +12,12 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmWeightArgPayloadJsonEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmWeightArgPayloadJsonEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// WeightArg Payload(JSON) 編輯視圖。
 public class ViewWeightArgPayloadJsonEdit: AppViewBase{
@@ -29,7 +31,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 		Render();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TextEditor? PayloadEditor;
 	bool IsSyncingPayloadText = false;
 	protected nil Render(){
@@ -62,7 +64,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 	}
 
 	Control MkBottomBar(){
-		var g = new AutoGrid(IsRow:false);
+		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
 		g.A(new OpBtn(), o=>{
 			o._Button.HorizontalContentAlignment = HAlign.Center;

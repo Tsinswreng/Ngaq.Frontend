@@ -14,6 +14,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
@@ -37,7 +38,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 	TreeDataGrid? PropGrid;
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? CoreGridSource;
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? PropGridSource;
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 	protected nil Render(){
 		Content = Root.Grid;
@@ -51,7 +52,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 	}
 
 	Control MkBody(){
-		var root = new AutoGrid(IsRow:true);
+		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Star),
@@ -117,7 +118,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 			BorderThickness = new Thickness(1),
 			Padding = new Thickness(10),
 		};
-		var root = new AutoGrid(IsRow:true);
+		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Star),
@@ -125,7 +126,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 		box.Child = root.Grid;
 
 		var title = IsCore ? I[K.CoreFilter] : I[K.PropFilter];
-		var top = new AutoGrid(IsRow:false);
+		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
@@ -205,7 +206,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 	}
 
 	Control MkBottomBar(){
-		var g = new AutoGrid(IsRow:false);
+		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;

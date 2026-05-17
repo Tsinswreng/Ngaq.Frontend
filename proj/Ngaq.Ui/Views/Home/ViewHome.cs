@@ -15,6 +15,7 @@ using Ngaq.Ui.Views.Word.Learn;
 using Tsinswreng.CsI18n;
 using Ngaq.Ui.Infra;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewHome
 	:AppViewBase
@@ -41,7 +42,7 @@ public partial class ViewHome
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow:true);
+	GridStack Root = new(IsRow:true);
 	readonly ViewDictionary DictionaryView = new();
 	ViewBottomBar? BottomBar;
 

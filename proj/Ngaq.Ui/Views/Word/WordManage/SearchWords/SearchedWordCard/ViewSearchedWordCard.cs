@@ -8,6 +8,7 @@ using Ngaq.Core.Shared.User.Models.Po;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Tools;
 using Ngaq.Ui.Converters;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSearchedWordCard;
@@ -30,7 +31,7 @@ public partial class ViewSearchedWordCard
 		public static str InInfoGrid = nameof(InInfoGrid);
 	}
 
-	public AutoGrid Root{get;set;} = new AutoGrid(IsRow:true);
+	public GridStack Root{get;set;} = new GridStack(IsRow:true);
 
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
@@ -78,7 +79,7 @@ public partial class ViewSearchedWordCard
 			new RowDef(8, GUT.Auto),
 		]);
 
-		var LangGrid = new AutoGrid(IsRow:false);
+		var LangGrid = new GridStack(IsRow:false);
 		Root.Add(LangGrid.Grid);
 		{var o = LangGrid;
 			o.Grid.ColumnDefinitions.AddRange([
@@ -103,7 +104,7 @@ public partial class ViewSearchedWordCard
 		}}//~Header
 
 
-		var HeadBox = new AutoGrid(IsRow:false);
+		var HeadBox = new GridStack(IsRow:false);
 		Root.Add(HeadBox.Grid);
 		{
 			HeadBox.Grid.ColumnDefinitions.AddRange([
@@ -119,7 +120,7 @@ public partial class ViewSearchedWordCard
 				o.CBind<Ctx>(
 					o.PropTextDecorations
 					,x=>x.DelAt
-						,Converter: new SimpleFnConvtr<IdDel?, TextDecorationCollection?>((delAt)=>{
+						,Converter: new FnConvtr<IdDel?, TextDecorationCollection?>((delAt)=>{
 							return delAt.IsNullOrDefault()
 							? null : TextDecorations.Strikethrough;
 						})
@@ -137,7 +138,7 @@ public partial class ViewSearchedWordCard
 	}
 
 	Control _InfoGrid(){
-		var R = new AutoGrid(IsRow:false);
+		var R = new GridStack(IsRow:false);
 		{var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
 			o.ColumnDefinitions.AddRange([
@@ -161,7 +162,7 @@ public partial class ViewSearchedWordCard
 					o.PropText_()
 					//LearnRecord不應潙空集合、緣添旹必得'add'
 					,x=>x.SavedLearnRecords
-						,Converter: new ParamFnConvtr<IList<ILearnRecord>, str>((x, p)=>{
+						,Converter: new FnConvtr<IList<ILearnRecord>, str>((x, p)=>{
 							if(x.Count > 0){
 								return Ctx.LearnToSymbol(x[^1].Learn);
 							}
@@ -204,7 +205,7 @@ public partial class ViewSearchedWordCard
 				o.CBind<Ctx>(
 					o.PropText_()
 					,x=>x.LastLearnedTime
-						,Converter: new SimpleFnConvtr<i64, str>(x=>{
+						,Converter: new FnConvtr<i64, str>(x=>{
 							var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 							var Diff = Now - x;
 							return Ctx.FormatUnixMsDiff(Diff);
@@ -218,7 +219,7 @@ public partial class ViewSearchedWordCard
 				o.CBind<Ctx>(
 					o.PropText_()
 					,x=>x.Weight
-						,Converter: new ParamFnConvtr<f64?,str>((x,p)=>
+						,Converter: new FnConvtr<f64?,str>((x,p)=>
 							Ctx.FmtNum(x??0, 2)
 						)
 					);

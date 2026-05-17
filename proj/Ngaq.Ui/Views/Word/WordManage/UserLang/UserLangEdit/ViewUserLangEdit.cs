@@ -12,6 +12,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -42,7 +43,7 @@ public partial class ViewUserLangEdit
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 	/// 組裝頁面主體與底部操作區。
 	protected nil Render(){
@@ -113,7 +114,7 @@ public partial class ViewUserLangEdit
 
 	/// 建立底部操作欄（僅保存）。
 	Control MkBottomBar(){
-		var bar = new AutoGrid(IsRow:false);
+		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 		]);
@@ -158,7 +159,7 @@ public partial class ViewUserLangEdit
 	Control MkPickerRow(str Label, IBinding Binding, Action OnPick){
 		var root = new StackPanel{Spacing = 3};
 		root.Children.Add(new TextBlock{Text = Label});
-		var row = new AutoGrid(IsRow:false);
+		var row = new GridStack(IsRow:false);
 		row.Grid.ColumnDefinitions.AddRange([
 			ColDef(8, GUT.Star),
 			ColDef(2, GUT.Star),

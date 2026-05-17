@@ -11,10 +11,12 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStudyPlan;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmStudyPlan;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewStudyPlan
 	:AppViewBase, I_MkTitleMenu
 {
@@ -40,7 +42,7 @@ public partial class ViewStudyPlan
 	}
 
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([

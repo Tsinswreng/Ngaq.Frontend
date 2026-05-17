@@ -15,10 +15,12 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmPreFilterVisualEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmPreFilterVisualEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// PreFilter GUI 主頁。
 /// 顯示 Po 主信息與內嵌的篩選器編輯表格。
@@ -34,7 +36,7 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 		InitVisualGridSource();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TreeDataGrid? CoreGrid;
 	TreeDataGrid? PropGrid;
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? CoreGridSource;
@@ -51,7 +53,7 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	}
 
 	Control MkBody(){
-		var root = new AutoGrid(IsRow:true);
+		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Auto),
@@ -144,13 +146,13 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	}
 
 	Control MkFilterTab(bool isCore){
-		var root = new AutoGrid(IsRow:true);
+		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Star),
 		]);
 
-		var top = new AutoGrid(IsRow:false);
+		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
@@ -228,7 +230,7 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	}
 
 	Control MkBottomBar(){
-		var bar = new AutoGrid(IsRow:false);
+		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

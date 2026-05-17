@@ -20,6 +20,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.StrokeText;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordEditV2;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Dsl;
@@ -51,7 +52,7 @@ public partial class ViewWordInfo
 	/// splitter 用 1px 保持可拖拽，同時避免 0.5px 在不同縮放下看起來發虛變粗。
 	public const double SplitterThickness = 1;
 
-	public AutoGrid Root{get;set;} = new(IsRow: true);
+	public GridStack Root{get;set;} = new(IsRow: true);
 	Grid? MainGrid;
 	Control? Splitter;
 	Control? SidePropsPane;
@@ -150,7 +151,7 @@ public partial class ViewWordInfo
 	/// 主內容區爲左右分欄：左側 description，右側其他 prop，中間細分隔條可拖拽。
 	/// 主內容容器負責左側 description、右側其他 prop 與中間拖拽分隔條。
 	Control MkMainContent(){
-		var Root = new AutoGrid(IsRow: false);
+		var Root = new GridStack(IsRow: false);
 		MainGrid = Root.Grid;
 		MainGrid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),

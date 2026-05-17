@@ -5,6 +5,7 @@ using Avalonia.Styling;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -33,7 +34,7 @@ public partial class ViewChangePassword
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	public void Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([

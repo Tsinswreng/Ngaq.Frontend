@@ -20,9 +20,10 @@ using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using static Tsinswreng.AvlnTools.Dsl.DslFactory;
 using Ctx = VmLearnWords;
 using K = Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.Avln.Grid;
+
 public partial class ViewLearnWords
 	:AppViewBase<Ctx>
 {
@@ -44,10 +45,10 @@ public partial class ViewLearnWords
 		ViewWordListCard.HandlePronounceResult(Ctx, Result);
 	}
 
-	public partial class Cls_{
-		public str MenuBtn = nameof(MenuBtn);
+	public partial class Cls{
+		public const str MenuBtn = nameof(MenuBtn);
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
+
 
 	protected nil Style(){
 		Styles.A(new Style(x=>
@@ -60,7 +61,7 @@ public partial class ViewLearnWords
 		return NIL;
 	}
 
-	AutoGrid Root = new AutoGrid(IsRow: true);
+	GridStack Root = new GridStack(IsRow: true);
 	Panel Menu;
 
 	protected IBrush Shade(IBrush originalBrush, ContentControl top){
@@ -98,7 +99,7 @@ public partial class ViewLearnWords
 			,CBE.Mk<Ctx>(x=>x.BgBrush
 				,Source: Ctx
 				,Mode: BindingMode.OneWay
-				,Converter: new ParamFnConvtr<IBrush, nil>((oldBrush, arg)=>{
+				,Converter: new FnConvtr<IBrush, nil>((oldBrush, arg)=>{
 					return Shade(oldBrush, top);
 				})
 			)
@@ -122,8 +123,8 @@ public partial class ViewLearnWords
 	}
 
 	protected Panel _Menu(){
-		var R = new AutoGrid(IsRow: true);
-		var Row1 = new AutoGrid(IsRow: false);
+		var R = new GridStack(IsRow: true);
+		var Row1 = new GridStack(IsRow: false);
 		R.A(Row1.Grid, (o)=>{
 			o.ColumnDefinitions.AddRange([
 				ColDef(100, GUT.Star),
@@ -183,7 +184,7 @@ public partial class ViewLearnWords
 					).Set(
 						BackgroundProperty
 						,CBE.Mk<Ctx>(x=>x.IsSaved
-							,Converter: new SimpleFnConvtr<bool, IBrush?>((b)=>{
+							,Converter: new FnConvtr<bool, IBrush?>((b)=>{
 								if(!b){
 									return UiCfg.Inst.MainColor;
 								}
@@ -257,7 +258,7 @@ public partial class ViewLearnWords
 	}
 
 	Control _RowSearch(){
-		var Ans = new AutoGrid(IsRow: false);
+		var Ans = new GridStack(IsRow: false);
 		{var o = Ans.Grid;
 			o.ColumnDefinitions.AddRange([
 				ColDef(1, GUT.Star),

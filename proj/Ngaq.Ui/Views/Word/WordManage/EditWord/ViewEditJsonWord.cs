@@ -3,9 +3,11 @@ namespace Ngaq.Ui.Views.Word.WordManage.EditWord;
 using Avalonia.Controls;
 using AvaloniaEdit;
 using Ngaq.Ui.Infra;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
-using Ctx = VmEditJsonWord;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmEditJsonWord;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 #if false //TODO 寫到Ui㕥示用戶
 
@@ -39,7 +41,7 @@ public partial class ViewEditJsonWord
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
@@ -53,7 +55,7 @@ public partial class ViewEditJsonWord
 				o.PropText
 				,x=>x.Json);
 		});
-		var BottomBtnGrid = new AutoGrid(IsRow: false);
+		var BottomBtnGrid = new GridStack(IsRow: false);
 		Root.Add(BottomBtnGrid.Grid);
 		{
 			BottomBtnGrid.Grid.ColumnDefinitions.AddRange([

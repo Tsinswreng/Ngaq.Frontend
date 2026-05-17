@@ -13,6 +13,7 @@ using Ngaq.Ui.Views.Word.WordManage.SearchWords;
 using Ngaq.Ui.Views.Word.WordManage.Statistics;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
@@ -51,7 +52,7 @@ public partial class ViewWordManage
 		return NIL;
 	}
 
-	public AutoGrid Root = new(IsRow:true);
+	public GridStack Root = new(IsRow:true);
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{

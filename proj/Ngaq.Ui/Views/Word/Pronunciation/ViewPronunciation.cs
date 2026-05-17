@@ -5,6 +5,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -36,7 +37,7 @@ public partial class ViewPronunciation
 	SelectableTextBlock Txt(){
 		return new SelectableTextBlock();
 	}
-	AutoGrid Root = new(IsRow: false);
+	GridStack Root = new(IsRow: false);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([

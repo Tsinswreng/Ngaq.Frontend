@@ -18,6 +18,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Avalonia;
 using Avalonia.Interactivity;
 using Ngaq.Ui.Tools;
+using Tsinswreng.Avln.Grid;
 
 /// 屬性分頁：列表 + 新增，點行進入編輯頁。
 public partial class ViewWordPropPage: AppViewBase{
@@ -36,7 +37,7 @@ public partial class ViewWordPropPage: AppViewBase{
 	}
 
 	void Render(){
-		var root = new AutoGrid(IsRow: true);
+		var root = new GridStack(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(9, GUT.Star),

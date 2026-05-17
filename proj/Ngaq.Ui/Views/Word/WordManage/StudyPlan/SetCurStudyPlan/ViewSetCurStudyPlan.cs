@@ -13,6 +13,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -60,7 +61,7 @@ public partial class ViewSetCurStudyPlan
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	bool HasAutoLoaded = false;
 
 	protected nil Render(){
@@ -73,7 +74,7 @@ public partial class ViewSetCurStudyPlan
 	}
 
 	Control MkBody(){
-		var host = new AutoGrid(IsRow:true);
+		var host = new GridStack(IsRow:true);
 		host.Grid.RowDefinitions.AddRange([RowDef(1, GUT.Star)]);
 		host.A(MkFieldsPanel());
 		return host.Grid;

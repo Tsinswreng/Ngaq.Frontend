@@ -8,10 +8,12 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmFilterItemEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmFilterItemEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// View for editing a single FilterItem.
 public class ViewFilterItemEdit: AppViewBase{
@@ -28,7 +30,7 @@ public class ViewFilterItemEdit: AppViewBase{
 		Render();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 	protected nil Render(){
 		Content = Root.Grid;
@@ -64,7 +66,7 @@ public class ViewFilterItemEdit: AppViewBase{
 		};
 		sv.Content = root;
 
-		var top = new AutoGrid(IsRow:false);
+		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
@@ -87,7 +89,7 @@ public class ViewFilterItemEdit: AppViewBase{
 	}
 
 	Control MkBottomBar(){
-		var g = new AutoGrid(IsRow:false);
+		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

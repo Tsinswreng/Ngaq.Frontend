@@ -15,6 +15,7 @@ using Ctx = VmLoginRegister;
 using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.CsI18n;
 using Ngaq.Ui.Infra;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewRegister
 	:AppViewBase
@@ -51,7 +52,7 @@ public partial class ViewRegister
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil _Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([

@@ -6,6 +6,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.BottomBar;
 using Ngaq.Ui.Views.User.Login;
 using Ngaq.Ui.Views.User.Register;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Converters;
 using Tsinswreng.AvlnTools.Tools;
@@ -41,7 +42,7 @@ class ViewTestBindDict : UserControl {
 
 	public ViewTestBindDict() {
 		Ctx = new VmTestBindDict();
-		var Root = new AutoGrid(IsRow: true);
+		var Root = new GridStack(IsRow: true);
 		Content = Root.Grid;
 		{
 			var o = Root.Grid;

@@ -14,10 +14,12 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using ScottPlot.Avalonia;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStatistics;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmStatistics;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewStatistics: AppViewBase{
 
@@ -141,7 +143,7 @@ public partial class ViewStatistics: AppViewBase{
 	}
 
 	Control MkCfgPanel(){
-		var cfg = new AutoGrid(IsRow: true);
+		var cfg = new GridStack(IsRow: true);
 		cfg.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Star),
 			RowDef(1, GUT.Auto),
@@ -208,7 +210,7 @@ public partial class ViewStatistics: AppViewBase{
 		o.Plot.Axes.AutoScale();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
@@ -218,7 +220,7 @@ public partial class ViewStatistics: AppViewBase{
 			]);
 		});
 
-		var resultPanel = new AutoGrid(IsRow: true);
+		var resultPanel = new GridStack(IsRow: true);
 		resultPanel
 		.A(new AvaPlot(), o=>{
 			Ctx?.GraphChanged += (s, e)=>{
@@ -228,7 +230,7 @@ public partial class ViewStatistics: AppViewBase{
 			DrawPlot(o);
 		});
 
-		var bottomPanel = new AutoGrid(IsRow: true);
+		var bottomPanel = new GridStack(IsRow: true);
 		bottomPanel.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Star),

@@ -17,6 +17,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangEdit;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -65,7 +66,7 @@ public partial class ViewUserLangPage
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TreeDataGrid? Grid;
 	FlatTreeDataGridSource<Ctx.RowUserLang>? GridSource;
 
@@ -85,7 +86,7 @@ public partial class ViewUserLangPage
 
 	/// 創建頂部搜索條。
 	protected Control MkTopBar(){
-		var top = new AutoGrid(IsRow:false);
+		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(8, GUT.Star),
 			ColDef(1, GUT.Star),

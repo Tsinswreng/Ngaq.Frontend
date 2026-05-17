@@ -12,6 +12,7 @@ using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.EditWord;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -80,7 +81,7 @@ public partial class ViewWordEdit
 		return R;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([

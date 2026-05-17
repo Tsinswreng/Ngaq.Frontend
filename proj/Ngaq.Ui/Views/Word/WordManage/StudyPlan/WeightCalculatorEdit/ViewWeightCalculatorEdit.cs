@@ -15,7 +15,9 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightCalculatorEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmWeightCalculatorEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewWeightCalculatorEdit
 	:AppViewBase
@@ -37,7 +39,7 @@ public partial class ViewWeightCalculatorEdit
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TextEditor? PayloadEditor;
 	bool IsSyncingPayloadText = false;
 	protected nil Render(){
@@ -104,7 +106,7 @@ public partial class ViewWeightCalculatorEdit
 	}
 
 	Control MkBottomBar(){
-		var bar = new AutoGrid(IsRow:false);
+		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

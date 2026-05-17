@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.BottomBar;
 
 using Avalonia.Controls;
 using Avalonia.Media;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -25,7 +26,7 @@ public partial class StrBarItem{
 			o.Styles.Add(new Style().NoMargin().NoPadding());
 		}
 		{{
-			var Grid = new AutoGrid(IsRow:true);
+			var Grid = new GridStack(IsRow:true);
 			Ans.Content = Grid.Grid;
 			//Grid.Grid.Classes.Add(Cls.BarItem);
 			Grid.Grid.RowDefinitions.AddRange([

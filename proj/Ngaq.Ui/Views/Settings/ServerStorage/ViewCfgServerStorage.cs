@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -24,7 +25,7 @@ public partial class ViewCfgServerStorage: AppViewBase{
 		this.Classes.A(App.Cls.ViewPadding);
 	}
 
-	public AutoGrid Root = new(IsRow:true);
+	public GridStack Root = new(IsRow:true);
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{

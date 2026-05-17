@@ -9,10 +9,10 @@ public class ConvtrTempus{
 	protected static ConvtrTempus? _Inst = null;
 	public static ConvtrTempus Inst => _Inst??= new ConvtrTempus();
 
-	public SimpleFnConvtr<obj?, obj?> Int64{get;protected set;}
-	public SimpleFnConvtr<obj?, obj?> Iso{get;protected set;}
+	public FnConvtr<obj?, obj?> Int64{get;protected set;}
+	public FnConvtr<obj?, obj?> Iso{get;protected set;}
 	ConvtrTempus(){
-		Int64 = new SimpleFnConvtr<obj?, obj?>(
+		Int64 = new FnConvtr<obj?, obj?>(
 			(tempusO)=>{
 				if(tempusO is UnixMs t){
 					return t.Value;
@@ -27,7 +27,7 @@ public class ConvtrTempus{
 				return BindingNotification.UnsetValue;
 			}
 		);
-		Iso = new SimpleFnConvtr<obj?, obj?>(
+		Iso = new FnConvtr<obj?, obj?>(
 			(tempus)=>{
 				if(tempus is UnixMs t){
 					return t.ToIso();

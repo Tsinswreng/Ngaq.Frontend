@@ -6,6 +6,7 @@ using Ngaq.Core.Tools.JsonMap;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using ScottPlot.Plottables;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -24,7 +25,7 @@ public partial class ViewJsonMapItem
 		Style();
 		Render();
 	}
-	
+
 	public partial class Cls{
 
 	}
@@ -38,7 +39,7 @@ public partial class ViewJsonMapItem
 		return new();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([

@@ -17,10 +17,12 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmPreFilterPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmPreFilterPage;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewPreFilterPage
 	:AppViewBase
 {
@@ -61,7 +63,7 @@ public partial class ViewPreFilterPage
 	}
 
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TreeDataGrid? PreFilterGrid;
 	FlatTreeDataGridSource<Ctx.RowPreFilter>? GridSource;
 
@@ -80,7 +82,7 @@ public partial class ViewPreFilterPage
 	}
 
 	protected Control MkTopBar(){
-		var top = new AutoGrid(IsRow:false);
+		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(7, GUT.Star),
 			ColDef(1, GUT.Star),

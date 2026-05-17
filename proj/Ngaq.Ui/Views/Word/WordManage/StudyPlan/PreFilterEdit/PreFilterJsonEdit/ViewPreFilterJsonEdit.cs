@@ -11,10 +11,12 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmPreFilterJsonEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmPreFilterJsonEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// <summary>
 /// PoPreFilter JSON 專用編輯視圖。
@@ -30,7 +32,7 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 		Render();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TextEditor? JsonEditor;
 	bool IsSyncingJsonText = false;
 	protected nil Render(){
@@ -63,7 +65,7 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 	}
 
 	Control MkBottomBar(){
-		var g = new AutoGrid(IsRow:false);
+		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

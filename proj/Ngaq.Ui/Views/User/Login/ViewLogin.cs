@@ -17,6 +17,7 @@ using Ctx = VmLoginRegister;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Infra;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewLogin
 	:AppViewBase
@@ -102,7 +103,7 @@ public partial class Cls_{
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 
 

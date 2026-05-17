@@ -10,6 +10,7 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordLearnPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTempus;
@@ -37,7 +38,7 @@ public partial class ViewWordLearnEdit: AppViewBase{
 	}
 
 	void Render(){
-		var root = new AutoGrid(IsRow: true);
+		var root = new GridStack(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(8, GUT.Star),
 			RowDef(1, GUT.Auto),

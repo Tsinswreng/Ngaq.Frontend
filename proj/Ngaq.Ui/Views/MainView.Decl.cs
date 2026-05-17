@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using Ngaq.Ui.Infra.I18n;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
 using Tsinswreng.CsI18n;
@@ -23,8 +24,8 @@ public partial class MainView : UserControl {
 	);
 	public II18n I18n{get;set;} = AppI18n.Inst;
 	public SvcPopup SvcPopup{get;set;}
-	public AutoGrid AutoGrid = new (IsRow: true);
-	public Grid Root{get{return AutoGrid.Grid;}}
+	public GridStack GridStack = new (IsRow: true);
+	public Grid Root{get{return GridStack.Grid;}}
 	public ViewNaviBase ViewNaviBase{get;} = new ();
 	public ILogger? Logger{get=>App.Logger;set{}}
 
@@ -37,7 +38,7 @@ public partial class MainView : UserControl {
 	[Doc(@$"可關閉彈窗、執行操作。
 	不要在ViewModel層調用此函數、因爲這違反Mvvm規範。
 	#Params([],[縱向生成按鈕列])
-	
+
 	")]
 	public partial nil ShowDialog(str Msg, IList<Button> Operations);
 

@@ -14,7 +14,9 @@ using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmNormLangEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmNormLangEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Tsinswreng.Avln.Grid;
 
 /// NormLang 詳情編輯頁。
 public partial class ViewNormLangEdit
@@ -37,7 +39,7 @@ public partial class ViewNormLangEdit
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 	protected nil Render(){
 		this.Content = Root.Grid;
@@ -103,7 +105,7 @@ public partial class ViewNormLangEdit
 	}
 
 	Control MkBottomBar(){
-		var bar = new AutoGrid(IsRow:false);
+		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

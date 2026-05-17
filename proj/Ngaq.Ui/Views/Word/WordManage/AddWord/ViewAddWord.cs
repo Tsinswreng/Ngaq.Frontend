@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -32,7 +33,7 @@ public partial class ViewAddWord
 
 	TextEditor? WordEditor;
 	bool IsSyncingText = false;
-	AutoGrid Root = new(IsRow:true);
+	GridStack Root = new(IsRow:true);
 
 	protected nil Style(){
 		return NIL;

@@ -15,6 +15,7 @@ using Ursa.Controls;
 using Ctx = VmUserProfile;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ngaq.Ui.Icons;
+using Tsinswreng.Avln.Grid;
 
 public partial class ViewUserProfile
 	:AppViewBase
@@ -62,7 +63,7 @@ public partial class ViewUserProfile
 	public partial class Cls{
 
 	}
-	public AutoGrid Root = new(IsRow: true);
+	public GridStack Root = new(IsRow: true);
 
 	protected nil Style(){
 		return NIL;
@@ -80,7 +81,7 @@ public partial class ViewUserProfile
 			]);
 		});
 		Root.A(new ScrollViewer(), sv=>{
-			var ContentGrid = new AutoGrid(IsRow: true);
+			var ContentGrid = new GridStack(IsRow: true);
 			sv.SetContent(ContentGrid.Grid, o=>{
 				o.RowDefinitions.AddRange([
 					RowDef(4, GUT.Star),

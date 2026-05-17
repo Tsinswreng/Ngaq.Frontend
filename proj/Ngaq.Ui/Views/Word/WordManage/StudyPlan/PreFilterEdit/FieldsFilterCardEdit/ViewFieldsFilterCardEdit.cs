@@ -19,10 +19,12 @@ using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 
-using Ctx = VmFieldsFilterCardEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmFieldsFilterCardEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 
 /// Editor view for a single fields-filter group.
@@ -38,7 +40,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		InitGridSource();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TreeDataGrid? ItemGrid;
 	FlatTreeDataGridSource<Ctx.RowFilterItemCard>? ItemGridSource;
 
@@ -85,7 +87,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		list.Bind(ItemsControl.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.Fields, Mode: BindingMode.OneWay));
 		list.SetItemsPanel(()=>new StackPanel{Spacing = 8});
 		list.SetItemTemplate<VmPreFilterVisualEdit.VmFieldValueRow>((item, ns)=>{
-			var row = new AutoGrid(IsRow:false);
+			var row = new GridStack(IsRow:false);
 			row.Grid.ColumnDefinitions.AddRange([
 				ColDef(1, GUT.Star),
 				ColDef(1, GUT.Auto),
@@ -155,13 +157,13 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	}
 
 	Control MkFilterItemsTab(){
-		var root = new AutoGrid(IsRow:true);
+		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
 			RowDef(1, GUT.Auto),
 			RowDef(1, GUT.Star),
 		]);
 
-		var top = new AutoGrid(IsRow:false);
+		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Auto),
@@ -229,7 +231,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	}
 
 	Control MkBottomBar(){
-		var g = new AutoGrid(IsRow:false);
+		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

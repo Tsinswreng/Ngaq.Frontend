@@ -4,6 +4,7 @@ using System.ComponentModel;
 using Avalonia.Controls;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -33,7 +34,7 @@ public partial class ViewUiJsonMap
 	}
 
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([

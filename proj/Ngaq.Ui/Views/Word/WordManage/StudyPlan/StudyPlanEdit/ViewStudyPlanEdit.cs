@@ -14,10 +14,12 @@ using Ngaq.Ui.Views.Word.WordManage.StudyPlan;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightArgPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmStudyPlanEdit;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmStudyPlanEdit;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewStudyPlanEdit
 	:AppViewBase
@@ -38,7 +40,7 @@ public partial class ViewStudyPlanEdit
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
@@ -141,7 +143,7 @@ public partial class ViewStudyPlanEdit
 	}
 
 	Control MkBottomBar(){
-		var bar = new AutoGrid(IsRow:false);
+		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),

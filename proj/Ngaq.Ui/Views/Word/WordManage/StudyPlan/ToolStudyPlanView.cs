@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Tools;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTempus;
@@ -49,7 +50,7 @@ public static class ToolStudyPlanView{
 	){
 		var sp = new StackPanel{Spacing = 3};
 		sp.Children.Add(new TextBlock{Text = Label});
-		var row = new AutoGrid(IsRow:false);
+		var row = new GridStack(IsRow:false);
 		row.Grid.ColumnDefinitions.AddRange([
 			ColDef(7, GUT.Star),
 			ColDef(2, GUT.Star),

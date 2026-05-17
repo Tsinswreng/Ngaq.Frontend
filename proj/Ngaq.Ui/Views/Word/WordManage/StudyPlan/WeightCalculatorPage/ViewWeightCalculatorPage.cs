@@ -17,10 +17,12 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.WeightCalculatorEdit;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
-using Ctx = VmWeightCalculatorPage;using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
+using Ctx = VmWeightCalculatorPage;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWeightCalculatorPage
 	:AppViewBase
@@ -59,7 +61,7 @@ public partial class ViewWeightCalculatorPage
 		return NIL;
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 	TreeDataGrid? Grid;
 	FlatTreeDataGridSource<Ctx.RowWeightCalculator>? GridSource;
 
@@ -78,7 +80,7 @@ public partial class ViewWeightCalculatorPage
 	}
 
 	protected Control MkTopBar(){
-		var top = new AutoGrid(IsRow:false);
+		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
 			ColDef(7, GUT.Star),
 			ColDef(1, GUT.Star),

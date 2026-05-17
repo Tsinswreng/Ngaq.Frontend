@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Settings;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
@@ -32,7 +33,7 @@ public partial class ViewAbout
 		this.Classes.A(App.Cls.ViewPadding);
 		return NIL;
 	}
-	AutoGrid Root = new (IsRow: true);
+	GridStack Root = new (IsRow: true);
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{

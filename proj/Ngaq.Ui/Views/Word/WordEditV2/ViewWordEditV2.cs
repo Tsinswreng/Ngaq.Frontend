@@ -15,6 +15,7 @@ using Ngaq.Ui.Views.Word.WordLearnEdit;
 using Ngaq.Ui.Views.Word.WordLearnPage;
 using Ngaq.Ui.Views.Word.WordPropEdit;
 using Ngaq.Ui.Views.Word.WordPropPage;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmWordEditV2;
@@ -33,7 +34,7 @@ public partial class ViewWordEditV2: AppViewBase{
 		HookSubPageEvents();
 	}
 
-	AutoGrid Root = new(IsRow: true);
+	GridStack Root = new(IsRow: true);
 
 	void Render(){
 		Content = Root.Grid;
@@ -99,7 +100,7 @@ public partial class ViewWordEditV2: AppViewBase{
 	}
 
 	Control MkBottomBar(){
-		var g = new AutoGrid(IsRow: false);
+		var g = new GridStack(IsRow: false);
 		g.Grid.ColumnDefinitions.AddRange([
 			ColDef(1, GUT.Star),
 			ColDef(1, GUT.Star),
