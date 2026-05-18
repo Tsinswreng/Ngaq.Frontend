@@ -36,6 +36,7 @@ using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using System.IO.Abstractions;
 using Ngaq.Ui.Views.Settings.Lang;
+using Ngaq.Ui.Views.Settings.LlmDictionary;
 using Ngaq.Ui.Views.User.Profile;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayloadJsonEdit;
 
@@ -58,6 +59,7 @@ public static class DiUi{
 		z.AddTransient<VmWordSyncV2>();
 		z.AddTransient<VmStatistics>();
 		z.AddTransient<VmCfgLearnWord>();
+		z.AddTransient<VmCfgLlmDictionary>();
 		z.AddTransient<VmPronunciation>();
 		z.AddTransient<VmDictionary>();
 		z.AddTransient<VmPreFilterVisualEdit>();

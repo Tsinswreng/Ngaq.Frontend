@@ -32,6 +32,10 @@ using Tsinswreng.CsTools;
 namespace Ngaq.Client.Mock;
 
 public class MockSvcDictionary : ISvcDictionary {
+	public Task<string> GetLlmDictSysPromptOrDflt(IDbUserCtx Ctx, CT Ct) {
+		return Task.FromResult("");
+	}
+
 	public Task<PoNormLang?> GetCurSrcNormLang(IDbUserCtx Ctx, CT Ct) {
 		throw new NotImplementedException();
 	}
@@ -50,6 +54,10 @@ public class MockSvcDictionary : ISvcDictionary {
 
 	public Task<PoNormLang?> SetCurSrcNormLang(IDbUserCtx Ctx, PoNormLang Po, CT Ct) {
 		throw new NotImplementedException();
+	}
+
+	public Task<string> SetLlmDictSysPrompt(IDbUserCtx Ctx, string Prompt, CT Ct) {
+		return Task.FromResult(Prompt);
 	}
 
 	public Task<PoNormLang?> SetCurTgtNormLang(IDbUserCtx Ctx, PoNormLang Po, CT Ct) {

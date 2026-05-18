@@ -219,27 +219,12 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
 
-		var normLang = await SvcNormLang.BatGetNormLangByTypeCode(
-			User.ToDbUserCtx()
-			,ToolAsyE.ToAsyE([(ELangIdentType.Bcp47, TgtLang)])
-			,Ct
-		).FirstAsync(Ct);
-		IList<NormLangDetail> TgtLangs = [new NormLangDetail{
-			Type = ELangIdentType.Bcp47,
-			Code = TgtLang,
-			NativeName = normLang?.NativeName?? "",
-		}];
+		var ReqLang = await BuildReqOptLang(User.ToDbUserCtx(), Ct);
 		var Req = new ReqLlmDictEvt{
 			Query = new Query{
 				Term = Input.Trim(),
 			},
-			OptLang = new OptLang{
-				SrcLang = new NormLangDetail{
-					Type = ELangIdentType.Bcp47,
-					Code = SrcLang,
-				},
-				TgtLangs = TgtLangs,
-			},
+			OptLang = ReqLang,
 			OnNewSeg = (dto, ct) => {
 				if(dto.NewSeg is not null){
 					lock(streamLock){
@@ -333,21 +318,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var PrevRawOutput = LastLlmRawOutput;
 		try{
 			HasLookupStarted = true;
-			var Req = new ReqLlmDictEvt{
-				Query = new Query{
-					Term = Input.Trim(),
-				},
-				OptLang = new OptLang{
-					SrcLang = new NormLangDetail{
-						Type = ELangIdentType.Bcp47,
-						Code = SrcLang,
-					},
-					TgtLangs = [new NormLangDetail{
-						Type = ELangIdentType.Bcp47,
-						Code = TgtLang,
-					}],
-				},
-			};
+			var Req = BuildFallbackReqLlmDict();
 			var Resp = SvcDictionary.ParseRawOutput(RawOutput);
 			Result ??= App.DiOrMk<VmSimpleWord>();
 			Result.FromRespLlmDict(Resp);
@@ -366,6 +337,60 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			HandleErr(ex);
 		}
 		return Task.FromResult<nil>(NIL);
+	}
+
+	/// 構造查詞請求中的語言信息。
+	/// 優先從標準語言表中補齊 NativeName / EnglishName，避免把不完整的語言信息傳給後端。
+	async Task<OptLang> BuildReqOptLang(IDbUserCtx DbUserCtx, CT Ct){
+		if(SvcNormLang is null){
+			return BuildFallbackReqLlmDict().OptLang;
+		}
+
+		var Query = ToolAsyE.ToAsyE([
+			(ELangIdentType.Bcp47, SrcLang),
+			(ELangIdentType.Bcp47, TgtLang),
+		]);
+		PoNormLang? SrcPo = null;
+		PoNormLang? TgtPo = null;
+		var Index = 0;
+		await foreach(var Po in SvcNormLang.BatGetNormLangByTypeCode(DbUserCtx, Query, Ct).WithCancellation(Ct)){
+			if(Index == 0){
+				SrcPo = Po;
+			}else if(Index == 1){
+				TgtPo = Po;
+			}
+			Index++;
+		}
+
+		return new OptLang{
+			SrcLang = ToNormLangDetail(SrcLang, SrcPo),
+			TgtLangs = [ToNormLangDetail(TgtLang, TgtPo)],
+		};
+	}
+
+	/// 無需訪問後端時的兜底請求。
+	/// 例如「編輯原始響應後重解析」場景，只保留當前界面上可直接取得的語言代碼。
+	ReqLlmDictEvt BuildFallbackReqLlmDict(){
+		return new ReqLlmDictEvt{
+			Query = new Query{
+				Term = Input.Trim(),
+			},
+			OptLang = new OptLang{
+				SrcLang = ToNormLangDetail(SrcLang, null),
+				TgtLangs = [ToNormLangDetail(TgtLang, null)],
+			},
+		};
+	}
+
+	/// 從標準語言實體映射出請求用 DTO。
+	/// 若查不到資料，至少保留 BCP47 代碼，避免請求結構缺失。
+	static NormLangDetail ToNormLangDetail(str Code, PoNormLang? Po){
+		return new NormLangDetail{
+			Type = ELangIdentType.Bcp47,
+			Code = Code,
+			NativeName = Po?.NativeName ?? "",
+			EnglishName = Po?.EnglishName ?? "",
+		};
 	}
 
 	/// 查詢前快照：失敗時恢復到此狀態。
