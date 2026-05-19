@@ -82,7 +82,7 @@ public partial class ViewPageBar
 	GridStack Root = new(IsRow: false);
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.ColDefs([
+		Root.Grid.SetColDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),

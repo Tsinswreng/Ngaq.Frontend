@@ -32,10 +32,9 @@ public partial class ViewLlmRawOutputEdit: AppViewBase{
 	}
 
 	GridStack Root = new(IsRow: true);
-
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.RowDefs.AddRange([
+		Root.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);

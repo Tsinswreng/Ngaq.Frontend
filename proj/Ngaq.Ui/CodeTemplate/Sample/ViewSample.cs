@@ -34,7 +34,7 @@ public partial class ViewSample
 	//視圖的初始化羅輯寫在Render裏
 	public void Render(){
 		this.Content = Root.Grid;
-		Root.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Auto),
 			new(2, GUT.Star),
 			new(30, GUT.Pixel),

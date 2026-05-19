@@ -45,7 +45,7 @@ public partial class ViewSimpleWord
 	}
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
@@ -72,7 +72,7 @@ public partial class ViewSimpleWord
 
 		R.SetItemTemplate<Pronunciation>((p,b)=>{
 			var Row = new GridStack(IsRow: false);
-			Row.ColDefs.AddRange([
+			Row.SetColDefs([
 				new(1, GUT.Auto),
 				new(1, GUT.Auto),
 			]);

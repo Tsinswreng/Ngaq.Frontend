@@ -37,7 +37,7 @@ public partial class ViewWordLearnPage: AppViewBase{
 
 	void Render(){
 		var root = new GridStack(IsRow: true);
-		root.Grid.RowDefs([
+		root.Grid.SetRowDefs([
 			new(1, GUT.Auto),
 			new(9, GUT.Star),
 		]);

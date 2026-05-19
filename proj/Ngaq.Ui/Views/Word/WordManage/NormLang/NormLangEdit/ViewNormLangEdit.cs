@@ -43,7 +43,7 @@ public partial class ViewNormLangEdit
 
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -106,7 +106,7 @@ public partial class ViewNormLangEdit
 
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
-		bar.Grid.ColDefs([
+		bar.Grid.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);

@@ -46,7 +46,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -88,7 +88,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		list.SetItemsPanel(()=>new StackPanel{Spacing = 8});
 		list.SetItemTemplate<VmPreFilterVisualEdit.VmFieldValueRow>((item, ns)=>{
 			var row = new GridStack(IsRow:false);
-			row.Grid.ColDefs([
+			row.Grid.SetColDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);
@@ -158,13 +158,13 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 
 	Control MkFilterItemsTab(){
 		var root = new GridStack(IsRow:true);
-		root.Grid.RowDefs([
+		root.Grid.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);
 
 		var top = new GridStack(IsRow:false);
-		top.Grid.ColDefs([
+		top.Grid.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -232,7 +232,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow:false);
-		g.Grid.ColDefs([
+		g.Grid.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);

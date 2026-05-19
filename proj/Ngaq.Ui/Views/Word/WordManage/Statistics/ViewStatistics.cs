@@ -68,7 +68,7 @@ public partial class ViewStatistics: AppViewBase{
 
 	Control MkIntervalInput(){
 		var grid = new Grid();
-		grid.ColDefs([
+		grid.SetColDefs([
 			new(4, GUT.Star),
 			new(4, GUT.Star),
 		]);
@@ -105,11 +105,11 @@ public partial class ViewStatistics: AppViewBase{
 
 	Control MkCfgForm(){
 		var grid = new Grid();
-		grid.ColDefs([
+		grid.SetColDefs([
 			new(130, GUT.Pixel),
 			new(1, GUT.Star),
 		]);
-		grid.RowDefs([
+		grid.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
@@ -144,7 +144,7 @@ public partial class ViewStatistics: AppViewBase{
 
 	Control MkCfgPanel(){
 		var cfg = new GridStack(IsRow: true);
-		cfg.Grid.RowDefs([
+		cfg.Grid.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -213,7 +213,7 @@ public partial class ViewStatistics: AppViewBase{
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(7, GUT.Star),
 				new(1, GUT.Auto),
 				new(5, GUT.Star),
@@ -231,7 +231,7 @@ public partial class ViewStatistics: AppViewBase{
 		});
 
 		var bottomPanel = new GridStack(IsRow: true);
-		bottomPanel.Grid.RowDefs([
+		bottomPanel.Grid.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);

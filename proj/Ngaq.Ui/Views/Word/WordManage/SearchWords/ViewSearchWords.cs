@@ -51,7 +51,7 @@ public partial class ViewSearchWords
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Auto),
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
@@ -59,13 +59,13 @@ public partial class ViewSearchWords
 		});
 		var SearchGrid = new GridStack(IsRow: false);
 		Root.A(SearchGrid.Grid, o=>{
-			o.ColDefs([
+			o.SetColDefs([
 				new(6, GUT.Auto),
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);
 		});
-		
+
 				{{
 			var searchBtn = new OpBtn();
 			var freeAddBtn = new OpBtn();

@@ -50,7 +50,7 @@ public partial class ViewTitle
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Auto),//Title
 				new(1, GUT.Star),//Content
 			]);
@@ -59,7 +59,7 @@ public partial class ViewTitle
 		BdrTitle.Child=TitleBar.Grid;
 		{
 			var o = TitleBar;
-			o.Grid.ColDefs([
+			o.Grid.SetColDefs([
 				new(1, GUT.Auto),//Back Btn
 				new(1, GUT.Star),//Title Str
 				new(1, GUT.Auto),//Menu Btn

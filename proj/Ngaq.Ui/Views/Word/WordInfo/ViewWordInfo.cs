@@ -99,7 +99,7 @@ public partial class ViewWordInfo
 
 	protected nil Render() {
 		this.SetContent(Root.Grid, o => {
-			o.RowDefs([
+			o.SetRowDefs([
 				new(3, GUT.Auto),
 				new(100, GUT.Star),
 			]);
@@ -152,7 +152,7 @@ public partial class ViewWordInfo
 	Control MkMainContent() {
 		var Root = new GridStack(IsRow: false);
 		MainGrid = Root.Grid;
-		MainGrid.ColDefs([
+		MainGrid.SetColDefs([
 			new(1, GUT.Star),
 			new(SplitterThickness, GUT.Pixel),
 			new(1, GUT.Auto),
@@ -266,7 +266,7 @@ public partial class ViewWordInfo
 		R.Padding = new(8, 8);
 		R.HorizontalAlignment = HAlign.Stretch;
 		R.SetChild(new Grid(), o => {
-			o.ColDefs([
+			o.SetColDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);
@@ -292,11 +292,11 @@ public partial class ViewWordInfo
 		R.Padding = new(8, 8);
 		R.HorizontalAlignment = HAlign.Stretch;
 		R.SetChild(new Grid(), o => {
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Auto),
 				new(1, GUT.Auto),
 			]);
-			o.ColDefs([
+			o.SetColDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);

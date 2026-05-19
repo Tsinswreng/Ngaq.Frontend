@@ -66,7 +66,7 @@ public partial class Cls_{
 
 	protected nil _Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 				new(1, GUT.Star),

@@ -327,7 +327,7 @@ public partial class MainView : UserControl {
 		DataContext = new MainViewModel();
 		SvcPopup = new SvcPopup(Root);
 		this.SetContent(GridStack.Grid);
-		GridStack.Grid.RowDefs([
+		GridStack.Grid.SetRowDefs([
 			new(1, GUT.Star),
 		]);
 		GridStack.Add(ViewNaviBase);

@@ -45,7 +45,7 @@ public partial class ViewStudyPlan
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Star),
 		]);
 		Root.A(_S());

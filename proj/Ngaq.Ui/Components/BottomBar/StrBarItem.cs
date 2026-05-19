@@ -29,7 +29,7 @@ public partial class StrBarItem{
 			var Grid = new GridStack(IsRow:true);
 			Ans.Content = Grid.Grid;
 			//Grid.Grid.Classes.Add(Cls.BarItem);
-			Grid.Grid.RowDefs([
+			Grid.SetRowDefs([
 				// new RowDef(12, GUT.Star),
 				// new RowDef(4, GUT.Star),
 				new(1, GUT.Auto),

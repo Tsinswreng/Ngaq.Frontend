@@ -48,7 +48,7 @@ public partial class ViewHome
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(20, GUT.Star),
 			]);
 		});

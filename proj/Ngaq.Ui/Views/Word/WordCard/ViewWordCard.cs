@@ -169,7 +169,7 @@ public partial class ViewWordListCard
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new RowDef(4, GUT.Auto),
 				new RowDef(8, GUT.Auto),
 			]);
@@ -177,7 +177,7 @@ public partial class ViewWordListCard
 
 		var LangGrid = new GridStack(IsRow:false);
 		Root.A(LangGrid.Grid, o=>{
-			o.ColDefs([
+			o.SetColDefs([
 				new ColDef(1, GUT.Star),
 				new ColDef(0.3, GUT.Star),
 				new ColDef(4, GUT.Star),
@@ -204,7 +204,7 @@ public partial class ViewWordListCard
 
 		var HeadBox = new GridStack(IsRow:false);
 		Root.A(HeadBox.Grid, o=>{
-			o.ColDefs([
+			o.SetColDefs([
 				new ColDef(1, GUT.Star),
 			]);
 		});
@@ -222,7 +222,7 @@ public partial class ViewWordListCard
 		var R = new GridStack(IsRow:false);
 		{var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
-			o.ColDefs([
+			o.SetColDefs([
 				new ColDef(9, GUT.Star),
 				new ColDef(3, GUT.Star),//last review time
 				new ColDef(1, GUT.Star),//tab

@@ -67,7 +67,7 @@ public partial class ViewWeightCalculatorPage
 
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
@@ -81,7 +81,7 @@ public partial class ViewWeightCalculatorPage
 
 	protected Control MkTopBar(){
 		var top = new GridStack(IsRow:false);
-		top.Grid.ColDefs([
+		top.Grid.SetColDefs([
 			new(7, GUT.Star),
 			new(1, GUT.Star),
 			new(1, GUT.Star),

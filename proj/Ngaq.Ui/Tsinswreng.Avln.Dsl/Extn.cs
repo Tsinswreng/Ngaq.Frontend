@@ -7,14 +7,14 @@ public static partial class Extn {
 	extension<TSelf>(TSelf z)
 		where TSelf : Grid
 	{
-		public TSelf RowDefs(
+		public TSelf SetRowDefs(
 			params IEnumerable<RowDef> RowDefs
 		){
 			z.RowDefinitions = [..RowDefs];
 			return z;
 		}
 
-		public TSelf ColDefs(
+		public TSelf SetColDefs(
 			params IEnumerable<ColDef> ColDefs
 		){
 			z.ColumnDefinitions= [..ColDefs];
@@ -27,14 +27,14 @@ public static partial class ExtnGridStack{
 	extension<TSelf>(TSelf z)
 		where TSelf : GridStack
 	{
-		public TSelf RowDefs(
+		public TSelf SetRowDefs(
 			params IEnumerable<RowDef> RowDefs
 		){
 			z.Grid.RowDefinitions = [..RowDefs];
 			return z;
 		}
 
-		public TSelf ColDefs(
+		public TSelf SetColDefs(
 			params IEnumerable<ColDef> ColDefs
 		){
 			z.Grid.ColumnDefinitions= [..ColDefs];

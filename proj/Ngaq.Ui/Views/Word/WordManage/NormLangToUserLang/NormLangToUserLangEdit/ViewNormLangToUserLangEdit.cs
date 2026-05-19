@@ -46,7 +46,7 @@ public partial class ViewNormLangToUserLangEdit
 
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -108,7 +108,7 @@ public partial class ViewNormLangToUserLangEdit
 
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
-		bar.Grid.ColDefs([
+		bar.Grid.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);
@@ -157,7 +157,7 @@ public partial class ViewNormLangToUserLangEdit
 		var root = new StackPanel{Spacing = 3};
 		root.Children.Add(new TextBlock{Text = Label});
 		var row = new GridStack(IsRow:false);
-		row.Grid.ColDefs([
+		row.Grid.SetColDefs([
 			new(8, GUT.Star),
 			new(2, GUT.Star),
 		]);

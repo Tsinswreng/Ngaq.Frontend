@@ -35,7 +35,7 @@ public partial class ViewCfgLang: AppViewBase{
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);

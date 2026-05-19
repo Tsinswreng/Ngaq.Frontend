@@ -41,7 +41,7 @@ public partial class ViewAddWord
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(2, GUT.Auto),
 				new(8, GUT.Star),
 				new(1, GUT.Auto),

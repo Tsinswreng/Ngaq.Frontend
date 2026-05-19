@@ -44,7 +44,7 @@ public partial class ViewEditJsonWord
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);
@@ -58,7 +58,7 @@ public partial class ViewEditJsonWord
 		var BottomBtnGrid = new GridStack(IsRow: false);
 		Root.Add(BottomBtnGrid.Grid);
 		{
-			BottomBtnGrid.Grid.ColDefs([
+			BottomBtnGrid.Grid.SetColDefs([
 				new(1,GUT.Star),
 				new(1,GUT.Star),
 			]);

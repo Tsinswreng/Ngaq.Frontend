@@ -36,7 +36,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 	bool IsSyncingPayloadText = false;
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 			new(1, GUT.Auto),

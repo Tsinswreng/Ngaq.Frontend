@@ -127,7 +127,7 @@ public partial class ViewLearnWords
 		var R = new GridStack(IsRow: true);
 		var Row1 = new GridStack(IsRow: false);
 		R.A(Row1.Grid, (o)=>{
-			o.ColDefs([
+			o.SetColDefs([
 				new(100, GUT.Star),
 				new(100, GUT.Star),
 				new(100, GUT.Star),
@@ -224,7 +224,7 @@ public partial class ViewLearnWords
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Auto),//overlay
 				new(1, GUT.Auto),
 				new(4, GUT.Star),
@@ -261,7 +261,7 @@ public partial class ViewLearnWords
 	Control _RowSearch(){
 		var Ans = new GridStack(IsRow: false);
 		{var o = Ans.Grid;
-			o.ColDefs([
+			o.SetColDefs([
 				new(1, GUT.Star),
 				new(7, GUT.Star),
 				new(2, GUT.Star),
@@ -299,7 +299,7 @@ public partial class ViewLearnWords
 		});
 		Ans.ItemTemplate = new FuncDataTemplate<VmWordListCard>((VmWordCard,b)=>{
 			var Grid = new Grid();
-			Grid.RowDefs([
+			Grid.SetRowDefs([
 				new(1,GUT.Auto)
 			]);
 			{{

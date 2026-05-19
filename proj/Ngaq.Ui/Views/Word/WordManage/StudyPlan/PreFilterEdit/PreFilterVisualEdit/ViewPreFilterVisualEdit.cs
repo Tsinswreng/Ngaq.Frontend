@@ -43,7 +43,7 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>? PropGridSource;
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -54,7 +54,7 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 
 	Control MkBody(){
 		var root = new GridStack(IsRow:true);
-		root.Grid.RowDefs([
+		root.Grid.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
@@ -147,13 +147,13 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 
 	Control MkFilterTab(bool isCore){
 		var root = new GridStack(IsRow:true);
-		root.Grid.RowDefs([
+		root.Grid.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);
 
 		var top = new GridStack(IsRow:false);
-		top.Grid.ColDefs([
+		top.Grid.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -231,7 +231,7 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
-		bar.Grid.ColDefs([
+		bar.Grid.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);

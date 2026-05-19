@@ -44,7 +44,7 @@ public partial class ViewAboutMe
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Auto),
 				new(2, GUT.Auto),
 				new(1, GUT.Star),
@@ -60,7 +60,7 @@ public partial class ViewAboutMe
 
 	protected Control _UserCard(){
 		var R = new GridStack(IsRow: false);
-		R.Grid.ColDefs([
+		R.Grid.SetColDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);

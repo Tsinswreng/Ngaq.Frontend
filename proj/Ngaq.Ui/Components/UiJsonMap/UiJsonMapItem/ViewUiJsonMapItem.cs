@@ -42,7 +42,7 @@ public partial class ViewJsonMapItem
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),

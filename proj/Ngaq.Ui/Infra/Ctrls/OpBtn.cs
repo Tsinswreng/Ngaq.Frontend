@@ -84,7 +84,7 @@ public partial class OpBtn : ContentControl {
 
 	public OpBtn() {
 		base.Content = Grid;
-		Grid.RowDefs([
+		Grid.SetRowDefs([
 			new(1, GUT.Star),
 			//RowDef(1, GUT.Auto),
 		]);

@@ -66,7 +66,7 @@ public partial class ViewSetCurStudyPlan
 
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefs([
+		Root.SetRowDefs([
 			new(1, GUT.Star),
 		]);
 		Root.A(MkBody());
@@ -75,7 +75,7 @@ public partial class ViewSetCurStudyPlan
 
 	Control MkBody(){
 		var host = new GridStack(IsRow:true);
-		host.Grid.RowDefs([new(1, GUT.Star)]);
+		host.Grid.SetRowDefs([new(1, GUT.Star)]);
 		host.A(MkFieldsPanel());
 		return host.Grid;
 	}

@@ -35,7 +35,7 @@ public partial class ViewCfgFont
 
 	protected Control InputFontSize(){
 		var R = new GridStack(IsRow:false);
-		R.Grid.ColDefs([
+		R.Grid.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -54,7 +54,7 @@ public partial class ViewCfgFont
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefs([
+			o.SetRowDefs([
 				new(1, GUT.Auto),
 				new(1, GUT.Auto),
 				new(1, GUT.Auto),
