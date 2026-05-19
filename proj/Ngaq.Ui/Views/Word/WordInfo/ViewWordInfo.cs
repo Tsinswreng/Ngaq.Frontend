@@ -291,37 +291,37 @@ public partial class ViewWordInfo
 	/// 側欄保留 prop 名稱標題，並讓卡片整欄拉伸，保證分隔線等寬。
 	Control MkSidePropCard(PoWordProp Prop){
 		var R = new Border();
-		{var o = R;
-			o.BorderThickness = new(0, 0, 0, 1);
-			o.BorderBrush = new SolidColorBrush(Gray);
-			o.Padding = new(8, 8);
-			o.HorizontalAlignment = HAlign.Stretch;
-		}
-		var Grid = new Grid();
-		Grid.RowDefinitions.AddRange([
-			new(1, GUT.Auto),
-			new(1, GUT.Auto),
-		]);
-		Grid.ColumnDefinitions.AddRange([
-			new(1, GUT.Star),
-			new(1, GUT.Auto),
-		]);
-		Grid
-		.A(SubTxt(), o=>{
-			o.Text = TranslatePropKey(Prop.KStr);
-			o.HorizontalAlignment = HAlign.Left;
-			o.VerticalAlignment = VAlign.Top;
-		})
-		.A(MkEditBtn(Prop), o=>{
-			Grid.SetColumn(o, 1);
-		})
-		.A(MkPropValueTxt(IsDescriptionPane: false), o=>{
-			o.Text = GetPropValueText(Prop);
-			o.HorizontalAlignment = HAlign.Left;
-			Grid.SetRow(o, 1);
-			Grid.SetColumnSpan(o, 2);
+		R.BorderThickness = new(0, 0, 0, 1);
+		R.BorderBrush = new SolidColorBrush(Gray);
+		R.Padding = new(8, 8);
+		R.HorizontalAlignment = HAlign.Stretch;
+		R.SetChild(new Grid(), o=>{
+			o.RowDefinitions.AddRange([
+				new(1, GUT.Auto),
+				new(1, GUT.Auto),
+			]);
+			o.ColumnDefinitions.AddRange([
+				new(1, GUT.Star),
+				new(1, GUT.Auto),
+			]);
+			o
+			.A(SubTxt(), o=>{
+				o.Text = TranslatePropKey(Prop.KStr);
+				o.HorizontalAlignment = HAlign.Left;
+				o.VerticalAlignment = VAlign.Top;
+			})
+			.A(MkEditBtn(Prop), o=>{
+				Grid.SetColumn(o, 1);
+			})
+			.A(MkPropValueTxt(IsDescriptionPane: false), o=>{
+				o.Text = GetPropValueText(Prop);
+				o.HorizontalAlignment = HAlign.Left;
+				Grid.SetRow(o, 1);
+				Grid.SetColumnSpan(o, 2);
+			});
 		});
-		R.SetChild(Grid);
+
+
 		return R;
 	}
 
