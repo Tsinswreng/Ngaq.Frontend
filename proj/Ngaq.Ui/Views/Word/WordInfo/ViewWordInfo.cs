@@ -159,13 +159,12 @@ public partial class ViewWordInfo
 		]);
 		Splitter = MkColumnSplitter();
 		SidePropsPane = new Border();
-
 		Root
 		.A(new Border(), o => {
 			o.SetChild(new ScrollViewer(), Sv => {
-				Sv.SetContent(new ItemsControl(), List => {
-					this.Bind(List, List.PropItemsSource, x => x.DescriptionWordProps);
-					List.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop, b) => {
+				Sv.SetContent(new ItemsControl(), L => {
+					this.Bind(L, L.PropItemsSource, x => x.DescriptionWordProps);
+					L.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop, b) => {
 						return MkPropCard(Prop, IsDescriptionPane: true);
 					});
 				});
@@ -178,20 +177,20 @@ public partial class ViewWordInfo
 			}
 			B.BorderThickness = new(0);
 			B.MinWidth = UiCfg.Inst.BaseFontSize * 2.2;
-			B.HorizontalAlignment = HAlign.Stretch;
+			B.HAlign(x=>x.Stretch);
 			B.SetChild(new ScrollViewer(), Sv => {
-				Sv.HorizontalAlignment = HAlign.Stretch;
+				Sv.HAlign(x=>x.Stretch);
 				Sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled;
-				Sv.SetContent(new ItemsControl(), List => {
-					List.HorizontalAlignment = HAlign.Stretch;
-					List.SetItemsPanel(() => {
+				Sv.SetContent(new ItemsControl(), L => {
+					L.HAlign(x=>x.Stretch);
+					L.SetItemsPanel(() => {
 						return new StackPanel {
 							Orientation = Orientation.Vertical,
 							HorizontalAlignment = HAlign.Stretch,
 						};
 					});
-					this.Bind(List, List.PropItemsSource, x => x.SideWordProps);
-					List.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop, b) => {
+					this.Bind(L, L.PropItemsSource, x => x.SideWordProps);
+					L.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop, b) => {
 						return MkPropCard(Prop, IsDescriptionPane: false);
 					});
 				});

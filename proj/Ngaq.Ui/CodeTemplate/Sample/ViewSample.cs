@@ -63,14 +63,14 @@ public partial class ViewSample
 //當CBind的泛型參數爲Ctx時 可以簡寫成 Ctx.Bind(o, o.PropText, x=>x.Cnt1);
 //優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
 		})
-		.A(new Button(), o=>{
+		.A(new Button(), b=>{
 			//初始化ContentControl.Content時使用SetContent擴展方法、不要直接給Content賦值
-			o.SetContent(new TextBlock(), t=>{
+			b.SetContent(new TextBlock(), t=>{
 				t.Text = I[K.ButtonOne];//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
 			});
 //你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
 //按鈕綁定事件的寫法
-			o.Click += (s,e)=>{
+			b.Click += (s,e)=>{
 				Ctx?.Click1();
 			};
 		})
@@ -135,18 +135,18 @@ public partial class ViewSample
 
 	public void SampleIcon(){
 		//基礎示例
-		Avalonia.Controls.Shapes.Path addIcon = Icons.Add().ToIcon();
+		Avalonia.Controls.Shapes.Path addIcon = Icons.Add();
 		var b1 = new Button();
 		b1.SetContent(addIcon);
-// Svgs下 可用的圖標 在 Ngaq.Frontend/proj/Ngaq.Ui/Icons/Icons.Decl.cs
-// 禁止閱讀 Icons.Impl.cs !!!!
+		// Svgs下 可用的圖標 在 Ngaq.Frontend/proj/Ngaq.Ui/Icons/Icons.Decl.cs
+		// 禁止閱讀 Icons.Impl.cs !!!!
 		//圖標接文字示例:
 		var b2 = new Button();
-		b2.SetContent(Icons.Add().ToIcon().WithText("Add"));
+		b2.SetContent(Icons.Add().WithText("Add"));
 	}
 
 
-	[Doc(@$"使用Tsinswreng.AvlnTool的Dsl。
+	[Doc(@$"使用Tsinswreng.Avln.Dsl。
 	要求:
 	- 在lambda中 用o.Xxx = Yyy的寫法初始化 加入控件樹的子控件、而不是使用屬性初始化塊
 	- 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
@@ -154,22 +154,23 @@ public partial class ViewSample
 	public void SampleOfUsingDsl(){
 		var 正確示例 = (Panel p)=>{
 			//所有Panel都能用.A()擴展方法
-			p.A(new TextBox(), o=>{
+			p.A(new TextBox(), t=>{
 				//在這裏通過o.Xxx初始化
-				o.Text = I[K.CorrectExample];
+				t.Text = I[K.CorrectExample];
 			})
 			//鏈試調用
 			.A(new Control())//第二個Action<>可省略不傳
-			.A(new Button(), o=>{
-				//第二個Action<>可省略。
+			.A(new Button(), b=>{
+				b.BorderThickness = new(0);//能直接寫 = new(...); 的 就不要寫 = new SomeType(...);
+				b.HAlign(x=>x.Center);
 				// 當給Content賦值 需要初始化的對象時、使用SetContent+lambda的寫法。
 				// 如果只是賦值簡單對象 不需額外初始化的、就可以直接 o.Content=xxx
-				o.SetContent(new TextBlock(), o=>{
-					o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				b.SetContent(new TextBlock(), t=>{
+					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				});
 			})
-			.A(new Border(), bdr=>{ // 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
-				bdr.SetChild(new ScrollViewer(), sv=>{
+			.A(new Border(), b=>{ // 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
+				b.SetChild(new ScrollViewer(), sv=>{//lambda中的形參名稱長度不得多于2字符
 					sv.SetContent(new StackPanel(), sp=>{
 						sp.A(new TextBlock())
 						.A(new TextBox());
@@ -178,6 +179,7 @@ public partial class ViewSample
 			})
 			;
 		};
+
 		var 錯誤示例 = (Panel p)=>{
 			var textBox = new TextBox{
 				Text = "錯誤示例"
@@ -191,7 +193,8 @@ public partial class ViewSample
 				FontSize = 20
 			};
 			btn.Content = textBlock;
-			//錯誤原因: 未使用A和SetContent擴展方法;
+			//錯誤原因: 完全未按Dsl層級寫法來
+			// 未使用A和SetContent擴展方法;
 			// 初始化控件屬性寫法不符合規範; 硬編碼字體大小; 硬編碼文本未使用Todo.I18n
 			// 代碼塊的嵌套 未和 樹的邏輯結構 保持一致
 		};//以上代碼是*錯誤示例*！
@@ -199,17 +202,17 @@ public partial class ViewSample
 
 	public void SampleNoDupliStyle(){
 		var 錯誤示例 = (Panel P)=>{
-			P.A(new Button(), o=>{
-				o.Background = Brushes.Gray;
-				o.VAlign(x=>x.Center);
-				o.HAlign(x=>x.Center);
-				o.SetContent(I[K.File]);
+			P.A(new Button(), b=>{
+				b.Background = Brushes.Gray;
+				b.VAlign(x=>x.Center);
+				b.HAlign(x=>x.Center);
+				b.SetContent(I[K.File]);
 			})
-			.A(new Button(), o=>{
-				o.Background = Brushes.Gray;
-				o.VAlign(x=>x.Center);
-				o.HAlign(x=>x.Center);
-				o.SetContent(I[K.Edit]);
+			.A(new Button(), b=>{
+				b.Background = Brushes.Gray;
+				b.VAlign(x=>x.Center);
+				b.HAlign(x=>x.Center);
+				b.SetContent(I[K.Edit]);
 			})
 			;
 		};
@@ -221,15 +224,15 @@ public partial class ViewSample
 				o.HAlign(x=>x.Center);
 				return o;
 			};
-			P.A(_Btn(), o=>{
-				o.SetContent(I[K.File]);
+			P.A(_Btn(), b=>{
+				b.SetContent(I[K.File]);
 			})
 			.A(_Btn(), o=>{
 				o.SetContent(I[K.Edit]);
 			})
 			;
 		};
-		var 正確示例2 = (Panel P)=>{
+		var 更推薦的正確示例2 = (Panel P)=>{
 			P.Styles.A(
 				new Style(x=>x.Is<Button>().Class(Cls.MenuBtn))
 				.Set(HorizontalAlignmentProperty, HAlign.Center)
