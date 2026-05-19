@@ -19,19 +19,5 @@ public static partial class Extn {
 			z.ColumnDefinitions= [..ColDefs];
 			return z;
 		}
-
-		// public TSelf RowDefs(
-		// 	params IEnumerable<RowDef> RowDefs
-		// ){
-		// 	z.RowDefinitions = [..RowDefs];
-		// 	return z;
-		// }
-
-		// public TSelf ColDefs(
-		// 	IEnumerable<ColDef> ColDefs
-		// ){
-		// 	z.ColumnDefinitions= [..ColDefs];
-		// 	return z;
-		// }
 	}
 }
