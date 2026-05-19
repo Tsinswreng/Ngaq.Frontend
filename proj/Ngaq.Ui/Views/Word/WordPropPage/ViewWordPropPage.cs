@@ -54,7 +54,7 @@ public partial class ViewWordPropPage: AppViewBase{
 
 	Button MkBtnAdd(){
 		var o = new Button();
-		o.Margin = new Thickness(10, 10, 10, 4);
+		o.Margin = new(10, 10, 10, 4);
 		o.StretchCenter();
 		o.Content = Icons.Add().ToIcon().WithText(" "+I[K.AddProp]);
 		return o;
@@ -62,7 +62,7 @@ public partial class ViewWordPropPage: AppViewBase{
 
 	Control MkGrid(){
 		Grid = new TreeDataGrid{
-			Margin = new Thickness(10, 4, 10, 10),
+			Margin = new(10, 4, 10, 10),
 			MinHeight = 260,
 			HorizontalAlignment = HAlign.Stretch,
 		};

@@ -78,8 +78,8 @@ public partial class ViewWordSyncV2
 	Control MkSection(str Title, Action<StackPanel> FnFillBody){
 		var bdr = new Border();
 		bdr.BorderBrush = UiCfg.Inst.MainColor;
-		bdr.BorderThickness = new Thickness(1);
-		bdr.Padding = new Thickness(
+		bdr.BorderThickness = new(1);
+		bdr.Padding = new(
 			UiCfg.Inst.BaseFontSize * 0.6,
 			UiCfg.Inst.BaseFontSize * 0.5
 		);

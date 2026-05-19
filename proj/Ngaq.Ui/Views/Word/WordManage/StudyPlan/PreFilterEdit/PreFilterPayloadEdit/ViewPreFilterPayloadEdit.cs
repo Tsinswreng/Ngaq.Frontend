@@ -59,7 +59,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 		]);
 		root.A(MkErrorBar());
 		var tabs = new TabControl{
-			Margin = new Thickness(10, 8, 10, 10),
+			Margin = new(10, 8, 10, 10),
 		};
 		tabs.Items.Add(new TabItem{
 			Header = I[K.CoreFilter],
@@ -100,7 +100,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 	Control MkErrorBar(){
 		var b = new Border{
 			Background = new SolidColorBrush(Color.FromArgb(80, 180, 30, 30)),
-			Padding = new Thickness(10, 6),
+			Padding = new(10, 6),
 			IsVisible = false,
 		};
 		b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
@@ -115,8 +115,8 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 	Control MkFieldsFilterGridSection(bool IsCore){
 		var box = new Border{
 			BorderBrush = Brushes.DimGray,
-			BorderThickness = new Thickness(1),
-			Padding = new Thickness(10),
+			BorderThickness = new(1),
+			Padding = new(10),
 		};
 		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([

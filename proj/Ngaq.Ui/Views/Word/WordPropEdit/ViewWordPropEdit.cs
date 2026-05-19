@@ -63,7 +63,7 @@ public partial class ViewWordPropEdit: AppViewBase{
 		root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
 				EditorForm = sp;
-				sp.Margin = new Thickness(10);
+				sp.Margin = new(10);
 				sp.Spacing = 8;
 				sp.A(MkComboRow(I[K.KType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay)));
 				sp.A(MkEditableComboRow(
@@ -82,14 +82,14 @@ public partial class ViewWordPropEdit: AppViewBase{
 			});
 		});
 		root.A(new Button(), o=>{
-			o.Margin = new Thickness(10, 6, 10, 6);
+			o.Margin = new(10, 6, 10, 6);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.MainColor;
 			o.Content = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.Click += (s, e)=>ViewNavi?.Back();
 		});
 		root.A(new Button(), o=>{
-			o.Margin = new Thickness(10, 0, 10, 10);
+			o.Margin = new(10, 0, 10, 10);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Remove]);

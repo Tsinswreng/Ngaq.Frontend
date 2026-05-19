@@ -49,9 +49,9 @@ public class SvcPopup {
 	// 	var popup = new Border {
 	// 		Background = Brushes.White,
 	// 		BorderBrush = Brushes.Gray,
-	// 		BorderThickness = new Thickness(2),
+	// 		BorderThickness = new(2),
 	// 		CornerRadius = new CornerRadius(8),
-	// 		Padding = new Thickness(20),
+	// 		Padding = new(20),
 	// 		Child = new StackPanel {
 	// 			Children =
 	// 			{
@@ -59,7 +59,7 @@ public class SvcPopup {
 	// 				new Button
 	// 				{
 	// 					Content = "关闭",
-	// 					Margin = new Thickness(0, 10, 0, 0),
+	// 					Margin = new(0, 10, 0, 0),
 	// 					HorizontalAlignment = HAlign.Right
 	// 				}
 	// 			}

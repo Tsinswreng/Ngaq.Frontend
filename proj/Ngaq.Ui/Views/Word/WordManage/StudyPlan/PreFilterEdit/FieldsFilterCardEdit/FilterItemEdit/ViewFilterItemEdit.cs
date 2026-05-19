@@ -62,7 +62,7 @@ public class ViewFilterItemEdit: AppViewBase{
 		var sv = new ScrollViewer();
 		var root = new StackPanel{
 			Spacing = 10,
-			Margin = new Thickness(10),
+			Margin = new(10),
 		};
 		sv.Content = root;
 

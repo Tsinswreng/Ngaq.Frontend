@@ -130,7 +130,7 @@ public partial class OpBtn : ContentControl {
 			VerticalAlignment = VAlign.Bottom,
 			HorizontalAlignment = HAlign.Stretch,
 			Height = 4,
-			Margin = new Thickness(0),
+			Margin = new(0),
 			IsHitTestVisible = false
 		};
 

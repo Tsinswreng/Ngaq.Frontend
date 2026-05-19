@@ -47,21 +47,21 @@ public partial class ViewWordLearnEdit: AppViewBase{
 		root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
 				EditorForm = sp;
-				sp.Margin = new Thickness(10);
+				sp.Margin = new(10);
 				sp.Spacing = 8;
 				sp.A(MkComboRow(I[K.LearnResult], LearnResultOptions, CBE.Mk<VmWordLearnRow>(x=>x.LearnResultIndex, Mode: BindingMode.TwoWay)));
 				sp.A(MkTempusRow(I[K.Biz_CreatedAt], CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: new IsoToTempusConverter())));
 			});
 		});
 		root.A(new Button(), o=>{
-			o.Margin = new Thickness(10, 6, 10, 6);
+			o.Margin = new(10, 6, 10, 6);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.MainColor;
 			o.Content = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.Click += (s, e)=>ViewNavi?.Back();
 		});
 		root.A(new Button(), o=>{
-			o.Margin = new Thickness(10, 0, 10, 10);
+			o.Margin = new(10, 0, 10, 10);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Remove]);

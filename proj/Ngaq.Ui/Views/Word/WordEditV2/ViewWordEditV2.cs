@@ -89,7 +89,7 @@ public partial class ViewWordEditV2: AppViewBase{
 	Control MkErrBar(){
 		var b = new Border{
 			Background = new SolidColorBrush(Color.FromArgb(70, 180, 20, 20)),
-			Padding = new Thickness(10, 6),
+			Padding = new(10, 6),
 			IsVisible = false,
 		};
 		b.Bind(IsVisibleProperty, CBE.Mk<Ctx>(x=>x.HasError, Mode: BindingMode.OneWay));
@@ -105,7 +105,7 @@ public partial class ViewWordEditV2: AppViewBase{
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);
-		g.Grid.Margin = new Thickness(10, 8, 10, 10);
+		g.Grid.Margin = new(10, 8, 10, 10);
 
 		g.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.DelBtnBg;

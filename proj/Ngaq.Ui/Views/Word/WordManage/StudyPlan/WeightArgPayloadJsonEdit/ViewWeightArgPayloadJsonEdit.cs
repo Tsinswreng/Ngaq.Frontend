@@ -50,9 +50,9 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 	Control MkErrorBar(){
 		var b = new Border{
 			Background = new SolidColorBrush(Color.FromArgb(80, 180, 30, 30)),
-			Padding = new Thickness(10, 6),
+			Padding = new(10, 6),
 			IsVisible = false,
-			Margin = new Thickness(10, 10, 10, 4),
+			Margin = new(10, 10, 10, 4),
 		};
 		b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
 		var txt = new TextBlock{
@@ -80,7 +80,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 
 	Control JsonText(){
 		var editor = JsonTextEditorCtrl.Mk(Ctx?.PayloadJson, IsReadOnly: false, MinHeight: 220);
-		editor.Margin = new Thickness(10, 4, 10, 10);
+		editor.Margin = new(10, 4, 10, 10);
 		PayloadEditor = editor;
 		editor.TextChanged += (s,e)=>{
 			if(IsSyncingPayloadText || Ctx is null){

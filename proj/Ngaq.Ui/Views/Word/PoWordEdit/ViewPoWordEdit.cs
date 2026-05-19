@@ -33,7 +33,7 @@ public partial class ViewPoWordEdit: AppViewBase{
 	void Render(){
 		var sv = new ScrollViewer();
 		sv.SetContent(new StackPanel(), sp=>{
-			sp.Margin = new Thickness(10);
+			sp.Margin = new(10);
 			sp.Spacing = 8;
 			sp.A(MkIdSelectableRow(I[K.WordId], CBE.Mk<Ctx>(x=>x.WordIdText, Mode: BindingMode.OneWay)));
 			sp.A(MkInputRow(I[K.Head], CBE.Mk<Ctx>(x=>x.Head, Mode: BindingMode.TwoWay)));

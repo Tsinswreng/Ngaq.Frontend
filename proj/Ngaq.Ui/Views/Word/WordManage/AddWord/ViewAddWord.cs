@@ -64,7 +64,7 @@ public partial class ViewAddWord
 	Control MkFormatHint(){
 		var sp = new StackPanel{
 			Spacing = 4,
-			Margin = new Thickness(10, 10, 10, 6),
+			Margin = new(10, 10, 10, 6),
 		};
 		return sp;
 	}
@@ -88,7 +88,7 @@ public partial class ViewAddWord
 				Ctx.PropertyChanged -= OnVmPropertyChanged;
 			}
 		};
-		editor.Margin = new Thickness(10, 0, 10, 10);
+		editor.Margin = new(10, 0, 10, 10);
 		return editor;
 	}
 

@@ -109,7 +109,7 @@ public partial class ViewWordInfo
 		Root
 		//詞頭框
 		.A(new Border(), o=>{
-			o.BorderThickness = new Thickness(0, 1, 0, 1);
+			o.BorderThickness = new(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Gray);
 			o.SetChild(TxtBox(), x=>{
 				Ctx.Bind(x, x.PropText, Vm=>Vm.Head);
@@ -177,7 +177,7 @@ public partial class ViewWordInfo
 			if(o is not Border B){
 				return;
 			}
-			B.BorderThickness = new Thickness(0);
+			B.BorderThickness = new(0);
 			B.MinWidth = UiCfg.Inst.BaseFontSize*2.2;
 			B.HorizontalAlignment = HAlign.Stretch;
 			B.SetChild(new ScrollViewer(), Sv=>{
@@ -264,9 +264,9 @@ public partial class ViewWordInfo
 	Control MkDescriptionPropCard(PoWordProp Prop){
 		var R = new Border();
 		{var o = R;
-			o.BorderThickness = new Thickness(0, 1, 0, 0);
+			o.BorderThickness = new(0, 1, 0, 0);
 			o.BorderBrush = new SolidColorBrush(Gray);
-			o.Padding = new Thickness(8, 8);
+			o.Padding = new(8, 8);
 			o.HorizontalAlignment = HAlign.Stretch;
 		}
 		var Grid = new Grid();
@@ -282,7 +282,7 @@ public partial class ViewWordInfo
 		})
 		.A(MkEditBtn(Prop), o=>{
 			Grid.SetColumn(o, 1);
-			o.Margin = new Thickness(8, 0, 0, 0);
+			o.Margin = new(8, 0, 0, 0);
 		});
 		R.SetChild(Grid);
 		return R;
@@ -292,9 +292,9 @@ public partial class ViewWordInfo
 	Control MkSidePropCard(PoWordProp Prop){
 		var R = new Border();
 		{var o = R;
-			o.BorderThickness = new Thickness(0, 0, 0, 1);
+			o.BorderThickness = new(0, 0, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Gray);
-			o.Padding = new Thickness(8, 8);
+			o.Padding = new(8, 8);
 			o.HorizontalAlignment = HAlign.Stretch;
 		}
 		var Grid = new Grid();
@@ -331,8 +331,8 @@ public partial class ViewWordInfo
 		R.SetContent(Icons.Edit().ToIcon());
 		R.HorizontalAlignment = HAlign.Right;
 		R.VerticalAlignment = VAlign.Top;
-		R.Padding = new Thickness(0);
-		R.Margin = new Thickness(0);
+		R.Padding = new(0);
+		R.Margin = new(0);
 		R.MinWidth = 0;
 		R.MinHeight = 0;
 		R.Background = Brushes.Transparent;

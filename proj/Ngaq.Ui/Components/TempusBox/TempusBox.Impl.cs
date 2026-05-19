@@ -141,9 +141,9 @@ public partial class TempusBox: ContentControl{
 		var o = _Input;
 		o.MinWidth = 0;
 		o.VerticalContentAlignment = VAlign.Center;
-		o.Margin = new Thickness(0);
-		o.BorderThickness = new Thickness(1);
-		//o.Padding = new Thickness(8, 0, 8, 0);
+		o.Margin = new(0);
+		o.BorderThickness = new(1);
+		//o.Padding = new(8, 0, 8, 0);
 		o.TextChanged += (s, e)=>{
 			// 由用戶輸入觸發時，按當前格式解析；失敗則只更新標記，不覆蓋既有 Tempus。
 			if(_SyncingUi){
@@ -174,9 +174,9 @@ public partial class TempusBox: ContentControl{
 		};
 		btn.HorizontalAlignment = HAlign.Stretch;
 		btn.VerticalAlignment = VAlign.Stretch;
-		btn.Margin = new Thickness(0);
-		btn.BorderThickness = new Thickness(1);
-		btn.Padding = new Thickness(8, 0, 8, 0);
+		btn.Margin = new(0);
+		btn.BorderThickness = new(1);
+		btn.Padding = new(8, 0, 8, 0);
 		var flyout = new Flyout{
 			Placement = PlacementMode.Bottom,
 		};
@@ -194,7 +194,7 @@ public partial class TempusBox: ContentControl{
 		};
 		panel.A(cbFormat);
 		var wrap = new Border{
-			Padding = new Thickness(6),
+			Padding = new(6),
 		};
 		var calendar = new Avalonia.Controls.Calendar{
 			HorizontalAlignment = HAlign.Stretch,

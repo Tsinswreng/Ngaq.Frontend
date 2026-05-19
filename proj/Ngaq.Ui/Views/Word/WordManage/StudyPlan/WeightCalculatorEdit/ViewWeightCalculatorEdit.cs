@@ -57,7 +57,7 @@ public partial class ViewWeightCalculatorEdit
 		var sv = new ScrollViewer();
 		var root = new StackPanel{
 			Spacing = 10,
-			Margin = new Thickness(10),
+			Margin = new(10),
 		};
 		sv.Content = root;
 		root.Children.Add(MkErrorBar());
@@ -68,7 +68,7 @@ public partial class ViewWeightCalculatorEdit
 	Control MkErrorBar(){
 		var b = new Border{
 			Background = new SolidColorBrush(Color.FromArgb(80, 180, 30, 30)),
-			Padding = new Thickness(10, 6),
+			Padding = new(10, 6),
 			IsVisible = false,
 		};
 		b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
@@ -83,8 +83,8 @@ public partial class ViewWeightCalculatorEdit
 	Control MkPoSection(){
 		var bdr = new Border{
 			BorderBrush = Brushes.DimGray,
-			BorderThickness = new Thickness(1),
-			Padding = new Thickness(10),
+			BorderThickness = new(1),
+			Padding = new(10),
 		};
 		var sp = new StackPanel{Spacing = 8};
 		bdr.Child = sp;

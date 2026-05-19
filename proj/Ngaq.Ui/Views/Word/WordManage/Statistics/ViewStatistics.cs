@@ -121,13 +121,13 @@ public partial class ViewStatistics: AppViewBase{
 			var text = new TextBlock{
 				Text = label,
 				VerticalAlignment = VAlign.Center,
-				Margin = new Thickness(0, 4, 8, 4),
+				Margin = new(0, 4, 8, 4),
 			};
 			Grid.SetRow(text, row);
 			Grid.SetColumn(text, 0);
 			grid.Children.Add(text);
 
-			input.Margin = new Thickness(0, 4, 0, 4);
+			input.Margin = new(0, 4, 0, 4);
 			Grid.SetRow(input, row);
 			Grid.SetColumn(input, 1);
 			grid.Children.Add(input);
@@ -152,11 +152,11 @@ public partial class ViewStatistics: AppViewBase{
 		cfg
 		.A(new ScrollViewer(), sv=>{
 			sv.SetContent(MkCfgForm(), o=>{
-				o.Margin = new Thickness(8, 8, 8, 4);
+				o.Margin = new(8, 8, 8, 4);
 			});
 		})
 		.A(new OpBtn(), o=>{
-			o.Margin = new Thickness(8, 4, 8, 8);
+			o.Margin = new(8, 4, 8, 8);
 			o._Button.HAlign(x=>x.Stretch);
 			o._Button.StretchCenter();
 			o.BtnContent = I[K.Count];

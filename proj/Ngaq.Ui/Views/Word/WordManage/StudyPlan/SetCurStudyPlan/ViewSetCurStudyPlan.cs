@@ -87,14 +87,14 @@ public partial class ViewSetCurStudyPlan
 		var sv = new ScrollViewer();
 		var root = new StackPanel{
 			Spacing = 10,
-			Margin = new Thickness(10),
+			Margin = new(10),
 		};
 		sv.Content = root;
 
 		var bdr = new Border{
 			BorderBrush = Brushes.DimGray,
-			BorderThickness = new Thickness(1),
-			Padding = new Thickness(10),
+			BorderThickness = new(1),
+			Padding = new(10),
 		};
 		root.Children.Add(bdr);
 

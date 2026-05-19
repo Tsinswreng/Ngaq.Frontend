@@ -31,7 +31,7 @@ public class TryTreeDataGrid {
 		var treeDataGrid = new TreeDataGrid {
 			Source = source,
 			MinHeight = 280,
-			Margin = new Thickness(12),
+			Margin = new(12),
 		};
 
 		var host = new Grid {
@@ -39,7 +39,7 @@ public class TryTreeDataGrid {
 		};
 		host.Children.Add(new TextBlock {
 			Text = "TreeDataGrid Demo",
-			Margin = new Thickness(12, 10, 12, 0),
+			Margin = new(12, 10, 12, 0),
 			Foreground = Brushes.White,
 		});
 		Grid.SetRow(treeDataGrid, 1);

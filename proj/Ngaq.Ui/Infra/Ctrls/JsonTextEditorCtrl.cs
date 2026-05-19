@@ -29,7 +29,7 @@ public static class JsonTextEditorCtrl{
 		editor.Options.IndentationSize = 2;
 		editor.Options.EnableHyperlinks = false;
 		editor.Options.EnableEmailHyperlinks = false;
-		editor.Margin = new Thickness(0);
+		editor.Margin = new(0);
 		return editor;
 	}
 

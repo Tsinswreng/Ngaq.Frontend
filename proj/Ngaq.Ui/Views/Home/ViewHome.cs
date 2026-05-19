@@ -57,7 +57,7 @@ public partial class ViewHome
 			var R = StrBarItem.Inst.BarItem(Title, Icon);
 			//不效
 			// if (R.Content is Grid grid && grid.Children.Count >= 2 && grid.Children[1] is Control ctrl){
-			// 	ctrl.Margin = new Thickness(0, 0, 0, 10); // 👈 關鍵：往下留少許空間，視覺上往上移
+			// 	ctrl.Margin = new(0, 0, 0, 10); // 👈 關鍵：往下留少許空間，視覺上往上移
 			// }
 			return R;
 		};

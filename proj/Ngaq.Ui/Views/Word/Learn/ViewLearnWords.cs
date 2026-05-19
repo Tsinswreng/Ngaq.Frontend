@@ -161,7 +161,7 @@ public partial class ViewLearnWords
 				R._Button.VerticalContentAlignment = VAlign.Stretch;
 				R._Button.StretchCenter();
 				R._Button.Background = Brushes.Transparent;
-				R.Padding = R._Button.Margin = new Thickness(0);
+				R.Padding = R._Button.Margin = new(0);
 				return R;
 			};
 			Row1.A(Btn(), o=>{
