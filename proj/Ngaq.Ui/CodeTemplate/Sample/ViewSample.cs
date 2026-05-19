@@ -1,18 +1,14 @@
 namespace Ngaq.Ui.CodeTemplate.Sample;
 
 using Avalonia.Controls;
-using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
 using Tsinswreng.Avln.Grid;
-using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsCore;
 using Ctx = VmSample;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
@@ -29,6 +25,8 @@ public partial class ViewSample
 		};
 	}
 
+
+
 	//大多數場景下我們用GridStack作爲視圖的根節點。
 	//GridStack支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號 因此不要手動設計行/列號
 	//優先使用GridStack、別用原生Grid 除非你要顯示手動設置行和列
@@ -36,10 +34,10 @@ public partial class ViewSample
 	//視圖的初始化羅輯寫在Render裏
 	public void Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
-			new RowDef(1, GUT.Auto), //GUT成員有Star,Auto,Pixel
-			new RowDef(2, GUT.Star),
-			new RowDef(30, GUT.Pixel),
+		Root.RowDefs.AddRange([
+			new(1, GUT.Auto),
+			new(2, GUT.Star),
+			new(30, GUT.Pixel),
 			//....略
 		]);
 		//也可以寫 Root.Grid.RowDefinitions = new("Auto,2*,30");
@@ -82,8 +80,7 @@ public partial class ViewSample
 					//UI中硬編碼的字符串都要這樣寫Todo
 					o._Button.Content = I[K.CallBackendService];
 					o.SetExe(Ct=>Ctx?.CallService(Ct));
-				});
-				Sp.A(MkList());
+				}).A(MkList());
 			});
 		})
 		;
@@ -96,8 +93,7 @@ public partial class ViewSample
 		var R = new ItemsControl();
 		R.SetItemTemplate<str>((ele, ns)=>{
 			return new TextBox{Text=ele};
-		});
-		R.SetItemsPanel(()=>{
+		}).SetItemsPanel(()=>{
 			return new VirtualizingStackPanel();
 		});
 		R.Bind(R.PropItemsSource, CBE.Mk<Ctx>(x=>x.List));

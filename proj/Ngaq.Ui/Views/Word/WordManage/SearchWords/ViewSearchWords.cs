@@ -52,18 +52,18 @@ public partial class ViewSearchWords
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Star),
-				RowDef(1, GUT.Auto),
+				new(1, GUT.Auto),
+				new(1, GUT.Star),
+				new(1, GUT.Auto),
 			]);
 		});
 		var SearchGrid = new GridStack(IsRow: false);
 		Root.A(SearchGrid.Grid);
 		{var o = SearchGrid;
 			o.Grid.ColumnDefinitions.AddRange([
-				ColDef(6, GUT.Auto),
-				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Auto),
+				new(6, GUT.Auto),
+				new(1, GUT.Star),
+				new(1, GUT.Auto),
 			]);
 		}
 				{{

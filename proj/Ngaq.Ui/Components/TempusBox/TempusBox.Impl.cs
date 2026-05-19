@@ -128,8 +128,8 @@ public partial class TempusBox: ContentControl{
 	void Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 		Root
 		.A(MkMenuBtn())

@@ -4,7 +4,6 @@ using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.User.UserCtx;
 using Ngaq.Ui.Infra;
-using Tsinswreng.CsCore;
 
 namespace Ngaq.Ui.CodeTemplate.Sample;
 

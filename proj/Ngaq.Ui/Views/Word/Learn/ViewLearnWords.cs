@@ -128,10 +128,10 @@ public partial class ViewLearnWords
 		var Row1 = new GridStack(IsRow: false);
 		R.A(Row1.Grid, (o)=>{
 			o.ColumnDefinitions.AddRange([
-				ColDef(100, GUT.Star),
-				ColDef(100, GUT.Star),
-				ColDef(100, GUT.Star),
-				ColDef(100, GUT.Star),
+				new(100, GUT.Star),
+				new(100, GUT.Star),
+				new(100, GUT.Star),
+				new(100, GUT.Star),
 			]);
 		});
 		{{
@@ -225,11 +225,11 @@ public partial class ViewLearnWords
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Auto),//overlay
-				RowDef(1, GUT.Auto),
-				RowDef(4, GUT.Star),
-				RowDef(1, GUT.Auto),//GridSplitter
-				RowDef(5, GUT.Star),
+				new(1, GUT.Auto),//overlay
+				new(1, GUT.Auto),
+				new(4, GUT.Star),
+				new(1, GUT.Auto),//GridSplitter
+				new(5, GUT.Star),
 			]);
 		});
 		{{
@@ -262,9 +262,9 @@ public partial class ViewLearnWords
 		var Ans = new GridStack(IsRow: false);
 		{var o = Ans.Grid;
 			o.ColumnDefinitions.AddRange([
-				ColDef(1, GUT.Star),
-				ColDef(7, GUT.Star),
-				ColDef(2, GUT.Star),
+				new(1, GUT.Star),
+				new(7, GUT.Star),
+				new(2, GUT.Star),
 			]);
 		}
 		{{
@@ -301,7 +301,7 @@ public partial class ViewLearnWords
 			var Grid = new Grid();
 			{var o = Grid;
 				o.RowDefinitions.AddRange([
-					new RowDef(1,GUT.Auto)
+					new(1,GUT.Auto)
 				]);
 			}
 			{{
@@ -316,29 +316,29 @@ public partial class ViewLearnWords
 					o.HorizontalContentAlignment = HAlign.Stretch;
 					o.Styles.Add(new Style().NoMargin().NoPadding());
 					o.Background = Brushes.Transparent;
-					o.CBind<VmWordListCard>(
+					o.CBind(
 						//Button.BackgroundProperty
 						BorderBrushProperty
-						,x=>x.LearnedColor, Mode: BindingMode.OneWay);
+						, (VmWordListCard x) => x.LearnedColor, Mode: BindingMode.OneWay);
 					o.BorderThickness = new Thickness(4,0,0,0);
-					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs??o.LongPressDurationMs;
+					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs?? o.LongPressDurationMs;
 					o.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, VmWordCard?.WordForLearn?.JnWord);
 					o.OnLongPressed += (s,e)=>{
 						o.ContextMenu.Open();
 					};
 					o.LongPressDurationMs = 500;
-					StyBtnWordCard(o.Styles);
+						StyBtnWordCard(o.Styles);
 				}
 
 				Btn.SetContent(new ViewWordListCard(VmWordCard), o=>{
 					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
 					o.Background = Brushes.Transparent;
-					o.CBind<VmWordListCard>(
+					o.CBind(
 						o.PropDataContext_()
-						,x=>x
-							,Mode: BindingMode.OneWay
+						,(VmWordListCard x) => x
+							, Mode: BindingMode.OneWay
 						);
-					Btn.Click += (s,e)=>{
+					Btn.Click += (object? s, Avalonia.Interactivity.RoutedEventArgs e)=>{
 						if(o?.Ctx != null){
 							Ctx?.ClickWordCard(o.Ctx);
 						}

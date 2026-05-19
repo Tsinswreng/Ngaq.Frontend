@@ -56,9 +56,9 @@ public partial class ViewWordPropEdit: AppViewBase{
 	void Render(){
 		var root = new GridStack(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
-			RowDef(8, GUT.Star),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+			new(8, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 		root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{

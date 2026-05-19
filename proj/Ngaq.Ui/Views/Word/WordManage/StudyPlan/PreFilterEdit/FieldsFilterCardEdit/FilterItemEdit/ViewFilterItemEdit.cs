@@ -35,8 +35,8 @@ public class ViewFilterItemEdit: AppViewBase{
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkBody());
 		Root.A(MkBottomBar());
@@ -68,8 +68,8 @@ public class ViewFilterItemEdit: AppViewBase{
 
 		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		top.A(MkComboRow(
 			I[K.Operation],
@@ -91,8 +91,8 @@ public class ViewFilterItemEdit: AppViewBase{
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Delete]);

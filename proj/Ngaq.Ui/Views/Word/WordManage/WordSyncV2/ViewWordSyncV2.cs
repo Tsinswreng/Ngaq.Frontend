@@ -154,8 +154,8 @@ public partial class ViewWordSyncV2
 	Control MkImportPathRow(){
 		var row = new GridStack(IsRow: false);
 		row.ColDefs.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		row.A(new TextBox(), o=>{
 			o.CBind<Ctx>(o.PropText, x=>x.PathImport);
@@ -175,8 +175,8 @@ public partial class ViewWordSyncV2
 	Control MkExportPathRow(){
 		var row = new GridStack(IsRow: false);
 		row.ColDefs.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		row.A(new TextBox(), o=>{
 			o.CBind<Ctx>(o.PropText, x=>x.PathExport);

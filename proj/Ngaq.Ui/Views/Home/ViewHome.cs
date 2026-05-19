@@ -49,7 +49,7 @@ public partial class ViewHome
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(20, GUT.Star),
+				new(20, GUT.Star),
 			]);
 		});
 

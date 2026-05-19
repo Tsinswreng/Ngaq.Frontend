@@ -43,9 +43,9 @@ public partial class ViewJsonMapItem
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 		Root
 		.A(Txt(), o=>{

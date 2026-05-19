@@ -43,8 +43,8 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkBody());
 		Root.A(MkBottomBar());
@@ -54,8 +54,8 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 	Control MkBody(){
 		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 		root.A(MkErrorBar());
 		var tabs = new TabControl{
@@ -120,16 +120,16 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 		};
 		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 		box.Child = root.Grid;
 
 		var title = IsCore ? I[K.CoreFilter] : I[K.PropFilter];
 		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		top.A(new TextBlock(), o=>{
 			o.Text = title;
@@ -207,7 +207,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow:false);
-		g.Grid.ColumnDefinitions.Add(ColDef(1, GUT.Star));
+		g.Grid.ColumnDefinitions.Add(new(1, GUT.Star));
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Content = Icons.Save().ToIcon().WithText(I[K.SaveDraft]);

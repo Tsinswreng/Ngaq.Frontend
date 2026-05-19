@@ -45,8 +45,8 @@ public partial class ViewEditJsonWord
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Star),
-				RowDef(1, GUT.Auto),
+				new(1, GUT.Star),
+				new(1, GUT.Auto),
 			]);
 		});
 		Root.A(new TextBox(), o=>{
@@ -59,8 +59,8 @@ public partial class ViewEditJsonWord
 		Root.Add(BottomBtnGrid.Grid);
 		{
 			BottomBtnGrid.Grid.ColumnDefinitions.AddRange([
-				ColDef(1,GUT.Star),
-				ColDef(1,GUT.Star),
+				new(1,GUT.Star),
+				new(1,GUT.Star),
 			]);
 		}
 		{{

@@ -44,8 +44,8 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkBody());
 		Root.A(MkBottomBar());
@@ -55,9 +55,9 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	Control MkBody(){
 		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 		root.A(MkErrorBar());
 		root.A(MkPoSection(), o=>o.Margin = new Thickness(10, 10, 10, 8));
@@ -148,14 +148,14 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	Control MkFilterTab(bool isCore){
 		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 
 		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		top.A(new TextBlock(), o=>{
 			o.Text = "";
@@ -232,8 +232,8 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		bar.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.DelBtnBg;

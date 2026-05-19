@@ -36,8 +36,8 @@ public partial class ViewLlmRawOutputEdit: AppViewBase{
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.RowDefs.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(new TextBox(), o=>{
 			o.CBind<Ctx>(o.PropText, x=>x.RawOutput);

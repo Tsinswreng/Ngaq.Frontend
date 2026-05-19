@@ -69,8 +69,8 @@ public partial class ViewStatistics: AppViewBase{
 	Control MkIntervalInput(){
 		var grid = new Grid();
 		grid.ColumnDefinitions.AddRange([
-			ColDef(4, GUT.Star),
-			ColDef(4, GUT.Star),
+			new(4, GUT.Star),
+			new(4, GUT.Star),
 		]);
 
 		var intervalBox = new TextBox();
@@ -106,14 +106,14 @@ public partial class ViewStatistics: AppViewBase{
 	Control MkCfgForm(){
 		var grid = new Grid();
 		grid.ColumnDefinitions.AddRange([
-			ColDef(130, GUT.Pixel),
-			ColDef(1, GUT.Star),
+			new(130, GUT.Pixel),
+			new(1, GUT.Star),
 		]);
 		grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 
 		i32 row = 0;
@@ -145,8 +145,8 @@ public partial class ViewStatistics: AppViewBase{
 	Control MkCfgPanel(){
 		var cfg = new GridStack(IsRow: true);
 		cfg.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 
 		cfg
@@ -214,9 +214,9 @@ public partial class ViewStatistics: AppViewBase{
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(7, GUT.Star),
-				RowDef(1, GUT.Auto),
-				RowDef(5, GUT.Star),
+				new(7, GUT.Star),
+				new(1, GUT.Auto),
+				new(5, GUT.Star),
 			]);
 		});
 
@@ -232,8 +232,8 @@ public partial class ViewStatistics: AppViewBase{
 
 		var bottomPanel = new GridStack(IsRow: true);
 		bottomPanel.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 		bottomPanel
 		.A(MkPageBar(), o=>{

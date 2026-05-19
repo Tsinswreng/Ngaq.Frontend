@@ -36,8 +36,8 @@ public partial class ViewCfgFont
 	protected Control InputFontSize(){
 		var R = new GridStack(IsRow:false);
 		R.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		R.A(new TextBox(), o=>{
 			o.CBind<Ctx>(
@@ -55,11 +55,11 @@ public partial class ViewCfgFont
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Star),
+				new(1, GUT.Auto),
+				new(1, GUT.Auto),
+				new(1, GUT.Auto),
+				new(1, GUT.Auto),
+				new(1, GUT.Star),
 			]);
 		});
 		Root.A(new TextBlock(), o=>{

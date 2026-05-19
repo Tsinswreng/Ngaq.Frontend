@@ -51,8 +51,8 @@ public partial class ViewTitle
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Auto),//Title
-				RowDef(1, GUT.Star),//Content
+				new(1, GUT.Auto),//Title
+				new(1, GUT.Star),//Content
 			]);
 		});
 		GridStack TitleBar = new(IsRow: false);
@@ -60,9 +60,9 @@ public partial class ViewTitle
 		{
 			var o = TitleBar;
 			o.Grid.ColumnDefinitions.AddRange([
-				ColDef(1, GUT.Auto),//Back Btn
-				ColDef(1, GUT.Star),//Title Str
-				ColDef(1, GUT.Auto),//Menu Btn
+				new(1, GUT.Auto),//Back Btn
+				new(1, GUT.Star),//Title Str
+				new(1, GUT.Auto),//Menu Btn
 			]);
 		}
 		Root.A(BdrTitle, o=>{});

@@ -38,7 +38,7 @@ public partial class ViewChangePassword
 	public void Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star)
+			new(1, GUT.Star)
 		]);
 		Root.A(new StackPanel(), Sp=>{
 			Sp.A(new TextBlock(), o=>{

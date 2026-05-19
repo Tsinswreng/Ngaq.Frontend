@@ -38,9 +38,9 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkErrorBar());
 		Root.A(JsonText());
@@ -67,9 +67,9 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
 			o.Content = I[K.Back];

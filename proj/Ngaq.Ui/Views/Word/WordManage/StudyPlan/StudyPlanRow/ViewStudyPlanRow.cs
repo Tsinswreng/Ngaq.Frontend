@@ -35,7 +35,7 @@ public partial class ViewStudyPlanRow
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		return NIL;
 	}

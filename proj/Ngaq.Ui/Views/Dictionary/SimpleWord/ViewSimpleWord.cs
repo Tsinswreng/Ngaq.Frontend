@@ -46,9 +46,9 @@ public partial class ViewSimpleWord
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 		Root
 		.A(Txt(), o=>{
@@ -73,8 +73,8 @@ public partial class ViewSimpleWord
 		R.SetItemTemplate<Pronunciation>((p,b)=>{
 			var Row = new GridStack(IsRow: false);
 			Row.ColDefs.AddRange([
-				ColDef(1, GUT.Auto),
-				ColDef(1, GUT.Auto),
+				new(1, GUT.Auto),
+				new(1, GUT.Auto),
 			]);
 			Row.A(new OpBtn(), o=>{
 				var Icon = Icons.VolHigh().ToIcon();

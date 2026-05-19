@@ -67,9 +67,9 @@ public partial class ViewStudyPlanPage
 	public nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkTopBar());
 		Root.A(MkGridHost());
@@ -80,9 +80,9 @@ public partial class ViewStudyPlanPage
 	Control MkTopBar(){
 		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(7, GUT.Star),
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(7, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{

@@ -47,8 +47,8 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	protected nil Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkBody());
 		Root.A(MkBottomBar());
@@ -89,8 +89,8 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		list.SetItemTemplate<VmPreFilterVisualEdit.VmFieldValueRow>((item, ns)=>{
 			var row = new GridStack(IsRow:false);
 			row.Grid.ColumnDefinitions.AddRange([
-				ColDef(1, GUT.Star),
-				ColDef(1, GUT.Auto),
+				new(1, GUT.Star),
+				new(1, GUT.Auto),
 			]);
 
 			var cb = new ComboBox{
@@ -159,14 +159,14 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	Control MkFilterItemsTab(){
 		var root = new GridStack(IsRow:true);
 		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 
 		var top = new GridStack(IsRow:false);
 		top.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		top.A(new TextBlock(), o=>{
 			o.Text = I[K.TapRowToEditOneFilterItem];
@@ -233,8 +233,8 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow:false);
 		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		g.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;

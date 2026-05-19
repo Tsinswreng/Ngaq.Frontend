@@ -43,8 +43,8 @@ public partial class ViewCfgLearnWord
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Star),
-				RowDef(1, GUT.Star),
+				new(1, GUT.Star),
+				new(1, GUT.Star),
 			]);
 		});
 		Root.A(new ScrollViewer(), sc=>{

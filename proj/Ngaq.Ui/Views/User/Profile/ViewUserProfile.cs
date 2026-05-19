@@ -76,19 +76,19 @@ public partial class ViewUserProfile
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
+				new(1, GUT.Auto),
+				new(1, GUT.Auto),
 			]);
 		});
 		Root.A(new ScrollViewer(), sv=>{
 			var ContentGrid = new GridStack(IsRow: true);
 			sv.SetContent(ContentGrid.Grid, o=>{
 				o.RowDefinitions.AddRange([
-					RowDef(4, GUT.Star),
-					RowDef(1, GUT.Star),
-					RowDef(1, GUT.Auto),
-					RowDef(1, GUT.Auto),
-					RowDef(1, GUT.Auto),
+					new(4, GUT.Star),
+					new(1, GUT.Star),
+					new(1, GUT.Auto),
+					new(1, GUT.Auto),
+					new(1, GUT.Auto),
 				]);
 
 				ContentGrid

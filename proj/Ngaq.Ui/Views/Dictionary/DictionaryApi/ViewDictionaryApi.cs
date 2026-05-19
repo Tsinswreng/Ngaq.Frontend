@@ -42,7 +42,7 @@ public partial class ViewDictionaryApi
 	public void Render() {
 		// 整頁只有一個列表，高度自適應
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star)
+			new(1, GUT.Star)
 		]);
 		this.Content = Root.Grid;
 

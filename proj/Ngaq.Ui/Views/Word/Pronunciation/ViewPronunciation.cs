@@ -41,8 +41,8 @@ public partial class ViewPronunciation
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 		Root.A(new OpBtn(), o=>{
 			var icon = Icons.VolHigh().ToIcon();

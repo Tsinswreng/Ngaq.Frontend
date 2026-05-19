@@ -39,9 +39,9 @@ public partial class ViewWordEditV2: AppViewBase{
 	void Render(){
 		Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(9, GUT.Star),
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+			new(9, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 		Root
 		.A(MkTabs())
@@ -102,8 +102,8 @@ public partial class ViewWordEditV2: AppViewBase{
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow: false);
 		g.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		g.Grid.Margin = new Thickness(10, 8, 10, 10);
 

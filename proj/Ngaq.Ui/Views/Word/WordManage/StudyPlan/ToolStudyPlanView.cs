@@ -52,8 +52,8 @@ public static class ToolStudyPlanView{
 		sp.Children.Add(new TextBlock{Text = Label});
 		var row = new GridStack(IsRow:false);
 		row.Grid.ColumnDefinitions.AddRange([
-			ColDef(7, GUT.Star),
-			ColDef(2, GUT.Star),
+			new(7, GUT.Star),
+			new(2, GUT.Star),
 		]);
 		row.A(new TextBox(), o=>{
 			o.IsReadOnly = ReadOnly;

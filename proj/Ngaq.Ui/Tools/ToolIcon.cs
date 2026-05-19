@@ -11,9 +11,9 @@ public class ToolIcon{
 	){
 		var R = new GridStack(IsRow: false);
 		R.ColDefs.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(UiCfg.Inst.BaseFontSize, GUT.Pixel),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(UiCfg.Inst.BaseFontSize, GUT.Pixel),
+			new(1, GUT.Auto),
 		]);
 		R.A(Icon);
 		R.Add();

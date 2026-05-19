@@ -85,8 +85,8 @@ public partial class ViewWordEdit
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(9999, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(9999, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 
 		Root.A(new ScrollViewer(), Sv=>{

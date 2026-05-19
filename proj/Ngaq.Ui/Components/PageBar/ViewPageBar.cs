@@ -83,12 +83,12 @@ public partial class ViewPageBar
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 		Root
 		.A(MkPageBtn(), o=>{

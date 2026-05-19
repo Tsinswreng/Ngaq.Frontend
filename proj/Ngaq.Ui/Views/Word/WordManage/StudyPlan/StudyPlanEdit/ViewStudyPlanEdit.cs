@@ -44,8 +44,8 @@ public partial class ViewStudyPlanEdit
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkBody());
 		Root.A(MkBottomBar());
@@ -145,8 +145,8 @@ public partial class ViewStudyPlanEdit
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		bar.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.DelBtnBg;

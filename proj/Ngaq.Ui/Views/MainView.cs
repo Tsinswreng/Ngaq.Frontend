@@ -328,7 +328,7 @@ public partial class MainView : UserControl {
 		SvcPopup = new SvcPopup(Root);
 		this.SetContent(GridStack.Grid);
 		GridStack.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		GridStack.Add(ViewNaviBase);
 		InputElement.KeyDownEvent.AddClassHandler<TopLevel>(

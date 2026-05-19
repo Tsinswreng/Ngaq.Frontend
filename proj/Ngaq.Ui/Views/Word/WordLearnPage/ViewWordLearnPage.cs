@@ -38,8 +38,8 @@ public partial class ViewWordLearnPage: AppViewBase{
 	void Render(){
 		var root = new GridStack(IsRow: true);
 		root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(9, GUT.Star),
+			new(1, GUT.Auto),
+			new(9, GUT.Star),
 		]);
 		root.A(MkBtnAdd(), o=>{
 			o.Click += (s, e)=>{

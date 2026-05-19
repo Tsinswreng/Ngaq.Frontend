@@ -49,8 +49,8 @@ public partial class ViewUserLangEdit
 	protected nil Render(){
 		this.Content = Root.Grid;
 		Root.Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Star),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Root.A(MkBody());
 		Root.A(MkBottomBar());
@@ -116,7 +116,7 @@ public partial class ViewUserLangEdit
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
 		bar.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
+			new(1, GUT.Star),
 		]);
 		bar.A(new OpBtn(), o=>{
 			o._Button.Background = UiCfg.Inst.MainColor;
@@ -161,8 +161,8 @@ public partial class ViewUserLangEdit
 		root.Children.Add(new TextBlock{Text = Label});
 		var row = new GridStack(IsRow:false);
 		row.Grid.ColumnDefinitions.AddRange([
-			ColDef(8, GUT.Star),
-			ColDef(2, GUT.Star),
+			new(8, GUT.Star),
+			new(2, GUT.Star),
 		]);
 		row.A(new TextBox(), tb=>{
 			tb.Bind(TextBox.TextProperty, Binding);

@@ -32,8 +32,8 @@ public partial class StrBarItem{
 			Grid.Grid.RowDefinitions.AddRange([
 				// new RowDef(12, GUT.Star),
 				// new RowDef(4, GUT.Star),
-				RowDef(1, GUT.Auto),
-				RowDef(1, GUT.Auto),
+				new(1, GUT.Auto),
+				new(1, GUT.Auto),
 			]);
 			{{
 				Grid.Add(Icon);{

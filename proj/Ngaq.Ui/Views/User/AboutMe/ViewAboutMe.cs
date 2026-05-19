@@ -45,9 +45,9 @@ public partial class ViewAboutMe
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(1, GUT.Auto),
-				RowDef(2, GUT.Auto),
-				RowDef(1, GUT.Star),
+				new(1, GUT.Auto),
+				new(2, GUT.Auto),
+				new(1, GUT.Star),
 			]);
 		});
 		Root.A(_ToolBar(), o=>{})
@@ -61,8 +61,8 @@ public partial class ViewAboutMe
 	protected Control _UserCard(){
 		var R = new GridStack(IsRow: false);
 		R.Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Auto),
-			ColDef(1, GUT.Star),
+			new(1, GUT.Auto),
+			new(1, GUT.Star),
 		]);
 
 		R.A(new SwipeLongPressBtn(), o=>{

@@ -101,8 +101,8 @@ public partial class ViewWordInfo
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(3, GUT.Auto),
-				RowDef(100, GUT.Star),
+				new(3, GUT.Auto),
+				new(100, GUT.Star),
 			]);
 		});
 
@@ -154,9 +154,9 @@ public partial class ViewWordInfo
 		var Root = new GridStack(IsRow: false);
 		MainGrid = Root.Grid;
 		MainGrid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(SplitterThickness, GUT.Pixel),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(SplitterThickness, GUT.Pixel),
+			new(1, GUT.Auto),
 		]);
 		Splitter = MkColumnSplitter();
 		SidePropsPane = new Border();
@@ -271,8 +271,8 @@ public partial class ViewWordInfo
 		}
 		var Grid = new Grid();
 		Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Grid
 		.A(MkPropValueTxt(IsDescriptionPane: true), o=>{
@@ -299,12 +299,12 @@ public partial class ViewWordInfo
 		}
 		var Grid = new Grid();
 		Grid.RowDefinitions.AddRange([
-			RowDef(1, GUT.Auto),
-			RowDef(1, GUT.Auto),
+			new(1, GUT.Auto),
+			new(1, GUT.Auto),
 		]);
 		Grid.ColumnDefinitions.AddRange([
-			ColDef(1, GUT.Star),
-			ColDef(1, GUT.Auto),
+			new(1, GUT.Star),
+			new(1, GUT.Auto),
 		]);
 		Grid
 		.A(SubTxt(), o=>{

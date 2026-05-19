@@ -69,8 +69,8 @@ public partial class ViewBottomBar
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.RowDefinitions.AddRange([
-				RowDef(18, GUT.Star),
-				RowDef(1, GUT.Star),
+				new(18, GUT.Star),
+				new(1, GUT.Star),
 			]);
 		});
 		{{
