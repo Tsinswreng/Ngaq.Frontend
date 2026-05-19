@@ -299,50 +299,48 @@ public partial class ViewLearnWords
 		});
 		Ans.ItemTemplate = new FuncDataTemplate<VmWordListCard>((VmWordCard,b)=>{
 			var Grid = new Grid();
-			{var o = Grid;
-				o.RowDefinitions.AddRange([
-					new(1,GUT.Auto)
-				]);
-			}
+			Grid.RowDefinitions.AddRange([
+				new(1,GUT.Auto)
+			]);
 			{{
 				if(Cnt > Ctx?.WordCards.Count){
 					Cnt = 1;
 				}
 				Cnt++;
-				var Btn = new SwipeLongPressBtn();
-				Grid.Children.Add(Btn);
-				{var o = Btn;
+				Grid.A(new SwipeLongPressBtn(), o=>{
 					//o.HorizontalContentAlignment = HoriAlign.Left;
 					o.HorizontalContentAlignment = HAlign.Stretch;
 					o.Styles.Add(new Style().NoMargin().NoPadding());
 					o.Background = Brushes.Transparent;
-					o.CBind(
+					o.CBind<VmWordListCard>(
 						//Button.BackgroundProperty
 						BorderBrushProperty
-						, (VmWordListCard x) => x.LearnedColor, Mode: BindingMode.OneWay);
-					o.BorderThickness = new Thickness(4,0,0,0);
+						,(x) => x.LearnedColor
+					);
+					o.BorderThickness = new(4,0,0,0);
 					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs?? o.LongPressDurationMs;
 					o.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, VmWordCard?.WordForLearn?.JnWord);
 					o.OnLongPressed += (s,e)=>{
 						o.ContextMenu.Open();
 					};
 					o.LongPressDurationMs = 500;
-						StyBtnWordCard(o.Styles);
-				}
-
-				Btn.SetContent(new ViewWordListCard(VmWordCard), o=>{
-					o.VAlign(VAlign.Stretch).HAlign(HAlign.Stretch);
-					o.Background = Brushes.Transparent;
-					o.CBind(
-						o.PropDataContext_()
-						,(VmWordListCard x) => x
-							, Mode: BindingMode.OneWay
-						);
-					Btn.Click += (object? s, Avalonia.Interactivity.RoutedEventArgs e)=>{
-						if(o?.Ctx != null){
-							Ctx?.ClickWordCard(o.Ctx);
-						}
-					};
+					StyBtnWordCard(o.Styles);
+					var Btn = o;
+					Btn.SetContent(new ViewWordListCard(VmWordCard), o=>{
+						o.VAlign(x=>x.Stretch)
+						.HAlign(x=>x.Stretch);
+						o.Background = Brushes.Transparent;
+						o.CBind(
+							o.PropDataContext
+							,(VmWordListCard x) => x
+								, Mode: BindingMode.OneWay
+							);
+						Btn.Click += (s,e)=>{
+							if(o?.Ctx != null){
+								Ctx?.ClickWordCard(o.Ctx);
+							}
+						};
+					});
 				});
 			}}//~Grid
 
