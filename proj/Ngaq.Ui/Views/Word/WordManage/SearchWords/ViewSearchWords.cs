@@ -58,14 +58,14 @@ public partial class ViewSearchWords
 			]);
 		});
 		var SearchGrid = new GridStack(IsRow: false);
-		Root.A(SearchGrid.Grid);
-		{var o = SearchGrid;
-			o.Grid.ColDefs([
+		Root.A(SearchGrid.Grid, o=>{
+			o.ColDefs([
 				new(6, GUT.Auto),
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);
-		}
+		});
+		
 				{{
 			var searchBtn = new OpBtn();
 			var freeAddBtn = new OpBtn();
