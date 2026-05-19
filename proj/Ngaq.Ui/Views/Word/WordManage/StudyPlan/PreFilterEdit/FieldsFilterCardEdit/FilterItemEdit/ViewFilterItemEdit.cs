@@ -34,7 +34,7 @@ public class ViewFilterItemEdit: AppViewBase{
 
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -67,7 +67,7 @@ public class ViewFilterItemEdit: AppViewBase{
 		sv.Content = root;
 
 		var top = new GridStack(IsRow:false);
-		top.Grid.ColumnDefinitions.AddRange([
+		top.Grid.ColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);
@@ -90,7 +90,7 @@ public class ViewFilterItemEdit: AppViewBase{
 
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow:false);
-		g.Grid.ColumnDefinitions.AddRange([
+		g.Grid.ColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);

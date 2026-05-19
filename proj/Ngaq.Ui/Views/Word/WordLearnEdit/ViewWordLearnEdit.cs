@@ -39,7 +39,7 @@ public partial class ViewWordLearnEdit: AppViewBase{
 
 	void Render(){
 		var root = new GridStack(IsRow: true);
-		root.Grid.RowDefinitions.AddRange([
+		root.Grid.RowDefs([
 			new(8, GUT.Star),
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),

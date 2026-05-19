@@ -51,7 +51,7 @@ public partial class ViewSearchWords
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefinitions.AddRange([
+			o.RowDefs([
 				new(1, GUT.Auto),
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
@@ -60,7 +60,7 @@ public partial class ViewSearchWords
 		var SearchGrid = new GridStack(IsRow: false);
 		Root.A(SearchGrid.Grid);
 		{var o = SearchGrid;
-			o.Grid.ColumnDefinitions.AddRange([
+			o.Grid.ColDefs([
 				new(6, GUT.Auto),
 				new(1, GUT.Star),
 				new(1, GUT.Auto),

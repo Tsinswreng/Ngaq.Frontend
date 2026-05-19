@@ -42,7 +42,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -53,7 +53,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 
 	Control MkBody(){
 		var root = new GridStack(IsRow:true);
-		root.Grid.RowDefinitions.AddRange([
+		root.Grid.RowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);
@@ -119,7 +119,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 			Padding = new(10),
 		};
 		var root = new GridStack(IsRow:true);
-		root.Grid.RowDefinitions.AddRange([
+		root.Grid.RowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);
@@ -127,7 +127,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 
 		var title = IsCore ? I[K.CoreFilter] : I[K.PropFilter];
 		var top = new GridStack(IsRow:false);
-		top.Grid.ColumnDefinitions.AddRange([
+		top.Grid.ColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);

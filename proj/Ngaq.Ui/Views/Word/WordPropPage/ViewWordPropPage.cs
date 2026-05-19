@@ -38,7 +38,7 @@ public partial class ViewWordPropPage: AppViewBase{
 
 	void Render(){
 		var root = new GridStack(IsRow: true);
-		root.Grid.RowDefinitions.AddRange([
+		root.Grid.RowDefs([
 			new(1, GUT.Auto),
 			new(9, GUT.Star),
 		]);

@@ -51,7 +51,7 @@ public static class ToolStudyPlanView{
 		var sp = new StackPanel{Spacing = 3};
 		sp.Children.Add(new TextBlock{Text = Label});
 		var row = new GridStack(IsRow:false);
-		row.Grid.ColumnDefinitions.AddRange([
+		row.Grid.ColDefs([
 			new(7, GUT.Star),
 			new(2, GUT.Star),
 		]);

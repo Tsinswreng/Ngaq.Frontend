@@ -74,7 +74,7 @@ public partial class ViewSearchedWordCard
 
 		var RootGrid = Root.Grid;
 		Content = RootGrid;
-		RootGrid.RowDefinitions.AddRange([
+		RootGrid.RowDefs([
 			new RowDef(4, GUT.Auto),
 			new RowDef(8, GUT.Auto),
 		]);
@@ -82,7 +82,7 @@ public partial class ViewSearchedWordCard
 		var LangGrid = new GridStack(IsRow:false);
 		Root.Add(LangGrid.Grid);
 		{var o = LangGrid;
-			o.Grid.ColumnDefinitions.AddRange([
+			o.Grid.ColDefs([
 				new ColDef(1, GUT.Star),
 				new ColDef(2, GUT.Star),
 			]);
@@ -107,7 +107,7 @@ public partial class ViewSearchedWordCard
 		var HeadBox = new GridStack(IsRow:false);
 		Root.Add(HeadBox.Grid);
 		{
-			HeadBox.Grid.ColumnDefinitions.AddRange([
+			HeadBox.Grid.ColDefs([
 				new ColDef(1, GUT.Star),
 			]);
 		}
@@ -141,7 +141,7 @@ public partial class ViewSearchedWordCard
 		var R = new GridStack(IsRow:false);
 		{var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
-			o.ColumnDefinitions.AddRange([
+			o.ColDefs([
 				new ColDef(1, GUT.Auto),//上次學習記錄
 				new ColDef(1, GUT.Auto),//add
 				new ColDef(1, GUT.Auto),//:

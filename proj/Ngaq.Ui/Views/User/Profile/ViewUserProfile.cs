@@ -75,7 +75,7 @@ public partial class ViewUserProfile
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefinitions.AddRange([
+			o.RowDefs([
 				new(1, GUT.Auto),
 				new(1, GUT.Auto),
 			]);
@@ -83,7 +83,7 @@ public partial class ViewUserProfile
 		Root.A(new ScrollViewer(), sv=>{
 			var ContentGrid = new GridStack(IsRow: true);
 			sv.SetContent(ContentGrid.Grid, o=>{
-				o.RowDefinitions.AddRange([
+				o.RowDefs([
 					new(4, GUT.Star),
 					new(1, GUT.Star),
 					new(1, GUT.Auto),

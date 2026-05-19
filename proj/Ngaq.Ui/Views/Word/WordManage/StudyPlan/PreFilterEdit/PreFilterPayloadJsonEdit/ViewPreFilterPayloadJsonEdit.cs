@@ -36,7 +36,7 @@ public class ViewPreFilterPayloadJsonEdit: AppViewBase{
 	bool IsSyncingPayloadText = false;
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
@@ -65,7 +65,7 @@ public class ViewPreFilterPayloadJsonEdit: AppViewBase{
 
 	Control MkBottomBar(){
 		var g = new GridStack(IsRow:false);
-		g.Grid.ColumnDefinitions.AddRange([
+		g.Grid.ColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);

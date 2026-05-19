@@ -42,7 +42,7 @@ public partial class ViewCfgLearnWord
 	GridStack Root = new GridStack(IsRow:true);
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefinitions.AddRange([
+			o.RowDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Star),
 			]);

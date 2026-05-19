@@ -73,7 +73,7 @@ public partial class ViewUserLangPage
 	/// 組裝頁面骨架。
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
@@ -87,7 +87,7 @@ public partial class ViewUserLangPage
 	/// 創建頂部搜索條。
 	protected Control MkTopBar(){
 		var top = new GridStack(IsRow:false);
-		top.Grid.ColumnDefinitions.AddRange([
+		top.Grid.ColDefs([
 			new(8, GUT.Star),
 			new(1, GUT.Star),
 			new(1, GUT.Star),

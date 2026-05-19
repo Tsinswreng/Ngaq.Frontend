@@ -45,7 +45,7 @@ public partial class ViewWeightArgEdit
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -145,7 +145,7 @@ public partial class ViewWeightArgEdit
 
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
-		bar.Grid.ColumnDefinitions.AddRange([
+		bar.Grid.ColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);

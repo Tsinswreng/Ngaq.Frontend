@@ -1,16 +1,37 @@
-// using Avalonia.Controls;
+using Avalonia.Controls;
+namespace Ngaq.Ui;
 
-// namespace Ngaq.Ui;
 
-// public class ClsGridUnitType {
-// 	public static readonly ClsGridUnitType Inst = new();
-// 	public readonly GridUnitType Star = GridUnitType.Star;
-// 	public readonly GridUnitType Auto = GridUnitType.Auto;
-// 	public readonly GridUnitType Pixel = GridUnitType.Pixel;
-// }
+public static partial class Extn {
+	extension<TSelf>(TSelf z)
+		where TSelf : Grid
+	{
+		public TSelf RowDefs(
+			params IEnumerable<RowDef> RowDefs
+		){
+			z.RowDefinitions = [..RowDefs];
+			return z;
+		}
 
-// public partial class Extn {
-// 	public static RowDef RowDef(f64 Value, Func<ClsGridUnitType, GridUnitType> TypeSlct) {
-// 		return new RowDef(Value, TypeSlct(ClsGridUnitType.Inst));
-// 	}
-// }
+		public TSelf ColDefs(
+			params IEnumerable<ColDef> ColDefs
+		){
+			z.ColumnDefinitions= [..ColDefs];
+			return z;
+		}
+
+		// public TSelf RowDefs(
+		// 	params IEnumerable<RowDef> RowDefs
+		// ){
+		// 	z.RowDefinitions = [..RowDefs];
+		// 	return z;
+		// }
+
+		// public TSelf ColDefs(
+		// 	IEnumerable<ColDef> ColDefs
+		// ){
+		// 	z.ColumnDefinitions= [..ColDefs];
+		// 	return z;
+		// }
+	}
+}

@@ -31,7 +31,7 @@ public partial class ViewCfgHotkey: AppViewBase{
 	/// <returns>空值。</returns>
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefinitions.AddRange([
+			o.RowDefs([
 				new(1, GUT.Star),
 				new(1, GUT.Auto),
 			]);

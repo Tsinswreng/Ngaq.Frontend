@@ -34,7 +34,7 @@ public partial class ViewStudyPlanRow
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Star),
 		]);
 		return NIL;

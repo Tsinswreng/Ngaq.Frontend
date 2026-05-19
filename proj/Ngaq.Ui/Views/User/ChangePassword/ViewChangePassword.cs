@@ -37,7 +37,7 @@ public partial class ViewChangePassword
 	GridStack Root = new(IsRow: true);
 	public void Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Star)
 		]);
 		Root.A(new StackPanel(), Sp=>{

@@ -40,7 +40,7 @@ public partial class ViewPronunciation
 	GridStack Root = new(IsRow: false);
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.ColumnDefinitions.AddRange([
+		Root.Grid.ColDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 		]);

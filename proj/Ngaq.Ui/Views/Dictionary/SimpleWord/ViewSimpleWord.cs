@@ -45,7 +45,7 @@ public partial class ViewSimpleWord
 	}
 	protected nil Render(){
 		Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),

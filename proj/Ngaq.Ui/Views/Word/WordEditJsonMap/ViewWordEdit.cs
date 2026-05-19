@@ -84,7 +84,7 @@ public partial class ViewWordEdit
 	GridStack Root = new(IsRow: true);
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(9999, GUT.Star),
 			new(1, GUT.Auto),
 		]);

@@ -127,7 +127,7 @@ public partial class TempusBox: ContentControl{
 
 	void Render(){
 		this.Content = Root.Grid;
-		Root.Grid.ColumnDefinitions.AddRange([
+		Root.Grid.ColDefs([
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);

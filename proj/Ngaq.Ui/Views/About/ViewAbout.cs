@@ -37,7 +37,7 @@ public partial class ViewAbout
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefinitions.AddRange([
+			o.RowDefs([
 				new(1, GUT.Auto),
 			]);
 		});

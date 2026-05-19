@@ -48,7 +48,7 @@ public partial class ViewUserLangEdit
 	/// 組裝頁面主體與底部操作區。
 	protected nil Render(){
 		this.Content = Root.Grid;
-		Root.Grid.RowDefinitions.AddRange([
+		Root.Grid.RowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
@@ -115,7 +115,7 @@ public partial class ViewUserLangEdit
 	/// 建立底部操作欄（僅保存）。
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
-		bar.Grid.ColumnDefinitions.AddRange([
+		bar.Grid.ColDefs([
 			new(1, GUT.Star),
 		]);
 		bar.A(new OpBtn(), o=>{
@@ -160,7 +160,7 @@ public partial class ViewUserLangEdit
 		var root = new StackPanel{Spacing = 3};
 		root.Children.Add(new TextBlock{Text = Label});
 		var row = new GridStack(IsRow:false);
-		row.Grid.ColumnDefinitions.AddRange([
+		row.Grid.ColDefs([
 			new(8, GUT.Star),
 			new(2, GUT.Star),
 		]);

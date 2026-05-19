@@ -56,7 +56,7 @@ public partial class ViewWordManage
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
-			o.RowDefinitions.AddRange([
+			o.RowDefs([
 				new(9999, GUT.Star),
 				new(1, GUT.Star),
 			]);
