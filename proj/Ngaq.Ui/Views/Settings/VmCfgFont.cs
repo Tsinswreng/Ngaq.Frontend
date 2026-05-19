@@ -7,7 +7,10 @@ using Ngaq.Core.Infra.Cfg;
 using Tsinswreng.CsCfg;
 using Ngaq.Ui.Infra.I18n;
 
-public partial class VmCfgFont: ViewModelBase{
+public partial class VmCfgFont
+	:ViewModelBase
+	,IMk<Ctx>
+{
 	ILogger<VmCfgFont>? Log{get;set;}
 	public VmCfgFont(
 		ILogger<VmCfgFont>? Log

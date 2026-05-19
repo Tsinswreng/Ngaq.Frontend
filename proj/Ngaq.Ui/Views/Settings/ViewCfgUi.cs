@@ -24,10 +24,8 @@ public partial class ViewCfgUi
 		Render();
 	}
 
-	public  partial class Cls_{
+	public  partial class Cls{}
 
-	}
-	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil Style(){
 		return NIL;

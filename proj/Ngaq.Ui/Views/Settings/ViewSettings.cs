@@ -21,14 +21,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.Avln.Navi;
 
 public partial class ViewSettings
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewSettings(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();
@@ -38,8 +32,6 @@ public partial class ViewSettings
 	public partial class Cls{
 		public const str CfgSp = nameof(CfgSp);
 	}
-
-
 
 	protected nil Style(){
 		return NIL;
@@ -74,7 +66,7 @@ public partial class ViewSettings
 				new Style(x=>x.OfType<TextBox>())
 				.Set(TextBox.BackgroundProperty, new SolidColorBrush(Color.FromArgb(255, 32,32,32)))
 			);
-			R.HorizontalContentAlignment = HAlign.Left;
+			R.HCAlign(x=>x.Left);
 			R.SetContent(new StackPanel(), o=>{
 				o.Orientation = Orientation.Horizontal;
 				o.Spacing = UiCfg.Inst.BaseFontSize * 0.35;
@@ -84,9 +76,9 @@ public partial class ViewSettings
 						iconCtrl.Height = UiCfg.Inst.BaseFontSize * 1.2;
 					});
 				}
-				o.A(new TextBlock(), txt=>{
-					txt.Text = Title;
-					txt.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				o.A(new TextBlock(), t=>{
+					t.Text = Title;
+					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				});
 			});
 			R.Click += (s,e)=>{

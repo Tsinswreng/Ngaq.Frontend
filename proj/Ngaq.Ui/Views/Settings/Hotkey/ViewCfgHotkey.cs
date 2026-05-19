@@ -38,18 +38,18 @@ public partial class ViewCfgHotkey: AppViewBase{
 		});
 
 		Root.A(new ScrollViewer(), sv=>{
-			sv.SetContent(new StackPanel(), sp=>{
-				sp.Classes.A(App.Cls.SpacedStackPanel);
-				sp.A(new TextBlock(), o=>{
+			sv.SetContent(new StackPanel(), S=>{
+				S.Classes.A(App.Cls.SpacedStackPanel);
+				S.A(new TextBlock(), o=>{
 					o.Text = I[K.DictionaryLookupHotkeyModifiers_];
 				});
-				sp.A(new TextBox(), o=>{
+				S.A(new TextBox(), o=>{
 					o.CBind<Ctx>(o.PropText, x=>x.DictionaryLookupModifiers);
 				});
-				sp.A(new TextBlock(), o=>{
+				S.A(new TextBlock(), o=>{
 					o.Text = I[K.DictionaryLookupHotkeyKey];
 				});
-				sp.A(new TextBox(), o=>{
+				S.A(new TextBox(), o=>{
 					o.CBind<Ctx>(o.PropText, x=>x.DictionaryLookupKey);
 				});
 			});

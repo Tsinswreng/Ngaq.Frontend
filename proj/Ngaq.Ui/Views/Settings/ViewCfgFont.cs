@@ -9,13 +9,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmCfgFont;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewCfgFont
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewCfgFont(){
 		Ctx = Ctx.Mk();
@@ -23,7 +18,7 @@ public partial class ViewCfgFont
 		Render();
 	}
 
-	public  partial class Cls{
+	public partial class Cls{
 
 	}
 	public GridStack Root = new(IsRow: true);
@@ -35,20 +30,13 @@ public partial class ViewCfgFont
 
 	protected Control InputFontSize(){
 		var R = new GridStack(IsRow:false);
-		R.Grid.SetColDefs([
+		R.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
 		R.A(new TextBox(), o=>{
-			o.CBind<Ctx>(
-				o.PropText
-				,
-					x=>x.InputFontSize
-				);
+			o.CBind<Ctx>(o.PropText,x=>x.InputFontSize);
 		});
-		// .AddInit(new SwipeLongPressBtn(), o=>{
-
-		// });
 		return R.Grid;
 	}
 
@@ -63,7 +51,7 @@ public partial class ViewCfgFont
 			]);
 		});
 		Root.A(new TextBlock(), o=>{
-				o.Text = I[K.BaseFontSize];
+			o.Text = I[K.BaseFontSize];
 		});
 		Root.A(InputFontSize())
 		.A(new SwipeLongPressBtn(), o=>{
@@ -81,9 +69,7 @@ public partial class ViewCfgFont
 		.A(new TextBlock(), o=>{
 			o.Text = SampleText;
 			o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
-			o.CBind<Ctx>(
-				o.PropFontSize_()
-				,x=>x.FontSize);
+			o.CBind<Ctx>(o.PropFontSize,x=>x.FontSize);
 		});
 
 		return NIL;
