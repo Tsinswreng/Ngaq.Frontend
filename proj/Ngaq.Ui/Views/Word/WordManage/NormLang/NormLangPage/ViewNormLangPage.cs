@@ -70,16 +70,16 @@ public partial class ViewNormLangPage
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
-		]);
-		Root.A(MkTopBar());
-		Root.A(MkGridHost());
-		Root.A(MkPageBarHost());
+		])
+		.A(MkTopBar())
+		.A(MkGridHost())
+		.A(MkPageBarHost());
 		return NIL;
 	}
 
 	protected Control MkTopBar(){
 		var top = new GridStack(IsRow:false);
-		top.Grid.SetColDefs([
+		top.SetColDefs([
 			new(7, GUT.Star),
 			new(1, GUT.Star),
 			new(1, GUT.Star),
@@ -95,14 +95,14 @@ public partial class ViewNormLangPage
 		})
 		.A(searchBtn, o=>{
 			o.Classes.Add(Cls.FullStretch);
-			o.BtnContent = Icons.Search().ToIcon();
+			o.BtnContent = Icons.Search();
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.InitSearch(Ct)!);
 		})
 		.A(new Button(), o=>{
 			o.Classes.Add(Cls.FullStretch);
 			o.CBind<Ctx>(IsVisibleProperty, x=>x.CanCreate, Mode: BindingMode.OneWay);
-			o.Content = Icons.Add().ToIcon();
+			o.Content = Icons.Add();
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
@@ -113,11 +113,10 @@ public partial class ViewNormLangPage
 			MinHeight = 280,
 			HorizontalAlignment = HAlign.Stretch,
 		};
-		Grid.Styles.Add(
+		Grid.Styles.A(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
-		);
-		Grid.Styles.Add(
+		).A(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);

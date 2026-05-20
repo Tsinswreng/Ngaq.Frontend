@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.CodeTemplate.Sample;
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -107,15 +108,21 @@ public partial class ViewSample
 		public const string MenuBtn = nameof(MenuBtn);
 	}
 	public void Style(){
-		var S = this.Styles;
-
-		var SomeStyle = new Style(x=>
-			x.Is<Control>()
-			.Class(Cls.MenuBtn)//禁止硬編碼字符串作類名
-		).Set(
-			VerticalAlignmentProperty
-			,VAlign.Stretch
-		).AddTo(S);
+		Styles.A(
+			new Style(x=>
+				x.Is<Control>()
+				.Class(Cls.MenuBtn)//禁止硬編碼字符串作類名
+			).Set(
+				VerticalAlignmentProperty
+				,VAlign.Stretch
+			)
+		).A( //Styles也必須使用.A鏈式調用
+			new Style(
+				x=>x.Is<Control>()
+			).Set(
+				CornerRadiusProperty, new CornerRadius(0)
+			)
+		)
 		;
 	}
 
@@ -158,18 +165,18 @@ public partial class ViewSample
 				//在這裏通過o.Xxx初始化
 				t.Text = I[K.CorrectExample];
 			})
-			//鏈試調用
+			//多次.A()時必須使用鏈試調用寫法p.A().A()...、不允許p.A();p.A();...
 			.A(new Control())//第二個Action<>可省略不傳
 			.A(new Button(), b=>{
 				b.BorderThickness = new(0);//能直接寫 = new(...); 的 就不要寫 = new SomeType(...);
 				b.HAlign(x=>x.Center);
-				// 當給Content賦值 需要初始化的對象時、使用SetContent+lambda的寫法。
-				// 如果只是賦值簡單對象 不需額外初始化的、就可以直接 o.Content=xxx
+				// 給ContentControl的Content賦值時必須使用SetContent擴展方法、禁止直接賦值
 				b.SetContent(new TextBlock(), t=>{
 					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				});
 			})
 			.A(new Border(), b=>{ // 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
+				//Border必須使用SetChild、禁止使用 b.Child=xxx 的寫法
 				b.SetChild(new ScrollViewer(), sv=>{//lambda中的形參名稱長度不得多于2字符
 					sv.SetContent(new StackPanel(), sp=>{
 						sp.A(new TextBlock())

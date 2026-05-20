@@ -96,8 +96,8 @@ public partial class ViewSearchWords
 						,Mode: BindingMode.OneWay
 					);
 			});
-		});
-		Root.A(MkPageBar(), o=>{
+		})
+		.A(MkPageBar(), o=>{
 			o.HorizontalAlignment = HAlign.Center;
 		});
 

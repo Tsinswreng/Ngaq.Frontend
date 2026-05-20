@@ -42,9 +42,9 @@ public partial class ViewStudyPlanEdit
 		Root.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
-		]);
-		Root.A(MkBody());
-		Root.A(MkBottomBar());
+		])
+		.A(MkBody())
+		.A(MkBottomBar());
 		return NIL;
 	}
 
@@ -81,66 +81,65 @@ public partial class ViewStudyPlanEdit
 			BorderThickness = new(1),
 			Padding = new(10),
 		};
-		var sp = new StackPanel{Spacing = 8};
-		bdr.Child = sp;
-
-		sp.A(new TextBlock{
-			Text = I[K.StudyPlan],
-			FontSize = UiCfg.Inst.BaseFontSize * 1.1,
-			FontWeight = FontWeight.SemiBold,
-		})
-		.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
-		.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
-		.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
-		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			I[K.PreFilter],
-			CBE.Mk<Ctx>(x=>x.PreFilterUniqNameText, Mode: BindingMode.OneWay),
-			Icons.ListSelect().ToIcon().WithText(I[K.Choose]),
-			()=>{
-				var view = new ViewPreFilterPage();
-				view.Ctx?.SetSelectMode(po=>{
-					Ctx?.ApplySelectedPreFilter(po);
-					view.ViewNavi?.Back();
-				});
-				ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectPreFilter], view));
-			},
-			ReadOnly: true
-		))
-		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			I[K.WeightCalculator],
-			CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
-			Icons.ListSelect().ToIcon().WithText(I[K.Choose]),
-			()=>{
-				var view = new ViewWeightCalculatorPage();
-				view.Ctx?.SetSelectMode(po=>{
-					Ctx?.ApplySelectedWeightCalculator(po);
-					view.ViewNavi?.Back();
-				});
-				ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectWeightCalculator], view));
-			},
-			ReadOnly: true
-		))
-		.A(ToolStudyPlanView.MkInputWithBtnRow(
-			I[K.WeightArg],
-			CBE.Mk<Ctx>(x=>x.WeightArgUniqNameText, Mode: BindingMode.OneWay),
-			Icons.ListSelect().ToIcon().WithText(I[K.Choose]),
-			()=>{
-				var view = new ViewWeightArgPage();
-				view.Ctx?.SetSelectMode(po=>{
-					Ctx?.ApplySelectedWeightArg(po);
-					view.ViewNavi?.Back();
-				});
-				ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectWeightArg], view));
-			},
-			ReadOnly: true
-		))
-		;
+		bdr.SetChild(new StackPanel{Spacing = 8}, sp=>{
+			sp.A(new TextBlock{
+				Text = I[K.StudyPlan],
+				FontSize = UiCfg.Inst.BaseFontSize * 1.1,
+				FontWeight = FontWeight.SemiBold,
+			})
+			.A(MkIdRow(I[K.Id], CBE.Mk<Ctx>(x=>x.PoIdText, Mode: BindingMode.OneWay)))
+			.A(MkInputRow(I[K.Name], CBE.Mk<Ctx>(x=>x.PoUniqName, Mode: BindingMode.TwoWay)))
+			.A(MkInputRow(I[K.Description], CBE.Mk<Ctx>(x=>x.PoDescr, Mode: BindingMode.TwoWay), AcceptsReturn: true))
+			.A(ToolStudyPlanView.MkInputWithBtnRow(
+				I[K.PreFilter],
+				CBE.Mk<Ctx>(x=>x.PreFilterUniqNameText, Mode: BindingMode.OneWay),
+				Icons.ListSelect().WithText(I[K.Choose]),
+				()=>{
+					var view = new ViewPreFilterPage();
+					view.Ctx?.SetSelectMode(po=>{
+						Ctx?.ApplySelectedPreFilter(po);
+						view.ViewNavi?.Back();
+					});
+					ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectPreFilter], view));
+				},
+				ReadOnly: true
+			))
+			.A(ToolStudyPlanView.MkInputWithBtnRow(
+				I[K.WeightCalculator],
+				CBE.Mk<Ctx>(x=>x.WeightCalculatorUniqNameText, Mode: BindingMode.OneWay),
+				Icons.ListSelect().ToIcon().WithText(I[K.Choose]),
+				()=>{
+					var view = new ViewWeightCalculatorPage();
+					view.Ctx?.SetSelectMode(po=>{
+						Ctx?.ApplySelectedWeightCalculator(po);
+						view.ViewNavi?.Back();
+					});
+					ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectWeightCalculator], view));
+				},
+				ReadOnly: true
+			))
+			.A(ToolStudyPlanView.MkInputWithBtnRow(
+				I[K.WeightArg],
+				CBE.Mk<Ctx>(x=>x.WeightArgUniqNameText, Mode: BindingMode.OneWay),
+				Icons.ListSelect().ToIcon().WithText(I[K.Choose]),
+				()=>{
+					var view = new ViewWeightArgPage();
+					view.Ctx?.SetSelectMode(po=>{
+						Ctx?.ApplySelectedWeightArg(po);
+						view.ViewNavi?.Back();
+					});
+					ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectWeightArg], view));
+				},
+				ReadOnly: true
+			))
+			;
+		});
 		return bdr;
 	}
 
 	Control MkBottomBar(){
 		var bar = new GridStack(IsRow:false);
-		bar.Grid.SetColDefs([
+		bar.SetColDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);

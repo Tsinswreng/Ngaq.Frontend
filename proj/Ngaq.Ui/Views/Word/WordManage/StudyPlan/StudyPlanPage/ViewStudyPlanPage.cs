@@ -66,16 +66,16 @@ public partial class ViewStudyPlanPage
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
-		]);
-		Root.A(MkTopBar());
-		Root.A(MkGridHost());
-		Root.A(MkPageBarHost());
+		])
+		.A(MkTopBar())
+		.A(MkGridHost())
+		.A(MkPageBarHost());
 		return NIL;
 	}
 
 	Control MkTopBar(){
 		var top = new GridStack(IsRow:false);
-		top.Grid.SetColDefs([
+		top.SetColDefs([
 			new(7, GUT.Star),
 			new(1, GUT.Star),
 			new(1, GUT.Star),
@@ -111,11 +111,10 @@ public partial class ViewStudyPlanPage
 			MinHeight = 280,
 			HorizontalAlignment = HAlign.Stretch,
 		};
-		Grid.Styles.Add(
+		Grid.Styles.A(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
-		);
-		Grid.Styles.Add(
+		).A(
 			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
