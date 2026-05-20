@@ -45,21 +45,21 @@ public partial class ViewNormLangToUserLangEdit
 		Root.SetRowDefs([
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
-		]);
-		Root.A(MkBody());
-		Root.A(MkBottomBar());
+		])
+		.A(MkBody())
+		.A(MkBottomBar());
 		return NIL;
 	}
 
 	Control MkBody(){
 		var sv = new ScrollViewer();
-		var root = new StackPanel{
+		sv.SetContent(new StackPanel{
 			Spacing = 10,
 			Margin = new(10),
-		};
-		sv.Content = root;
-		root.Children.Add(MkErrorBar());
-		root.Children.Add(MkPoSection());
+		}, o=>{
+			o.Children.Add(MkErrorBar());
+			o.Children.Add(MkPoSection());
+		});
 		return sv;
 	}
 
@@ -69,12 +69,13 @@ public partial class ViewNormLangToUserLangEdit
 			Padding = new(10, 6),
 			IsVisible = false,
 		};
-		//b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
-		var txt = new TextBlock{
+		b.SetChild(new TextBlock{
 			Foreground = Brushes.White,
-		};
+		});
+		//b.CBind<Ctx>(IsVisibleProperty, x=>x.HasError, Mode: BindingMode.OneWay);
+
 		//txt.CBind<Ctx>(TextBlock.TextProperty, x=>x.LastError, Mode: BindingMode.OneWay);
-		b.Child = txt;
+
 		return b;
 	}
 
@@ -133,7 +134,7 @@ public partial class ViewNormLangToUserLangEdit
 			MaxHeight = AcceptsReturn ? 180 : double.PositiveInfinity,
 		};
 		tb.Bind(TextBox.TextProperty, Binding);
-		sp.Children.Add(tb);
+		sp.A(tb);
 		return sp;
 	}
 
@@ -151,20 +152,22 @@ public partial class ViewNormLangToUserLangEdit
 
 	Control MkPickerRow(str Label, IBinding Binding, Action OnPick){
 		var root = new StackPanel{Spacing = 3};
-		root.Children.Add(new TextBlock{Text = Label});
+		root.A(new TextBlock{Text = Label});
 		var row = new GridStack(IsRow:false);
-		row.Grid.SetColDefs([
-			new(8, GUT.Star),
-			new(2, GUT.Star),
-		]);
-		row.A(new TextBox(), tb=>{
-			tb.Bind(TextBox.TextProperty, Binding);
+		root.A(row.Grid, row=>{
+			row.SetColDefs([
+				new(8, GUT.Star),
+				new(2, GUT.Star),
+			]);
+			row.A(new TextBox(), tb=>{
+				tb.Bind(TextBox.TextProperty, Binding);
+			});
 		})
 		.A(new Button(), o=>{
 			o.Content = Icons.ListSelect().ToIcon().WithText(I[K.Pick]);
 			o.Click += (s,e)=>OnPick();
 		});
-		root.Children.Add(row.Grid);
+
 		return root;
 	}
 
