@@ -15,13 +15,9 @@ using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.Avln.Grid;
 
 public partial class ViewCfgLearnWord
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
 
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewCfgLearnWord(){
 		Ctx = App.DiOrMk<Ctx>();

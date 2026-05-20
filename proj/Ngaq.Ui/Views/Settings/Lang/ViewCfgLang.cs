@@ -13,12 +13,7 @@ using Tsinswreng.CsI18n;
 using Ctx = VmCfgLang;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-public partial class ViewCfgLang: AppViewBase{
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public partial class ViewCfgLang: AppViewBase<Ctx>{
 
 	public ViewCfgLang(){
 		Ctx = App.DiOrMk<Ctx>();

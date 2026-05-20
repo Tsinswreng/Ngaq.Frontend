@@ -14,13 +14,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmSimpleWord;
 public partial class ViewSimpleWord
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewSimpleWord(){
 		Ctx = App.DiOrMk<Ctx>();

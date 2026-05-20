@@ -10,14 +10,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmUiJsonMap;
 public partial class ViewUiJsonMap
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewUiJsonMap(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();

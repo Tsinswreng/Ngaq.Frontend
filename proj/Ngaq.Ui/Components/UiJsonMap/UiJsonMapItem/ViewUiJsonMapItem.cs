@@ -12,14 +12,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmJsonMapItem;
 public partial class ViewJsonMapItem
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewJsonMapItem(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();

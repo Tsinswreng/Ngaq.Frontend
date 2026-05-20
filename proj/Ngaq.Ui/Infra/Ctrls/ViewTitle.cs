@@ -12,18 +12,12 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = ViewModelBase;
 public partial class ViewTitle
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
 
 	public Border BdrTitle{get;set;} = new();
 	public ContentControl Body{get;set;} = new ContentControl();
 	public ContentControl Title{get;set;} = new ContentControl();
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewTitle(){
 		Ctx = new Ctx();
 		Style();

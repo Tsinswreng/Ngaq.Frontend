@@ -18,13 +18,8 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Tsinswreng.Avln.Grid;
 
 public partial class ViewHome
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewHome(){
 		Ctx = new Ctx();

@@ -17,14 +17,8 @@ using Tsinswreng.CsI18n;
 using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmPageBar;
 public partial class ViewPageBar
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewPageBar(){
 		Ctx = App.DiOrMk<Ctx>();
 		Style();

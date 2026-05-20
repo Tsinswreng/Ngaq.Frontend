@@ -13,11 +13,7 @@ using Ctx = VmCfgHotkey;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 快捷鍵配置頁。
-public partial class ViewCfgHotkey: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public partial class ViewCfgHotkey: AppViewBase<Ctx>{
 
 	public ViewCfgHotkey(){
 		Ctx = App.DiOrMk<Ctx>();

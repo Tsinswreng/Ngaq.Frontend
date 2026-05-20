@@ -12,12 +12,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmDictionaryApi;
 public partial class ViewDictionaryApi
-	: AppViewBase {
-
-	public Ctx? Ctx {
-		get { return DataContext as Ctx; }
-		set { DataContext = value; }
-	}
+	: AppViewBase<Ctx>
+{
 
 	public ViewDictionaryApi() {
 		Ctx = App.DiOrMk<Ctx>();

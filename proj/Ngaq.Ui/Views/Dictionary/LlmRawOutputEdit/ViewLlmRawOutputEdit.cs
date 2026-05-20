@@ -13,11 +13,8 @@ using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmLlmRawOutputEdit;
 
 /// LLM 原始輸出查看/編輯頁。
-public partial class ViewLlmRawOutputEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public partial class ViewLlmRawOutputEdit: AppViewBase<Ctx>{
+
 
 	public ViewLlmRawOutputEdit(){
 		Ctx = App.DiOrMk<Ctx>();

@@ -12,12 +12,7 @@ using Tsinswreng.CsI18n;
 using Ctx = VmCfgLlmDictionary;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-public partial class ViewCfgLlmDictionary: AppViewBase{
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public partial class ViewCfgLlmDictionary: AppViewBase<Ctx>{
 
 	public ViewCfgLlmDictionary(){
 		Ctx = App.DiOrMk<Ctx>();
