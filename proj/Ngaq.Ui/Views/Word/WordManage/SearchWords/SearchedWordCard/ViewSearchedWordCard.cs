@@ -8,19 +8,14 @@ using Ngaq.Core.Shared.User.Models.Po;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Tools;
 using Ngaq.Ui.Converters;
+using Ngaq.Ui.Infra;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmSearchedWordCard;
 public partial class ViewSearchedWordCard
-	:UserControl
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 	public ViewSearchedWordCard(){
 		Ctx = new Ctx();
 		Style();
@@ -34,13 +29,10 @@ public partial class ViewSearchedWordCard
 	public GridStack Root{get;set;} = new GridStack(IsRow:true);
 
 	protected nil Style(){
-		//Styles.Add(SugarStyle.GridShowLines());
-
 		Styles.A(
 			new Style(x=>
 				x.Is<TextBlock>()
-			)
-			,o=>{o.Set(
+			).Set(
 				EffectProperty
 				,new DropShadowDirectionEffect{
 					Color = Colors.Black
@@ -49,183 +41,134 @@ public partial class ViewSearchedWordCard
 					//,Direction = 315 //高度 315是左上角
 					,Direction = 330
 					,Opacity = 0.5
-				});
-			}
+				}
+			)
 		);
-
-		// var InfoGridColor = new Style(x=>
-		// 	x.Is<TextBlock>()
-		// 	.Class(Cls.InInfoGrid)
-		// );
-		// Styles.Add(InfoGridColor);
-		// {var o = InfoGridColor;
-		// 	o.CBind(
-		// 		TextBlock.ForegroundProperty
-		// 		,CBE.Mk<Ctx>(x=>x.LearnedColor,
-		// 			Mode: BindingMode.OneWay
-		// 			,Source: Ctx
-		// 		)
-		// 	);
-		// }
 		return NIL;
 	}
 
 	protected nil Render(){
-
-		var RootGrid = Root.Grid;
-		Content = RootGrid;
-		RootGrid.SetRowDefs([
-			new RowDef(4, GUT.Auto),
-			new RowDef(8, GUT.Auto),
+		this.SetContent(Root.Grid);
+		Root.SetRowDefs([
+			new(4, GUT.Auto),
+			new(8, GUT.Auto),
 		]);
 
+
 		var LangGrid = new GridStack(IsRow:false);
-		Root.Add(LangGrid.Grid);
-		{var o = LangGrid;
-			o.Grid.SetColDefs([
-				new ColDef(1, GUT.Star),
-				new ColDef(2, GUT.Star),
-			]);
-		}
-		{{
-			var Lang = new TextBlock();
-			LangGrid.Add(Lang);
-			{var o = Lang;
-				o.VerticalAlignment = VAlign.Center;
+		Root.A(LangGrid.Grid, lg=>{
+			lg.SetColDefs([
+				new(1, GUT.Star),
+				new(2, GUT.Star),
+			]).A(new TextBlock(), o=>{
+				o.VAlign(x=>x.Center);
 				o.CBind<Ctx>(o.PropText,x=>x.Lang);
 				o.Foreground = Brushes.LightGray;
-			}
-
-			var InfoGrid = _InfoGrid();
-			LangGrid.Add(InfoGrid);
-			{var o = InfoGrid;
-				//o.HorizontalAlignment = HoriAlign.Right;
-			}
-		}}//~Header
-
+			}).A(_InfoGrid())
+			;
+		});
 
 		var HeadBox = new GridStack(IsRow:false);
-		Root.Add(HeadBox.Grid);
-		{
-			HeadBox.Grid.SetColDefs([
-				new ColDef(1, GUT.Star),
+		Root.A(HeadBox.Grid, hb=>{
+			hb.SetColDefs([
+				new(1, GUT.Star),
 			]);
-		}
-		{{
-			var Head = new TextBlock();
-			HeadBox.Add(Head);
-			{var o = Head;
-				o.VerticalAlignment = VAlign.Center;
+			hb.A(new TextBlock(), o=>{
+				o.VAlign(x=>x.Center);
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				o.CBind<Ctx>(
 					o.PropTextDecorations
 					,x=>x.DelAt
-						,Converter: new FnConvtr<IdDel?, TextDecorationCollection?>((delAt)=>{
-							return delAt.IsNullOrDefault()
-							? null : TextDecorations.Strikethrough;
-						})
-					);
-				o.CBind<Ctx>(
-					o.PropText
-					,x=>x.Head);
-				o.CBind<Ctx>(
-					TextBlock.ForegroundProperty
-					,x=>x.FontColor);
-			}
-		}}
+					,Converter: new FnConvtr<IdDel?, TextDecorationCollection?>((delAt)=>{
+						return delAt.IsNullOrDefault()
+						? null : TextDecorations.Strikethrough;
+					})
+				);
+				o.CBind<Ctx>(o.PropText,x=>x.Head);
+				o.CBind<Ctx>(TextBlock.ForegroundProperty,x=>x.FontColor);
 
+			});
+		});
 		return NIL;
 	}
 
 	Control _InfoGrid(){
 		var R = new GridStack(IsRow:false);
-		{var o = R.Grid;
+		{
+			var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
 			o.SetColDefs([
-				new ColDef(1, GUT.Auto),//上次學習記錄
-				new ColDef(1, GUT.Auto),//add
-				new ColDef(1, GUT.Auto),//:
-				new ColDef(1, GUT.Auto),//rmb
-				new ColDef(1, GUT.Auto),//:
-				new ColDef(1, GUT.Auto),//fgt
-				new ColDef(1, GUT.Auto),//tab
-				new ColDef(1, GUT.Auto),//last review time
-				new ColDef(1, GUT.Auto),//tab
-				new ColDef(1, GUT.Auto),//weight
+				new(1, GUT.Auto),//上次學習記錄
+				new(1, GUT.Auto),//add
+				new(1, GUT.Auto),//:
+				new(1, GUT.Auto),//rmb
+				new(1, GUT.Auto),//:
+				new(1, GUT.Auto),//fgt
+				new(1, GUT.Auto),//tab
+				new(1, GUT.Auto),//last review time
+				new(1, GUT.Auto),//tab
+				new(1, GUT.Auto),//weight
 			]);
 		}
-		{{
-			var LastLearn = new TextBlock();
-			R.Add(LastLearn);
-			{var o = LastLearn;
-				o.CBind<Ctx>(
-					o.PropText_()
-					//LearnRecord不應潙空集合、緣添旹必得'add'
-					,x=>x.SavedLearnRecords
-						,Converter: new FnConvtr<IList<ILearnRecord>, str>((x, p)=>{
-							if(x.Count > 0){
-								return Ctx.LearnToSymbol(x[^1].Learn);
-							}
-							return "";
-							// var Word = (Ctx)p!;
-							// throw new FatalLogicErr("No learn record found. Word:"+Word.Lang+":"+Word.Head);
-						})
-						,ConverterParameter: Ctx
-					);
-			}
 
-			var RecordType = (ELearn Learn)=>{
-				var R = new TextBlock{};
-				R.Bind(
-					TextBlock.TextProperty
-					,CBE.Mk<Ctx>(x=>x.Learn_Records
-						,Converter: new ConvMultiDictValueCnt<ELearn, ILearnRecord>()
-						,ConverterParameter: Learn
-					)
-				);
-				return R;
-			};
-			var Colon = ()=>new TextBlock(){Text = ":"};
+		R.A(new TextBlock(), o=>{
+			o.CBind<Ctx>(
+				o.PropText
+				//LearnRecord不應潙空集合、緣添旹必得'add'
+				,x=>x.SavedLearnRecords
+				,Converter: new FnConvtr<IList<ILearnRecord>, str>((x, p)=>{
+					if(x.Count > 0){
+						return Ctx.LearnToSymbol(x[^1].Learn);
+					}
+					return "";
+					// var Word = (Ctx)p!;
+					// throw new FatalLogicErr("No learn record found. Word:"+Word.Lang+":"+Word.Head);
+				})
+				,ConverterParameter: Ctx
+			);
+		});
 
-			var Add = RecordType(ELearn.Add);
-			R.Add(Add);
+		var RecordType = (ELearn Learn)=>{
+			var R = new TextBlock{};
+			R.CBind<Ctx>(
+				TextBlock.TextProperty
+				,x=>x.Learn_Records
+				,Converter: new ConvMultiDictValueCnt<ELearn, ILearnRecord>()
+				,ConverterParameter: Learn
+			);
+			return R;
+		};
+		var Colon = ()=>new TextBlock(){Text = ":"};
 
-			R.Add(Colon());
-			var Rmb = RecordType(ELearn.Rmb);
-			R.Add(Rmb);
-			R.Add(Colon());
-			var Fgt = RecordType(ELearn.Fgt);
-			R.Add(Fgt);
 
-			R.Add(new TextBlock{Text = "\t"});
+		R.A(RecordType(ELearn.Add))
+		.A(Colon())
+		.A(RecordType(ELearn.Rmb))
+		.A(Colon())
+		.A(RecordType(ELearn.Fgt))
+		.A(new TextBlock{Text = "\t"})
 
-			var LastReviewTime = new TextBlock();
-			R.Add(LastReviewTime);
-			{var o = LastReviewTime;
-				o.CBind<Ctx>(
-					o.PropText_()
-					,x=>x.LastLearnedTime
-						,Converter: new FnConvtr<i64, str>(x=>{
-							var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-							var Diff = Now - x;
-							return Ctx.FormatUnixMsDiff(Diff);
-						})
-					);
-			}
-			R.Add(new TextBlock{Text = "\t"});
-			var Weight = new TextBlock();
-			R.Add(Weight);
-			{var o = Weight;
-				o.CBind<Ctx>(
-					o.PropText_()
-					,x=>x.Weight
-						,Converter: new FnConvtr<f64?,str>((x,p)=>
-							Ctx.FmtNum(x??0, 2)
-						)
-					);
-			}
-		}}
-
+		//LastReviewTime
+		.A(new TextBlock(), o=>{
+			o.CBind<Ctx>(
+				o.PropText
+				,x=>x.LastLearnedTime
+				,Converter: new FnConvtr<i64, str>(x=>{
+					var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+					var Diff = Now - x;
+					return Ctx.FormatUnixMsDiff(Diff);
+				})
+			);
+		})
+		.A(new TextBlock{Text = "\t"})
+		.A(new TextBlock(), o=>{
+			o.CBind<Ctx>(
+				o.PropText,x=>x.Weight
+				,Converter: new FnConvtr<f64?,str>((x,p)=>
+					Ctx.FmtNum(x??0, 2)
+				)
+			);
+		});
 		return R.Grid;
 	}
 }
