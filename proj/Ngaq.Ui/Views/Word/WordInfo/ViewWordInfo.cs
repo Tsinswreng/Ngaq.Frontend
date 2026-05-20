@@ -111,7 +111,7 @@ public partial class ViewWordInfo
 			o.BorderThickness = new(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Gray);
 			o.SetChild(TxtBox(), x => {
-				Ctx.Bind(x, x.PropText, Vm => Vm.Head);
+				Ctx.Bind(x, x=>x.Text, Vm => Vm.Head);
 				x.FontSize = UiCfg.Inst.BaseFontSize * 1.4;
 				x.StrokeThickness = 4;
 				x.Styles.Add(new Style().NoMargin().NoPadding());
@@ -163,7 +163,7 @@ public partial class ViewWordInfo
 		.A(new Border(), o => {
 			o.SetChild(new ScrollViewer(), Sv => {
 				Sv.SetContent(new ItemsControl(), L => {
-					this.Bind(L, L.PropItemsSource, x => x.DescriptionWordProps);
+					Ctx.Bind(L, L=>L.ItemsSource, x => x.DescriptionWordProps);
 					L.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop, b) => {
 						return MkPropCard(Prop, IsDescriptionPane: true);
 					});
@@ -189,7 +189,7 @@ public partial class ViewWordInfo
 							HorizontalAlignment = HAlign.Stretch,
 						};
 					});
-					this.Bind(L, L.PropItemsSource, x => x.SideWordProps);
+					Ctx.Bind(L, L=>L.ItemsSource, x => x.SideWordProps);
 					L.ItemTemplate = new FuncDataTemplate<PoWordProp>((Prop, b) => {
 						return MkPropCard(Prop, IsDescriptionPane: false);
 					});

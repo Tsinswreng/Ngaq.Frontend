@@ -76,17 +76,15 @@ public partial class ViewSearchedWordCard
 			hb.A(new TextBlock(), o=>{
 				o.VAlign(x=>x.Center);
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
-				o.CBind<Ctx>(
-					o.PropTextDecorations
-					,x=>x.DelAt
+				Ctx.Bind(
+					o,x=>x.TextDecorations,x=>x.DelAt
 					,Converter: new FnConvtr<IdDel?, TextDecorationCollection?>((delAt)=>{
 						return delAt.IsNullOrDefault()
 						? null : TextDecorations.Strikethrough;
 					})
 				);
-				o.CBind<Ctx>(o.PropText,x=>x.Head);
-				o.CBind<Ctx>(TextBlock.ForegroundProperty,x=>x.FontColor);
-
+				Ctx.Bind(o, o=>o.Text,x=>x.Head);
+				Ctx.Bind(o, o=>o.Foreground,x=>x.FontColor);
 			});
 		});
 		return NIL;
@@ -112,10 +110,9 @@ public partial class ViewSearchedWordCard
 		}
 
 		R.A(new TextBlock(), o=>{
-			o.CBind<Ctx>(
-				o.PropText
-				//LearnRecord不應潙空集合、緣添旹必得'add'
-				,x=>x.SavedLearnRecords
+			//LearnRecord不應潙空集合、緣添旹必得'add'
+			Ctx.Bind(
+				o,o=>o.Text,x=>x.SavedLearnRecords
 				,Converter: new FnConvtr<IList<ILearnRecord>, str>((x, p)=>{
 					if(x.Count > 0){
 						return Ctx.LearnToSymbol(x[^1].Learn);
@@ -130,16 +127,14 @@ public partial class ViewSearchedWordCard
 
 		var RecordType = (ELearn Learn)=>{
 			var R = new TextBlock{};
-			R.CBind<Ctx>(
-				TextBlock.TextProperty
-				,x=>x.Learn_Records
+			Ctx.Bind(
+				R,x=>x.Text,x=>x.Learn_Records
 				,Converter: new ConvMultiDictValueCnt<ELearn, ILearnRecord>()
 				,ConverterParameter: Learn
 			);
 			return R;
 		};
 		var Colon = ()=>new TextBlock(){Text = ":"};
-
 
 		R.A(RecordType(ELearn.Add))
 		.A(Colon())
@@ -150,9 +145,8 @@ public partial class ViewSearchedWordCard
 
 		//LastReviewTime
 		.A(new TextBlock(), o=>{
-			o.CBind<Ctx>(
-				o.PropText
-				,x=>x.LastLearnedTime
+			Ctx.Bind(
+				o, o=>o.Text,x=>x.LastLearnedTime
 				,Converter: new FnConvtr<i64, str>(x=>{
 					var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 					var Diff = Now - x;
@@ -162,8 +156,8 @@ public partial class ViewSearchedWordCard
 		})
 		.A(new TextBlock{Text = "\t"})
 		.A(new TextBlock(), o=>{
-			o.CBind<Ctx>(
-				o.PropText,x=>x.Weight
+			Ctx.Bind(
+				o, o=>o.Text,x=>x.Weight
 				,Converter: new FnConvtr<f64?,str>((x,p)=>
 					Ctx.FmtNum(x??0, 2)
 				)

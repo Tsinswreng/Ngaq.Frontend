@@ -34,7 +34,7 @@ public partial class ViewSample
 	GridStack Root = new(IsRow: true);//IsRow: true 表示行佈局
 	//視圖的初始化羅輯寫在Render裏
 	public void Render(){
-		this.Content = Root.Grid;
+		this.SetContent(Root.Grid);
 		Root.SetRowDefs([
 			new(1, GUT.Auto),
 			new(2, GUT.Star),
@@ -42,17 +42,18 @@ public partial class ViewSample
 			//....略
 		]);
 		//也可以寫 Root.Grid.RowDefinitions = new("Auto,2*,30");
-
 		//GridStack 與 所有的Panel都有 A<TControl>(TControl C, Action<TControl>? FnInit=null)擴展方法。
-		//常規寫法一
+
 		Root
 		//可鏈式調用
 		// lambda的形參以一到兩個字母爲宜
 		.A(new TextBox(), o=>{
 			o.AcceptsReturn = true;
-			//靜態綁定寫法。不准用new Binding(字符串)
+			//下面展示綁定寫法。本項目使用AOT兼容的綁定寫法。不准用new Binding(字符串)
+			//功能最全但不是最常用的寫法:
 			o.CBind<Ctx>(
-				o.PropText,x=>x.Cnt1
+				TextBox.TextProperty
+				,x=>x.Cnt1 //對應Ctx(即ViewModel)中的成員
 				#if false
 				可加其他可選命名參數如:
 				,Converter:
@@ -60,9 +61,10 @@ public partial class ViewSample
 				,Mode:
 				#endif
 			);
-//參數不複雜時可只寫一句 o.CBind<Ctx>(o.PropText, x=>x.Cnt);
-//當CBind的泛型參數爲Ctx時 可以簡寫成 Ctx.Bind(o, o.PropText, x=>x.Cnt1);
-//優先用o.PropText的寫法。如當o爲TextBox時o.PropText即等於TextBox.TextProperty。不得已時再用 類名.XxxProperty的寫法
+			//大部分情況下、綁定源都是Ctx 故此時則採用簡便寫法如下:
+			Ctx.Bind(o, o=>o.Text, x=>x.Cnt1);
+			//上面的第二個參數優先用o=>o.Text的寫法。如當o爲TextBox時o=>o.Text即等於TextBox.TextProperty。
+			// 不得已時再用 類名.XxxProperty的寫法
 		})
 		.A(new Button(), b=>{
 			//初始化ContentControl.Content時使用SetContent擴展方法、不要直接給Content賦值
@@ -116,7 +118,7 @@ public partial class ViewSample
 				VerticalAlignmentProperty
 				,VAlign.Stretch
 			)
-		).A( //Styles也必須使用.A鏈式調用
+		).A(//Styles也必須使用.A鏈式調用
 			new Style(
 				x=>x.Is<Control>()
 			).Set(

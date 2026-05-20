@@ -66,12 +66,12 @@ public partial class ViewDictionary
 		});
 		{{
 			LangGrid.A(MkLangButton(), o=>{
-				Ctx.Bind(o, o.PropContent, x=>x.SrcLangDisplay);
+				Ctx.Bind(o, o=>o.Content, x=>x.SrcLangDisplay);
 				o.Click += (s, e) => OpenNormLangSelector(true);
 			})
 			.A(MkLangSwapButton())
 			.A(MkLangButton(), o=>{
-				Ctx.Bind(o, o.PropContent, x=>x.TgtLangDisplay);
+				Ctx.Bind(o, o=>o.Content, x=>x.TgtLangDisplay);
 				o.Click += (s, e) => OpenNormLangSelector(false);
 			});
 		}}
@@ -91,7 +91,7 @@ public partial class ViewDictionary
 				);
 			})
 			.A(SearchTextBox, o=>{
-				Ctx.Bind(o, o.PropText,x=>x.Input);
+				Ctx.Bind(o, o=>o.Text,x=>x.Input);
 				o.Watermark = I[DictK.InputNewWordToSearch];
 				o.KeyBindings.Add(
 					new KeyBinding{
