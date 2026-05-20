@@ -90,9 +90,8 @@ public partial class ViewPageBar
 			o.SetExe((Ct)=>Ctx?.FnPrevPage?.Invoke(Ctx, Ct));
 		})
 		.A(_TextBox(), o=>{
-			o.CBind<Ctx>(
-				o.PropText
-				,x=>x.PageNum
+			Ctx.Bind(
+				o,o=>o.Text,x=>x.PageNum
 				,Converter: ConvU64Str(1)
 				,Mode: BindingMode.TwoWay
 			);
@@ -108,9 +107,8 @@ public partial class ViewPageBar
 			o.IsReadOnly = true;
 			o.Focusable = false;
 			o.BorderBrush = null;
-			o.CBind<Ctx>(
-				o.PropText
-				,x=>x.TotPageCnt
+			Ctx.Bind(
+				o, o=>o.Text,x=>x.TotPageCnt
 				,Converter: new FnConvtr<u64?, str>((x, p)=>x?.ToString()??"")
 				,Mode: BindingMode.OneWay
 			);
@@ -140,9 +138,8 @@ public partial class ViewPageBar
 				o.IsEditable = true;
 				o.MinWidth = 96;
 				o.ItemsSource = new str[]{"10", "20", "50"};
-				o.CBind<Ctx>(
-					ComboBox.TextProperty
-					,x=>x.PageSize
+				Ctx.Bind(
+					o,o=>o.Text,x=>x.PageSize
 					,Converter: ConvU64Str(10)
 					,Mode: BindingMode.TwoWay
 				);

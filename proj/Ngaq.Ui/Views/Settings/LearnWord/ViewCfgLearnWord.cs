@@ -13,6 +13,7 @@ using Ngaq.Ui.Infra.I18n;
 using Ctx = VmCfgLearnWord;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.Avln.Grid;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewCfgLearnWord
 	:AppViewBase<Ctx>
@@ -48,45 +49,32 @@ public partial class ViewCfgLearnWord
 				sp.Classes.A(App.Cls.SpacedStackPanel);
 				sp
 				.A(new SwipeLongPressBtn(), o=>{
-					// 在背詞設置中直接提供學習計劃入口，避免多層跳轉。
-					o.Content = I[KeysUiI18nCommon.StudyPlan];
+					o.Content = I[K.StudyPlan];
 					o.Click += (s,e)=>{
 						ViewNavi?.GoTo(
-							ToolView.WithTitle(I[KeysUiI18nCommon.StudyPlan], new ViewStudyPlan())
+							ToolView.WithTitle(I[K.StudyPlan], new ViewStudyPlan())
 						);
 					};
-				})
-				.A(new CheckBox(), o=>{
-					//o.Tag = new TextBlock{Text = "Enable Random Background"};
-					o.Content = I[KeysUiI18nCommon.EnableRandomBackground];
-					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableRandomBackground);
-				})
-				.A(new CheckBox(), o=>{
-					o.Content = I[KeysUiI18nCommon.EnableAutoPronounce];
-					o.CBind<Ctx>(o.PropIsChecked,x=>x.EnableAutoPronounce);
-				})
-				.A(new TextBlock(), o=>{
-					o.Text = I[KeysUiI18nCommon.MaxDisplayedWordCount];
-				})
-				.A(new TextBox(), o=>{
-					o.CBind<Ctx>(o.PropText, x=>x.MaxDisplayedWordCount);
-				})
-
-				;
+				}).A(new CheckBox(), o=>{
+					o.Content = I[K.EnableRandomBackground];
+					Ctx.Bind(o, o=>o.IsChecked,x=>x.EnableRandomBackground);
+				}).A(new CheckBox(), o=>{
+					o.Content = I[K.EnableAutoPronounce];
+					Ctx.Bind(o, o=>o.IsChecked,x=>x.EnableAutoPronounce);
+				}).A(new TextBlock(), o=>{
+					o.Text = I[K.MaxDisplayedWordCount];
+				}).A(new TextBox(), o=>{
+					Ctx.Bind(o, o=>o.Text, x=>x.MaxDisplayedWordCount);
+				});
 			});
-		})
-		.A(new OpBtn(), o=>{
+		}).A(new OpBtn(), o=>{
 			DockPanel.SetDock(o, Dock.Bottom);
 			o._Button.StretchCenter();
-			o.VerticalAlignment = VAlign.Bottom;
-			o.BtnContent = I[KeysUiI18nCommon.Save];
+			o.VAlign(x=>x.Bottom);
+			o.BtnContent = I[K.Save];
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
-
-
-		;
-
 		return NIL;
 	}
 

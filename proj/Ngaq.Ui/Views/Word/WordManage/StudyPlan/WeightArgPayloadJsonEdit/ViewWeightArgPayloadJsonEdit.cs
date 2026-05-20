@@ -43,6 +43,7 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase<Ctx>{
 		return NIL;
 	}
 
+	//不符代碼規範
 	Control MkErrorBar(){
 		var b = new Border{
 			Background = new SolidColorBrush(Color.FromArgb(80, 180, 30, 30)),

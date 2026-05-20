@@ -48,11 +48,11 @@ public partial class ViewSimpleWord
 		Root
 		.A(Txt(), o=>{
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.5;
-			o.CBind<Ctx>(o.PropText,x=>x.Head);
+			Ctx.Bind(o, o=>o.Text,x=>x.Head);
 		})
 		.A(PronunciationList())
 		.A(Txt(), o=>{
-			o.CBind<Ctx>(o.PropText,x=>x.Description);
+			Ctx.Bind(o,o=>o.Text,x=>x.Description);
 		})
 		;
 		return NIL;

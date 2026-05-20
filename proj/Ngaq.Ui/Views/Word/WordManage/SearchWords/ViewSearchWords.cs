@@ -91,10 +91,9 @@ public partial class ViewSearchWords
 			scrl.SetContent(_ListWordCard(), o=>{
 				o.CBind<Ctx>(
 					ItemsControl.ItemsSourceProperty
-					,
-						x=>x.GotWords
-						,Mode: BindingMode.OneWay
-					);
+					,x=>x.GotWords
+					,Mode: BindingMode.OneWay
+				);
 			});
 		})
 		.A(MkPageBar(), o=>{
@@ -150,9 +149,7 @@ public partial class ViewSearchWords
 		return view;
 	}
 
-	/// <summary>
 	/// 頂欄菜單：收納單詞同步頁入口（V1 + V2）。
-	/// </summary>
 	/// <returns>標題菜單控件。</returns>
 	public Control MkTitleMenu(){
 		var menu = new ContextMenu();
