@@ -26,14 +26,9 @@ using Tsinswreng.Avln.Grid;
 
 //TODO 改名爲 UserWordPage / UserWordManage
 public partial class ViewSearchWords
-	:AppViewBase
+	:AppViewBase<Ctx>
 	,I_MkTitleMenu
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewSearchWords(){
 		Ctx = App.GetRSvc<Ctx>();
@@ -212,4 +207,5 @@ public partial class ViewSearchWords
 		return NIL;
 	}
 }
+
 

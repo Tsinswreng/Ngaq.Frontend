@@ -18,13 +18,8 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 #endif
 
 public partial class ViewEditJsonWord
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewEditJsonWord(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -85,4 +80,5 @@ public partial class ViewEditJsonWord
 		return NIL;
 	}
 }
+
 

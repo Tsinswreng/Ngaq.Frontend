@@ -20,11 +20,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// <summary>
 /// PreFilter 載荷 JSON 文本編輯頁。
 /// </summary>
-public class ViewPreFilterPayloadJsonEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public class ViewPreFilterPayloadJsonEdit: AppViewBase<Ctx>{
 
 	public ViewPreFilterPayloadJsonEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -119,3 +115,4 @@ public class ViewPreFilterPayloadJsonEdit: AppViewBase{
 		IsSyncingPayloadText = false;
 	}
 }
+

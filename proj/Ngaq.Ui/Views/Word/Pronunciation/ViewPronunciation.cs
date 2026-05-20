@@ -11,13 +11,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmPronunciation;
 public partial class ViewPronunciation
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewPronunciation(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -57,5 +52,6 @@ public partial class ViewPronunciation
 		return NIL;
 	}
 }
+
 
 

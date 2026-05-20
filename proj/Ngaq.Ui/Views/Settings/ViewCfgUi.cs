@@ -10,13 +10,8 @@ using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Icons;
 
 public partial class ViewCfgUi
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewCfgUi(){
 		Ctx = new Ctx();
@@ -42,3 +37,4 @@ public partial class ViewCfgUi
 
 
 }
+

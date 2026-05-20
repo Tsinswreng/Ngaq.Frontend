@@ -16,11 +16,7 @@ using Ctx = VmFilterItemEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// View for editing a single FilterItem.
-public class ViewFilterItemEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public class ViewFilterItemEdit: AppViewBase<Ctx>{
 
 	ComboBox? OperationCombo{get;set;}
 	ComboBox? ValueTypeCombo{get;set;}
@@ -138,3 +134,4 @@ public class ViewFilterItemEdit: AppViewBase{
 		return sp;
 	}
 }
+

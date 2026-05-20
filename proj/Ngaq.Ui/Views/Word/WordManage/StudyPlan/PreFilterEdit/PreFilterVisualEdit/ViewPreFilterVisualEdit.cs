@@ -24,11 +24,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// PreFilter GUI 主頁。
 /// 顯示 Po 主信息與內嵌的篩選器編輯表格。
-public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public class ViewPreFilterVisualEdit: AppViewBase<Ctx>, I_MkTitleMenu{
 
 	public ViewPreFilterVisualEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -301,4 +297,5 @@ public class ViewPreFilterVisualEdit: AppViewBase, I_MkTitleMenu{
 		return menu;
 	}
 }
+
 

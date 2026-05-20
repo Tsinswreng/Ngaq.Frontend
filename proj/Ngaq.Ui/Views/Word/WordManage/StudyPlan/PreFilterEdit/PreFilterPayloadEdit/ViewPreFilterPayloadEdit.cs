@@ -22,11 +22,7 @@ using Ctx = PreFilterVisualEdit.VmPreFilterVisualEdit;
 using K = Infra.I18n.KeysUiI18nCommon;
 
 /// GUI editor for PreFilter payload data (without Po fields).
-public class ViewPreFilterPayloadEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public class ViewPreFilterPayloadEdit: AppViewBase<Ctx>{
 
 	public ViewPreFilterPayloadEdit(Ctx Ctx){
 		this.Ctx = Ctx;
@@ -221,6 +217,7 @@ public class ViewPreFilterPayloadEdit: AppViewBase{
 		return g.Grid;
 	}
 }
+
 
 
 

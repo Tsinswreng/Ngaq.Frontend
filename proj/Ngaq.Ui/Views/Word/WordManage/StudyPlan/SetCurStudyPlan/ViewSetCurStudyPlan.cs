@@ -23,13 +23,9 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// 設置當前學習方案頁。
 /// 頁面打開後即讀取後端當前學習方案，僅展示關鍵字段並支持重新選擇。
 public partial class ViewSetCurStudyPlan
-	:AppViewBase
+	:AppViewBase<Ctx>
 	,I_MkTitleMenu
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewSetCurStudyPlan(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -217,4 +213,5 @@ public partial class ViewSetCurStudyPlan
 		return menu;
 	}
 }
+
 

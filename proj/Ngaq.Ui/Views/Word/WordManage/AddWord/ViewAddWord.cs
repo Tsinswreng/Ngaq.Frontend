@@ -18,12 +18,8 @@ using Ctx = VmAddWord;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewAddWord
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewAddWord(){
 		Ctx = App.SvcProvider.GetRequiredService<Ctx>();
@@ -104,3 +100,4 @@ public partial class ViewAddWord
 		IsSyncingText = false;
 	}
 }
+

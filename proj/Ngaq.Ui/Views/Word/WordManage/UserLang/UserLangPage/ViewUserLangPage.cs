@@ -27,13 +27,9 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// UserLang 列表頁視圖。
 /// 上部爲搜索與新增，主體爲 TreeDataGrid，底部爲分頁條。
 public partial class ViewUserLangPage
-	:AppViewBase
+	:AppViewBase<Ctx>
 	,I_MkTitleMenu
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewUserLangPage(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -205,6 +201,7 @@ public partial class ViewUserLangPage
 		ViewNavi?.GoTo(titled);
 	}
 }
+
 
 
 

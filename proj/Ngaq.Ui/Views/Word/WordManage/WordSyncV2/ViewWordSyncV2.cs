@@ -21,14 +21,9 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// - 文件導入/導出（含文件選擇器）
 /// - 雲端 Push / Pull
 public partial class ViewWordSyncV2
-	:AppViewBase
+	:AppViewBase<Ctx>
 	,I_MkTitleMenu
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewWordSyncV2(){
 		Ctx = App.GetRSvc<Ctx>();
@@ -257,3 +252,4 @@ public partial class ViewWordSyncV2
 		return menu;
 	}
 }
+

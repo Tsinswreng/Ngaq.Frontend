@@ -22,12 +22,8 @@ using Ctx = VmStudyPlanEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewStudyPlanEdit
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewStudyPlanEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -195,5 +191,6 @@ public partial class ViewStudyPlanEdit
 	}
 
 }
+
 
 

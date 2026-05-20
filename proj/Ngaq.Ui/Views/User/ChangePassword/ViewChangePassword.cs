@@ -11,13 +11,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmChangePassword;
 public partial class ViewChangePassword
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewChangePassword(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -76,3 +71,4 @@ public partial class ViewChangePassword
 		});
 	}
 }
+

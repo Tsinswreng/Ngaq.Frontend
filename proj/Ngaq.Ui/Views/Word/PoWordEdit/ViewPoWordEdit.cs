@@ -17,11 +17,7 @@ using Ctx = VmPoWordEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// PoWord 基本信息編輯頁。
-public partial class ViewPoWordEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public partial class ViewPoWordEdit: AppViewBase<Ctx>{
 
 	static readonly IValueConverter IsoConverter = new IsoToTempusConverter();
 	static readonly IValueConverter DelAtConverter = new DelAtUnixMsToTempusConverter();
@@ -112,3 +108,4 @@ public partial class ViewPoWordEdit: AppViewBase{
 		}
 	}
 }
+

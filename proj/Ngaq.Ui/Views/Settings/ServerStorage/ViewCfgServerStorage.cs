@@ -12,12 +12,7 @@ using Tsinswreng.CsI18n;
 using Ctx = VmCfgServerStorage;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-public partial class ViewCfgServerStorage: AppViewBase{
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public partial class ViewCfgServerStorage: AppViewBase<Ctx>{
 
 	public ViewCfgServerStorage(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -59,4 +54,5 @@ public partial class ViewCfgServerStorage: AppViewBase{
 		return NIL;
 	}
 }
+
 

@@ -20,12 +20,8 @@ using Tsinswreng.Avln.Grid;
 
 /// NormLang 詳情編輯頁。
 public partial class ViewNormLangEdit
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewNormLangEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -168,4 +164,5 @@ public partial class ViewNormLangEdit
 		return row;
 	}
 }
+
 

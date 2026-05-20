@@ -21,11 +21,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// <summary>
 /// PoPreFilter JSON 專用編輯視圖。
 /// </summary>
-public class ViewPreFilterJsonEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public class ViewPreFilterJsonEdit: AppViewBase<Ctx>{
 
 	public ViewPreFilterJsonEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -125,3 +121,4 @@ public class ViewPreFilterJsonEdit: AppViewBase{
 		IsSyncingJsonText = false;
 	}
 }
+

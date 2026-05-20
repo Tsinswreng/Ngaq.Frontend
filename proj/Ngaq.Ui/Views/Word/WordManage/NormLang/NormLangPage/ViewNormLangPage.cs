@@ -25,13 +25,9 @@ using Ctx = VmNormLangPage;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewNormLangPage
-	:AppViewBase
+	:AppViewBase<Ctx>
 	,I_MkTitleMenu
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewNormLangPage(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -197,4 +193,5 @@ public partial class ViewNormLangPage
 		return menu;
 	}
 }
+
 

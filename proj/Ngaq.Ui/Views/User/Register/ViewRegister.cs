@@ -18,13 +18,8 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.Avln.Grid;
 
 public partial class ViewRegister
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewRegister(){
 		// Ctx由父容器ViewLoginRegister注入，避免登錄與註冊頁分別持有不同Vm實例。
@@ -156,4 +151,5 @@ public partial class ViewRegister
 	}
 
 }
+
 

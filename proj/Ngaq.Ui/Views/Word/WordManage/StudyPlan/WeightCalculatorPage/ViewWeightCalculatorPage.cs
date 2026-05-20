@@ -25,12 +25,8 @@ using Ctx = VmWeightCalculatorPage;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWeightCalculatorPage
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewWeightCalculatorPage(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -183,6 +179,7 @@ public partial class ViewWeightCalculatorPage
 		ViewNavi?.GoTo(titled);
 	}
 }
+
 
 
 

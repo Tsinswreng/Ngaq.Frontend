@@ -28,11 +28,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 
 /// Editor view for a single fields-filter group.
-public class ViewFieldsFilterCardEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public class ViewFieldsFilterCardEdit: AppViewBase<Ctx>{
 
 	public ViewFieldsFilterCardEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -251,3 +247,4 @@ public class ViewFieldsFilterCardEdit: AppViewBase{
 		return g.Grid;
 	}
 }
+

@@ -20,14 +20,9 @@ using Tsinswreng.Srefl;
 using Ctx = VmWordEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewWordEdit
-	:AppViewBase
+	:AppViewBase<Ctx>
 	,I_MkTitleMenu
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewWordEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -120,3 +115,4 @@ public partial class ViewWordEdit
 
 
 }
+

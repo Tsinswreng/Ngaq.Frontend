@@ -25,13 +25,8 @@ using LK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 
 public partial class ViewWordManage
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewWordManage(){
 		Ctx = new Ctx();
@@ -133,3 +128,4 @@ public partial class ViewWordManage
 
 
 }
+

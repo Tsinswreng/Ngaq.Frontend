@@ -7,13 +7,8 @@ using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsI18n;
 using Ctx = VmStudyPlanRow;
 public partial class ViewStudyPlanRow
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewStudyPlanRow(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -40,4 +35,5 @@ public partial class ViewStudyPlanRow
 		return NIL;
 	}
 }
+
 

@@ -20,18 +20,11 @@ using Ngaq.Ui.Infra;
 using Tsinswreng.Avln.Grid;
 
 public partial class ViewLogin
-	:AppViewBase
+	:AppViewBase<Ctx>
 	//,IHasViewNavigator
 {
 
 	//public IViewNavigator? ViewNavigator{get;set;}
-
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
 
 	public ViewLogin(){
 		// Ctx由父容器ViewLoginRegister注入，避免登錄與註冊頁分別持有不同Vm實例。
@@ -170,3 +163,4 @@ public partial class Cls_{
 
 
 }
+

@@ -25,12 +25,8 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 標準語言到用戶語言映射列表頁視圖。
 public partial class ViewNormLangToUserLangPage
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewNormLangToUserLangPage(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -180,4 +176,5 @@ public partial class ViewNormLangToUserLangPage
 		ViewNavi?.GoTo(titled);
 	}
 }
+
 

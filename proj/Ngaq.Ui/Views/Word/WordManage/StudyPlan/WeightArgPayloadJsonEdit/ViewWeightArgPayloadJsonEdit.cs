@@ -20,11 +20,7 @@ using Ctx = VmWeightArgPayloadJsonEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// WeightArg Payload(JSON) 編輯視圖。
-public class ViewWeightArgPayloadJsonEdit: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
+public class ViewWeightArgPayloadJsonEdit: AppViewBase<Ctx>{
 
 	public ViewWeightArgPayloadJsonEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -113,5 +109,6 @@ public class ViewWeightArgPayloadJsonEdit: AppViewBase{
 		IsSyncingPayloadText = false;
 	}
 }
+
 
 

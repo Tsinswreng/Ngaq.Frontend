@@ -23,12 +23,8 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 標準語言到用戶語言映射詳情編輯頁。
 public partial class ViewNormLangToUserLangEdit
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewNormLangToUserLangEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -213,5 +209,6 @@ public partial class ViewNormLangToUserLangEdit
 		ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectUserLang], view));
 	}
 }
+
 
 

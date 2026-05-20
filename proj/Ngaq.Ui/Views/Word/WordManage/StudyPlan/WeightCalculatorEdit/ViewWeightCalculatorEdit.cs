@@ -20,12 +20,8 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Tsinswreng.Avln.Grid;
 
 public partial class ViewWeightCalculatorEdit
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewWeightCalculatorEdit(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -206,5 +202,6 @@ public partial class ViewWeightCalculatorEdit
 		return row;
 	}
 }
+
 
 

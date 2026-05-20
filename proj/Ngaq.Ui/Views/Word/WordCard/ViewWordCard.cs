@@ -22,7 +22,7 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Tsinswreng.Avln.Grid;
 
 public partial class ViewWordListCard
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
 
 	public static ContextMenu MkWordCardCtxMenu(
@@ -110,11 +110,6 @@ public partial class ViewWordListCard
 			return NIL;
 		}
 		return NIL;
-	}
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
 	}
 
 	public ViewWordListCard(Ctx Ctx){
@@ -274,6 +269,7 @@ public partial class ViewWordListCard
 		return R.Grid;
 	}
 }
+
 
 
 

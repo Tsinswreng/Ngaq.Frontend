@@ -19,13 +19,8 @@ using Ngaq.Ui.Components;
 using Tsinswreng.Avln.Grid;
 
 public partial class ViewAboutMe
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewAboutMe(){
 		Ctx = App.GetRSvc<Ctx>();
@@ -138,3 +133,4 @@ public partial class ViewAboutMe
 
 
 }
+

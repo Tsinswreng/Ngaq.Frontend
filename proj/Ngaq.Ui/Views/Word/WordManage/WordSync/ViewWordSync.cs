@@ -14,13 +14,8 @@ using Ctx = VmWordSync;
 using K = Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWordSync
-	:AppViewBase
+	:AppViewBase<Ctx>
 {
-
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
 
 	public ViewWordSync(){
 		Ctx = App.GetRSvc<Ctx>();
@@ -111,3 +106,4 @@ public partial class ViewWordSync
 	}
 
 }
+
