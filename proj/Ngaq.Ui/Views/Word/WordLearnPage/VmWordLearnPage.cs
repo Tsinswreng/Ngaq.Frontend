@@ -91,7 +91,13 @@ public partial class VmWordLearnRow: ViewModelBase{
 	public str LearnResultDisplayText => TranslateLearnResult(GetLearnResultByIndex(LearnResultIndex));
 
 	public static VmWordLearnRow NewRow(){
-		return new VmWordLearnRow{LearnResultIndex = 0};
+		return new VmWordLearnRow{
+			// 新增行必須保持空 Id，保存時才能走 BatAdd 而不是誤走 BatUpd。
+			Raw = new PoWordLearn{
+				Id = default,
+			},
+			LearnResultIndex = 0,
+		};
 	}
 
 	public static VmWordLearnRow FromPo(PoWordLearn Po){

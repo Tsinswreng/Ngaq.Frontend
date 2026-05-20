@@ -117,6 +117,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			Props = [],
 			Learns = [
 				new PoWordLearn{
+					Id = default,
 					LearnResult = ELearn.Add,
 					BizCreatedAt = now,
 				}

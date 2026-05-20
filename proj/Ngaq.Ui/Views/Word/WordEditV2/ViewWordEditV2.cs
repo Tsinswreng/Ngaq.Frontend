@@ -22,12 +22,7 @@ using Ctx = VmWordEditV2;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 單詞編輯主頁：僅承擔三個分頁容器與全局保存/刪除。
-public partial class ViewWordEditV2: AppViewBase{
-	public Ctx? Ctx{
-		get{return DataContext as Ctx;}
-		set{DataContext = value;}
-	}
-
+public partial class ViewWordEditV2: AppViewBase<Ctx>{
 	public ViewWordEditV2(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();

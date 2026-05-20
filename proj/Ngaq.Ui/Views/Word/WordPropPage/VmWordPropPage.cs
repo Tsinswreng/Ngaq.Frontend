@@ -101,6 +101,10 @@ public partial class VmWordPropRow: ViewModelBase{
 
 	public static VmWordPropRow NewRow(){
 		return new VmWordPropRow{
+			// 新增行必須保持空 Id，保存時才能走 BatAdd 而不是誤走 BatUpd。
+			Raw = new PoWordProp{
+				Id = default,
+			},
 			KTypeIndex = 0,
 			VTypeIndex = 0,
 			KStrText = DescriptionAlias,
