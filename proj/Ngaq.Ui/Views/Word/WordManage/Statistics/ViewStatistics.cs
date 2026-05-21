@@ -1,9 +1,11 @@
 namespace Ngaq.Ui.Views.Word.WordManage.Statistics;
 
 using System.Linq.Expressions;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Media.Imaging;
 using Avalonia.Media;
 using Avalonia.Styling;
 using CommunityToolkit.Mvvm.Input;
@@ -13,7 +15,6 @@ using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
-using ScottPlot.Avalonia;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -33,6 +34,8 @@ public partial class ViewStatistics: AppViewBase{
 		Style();
 		Render();
 	}
+
+	Image? PlotImage;
 
 
 
@@ -167,21 +170,22 @@ public partial class ViewStatistics: AppViewBase{
 		return cfg.Grid;
 	}
 
-	void DrawPlot(AvaPlot o){
+	void DrawPlot(Image o){
 		if(Ctx is null){
 			return;
 		}
+		var plot = new ScottPlot.Plot();
 		// 統一套用黑底白字主題，避免刷新後回到默認配色。
-		o.Plot.FigureBackground.Color = ScottPlot.Colors.Black;
-		o.Plot.DataBackground.Color = ScottPlot.Colors.Black;
+		plot.FigureBackground.Color = ScottPlot.Colors.Black;
+		plot.DataBackground.Color = ScottPlot.Colors.Black;
 		var frameColor = ScottPlot.Colors.Gray;
-		o.Plot.Axes.Color(ScottPlot.Colors.White);
-		o.Plot.Axes.FrameColor(frameColor);
-		o.Plot.Grid.MajorLineColor = frameColor;
-		o.Plot.Grid.MajorLineWidth = 0.5f;
+		plot.Axes.Color(ScottPlot.Colors.White);
+		plot.Axes.FrameColor(frameColor);
+		plot.Grid.MajorLineColor = frameColor;
+		plot.Grid.MajorLineWidth = 0.5f;
 
-		o.Plot.Clear();
-		var series = o.Plot.Add.Scatter(Ctx.Points, ScottPlot.Colors.LightBlue);
+		plot.Clear();
+		var series = plot.Add.Scatter(Ctx.Points, ScottPlot.Colors.LightBlue);
 		series.LineWidth = 1;
 		series.MarkerSize = 0;
 
@@ -194,20 +198,38 @@ public partial class ViewStatistics: AppViewBase{
 			tickLabels.Add(dt.ToString("yy-MM-dd"));
 		}
 
-		o.Plot.Axes.Bottom.TickGenerator =
+		plot.Axes.Bottom.TickGenerator =
 			new ScottPlot.TickGenerators.NumericManual(tickPositions.ToArray(), tickLabels.ToArray());
-		o.Plot.Axes.Bottom.TickLabelStyle.Rotation = 60;
-		//o.Plot.Axes.Bottom.MinimumSize = 96;
+		plot.Axes.Bottom.TickLabelStyle.Rotation = 60;
 
 		for(i32 i = 0; i < Ctx.Points.Count; i++){
 			var p = Ctx.Points[i];
-			var txt = o.Plot.Add.Text(p.Y.ToString("0"), p.X, p.Y);
+			var txt = plot.Add.Text(p.Y.ToString("0"), p.X, p.Y);
 			txt.LabelFontColor = ScottPlot.Colors.White;
 			txt.OffsetY = -0.3f;
 			txt.LabelAlignment = ScottPlot.Alignment.LowerCenter;
 		}
-		o.Refresh();
-		o.Plot.Axes.AutoScale();
+		plot.Axes.AutoScale();
+		o.Source = RenderPlotBitmap(plot, 900, 520);
+	}
+
+	Bitmap? RenderPlotBitmap(ScottPlot.Plot Plot, i32 Width, i32 Height){
+		var tempPath = Path.Combine(Path.GetTempPath(), $"ngaq_statistics_{Guid.NewGuid():N}.png");
+		try{
+			Plot.SavePng(tempPath, Width, Height);
+			using var fs = File.OpenRead(tempPath);
+			using var ms = new MemoryStream();
+			fs.CopyTo(ms);
+			ms.Position = 0;
+			return new Bitmap(ms);
+		}finally{
+			try{
+				if(File.Exists(tempPath)){
+					File.Delete(tempPath);
+				}
+			}catch{
+			}
+		}
 	}
 
 	GridStack Root = new(IsRow: true);
@@ -222,7 +244,11 @@ public partial class ViewStatistics: AppViewBase{
 
 		var resultPanel = new GridStack(IsRow: true);
 		resultPanel
-		.A(new AvaPlot(), o=>{
+		.A(new Image(), o=>{
+			PlotImage = o;
+			o.Stretch = Stretch.Uniform;
+			o.HorizontalAlignment = HAlign.Stretch;
+			o.VerticalAlignment = VAlign.Stretch;
 			Ctx?.GraphChanged += (s, e)=>{
 				DrawPlot(o);
 			};
