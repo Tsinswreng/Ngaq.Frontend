@@ -3,7 +3,6 @@ namespace Ngaq.Ui.Views.Word.WordLearnPage;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Styling;
@@ -66,11 +65,11 @@ public partial class ViewWordLearnPage: AppViewBase{
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		);
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		Grid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
@@ -84,9 +83,9 @@ public partial class ViewWordLearnPage: AppViewBase{
 		}
 		var source = new FlatTreeDataGridSource<VmWordLearnRow>(Ctx.Rows){
 			Columns = {
-				new TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x), width: new GridLength(1, GUT.Auto)),
-				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultDisplayText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay, width: new GridLength(1, GUT.Star)),
+				TdgCompat.TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x), new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultDisplayText, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay, new GridLength(1, GUT.Star)),
 			},
 		};
 		Grid.Source = source;
@@ -149,7 +148,7 @@ public partial class ViewWordLearnPage: AppViewBase{
 			return;
 		}
 		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
-			if(cur is TreeDataGridRow row){
+			if(cur is DataGridRow row){
 				if(row.DataContext is VmWordLearnRow vmRow){
 					Ctx.RequestEdit(vmRow);
 					E.Handled = true;
@@ -159,3 +158,6 @@ public partial class ViewWordLearnPage: AppViewBase{
 		}
 	}
 }
+
+
+

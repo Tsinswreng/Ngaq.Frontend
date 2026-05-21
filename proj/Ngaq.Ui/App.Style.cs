@@ -101,6 +101,28 @@ public partial class App{
 
 		Styles.A(
 			new Style(x=>
+				x.Is<Window>()
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,UiCfg.Inst.BackgroundColor
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,UiCfg.Inst.ForegroundColor
+			)
+		)
+		.A(
+			new Style(x=>
+				x.Is<UserControl>()
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,UiCfg.Inst.BackgroundColor
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,UiCfg.Inst.ForegroundColor
+			)
+		)
+		.A(
+			new Style(x=>
 				x.Is<Button>()
 			).Set(
 				TemplatedControl.HorizontalAlignmentProperty
@@ -131,6 +153,84 @@ public partial class App{
 			).Set(
 				TemplatedControl.VerticalAlignmentProperty
 				,VAlign.Stretch
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,new SolidColorBrush(Color.FromRgb(24, 24, 24))
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,Brushes.White
+			)
+		)
+		.A(
+			new Style(x=>
+				x.Is<DataGridColumnHeader>()
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,new SolidColorBrush(Color.FromRgb(36, 36, 36))
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,Brushes.White
+			).Set(
+				TemplatedControl.BorderBrushProperty
+				,new SolidColorBrush(Color.FromRgb(64, 64, 64))
+			)
+		)
+		.A(
+			new Style(x=>
+				x.Is<DataGridRow>()
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,new SolidColorBrush(Color.FromRgb(24, 24, 24))
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,Brushes.White
+			)
+		)
+		.A(
+			new Style(x=>
+				x.Is<DataGridRow>()
+				.Class(":pointerover")
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,new SolidColorBrush(Color.FromRgb(46, 46, 46))
+			)
+		)
+		.A(
+			new Style(x=>
+				x.Is<DataGridRow>()
+				.Class(":selected")
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,new SolidColorBrush(Color.FromRgb(60, 60, 60))
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,Brushes.White
+			)
+		)
+		.A(
+			new Style(x=>
+				x.Is<DataGridCell>()
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,Brushes.Transparent
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,Brushes.White
+			).Set(
+				TemplatedControl.BorderBrushProperty
+				,new SolidColorBrush(Color.FromRgb(52, 52, 52))
+			)
+		)
+		.A(
+			new Style(x=>
+				x.Is<DataGridCell>()
+				.Class(":current")
+			).Set(
+				TemplatedControl.BackgroundProperty
+				,new SolidColorBrush(Color.FromRgb(70, 70, 70))
+			).Set(
+				TemplatedControl.ForegroundProperty
+				,Brushes.White
 			)
 		);
 

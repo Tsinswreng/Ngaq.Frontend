@@ -35,16 +35,15 @@ public partial class ViewCfgServerStorage: AppViewBase<Ctx>{
 				o.Text = I[K.ServerBaseUrl];
 			});
 			sp.A(new TextBox(), o=>{
-				o.CBind<Ctx>(o.PropText, x=>x.ServerBaseUrl);
+				Ctx.Bind(o, o=>o.Text, x=>x.ServerBaseUrl);
 			});
 			sp.A(new TextBlock(), o=>{
 				o.Text = I[K.SqlitePath];
 			});
 			sp.A(new TextBox(), o=>{
-				o.CBind<Ctx>(o.PropText, x=>x.SqlitePath);
+				Ctx.Bind(o, o=>o.Text, x=>x.SqlitePath);
 			});
-		});
-		Root.A(new OpBtn(), o=>{
+		}).A(new OpBtn(), o=>{
 			o._Button.StretchCenter();
 			o.VerticalAlignment = VAlign.Bottom;
 			o.BtnContent = I[K.Save];

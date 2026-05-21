@@ -3,7 +3,6 @@ namespace Ngaq.Ui.Views.Word.WordPropPage;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Styling;
@@ -67,11 +66,11 @@ public partial class ViewWordPropPage: AppViewBase{
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		);
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		Grid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
@@ -85,9 +84,9 @@ public partial class ViewWordPropPage: AppViewBase{
 		}
 		var source = new FlatTreeDataGridSource<VmWordPropRow>(Ctx.Rows){
 			Columns = {
-				new TextColumn<VmWordPropRow, str>("", x=>GetIdxText(x), width: new GridLength(1, GUT.Auto)),
-				new TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyDisplayText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<VmWordPropRow, str>(I[K.Values], x=>x.ValueDisplayText, width: new GridLength(1, GUT.Star)),
+				TdgCompat.TextColumn<VmWordPropRow, str>("", x=>GetIdxText(x), new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<VmWordPropRow, str>(I[K.Key], x=>x.KeyDisplayText, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<VmWordPropRow, str>(I[K.Values], x=>x.ValueDisplayText, new GridLength(1, GUT.Star)),
 			},
 		};
 		Grid.Source = source;
@@ -150,7 +149,7 @@ public partial class ViewWordPropPage: AppViewBase{
 			return;
 		}
 		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
-			if(cur is TreeDataGridRow row){
+			if(cur is DataGridRow row){
 				if(row.DataContext is VmWordPropRow vmRow){
 					Ctx.RequestEdit(vmRow);
 					E.Handled = true;
@@ -160,3 +159,6 @@ public partial class ViewWordPropPage: AppViewBase{
 		}
 	}
 }
+
+
+

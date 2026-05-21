@@ -3,7 +3,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
-using Avalonia.Markup.Xaml.MarkupExtensions.CompiledBindings;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views;
 using Tsinswreng.Avln.Navi;

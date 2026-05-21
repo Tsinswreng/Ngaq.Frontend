@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
@@ -19,12 +18,14 @@ public class TryTreeDataGrid {
 		new("Root B", "folder", new List<MyTreeRow>{ new("B-1", "leaf"), new("B-2", "leaf"), new("B-3", "leaf") }),
 	};
 
-		var source = new HierarchicalTreeDataGridSource<MyTreeRow>(demoItems) {
+		var flatItems = demoItems
+			.SelectMany(x => new[] { x }.Concat(x.Children))
+			.ToList();
+
+		var source = new FlatTreeDataGridSource<MyTreeRow>(flatItems) {
 			Columns = {
-				new HierarchicalExpanderColumn<MyTreeRow>(
-					new TextColumn<MyTreeRow, string>("Name", x=>x.Name), x=>x.Children
-				),
-				new TextColumn<MyTreeRow, string>("Type", x=>x.Type),
+				TdgCompat.TextColumn<MyTreeRow, string>("Name", x=>x.Name, new GridLength(1, GridUnitType.Star)),
+				TdgCompat.TextColumn<MyTreeRow, string>("Type", x=>x.Type, new GridLength(1, GridUnitType.Auto)),
 			},
 		};
 
@@ -73,3 +74,5 @@ public class TryTreeDataGrid {
 	}
 
 }
+
+

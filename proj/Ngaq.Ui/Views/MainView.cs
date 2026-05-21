@@ -85,7 +85,7 @@ public partial class MainView : UserControl {
 				});
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
 				o.MinWidth = UiCfg.Inst.WindowWidth*0.5;
-				o._Border.BorderThickness = new Avalonia.Thickness(1);
+				o._Border.BorderThickness = new(1);
 				o._Border.BorderBrush = UiCfg.Inst.MainColor;
 				o._BdrTitle.Background = new SolidColorBrush(new Color(255, 40,40,40));
 				o._BdrBody.MaxHeight = UiCfg.Inst.WindowHeight*0.8;
@@ -108,7 +108,7 @@ public partial class MainView : UserControl {
 				o.Background = Brushes.Black;
 				var Bdr = new Border();
 				Bdr.Child = o;
-				Bdr.Padding = new Avalonia.Thickness(40);
+				Bdr.Padding = new(40);
 				SvcPopup.ShowPopup(Bdr);
 			}
 		}));
@@ -126,7 +126,7 @@ public partial class MainView : UserControl {
 				});
 				o.MinHeight = UiCfg.Inst.WindowHeight*0.2;
 				o.MinWidth = UiCfg.Inst.WindowWidth*0.5;
-				o._Border.BorderThickness = new Avalonia.Thickness(1);
+				o._Border.BorderThickness = new(1);
 				o._Border.BorderBrush = Brushes.White;
 				o._BdrTitle.Background = new SolidColorBrush(new Color(255, 40,40,40));
 				o._BdrBody.MaxHeight = UiCfg.Inst.WindowHeight*0.8;
@@ -141,7 +141,7 @@ public partial class MainView : UserControl {
 				var Body = new StackPanel{
 					Orientation = Orientation.Vertical,
 					Spacing = UiCfg.Inst.BaseFontSize*0.35,
-					Margin = new Avalonia.Thickness(
+					Margin = new(
 						UiCfg.Inst.BaseFontSize*0.7,
 						UiCfg.Inst.BaseFontSize*0.45,
 						UiCfg.Inst.BaseFontSize*0.7,
@@ -170,7 +170,7 @@ public partial class MainView : UserControl {
 				o.Background = Brushes.Black;
 				var Bdr = new Border();
 				Bdr.Child = o;
-				Bdr.Padding = new Avalonia.Thickness(40);
+				Bdr.Padding = new(40);
 				SvcPopup.ShowPopup(Bdr);
 			}
 		}));
@@ -203,18 +203,19 @@ public partial class MainView : UserControl {
 	}
 
 	/// 構造 Toast 控件。右上角提供關閉按鈕，內容區展示文案。
+	/// TODO 寫法不符dsl規範
 	protected Border MkToastControl(str Msg){
 		var FontSize = UiCfg.Inst.BaseFontSize;
 		var Container = new Grid{
 			HorizontalAlignment = HAlign.Stretch,
 			VerticalAlignment = VAlign.Bottom,
-			Margin = new Avalonia.Thickness(FontSize*0.8, 0, FontSize*0.8, FontSize*0.8),
+			Margin = new(FontSize*0.8, 0, FontSize*0.8, FontSize*0.8),
 		};
 		var ToastBody = new Border{
 			Background = new SolidColorBrush(new Color(255, 40, 40, 40)),
 			BorderBrush = UiCfg.Inst.MainColor,
-			BorderThickness = new Avalonia.Thickness(1),
-			Padding = new Avalonia.Thickness(FontSize*0.55, FontSize*0.45, FontSize*0.45, FontSize*0.45),
+			BorderThickness = new(1),
+			Padding = new(FontSize*0.55, FontSize*0.45, FontSize*0.45, FontSize*0.45),
 			HorizontalAlignment = HAlign.Stretch,
 			VerticalAlignment = VAlign.Bottom,
 		};
@@ -230,14 +231,14 @@ public partial class MainView : UserControl {
 			VerticalAlignment = VAlign.Center,
 			FontSize = FontSize,
 			Foreground = UiCfg.Inst.ForegroundColor,
-			Margin = new Avalonia.Thickness(0, 0, FontSize*0.5, 0),
+			Margin = new(0, 0, FontSize*0.5, 0),
 		};
 		Grid.SetColumn(Text, 0);
 		var CloseBtn = new Button{
 			Background = Brushes.Transparent,
 			HorizontalAlignment = HAlign.Right,
 			VerticalAlignment = VAlign.Top,
-			Padding = new Avalonia.Thickness(0),
+			Padding = new(0),
 		};
 		CloseBtn.SetContent(Icons.CloseX(), o=>{
 			o.Fill = Brushes.Red;

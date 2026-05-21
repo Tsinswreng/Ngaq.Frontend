@@ -2,7 +2,6 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -115,11 +114,11 @@ public partial class ViewPreFilterPage
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		PreFilterGrid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		);
 		PreFilterGrid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		PreFilterGrid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
@@ -140,9 +139,9 @@ public partial class ViewPreFilterPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowPreFilter>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowPreFilter, str>("", x=>x.UiIdxText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowPreFilter, str>(I[K.Name], x=>x.Name, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowPreFilter, str>(I[K.ModifiedTime], x=>x.ModifiedTime, width: new GridLength(1, GUT.Star)),
+				TdgCompat.TextColumn<Ctx.RowPreFilter, str>("", x=>x.UiIdxText, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowPreFilter, str>(I[K.Name], x=>x.Name, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowPreFilter, str>(I[K.ModifiedTime], x=>x.ModifiedTime, new GridLength(1, GUT.Star)),
 			},
 		};
 		PreFilterGrid.Source = GridSource;
@@ -160,7 +159,7 @@ public partial class ViewPreFilterPage
 			if(cur is ToggleButton){
 				return;
 			}
-			if(cur is TreeDataGridRow row){
+			if(cur is DataGridRow row){
 				if(row.DataContext is Ctx.RowPreFilter vmRow){
 					Ctx.OpenDetail(vmRow);
 					e.Handled = true;
@@ -182,4 +181,7 @@ public partial class ViewPreFilterPage
 		ViewNavi?.GoTo(titled);
 	}
 }
+
+
+
 

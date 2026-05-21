@@ -68,7 +68,7 @@ public partial class App :Application
 	/// 保持主要 UI 仍爲純 C#；
 	/// 但第三方控件全局主題改由極小的 App.axaml 在編譯期註冊，避免運行時動態載入主題失敗。
 	/// App.xaml中的
-	/// <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml" />
+	/// <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 	/// 目前找不到辦法用等價c#表示 故此項目仍需少量xaml
 
 	public override void Initialize() {
@@ -84,7 +84,7 @@ public partial class App :Application
 		//增 && WINDOWS亦不效 緣Ngaq.Ui中無斯預處理ˉ符號
 		#if DEBUG
 			if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)){
-				DevToolsExtensions.AttachDevTools(this);
+				//DevToolsExtensions.AttachDevTools(this);
 			}
 		#endif
 	}
@@ -94,10 +94,6 @@ public partial class App :Application
 		GlobalExceptionGuard.Install();
 
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
-			// Avoid duplicate validations from both Avalonia and the CommunityToolkit.
-			// More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-			DisableAvaloniaDataAnnotationValidation();
-
 			#region 全局基字體 2025-05-29T17:14:54.155+08:00_W22-4
 			// 创建资源字典并添加资源
 			var resources = new ResourceDictionary();
@@ -135,14 +131,7 @@ public partial class App :Application
 
 
 	private void DisableAvaloniaDataAnnotationValidation() {
-		// Get an array of plugins to remove
-		var dataValidationPluginsToRemove =
-			BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-		// remove each entry found
-		foreach (var plugin in dataValidationPluginsToRemove) {
-			BindingPlugins.DataValidators.Remove(plugin);
-		}
+		// Avalonia 12 將 BindingPlugins 轉爲內部類，這裏暫不再透過公開 API 移除校驗插件。
 	}
 
 
@@ -153,6 +142,8 @@ public partial class App :Application
 			,Title= "ŋaʔ"
 			,Width = Cfg.WindowWidth
 			,Height = Cfg.WindowHeight
+			,RequestedThemeVariant = ThemeVariant.Dark
+			,Background = Cfg.BackgroundColor
 			,Foreground = Brushes.White
 		};
 	}

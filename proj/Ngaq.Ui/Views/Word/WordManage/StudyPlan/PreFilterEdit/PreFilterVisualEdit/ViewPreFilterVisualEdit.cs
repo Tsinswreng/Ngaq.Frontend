@@ -3,7 +3,6 @@ namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualE
 using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -118,9 +117,9 @@ public class ViewPreFilterVisualEdit: AppViewBase<Ctx>, I_MkTitleMenu{
 	FlatTreeDataGridSource<Ctx.RowFieldsFilterCard> MkGridSource(IList<Ctx.RowFieldsFilterCard> rows){
 		return new FlatTreeDataGridSource<Ctx.RowFieldsFilterCard>(rows){
 			Columns = {
-				new TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview, width: new GridLength(1, GUT.Star)),
+				TdgCompat.TextColumn<Ctx.RowFieldsFilterCard, str>("", x=>x.UiIdxText, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.Items], x=>x.FilterCountText, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowFieldsFilterCard, str>(I[K.TextPreview], x=>x.ContentPreview, new GridLength(1, GUT.Star)),
 			},
 		};
 	}
@@ -174,11 +173,11 @@ public class ViewPreFilterVisualEdit: AppViewBase<Ctx>, I_MkTitleMenu{
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		);
 		grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		if(isCore){
@@ -211,7 +210,7 @@ public class ViewPreFilterVisualEdit: AppViewBase<Ctx>, I_MkTitleMenu{
 			if(cur is ToggleButton){
 				return;
 			}
-			if(cur is TreeDataGridRow row){
+			if(cur is DataGridRow row){
 				if(row.DataContext is Ctx.RowFieldsFilterCard vmRow){
 					if(isCore){
 						Ctx.OpenCoreFilterCard(vmRow);
@@ -297,5 +296,8 @@ public class ViewPreFilterVisualEdit: AppViewBase<Ctx>, I_MkTitleMenu{
 		return menu;
 	}
 }
+
+
+
 
 

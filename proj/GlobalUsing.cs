@@ -1,5 +1,6 @@
 //[2025-06-26T13:37:22.811+08:00_W26-4]
 global using BindingMode = Avalonia.Data.BindingMode;
+global using IBinding = Avalonia.Data.BindingBase;
 
 #region Grid
 global using ColDef = Avalonia.Controls.ColumnDefinition;

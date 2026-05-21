@@ -2,7 +2,6 @@ namespace Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangPag
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -111,11 +110,11 @@ public partial class ViewNormLangToUserLangPage
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		);
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		Grid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
@@ -136,10 +135,10 @@ public partial class ViewNormLangToUserLangPage
 		}
 		GridSource = new FlatTreeDataGridSource<Ctx.RowNormLangToUserLang>(Ctx.Rows){
 			Columns = {
-				new TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime, width: new GridLength(1, GUT.Star)),
+				TdgCompat.TextColumn<Ctx.RowNormLangToUserLang, str>("", x=>x.UiIdxText, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.NormLang], x=>x.NormLang, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.UserLang], x=>x.UserLang, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowNormLangToUserLang, str>(I[K.ModifiedTime], x=>x.ModifiedTime, new GridLength(1, GUT.Star)),
 			},
 		};
 		Grid.Source = GridSource;
@@ -157,7 +156,7 @@ public partial class ViewNormLangToUserLangPage
 			if(cur is ToggleButton){
 				return;
 			}
-			if(cur is TreeDataGridRow row){
+			if(cur is DataGridRow row){
 				if(row.DataContext is Ctx.RowNormLangToUserLang vmRow){
 					Ctx.OpenDetail(vmRow);
 					e.Handled = true;
@@ -176,5 +175,8 @@ public partial class ViewNormLangToUserLangPage
 		ViewNavi?.GoTo(titled);
 	}
 }
+
+
+
 
 

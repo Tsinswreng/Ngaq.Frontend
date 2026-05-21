@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Ngaq.Core.Infra.Cfg;
 using Tsinswreng.CsCfg;
@@ -21,7 +20,7 @@ public partial class UiCfg{
 	public f64 WindowWidth {get;set;}= 400;
 	public f64 WindowHeight {get;set;}= 700;
 	public IBrush? MainColor {get;set;}= DfltMainColor;
-	public IBrush? DelBtnBg {get;set;} = Color.FromRgb(210, 56, 56).ToBrush();
+	public IBrush? DelBtnBg {get;set;} = new SolidColorBrush(Color.FromRgb(210, 56, 56));
 	public IBrush ForegroundColor {get;set;}= Brushes.White;
 	public IBrush BackgroundColor {get;set;}= Brushes.Black;
 	public static IBrush DfltMainColor = new SolidColorBrush(Color.FromArgb(0xFF, 0x00, 0x78, 0xD7));
@@ -32,17 +31,16 @@ public partial class UiCfg{
 			return DfltMainColor;
 		}
 
-		// 嘗試主題資源鍵 (Avalonia first, then Windows)
+		// 只從「強調色/Accent」資源取主色，避免誤把前景色（深色主題下常爲白色）當作背景色。
 		var keys = new[] {
 			"ThemeAccentBrush",
 			"ThemeAccentBrush2",
 			"ThemeAccentBrush3",
 			"ThemeAccentBrush4",
 			"AccentBrush",
-			"SystemControlHighlightAccentBrush",
-			"SystemControlForegroundBaseHighBrush",
 			"SystemAccentColorBrush",
 			"AccentColorBrush",
+			"SystemControlHighlightAccentBrush",
 		};
 		foreach(var k in keys){
 			if (app.Resources.TryGetValue(k, out var val) && val is IBrush b){

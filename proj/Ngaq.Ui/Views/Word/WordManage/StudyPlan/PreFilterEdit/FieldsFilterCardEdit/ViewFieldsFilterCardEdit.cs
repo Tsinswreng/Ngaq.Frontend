@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
@@ -179,10 +178,10 @@ public class ViewFieldsFilterCardEdit: AppViewBase<Ctx>{
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		ItemGrid.Styles.A(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pointerover"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		).A(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
+			new Style(x=>x.OfType<DataGridRow>().Class(":pressed"))
 			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		ItemGrid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
@@ -196,10 +195,10 @@ public class ViewFieldsFilterCardEdit: AppViewBase<Ctx>{
 		}
 		ItemGridSource = new FlatTreeDataGridSource<Ctx.RowFilterItemCard>(Ctx.ItemCards){
 			Columns = {
-				new TextColumn<Ctx.RowFilterItemCard, str>("", x=>x.UiIdxText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Operation], x=>x.Operation, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.ValueType], x=>x.ValueType, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<Ctx.RowFilterItemCard, str>(I[K.Values], x=>x.ValuesPreview, width: new GridLength(1, GUT.Star)),
+				TdgCompat.TextColumn<Ctx.RowFilterItemCard, str>("", x=>x.UiIdxText, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowFilterItemCard, str>(I[K.Operation], x=>x.Operation, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowFilterItemCard, str>(I[K.ValueType], x=>x.ValueType, new GridLength(1, GUT.Auto)),
+				TdgCompat.TextColumn<Ctx.RowFilterItemCard, str>(I[K.Values], x=>x.ValuesPreview, new GridLength(1, GUT.Star)),
 			},
 		};
 		ItemGrid.Source = ItemGridSource;
@@ -216,7 +215,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase<Ctx>{
 			if(cur is ToggleButton){
 				return;
 			}
-			if(cur is TreeDataGridRow row){
+			if(cur is DataGridRow row){
 				if(row.DataContext is Ctx.RowFilterItemCard vmRow){
 					Ctx.OpenFilterItem(vmRow);
 					e.Handled = true;
@@ -247,4 +246,7 @@ public class ViewFieldsFilterCardEdit: AppViewBase<Ctx>{
 		return g.Grid;
 	}
 }
+
+
+
 
