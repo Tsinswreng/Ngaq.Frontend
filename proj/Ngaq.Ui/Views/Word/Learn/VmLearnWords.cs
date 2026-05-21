@@ -1,33 +1,27 @@
 namespace Ngaq.Ui.Views.Word.Learn;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Ngaq.Ui.Views.Word.WordCard;
-using Ngaq.Ui.Views.Word.WordInfo;
-using Tsinswreng.CsPage;
-using Ngaq.Ui.Infra;
-
-using Ctx = VmLearnWords;
-using Ngaq.Core.Shared.Word.Models.Learn_;
+using Avalonia.Threading;
 using Ngaq.Core.Frontend.ImgBg;
 using Ngaq.Core.Frontend.User;
-using Ngaq.Core.Shared.Word;
-
-using Avalonia.Threading;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using Tsinswreng.CsCfg;
-using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Infra;
-using System.Diagnostics;
-using Tsinswreng.CsTools;
-using Ngaq.Core.Tools;
-using Avalonia.Logging;
-using Ngaq.Core.Shared.Base.Models.Po;
+using Ngaq.Core.Infra.Cfg;
+using Ngaq.Core.Shared.Word;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Svc;
+using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word.WordCard;
+using Ngaq.Ui.Views.Word.WordInfo;
+using Tsinswreng.CsCfg;
+using Tsinswreng.CsTools;
+using Ctx = VmLearnWords;
 
 public partial class VmLearnWords
 	:ViewModelBase
@@ -48,10 +42,6 @@ public partial class VmLearnWords
 	}
 
 	public Cfg_ CfgUi = new();
-
-	// public VmWordQuery(){
-	// 	_Init();
-	// }
 	ISvcWord SvcWordV1;
 	ISvcWordV2 SvcWordV2;
 	IFrontendUserCtxMgr UserCtxMgr;
@@ -139,18 +129,15 @@ public partial class VmLearnWords
 
 
 	public ObservableCollection<VmWordListCard> WordCards{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new();
 
 
 	public VmWordInfo CurWordInfo{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new();
-
-	/// 權重參數
-	public IJsonNode? WeightArg {get;set;}
 
 
 	protected ELearnOpRtn _LearnOrUndo(VmWordListCard Vm, ELearn Learn){
@@ -209,7 +196,6 @@ public partial class VmLearnWords
 		if(AnyNull(MgrLearn)){
 			return;
 		}
-		MgrLearn.WeightArgOld = WeightArg;
 	}
 
 	public async Task<nil> LoadEtStartAsy(CT Ct){
@@ -237,9 +223,9 @@ public partial class VmLearnWords
 
 	public async Task<nil> SaveEtRestart(CT Ct){
 		_AssignWeightArg();
-		await MgrLearn.Save(Ct);//只背一個單詞45ms于安卓
-		await MgrLearn.CalcWeightEtStart(Ct);//只背一個單詞567ms于安卓
-		RenderWordList();////只背一個單詞104ms于安卓 限示50個單詞 虛渲染
+		await MgrLearn.Save(Ct);
+		await MgrLearn.CalcWeightEtStart(Ct);
+		RenderWordList();
 		OnPropertyChanged(nameof(IsSaved));
 		// Dispatcher.UIThread.Post(()=>{
 		// 	ShowMsg($"SaveEtRestartAsy: {t1}ms, CalcWeightEtStartAsy: {t2}ms, RenderWordList: {t3}ms");
@@ -271,9 +257,8 @@ public partial class VmLearnWords
 		return NIL;
 	}
 
-
 	public IBrush BgBrush{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = Brushes.Black;
 
@@ -283,8 +268,6 @@ public partial class VmLearnWords
 	}
 
 
-
-	// 类级字段（只加这一行）
 	private readonly ConcurrentQueue<Bitmap> _bgCache = new();
 
 	public async Task<nil> ChangeBg(){

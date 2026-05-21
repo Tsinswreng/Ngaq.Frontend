@@ -1,8 +1,8 @@
 namespace Ngaq.Ui.Views.Word.Learn;
+
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Markup.Declarative;
 using Avalonia.Media;
@@ -14,20 +14,18 @@ using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Settings.LearnWord;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.Avln.StrokeText;
 using Tsinswreng.AvlnTools.Controls;
-using Tsinswreng.AvlnTools;
 using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.CsI18n;
 using Ctx = VmLearnWords;
 using K = Infra.I18n.KeysUiI18nCommon;
-using Tsinswreng.Avln.Grid;
 using PC = PsdCls;
 
 public partial class ViewLearnWords
 	:AppViewBase<Ctx>
 {
+
 	public ViewLearnWords(){
 		Ctx = App.GetRSvc<Ctx>();
 		if(Ctx is not null){
@@ -35,12 +33,14 @@ public partial class ViewLearnWords
 		}
 		Style();
 		Menu = _Menu();
-		//Menu.IsVisible = false;
 		Render();
 		Loaded += (s,e)=>{
 			_OnLoad();
 		};
 	}
+	GridStack Root = new GridStack(IsRow: true);
+	Panel Menu;
+
 
 	void OnAutoPronounceResult(DtoWordCardPronounceResult Result){
 		ViewWordListCard.HandlePronounceResult(Ctx, Result);
@@ -62,9 +62,6 @@ public partial class ViewLearnWords
 		return NIL;
 	}
 
-	GridStack Root = new GridStack(IsRow: true);
-	Panel Menu;
-
 	protected IBrush Shade(IBrush originalBrush, ContentControl top){
 		var overlayBrush = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0)); // 半透明黑，alpha可调
 		var overlayGrid = new Grid{
@@ -85,23 +82,20 @@ public partial class ViewLearnWords
 	}
 
 	protected nil _OnLoad(){
-		var top = TopLevel.GetTopLevel(this);
-		if(top == null){return NIL;}
-		top.Bind(
-			BackgroundProperty
-			,CBE.Mk<Ctx>(x=>x.BgBrush
-				,Source: Ctx
-				,Mode: BindingMode.OneWay
-				,Converter: new FnConvtr<IBrush, nil>((oldBrush, arg)=>{
-					return Shade(oldBrush, top);
-				})
-			)
+		var t = TopLevel.GetTopLevel(this);
+		if(t == null){return NIL;}
+		Ctx.Bind(
+			t, t=>t.Background, x=>x.BgBrush
+			,Converter: new FnConvtr<IBrush, nil>((oldBrush, arg)=>{
+				return Shade(oldBrush, t);
+			})
 		);
-		top.GetObservable(TopLevel.BoundsProperty).Subscribe(_ =>{
+		t.GetObservable(TopLevel.BoundsProperty).Subscribe(_ =>{
 			// 触发 Background 的刷新或重设，保证ImageBrush用UniformToFill渲染
-			if(Ctx==null){return;}
-			if(top.Background is TileBrush tb){
-				tb.Stretch = Stretch.UniformToFill; //TODO與Ctx中ʹ配?持一
+			if(Ctx is null){return;}
+			if(t.Background is TileBrush tb){
+				//TODO 改成可配置的
+				tb.Stretch = Stretch.UniformToFill;
 			}
 			//Background = Shade(Ctx.BgBrush, top);
 			//top.Background.Stretch = Stretch.Uniform;
@@ -118,29 +112,19 @@ public partial class ViewLearnWords
 	protected Panel _Menu(){
 		var R = new GridStack(IsRow: true);
 		var Row1 = new GridStack(IsRow: false);
-		R.A(Row1.Grid, (o)=>{
-			o.SetColDefs([
+		R.A(Row1.Grid, (r)=>{
+			r.SetColDefs([
 				new(100, GUT.Star),
 				new(100, GUT.Star),
 				new(100, GUT.Star),
 				new(100, GUT.Star),
 			]);
-		});
-		{{
 			var T = (str t)=>{
 				var R = new StrokeTextBlock{
 					Text = " "+t,
 					FontSize = UiCfg.Inst.BaseFontSize*0.8,
 					StrokeThickness = 2.0,
-
-					//Foreground = Brushes.White,
 				};
-				return R;
-			};
-			var Ic = (Svg s)=>{
-				var R = s.ToIcon();
-				R.Stroke = Brushes.Black;
-				R.StrokeThickness = 0.9;
 				return R;
 			};
 			var Hc = (params Control[] Ctrls)=>{
@@ -161,14 +145,12 @@ public partial class ViewLearnWords
 					Icons.StartLearn()//▶️
 					,T(I[K.Start])
 				));
-				//o._Button.ContentInit(_Txt(), t=>{t.Text = "▶️"+I[K.Start];});
 				o.SetExe((Ct)=>Ctx?.LoadEtStartAsy(Ct));
-			}).A(Btn(), o=>{ //📁"💾"
+			}).A(Btn(), o=>{ //📁 💾
 				o._Button.SetContent(Hc(
 					Icons.Save()
 					,T(I[K.Save])
 				));
-
 				o.SetExe((Ct)=>Ctx?.SaveEtRestart(Ct));
  				o._Button.Styles.Add(
 					new Style(
@@ -176,7 +158,8 @@ public partial class ViewLearnWords
 						x=>x.Is<Button>()
 					).Set(
 						BackgroundProperty
-						,CBE.Mk<Ctx>(x=>x.IsSaved
+						,CBE.Mk<Ctx>(
+							x=>x.IsSaved
 							,Converter: new FnConvtr<bool, IBrush?>((b)=>{
 								if(!b){
 									return UiCfg.Inst.MainColor;
@@ -192,9 +175,8 @@ public partial class ViewLearnWords
 					,T(I[K.Reset])
 				));
 				o.SetExe((Ct)=>Ctx?.Reset(Ct));
-			})
-			.A(Btn(), o=>{
-				o._Button.SetContent(Hc(//?
+			}).A(Btn(), o=>{
+				o._Button.SetContent(Hc(//⚙️
 					Icons.Setting()
 					,T(I[K.Settings])
 				));
@@ -208,7 +190,7 @@ public partial class ViewLearnWords
 				};
 			})
 			;
-		}}
+		});
 
 		return R.Grid;
 	}
@@ -224,121 +206,68 @@ public partial class ViewLearnWords
 				new(5, GUT.Star),
 			]);
 		});
-		{{
-			Root
-			.A(new Border(), o=>{
-				//背景圖遮?
-				o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
-				o.ZIndex = -1;
-			})
-			.A(_Menu())
-			.A(new ScrollViewer(), Scr=>{
-				Scr.SetContent(_ListWordCard(), o=>{
-					Ctx.Bind(o,
-						ItemsControl.ItemsSourceProperty
-						,x=>x.WordCards, Mode: BindingMode.TwoWay
-					);
-				});
-			})//~ScrollViewer
-			.A(new GridSplitter(), o=>{
-				o.GrayBarWith3Dots();
-			})
-			.A(_WordInfo(), o=>{
-				Ctx.Bind(o, o.PropDataContext,x=>x.CurWordInfo, Mode: BindingMode.TwoWay);
+		Root
+		.A(new Border(), o=>{
+			//背景圖遮蔽
+			o.Background = new SolidColorBrush(Color.FromArgb((byte)(255 * 0.35), 0, 0, 0));
+			o.ZIndex = -1;
+		}).A(_Menu())
+		.A(new ScrollViewer(), Scr=>{
+			Scr.SetContent(_ListWordCard(), o=>{
+				Ctx.Bind(o,
+					ItemsControl.ItemsSourceProperty
+					,x=>x.WordCards, Mode: BindingMode.TwoWay
+				);
 			});
-		}}
+		}).A(new GridSplitter(), o=>{
+			o.GrayBarWith3Dots();
+		}).A(_WordInfo(), o=>{
+			Ctx.Bind(o, o.PropDataContext,x=>x.CurWordInfo, Mode: BindingMode.TwoWay);
+		});
 		return NIL;
 	}
 
-	Control _RowSearch(){
-		var Ans = new GridStack(IsRow: false);
-		{var o = Ans.Grid;
-			o.SetColDefs([
-				new(1, GUT.Star),
-				new(7, GUT.Star),
-				new(2, GUT.Star),
-			]);
-		}
-		{{
-			var MenuBtn = new SwipeLongPressBtn{Content = "···"};
-			Ans.Add(MenuBtn);
-			{var o = MenuBtn;
-				o.Click += (s,e)=>{
-					Menu.IsVisible = !Menu.IsVisible;
-				};
-			}
-
-			var SearchBox = new AutoCompleteBox();
-			{var o = SearchBox;Ans.Add(o);
-
-			}
-
-			var SearchButton = new SwipeLongPressBtn();
-			{var o = SearchButton;Ans.Add(o);
-				o.Content = "Search";
-			}
-		}}
-		return Ans.Grid;
-	}
-
-	//TODO 分頁加載以代虛擬?
+	//TODO 分頁加載以代虛擬化
 	Control _ListWordCard(){
-		var Ans = new ItemsControl();
-		var Cnt = 1;
-		Ans.ItemsPanel = new FuncTemplate<Panel?>(()=>{
+		var Ic = new ItemsControl();
+		Ic.SetItemsPanel(()=>{
 			return new VirtualizingStackPanel();
-			//return new StackPanel();
-		});
-		Ans.ItemTemplate = new FuncDataTemplate<VmWordListCard>((VmWordCard,b)=>{
+		}).SetItemTemplate<VmWordListCard>((VmWordCard,b)=>{
 			var Grid = new Grid();
 			Grid.SetRowDefs([
 				new(1,GUT.Auto)
 			]);
-			{{
-				if(Cnt > Ctx?.WordCards.Count){
-					Cnt = 1;
-				}
-				Cnt++;
-				Grid.A(new SwipeLongPressBtn(), o=>{
-					//o.HorizontalContentAlignment = HoriAlign.Left;
-					o.HorizontalContentAlignment = HAlign.Stretch;
-					o.Styles.Add(new Style().NoMargin().NoPadding());
-					o.Background = Brushes.Transparent;
-					o.CBind<VmWordListCard>(
-						//Button.BackgroundProperty
-						BorderBrushProperty
-						,(x) => x.LearnedColor
-					);
-					o.BorderThickness = new(4,0,0,0);
-					o.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs?? o.LongPressDurationMs;
-					o.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, VmWordCard?.WordForLearn?.JnWord);
-					o.OnLongPressed += (s,e)=>{
-						o.ContextMenu.Open();
+			Grid.A(new SwipeLongPressBtn(), b=>{
+				b.HCAlign(x=>x.Stretch);
+				b.Styles.Add(new Style().NoMargin().NoPadding());
+				b.Background = Brushes.Transparent;
+				b.CBind<VmWordListCard>(
+					BorderBrushProperty
+					,(x) => x.LearnedColor
+				);
+				b.BorderThickness = new(4,0,0,0);
+				b.LongPressDurationMs = Ctx?.CfgUi.LongPressDurationMs?? b.LongPressDurationMs;
+				b.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, VmWordCard?.WordForLearn?.JnWord);
+				b.OnLongPressed += (s,e)=>{
+					b.ContextMenu.Open();
+				};
+				b.LongPressDurationMs = 500;
+				StyBtnWordCard(b.Styles);
+				b.SetContent(new ViewWordListCard(VmWordCard), w=>{
+					w.VAlign(x=>x.Stretch)
+					.HAlign(x=>x.Stretch);
+					w.Background = Brushes.Transparent;
+					w.CBind<VmWordListCard>(w.Prop(x=>x.DataContext),x=>x);
+					b.Click += (s,e)=>{
+						if(w?.Ctx is not null){
+							Ctx?.ClickWordCard(w.Ctx);
+						}
 					};
-					o.LongPressDurationMs = 500;
-					StyBtnWordCard(o.Styles);
-					var Btn = o;
-					Btn.SetContent(new ViewWordListCard(VmWordCard), o=>{
-						o.VAlign(x=>x.Stretch)
-						.HAlign(x=>x.Stretch);
-						o.Background = Brushes.Transparent;
-						o.CBind(
-							o.PropDataContext
-							,(VmWordListCard x) => x
-								, Mode: BindingMode.OneWay
-							);
-						Btn.Click += (s,e)=>{
-							if(o?.Ctx != null){
-								Ctx?.ClickWordCard(o.Ctx);
-							}
-						};
-					});
 				});
-			}}//~Grid
-
+			});
 			return Grid;
 		});
-		return Ans;
+		return Ic;
 	}
 
 	Control _WordInfo(){
@@ -347,32 +276,29 @@ public partial class ViewLearnWords
 	}
 
 	Styles StyBtnWordCard(Styles s){
-		var Hover = new Style(x=>
-			x.Is<Button>()
-			.Class(PC.pointerover)
-			.Template()
-			.OfType<ContentPresenter>()
-		).Set(
-			BorderBrushProperty
-			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-			//,Brushes.Transparent
-		).AddTo(s);
-
-
-		var Pressed = new Style(x=>
-			x.Is<Button>()
-			.Class(PC.pressed)
-			.Template()
-			.OfType<ContentPresenter>()
-		).Set(
-			BorderBrushProperty
-			//,Brushes.Yellow
-			,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
-		).AddTo(s);
-
-
+		s.A(
+			new Style(x=>
+				x.Is<Button>()
+				.Class(PC.pointerover)
+				.Template()
+				.OfType<ContentPresenter>()
+			).Set(
+				BorderBrushProperty
+				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+			)
+		).A(
+			new Style(x=>
+				x.Is<Button>()
+				.Class(PC.pressed)
+				.Template()
+				.OfType<ContentPresenter>()
+			).Set(
+				BorderBrushProperty
+				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
+			)
+		)
+		;
 		return s;
-
 	}
 }
 

@@ -60,10 +60,12 @@ public partial class ViewSample
 				,Mode:
 				#endif
 			);
+
 			//寫法二。比上面的寫法稍簡單點 但仍然不是最簡單的寫法 也不是最常用的寫法。
-			//這種寫法一般用于綁定源不是Ctx的情況。當綁定源是Ctx時優先用寫法三
+			//這種寫法一般用于綁定源不是Ctx的情況(如ItemTemplate中)。當綁定源是Ctx時優先用寫法三
 			o.CBind<Ctx>(TextBox.TextProperty, x=>x.Cnt1);
-			//大部分情況下、綁定源都是Ctx 故此時則採用簡便寫法如下:
+
+			//寫法三。大部分情況下、綁定源都是Ctx 故此時則採用簡便寫法如下:
 			Ctx.Bind(o, o=>o.Text, x=>x.Cnt1);
 			//上面的第二個參數優先用o=>o.Text的寫法。如當o爲TextBox時o=>o.Text即等於TextBox.TextProperty。
 			// 不得已時再用 類名.XxxProperty的寫法
