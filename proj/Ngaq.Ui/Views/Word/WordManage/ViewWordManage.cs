@@ -59,8 +59,8 @@ public partial class ViewWordManage
 
 		Root.A(new ScrollViewer(), Sv=>{
 			Sv.SetContent(new Grid(), g=>{
-				g.ColumnDefinitions = new ColumnDefinitions("*,*");
-				g.RowDefinitions = new RowDefinitions("Auto,Auto");
+				g.ColumnDefinitions = new ("*,*");
+				g.RowDefinitions = new("Auto,Auto");
 				g.ColumnSpacing = UiCfg.Inst.BaseFontSize * 0.4;
 				g.RowSpacing = UiCfg.Inst.BaseFontSize * 0.6;
 				//g.Margin = new(UiCfg.Inst.BaseFontSize * 0.4);

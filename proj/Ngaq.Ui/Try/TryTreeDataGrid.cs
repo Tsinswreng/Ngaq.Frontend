@@ -35,7 +35,7 @@ public class TryTreeDataGrid {
 		};
 
 		var host = new Grid {
-			RowDefinitions = new RowDefinitions("Auto,*"),
+			RowDefinitions = new("Auto,*"),
 		};
 		host.Children.Add(new TextBlock {
 			Text = "TreeDataGrid Demo",

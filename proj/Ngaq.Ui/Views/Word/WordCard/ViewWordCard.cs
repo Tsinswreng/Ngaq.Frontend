@@ -165,18 +165,18 @@ public partial class ViewWordListCard
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
 			o.SetRowDefs([
-				new RowDef(4, GUT.Auto),
-				new RowDef(8, GUT.Auto),
+				new(4, GUT.Auto),
+				new(8, GUT.Auto),
 			]);
 		});
 
 		var LangGrid = new GridStack(IsRow:false);
 		Root.A(LangGrid.Grid, o=>{
 			o.SetColDefs([
-				new ColDef(1, GUT.Star),
-				new ColDef(0.3, GUT.Star),
-				new ColDef(4, GUT.Star),
-				new ColDef(13, GUT.Star),
+				new(1, GUT.Star),
+				new(0.3, GUT.Star),
+				new(4, GUT.Star),
+				new(13, GUT.Star),
 			]);
 		});
 		{{

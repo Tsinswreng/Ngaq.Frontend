@@ -47,8 +47,8 @@ class ViewTestBindDict : UserControl {
 		{
 			var o = Root.Grid;
 			o.SetRowDefs([
-				new RowDef(1,GUT.Auto),
-				new RowDef(1,GUT.Auto),
+				new(1,GUT.Auto),
+				new(1,GUT.Auto),
 			]);
 		}
 		{

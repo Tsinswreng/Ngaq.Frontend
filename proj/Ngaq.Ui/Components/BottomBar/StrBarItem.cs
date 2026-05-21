@@ -30,8 +30,8 @@ public partial class StrBarItem{
 			Ans.Content = Grid.Grid;
 			//Grid.Grid.Classes.Add(Cls.BarItem);
 			Grid.SetRowDefs([
-				// new RowDef(12, GUT.Star),
-				// new RowDef(4, GUT.Star),
+				// new(12, GUT.Star),
+				// new(4, GUT.Star),
 				new(1, GUT.Auto),
 				new(1, GUT.Auto),
 			]);
