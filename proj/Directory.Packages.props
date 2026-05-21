@@ -4,8 +4,8 @@
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageVersion Include="Tsinswreng.Avln.Dsl" Version="0.0.1-alpha" />
-		<PackageVersion Include="Tsinswreng.Avln.Grid" Version="0.0.1-alpha" />
+		<PackageVersion Include="Tsinswreng.Avln.Dsl" Version="0.1.0-alpha" />
+		<PackageVersion Include="Tsinswreng.Avln.Grid" Version="0.0.2-alpha" />
 		<PackageVersion Include="Tsinswreng.Avln.Navi" Version="0.0.1-alpha" />
 	</ItemGroup>
 	<ItemGroup>

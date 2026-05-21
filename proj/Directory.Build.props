@@ -17,12 +17,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- <PackageReference Include="Tsinswreng.Avln.Dsl" /> -->
-		<!-- <PackageReference Include="Tsinswreng.Avln.Grid" /> -->
+		<PackageReference Include="Tsinswreng.Avln.Dsl" />
+		<PackageReference Include="Tsinswreng.Avln.Grid" />
 		<PackageReference Include="Tsinswreng.Avln.Navi" />
 		<ProjectReference Include="../../../Tsinswreng.Avln.Dsl/proj/Tsinswreng.Avln.Dsl/Tsinswreng.Avln.Dsl.csproj" />
 		<!-- <ProjectReference Include="../../../Tsinswreng.Avln.Navi/proj/Tsinswreng.Avln.Navi/Tsinswreng.Avln.Navi.csproj" /> -->
-		<ProjectReference Include="../../../Tsinswreng.Avln.Grid/proj/Tsinswreng.Avln.Grid/Tsinswreng.Avln.Grid.csproj" />
+		<!-- <ProjectReference Include="../../../Tsinswreng.Avln.Grid/proj/Tsinswreng.Avln.Grid/Tsinswreng.Avln.Grid.csproj" /> -->
 		<ProjectReference Include="../../../Tsinswreng.AvlnTools/proj/Tsinswreng.AvlnTools/Tsinswreng.AvlnTools.csproj" />
 		<!-- <ProjectReference Include="../../../Tsinswreng.CsCore/proj/Tsinswreng.CsCore/Tsinswreng.CsCore.csproj" /> -->
 		<!-- <ProjectReference Include="../../../Tsinswreng.CsTools/proj/Tsinswreng.CsTools/Tsinswreng.CsTools.csproj" /> -->
