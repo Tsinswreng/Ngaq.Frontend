@@ -183,14 +183,12 @@ public partial class ViewWordListCard
 			LangGrid
 			.A(TxtBox(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
-				o.CBind<Ctx>(o.PropText,x=>x.Index);
-			})
-			.A(TxtBox(), o=>{
+				Ctx.Bind(o, o=>o.Text,x=>x.Index);
+			}).A(TxtBox(), o=>{
 				o.Text = "　";
-			})
-			.A(TxtBox(), o=>{
+			}).A(TxtBox(), o=>{
 				o.VerticalAlignment = VAlign.Center;
-				o.CBind<Ctx>(o.PropText, x=>x.Lang);
+				Ctx.Bind(o, o=>o.Text, x=>x.Lang);
 				o.Foreground = Brushes.LightGray;
 			})
 			.A(_InfoGrid());
@@ -200,15 +198,15 @@ public partial class ViewWordListCard
 		var HeadBox = new GridStack(IsRow:false);
 		Root.A(HeadBox.Grid, o=>{
 			o.SetColDefs([
-				new ColDef(1, GUT.Star),
+				new(1, GUT.Star),
 			]);
 		});
 
 		HeadBox.A(TxtBox(), o=>{
 			o.VerticalAlignment = VAlign.Center;
 			o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
-			o.CBind<Ctx>(o.PropText, x=>x.Head);
-			o.CBind<Ctx>(o.PropForeground,x=>x.FontColor);
+			Ctx.Bind(o, o=>o.Text, x=>x.Head);
+			Ctx.Bind(o, o=>o.Foreground,x=>x.FontColor);
 		});
 		return NIL;
 	}
@@ -218,17 +216,17 @@ public partial class ViewWordListCard
 		{var o = R.Grid;
 			o.Classes.Add(Cls.InInfoGrid);
 			o.SetColDefs([
-				new ColDef(9, GUT.Star),
-				new ColDef(3, GUT.Star),//last review time
-				new ColDef(1, GUT.Star),//tab
-				new ColDef(7, GUT.Star),//weight
+				new(9, GUT.Star),
+				new(3, GUT.Star),//last review time
+				new(1, GUT.Star),//tab
+				new(7, GUT.Star),//weight
 			]);
 		}
 		{{
 			var RecordType = (ELearn Learn)=>{
 				var R = new TextBlock{};
-				R.CBind<Ctx>(
-					R.PropText
+				Ctx.Bind(
+					R,R=>R.Text
 					,x=>x.Learn_Records
 					,Converter: new ConvMultiDictValueCnt<ELearn, ILearnRecord>()
 					,ConverterParameter: Learn
@@ -238,16 +236,16 @@ public partial class ViewWordListCard
 			var Colon = ()=>new TextBlock(){Text = ":"};
 
 			R.A(TxtBox(), o=>{
-				o.CBind<Ctx>(
-					o.PropText,x=>x
+				Ctx.Bind(
+					o, o=>o.Text,x=>x
 					,Converter: new FnConvtr<Ctx?, str>((x)=>x?.ToLearnHistoryRepr()??"")
 				);
 			});
 
 			//LastReviewTime
 			R.A(TxtBox(), o=>{
-				o.CBind<Ctx>(
-					o.PropText,x=>x.LastLearnedTime
+				Ctx.Bind(
+					o,o=>o.Text,x=>x.LastLearnedTime
 					,Converter: new FnConvtr<i64, str>(x=>{
 						var Now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 						var Diff = Now - x;
@@ -257,8 +255,8 @@ public partial class ViewWordListCard
 			})
 			.A(new TextBlock{Text = "\t"})
 			.A(TxtBox(), o=>{
-				o.CBind<Ctx>(
-					o.PropText,x=>x.Weight
+				Ctx.Bind(
+					o,o=>o.Text,x=>x.Weight
 					,Converter: new FnConvtr<f64?,str>((x,p)=>
 						Ctx.FmtNum(x??0, 1)
 					)
