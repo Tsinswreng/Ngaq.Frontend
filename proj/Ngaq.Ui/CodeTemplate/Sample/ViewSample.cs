@@ -51,22 +51,23 @@ public partial class ViewSample
 			o.AcceptsReturn = true;
 			//下面展示綁定寫法。本項目使用AOT兼容的綁定寫法。不准用new Binding(字符串)
 			//功能最全但不是最常用的寫法:
-			o.CBind<Ctx>(
+			o.Bind(
 				TextBox.TextProperty
-				,x=>x.Cnt1 //對應Ctx(即ViewModel)中的成員
-				#if false
-				可加其他可選命名參數如:
+				,CBE.Mk<Ctx>(x=>x.Cnt1)//對應Ctx(即ViewModel)中的成員
+				#if false //可加其他可選命名參數如:
 				,Converter:
 				,ConverterParameter:
 				,Mode:
 				#endif
 			);
+			//寫法二。比上面的寫法稍簡單點 但仍然不是最簡單的寫法 也不是最常用的寫法。
+			//這種寫法一般用于綁定源不是Ctx的情況。當綁定源是Ctx時優先用寫法三
+			o.CBind<Ctx>(TextBox.TextProperty, x=>x.Cnt1);
 			//大部分情況下、綁定源都是Ctx 故此時則採用簡便寫法如下:
 			Ctx.Bind(o, o=>o.Text, x=>x.Cnt1);
 			//上面的第二個參數優先用o=>o.Text的寫法。如當o爲TextBox時o=>o.Text即等於TextBox.TextProperty。
 			// 不得已時再用 類名.XxxProperty的寫法
-		})
-		.A(new Button(), b=>{
+		}).A(new Button(), b=>{
 			//初始化ContentControl.Content時使用SetContent擴展方法、不要直接給Content賦值
 			b.SetContent(new TextBlock(), t=>{
 				t.Text = I[K.ButtonOne];//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
@@ -76,8 +77,7 @@ public partial class ViewSample
 			b.Click += (s,e)=>{
 				Ctx?.Click1();
 			};
-		})
-		.A(new ScrollViewer(), Sv=>{
+		}).A(new ScrollViewer(), Sv=>{
 			Sv.SetContent(new StackPanel(), Sp=>{
 				Sp.A(new OpBtn(), o=>{
 					//UI中硬編碼的字符串都要這樣寫Todo
@@ -122,7 +122,13 @@ public partial class ViewSample
 			new Style(
 				x=>x.Is<Control>()
 			).Set(
-				CornerRadiusProperty, new CornerRadius(0)
+				//可以在Style中設置綁定
+				CornerRadiusProperty, CBE.Mk<Ctx>(
+					x=>x.Cnt1,
+					Converter: new FnConvtr<int, CornerRadius>(cnt=>{
+						return new CornerRadius(cnt);
+					})
+				)
 			)
 		)
 		;
@@ -176,8 +182,7 @@ public partial class ViewSample
 				b.SetContent(new TextBlock(), t=>{
 					t.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				});
-			})
-			.A(new Border(), b=>{ // 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
+			}).A(new Border(), b=>{ // 組織子控件並加入控件樹時、代碼塊的嵌套 要和 樹的邏輯結構 保持一致
 				//Border必須使用SetChild、禁止使用 b.Child=xxx 的寫法
 				b.SetChild(new ScrollViewer(), sv=>{//lambda中的形參名稱長度不得多于2字符
 					sv.SetContent(new StackPanel(), sp=>{
@@ -216,8 +221,7 @@ public partial class ViewSample
 				b.VAlign(x=>x.Center);
 				b.HAlign(x=>x.Center);
 				b.SetContent(I[K.File]);
-			})
-			.A(new Button(), b=>{
+			}).A(new Button(), b=>{
 				b.Background = Brushes.Gray;
 				b.VAlign(x=>x.Center);
 				b.HAlign(x=>x.Center);
@@ -235,8 +239,7 @@ public partial class ViewSample
 			};
 			P.A(_Btn(), b=>{
 				b.SetContent(I[K.File]);
-			})
-			.A(_Btn(), o=>{
+			}).A(_Btn(), o=>{
 				o.SetContent(I[K.Edit]);
 			})
 			;
@@ -253,8 +256,7 @@ public partial class ViewSample
 			P.A(new Button(), o=>{
 				o.Classes.Add(Cls.MenuBtn);
 				o.SetContent(I[K.File]);
-			})
-			.A(new Button(), o=>{
+			}).A(new Button(), o=>{
 				o.Classes.Add(Cls.MenuBtn);
 				o.SetContent(I[K.Edit]);
 			});
