@@ -75,14 +75,6 @@ public partial class ViewLearnWords
 				new Border { Background = overlayBrush }
 			}
 		};
-		// 动态监听窗口大小变化，保持同步
-		// top.GetObservable(TopLevel.BoundsProperty).Subscribe(bounds => //无法?lambda 表达?转换为类型“IObserver<Rect>”，原因是它不是委托类型CS1660
-		// {
-		// 	originalBrush.Stretch = Stretch.Uniform;
-		// 	overlayGrid.Width = bounds.Width;
-		// 	overlayGrid.Height = bounds.Height;
-		// });
-
 		// ?VisualBrush 包裹 overlayGrid
 		var combinedBrush = new VisualBrush{
 			Visual = overlayGrid,

@@ -163,14 +163,6 @@ public partial class VmLearnWords
 		return R;
 	}
 
-	// IBrush MatchBg(i64 ELearnOptRtn){
-	// 	if(ELearnOptRtn == (i64)MgrLearn.ELearnOpRtn.Learn){
-	// 		return Cfg.ColorRmb;
-	// 	}else if(ELearnOptRtn == (i64)MgrLearn.ELearnOpRtn.Undo){
-	// 		return Cfg.ColorNone;
-	// 	}
-	// }
-
 	public nil ClickWordCard(VmWordListCard Vm){
 		var CurLearnRecord = Vm.WordForLearn?.GetLastUnsavedLearnRecord();
 		if(CurLearnRecord == null){
@@ -205,26 +197,6 @@ public partial class VmLearnWords
 		);
 	}
 
-	// public nil ClickVmWordCard(
-	// 	VmWordListCard Vm
-	// ){
-	// 	if(_LearnOrUndo(Vm, ELearn.Rmb) == (i64)MgrLearn.ELearnOpRtn.Learn){
-	// 		Vm.LearnedColor = Cfg.ColorRmb;
-	// 	}else{
-	// 		Vm.LearnedColor = Cfg.ColorNone;
-	// 	}
-	// 	return NIL;
-	// }
-
-	// public nil OnLongPressed(VmWordListCard Vm){
-	// 	if(_LearnOrUndo(Vm, ELearn.Fgt) == (i64)MgrLearn.ELearnOpRtn.Learn){
-	// 		Vm.LearnedColor = Cfg.ColorFgt;
-	// 	}else{
-	// 		Vm.LearnedColor = Cfg.ColorNone;
-	// 	}
-	// 	return NIL;
-	// }
-
 	public nil SetCurVmWord(VmWordListCard Vm){
 		if(Vm.WordForLearn == null){
 			return NIL;
@@ -232,22 +204,6 @@ public partial class VmLearnWords
 		CurWordInfo.FromIWordForLearn(Vm.WordForLearn);
 		return NIL;
 	}
-
-	//臨時。篩ʹ理則ˋ宜作獨立模塊、後集于MgrLearn 洏不璫于視圖模型
-	[Obsolete("")]
-	public IAsyncEnumerable<IJnWord> FilterWord(
-		IAsyncEnumerable<IJnWord> Words
-	){
-		var langs = Cfg.Get(KeysClientCfg.Word.FilterLanguage)??[];
-		if(langs.Count == 0){
-			return Words;
-		}
-		var langSet = new HashSet<str>(langs.Select(x=>x+""));
-		return Words.Where(x=>langSet.Contains(x.Lang));
-	}
-
-
-	/// 須呼于UI線程
 
 	void _AssignWeightArg(){
 		if(AnyNull(MgrLearn)){
@@ -261,20 +217,12 @@ public partial class VmLearnWords
 		_AssignWeightArg();
 		await Task.Run(async()=>{
 			if(!MgrLearn.State.OperationStatus.Load){
-				// var Page = await SvcWordV1.PageWord(
-				// 	UserCtxMgr.GetUserCtx()
-				// 	,PageQry.SlctI64Max()
-				// 	,Ct
-				// );
 				//須先DBʹ詞ˇ全載入內存後交予MgrLearn。否則算權重旹併發讀則使Sqlite出錯
 				var wordsAsyE = SvcWordV2.GetWordsToLearn(UserCtxMgr.GetDbUserCtx(), Ct);
 				var sw2 = Stopwatch.StartNew();
 				var wordList = await wordsAsyE.ToListAsync(Ct);
 				sw2.Stop();
 				LogInfo($"{nameof(SvcWordV2)}.{nameof(SvcWordV2.GetWordsToLearn)}: {sw2.ElapsedMilliseconds} ms");
-				//var dataAsyE = (loadedAll.Data??[]).ToAsyncEnumerable();
-				//await MgrLearn.LoadEtCalcWeightAsy(Page.DataAsyE.OrEmpty(), Ct);
-				//dataAsyE = FilterWord(dataAsyE);
 				await MgrLearn.LoadEtCalcWeight(ToolAsyE.ToAsyE(wordList), Ct);
 			}
 			await MgrLearn.Start(Ct);
@@ -288,7 +236,6 @@ public partial class VmLearnWords
 	}
 
 	public async Task<nil> SaveEtRestart(CT Ct){
-
 		_AssignWeightArg();
 		await MgrLearn.Save(Ct);//只背一個單詞45ms于安卓
 		await MgrLearn.CalcWeightEtStart(Ct);//只背一個單詞567ms于安卓
