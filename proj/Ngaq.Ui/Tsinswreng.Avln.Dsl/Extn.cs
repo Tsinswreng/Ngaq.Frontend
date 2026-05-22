@@ -95,9 +95,32 @@ public class Test{
 		).A(
 			Sty.Is<Control>(x=>
 				x.Class(App.Cls.ViewPadding)
+				//再附加一個 selector 條件：只匹配 IsVisible == true 的元素
 				.PropertyEquals(Layoutable.IsVisibleProperty, true)
 			)
 			.Set(x=>x.Focusable, false)
-		);
+		)
+		;
+	}
+	
+	void TryOr(){
+// 组合选择器：匹配所有带 "primary" 或 "secondary" 类的 Button 控件
+var combinedSelector = Selectors.Or(
+    new Style(x => x.OfType<Button>().Class("primary")).Selector,
+    new Style(x => x.OfType<Button>().Class("secondary")).Selector
+);
+
+var style = new Style
+{
+    Selector = combinedSelector,
+    Setters =
+    {
+        new Setter(Button.BackgroundProperty, Brushes.Green),
+        new Setter(Button.ForegroundProperty, Brushes.White)
+    }
+};
+
+// 将样式添加到全局样式表或控件的样式集合中
+Application.Current?.Styles.Add(style);
 	}
 }
