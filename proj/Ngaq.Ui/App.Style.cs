@@ -39,38 +39,42 @@ public partial class App{
 	}
 
 	Styles CenterBtn(Styles S){
-		S.A(new Style(
-			x=>x.Is<Button>().Class(Cls.CenterBtn)
-		).Set(TemplatedControl.HorizontalAlignmentProperty
-		,HAlign.Center)
-		.Set(TemplatedControl.VerticalAlignmentProperty
-		,VAlign.Center)
-		.Set(ContentControl.VerticalContentAlignmentProperty
-		,VAlign.Center)
-		.Set(ContentControl.HorizontalContentAlignmentProperty
-		,HAlign.Center)
+		S.A(
+			Sty.Is<Button>(
+				x=>x.Class(Cls.CenterBtn)
+			).Set(
+				x=>x.HorizontalAlignment, HAlign.Center
+			).Set(
+				x=>x.VerticalAlignment, VAlign.Center
+			).Set(
+				x=>x.VerticalContentAlignment, VAlign.Center
+			).Set(
+				x=>x.HorizontalContentAlignment, HAlign.Center
+			)
 		);
 		return S;
 	}
 
 	Styles SpacedStackPanel(Styles S){
-		S.A(new Style(
-			x=>x.Is<StackPanel>().Class(Cls.SpacedStackPanel)
-		).Set(
-			StackPanel.SpacingProperty
-			,UiCfg.Inst.BaseFontSize*0.5
-		))
+		S.A(
+			Sty.Is<StackPanel>(
+				x=>x.Class(Cls.SpacedStackPanel)
+			).Set(
+				x=>x.Spacing, UiCfg.Inst.BaseFontSize*0.5
+			)
+		)
 		;
 		return S;
 	}
 
 	Styles ViewPadding(Styles S){
-		S.A(new Style(
-			x=>x.Is<Control>().Class(Cls.ViewPadding)
-		).Set(
-			ContentControl.PaddingProperty
-			,new Thickness(UiCfg.Inst.BaseFontSize)
-		));
+		S.A(
+			Sty.Is<ContentControl>(
+				x=>x.Class(Cls.ViewPadding)
+			).Set(
+				x=>x.Padding, new Thickness(UiCfg.Inst.BaseFontSize)
+			)
+		);
 		return S;
 	}
 
@@ -89,48 +93,43 @@ public partial class App{
 		// 	,UiCfg.Inst.BaseFontSize
 		// );
 		// Styles.Add(StyBaseFontSize);
-
-		var StyBaseFontSize = new Style(x=>
-			x.Is<Control>()
-		).Set(
-			TextElement.FontFamilyProperty
-			//,new FontFamily("Times New Roman, STSong")
-			//,new FontFamily("Times New Roman")
-			,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
-		).AddTo(Styles);
+		var StyBaseFontSize = Sty.Is<TextElement>()
+			.Set(
+				x=>x.FontFamily
+				//,new FontFamily("Times New Roman, STSong")
+				//,new FontFamily("Times New Roman")
+				,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
+			).AddTo(Styles);
 		//按鈕舒展
 
 		Styles.A(
-			new Style(x=>
-				x.Is<Button>()
-			).Set(
-				TemplatedControl.HorizontalAlignmentProperty
+			Sty.Is<Button>()
+			.Set(
+				x=>x.HorizontalAlignment
 				, HAlign.Stretch
 			).Set(
-				Button.BackgroundProperty
+				x=>x.Background
 				,new SolidColorBrush(Color.FromArgb(255, 32,32,32))
 			)
 		)
 		.A(
-			new Style(x=>
-				x.Is<Button>()
-				.Class(":pointerover")
+			Sty.Is<Button>(x=>
+				x.Class(PsdCls.pointerover)
 				.Template().OfType<ContentPresenter>()
 			).Set(
-				Button.BorderBrushProperty
+				x=>x.BorderBrush
 				,UiCfg.Inst.MainColor
 			)
 		)
 
 		// TreeDataGrid 統一撐滿父容器；各頁列寬約定為「前列 Auto，最後一列 1 Star」以消除表頭右側空白。
 		.A(
-			new Style(x=>
-				x.Is<TreeDataGrid>()
-			).Set(
-				TemplatedControl.HorizontalAlignmentProperty
+			Sty.Is<TreeDataGrid>()
+			.Set(
+				x=>x.HorizontalAlignment
 				,HAlign.Stretch
 			).Set(
-				TemplatedControl.VerticalAlignmentProperty
+				x=>x.VerticalAlignment
 				,VAlign.Stretch
 			)
 		);
