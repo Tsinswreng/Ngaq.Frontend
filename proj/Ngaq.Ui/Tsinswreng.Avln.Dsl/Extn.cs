@@ -30,8 +30,8 @@ public class StyleBuilder<TCtrl>
 
 	}
 
-	public StyleBuilder<TCtrl> Set(
-		Expression<Func<TCtrl, obj?>> ScltProp, obj? V
+	public StyleBuilder<TCtrl> Set<T>(
+		Expression<Func<TCtrl, T?>> ScltProp, T? V
 	){
 		var prop = Tsinswreng.Avln.Dsl.Extn.Prop<TCtrl>(null, ScltProp);
 		Setters.Add(new Setter(prop, V));
@@ -53,3 +53,7 @@ public class Test{
 		);
 	}
 }
+/*
+
+
+ */
