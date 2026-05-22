@@ -276,19 +276,19 @@ public partial class ViewLearnWords
 
 	Styles StyBtnWordCard(Styles s){
 		s.A(
-			Sty.OfType<ContentPresenter>(x=>
-				x.Is<Button>()
-				.Class(PC.pointerover)
+			Sty.Is<Button>(
+				x=>x.Class(PC.pointerover)
 				.Template()
+				.OfType<ContentPresenter>()
 			).Set(
 				x=>x.BorderBrush
 				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
 			)
 		).A(
-			Sty.OfType<ContentPresenter>(x=>
-				x.Is<Button>()
+			Sty.Is<Button>(x=>x
 				.Class(PC.pressed)
 				.Template()
+				.OfType<ContentPresenter>()
 			).Set(
 				x=>x.BorderBrush
 				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
