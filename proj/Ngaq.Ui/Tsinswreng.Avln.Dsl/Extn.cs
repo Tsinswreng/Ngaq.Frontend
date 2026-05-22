@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Tsinswreng.Avln.Grid;
@@ -15,7 +16,7 @@ public static class Sty{
 	)
 		where TCtrl : StyledElement
 	{
-		return new StyleBuilder<TCtrl>(new Style(x=>ApplySelector(selector, x.Is<TCtrl>())));
+		return new StyleBuilder<TCtrl>(x=>ApplySelector(selector, x.Is<TCtrl>()));
 	}
 
 	public static StyleBuilder<TCtrl> OfType<TCtrl>(
@@ -23,7 +24,7 @@ public static class Sty{
 	)
 		where TCtrl : StyledElement
 	{
-		return new StyleBuilder<TCtrl>(new Style(x=>ApplySelector(selector, x.OfType<TCtrl>())));
+		return new StyleBuilder<TCtrl>(x=>ApplySelector(selector, x.OfType<TCtrl>()));
 	}
 
 	static Selector ApplySelector(
@@ -36,27 +37,29 @@ public static class Sty{
 
 
 public class StyleBuilder<TCtrl>
+	: Style
 	where TCtrl : StyledElement
 {
-	public Style Style{get;}
-
-	public StyleBuilder(Style style){
-		Style = style;
+	public StyleBuilder(Func<Selector, Selector> selector)
+		: base(selector)
+	{
 	}
 
 	public Style Build(){
-		return Style;
+		return this;
 	}
 
-	public static implicit operator Style(StyleBuilder<TCtrl> builder){
-		return builder.Style;
-	}
 
 	public StyleBuilder<TCtrl> Set<T>(
 		Expression<Func<TCtrl, T?>> ScltProp, T? V
 	){
-		var prop = Tsinswreng.Avln.Dsl.Extn.Prop<TCtrl>(null, ScltProp);
-		Style.Setters.Add(new Setter(prop, V));
+		Expression body = ScltProp.Body;
+		if(body.Type.IsValueType){
+			body = Expression.Convert(body, typeof(object));
+		}
+		var scltObj = Expression.Lambda<Func<TCtrl, object?>>(body, ScltProp.Parameters);
+		var prop = Tsinswreng.Avln.Dsl.Extn.Prop<TCtrl>(null, scltObj);
+		Setters.Add(new Setter(prop, V));
 		return this;
 	}
 }
@@ -71,30 +74,28 @@ public class Test{
 			.Set(x=>x.TextWrapping, TextWrapping.Wrap)
 			.Set(x=>x.Focusable, false)
 			.Set(x=>x.IsTabStop, false)
-		)
-		.A(
+		).A(
 			Sty.Is<Button>()
 			.Set(x=>x.HorizontalAlignment, HAlign.Stretch)
 			.Set(x=>x.Background, new SolidColorBrush(Color.FromArgb(255, 32, 32, 32)))
-		)
-		.A(
+		).A(
 			Sty.Is<Button>(x=>
 				x.Class(":pointerover")
 				.Template()
 				.OfType<ContentPresenter>()
 			)
 			.Set(x=>x.BorderBrush, UiCfg.Inst.MainColor)
-		)
-		.A(
+		).A(
 			Sty.OfType<TreeDataGrid>()
 			.Set(x=>x.HorizontalAlignment, HAlign.Stretch)
 			.Set(x=>x.VerticalAlignment, VAlign.Stretch)
-		)
-		.A(
+		).A(
+			Sty.Is<StackPanel>(x=>x.Class(App.Cls.SpacedStackPanel))
+			.Set(x=>x.Spacing, UiCfg.Inst.BaseFontSize * 0.5)
+		).A(
 			Sty.Is<Control>(x=>
 				x.Class(App.Cls.ViewPadding)
-				.Or()
-				.Class(App.Cls.CenterBtn)
+				.PropertyEquals(Layoutable.IsVisibleProperty, true)
 			)
 			.Set(x=>x.Focusable, false)
 		);
