@@ -32,22 +32,22 @@ public partial class ViewWordListCard
 		var R = new ContextMenu();
 		R.Items.A(new MenuItem(), o=>{
 
-			o.Header = Icons.Edit().ToIcon().WithText(AppI18n.Inst[K.Edit]);
+			o.Header = Icons.Edit().WithText(AppI18n.Inst[K.Edit]);
 			o.Click += (s,e)=>{
 				if(AnyNull(JnWord)){
 					MainView.Inst.ShowDialog(AppI18n.Inst[K.NoWordSelected]);
 					return;
 				}
-                var editView = new ViewWordEditV2();
-                if(editView.Ctx is null){
-                                    return;
-                }
-                editView.Ctx.FromJnWord(JnWord);
+				var editView = new ViewWordEditV2();
+				if(editView.Ctx is null){
+					return;
+				}
+				editView.Ctx.FromJnWord(JnWord);
 				MgrViewNavi.Inst.ViewNavi?.GoTo(ToolView.WithTitle(JnWord.Head, editView));
 			};
 		})
 		.A(new MenuItem(), o=>{
-			o.Header = Icons.VolHigh().ToIcon().WithText(AppI18n.Inst[K.Pronounce]);
+			o.Header = Icons.VolHigh().WithText(AppI18n.Inst[K.Pronounce]);
 			o.Click += async(s,e)=>{
 				if(Ctx is IWordCardMenuAction Action){
 					var R = await Action.PronounceWord(JnWord, default);
@@ -135,10 +135,10 @@ public partial class ViewWordListCard
 		return R;
 	}
 
-	public partial class Cls_{
-		public str InInfoGrid = nameof(InInfoGrid);
+	public partial class Cls{
+		public const str InInfoGrid = nameof(InInfoGrid);
 	}
-	public Cls_ Cls{get;set;} = new Cls_();
+
 	public GridStack Root{get;set;} = new GridStack(IsRow:true);
 
 	protected nil Style(){
@@ -146,8 +146,7 @@ public partial class ViewWordListCard
 		Styles.A(
 			new Style(x=>
 				x.Is<TextBlock>()
-			)
-			,o=>{o.Set(
+			).Set(
 				EffectProperty
 				,new DropShadowDirectionEffect{
 					Color = Colors.Black
@@ -156,8 +155,8 @@ public partial class ViewWordListCard
 					//,Direction = 315 //高度 315是左上角
 					,Direction = 330
 					,Opacity = 0.5
-				});
-			}
+				}
+			)
 		);
 		return NIL;
 	}
@@ -177,11 +176,7 @@ public partial class ViewWordListCard
 				new(0.3, GUT.Star),
 				new(4, GUT.Star),
 				new(13, GUT.Star),
-			]);
-		});
-		{{
-			LangGrid
-			.A(TxtBox(), o=>{
+			]).A(TxtBox(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
 				Ctx.Bind(o, o=>o.Text,x=>x.Index);
 			}).A(TxtBox(), o=>{
@@ -190,24 +185,21 @@ public partial class ViewWordListCard
 				o.VerticalAlignment = VAlign.Center;
 				Ctx.Bind(o, o=>o.Text, x=>x.Lang);
 				o.Foreground = Brushes.LightGray;
-			})
-			.A(_InfoGrid());
-		}}//~Header
-
+			}).A(_InfoGrid());
+		});
 
 		var HeadBox = new GridStack(IsRow:false);
 		Root.A(HeadBox.Grid, o=>{
 			o.SetColDefs([
 				new(1, GUT.Star),
-			]);
+			]).A(TxtBox(), o=>{
+				o.VerticalAlignment = VAlign.Center;
+				o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
+				Ctx.Bind(o, o=>o.Text, x=>x.Head);
+				Ctx.Bind(o, o=>o.Foreground,x=>x.FontColor);
+			});
 		});
 
-		HeadBox.A(TxtBox(), o=>{
-			o.VerticalAlignment = VAlign.Center;
-			o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
-			Ctx.Bind(o, o=>o.Text, x=>x.Head);
-			Ctx.Bind(o, o=>o.Foreground,x=>x.FontColor);
-		});
 		return NIL;
 	}
 

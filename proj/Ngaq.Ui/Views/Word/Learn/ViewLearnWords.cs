@@ -85,7 +85,7 @@ public partial class ViewLearnWords
 		var t = TopLevel.GetTopLevel(this);
 		if(t == null){return NIL;}
 		Ctx.Bind(
-			t, t=>t.Background, x=>x.BgBrush
+			t, t=>t.Background, x=>x.BgBrush, Source: Ctx//必須寫Source:、因是給top綁定、其本ʹDataContext非this.Ctx
 			,Converter: new FnConvtr<IBrush, nil>((oldBrush, arg)=>{
 				return Shade(oldBrush, t);
 			})
