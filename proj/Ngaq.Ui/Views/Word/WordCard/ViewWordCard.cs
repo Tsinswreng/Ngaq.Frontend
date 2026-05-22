@@ -175,7 +175,8 @@ public partial class ViewWordListCard
 				new(0.3, GUT.Star),
 				new(4, GUT.Star),
 				new(13, GUT.Star),
-			]).A(TxtBox(), o=>{
+			]);
+			LangGrid.A(TxtBox(), o=>{
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
 				Ctx.Bind(o, o=>o.Text,x=>x.Index);
 			}).A(TxtBox(), o=>{
@@ -191,7 +192,8 @@ public partial class ViewWordListCard
 		Root.A(HeadBox.Grid, o=>{
 			o.SetColDefs([
 				new(1, GUT.Star),
-			]).A(TxtBox(), o=>{
+			]);
+			HeadBox.A(TxtBox(), o=>{
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				Ctx.Bind(o, o=>o.Text, x=>x.Head);
