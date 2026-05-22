@@ -94,13 +94,15 @@ public partial class App{
 		// 	,UiCfg.Inst.BaseFontSize
 		// );
 		// Styles.Add(StyBaseFontSize);
-		var StyBaseFontSize = Sty.Is<TextElement>()
+		Styles.A(
+			Sty.Is<TextElement>()
 			.Set(
 				x=>x.FontFamily
 				//,new FontFamily("Times New Roman, STSong")
 				//,new FontFamily("Times New Roman")
 				,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
-			).AddTo(Styles);
+			)
+		);
 		//按鈕舒展
 
 		Styles.A(

@@ -41,9 +41,10 @@ public partial class ViewWordManage
 
 	protected nil Style(){
 		var S = Styles;
-		new Style(x=>x.Is<Button>())
-		.Set(Button.BackgroundProperty, Brushes.Transparent)
-		.AddTo(S);
+		S.A(
+			Sty.Is<Button>()
+			.Set(x=>x.Background, Brushes.Transparent)
+		);
 		return NIL;
 	}
 

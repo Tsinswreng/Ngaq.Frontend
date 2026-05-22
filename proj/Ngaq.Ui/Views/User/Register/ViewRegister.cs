@@ -37,13 +37,14 @@ public partial class ViewRegister
 
 
 	protected nil _Style(){
-		new Style(x=>
-			x.Is<Control>()
-			.Class(Cls.inputBox)
-		).Set(
-			BackgroundProperty
-			,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
-		).AddTo(Styles);
+		Styles.A(
+			Sty.Is<TextBox>(x=>
+				x.Class(Cls.inputBox)
+			).Set(
+				x=>x.Background
+				,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
+			)
+		);
 		return NIL;
 	}
 

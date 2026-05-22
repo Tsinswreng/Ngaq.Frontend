@@ -47,13 +47,13 @@ public partial class ViewWeightCalculatorPage
 
 	protected nil Style(){
 		var S = Styles;
-		new Style(
-			x=>x.Is<Control>()
-			.Class(Cls.FullStretch)
-		)
-		.Set(HorizontalAlignmentProperty, HAlign.Stretch)
-		.Set(VerticalAlignmentProperty, VAlign.Stretch)
-		.AddTo(S);
+		S.A(
+			Sty.Is<Control>(
+				x=>x.Class(Cls.FullStretch)
+			)
+			.Set(x=>x.HorizontalAlignment, HAlign.Stretch)
+			.Set(x=>x.VerticalAlignment, VAlign.Stretch)
+		);
 		return NIL;
 	}
 
@@ -114,12 +114,12 @@ public partial class ViewWeightCalculatorPage
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+			Sty.OfType<TreeDataGridRow>(x=>x.Class(":pointerover"))
+			.Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		);
 		Grid.Styles.Add(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+			Sty.OfType<TreeDataGridRow>(x=>x.Class(":pressed"))
+			.Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		Grid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
 		return Grid;

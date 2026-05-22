@@ -109,9 +109,7 @@ public partial class ViewAboutMe
 					ToolView.WithTitle(I[KeysUiI18nCommon.SettingsTitle], new ViewSettings())
 					);
 				};
-				o.Styles.Add(new Style(
-					x=>x.Is<Control>()
-				).BgTrnsp());
+				o.Styles.Add(Sty.Is<Control>().BgTrnsp());
 			})
 			// .A(new Button(), o=>{
 			// 	o.Content = "Test1";

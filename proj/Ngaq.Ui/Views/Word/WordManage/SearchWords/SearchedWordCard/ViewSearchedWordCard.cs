@@ -30,10 +30,9 @@ public partial class ViewSearchedWordCard
 
 	protected nil Style(){
 		Styles.A(
-			new Style(x=>
-				x.Is<TextBlock>()
-			).Set(
-				EffectProperty
+			Sty.Is<TextBlock>()
+			.Set(
+				x=>x.Effect
 				,new DropShadowDirectionEffect{
 					Color = Colors.Black
 					,BlurRadius = 4

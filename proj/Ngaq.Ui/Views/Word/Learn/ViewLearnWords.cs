@@ -52,11 +52,10 @@ public partial class ViewLearnWords
 
 
 	protected nil Style(){
-		Styles.A(new Style(x=>
-			x.Is<Control>()
-			.Class(Cls.MenuBtn)
+		Styles.A(Sty.Is<Control>(x=>
+			x.Class(Cls.MenuBtn)
 		).Set(
-			VerticalAlignmentProperty
+			x=>x.VerticalAlignment
 			, VAlign.Stretch
 		));
 		return NIL;
@@ -153,11 +152,11 @@ public partial class ViewLearnWords
 				));
 				o.SetExe((Ct)=>Ctx?.SaveEtRestart(Ct));
  				o._Button.Styles.Add(
-					new Style(
+					Sty.Is<Button>(
 						//x=>x.OfType<Button>().Template().OfType<ContentPresenter>() //改僞類樣式旹纔需?
-						x=>x.Is<Button>()
+						x=>x
 					).Set(
-						BackgroundProperty
+						x=>x.Background
 						,CBE.Mk<Ctx>(
 							x=>x.IsSaved
 							,Converter: new FnConvtr<bool, IBrush?>((b)=>{
@@ -277,23 +276,21 @@ public partial class ViewLearnWords
 
 	Styles StyBtnWordCard(Styles s){
 		s.A(
-			new Style(x=>
+			Sty.OfType<ContentPresenter>(x=>
 				x.Is<Button>()
 				.Class(PC.pointerover)
 				.Template()
-				.OfType<ContentPresenter>()
 			).Set(
-				BorderBrushProperty
+				x=>x.BorderBrush
 				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
 			)
 		).A(
-			new Style(x=>
+			Sty.OfType<ContentPresenter>(x=>
 				x.Is<Button>()
 				.Class(PC.pressed)
 				.Template()
-				.OfType<ContentPresenter>()
 			).Set(
-				BorderBrushProperty
+				x=>x.BorderBrush
 				,CBE.Mk<VmWordListCard>(x=>x.LearnedColor)
 			)
 		)

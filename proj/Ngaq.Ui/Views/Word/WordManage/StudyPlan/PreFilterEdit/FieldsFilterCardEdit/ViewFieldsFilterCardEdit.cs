@@ -179,11 +179,11 @@ public class ViewFieldsFilterCardEdit: AppViewBase<Ctx>{
 			HorizontalAlignment = HAlign.Stretch,
 		};
 		ItemGrid.Styles.A(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pointerover"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
+			Sty.OfType<TreeDataGridRow>(x=>x.Class(":pointerover"))
+			.Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
 		).A(
-			new Style(x=>x.OfType<TreeDataGridRow>().Class(":pressed"))
-			.Set(TemplatedControl.BackgroundProperty, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
+			Sty.OfType<TreeDataGridRow>(x=>x.Class(":pressed"))
+			.Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
 		);
 		ItemGrid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
 		root.A(ItemGrid);

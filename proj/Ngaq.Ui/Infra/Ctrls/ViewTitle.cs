@@ -79,10 +79,11 @@ public partial class ViewTitle
 
 					}
 				};
-				new Style()
-					.NoMargin().NoPadding()
-					.Set(BackgroundProperty, Brushes.Transparent)
-				.AddTo(CtxMenu.Styles);
+				CtxMenu.Styles.A(
+					new Style()
+						.NoMargin().NoPadding()
+						.Set(BackgroundProperty, Brushes.Transparent)
+				);
 
 				o.ContextMenu = CtxMenu;
 				o.Click += (s,e)=>{

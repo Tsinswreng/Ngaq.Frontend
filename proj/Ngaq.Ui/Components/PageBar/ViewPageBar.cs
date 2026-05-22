@@ -34,15 +34,16 @@ public partial class ViewPageBar
 	protected nil Style(){
 		var S = Styles;
 
-		var centerText = new Style(
-			x=>x.Class(Cls.CenterInput)
-		).Set(VerticalContentAlignmentProperty, VAlign.Center)
-		.Set(HorizontalContentAlignmentProperty, HAlign.Center)
-		.AddTo(S);
+		S.A(
+			Sty.Is<TextBox>(
+				x=>x.Class(Cls.CenterInput)
+			).Set(x=>x.VerticalContentAlignment, VAlign.Center)
+			.Set(x=>x.HorizontalContentAlignment, HAlign.Center)
+		);
 
-		S.A(new Style(
+		S.A(Sty.Is<TextBlock>(
 				x=>x.Class(Cls.CenterText)
-			).Set(VerticalAlignmentProperty, VAlign.Center)
+			).Set(x=>x.VerticalAlignment, VAlign.Center)
 		);
 
 		return NIL;

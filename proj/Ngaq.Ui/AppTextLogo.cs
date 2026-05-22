@@ -34,23 +34,22 @@ public partial class AppTextLogo
 	public Cls_ Cls{get;set;} = new Cls_();
 
 	protected nil _Style(){
-		var cls_logo = new Style(x=>
-			x.Is<Control>()
-			.Class(Cls.Logo)
+		var cls_logo = Sty.Is<TextBlock>(x=>
+			x.Class(Cls.Logo)
 		);
 		Styles.Add(cls_logo);
 		{
 			var o = cls_logo;
 			o.Set(
-				FontSizeProperty
+				x=>x.FontSize
 				, FontSize
 			);
 			o.Set(
-				FontFamilyProperty
+				x=>x.FontFamily
 				,new FontFamily("Times New Roman")
 			);
 			o.Set(
-				HorizontalAlignmentProperty
+				x=>x.HorizontalAlignment
 				, HAlign.Center
 			);
 		}

@@ -37,12 +37,13 @@ public partial class ViewStatistics: AppViewBase{
 
 
 	protected nil Style(){
-		new Style(x=>
-			x.Is<TextBox>()
-		).Set(
-			BackgroundProperty
-			,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
-		).AddTo(Styles);
+		Styles.A(
+			Sty.Is<TextBox>()
+			.Set(
+				x=>x.Background
+				,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
+			)
+		);
 		return NIL;
 	}
 

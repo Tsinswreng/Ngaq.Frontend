@@ -58,13 +58,14 @@ public partial class ViewWordInfo
 	Ctx? SubscribedCtx;
 
 	protected nil Style() {
-		new Style(
-			x => x.Is<Control>()
-			.Class(Cls.LightGray)
-		).Set(
-			ForegroundProperty
-			, new SolidColorBrush(Gray)
-		).AddTo(Styles);
+		Styles.A(
+			Sty.Is<Control>(
+				x => x.Class(Cls.LightGray)
+			).Set(
+				ForegroundProperty
+				, new SolidColorBrush(Gray)
+			)
+		);
 		return NIL;
 	}
 

@@ -144,10 +144,9 @@ public partial class ViewWordListCard
 	protected nil Style(){
 		//Styles.Add(SugarStyle.GridShowLines());
 		Styles.A(
-			new Style(x=>
-				x.Is<TextBlock>()
-			).Set(
-				EffectProperty
+			Sty.Is<TextBlock>()
+			.Set(
+				x=>x.Effect
 				,new DropShadowDirectionEffect{
 					Color = Colors.Black
 					,BlurRadius = 4

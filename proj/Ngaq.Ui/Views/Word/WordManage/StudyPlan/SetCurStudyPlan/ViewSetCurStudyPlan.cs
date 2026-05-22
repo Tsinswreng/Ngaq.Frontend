@@ -46,14 +46,13 @@ public partial class ViewSetCurStudyPlan
 	}
 
 	protected nil Style(){
-		var S = Styles;
-		new Style(
-			x=>x.Is<Control>()
-			.Class(Cls.FullStretch)
-		)
-		.Set(HorizontalAlignmentProperty, HAlign.Stretch)
-		.Set(VerticalAlignmentProperty, VAlign.Stretch)
-		.AddTo(S);
+		Styles.A(
+			Sty.Is<Control>(
+				x=>x.Class(Cls.FullStretch)
+			)
+			.Set(x=>x.HorizontalAlignment, HAlign.Stretch)
+			.Set(x=>x.VerticalAlignment, VAlign.Stretch)
+		);
 		return NIL;
 	}
 

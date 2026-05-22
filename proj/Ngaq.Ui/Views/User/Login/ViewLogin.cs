@@ -41,15 +41,14 @@ public partial class Cls_{
 
 
 	protected nil _Style(){
-		var cls_inputBox = new Style(x=>
-			x.Is<Control>()
-			.Class(Cls.InputBox)
+		var cls_inputBox = Sty.Is<ContentControl>(x=>
+			x.Class(Cls.InputBox)
 		);
 		Styles.Add(cls_inputBox);
 		{
 			var o = cls_inputBox;
 			o.Set(
-				BackgroundProperty
+				x=>x.Background
 				,new SolidColorBrush(Color.FromRgb(0x20, 0x20, 0x20))
 			);
 		}

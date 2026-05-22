@@ -63,8 +63,8 @@ public partial class ViewSettings
 			var R = new SwipeLongPressBtn();
 			var titled = ToolView.WithTitle(Title, Target);
 			titled.Styles.Add(
-				new Style(x=>x.OfType<TextBox>())
-				.Set(TextBox.BackgroundProperty, new SolidColorBrush(Color.FromArgb(255, 32,32,32)))
+				Sty.OfType<TextBox>()
+				.Set(x=>x.Background, new SolidColorBrush(Color.FromArgb(255, 32,32,32)))
 			);
 			R.HCAlign(x=>x.Left);
 			R.SetContent(new StackPanel(), o=>{
@@ -85,7 +85,7 @@ public partial class ViewSettings
 				ViewNavi?.GoTo(titled);
 			};
 			R.Styles.Add(
-				new Style(x=>x.Is<Control>())
+				Sty.Is<Control>()
 				.BgTrnsp()
 			);
 			return R;
