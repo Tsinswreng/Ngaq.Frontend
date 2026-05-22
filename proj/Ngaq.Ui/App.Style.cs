@@ -20,18 +20,19 @@ public partial class App{
 	}
 
 	Styles RoTextBox(Styles S){
-		S.A(new Style(
-			x=>x.Is<TextBox>().Class(Cls.RoTextBox)
+		S.A(
+			Sty.Is<TextBox>(
+				x=>x.Class(Cls.RoTextBox)
 			).Set(
-				TextBox.IsReadOnlyProperty, true
+				x=>x.IsReadOnly, true
 			).Set(
-				TextBox.AcceptsReturnProperty, true
+				x=>x.AcceptsReturn, true
 			).Set(
-				TextBox.TextWrappingProperty, Avalonia.Media.TextWrapping.Wrap
+				x=>x.TextWrapping, TextWrapping.Wrap
 			).Set(
-				TextBox.FocusableProperty, false
+				x=>x.Focusable, false
 			).Set(
-				TextBox.IsTabStopProperty, false
+				x=>x.IsTabStop, false
 			)
 		);
 		return S;

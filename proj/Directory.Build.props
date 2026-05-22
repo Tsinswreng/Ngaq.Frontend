@@ -17,7 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Tsinswreng.Avln.Dsl" />
+		<!-- <PackageReference Include="Tsinswreng.Avln.Dsl" /> -->
 		<PackageReference Include="Tsinswreng.Avln.Grid" />
 		<PackageReference Include="Tsinswreng.Avln.Navi" />
 		<ProjectReference Include="../../../Tsinswreng.Avln.Dsl/proj/Tsinswreng.Avln.Dsl/Tsinswreng.Avln.Dsl.csproj" />
