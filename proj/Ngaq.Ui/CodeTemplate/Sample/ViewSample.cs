@@ -113,19 +113,32 @@ public partial class ViewSample
 	}
 	public void Style(){
 		Styles.A(
+			//傳統寫法。通常要寫完整的類名.XxxProperty、比較冗長且無編譯期類型檢查。不推薦
 			new Style(x=>
-				x.Is<Control>()
+				x.Is<Button>()
 				.Class(Cls.MenuBtn)//禁止硬編碼字符串作類名
 			).Set(
 				VerticalAlignmentProperty
 				,VAlign.Stretch
+			).Set(//.Set也能且必須鏈式調用
+				HorizontalAlignmentProperty
+				,HAlign.Center
+			)
+		).A(
+			Sty.Is<Button>(//Sty下有Is和OfType
+				x=>x.Class(Cls.MenuBtn)
+				//此寫法即等價于 new Style(x=>x.Is<Button>().Class(Cls.MenuBtn))、但更簡潔且有編譯期類型檢查
+			).Set(
+				//更推薦的簡便寫法、不用寫ClsName.XxxProperty
+				x=>x.HorizontalAlignment, HAlign.Center
+			).Set(
+				x=>x.VerticalAlignment, VAlign.Stretch
 			)
 		).A(//Styles也必須使用.A鏈式調用
-			new Style(
-				x=>x.Is<Control>()
-			).Set(
+			Sty.Is<ContentControl>()
+			.Set(
 				//可以在Style中設置綁定
-				CornerRadiusProperty, CBE.Mk<Ctx>(
+				x=>x.CornerRadius, CBE.Mk<Ctx>(
 					x=>x.Cnt1,
 					Converter: new FnConvtr<int, CornerRadius>(cnt=>{
 						return new CornerRadius(cnt);
@@ -248,13 +261,12 @@ public partial class ViewSample
 		};
 		var 更推薦的正確示例2 = (Panel P)=>{
 			P.Styles.A(
-				new Style(x=>x.Is<Button>().Class(Cls.MenuBtn))
-				.Set(HorizontalAlignmentProperty, HAlign.Center)
-				.Set(VerticalAlignmentProperty, VAlign.Center)
-				.Set(BackgroundProperty, Brushes.Gray)
-			)
-
-			;
+				Sty.Is<Button>(
+					x=>x.Class(Cls.MenuBtn)
+				).Set(x=>x.HorizontalAlignment, HAlign.Center)
+				.Set(x=>x.VerticalAlignment, VAlign.Center)
+				.Set(x=>x.Background, Brushes.Gray)
+			);
 			P.A(new Button(), o=>{
 				o.Classes.Add(Cls.MenuBtn);
 				o.SetContent(I[K.File]);
