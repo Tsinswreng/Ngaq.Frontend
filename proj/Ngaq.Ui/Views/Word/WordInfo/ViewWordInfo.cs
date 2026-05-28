@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -371,6 +372,10 @@ public partial class ViewWordInfo
 
 	/// 單條 prop 值完整展示，與編輯頁的字段語義保持一致。
 	protected str GetPropValueText(PoWordProp Prop) {
+		// 發音字段有時會把內部結構序列化進 VStr；展示時只取對用戶有意義的 Text。
+		if (Prop.KStr == KeysProp.Inst.pronunciation && Prop.VType == EKvType.Str && Prop.VStr is not null) {
+			return GetPronunciationDisplayText(Prop.VStr);
+		}
 		if (Prop.VType == EKvType.Str) {
 			return Prop.VStr ?? "";
 		}
@@ -385,6 +390,27 @@ public partial class ViewWordInfo
 		}
 		return Prop.VStr ?? "";
 	}
+
+	/// pronunciation 的 JSON 值只展示 Text，避免把原始結構直接渲染到頁面上。
+	protected str GetPronunciationDisplayText(str RawText) {
+		// step 1: 優先把原值當 JSON 對象解析，並只讀取展示字段。
+		try {
+			using var Document = JsonDocument.Parse(RawText);
+			if (
+				Document.RootElement.ValueKind == JsonValueKind.Object
+				&& Document.RootElement.TryGetProperty(PronunciationJsonTextKey, out var TextElement)
+				&& TextElement.ValueKind == JsonValueKind.String
+			) {
+				return TextElement.GetString() ?? RawText;
+			}
+		} catch (JsonException) {
+			// step 2: 非 JSON 或 JSON 結構不符合約定時，保持舊值原樣展示。
+		}
+		return RawText;
+	}
+
+	/// pronunciation JSON 的文本字段名，集中成常量避免散落魔法字串。
+	const str PronunciationJsonTextKey = "Text";
 
 	/// 先進入現有 WordEditV2，再自動打開對應 prop 的編輯框，沿用原有保存流程。
 	protected nil OpenPropEditor(PoWordProp Prop) {

@@ -87,17 +87,19 @@ public partial class App{
 		RoTextBox(S);
 
 		// 如下設置後 在局部覆蓋全局字體旹 TextBlock生效洏TextBox不效、不效者 字體大小恆不變
-		// var StyBaseFontSize = new Style(x=>
-		// 	x.Is<Control>()
-		// ).Set(
-		// 	TextElement.FontSizeProperty
-		// 	,UiCfg.Inst.BaseFontSize
+		// Styles.A(
+		// 	new Style(x=>
+		// 		x.Is<Control>()
+		// 	).Set(
+		// 		TextElement.FontSizeProperty
+		// 		,UiCfg.Inst.BaseFontSize
+		// 	)
 		// );
-		// Styles.Add(StyBaseFontSize);
+
 		Styles.A(
-			Sty.Is<TextElement>()
+			Sty.Is<Control>()//必須匹配Control。匹配 TextElement 不效、于安卓端漢字猶爲方塊
 			.Set(
-				x=>x.FontFamily
+				TextElement.FontFamilyProperty
 				//,new FontFamily("Times New Roman, STSong")
 				//,new FontFamily("Times New Roman")
 				,FontFamily.Default//不顯式指定Default則珩于android恐缺漢字字體
