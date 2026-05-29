@@ -59,7 +59,8 @@ public partial class ViewSearchedWordCard
 			lg.SetColDefs([
 				new(1, GUT.Star),
 				new(2, GUT.Star),
-			]).A(new TextBlock(), o=>{
+			]);
+			LangGrid.A(new TextBlock(), o=>{
 				o.VAlign(x=>x.Center);
 				o.CBind<Ctx>(o.PropText,x=>x.Lang);
 				o.Foreground = Brushes.LightGray;
@@ -72,7 +73,7 @@ public partial class ViewSearchedWordCard
 			hb.SetColDefs([
 				new(1, GUT.Star),
 			]);
-			hb.A(new TextBlock(), o=>{
+			HeadBox.A(new TextBlock(), o=>{
 				o.VAlign(x=>x.Center);
 				o.FontSize = UiCfg.Inst.BaseFontSize+8;
 				Ctx.Bind(
