@@ -297,7 +297,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		try{
-			await SvcWordV2.SoftDelJnWordInId(
+			await SvcWordV2.SoftDelPoWordInId(
 				UserCtxMgr.GetDbUserCtx(),
 				ToolAsyE.ToAsyE([Draft.Word.Id]),
 				Ct
