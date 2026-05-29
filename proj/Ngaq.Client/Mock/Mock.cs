@@ -139,6 +139,10 @@ public class MockSvcWordV2 : ISvcWordV2 {
 		throw new NotImplementedException();
 	}
 
+	public Task<object> HardDelSoftDeleted(IDbUserCtx Ctx, CT Ct) {
+		throw new NotImplementedException();
+	}
+
 	public Task<JnWord> LlmDictWordToJnWord(IDbUserCtx Ctx, IReqLlmDict Req, IRespLlmDict LlmDict, CT Ct) {
 		throw new NotImplementedException();
 	}
@@ -164,6 +168,10 @@ public class MockSvcWordV2 : ISvcWordV2 {
 	}
 
 	public Task<object> SoftDelJnWordInId(IDbUserCtx Ctx, IAsyncEnumerable<IdWord> Ids, CT Ct) {
+		throw new NotImplementedException();
+	}
+
+	public Task<object> SoftDelPoWordInId(IDbUserCtx Ctx, IAsyncEnumerable<IdWord> Ids, CT Ct) {
 		throw new NotImplementedException();
 	}
 

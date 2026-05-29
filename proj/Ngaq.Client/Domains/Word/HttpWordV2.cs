@@ -237,6 +237,14 @@ public class HttpWordV2 : ISvcWordV2 {
 		return content;
 	}
 
+	public Task<object> SoftDelPoWordInId(IDbUserCtx Ctx, IAsyncEnumerable<IdWord> Ids, CT Ct) {
+		throw new NotImplementedException();
+	}
+
+	public Task<object> HardDelSoftDeleted(IDbUserCtx Ctx, CT Ct) {
+		throw new NotImplementedException();
+	}
+
 	/// 包裝響應流，確保調用方釋放流時連同 HttpResponseMessage 一併釋放。
 	private sealed class HttpResponseOwnedStream:Stream{
 		private readonly HttpResponseMessage _resp;
