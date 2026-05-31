@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FilterCardEditV2;
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ngaq.Core.Shared.StudyPlan.Models.PreFilter;
@@ -21,6 +22,9 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 	VmPreFilterVisualEditV2? Owner{get;set;}
 	VmPreFilterVisualEditV2.VmFieldsFilterRow? Target{get;set;}
 	u64 RowIdx{get;set;}
+	public event Action? OnBackRequested;
+	public event Action<str>? OnDialogRequested;
+	public event Action<str>? OnToastRequested;
 
 	public i32 OperationIndex{get=>field;set{SetProperty(ref field, value);}} = (i32)EFilterOperationMode.Eq;
 	public i32 ValueTypeIndex{get=>field;set{SetProperty(ref field, value);}} = (i32)EValueType.String;
@@ -49,7 +53,7 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 
 	public nil Save(){
 		if(Owner is null || Target is null){
-			ShowDialog(I18n[K.EditorNotReady]);
+			OnDialogRequested?.Invoke(I18n[K.EditorNotReady]);
 			return NIL;
 		}
 
@@ -71,20 +75,20 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 		}
 
 		Owner.RefreshFieldsFilterCards();
-		ShowDialog(I18n.Get(K.Saved__Filter__No__, I18n[K.PreFilter], RowIdx));
-		ViewNavi?.Back();
+		OnDialogRequested?.Invoke(I18n.Get(K.Saved__Filter__No__, I18n[K.PreFilter], RowIdx));
+		OnBackRequested?.Invoke();
 		return NIL;
 	}
 
 	public nil Delete(){
 		if(Owner is null || Target is null){
-			ShowDialog(I18n[K.EditorNotReady]);
+			OnDialogRequested?.Invoke(I18n[K.EditorNotReady]);
 			return NIL;
 		}
 		Owner.FilterRows.Remove(Target);
 		Owner.RefreshFieldsFilterCards();
-		ShowToast(I18n[K.Deleted]);
-		ViewNavi?.Back();
+		OnToastRequested?.Invoke(I18n[K.Deleted]);
+		OnBackRequested?.Invoke();
 		return NIL;
 	}
 }

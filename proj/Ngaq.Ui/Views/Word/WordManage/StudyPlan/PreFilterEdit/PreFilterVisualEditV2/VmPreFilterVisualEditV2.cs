@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEditV2;
 
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Collections.Generic;
@@ -18,9 +19,6 @@ using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FilterCardEditV2;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayloadJsonEdit;
-using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.CsTools;
 
 using Ctx = VmPreFilterVisualEditV2;
@@ -43,6 +41,11 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
 	IJsonSerializer JsonSerializer{get;set;} = AppJsonSerializer.Inst;
 	bool _isHydrating = false;
+	public event Action<BoPreFilter>? OnOpenPayloadJsonRequested;
+	public event Action<BoPreFilter>? OnOpenLegacyVisualEditorRequested;
+	public event Action<RowFieldsFilterCard>? OnOpenFilterCardRequested;
+	public event Action<str>? OnDialogRequested;
+	public event Action<str>? OnToastRequested;
 	public static readonly IReadOnlyList<str> DefaultFieldOptions = [
 		nameof(PoWord.Head),
 		nameof(PoWord.Lang),
@@ -259,15 +262,13 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(err);
+			OnDialogRequested?.Invoke(err);
 			return NIL;
 		}
 		LastError = "";
 		OnPropertyChanged(nameof(HasError));
 		BoPreFilter = bo;
-		var view = new ViewPreFilterPayloadJsonEdit();
-		view.Ctx?.Load(bo.PoPreFilter, OnPayloadJsonSavedOrDeleted);
-		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.TextPayload], view));
+		OnOpenPayloadJsonRequested?.Invoke(bo);
 		return NIL;
 	}
 
@@ -283,13 +284,10 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 
 	public nil OpenLegacyVisualEditor(){
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
-			ShowDialog(err);
+			OnDialogRequested?.Invoke(err);
 			return NIL;
 		}
-		var view = new ViewPreFilterVisualEdit();
-		view.Ctx?.SetCreateMode(IsCreateMode);
-		view.Ctx?.FromBoPreFilter(bo);
-		ViewNavi?.GoTo(ToolView.WithTitle(PoUniqName ?? I18n[K.PreFilter], view));
+		OnOpenLegacyVisualEditorRequested?.Invoke(bo);
 		return NIL;
 	}
 
@@ -300,7 +298,7 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 		if(!TryBuildBoFromVisual(out var bo, out var err)){
 			LastError = err;
 			OnPropertyChanged(nameof(HasError));
-			ShowDialog(err);
+			OnDialogRequested?.Invoke(err);
 			return NIL;
 		}
 		try{
@@ -316,7 +314,7 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowToast(I18n[K.Saved]);
+			OnToastRequested?.Invoke(I18n[K.Saved]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -337,7 +335,7 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 			SyncFromBo();
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));
-			ShowToast(I18n[K.Deleted]);
+			OnToastRequested?.Invoke(I18n[K.Deleted]);
 		}catch(Exception e){
 			HandleErr(e);
 		}
@@ -354,9 +352,7 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 		if(card?.Raw is null){
 			return NIL;
 		}
-		var view = new ViewFilterCardEditV2();
-		view.Ctx?.Load(this, card.Raw, card.UiIdx);
-		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.PreFilter] + " #" + card.UiIdx, view));
+		OnOpenFilterCardRequested?.Invoke(card);
 		return NIL;
 	}
 

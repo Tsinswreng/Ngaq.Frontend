@@ -12,10 +12,16 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Ngaq.Core.Shared.StudyPlan.Models;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FilterCardEditV2;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterPayloadJsonEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -31,6 +37,13 @@ public class ViewPreFilterVisualEditV2: AppViewBase<Ctx>, I_MkTitleMenu{
 
 	public ViewPreFilterVisualEditV2(){
 		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnOpenPayloadJsonRequested += OpenPayloadJsonEditor;
+			Ctx.OnOpenLegacyVisualEditorRequested += OpenLegacyVisualEditor;
+			Ctx.OnOpenFilterCardRequested += OpenFilterCard;
+			Ctx.OnDialogRequested += msg=>MainView.Inst.ShowDialog(msg);
+			Ctx.OnToastRequested += msg=>MainView.Inst.ShowToast(msg);
+		}
 		Render();
 		InitVisualGridSource();
 	}
@@ -45,8 +58,10 @@ public class ViewPreFilterVisualEditV2: AppViewBase<Ctx>, I_MkTitleMenu{
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
-		Root.A(MkBody());
-		Root.A(MkBottomBar());
+		Root
+		.A(MkBody())
+		.A(MkBottomBar())
+		;
 		return NIL;
 	}
 
@@ -57,9 +72,11 @@ public class ViewPreFilterVisualEditV2: AppViewBase<Ctx>, I_MkTitleMenu{
 			new(1, GUT.Auto),
 			new(1, GUT.Star),
 		]);
-		root.A(MkErrorBar());
-		root.A(MkPoSection(), o=>o.Margin = new(10, 10, 10, 8));
-		root.A(MkIntegratedDataEditor(), o=>o.Margin = new(10, 0, 10, 10));
+		root
+		.A(MkErrorBar())
+		.A(MkPoSection(), o=>o.Margin = new(10, 10, 10, 8))
+		.A(MkIntegratedDataEditor(), o=>o.Margin = new(10, 0, 10, 10))
+		;
 		return root.Grid;
 	}
 
@@ -119,17 +136,20 @@ public class ViewPreFilterVisualEditV2: AppViewBase<Ctx>, I_MkTitleMenu{
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
-		top.A(new TextBlock(), o=>{ o.Text = I[K.PreFilter]; });
-		top.A(new Button(), o=>{
+		top.A(new TextBlock(), o=>{ o.Text = I[K.PreFilter]; })
+		.A(new Button(), o=>{
 			o.Content = Icons.Add().ToIcon().WithText(I[K.AddGroup]);
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Click += (s,e)=>Ctx?.AddGroup();
-		});
+		})
+		;
 		root.A(top.Grid);
 
 		Grid = new TreeDataGrid{ MinHeight = 220, HorizontalAlignment = HAlign.Stretch };
-		Grid.Styles.Add(Sty.OfType<TreeDataGridRow>(x=>x.Class(":pointerover")).Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(46,46,46))));
-		Grid.Styles.Add(Sty.OfType<TreeDataGridRow>(x=>x.Class(":pressed")).Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(70,70,70))));
+		Grid.Styles
+			.A(Sty.OfType<TreeDataGridRow>(x=>x.Class(":pointerover")).Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(46,46,46))))
+			.A(Sty.OfType<TreeDataGridRow>(x=>x.Class(":pressed")).Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(70,70,70))))
+			;
 		Grid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
 		root.A(Grid);
 		return root.Grid;
@@ -218,10 +238,35 @@ public class ViewPreFilterVisualEditV2: AppViewBase<Ctx>, I_MkTitleMenu{
 			o.Click += (s,e)=>Ctx?.OpenPayloadJsonEditor();
 		});
 		menu.Items.A(new MenuItem(), o=>{
-			o.Header = "Open Legacy Visual Editor";
+			o.Header = I[K.OpenLegacyVisualEditor];
 			o.Click += (s,e)=>Ctx?.OpenLegacyVisualEditor();
 		});
 		return menu;
+	}
+
+	void OpenPayloadJsonEditor(BoPreFilter bo){
+		var view = new ViewPreFilterPayloadJsonEdit();
+		view.Ctx?.Load(bo.PoPreFilter, po=>{
+			Ctx?.OnPayloadJsonSavedOrDeleted(po);
+		});
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.TextPayload], view));
+	}
+
+	void OpenLegacyVisualEditor(BoPreFilter bo){
+		var view = new ViewPreFilterVisualEdit();
+		view.Ctx?.SetCreateMode(Ctx?.IsCreateMode == true);
+		view.Ctx?.FromBoPreFilter(bo);
+		var title = Ctx?.PoUniqName ?? I[K.PreFilter];
+		ViewNavi?.GoTo(ToolView.WithTitle(title, view));
+	}
+
+	void OpenFilterCard(Ctx.RowFieldsFilterCard card){
+		if(Ctx is null || card.Raw is null){
+			return;
+		}
+		var view = new ViewFilterCardEditV2();
+		view.Ctx?.Load(Ctx, card.Raw, card.UiIdx);
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.PreFilter] + " #" + card.UiIdx, view));
 	}
 }
 

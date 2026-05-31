@@ -11,6 +11,7 @@ using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Views;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEditV2;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
@@ -27,6 +28,11 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 
 	public ViewFilterCardEditV2(){
 		Ctx = App.DiOrMk<Ctx>();
+		if(Ctx is not null){
+			Ctx.OnBackRequested += ()=>ViewNavi?.Back();
+			Ctx.OnDialogRequested += msg=>MainView.Inst.ShowDialog(msg);
+			Ctx.OnToastRequested += msg=>MainView.Inst.ShowToast(msg);
+		}
 		Render();
 	}
 
@@ -38,8 +44,10 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 			new(1, GUT.Star),
 			new(1, GUT.Auto),
 		]);
-		Root.A(MkBody());
-		Root.A(MkBottomBar());
+		Root
+		.A(MkBody())
+		.A(MkBottomBar())
+		;
 		return NIL;
 	}
 
@@ -91,13 +99,14 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.Click += (s,e)=>Ctx?.Delete();
-		});
-		g.A(new Button(), o=>{
+		})
+		.A(new Button(), o=>{
 			o.HorizontalContentAlignment = HAlign.Center;
 			o.Background = UiCfg.Inst.MainColor;
 			o.Content = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.Click += (s,e)=>Ctx?.Save();
-		});
+		})
+		;
 		return g.Grid;
 	}
 

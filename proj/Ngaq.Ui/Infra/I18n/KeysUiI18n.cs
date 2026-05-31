@@ -227,6 +227,7 @@ public class KeysUiI18nCommon{
 	public static readonly K TextPayload = Mk(_R, [nameof(TextPayload)]);
 	public static readonly K EditPreFilterTextInGui = Mk(_R, [nameof(EditPreFilterTextInGui)]);
 	public static readonly K OpenJson = Mk(_R, [nameof(OpenJson)]);
+	public static readonly K OpenLegacyVisualEditor = Mk(_R, [nameof(OpenLegacyVisualEditor)]);
 	public static readonly K Fields = Mk(_R, [nameof(Fields)]);
 	public static readonly K Items = Mk(_R, [nameof(Items)]);
 	public static readonly K CoreFilter = Mk(_R, [nameof(CoreFilter)]);
