@@ -17,6 +17,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEditV2;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
@@ -174,7 +175,7 @@ public partial class ViewPreFilterPage
 	/// 普通模式下打开编辑页；选择模式下不会进入该分支。
 	/// </summary>
 	void OpenDetail(Ctx.RowPreFilter? row){
-		var view = new ViewPreFilterVisualEdit();
+		var view = new ViewPreFilterVisualEditV2();
 		view.Ctx?.SetCreateMode(row is null);
 		view.Ctx?.FromPoPreFilter(row?.Raw);
 		var title = row?.Raw?.UniqName ?? I[K.NewPreFilter];
