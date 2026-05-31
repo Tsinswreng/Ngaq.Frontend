@@ -13,6 +13,8 @@ using Ngaq.Ui.Infra.I18n;
 using Ctx = VmCfgLearnWord;
 using Tsinswreng.AvlnTools.Controls;
 using Tsinswreng.Avln.Grid;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.SetCurStudyPlan;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewCfgLearnWord
@@ -55,6 +57,11 @@ public partial class ViewCfgLearnWord
 							ToolView.WithTitle(I[K.StudyPlan], new ViewStudyPlan())
 						);
 					};
+				}).A(new SwipeLongPressBtn(), o=>{
+					o.Content = I[K.ChooseAnotherStudyPlan];
+					o.Click += (s,e)=>{
+						_ = ChooseAndApplyStudyPlan(default);
+					};
 				}).A(new CheckBox(), o=>{
 					o.Content = I[K.EnableRandomBackground];
 					Ctx.Bind(o, o=>o.IsChecked,x=>x.EnableRandomBackground);
@@ -75,6 +82,28 @@ public partial class ViewCfgLearnWord
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o.SetExe((Ct)=>Ctx?.Save(Ct));
 		});
+		return NIL;
+	}
+
+	async System.Threading.Tasks.Task<nil> ChooseAndApplyStudyPlan(CT Ct){
+		var tcs = new System.Threading.Tasks.TaskCompletionSource<
+			Ngaq.Core.Shared.StudyPlan.Models.Po.StudyPlan.PoStudyPlan?
+		>();
+		var view = new ViewStudyPlanPage();
+		view.Ctx?.SetSelectMode(po=>{
+			tcs.TrySetResult(po);
+			view.ViewNavi?.Back();
+		});
+		ViewNavi?.GoTo(ToolView.WithTitle(I[K.SelectStudyPlan], view));
+		try{
+			var selected = await tcs.Task;
+			if(selected is null){
+				return NIL;
+			}
+			var setter = App.DiOrMk<VmSetCurStudyPlan>();
+			await setter.ApplySelectedStudyPlan(selected, Ct);
+		}catch{
+		}
 		return NIL;
 	}
 
