@@ -17,6 +17,8 @@ using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEdit;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterVisualEditV2;
+using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FilterCardEditV2;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.PreFilterJsonEdit;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanPage;
 using Ngaq.Ui.Views.Word.WordManage.StudyPlan.StudyPlanEdit;
@@ -63,6 +65,8 @@ public static class DiUi{
 		z.AddTransient<VmPronunciation>();
 		z.AddTransient<VmDictionary>();
 		z.AddTransient<VmPreFilterVisualEdit>();
+		z.AddTransient<VmPreFilterVisualEditV2>();
+		z.AddTransient<VmFilterCardEditV2>();
 		z.AddTransient<VmPreFilterJsonEdit>();
 		z.AddTransient<VmPreFilterPayloadJsonEdit>();
 		z.AddTransient<VmPreFilterPage>();

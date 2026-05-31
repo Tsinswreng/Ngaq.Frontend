@@ -1,7 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FilterCardEditV2;
 
-using System.Collections.Generic;
-using System.Linq;
+using Avalonia.Controls.Templates;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -70,18 +69,36 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 			IsEditable = true,
 			HorizontalAlignment = HAlign.Stretch,
 		};
-		cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptions, Mode: BindingMode.OneWay));
+		cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptionRows, Mode: BindingMode.OneWay));
 		cb.Bind(ComboBox.TextProperty, CBE.Mk<Ctx>(x=>x.Field, Mode: BindingMode.TwoWay));
+		cb.ItemTemplate = new FuncDataTemplate<Ctx.RowTextOption>((option, _) =>
+			new TextBlock{Text = option?.Display ?? ""}
+		);
+		cb.LostFocus += (s,e)=>{
+			if(Ctx is null){
+				return;
+			}
+			Ctx.Field = Ctx.ToFieldRaw(cb.Text);
+			cb.Text = Ctx.ToFieldDisplay(Ctx.Field);
+		};
 		sp.Children.Add(cb);
 		return sp;
 	}
 
 	Control MkOperationRow(){
-		return MkComboRow(I[K.Operation], Ctx?.OperationOptions ?? [], CBE.Mk<Ctx>(x=>x.OperationIndex, Mode: BindingMode.TwoWay));
+		return MkComboRow(
+			I[K.Operation],
+			CBE.Mk<Ctx>(x=>x.OperationOptionsDisplay, Mode: BindingMode.OneWay),
+			CBE.Mk<Ctx>(x=>x.SelectedOperation, Mode: BindingMode.TwoWay)
+		);
 	}
 
 	Control MkValueTypeRow(){
-		return MkComboRow(I[K.ValueType], Ctx?.ValueTypeOptions ?? [], CBE.Mk<Ctx>(x=>x.ValueTypeIndex, Mode: BindingMode.TwoWay));
+		return MkComboRow(
+			I[K.ValueType],
+			CBE.Mk<Ctx>(x=>x.ValueTypeOptionsDisplay, Mode: BindingMode.OneWay),
+			CBE.Mk<Ctx>(x=>x.SelectedValueType, Mode: BindingMode.TwoWay)
+		);
 	}
 
 	Control MkValuesRow(){
@@ -123,12 +140,12 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 		return sp;
 	}
 
-	Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
+	Control MkComboRow(str Label, IBinding ItemsBinding, IBinding Binding){
 		var sp = new StackPanel{Spacing = 3};
 		sp.Children.Add(new TextBlock{Text = Label});
 		var cb = new ComboBox();
-		foreach(var item in Items){ cb.Items.Add(item); }
-		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
+		cb.Bind(ComboBox.ItemsSourceProperty, ItemsBinding);
+		cb.Bind(ComboBox.TextProperty, Binding);
 		sp.Children.Add(cb);
 		return sp;
 	}
