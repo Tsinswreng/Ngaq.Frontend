@@ -18,9 +18,9 @@ using Tsinswreng.AvlnTools.Tools;
 using Ctx = VmPreFilterJsonEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
-/// <summary>
+
 /// PoPreFilter JSON 專用編輯視圖。
-/// </summary>
+
 public class ViewPreFilterJsonEdit: AppViewBase<Ctx>{
 
 	public ViewPreFilterJsonEdit(){
