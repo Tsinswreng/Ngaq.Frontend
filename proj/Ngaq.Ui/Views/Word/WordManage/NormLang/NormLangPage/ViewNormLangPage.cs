@@ -9,6 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Ui;
 using Ngaq.Ui.Components.PageBar;
@@ -39,6 +40,10 @@ public partial class ViewNormLangPage
 		InitDataGrid();
 		Loaded += async(s,e)=>{
 			_ = Ctx?.InitSearch(default);
+			// 語言選擇頁打開時聚焦搜索框，並全選已有文本，便於直接覆寫。
+			Dispatcher.UIThread.Post(()=>{
+				FocusAndSelectSearchInput();
+			});
 		};
 	}
 
@@ -63,6 +68,7 @@ public partial class ViewNormLangPage
 	GridStack Root = new(IsRow: true);
 	TreeDataGrid? Grid;
 	FlatTreeDataGridSource<Ctx.RowNormLang>? GridSource;
+	TextBox? SearchInput;
 
 	protected nil Render(){
 		this.Content = Root.Grid;
@@ -86,6 +92,7 @@ public partial class ViewNormLangPage
 		]);
 		var searchBtn = new OpBtn();
 		top.A(new TextBox(), o=>{
+			SearchInput = o;
 			o.Watermark = I[K.InputLangNameOrCode];
 			o.CBind<Ctx>(o.PropText, x=>x.Input);
 			o.KeyBindings.Add(new KeyBinding{
@@ -106,6 +113,15 @@ public partial class ViewNormLangPage
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
+	}
+
+	nil FocusAndSelectSearchInput(){
+		if(SearchInput is null){
+			return NIL;
+		}
+		SearchInput.Focus();
+		SearchInput.SelectAll();
+		return NIL;
 	}
 
 	protected Control MkGridHost(){
