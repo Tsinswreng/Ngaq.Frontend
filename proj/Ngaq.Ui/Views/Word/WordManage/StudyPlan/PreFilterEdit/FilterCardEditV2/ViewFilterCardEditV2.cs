@@ -1,6 +1,5 @@
 namespace Ngaq.Ui.Views.Word.WordManage.StudyPlan.PreFilterEdit.FilterCardEditV2;
 
-using Avalonia.Controls.Templates;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -69,17 +68,13 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 			IsEditable = true,
 			HorizontalAlignment = HAlign.Stretch,
 		};
-		cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptionRows, Mode: BindingMode.OneWay));
-		cb.Bind(ComboBox.TextProperty, CBE.Mk<Ctx>(x=>x.Field, Mode: BindingMode.TwoWay));
-		cb.ItemTemplate = new FuncDataTemplate<Ctx.RowTextOption>((option, _) =>
-			new TextBlock{Text = option?.Display ?? ""}
-		);
+		cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptionsDisplay, Mode: BindingMode.OneWay));
+		cb.Bind(ComboBox.TextProperty, CBE.Mk<Ctx>(x=>x.FieldDisplay, Mode: BindingMode.TwoWay));
 		cb.LostFocus += (s,e)=>{
 			if(Ctx is null){
 				return;
 			}
-			Ctx.Field = Ctx.ToFieldRaw(cb.Text);
-			cb.Text = Ctx.ToFieldDisplay(Ctx.Field);
+			Ctx.FieldDisplay = cb.Text ?? "";
 		};
 		sp.Children.Add(cb);
 		return sp;
@@ -89,7 +84,7 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 		return MkComboRow(
 			I[K.Operation],
 			CBE.Mk<Ctx>(x=>x.OperationOptionsDisplay, Mode: BindingMode.OneWay),
-			CBE.Mk<Ctx>(x=>x.SelectedOperation, Mode: BindingMode.TwoWay)
+			CBE.Mk<Ctx>(x=>x.OperationOptionIndex, Mode: BindingMode.TwoWay)
 		);
 	}
 
@@ -97,7 +92,7 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 		return MkComboRow(
 			I[K.ValueType],
 			CBE.Mk<Ctx>(x=>x.ValueTypeOptionsDisplay, Mode: BindingMode.OneWay),
-			CBE.Mk<Ctx>(x=>x.SelectedValueType, Mode: BindingMode.TwoWay)
+			CBE.Mk<Ctx>(x=>x.ValueTypeOptionIndex, Mode: BindingMode.TwoWay)
 		);
 	}
 
@@ -145,7 +140,7 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 		sp.Children.Add(new TextBlock{Text = Label});
 		var cb = new ComboBox();
 		cb.Bind(ComboBox.ItemsSourceProperty, ItemsBinding);
-		cb.Bind(ComboBox.TextProperty, Binding);
+		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
 		sp.Children.Add(cb);
 		return sp;
 	}

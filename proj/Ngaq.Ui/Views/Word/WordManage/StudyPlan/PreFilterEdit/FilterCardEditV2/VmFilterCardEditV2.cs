@@ -17,7 +17,6 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// 規則：字段僅 1 個、篩選項僅 1 個，且全部在同一頁編輯。
 /// </summary>
 public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
-	public VmFilterCardEditV2(){}
 	public static Ctx Mk(){ return new Ctx(); }
 
 	VmPreFilterVisualEditV2? Owner{get;set;}
@@ -29,65 +28,103 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 	static readonly i32 DefaultOperationRawIndex = (i32)EFilterOperationMode.Eq;
 	static readonly i32 DefaultValueTypeRawIndex = (i32)EValueType.String;
 
-	public class RowTextOption{
-		public str Raw{get;set;} = "";
-		public str Display{get;set;} = "";
-	}
-
-	public str SelectedOperation{
+	public str Field{
 		get=>field;
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(FieldDisplay));
+			}
+		}
 	} = "";
-
-	public str SelectedValueType{
+	public str FieldDisplay{
 		get=>field;
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				Field = ToFieldRaw(value);
+			}
+		}
 	} = "";
+	public i32 OperationIndex{
+		get=>field;
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(OperationOptionIndex));
+			}
+		}
+	} = DefaultOperationRawIndex;
+	public i32 ValueTypeIndex{
+		get=>field;
+		set{
+			if(SetProperty(ref field, value)){
+				OnPropertyChanged(nameof(ValueTypeOptionIndex));
+			}
+		}
+	} = DefaultValueTypeRawIndex;
 
-	public str Field{get=>field;set{SetProperty(ref field, value);}} = "";
 	public str ValuesText{get=>field;set{SetProperty(ref field, value);}} = "";
 
 	public IReadOnlyList<str> FieldOptionsRaw{get;} = VmPreFilterVisualEditV2.DefaultFieldOptions;
-	public IReadOnlyList<RowTextOption> FieldOptionRows => FieldOptionsRaw.Select(x=>new RowTextOption{
-		Raw = x,
-		Display = ToFieldDisplay(x),
-	}).ToList();
-
+	public IReadOnlyList<str> FieldOptionsDisplay{get;}
+	public IReadOnlyList<str> OperationOptionsDisplay{get;}
+	public IReadOnlyList<str> ValueTypeOptionsDisplay{get;}
 	public IReadOnlyList<i32> OperationRawIndices{get;} = Enum
 		.GetValues<EFilterOperationMode>()
 		.Select((x, idx)=>(x, idx))
 		.Where(x=>x.x != EFilterOperationMode.Null)
 		.Select(x=>(i32)x.idx)
 		.ToList();
-	public IReadOnlyList<str> OperationOptionsDisplay => OperationRawIndices
-		.Select(ToOperationDisplayByRawIndex)
-		.ToList();
-
 	public IReadOnlyList<i32> ValueTypeRawIndices{get;} = Enum
 		.GetValues<EValueType>()
 		.Select((x, idx)=>(x, idx))
 		.Where(x=>x.x != EValueType.Null)
 		.Select(x=>(i32)x.idx)
 		.ToList();
-	public IReadOnlyList<str> ValueTypeOptionsDisplay => ValueTypeRawIndices
-		.Select(ToValueTypeDisplayByRawIndex)
-		.ToList();
+
+	public i32 OperationOptionIndex{
+		get=>field;
+		set{
+			if(SetProperty(ref field, value)){
+				OperationIndex = OperationOptionIndexToRawIndex(value);
+			}
+		}
+	} = 0;
+	public i32 ValueTypeOptionIndex{
+		get=>field;
+		set{
+			if(SetProperty(ref field, value)){
+				ValueTypeIndex = ValueTypeOptionIndexToRawIndex(value);
+			}
+		}
+	} = 0;
+
+	public VmFilterCardEditV2(){
+		FieldOptionsDisplay = FieldOptionsRaw.Select(ToFieldDisplay).ToList();
+		OperationOptionsDisplay = OperationRawIndices.Select(ToOperationDisplayByRawIndex).ToList();
+		ValueTypeOptionsDisplay = ValueTypeRawIndices.Select(ToValueTypeDisplayByRawIndex).ToList();
+	}
 
 	public nil Load(VmPreFilterVisualEditV2 Owner, VmPreFilterVisualEditV2.VmFieldsFilterRow Target, u64 RowIdx){
 		this.Owner = Owner;
 		this.Target = Target;
 		this.RowIdx = RowIdx;
 
-		Field = Target.Fields.FirstOrDefault()?.Value ?? "";
+		Field = Target.Fields.FirstOrDefault()?.Value ?? nameof(PoWord.Lang);
+		if(str.IsNullOrWhiteSpace(Field)){
+			Field = nameof(PoWord.Lang);
+		}
+		FieldDisplay = ToFieldDisplay(Field);
 		var item = Target.Items.FirstOrDefault();
-		SelectedOperation = ToOperationDisplayByRawIndex(item?.OperationIndex ?? DefaultOperationRawIndex);
-		SelectedValueType = ToValueTypeDisplayByRawIndex(item?.ValueTypeIndex ?? DefaultValueTypeRawIndex);
+		OperationIndex = item?.OperationIndex ?? (i32)EFilterOperationMode.IncludeAny;
+		ValueTypeIndex = item?.ValueTypeIndex ?? DefaultValueTypeRawIndex;
+		OperationOptionIndex = ToOperationOptionIndex(OperationIndex);
+		ValueTypeOptionIndex = ToValueTypeOptionIndex(ValueTypeIndex);
 		ValuesText = item?.ValuesText ?? "";
-		OnPropertyChanged(nameof(FieldOptionRows));
+		OnPropertyChanged(nameof(FieldOptionsDisplay));
 		OnPropertyChanged(nameof(OperationOptionsDisplay));
 		OnPropertyChanged(nameof(ValueTypeOptionsDisplay));
-		OnPropertyChanged(nameof(SelectedOperation));
-		OnPropertyChanged(nameof(SelectedValueType));
+		OnPropertyChanged(nameof(FieldDisplay));
+		OnPropertyChanged(nameof(OperationOptionIndex));
+		OnPropertyChanged(nameof(ValueTypeOptionIndex));
 		return NIL;
 	}
 
@@ -99,7 +136,7 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 
 		// step 1: 僅保留 1 個字段。
 		Target.Fields.Clear();
-		var field = Field?.Trim() ?? "";
+		var field = ToFieldRaw(FieldDisplay);
 		if(!str.IsNullOrWhiteSpace(field)){
 			Target.Fields.Add(new VmPreFilterVisualEditV2.VmFieldValueRow{Value = field});
 		}
@@ -108,8 +145,8 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 		Target.Items.Clear();
 		if(!str.IsNullOrWhiteSpace(ValuesText)){
 			Target.Items.Add(new VmPreFilterVisualEditV2.VmFilterItemRow{
-				OperationIndex = OperationDisplayToRawIndex(SelectedOperation),
-				ValueTypeIndex = ValueTypeDisplayToRawIndex(SelectedValueType),
+				OperationIndex = OperationOptionIndexToRawIndex(OperationOptionIndex),
+				ValueTypeIndex = ValueTypeOptionIndexToRawIndex(ValueTypeOptionIndex),
 				ValuesText = ValuesText,
 			});
 		}
@@ -163,34 +200,57 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 		if(str.IsNullOrWhiteSpace(text)){
 			return "";
 		}
-		foreach(var option in FieldOptionRows){
-			if(option.Display == text || option.Raw == text){
-				return option.Raw;
+		for(i32 i = 0; i < FieldOptionsRaw.Count; i++){
+			var raw = FieldOptionsRaw[i];
+			if(ToFieldDisplay(raw) == text || raw == text){
+				return raw;
 			}
 		}
 		return text;
 	}
 
-	public i32 OperationDisplayToRawIndex(str? display){
-		var text = display?.Trim() ?? "";
-		for(i32 i = 0; i < OperationRawIndices.Count; i++){
-			var raw = OperationRawIndices[i];
-			if(ToOperationDisplayByRawIndex(raw) == text){
-				return raw;
-			}
+	public i32 OperationOptionIndexToRawIndex(i32 optionIndex){
+		if(OperationRawIndices.Count == 0){
+			return DefaultOperationRawIndex;
 		}
-		return DefaultOperationRawIndex;
+		if(optionIndex < 0){
+			optionIndex = 0;
+		}
+		if(optionIndex >= OperationRawIndices.Count){
+			optionIndex = OperationRawIndices.Count - 1;
+		}
+		return OperationRawIndices[optionIndex];
 	}
 
-	public i32 ValueTypeDisplayToRawIndex(str? display){
-		var text = display?.Trim() ?? "";
-		for(i32 i = 0; i < ValueTypeRawIndices.Count; i++){
-			var raw = ValueTypeRawIndices[i];
-			if(ToValueTypeDisplayByRawIndex(raw) == text){
-				return raw;
+	public i32 ValueTypeOptionIndexToRawIndex(i32 optionIndex){
+		if(ValueTypeRawIndices.Count == 0){
+			return DefaultValueTypeRawIndex;
+		}
+		if(optionIndex < 0){
+			optionIndex = 0;
+		}
+		if(optionIndex >= ValueTypeRawIndices.Count){
+			optionIndex = ValueTypeRawIndices.Count - 1;
+		}
+		return ValueTypeRawIndices[optionIndex];
+	}
+
+	public i32 ToOperationOptionIndex(i32 rawIndex){
+		for(i32 i = 0; i < OperationRawIndices.Count; i++){
+			if(OperationRawIndices[i] == rawIndex){
+				return i;
 			}
 		}
-		return DefaultValueTypeRawIndex;
+		return 0;
+	}
+
+	public i32 ToValueTypeOptionIndex(i32 rawIndex){
+		for(i32 i = 0; i < ValueTypeRawIndices.Count; i++){
+			if(ValueTypeRawIndices[i] == rawIndex){
+				return i;
+			}
+		}
+		return 0;
 	}
 
 	str ToOperationDisplayByRawIndex(i32 rawIndex){
