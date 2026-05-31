@@ -513,11 +513,37 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 			return "-";
 		}
 		var item = row.Items[0];
-		var value = SplitLines(item.ValuesText).FirstOrDefault();
-		if(str.IsNullOrWhiteSpace(value)){
+		var values = SplitLines(item.ValuesText).ToList();
+		if(values.Count == 0){
 			return "-";
 		}
-		return $"{field} {ToOpText(item.OperationIndex)} {value}";
+		return $"{ToFieldText(field)} {ToOpText(item.OperationIndex)} {string.Join(" | ", values)}";
+	}
+
+	str ToFieldText(str raw){
+		if(str.IsNullOrWhiteSpace(raw)){
+			return "";
+		}
+		return raw switch{
+			nameof(PoWord.Head) => I18n[K.Head],
+			nameof(PoWord.Lang) => I18n[K.Lang],
+			nameof(PoWord.BizCreatedAt) => I18n[K.Biz_CreatedAt],
+			nameof(PoWord.BizUpdatedAt) => I18n[K.Biz_UpdatedAt],
+			"summary" => I18n[K.Summary],
+			"description" => I18n[K.Description],
+			"note" => I18n[K.Note],
+			"tag" => I18n[K.Tag],
+			"source" => I18n[K.Source],
+			"alias" => I18n[K.Alias],
+			"pronunciation" => I18n[K.Pronunciation],
+			"weight" => I18n[K.Weight],
+			"learn" => I18n[K.Learn],
+			"usage" => I18n[K.Usage],
+			"example" => I18n[K.Example],
+			"relation" => I18n[K.Relation],
+			"ref" => I18n[K.Ref],
+			_ => raw,
+		};
 	}
 
 	str ToOpText(i32 operationIndex){

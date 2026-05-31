@@ -28,7 +28,7 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 		Ctx = App.DiOrMk<Ctx>();
 		if(Ctx is not null){
 			Ctx.OnBackRequested += ()=>ViewNavi?.Back();
-			Ctx.OnDialogRequested += msg=>MainView.Inst.ShowDialog(msg);
+			Ctx.OnDialogRequested += msg=>MainView.Inst.ShowToast(msg);
 			Ctx.OnToastRequested += msg=>MainView.Inst.ShowToast(msg);
 		}
 		Render();

@@ -196,7 +196,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 
 		Owner.RefreshFieldsFilterCards();
 		var kind = IsCore ? I18n[K.Core] : I18n[K.Prop];
-		ShowDialog(I18n.Get(K.Saved__Filter__No__, kind, RowIdx));
+		ShowToast(I18n.Get(K.Saved__Filter__No__, kind, RowIdx));
 		ViewNavi?.Back();
 		return NIL;
 	}
@@ -296,7 +296,7 @@ public class VmFieldsFilterCardEdit: ViewModelBase, IMk<Ctx>{
 		return text;
 	}
 
-	
+
 	/// <summary>
 	/// 供編輯頁回填下拉框使用：將 raw 值轉成顯示文字。
 	/// </summary>
