@@ -56,7 +56,16 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 	}
 
 	Control MkFieldRow(){
-		return MkInputRow(I[K.Fields], CBE.Mk<Ctx>(x=>x.Field, Mode: BindingMode.TwoWay));
+		var sp = new StackPanel{Spacing = 3};
+		sp.Children.Add(new TextBlock{Text = I[K.Fields]});
+		var cb = new ComboBox{
+			IsEditable = true,
+			HorizontalAlignment = HAlign.Stretch,
+		};
+		cb.Bind(ComboBox.ItemsSourceProperty, CBE.Mk<Ctx>(x=>x.FieldOptions, Mode: BindingMode.OneWay));
+		cb.Bind(ComboBox.TextProperty, CBE.Mk<Ctx>(x=>x.Field, Mode: BindingMode.TwoWay));
+		sp.Children.Add(cb);
+		return sp;
 	}
 
 	Control MkOperationRow(){
@@ -68,7 +77,7 @@ public class ViewFilterCardEditV2: AppViewBase<Ctx>{
 	}
 
 	Control MkValuesRow(){
-		return MkInputRow(I[K.Values], CBE.Mk<Ctx>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true);
+		return MkInputRow(I[K.ValuesNewlineSeparated], CBE.Mk<Ctx>(x=>x.ValuesText, Mode: BindingMode.TwoWay), AcceptsReturn: true);
 	}
 
 	Control MkBottomBar(){

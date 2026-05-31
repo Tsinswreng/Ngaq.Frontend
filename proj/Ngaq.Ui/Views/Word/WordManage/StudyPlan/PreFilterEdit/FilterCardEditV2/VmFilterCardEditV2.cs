@@ -27,6 +27,10 @@ public class VmFilterCardEditV2: ViewModelBase, IMk<Ctx>{
 	public str Field{get=>field;set{SetProperty(ref field, value);}} = "";
 	public str ValuesText{get=>field;set{SetProperty(ref field, value);}} = "";
 
+	/// <summary>
+	/// 字段候選：沿用舊版的核心字段 + 常見屬性字段，並允許手動輸入任意值。
+	/// </summary>
+	public IReadOnlyList<str> FieldOptions{get;} = VmPreFilterVisualEditV2.DefaultFieldOptions;
 	public IReadOnlyList<str> OperationOptions{get;} = Enum.GetNames<EFilterOperationMode>();
 	public IReadOnlyList<str> ValueTypeOptions{get;} = Enum.GetNames<EValueType>();
 

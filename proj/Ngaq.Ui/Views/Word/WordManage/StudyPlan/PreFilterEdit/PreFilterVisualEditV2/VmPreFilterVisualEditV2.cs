@@ -13,6 +13,7 @@ using Ngaq.Core.Shared.StudyPlan.Models;
 using Ngaq.Core.Shared.StudyPlan.Models.Po.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Models.PreFilter;
 using Ngaq.Core.Shared.StudyPlan.Svc;
+using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Tools.Json;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
@@ -42,6 +43,25 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 	IFrontendUserCtxMgr? UserCtxMgr{get;set;}
 	IJsonSerializer JsonSerializer{get;set;} = AppJsonSerializer.Inst;
 	bool _isHydrating = false;
+	public static readonly IReadOnlyList<str> DefaultFieldOptions = [
+		nameof(PoWord.Head),
+		nameof(PoWord.Lang),
+		nameof(PoWord.BizCreatedAt),
+		nameof(PoWord.BizUpdatedAt),
+		"summary",
+		"description",
+		"note",
+		"tag",
+		"source",
+		"alias",
+		"pronunciation",
+		"weight",
+		"learn",
+		"usage",
+		"example",
+		"relation",
+		"ref",
+	];
 
 	public VmPreFilterVisualEditV2(
 		ISvcStudyPlan? SvcStudyPlan
@@ -422,7 +442,7 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 			if(row.Items.Count > 0){
 				var item = row.Items[0];
 				var valueType = EnumOrDefault<EValueType>(item.ValueTypeIndex);
-				var values = ParseValuesSingle(item.ValuesText, valueType, out var parseErr);
+				var values = ParseValues(item.ValuesText, valueType, out var parseErr);
 				if(parseErr is not null){
 					Err = $"Row#{rowIdx}: {parseErr}";
 					return [];
@@ -441,29 +461,35 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 		return ans;
 	}
 
-	IList<obj?> ParseValuesSingle(str Text, EValueType ValueType, out str? Err){
+	IList<obj?> ParseValues(str Text, EValueType ValueType, out str? Err){
 		Err = null;
-		var first = SplitLines(Text).FirstOrDefault();
-		if(str.IsNullOrWhiteSpace(first)){
+		var parts = SplitLines(Text).ToList();
+		if(parts.Count == 0){
 			return [];
 		}
 		if(ValueType == EValueType.String){
-			return [first];
+			return parts.Cast<obj?>().ToList();
 		}
 		if(ValueType == EValueType.Null){
-			return [(obj?)null];
+			return parts.Select(_ => (obj?)null).ToList();
 		}
 		if(ValueType == EValueType.Number){
-			if(long.TryParse(first, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i)){
-				return [i];
+			var ans = new List<obj?>();
+			foreach(var p in parts){
+				if(long.TryParse(p, NumberStyles.Integer, CultureInfo.InvariantCulture, out var i)){
+					ans.Add(i);
+					continue;
+				}
+				if(double.TryParse(p, NumberStyles.Float, CultureInfo.InvariantCulture, out var d)){
+					ans.Add(d);
+					continue;
+				}
+				Err = I18n.Get(K.__IsNotValidNumber, p);
+				return [];
 			}
-			if(double.TryParse(first, NumberStyles.Float, CultureInfo.InvariantCulture, out var d)){
-				return [d];
-			}
-			Err = I18n.Get(K.__IsNotValidNumber, first);
-			return [];
+			return ans;
 		}
-		return [first];
+		return parts.Cast<obj?>().ToList();
 	}
 
 	static IEnumerable<str> SplitLines(str? Text){
