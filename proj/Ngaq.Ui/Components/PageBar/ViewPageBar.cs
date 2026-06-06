@@ -13,11 +13,13 @@ using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.CsCore;
 using Tsinswreng.CsI18n;
 using CommonK = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmPageBar;
 public partial class ViewPageBar
 	:AppViewBase<Ctx>
+	,IViewPageBar
 {
 	public ViewPageBar(){
 		Ctx = App.DiOrMk<Ctx>();
@@ -30,6 +32,42 @@ public partial class ViewPageBar
 		public static str CenterText = nameof(CenterText);
 	}
 
+
+	[Impl]
+	public async Task<nil> ClickPrev(CT Ct){
+		LeftBtn?.PerformClick();
+		return NIL;
+	}
+
+	[Impl]
+	public async Task<nil> ClickNext(CT Ct){
+		RightBtn?.PerformClick();
+		return NIL;
+	}
+
+	[Impl]
+	public str? CurPage{
+		get=>CurPageTextBox?.Text;
+		set=>CurPageTextBox?.Text = value;
+	}
+
+	[Impl]
+	public str? TotPage{
+		get=>TotPageTextBox?.Text;
+		set=>TotPageTextBox?.Text = value;
+	}
+
+	public str? PageSize{
+		get=>PageSizeTextBox?.Text;
+		set=>PageSizeTextBox?.Text = value;
+	}
+
+	public OpBtn? LeftBtn{get;set;}
+	public OpBtn? RightBtn{get;set;}
+	public TextBox? CurPageTextBox{get;set;}
+	public TextBox? TotPageTextBox{get;set;}
+	public ComboBox? PageSizeTextBox{get;set;}
+	//public OpBtn? PageSizeMenuBtn{get;set;}
 
 	protected nil Style(){
 		var S = Styles;
@@ -85,12 +123,17 @@ public partial class ViewPageBar
 			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 		]);
+		LeftBtn = MkPageBtn();
+		RightBtn = MkPageBtn();
+		CurPageTextBox = _TextBox();
+		TotPageTextBox = _TextBox();
+
 		Root
-		.A(MkPageBtn(), o=>{
+		.A(LeftBtn, o=>{
 			o.BtnContent = Icons.ArrowLeft().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnPrevPage?.Invoke(Ctx, Ct));
 		})
-		.A(_TextBox(), o=>{
+		.A(CurPageTextBox, o=>{
 			Ctx.Bind(
 				o,o=>o.Text,x=>x.PageNum
 				,Converter: ConvU64Str(1)
@@ -101,7 +144,7 @@ public partial class ViewPageBar
 		.A(_TextBlock(), o=>{
 			o.Text = " / ";
 		})
-		.A(_TextBox(), o=>{
+		.A(TotPageTextBox, o=>{
 			// o.CBind<Ctx>(o.PropIsVisible, x=>x.TotCnt,
 			// 	Converter: new FnConvtr<u64?, bool>((x,p)=>x is not null)
 			// );
@@ -114,7 +157,7 @@ public partial class ViewPageBar
 				,Mode: BindingMode.OneWay
 			);
 		})
-		.A(MkPageBtn(), o=>{
+		.A(RightBtn, o=>{
 			o.BtnContent = Icons.ArrowRight().ToIcon();
 			o.SetExe((Ct)=>Ctx?.FnNextPage?.Invoke(Ctx, Ct));
 		})
@@ -124,6 +167,7 @@ public partial class ViewPageBar
 	}
 
 	Button MkPageSizeMenuBtn(){
+		PageSizeTextBox = new ComboBox();
 		var flyout = new Flyout();{
 			var panel = new StackPanel(){
 				Init = o=>{
@@ -135,7 +179,7 @@ public partial class ViewPageBar
 			panel.A(new TextBlock(), o=>{
 				o.Text = I[CommonK.PageSize];
 			})
-			.A(new ComboBox(), o=>{
+			.A(PageSizeTextBox, o=>{
 				o.IsEditable = true;
 				o.MinWidth = 96;
 				o.ItemsSource = new str[]{"10", "20", "50"};

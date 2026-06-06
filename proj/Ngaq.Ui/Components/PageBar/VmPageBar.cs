@@ -112,8 +112,4 @@ public partial class VmPageBar: ViewModelBase, IMk<Ctx>{
 			}
 		}
 	}
-
-
-
-
 }
