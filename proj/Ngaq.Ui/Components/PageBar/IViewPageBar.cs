@@ -10,7 +10,6 @@ public interface IViewPageBar{
 	public Task<nil> ClickNext(CT Ct);
 	public str? CurPage { get; set; }
 	public str? TotPage { get; set; }
-
-	public str? PageSize{ get;set;}
+	public str? PageSize{ get;set; }
 
 }
