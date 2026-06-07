@@ -10,7 +10,6 @@ using Ngaq.Ui.StrokeText;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.Avln.StrokeText;
-using Ctx = VmWordListCard;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Icons;
@@ -21,6 +20,7 @@ using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Tsinswreng.Avln.Grid;
 
+using Ctx = VmWordListCard;
 public partial class ViewWordListCard
 	:AppViewBase<Ctx>
 {
