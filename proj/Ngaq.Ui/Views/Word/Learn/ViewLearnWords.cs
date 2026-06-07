@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.Learn;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Markup.Declarative;
 using Avalonia.Media;
@@ -24,7 +25,76 @@ using PC = PsdCls;
 
 public partial class ViewLearnWords
 	:AppViewBase<Ctx>
+	,IViewLearnWord
 {
+	public OpBtn? StartBtn{get;set;}
+	public OpBtn? SaveBtn{get;set;}
+	public OpBtn? ResetBtn{get;set;}
+	public OpBtn? SettingsBtn{get;set;}
+	public ItemsControl? WordListItemsCtrl{get;set;}
+	public ContentControl? WordInfoHost{get;set;}
+	public ViewWordInfo? WordInfoCtrl{get;set;}
+	public List<ViewWordListCard> WordCardCtrls{get;set;} = [];
+
+	[Impl]
+	public IList<IViewWordListCard>? WordListCards{
+		get => WordCardCtrls
+			.Where(x=>x.Parent is not null)
+			.Cast<IViewWordListCard>()
+			.ToList();
+		set{
+			if(value is null){
+				return;
+			}
+			WordCardCtrls = value.OfType<ViewWordListCard>().ToList();
+		}
+	}
+
+	[Impl]
+	public IViewWordInfo? WordInfo{
+		get => WordInfoCtrl;
+		set{
+			if(WordInfoHost is null || value is not ViewWordInfo View){
+				return;
+			}
+			WordInfoCtrl = View;
+			WordInfoHost.Content = View;
+		}
+	}
+
+	[Impl]
+	public async Task<nil> ClickStart(CT Ct){
+		await ClickBtn(StartBtn, Ct);
+		return NIL;
+	}
+
+	[Impl]
+	public async Task<nil> ClickSave(CT Ct){
+		await ClickBtn(SaveBtn, Ct);
+		return NIL;
+	}
+
+	[Impl]
+	public async Task<nil> ClickReset(CT Ct){
+		await ClickBtn(ResetBtn, Ct);
+		return NIL;
+	}
+
+	[Impl]
+	public async Task<nil> ClickSettings(CT Ct){
+		await ClickBtn(SettingsBtn, Ct);
+		return NIL;
+	}
+
+	[Impl]
+	public async Task<nil> ClickWordCard(u64 Pos, CT Ct){
+		var cards = WordListCards;
+		if(cards is null || Pos >= (u64)cards.Count){
+			return NIL;
+		}
+		await cards[(int)Pos].Click(Ct);
+		return NIL;
+	}
 
 	public ViewLearnWords(){
 		Ctx = App.GetRSvc<Ctx>();
@@ -140,12 +210,14 @@ public partial class ViewLearnWords
 				return R;
 			};
 			Row1.A(Btn(), o=>{
+				StartBtn = o;
 				o._Button.SetContent(Hc(
 					Icons.StartLearn()//▶️
 					,T(I[K.Start])
 				));
 				o.SetExe((Ct)=>Ctx?.LoadEtStartAsy(Ct));
 			}).A(Btn(), o=>{ //📁 💾
+				SaveBtn = o;
 				o._Button.SetContent(Hc(
 					Icons.Save()
 					,T(I[K.Save])
@@ -169,12 +241,14 @@ public partial class ViewLearnWords
 					)
 				);
 			}).A(Btn(), o=>{
+				ResetBtn = o;
 				o._Button.SetContent(Hc(//🔄
 					Icons.ResetLearnStatus()
 					,T(I[K.Reset])
 				));
 				o.SetExe((Ct)=>Ctx?.Reset(Ct));
 			}).A(Btn(), o=>{
+				SettingsBtn = o;
 				o._Button.SetContent(Hc(//⚙️
 					Icons.Setting()
 					,T(I[K.Settings])
@@ -229,9 +303,18 @@ public partial class ViewLearnWords
 	//TODO 分頁加載以代虛擬化
 	Control _ListWordCard(){
 		var Ic = new ItemsControl();
+		WordListItemsCtrl = Ic;
 		Ic.SetItemsPanel(()=>{
 			return new VirtualizingStackPanel();
-		}).SetItemTemplate<VmWordListCard>((VmWordCard,b)=>{
+		});
+		Ic.ItemTemplate = new FuncDataTemplate<object?>((Item,b)=>{
+			if(Item is ViewWordListCard ViewCard){
+				WordCardCtrls.Add(ViewCard);
+				return ViewCard;
+			}
+			if(Item is not VmWordListCard VmWordCard){
+				return new TextBlock();
+			}
 			var Grid = new Grid();
 			Grid.SetRowDefs([
 				new(1,GUT.Auto)
@@ -253,6 +336,8 @@ public partial class ViewLearnWords
 				b.LongPressDurationMs = 500;
 				StyBtnWordCard(b.Styles);
 				b.SetContent(new ViewWordListCard(VmWordCard), w=>{
+					w.HostClickBtn = b;
+					WordCardCtrls.Add(w);
 					w.VAlign(x=>x.Stretch)
 					.HAlign(x=>x.Stretch);
 					w.Background = Brushes.Transparent;
@@ -271,7 +356,12 @@ public partial class ViewLearnWords
 
 	Control _WordInfo(){
 		var R = new ViewWordInfo();
-		return R;
+		WordInfoCtrl = R;
+		//?
+		WordInfoHost = new ContentControl{
+			Content = R,
+		};
+		return WordInfoHost;
 	}
 
 	Styles StyBtnWordCard(Styles s){
@@ -297,6 +387,16 @@ public partial class ViewLearnWords
 		;
 		return s;
 	}
+
+	protected async Task<nil> ClickBtn(OpBtn? Btn, CT Ct){
+		if(Btn is null){
+			return NIL;
+		}
+		Btn.PerformClick();
+		while(Btn.State == OpBtn.EState.Working){
+			Ct.ThrowIfCancellationRequested();
+			await Task.Delay(10, Ct);
+		}
+		return NIL;
+	}
 }
-
-
