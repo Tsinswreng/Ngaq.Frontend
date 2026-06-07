@@ -44,37 +44,19 @@ public partial class ViewWordInfo
 		OnCtxChanged();
 	}
 
-	/// <summary>
-	/// 面向頁面契約暴露詞頭文本，只從實際控件讀寫。
-	/// </summary>
+
+	[Impl]
 	public str HeadText{
 		get{return HeadTextCtrl?.Text ?? "";}
-		set{
-			if(HeadTextCtrl is null){
-				return;
-			}
-			HeadTextCtrl.Text = value;
-		}
 	}
 
-	/// <summary>
-	/// 面向頁面契約暴露 description 文本集合，只從實際控件讀寫。
-	/// </summary>
+	[Impl]
 	public IList<str>? Descrs{
 		get{
 			return DescriptionTextCtrls
 				.Where(x => x.Parent is not null)
 				.Select(x => x.Text ?? "")
 				.ToList();
-		}
-		set{
-			if(value is null){
-				return;
-			}
-			var count = Math.Min(DescriptionTextCtrls.Count, value.Count);
-			for(var i = 0; i < count; i++){
-				DescriptionTextCtrls[i].Text = value[i] ?? "";
-			}
 		}
 	}
 

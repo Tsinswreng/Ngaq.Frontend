@@ -1,4 +1,5 @@
 //[2025-06-26T13:37:22.811+08:00_W26-4]
+global using Tsinswreng.CsCore;
 global using BindingMode = Avalonia.Data.BindingMode;
 
 #region Grid
