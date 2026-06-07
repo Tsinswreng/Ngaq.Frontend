@@ -34,32 +34,16 @@ public partial class ViewLearnWords
 	public ItemsControl? WordListItemsCtrl{get;set;}
 	public ContentControl? WordInfoHost{get;set;}
 	public ViewWordInfo? WordInfoCtrl{get;set;}
-	public List<ViewWordListCard> WordCardCtrls{get;set;} = [];
+	public IList<IViewWordListCard> WordCardCtrls{get;set;} = [];
 
 	[Impl]
 	public IList<IViewWordListCard>? WordListCards{
-		get => WordCardCtrls
-			.Where(x=>x.Parent is not null)
-			.Cast<IViewWordListCard>()
-			.ToList();
-		set{
-			if(value is null){
-				return;
-			}
-			WordCardCtrls = value.OfType<ViewWordListCard>().ToList();
-		}
+		get=>WordCardCtrls;
 	}
 
 	[Impl]
 	public IViewWordInfo? WordInfo{
 		get => WordInfoCtrl;
-		set{
-			if(WordInfoHost is null || value is not ViewWordInfo View){
-				return;
-			}
-			WordInfoCtrl = View;
-			WordInfoHost.Content = View;
-		}
 	}
 
 	[Impl]
@@ -307,14 +291,7 @@ public partial class ViewLearnWords
 		Ic.SetItemsPanel(()=>{
 			return new VirtualizingStackPanel();
 		});
-		Ic.ItemTemplate = new FuncDataTemplate<object?>((Item,b)=>{
-			if(Item is ViewWordListCard ViewCard){
-				WordCardCtrls.Add(ViewCard);
-				return ViewCard;
-			}
-			if(Item is not VmWordListCard VmWordCard){
-				return new TextBlock();
-			}
+		Ic.SetItemTemplate<VmWordListCard>((VmWordCard,b)=>{
 			var Grid = new Grid();
 			Grid.SetRowDefs([
 				new(1,GUT.Auto)

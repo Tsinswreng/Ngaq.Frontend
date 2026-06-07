@@ -38,7 +38,7 @@ public interface IViewLearnWord{
 	public Task<nil> ClickWordCard(u64 Pos, CT Ct);
 
 	[Doc(@$"所有單詞卡。顯示在上方。")]
-	public IList<IViewWordListCard>? WordListCards{get;set;}
+	public IList<IViewWordListCard>? WordListCards{get;}
 
 	[Doc(@$"當前單詞信息。顯示在下方。
 	每{nameof(ClickWordCard)}時、此則被改潙該詞之訊。
@@ -47,5 +47,5 @@ public interface IViewLearnWord{
 	
 	當用戶點擊{nameof(ClickStart)}之後、此當示潙{nameof(KeysUiI18nCommon.WordLearningHelpText_)}
 	")]
-	public IViewWordInfo? WordInfo{get;set;}
+	public IViewWordInfo? WordInfo{get;}
 }
