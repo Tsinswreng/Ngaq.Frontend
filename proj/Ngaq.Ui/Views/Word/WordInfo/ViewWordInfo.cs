@@ -30,7 +30,9 @@ using Ctx = VmWordInfo;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWordInfo
-	: AppViewBase<Ctx> {
+	: AppViewBase<Ctx>
+	,IViewWordInfo
+{
 
 	public ViewWordInfo() {
 		Ctx = App.DiOrMk<Ctx>();
@@ -40,6 +42,40 @@ public partial class ViewWordInfo
 			OnCtxChanged();
 		};
 		OnCtxChanged();
+	}
+
+	/// <summary>
+	/// 面向頁面契約暴露詞頭文本，只從實際控件讀寫。
+	/// </summary>
+	public str HeadText{
+		get{return HeadTextCtrl?.Text ?? "";}
+		set{
+			if(HeadTextCtrl is null){
+				return;
+			}
+			HeadTextCtrl.Text = value;
+		}
+	}
+
+	/// <summary>
+	/// 面向頁面契約暴露 description 文本集合，只從實際控件讀寫。
+	/// </summary>
+	public IList<str>? Descrs{
+		get{
+			return DescriptionTextCtrls
+				.Where(x => x.Parent is not null)
+				.Select(x => x.Text ?? "")
+				.ToList();
+		}
+		set{
+			if(value is null){
+				return;
+			}
+			var count = Math.Min(DescriptionTextCtrls.Count, value.Count);
+			for(var i = 0; i < count; i++){
+				DescriptionTextCtrls[i].Text = value[i] ?? "";
+			}
+		}
 	}
 
 	/// 樣式類名枚舉，避免直接硬編碼 class 字符串。
@@ -57,6 +93,8 @@ public partial class ViewWordInfo
 	Control? Splitter;
 	Control? SidePropsPane;
 	Ctx? SubscribedCtx;
+	StrokeTextBlock? HeadTextCtrl;
+	IList<StrokeTextBlock> DescriptionTextCtrls { get; } = [];
 
 	protected nil Style() {
 		Styles.A(
@@ -113,6 +151,7 @@ public partial class ViewWordInfo
 			o.BorderThickness = new(0, 1, 0, 1);
 			o.BorderBrush = new SolidColorBrush(Gray);
 			o.SetChild(TxtBox(), x => {
+				HeadTextCtrl = x;
 				Ctx.Bind(x, x=>x.Text, Vm => Vm.Head);
 				x.FontSize = UiCfg.Inst.BaseFontSize * 1.4;
 				x.StrokeThickness = 4;
@@ -135,6 +174,7 @@ public partial class ViewWordInfo
 			SubscribedCtx = Ctx;
 			SubscribedCtx.PropertyChanged += OnCtxPropertyChanged;
 		}
+		DescriptionTextCtrls.Clear();
 		SyncSidePaneVisibility();
 		return NIL;
 	}
@@ -145,6 +185,9 @@ public partial class ViewWordInfo
 			E.PropertyName == nameof(Ctx.DescriptionWordProps)
 			|| E.PropertyName == nameof(Ctx.SideWordProps)
 		) {
+			if(E.PropertyName == nameof(Ctx.DescriptionWordProps)){
+				DescriptionTextCtrls.Clear();
+			}
 			SyncSidePaneVisibility();
 		}
 	}
@@ -263,6 +306,8 @@ public partial class ViewWordInfo
 	/// description 不顯示灰字標題，正文與編輯圖標分列避免互相覆蓋。
 	Control MkDescriptionPropCard(PoWordProp Prop) {
 		var R = new Border();
+		var ValueTxt = MkPropValueTxt(IsDescriptionPane: true);
+		DescriptionTextCtrls.Add(ValueTxt);
 		R.BorderThickness = new(0, 1, 0, 0);
 		R.BorderBrush = new SolidColorBrush(Gray);
 		R.Padding = new(8, 8);
@@ -273,7 +318,7 @@ public partial class ViewWordInfo
 				new(1, GUT.Auto),
 			]);
 			o
-			.A(MkPropValueTxt(IsDescriptionPane: true), o => {
+			.A(ValueTxt, o => {
 				o.Text = GetPropValueText(Prop);
 				o.HorizontalAlignment = HAlign.Left;
 				o.VerticalAlignment = VAlign.Top;
