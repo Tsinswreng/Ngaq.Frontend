@@ -7,22 +7,22 @@ namespace Ngaq.Ui.Views.Word.WordCard;
 /// 面向用戶可觀察/可操作語義，不暴露具體控件類型。
 public interface IViewWordListCard {
 	/// 卡片序號文本。
-	public str IndexText { get; }
+	public str? IndexText { get; }
 
 	/// 單詞語言文本。
-	public str LangText { get; }
+	public str? LangText { get; }
 
 	/// 單詞詞頭文本。
-	public str HeadText { get; }
+	public str? HeadText { get; }
 
 	/// 學習歷史摘要文本。
-	public str LearnHistoryText { get; }
+	public str? LearnHistoryText { get; }
 
 	/// 最近一次學習時間文本。
-	public str LastLearnedTimeText { get; }
+	public str? LastLearnedTimeText { get; }
 
 	/// 權重文本。
-	public str WeightText { get; }
+	public str? WeightText { get; }
 
 	[Doc(@$"詞頭文ʹ色
 	添加次數	詞頭文色
@@ -33,7 +33,7 @@ public interface IViewWordListCard {
 	5	紫
 	>=6	紅
 	")]
-	public IBrush HeadFontColor{get;}
+	public IBrush? HeadFontColor{get;}
 
 	[Doc(@$"單詞卡最左豎邊框之色
 	此輪中
@@ -41,7 +41,7 @@ public interface IViewWordListCard {
 	記得時潙綠
 	忘時潙紅
 	")]
-	public IBrush LearnedColor{get;}
+	public IBrush? LearnedColor{get;}
 
 	[Doc(@$"點擊單詞卡片")]
 	public Task<nil> Click(CT Ct);

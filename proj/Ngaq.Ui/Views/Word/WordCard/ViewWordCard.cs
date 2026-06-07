@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Word.WordCard;
 
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Declarative;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -17,13 +18,59 @@ using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
+using Tsinswreng.AvlnTools.Controls;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Tsinswreng.Avln.Grid;
 
 using Ctx = VmWordListCard;
 public partial class ViewWordListCard
 	:AppViewBase<Ctx>
+	,IViewWordListCard
 {
+	public StrokeTextBlock? IndexTextCtrl;
+	public StrokeTextBlock? LangTextCtrl;
+	public StrokeTextBlock? LearnHistoryTextCtrl;
+	public StrokeTextBlock? LastLearnedTimeTextCtrl;
+	public StrokeTextBlock? WeightTextCtrl;
+	public StrokeTextBlock? HeadTextCtrl;
+	public SwipeLongPressBtn? HostClickBtn{get;set;}
+
+	public str? IndexText{
+		get{return IndexTextCtrl?.Text;}
+	}
+
+	public str? LangText{
+		get{return LangTextCtrl?.Text;}
+	}
+
+	public str? HeadText{
+		get{return HeadTextCtrl?.Text;}
+	}
+
+	public str? LearnHistoryText{
+		get{return LearnHistoryTextCtrl?.Text;}
+	}
+
+	public str? LastLearnedTimeText{
+		get{return LastLearnedTimeTextCtrl?.Text;}
+	}
+
+	public str? WeightText{
+		get{return WeightTextCtrl?.Text;}
+	}
+
+	public IBrush? HeadFontColor{
+		get{return HeadTextCtrl?.Foreground;}
+	}
+
+	public IBrush? LearnedColor{
+		get{return HostClickBtn?.BorderBrush;}
+	}
+
+	public Task<nil> Click(CT Ct){
+		HostClickBtn?.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+		return Task.FromResult<nil>(NIL);
+	}
 
 	public static ContextMenu MkWordCardCtxMenu(
 		ViewModelBase? Ctx
@@ -177,11 +224,13 @@ public partial class ViewWordListCard
 				new(13, GUT.Star),
 			]);
 			LangGrid.A(TxtBox(), o=>{
+				IndexTextCtrl = o;
 				o.FontSize = UiCfg.Inst.BaseFontSize*0.8;
 				Ctx.Bind(o, o=>o.Text,x=>x.Index);
 			}).A(TxtBox(), o=>{
 				o.Text = "　";
 			}).A(TxtBox(), o=>{
+				LangTextCtrl = o;
 				o.VerticalAlignment = VAlign.Center;
 				Ctx.Bind(o, o=>o.Text, x=>x.Lang);
 				o.Foreground = Brushes.LightGray;
@@ -194,6 +243,7 @@ public partial class ViewWordListCard
 				new(1, GUT.Star),
 			]);
 			HeadBox.A(TxtBox(), o=>{
+				HeadTextCtrl = o;
 				o.VerticalAlignment = VAlign.Center;
 				o.FontSize = UiCfg.Inst.BaseFontSize*1.2;
 				Ctx.Bind(o, o=>o.Text, x=>x.Head);
@@ -229,6 +279,7 @@ public partial class ViewWordListCard
 			var Colon = ()=>new TextBlock(){Text = ":"};
 
 			R.A(TxtBox(), o=>{
+				LearnHistoryTextCtrl = o;
 				Ctx.Bind(
 					o, o=>o.Text,x=>x
 					,Converter: new FnConvtr<Ctx?, str>((x)=>x?.ToLearnHistoryRepr()??"")
@@ -237,6 +288,7 @@ public partial class ViewWordListCard
 
 			//LastReviewTime
 			R.A(TxtBox(), o=>{
+				LastLearnedTimeTextCtrl = o;
 				Ctx.Bind(
 					o,o=>o.Text,x=>x.LastLearnedTime
 					,Converter: new FnConvtr<i64, str>(x=>{
@@ -248,6 +300,7 @@ public partial class ViewWordListCard
 			})
 			.A(new TextBlock{Text = "\t"})
 			.A(TxtBox(), o=>{
+				WeightTextCtrl = o;
 				Ctx.Bind(
 					o,o=>o.Text,x=>x.Weight
 					,Converter: new FnConvtr<f64?,str>((x,p)=>
