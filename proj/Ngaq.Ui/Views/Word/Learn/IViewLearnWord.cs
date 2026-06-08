@@ -1,4 +1,5 @@
 using Ngaq.Core.Shared.Word.Models.Learn_;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.I18n;
 using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Ui.Views.Word.WordInfo;
@@ -6,7 +7,7 @@ using Tsinswreng.CsCore;
 
 namespace Ngaq.Ui.Views.Word.Learn;
 
-public interface IViewLearnWord{
+public interface IViewLearnWord:IViewBase{
 
 	[Doc(@$"
 	點擊開始按鈕。

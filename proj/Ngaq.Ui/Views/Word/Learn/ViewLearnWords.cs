@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.Learn;
 
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
@@ -94,6 +95,8 @@ public partial class ViewLearnWords
 	GridStack Root = new GridStack(IsRow: true);
 	Panel Menu;
 
+	[Impl]
+	public event PropertyChangingEventHandler? PropertyChanging;
 
 	void OnAutoPronounceResult(DtoWordCardPronounceResult Result){
 		ViewWordListCard.HandlePronounceResult(Ctx, Result);
