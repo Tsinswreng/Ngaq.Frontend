@@ -32,7 +32,6 @@ public partial class ViewLearnWords
 	public OpBtn? ResetBtn{get;set;}
 	public OpBtn? SettingsBtn{get;set;}
 	public ItemsControl? WordListItemsCtrl{get;set;}
-	public ContentControl? WordInfoHost{get;set;}
 	public ViewWordInfo? WordInfoCtrl{get;set;}
 	public IList<IViewWordListCard> WordCardCtrls{get;set;} = [];
 
@@ -334,11 +333,7 @@ public partial class ViewLearnWords
 	Control _WordInfo(){
 		var R = new ViewWordInfo();
 		WordInfoCtrl = R;
-		//?
-		WordInfoHost = new ContentControl{
-			Content = R,
-		};
-		return WordInfoHost;
+		return R;
 	}
 
 	Styles StyBtnWordCard(Styles s){
