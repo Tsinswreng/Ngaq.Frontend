@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Tools;
 using Avalonia.Controls;
 using Avalonia.Threading;
+using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 
 public static class ToolBtn{
@@ -22,6 +23,11 @@ public static class ToolBtn{
 	extension<T>(T z)
 		where T: OpBtn
 	{
+
+		public IBtn ToIBtn(){
+
+		}
+
 		public async Task<nil> ClickAndWaitDone(CT Ct){
 			z.PerformClick();
 			while(z.State == OpBtn.EState.Working){
