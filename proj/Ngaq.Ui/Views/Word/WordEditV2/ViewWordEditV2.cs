@@ -5,7 +5,6 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
-using Avalonia.Threading;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -43,13 +42,19 @@ public partial class ViewWordEditV2
 
 	[Impl]
 	public async Task<nil> ClickDelete(CT Ct){
-		await ClickBtn(DeleteBtn, Ct);
+		if(DeleteBtn is null){
+			return NIL;
+		}
+		await DeleteBtn.ClickAndWaitDone(Ct);
 		return NIL;
 	}
 
 	[Impl]
 	public async Task<nil> ClickSave(CT Ct){
-		await ClickBtn(SaveBtn, Ct);
+		if(SaveBtn is null){
+			return NIL;
+		}
+		await SaveBtn.ClickAndWaitDone(Ct);
 		return NIL;
 	}
 
@@ -132,7 +137,7 @@ public partial class ViewWordEditV2
 			o._Button.StretchCenter();
 			o.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.SetExe(ct=>Ctx?.Delete(ct));
-			HookDoneEvent(o, ()=>DoneDelete?.Invoke(this, EventArgs.Empty));
+			o.HookDoneEvent(()=>DoneDelete?.Invoke(this, EventArgs.Empty));
 		})
 		.A(new OpBtn(), o=>{
 			SaveBtn = o;
@@ -140,49 +145,8 @@ public partial class ViewWordEditV2
 			o._Button.StretchCenter();
 			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.SetExe(ct=>Ctx?.Save(ct));
-			HookDoneEvent(o, ()=>DoneSave?.Invoke(this, EventArgs.Empty));
+			o.HookDoneEvent(()=>DoneSave?.Invoke(this, EventArgs.Empty));
 		});
 		return g.Grid;
-	}
-
-	void HookDoneEvent(OpBtn Btn, Action OnDone){
-		var oldOk = Btn.FnOk;
-		var oldFail = Btn.FnFail;
-		var oldCancel = Btn.FnCancel;
-		Btn.FnOk = ()=>{
-			oldOk?.Invoke();
-			PostDone(OnDone);
-			return null;
-		};
-		Btn.FnFail = ex=>{
-			oldFail?.Invoke(ex);
-			PostDone(OnDone);
-			return null;
-		};
-		Btn.FnCancel = ()=>{
-			oldCancel?.Invoke();
-			PostDone(OnDone);
-			return null;
-		};
-	}
-
-	void PostDone(Action OnDone){
-		Dispatcher.UIThread.Post(()=>{
-			Dispatcher.UIThread.Post(()=>{
-				OnDone();
-			});
-		});
-	}
-
-	async Task<nil> ClickBtn(OpBtn? Btn, CT Ct){
-		if(Btn is null){
-			return NIL;
-		}
-		Btn.PerformClick();
-		while(Btn.State == OpBtn.EState.Working){
-			Ct.ThrowIfCancellationRequested();
-			await Task.Delay(10, Ct);
-		}
-		return NIL;
 	}
 }

@@ -439,11 +439,6 @@ public partial class ViewLearnWords
 		if(Btn is null){
 			return NIL;
 		}
-		Btn.PerformClick();
-		while(Btn.State == OpBtn.EState.Working){
-			Ct.ThrowIfCancellationRequested();
-			await Task.Delay(10, Ct);
-		}
-		return NIL;
+		return await Btn.ClickAndWaitDone(Ct);
 	}
 }

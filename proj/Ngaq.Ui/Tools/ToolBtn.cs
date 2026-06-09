@@ -1,5 +1,7 @@
 namespace Ngaq.Ui.Tools;
 using Avalonia.Controls;
+using Avalonia.Threading;
+using Ngaq.Ui.Infra.Ctrls;
 
 public static class ToolBtn{
 	extension<T>(T z)
@@ -15,6 +17,49 @@ public static class ToolBtn{
 			o.VerticalContentAlignment = VAlign.Center;
 			return o;
 		}
+	}
+
+	extension<T>(T z)
+		where T: OpBtn
+	{
+		public async Task<nil> ClickAndWaitDone(CT Ct){
+			z.PerformClick();
+			while(z.State == OpBtn.EState.Working){
+				Ct.ThrowIfCancellationRequested();
+				await Task.Delay(10, Ct);
+			}
+			return NIL;
+		}
+
+		public T HookDoneEvent(Action OnDone){
+			var oldOk = z.FnOk;
+			var oldFail = z.FnFail;
+			var oldCancel = z.FnCancel;
+			z.FnOk = ()=>{
+				oldOk?.Invoke();
+				ToolBtn.PostDone(OnDone);
+				return null;
+			};
+			z.FnFail = ex=>{
+				oldFail?.Invoke(ex);
+				ToolBtn.PostDone(OnDone);
+				return null;
+			};
+			z.FnCancel = ()=>{
+				oldCancel?.Invoke();
+				ToolBtn.PostDone(OnDone);
+				return null;
+			};
+			return z;
+		}
+	}
+
+	static void PostDone(Action OnDone){
+		Dispatcher.UIThread.Post(()=>{
+			Dispatcher.UIThread.Post(()=>{
+				OnDone();
+			});
+		});
 	}
 
 }
