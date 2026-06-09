@@ -1,15 +1,10 @@
+using Avalonia.Controls;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 
 namespace Ngaq.Ui.Views.Word.WordPropPage;
 
 public interface IViewWordPropPage{
 	public IBtn BtnAddProp{get;}
-	public IList<IViewWordPropRow>? Rows{get;}
-}
-
-public interface IViewWordPropRow{
-	public str? No{get;}
-	public str? Key{get;}
-	public str? Values{get;}
-
+	public TreeDataGrid? Rows{get;}
 }

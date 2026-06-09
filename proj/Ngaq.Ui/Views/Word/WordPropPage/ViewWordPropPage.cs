@@ -18,13 +18,25 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Avalonia;
 using Avalonia.Interactivity;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.Avln.Grid;
 
 /// 屬性分頁：列表 + 新增，點行進入編輯頁。
-public partial class ViewWordPropPage: AppViewBase{
+public partial class ViewWordPropPage
+	: AppViewBase
+	, IViewWordPropPage
+{
 	public VmWordPropPage? Ctx{
 		get{return DataContext as VmWordPropPage;}
 		set{DataContext = value;}
+	}
+
+	[Impl]
+	public IBtn BtnAddProp{get;set;} = new Btn();
+
+	[Impl]
+	public TreeDataGrid? Rows{
+		get{return Grid;}
 	}
 
 	TreeDataGrid? Grid;
@@ -43,20 +55,22 @@ public partial class ViewWordPropPage: AppViewBase{
 			new(9, GUT.Star),
 		]);
 		root.A(MkBtnAdd(), o=>{
-			o.Click += (s, e)=>{
+			BtnAddProp = o.ToIBtn();
+			o.SetExe(ct=>{
 				Ctx?.AddRow();
 				RebuildGrid();
-			};
+				return Task.FromResult(NIL);
+			});
 		});
 		root.A(MkGrid());
 		Content = root.Grid;
 	}
 
-	Button MkBtnAdd(){
-		var o = new Button();
+	OpBtn MkBtnAdd(){
+		var o = new OpBtn();
 		o.Margin = new(10, 10, 10, 4);
-		o.StretchCenter();
-		o.Content = Icons.Add().ToIcon().WithText(" "+I[K.AddProp]);
+		o._Button.StretchCenter();
+		o.BtnContent = Icons.Add().ToIcon().WithText(" "+I[K.AddProp]);
 		return o;
 	}
 
