@@ -25,7 +25,7 @@ public static class ToolBtn{
 	{
 
 		public IBtn ToIBtn(){
-
+			return new OpBtnAsIBtn(z);
 		}
 
 		public async Task<nil> ClickAndWaitDone(CT Ct){
@@ -66,6 +66,27 @@ public static class ToolBtn{
 				OnDone();
 			});
 		});
+	}
+
+	sealed class OpBtnAsIBtn: IBtn{
+		readonly OpBtn _OpBtn;
+
+		public OpBtnAsIBtn(OpBtn OpBtn){
+			_OpBtn = OpBtn;
+			_OpBtn.HookDoneEvent(()=>{
+				Done?.Invoke(this, EventArgs.Empty);
+			});
+		}
+
+		public obj? Content{
+			get{return _OpBtn.BtnContent;}
+		}
+
+		public async Task<nil> Click(CT Ct){
+			return await _OpBtn.ClickAndWaitDone(Ct);
+		}
+
+		public event EventHandler? Done;
 	}
 
 }

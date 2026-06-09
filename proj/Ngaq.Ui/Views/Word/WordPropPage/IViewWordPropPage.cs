@@ -1,8 +1,10 @@
+using Ngaq.Ui.Infra;
+
 namespace Ngaq.Ui.Views.Word.WordPropPage;
 
 public interface IViewWordPropPage{
-	public Task<nil> ClickAddProp(CT Ct);
-	public event EventHandler? DoneAddProp;
+	public IBtn BtnAddProp{get;}
+	public IList<IViewWordPropRow>? Rows{get;}
 }
 
 public interface IViewWordPropRow{
