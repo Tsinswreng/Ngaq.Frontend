@@ -13,6 +13,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Tools;
@@ -158,11 +159,22 @@ public partial class ViewWordInfo
 		}
 		DescriptionTextCtrls.Clear();
 		SyncSidePaneVisibility();
+		NotifyOutputChanged(nameof(HeadText));
+		NotifyOutputChanged(nameof(Descrs));
 		return NIL;
 	}
 
 	/// 其他 prop 集合變更後同步刷新右欄顯示狀態。
 	protected void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E) {
+		if (E.PropertyName == nameof(Ctx.Head)) {
+			NotifyOutputChanged(nameof(HeadText));
+		}
+		if (
+			E.PropertyName == nameof(Ctx.DescriptionWordProps)
+			|| E.PropertyName == nameof(Ctx.Descrs)
+		) {
+			NotifyOutputChanged(nameof(Descrs));
+		}
 		if (
 			E.PropertyName == nameof(Ctx.DescriptionWordProps)
 			|| E.PropertyName == nameof(Ctx.SideWordProps)
@@ -172,6 +184,13 @@ public partial class ViewWordInfo
 			}
 			SyncSidePaneVisibility();
 		}
+	}
+
+	protected nil NotifyOutputChanged(str PropertyName){
+		Dispatcher.UIThread.Post(() => {
+			RaisePropertyChanged(PropertyName);
+		});
+		return NIL;
 	}
 
 	/// 主內容區爲左右分欄：左側 description，右側其他 prop，中間細分隔條可拖拽。

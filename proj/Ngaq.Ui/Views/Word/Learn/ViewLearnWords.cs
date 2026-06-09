@@ -1,5 +1,7 @@
 namespace Ngaq.Ui.Views.Word.Learn;
 
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
@@ -34,7 +36,9 @@ public partial class ViewLearnWords
 	public OpBtn? SettingsBtn{get;set;}
 	public ItemsControl? WordListItemsCtrl{get;set;}
 	public ViewWordInfo? WordInfoCtrl{get;set;}
-	public IList<IViewWordListCard> WordCardCtrls{get;set;} = [];
+	public ObservableCollection<IViewWordListCard> WordCardCtrls{get;set;} = [];
+	protected Ctx? SubscribedCtx;
+	protected ObservableCollection<VmWordListCard>? SubscribedVmWordCards;
 
 	[Impl]
 	public IList<IViewWordListCard>? WordListCards{
@@ -88,9 +92,14 @@ public partial class ViewLearnWords
 		Style();
 		Menu = _Menu();
 		Render();
+		DataContextChanged += (s,e)=>{
+			OnCtxChanged();
+		};
 		Loaded += (s,e)=>{
 			_OnLoad();
 		};
+		WordCardCtrls.CollectionChanged += OnWordCardCtrlsChanged;
+		OnCtxChanged();
 	}
 	GridStack Root = new GridStack(IsRow: true);
 	Panel Menu;
@@ -100,6 +109,62 @@ public partial class ViewLearnWords
 
 	void OnAutoPronounceResult(DtoWordCardPronounceResult Result){
 		ViewWordListCard.HandlePronounceResult(Ctx, Result);
+	}
+
+	protected nil OnCtxChanged(){
+		if(SubscribedCtx is not null){
+			SubscribedCtx.PropertyChanged -= OnCtxPropertyChanged;
+			UnsubscribeVmWordCards(SubscribedVmWordCards);
+			SubscribedCtx = null;
+			SubscribedVmWordCards = null;
+		}
+		if(Ctx is not null){
+			SubscribedCtx = Ctx;
+			SubscribedCtx.PropertyChanged += OnCtxPropertyChanged;
+			SubscribeVmWordCards(Ctx.WordCards);
+		}
+		return NIL;
+	}
+
+	protected void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName == nameof(Ctx.WordCards) && Ctx is not null){
+			UnsubscribeVmWordCards(SubscribedVmWordCards);
+			SubscribeVmWordCards(Ctx.WordCards);
+		}
+	}
+
+	protected nil SubscribeVmWordCards(ObservableCollection<VmWordListCard>? WordCards){
+		SubscribedVmWordCards = WordCards;
+		if(SubscribedVmWordCards is not null){
+			SubscribedVmWordCards.CollectionChanged += OnVmWordCardsChanged;
+		}
+		return NIL;
+	}
+
+	protected nil UnsubscribeVmWordCards(ObservableCollection<VmWordListCard>? WordCards){
+		if(WordCards is not null){
+			WordCards.CollectionChanged -= OnVmWordCardsChanged;
+		}
+		return NIL;
+	}
+
+	protected void OnVmWordCardsChanged(object? Sender, NotifyCollectionChangedEventArgs E){
+		if(E.Action == NotifyCollectionChangedAction.Reset){
+			WordCardCtrls.Clear();
+		}
+	}
+
+	protected void OnWordCardCtrlsChanged(object? Sender, NotifyCollectionChangedEventArgs E){
+		RaisePropertyChanged(nameof(WordListCards));
+	}
+
+	protected void OnWordInfoPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(
+			E.PropertyName == nameof(IViewWordInfo.HeadText)
+			|| E.PropertyName == nameof(IViewWordInfo.Descrs)
+		){
+			RaisePropertyChanged(nameof(WordInfo));
+		}
 	}
 
 	public partial class Cls{
@@ -335,6 +400,7 @@ public partial class ViewLearnWords
 
 	Control _WordInfo(){
 		var R = new ViewWordInfo();
+		R.PropertyChanged += OnWordInfoPropertyChanged;
 		WordInfoCtrl = R;
 		return R;
 	}
