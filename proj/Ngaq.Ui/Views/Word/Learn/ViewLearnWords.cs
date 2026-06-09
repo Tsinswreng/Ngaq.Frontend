@@ -98,14 +98,30 @@ public partial class ViewLearnWords
 		Loaded += (s,e)=>{
 			_OnLoad();
 		};
-		WordCardCtrls.CollectionChanged += OnWordCardCtrlsChanged;
+
 		OnCtxChanged();
+		InitIView();
 	}
-	GridStack Root = new GridStack(IsRow: true);
+
+	//來自IView的成員初始化都寫在此
+	void InitIView(){
+		WordCardCtrls.CollectionChanged += (s,e)=>{
+			RaisePropertyChanged(nameof(WordListCards));
+		};
+		WordInfoCtrl?.PropertyChanged += (s,e)=>{
+			if(
+				e.PropertyName == nameof(IViewWordInfo.HeadText)
+				|| e.PropertyName == nameof(IViewWordInfo.Descrs)
+			){
+				RaisePropertyChanged(nameof(WordInfo));
+			}
+		};
+	}
+
+
+	public GridStack Root = new GridStack(IsRow: true);
 	Panel Menu;
 
-	[Impl]
-	public event PropertyChangingEventHandler? PropertyChanging;
 
 	void OnAutoPronounceResult(DtoWordCardPronounceResult Result){
 		ViewWordListCard.HandlePronounceResult(Ctx, Result);
@@ -154,18 +170,9 @@ public partial class ViewLearnWords
 		}
 	}
 
-	protected void OnWordCardCtrlsChanged(object? Sender, NotifyCollectionChangedEventArgs E){
-		RaisePropertyChanged(nameof(WordListCards));
-	}
 
-	protected void OnWordInfoPropertyChanged(object? Sender, PropertyChangedEventArgs E){
-		if(
-			E.PropertyName == nameof(IViewWordInfo.HeadText)
-			|| E.PropertyName == nameof(IViewWordInfo.Descrs)
-		){
-			RaisePropertyChanged(nameof(WordInfo));
-		}
-	}
+
+
 
 	public partial class Cls{
 		public const str MenuBtn = nameof(MenuBtn);
@@ -346,6 +353,7 @@ public partial class ViewLearnWords
 		}).A(new GridSplitter(), o=>{
 			o.GrayBarWith3Dots();
 		}).A(_WordInfo(), o=>{
+			WordInfoCtrl = o;
 			Ctx.Bind(o, o.PropDataContext,x=>x.CurWordInfo, Mode: BindingMode.TwoWay);
 		});
 		return NIL;
@@ -398,10 +406,8 @@ public partial class ViewLearnWords
 		return Ic;
 	}
 
-	Control _WordInfo(){
+	ViewWordInfo _WordInfo(){
 		var R = new ViewWordInfo();
-		R.PropertyChanged += OnWordInfoPropertyChanged;
-		WordInfoCtrl = R;
 		return R;
 	}
 
