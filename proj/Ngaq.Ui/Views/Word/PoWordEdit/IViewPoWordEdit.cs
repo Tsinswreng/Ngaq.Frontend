@@ -9,9 +9,4 @@ public interface IViewPoWordEdit{
 	public str? BizCreatedAt{get;set;}
 	public str? BizUpdatedAt{get;set;}
 	public str? DelAt{get;set;}
-	public Task<nil> ClickDelete(CT Ct);
-	public event Func<CT, Task<nil>>? DoneDelete;
-
-	public Task<nil> ClickSave(CT Ct);
-	public event Func<CT, Task<nil>>? DoneSave;
 }
