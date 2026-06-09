@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using Ngaq.Ui;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -22,7 +23,16 @@ using Ctx = VmWordEditV2;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 單詞編輯主頁：僅承擔三個分頁容器與全局保存/刪除。
-public partial class ViewWordEditV2: AppViewBase<Ctx>{
+public partial class ViewWordEditV2
+	: AppViewBase<Ctx>
+	, IViewWordEditV2
+{
+	public OpBtn? DeleteBtn{get;set;}
+	public OpBtn? SaveBtn{get;set;}
+	public IViewPoWordEdit? PoWordEdit{get;set;}
+	public event EventHandler? DoneDelete;
+	public event EventHandler? DoneSave;
+
 	public ViewWordEditV2(){
 		Ctx = App.DiOrMk<Ctx>();
 		Render();
@@ -30,6 +40,18 @@ public partial class ViewWordEditV2: AppViewBase<Ctx>{
 	}
 
 	GridStack Root = new(IsRow: true);
+
+	[Impl]
+	public async Task<nil> ClickDelete(CT Ct){
+		await ClickBtn(DeleteBtn, Ct);
+		return NIL;
+	}
+
+	[Impl]
+	public async Task<nil> ClickSave(CT Ct){
+		await ClickBtn(SaveBtn, Ct);
+		return NIL;
+	}
 
 	void Render(){
 		Content = Root.Grid;
@@ -65,10 +87,12 @@ public partial class ViewWordEditV2: AppViewBase<Ctx>{
 
 	Control MkTabs(){
 		var tab = new TabControl();
+		var poWordEdit = new ViewPoWordEdit{Ctx = Ctx?.PoWordEdit};
+		PoWordEdit = poWordEdit;
 		tab.Bind(tab.PropSelectedIndex, CBE.Mk<Ctx>(x=>x.TabIndex, Mode: BindingMode.TwoWay));
 		tab.Items.A(new TabItem(), o=>{
 			o.Header = I[K.Basic];
-			o.Content = new ViewPoWordEdit{Ctx = Ctx?.PoWordEdit};
+			o.Content = poWordEdit;
 		})
 		.A(new TabItem(), o=>{
 			o.Header = I[K.Props];
@@ -103,17 +127,62 @@ public partial class ViewWordEditV2: AppViewBase<Ctx>{
 		g.Grid.Margin = new(10, 8, 10, 10);
 
 		g.A(new OpBtn(), o=>{
+			DeleteBtn = o;
 			o._Button.Background = UiCfg.Inst.DelBtnBg;
 			o._Button.StretchCenter();
 			o.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
 			o.SetExe(ct=>Ctx?.Delete(ct));
+			HookDoneEvent(o, ()=>DoneDelete?.Invoke(this, EventArgs.Empty));
 		})
 		.A(new OpBtn(), o=>{
+			SaveBtn = o;
 			o._Button.Background = UiCfg.Inst.MainColor;
 			o._Button.StretchCenter();
 			o.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
 			o.SetExe(ct=>Ctx?.Save(ct));
+			HookDoneEvent(o, ()=>DoneSave?.Invoke(this, EventArgs.Empty));
 		});
 		return g.Grid;
+	}
+
+	void HookDoneEvent(OpBtn Btn, Action OnDone){
+		var oldOk = Btn.FnOk;
+		var oldFail = Btn.FnFail;
+		var oldCancel = Btn.FnCancel;
+		Btn.FnOk = ()=>{
+			oldOk?.Invoke();
+			PostDone(OnDone);
+			return null;
+		};
+		Btn.FnFail = ex=>{
+			oldFail?.Invoke(ex);
+			PostDone(OnDone);
+			return null;
+		};
+		Btn.FnCancel = ()=>{
+			oldCancel?.Invoke();
+			PostDone(OnDone);
+			return null;
+		};
+	}
+
+	void PostDone(Action OnDone){
+		Dispatcher.UIThread.Post(()=>{
+			Dispatcher.UIThread.Post(()=>{
+				OnDone();
+			});
+		});
+	}
+
+	async Task<nil> ClickBtn(OpBtn? Btn, CT Ct){
+		if(Btn is null){
+			return NIL;
+		}
+		Btn.PerformClick();
+		while(Btn.State == OpBtn.EState.Working){
+			Ct.ThrowIfCancellationRequested();
+			await Task.Delay(10, Ct);
+		}
+		return NIL;
 	}
 }
