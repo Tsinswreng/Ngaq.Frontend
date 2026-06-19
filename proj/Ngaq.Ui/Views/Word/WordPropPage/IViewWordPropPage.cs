@@ -7,4 +7,5 @@ namespace Ngaq.Ui.Views.Word.WordPropPage;
 public interface IViewWordPropPage{
 	public IBtn BtnAddProp{get;}
 	public TreeDataGrid? Rows{get;}
+	
 }

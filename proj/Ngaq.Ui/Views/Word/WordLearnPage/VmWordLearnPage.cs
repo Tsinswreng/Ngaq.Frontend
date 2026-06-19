@@ -3,10 +3,12 @@ namespace Ngaq.Ui.Views.Word.WordLearnPage;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using Ngaq.Core.Infra;
+using Ngaq.Core.Model.Po.Learn_;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Views.Word;
 using Tsinswreng.CsTempus;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
@@ -19,6 +21,15 @@ public partial class VmWordLearnPage: ViewModelBase{
 		set{SetProperty(ref field, value);}
 	} = [];
 
+	/// 已標記刪除的行，保存時走 Del，成功後清空。
+	public List<VmWordLearnRow> RemovedRows{get;} = [];
+
+	/// 新增的行（DmlState == Added），保存時走 BatAdd。
+	public IEnumerable<VmWordLearnRow> AddedRows => Rows.Where(r => r.DmlState == EDmlState.Added);
+
+	/// 已修改的行（DmlState == Modified），保存時走 BatUpd。
+	public IEnumerable<VmWordLearnRow> ModifiedRows => Rows.Where(r => r.DmlState == EDmlState.Modified);
+
 	public nil LoadFromPoLearns(IList<PoWordLearn> Learns){
 		Rows = new ObservableCollection<VmWordLearnRow>(Learns.Select(VmWordLearnRow.FromPo));
 		return NIL;
@@ -29,13 +40,29 @@ public partial class VmWordLearnPage: ViewModelBase{
 		return NIL;
 	}
 
+	/// 新增行直接移除；已存在的行標記爲 Removed，保存時再刪。
 	public nil RemoveRow(VmWordLearnRow Row){
-		Rows.Remove(Row);
+		if(Row.DmlState == EDmlState.Added){
+			Rows.Remove(Row);
+		}else{
+			Row.DmlState = EDmlState.Removed;
+			Rows.Remove(Row);
+			RemovedRows.Add(Row);
+		}
 		return NIL;
 	}
 
 	public nil RequestEdit(VmWordLearnRow Row){
 		OnEditRequested?.Invoke(Row);
+		return NIL;
+	}
+
+	/// 保存成功後重置所有行狀態。
+	public nil OnSaved(){
+		foreach(var row in Rows){
+			row.DmlState = EDmlState.Unchanged;
+		}
+		RemovedRows.Clear();
 		return NIL;
 	}
 
@@ -64,14 +91,28 @@ public partial class VmWordLearnRow: ViewModelBase{
 
 	public PoWordLearn Raw{get;set;} = new();
 
+	/// 行記錄 DML 狀態：決定保存時走 BatAdd/BatUpd/Del。
+	public EDmlState DmlState{get;set;}
+
 	public i32 LearnResultIndex{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = 0;
+
+	/// 行記錄 Id（僅供顯示，只讀）。
+	public str IdText => Raw.Id.ToString();
 
 	public str BizCreatedAtIso{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = UnixMs.Now().ToIso();
 
 	public str BizCreatedAtDisplay{
@@ -90,13 +131,21 @@ public partial class VmWordLearnRow: ViewModelBase{
 	public str LearnResultText => GetLearnResultByIndex(LearnResultIndex).ToString();
 	public str LearnResultDisplayText => TranslateLearnResult(GetLearnResultByIndex(LearnResultIndex));
 
+	/// 只有 Unchanged → Modified 才切換，保持 Added / Removed 不被意外覆蓋。
+	void MarkModified(){
+		if(DmlState == EDmlState.Unchanged){
+			DmlState = EDmlState.Modified;
+		}
+	}
+
 	public static VmWordLearnRow NewRow(){
 		return new VmWordLearnRow{
-			// 新增行必須保持空 Id，保存時才能走 BatAdd 而不是誤走 BatUpd。
 			Raw = new PoWordLearn{
-				Id = default,
+				Id = new IdWordLearn(),
 			},
 			LearnResultIndex = 0,
+			// 放最後，覆蓋屬性初始化時觸發的 MarkModified
+			DmlState = EDmlState.Added,
 		};
 	}
 
@@ -105,6 +154,8 @@ public partial class VmWordLearnRow: ViewModelBase{
 			Raw = (PoWordLearn)Po.ShallowCloneSelf(),
 			LearnResultIndex = GetLearnResultIndex(Po.LearnResult),
 			BizCreatedAtIso = Po.BizCreatedAt.ToIso(),
+			// 放最後，覆蓋屬性初始化時觸發的 MarkModified
+			DmlState = EDmlState.Unchanged,
 		};
 	}
 

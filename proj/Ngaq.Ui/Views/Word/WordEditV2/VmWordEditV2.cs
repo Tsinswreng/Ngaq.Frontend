@@ -3,6 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Model.Po.Learn_;
 using Ngaq.Core.Shared.Word.Models.Learn_;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Learn;
@@ -117,7 +118,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			Props = [],
 			Learns = [
 				new PoWordLearn{
-					Id = default,
+					Id = new IdWordLearn(),
 					LearnResult = ELearn.Add,
 					BizCreatedAt = now,
 				}
@@ -191,7 +192,6 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			return NIL;
 		}
 		var dbCtx = UserCtxMgr.GetDbUserCtx();
-		var srcWord = Src?.AsOrToJnWord();
 		var oldId = Draft.Word.Id;
 		var finalId = await UpdRootAndGetFinalId(dbCtx, Ct);
 		var hasMovedToOtherWord = oldId != finalId;
@@ -199,8 +199,11 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			Draft.SetIdEtEnsureFKey(finalId);
 		}
 
-		await SavePropsByDiff(dbCtx, srcWord, Draft, hasMovedToOtherWord, Ct);
-		await SaveLearnsByDiff(dbCtx, srcWord, Draft, hasMovedToOtherWord, Ct);
+		var wordId = Draft.Word.Id;
+		await SavePropsAtomized(dbCtx, wordId, Ct);
+		await SaveLearnsAtomized(dbCtx, wordId, Ct);
+		WordPropPage.OnSaved();
+		WordLearnPage.OnSaved();
 		return NIL;
 	}
 
@@ -216,79 +219,75 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 		return resp.FinalId;
 	}
 
-	async Task<nil> SavePropsByDiff(
-		IDbUserCtx DbCtx,
-		IJnWord? SrcWord,
-		JnWord DraftWord,
-		bool HasMovedToOtherWord,
-		CT Ct
-	){
+	/// 根據行 DmlState 原子化保存 Props：Added → BatAdd / Modified → BatUpd / Removed → Del。
+	async Task<nil> SavePropsAtomized(IDbUserCtx DbCtx, IdWord WordId, CT Ct){
 		if(SvcWordV2 is null){
 			return NIL;
 		}
-		var addProps = DraftWord.Props.Where(x=>x.Id.IsNullOrDefault()).Select(x=>{
-			var neo = (PoWordProp)x.ShallowCloneSelf();
-			neo.WordId = DraftWord.Word.Id;
-			return neo;
-		});
-		await SvcWordV2.BatAddWordProp(DbCtx, ToolAsyE.ToAsyE(addProps), Ct);
 
-		var updProps = DraftWord.Props.Where(x=>!x.Id.IsNullOrDefault()).Select(x=>{
-			var upd = (PoWordProp)x.ShallowCloneSelf();
-			upd.WordId = DraftWord.Word.Id;
-			return upd;
-		});
-		await SvcWordV2.BatUpdWordProp(DbCtx, ToolAsyE.ToAsyE(updProps), Ct);
-
-		if(SrcWord is null || HasMovedToOtherWord){
-			return NIL;
+		// BatAdd
+		var addPos = new List<PoWordProp>();
+		foreach(var r in WordPropPage.AddedRows){
+			if(r.TryToPo(WordId, out var po, out _)){
+				addPos.Add(po);
+			}
 		}
-		var keepPropIds = DraftWord.Props
-			.Where(x=>!x.Id.IsNullOrDefault())
-			.Select(x=>x.Id)
-			.ToHashSet();
-		var delPropIds = SrcWord.Props
-			.Where(x=>!x.Id.IsNullOrDefault() && !keepPropIds.Contains(x.Id))
-			.Select(x=>x.Id);
-		await SvcWordV2.DelWordPropInId(DbCtx, ToolAsyE.ToAsyE(delPropIds), Ct);
+		if(addPos.Count > 0){
+			await SvcWordV2.BatAddWordProp(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
+		}
+
+		// BatUpd
+		var updPos = new List<PoWordProp>();
+		foreach(var r in WordPropPage.ModifiedRows){
+			if(r.TryToPo(WordId, out var po, out _)){
+				updPos.Add(po);
+			}
+		}
+		if(updPos.Count > 0){
+			await SvcWordV2.BatUpdWordProp(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
+		}
+
+		// Del
+		if(WordPropPage.RemovedRows.Count > 0){
+			var ids = WordPropPage.RemovedRows.Select(r => r.Raw.Id);
+			await SvcWordV2.DelWordPropInId(DbCtx, ToolAsyE.ToAsyE(ids), Ct);
+		}
 		return NIL;
 	}
 
-	async Task<nil> SaveLearnsByDiff(
-		IDbUserCtx DbCtx,
-		IJnWord? SrcWord,
-		JnWord DraftWord,
-		bool HasMovedToOtherWord,
-		CT Ct
-	){
+	/// 根據行 DmlState 原子化保存 Learns：Added → BatAdd / Modified → BatUpd / Removed → Del。
+	async Task<nil> SaveLearnsAtomized(IDbUserCtx DbCtx, IdWord WordId, CT Ct){
 		if(SvcWordV2 is null){
 			return NIL;
 		}
-		var addLearns = DraftWord.Learns.Where(x=>x.Id.IsNullOrDefault()).Select(x=>{
-			var neo = (PoWordLearn)x.ShallowCloneSelf();
-			neo.WordId = DraftWord.Word.Id;
-			return neo;
-		});
-		await SvcWordV2.BatAddWordLearn(DbCtx, ToolAsyE.ToAsyE(addLearns), Ct);
 
-		var updLearns = DraftWord.Learns.Where(x=>!x.Id.IsNullOrDefault()).Select(x=>{
-			var upd = (PoWordLearn)x.ShallowCloneSelf();
-			upd.WordId = DraftWord.Word.Id;
-			return upd;
-		});
-		await SvcWordV2.BatUpdWordLearn(DbCtx, ToolAsyE.ToAsyE(updLearns), Ct);
-
-		if(SrcWord is null || HasMovedToOtherWord){
-			return NIL;
+		// BatAdd
+		var addPos = new List<PoWordLearn>();
+		foreach(var r in WordLearnPage.AddedRows){
+			if(r.TryToPo(WordId, out var po, out _)){
+				addPos.Add(po);
+			}
 		}
-		var keepLearnIds = DraftWord.Learns
-			.Where(x=>!x.Id.IsNullOrDefault())
-			.Select(x=>x.Id)
-			.ToHashSet();
-		var delLearnIds = SrcWord.Learns
-			.Where(x=>!x.Id.IsNullOrDefault() && !keepLearnIds.Contains(x.Id))
-			.Select(x=>x.Id);
-		await SvcWordV2.DelWordLearnInId(DbCtx, ToolAsyE.ToAsyE(delLearnIds), Ct);
+		if(addPos.Count > 0){
+			await SvcWordV2.BatAddWordLearn(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
+		}
+
+		// BatUpd
+		var updPos = new List<PoWordLearn>();
+		foreach(var r in WordLearnPage.ModifiedRows){
+			if(r.TryToPo(WordId, out var po, out _)){
+				updPos.Add(po);
+			}
+		}
+		if(updPos.Count > 0){
+			await SvcWordV2.BatUpdWordLearn(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
+		}
+
+		// Del
+		if(WordLearnPage.RemovedRows.Count > 0){
+			var ids = WordLearnPage.RemovedRows.Select(r => r.Raw.Id);
+			await SvcWordV2.DelWordLearnInId(DbCtx, ToolAsyE.ToAsyE(ids), Ct);
+		}
 		return NIL;
 	}
 

@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -49,6 +50,7 @@ public partial class ViewWordLearnEdit: AppViewBase{
 				EditorForm = sp;
 				sp.Margin = new(10);
 				sp.Spacing = 8;
+				sp.A(MkIdSelectableRow(I[K.Id], CBE.Mk<VmWordLearnRow>(x=>x.IdText, Mode: BindingMode.OneWay)));
 				sp.A(MkComboRow(I[K.LearnResult], LearnResultOptions, CBE.Mk<VmWordLearnRow>(x=>x.LearnResultIndex, Mode: BindingMode.TwoWay)));
 				sp.A(MkTempusRow(I[K.Biz_CreatedAt], CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: new IsoToTempusConverter())));
 			});
@@ -102,6 +104,15 @@ public partial class ViewWordLearnEdit: AppViewBase{
 		if(EditorForm is not null){
 			EditorForm.DataContext = Ctx?.Row;
 		}
+	}
+
+	Control MkIdSelectableRow(str Label, IBinding Binding){
+		var tb = new SelectableTextBlock{
+			FontSize = UiCfg.Inst.BaseFontSize*0.8,
+			TextWrapping = TextWrapping.Wrap,
+		};
+		tb.Bind(TextBlock.TextProperty, Binding);
+		return MkFieldRow(Label, tb);
 	}
 
 	Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){

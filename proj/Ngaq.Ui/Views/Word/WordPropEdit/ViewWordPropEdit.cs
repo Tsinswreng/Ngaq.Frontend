@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui.Icons;
@@ -65,6 +66,7 @@ public partial class ViewWordPropEdit: AppViewBase{
 				EditorForm = sp;
 				sp.Margin = new(10);
 				sp.Spacing = 8;
+				sp.A(MkIdSelectableRow(I[K.Id], CBE.Mk<VmWordPropRow>(x=>x.IdText, Mode: BindingMode.OneWay)));
 				sp.A(MkComboRow(I[K.KType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay)));
 				sp.A(MkEditableComboRow(
 					I[K.KeyStr],
@@ -130,6 +132,15 @@ public partial class ViewWordPropEdit: AppViewBase{
 		if(EditorForm is not null){
 			EditorForm.DataContext = Ctx?.Row;
 		}
+	}
+
+	Control MkIdSelectableRow(str Label, IBinding Binding){
+		var tb = new SelectableTextBlock{
+			FontSize = UiCfg.Inst.BaseFontSize*0.8,
+			TextWrapping = TextWrapping.Wrap,
+		};
+		tb.Bind(TextBlock.TextProperty, Binding);
+		return MkFieldRow(Label, tb);
 	}
 
 	Control MkInputRow(str Label, IBinding Binding){

@@ -3,10 +3,12 @@ namespace Ngaq.Ui.Views.Word.WordPropPage;
 using System;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Infra;
+using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
+using Ngaq.Ui.Views.Word;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 /// 屬性分頁 ViewModel：管理列表、新增、轉換。
@@ -18,6 +20,15 @@ public partial class VmWordPropPage: ViewModelBase{
 		set{SetProperty(ref field, value);}
 	} = [];
 
+	/// 已標記刪除的行，保存時走 Del，成功後清空。
+	public List<VmWordPropRow> RemovedRows{get;} = [];
+
+	/// 新增的行（DmlState == Added），保存時走 BatAdd。
+	public IEnumerable<VmWordPropRow> AddedRows => Rows.Where(r => r.DmlState == EDmlState.Added);
+
+	/// 已修改的行（DmlState == Modified），保存時走 BatUpd。
+	public IEnumerable<VmWordPropRow> ModifiedRows => Rows.Where(r => r.DmlState == EDmlState.Modified);
+
 	public nil LoadFromPoProps(IList<PoWordProp> Props){
 		Rows = new ObservableCollection<VmWordPropRow>(Props.Select(VmWordPropRow.FromPo));
 		return NIL;
@@ -28,13 +39,29 @@ public partial class VmWordPropPage: ViewModelBase{
 		return NIL;
 	}
 
+	/// 新增行直接移除；已存在的行標記爲 Removed，保存時再刪。
 	public nil RemoveRow(VmWordPropRow Row){
-		Rows.Remove(Row);
+		if(Row.DmlState == EDmlState.Added){
+			Rows.Remove(Row);
+		}else{
+			Row.DmlState = EDmlState.Removed;
+			Rows.Remove(Row);
+			RemovedRows.Add(Row);
+		}
 		return NIL;
 	}
 
 	public nil RequestEdit(VmWordPropRow Row){
 		OnEditRequested?.Invoke(Row);
+		return NIL;
+	}
+
+	/// 保存成功後重置所有行狀態。
+	public nil OnSaved(){
+		foreach(var row in Rows){
+			row.DmlState = EDmlState.Unchanged;
+		}
+		RemovedRows.Clear();
 		return NIL;
 	}
 
@@ -65,45 +92,81 @@ public partial class VmWordPropRow: ViewModelBase{
 
 	public PoWordProp Raw{get;set;} = new();
 
+	/// 行記錄 DML 狀態：決定保存時走 BatAdd/BatUpd/Del。
+	public EDmlState DmlState{get;set;}
+
 	public i32 KTypeIndex{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = 0;
 
 	public str KStrText{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = "";
 
 	public str KI64Text{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = "0";
 
 	public i32 VTypeIndex{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = 0;
 
 	public str VStrText{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = "";
 
 	public str VI64Text{
 		get{return field;}
-		set{SetProperty(ref field, value);}
+		set{
+			if(SetProperty(ref field, value)){
+				MarkModified();
+			}
+		}
 	} = "0";
+
+	/// 行記錄 Id（僅供顯示，只讀）。
+	public str IdText => Raw.Id.ToString();
 
 	public str KeyText => GetKvTypeByIndex(KTypeIndex) == EKvType.I64 ? KI64Text : KStrText;
 	public str KeyDisplayText => TranslatePropKey(KeyText);
 	public str ValueDisplayText => BuildValueDisplayText();
 
+	/// 只有 Unchanged → Modified 才切換，保持 Added / Removed 不被意外覆蓋。
+	void MarkModified(){
+		if(DmlState == EDmlState.Unchanged){
+			DmlState = EDmlState.Modified;
+		}
+	}
+
 	public static VmWordPropRow NewRow(){
 		return new VmWordPropRow{
-			// 新增行必須保持空 Id，保存時才能走 BatAdd 而不是誤走 BatUpd。
 			Raw = new PoWordProp{
-				Id = default,
+				Id = new IdWordProp(),
 			},
 			KTypeIndex = 0,
 			VTypeIndex = 0,
@@ -111,6 +174,8 @@ public partial class VmWordPropRow: ViewModelBase{
 			VStrText = "",
 			KI64Text = "0",
 			VI64Text = "0",
+			// 放最後，覆蓋屬性初始化時觸發的 MarkModified
+			DmlState = EDmlState.Added,
 		};
 	}
 
@@ -123,6 +188,8 @@ public partial class VmWordPropRow: ViewModelBase{
 			KI64Text = Po.KI64 + "",
 			VStrText = Po.VStr ?? "",
 			VI64Text = Po.VI64 + "",
+			// 放最後，覆蓋屬性初始化時觸發的 MarkModified
+			DmlState = EDmlState.Unchanged,
 		};
 	}
 
