@@ -334,6 +334,7 @@ const a: TI18nKv = {
 			ApiUrl: "API URL",
 			ApiKey: "API 密钥",
 			Model: "模型",
+			ExtraBodyJson: "额外请求体 JSON",
 			Prompt: "提示词",
 			MaxDisplayedWordCountMustBeUnsignedInteger: "最大显示单词必须为整数",
 			EnableRandomBackground: "允许随机背景",

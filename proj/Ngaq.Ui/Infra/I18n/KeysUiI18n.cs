@@ -312,6 +312,7 @@ public class KeysUiI18nCommon{
 	public static readonly K ApiUrl = Mk(_R, [nameof(ApiUrl)]);
 	public static readonly K ApiKey = Mk(_R, [nameof(ApiKey)]);
 	public static readonly K Model = Mk(_R, [nameof(Model)]);
+	public static readonly K ExtraBodyJson = Mk(_R, [nameof(ExtraBodyJson)]);
 	public static readonly K Prompt = Mk(_R, [nameof(Prompt)]);
 	public static readonly K MaxDisplayedWordCountMustBeUnsignedInteger = Mk(_R, [nameof(MaxDisplayedWordCountMustBeUnsignedInteger)]);
 	public static readonly K EnableRandomBackground = Mk(_R, [nameof(EnableRandomBackground)]);

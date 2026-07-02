@@ -59,6 +59,8 @@ int.	說得對
 
 
 	public nil FromRespLlmDict(IRespLlmDict Resp){
+		// 最終結構化結果一旦落下，就不再接受晚到的流式片段覆蓋 UI 文本。
+		IsFinalized = true;
 		Head = Resp.Head;
 		Pronunciations = Resp.Pronunciations.Select(p => new Pronunciation{
 			TextType = p.TextType,
@@ -76,6 +78,8 @@ int.	說得對
 	/// 開始新的流式查詢，重置狀態
 
 	public nil StartStreaming(string QueryTerm){
+		// 新一輪查詞開始時重新打開流式寫入窗口。
+		IsFinalized = false;
 		Head = QueryTerm;
 		Description = "";
 		return NIL;
@@ -85,6 +89,11 @@ int.	說得對
 	/// 接收流式響應的新片段
 
 	public nil GotNewSeg(DtoOnNewSeg NewSeg){
+		// UI 執行緒中的流式片段可能晚於最終結果到達；
+		// 若本輪已完成最終解析，則忽略這些遲到片段，避免把尾巴再拼回去。
+		if(IsFinalized){
+			return NIL;
+		}
 		Description += NewSeg.NewSeg;
 		return NIL;
 	}
@@ -155,5 +164,9 @@ int.	說得對
 		get{return field;}
 		set{SetProperty(ref field, value);}
 	}="";
+
+	/// 當前這一輪查詞是否已經收到最終結構化結果。
+	/// 用來屏蔽 UI 線程中晚到的流式文本片段。
+	bool IsFinalized{get;set;} = false;
 
 }

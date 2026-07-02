@@ -36,7 +36,8 @@ public partial class VmCfgLlmDictionary: ViewModelBase, IMk<Ctx>{
 	}
 
 	/// 初始化設置頁顯示值。
-	/// ApiUrl / ApiKey / Model 直接來自本地配置；Prompt 經由詞典服務讀取，以便自動落默認值。
+	/// ApiUrl / ApiKey / Model / ExtraBodyJson 直接來自本地配置；
+	/// Prompt 經由詞典服務讀取，以便自動落默認值。
 	public async Task<nil> Init(CT Ct){
 		if(AnyNull(Cfg)){
 			return NIL;
@@ -44,6 +45,7 @@ public partial class VmCfgLlmDictionary: ViewModelBase, IMk<Ctx>{
 		ApiUrl = Cfg.Get(KeysClientCfg.LlmDictionary.ApiUrl)??"";
 		ApiKey = Cfg.Get(KeysClientCfg.LlmDictionary.ApiKey)??"";
 		Model = Cfg.Get(KeysClientCfg.LlmDictionary.Model)??"";
+		ExtraBodyJson = Cfg.Get(KeysClientCfg.LlmDictionary.ExtraBodyJson)??"";
 		var PromptFromCfg = Cfg.Get(KeysClientCfg.LlmDictionary.Prompt)??"";
 		Prompt = PromptFromCfg;
 		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
@@ -78,6 +80,13 @@ public partial class VmCfgLlmDictionary: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "";
 
+	/// 直接寫入請求體頂層的額外 JSON 對象。
+	/// 用於配置 provider-specific 參數，例如關閉某些模型的默認思考模式。
+	public str ExtraBodyJson{
+		get;
+		set{SetProperty(ref field, value);}
+	} = "";
+
 	public str Prompt{
 		get;
 		set{SetProperty(ref field, value);}
@@ -92,6 +101,7 @@ public partial class VmCfgLlmDictionary: ViewModelBase, IMk<Ctx>{
 				Cfg.Set(KeysClientCfg.LlmDictionary.ApiUrl, ApiUrl.Trim());
 				Cfg.Set(KeysClientCfg.LlmDictionary.ApiKey, ApiKey.Trim());
 				Cfg.Set(KeysClientCfg.LlmDictionary.Model, Model.Trim());
+				Cfg.Set(KeysClientCfg.LlmDictionary.ExtraBodyJson, ExtraBodyJson.Trim());
 				await Cfg.Save(Ct);
 				if(!AnyNull(SvcDictionary, FrontendUserCtxMgr)){
 					var SavedPrompt = await SvcDictionary.SetLlmDictSysPrompt(

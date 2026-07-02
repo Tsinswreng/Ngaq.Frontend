@@ -296,6 +296,7 @@ const a: TI18nKv = {
 			ApiUrl: "API URL",
 			ApiKey: "API Key",
 			Model: "Model",
+			ExtraBodyJson: "Extra Body JSON",
 			Prompt: "Prompt",
 			MaxDisplayedWordCountMustBeUnsignedInteger: "Max displayed word count must be an unsigned integer",
 			EnableRandomBackground: "Enable Random Background",

@@ -251,6 +251,10 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			lock(streamLock){
 				LastLlmRawOutput = StreamedResp.ToString();
 			}
+			LogWarn(
+				$"Dictionary raw output after stream lookup. " +
+				$"{DescribeTextTail(nameof(LastLlmRawOutput), LastLlmRawOutput)}"
+			);
 			Result.FromRespLlmDict(Resp);
 			if(
 				str.IsNullOrWhiteSpace(Result.Description)
@@ -318,6 +322,10 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var PrevRawOutput = LastLlmRawOutput;
 		try{
 			HasLookupStarted = true;
+			LogWarn(
+				$"Dictionary raw output before manual reparse. " +
+				$"{DescribeTextTail(nameof(RawOutput), RawOutput)}"
+			);
 			var Req = BuildFallbackReqLlmDict();
 			var Resp = SvcDictionary.ParseRawOutput(RawOutput);
 			Result ??= App.DiOrMk<VmSimpleWord>();
@@ -650,6 +658,16 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			return Code;
 		}
 		return $"{Code} {TranslatedName}";
+	}
+
+	/// 只記錄文本尾部的可見診斷信息，避免把整段原始輸出完整刷進日誌。
+	static str DescribeTextTail(str Name, str? Text){
+		var Safe = Text ?? "";
+		var TailLen = Math.Min(80, Safe.Length);
+		var Tail = Safe[^TailLen..]
+			.Replace("\r", "\\r")
+			.Replace("\n", "\\n");
+		return $"{Name}.Length={Safe.Length}; {Name}.Tail={Tail}";
 	}
 }
 

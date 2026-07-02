@@ -40,6 +40,13 @@ public partial class ViewCfgLlmDictionary: AppViewBase<Ctx>{
 				.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.ApiKey);})
 				.A(new TextBlock(), o=>{o.Text = I[K.Model];})
 				.A(new TextBox(), o=>{o.CBind<Ctx>(o.PropText, x=>x.Model);})
+				.A(new TextBlock(), o=>{o.Text = I[K.ExtraBodyJson];})
+				.A(new TextBox(), o=>{
+					o.AcceptsReturn = true;
+					o.TextWrapping = Avalonia.Media.TextWrapping.Wrap;
+					o.MinHeight = UiCfg.Inst.BaseFontSize*6;
+					o.CBind<Ctx>(o.PropText, x=>x.ExtraBodyJson);
+				})
 				.A(new TextBlock(), o=>{o.Text = I[K.Prompt];})
 				.A(new TextBox(), o=>{
 					o.AcceptsReturn = true;

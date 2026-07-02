@@ -304,6 +304,7 @@ const Full = {
 			ApiUrl: K,
 			ApiKey: K,
 			Model: K,
+			ExtraBodyJson: K,
 			Prompt: K,
 			MaxDisplayedWordCountMustBeUnsignedInteger: K,
 			EnableRandomBackground: K,

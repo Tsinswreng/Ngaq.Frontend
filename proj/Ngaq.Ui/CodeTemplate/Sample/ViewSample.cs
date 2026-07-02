@@ -69,6 +69,8 @@ public partial class ViewSample
 			Ctx.Bind(o, o=>o.Text, x=>x.Cnt1);
 			//上面的第二個參數優先用o=>o.Text的寫法。如當o爲TextBox時o=>o.Text即等於TextBox.TextProperty。
 			// 不得已時再用 類名.XxxProperty的寫法
+
+			//所有綁定 不需要顯示指定BindingMode的 就別寫BindingMode !
 		}).A(new Button(), b=>{
 			//初始化ContentControl.Content時使用SetContent擴展方法、不要直接給Content賦值
 			b.SetContent(new TextBlock(), t=>{
