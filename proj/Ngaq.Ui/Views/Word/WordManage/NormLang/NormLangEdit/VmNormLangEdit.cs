@@ -126,9 +126,9 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			if(IsCreateMode){
 				po.Owner = dbCtx.UserCtx.UserId;
-				await SvcNormLang.BatAddNormLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcNormLang.OrdAddNormLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcNormLang.BatUpdNormLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcNormLang.OrdUpdNormLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 
 			PoNormLang = po;
@@ -152,7 +152,7 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var po = BuildPoFromFields();
 			if(!IsCreateMode){
-				await SvcNormLang.BatSoftDelNormLang(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+				await SvcNormLang.OrdSoftDelNormLang(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoNormLang = new PoNormLang{
 				Type = ELangIdentType.Bcp47,

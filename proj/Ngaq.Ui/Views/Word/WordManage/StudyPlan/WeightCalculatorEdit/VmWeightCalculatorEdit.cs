@@ -124,9 +124,9 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 			var po = BuildPoFromFields();
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			if(IsCreateMode){
-				await SvcStudyPlan.BatAddWeightCalculator(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdAddWeightCalculator(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcStudyPlan.BatUpdWeightCalculator(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdUpdWeightCalculator(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 
 			PoWeightCalculator = po;
@@ -149,7 +149,7 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var po = BuildPoFromFields();
 			if(!IsCreateMode && po.Id != IdWeightCalculator.Zero){
-				await SvcStudyPlan.BatSoftDelWeightCalculator(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdSoftDelWeightCalculator(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoWeightCalculator = new PoWeightCalculator{
 				Type = EWeightCalculatorType.JsV1,

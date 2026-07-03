@@ -12,15 +12,15 @@ namespace Ngaq.Browser;
 ")]
 public class LocalStorageKv : ISvcKv {
 
-	public IAsyncEnumerable<PoKv?> BatGetByOwnerEtKI64(IDbFnCtx? Ctx, IAsyncEnumerable<(IdUser, long)> Owner_Key, CT Ct) {
+	public IAsyncEnumerable<PoKv?> OrdGetByOwnerEtKI64(IDbFnCtx? Ctx, IAsyncEnumerable<(IdUser, long)> Owner_Key, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PoKv?> BatGetByOwnerEtKStr(IDbFnCtx? Ctx, IAsyncEnumerable<(IdUser, string)> Owner_Key, CT Ct) {
+	public IAsyncEnumerable<PoKv?> OrdGetByOwnerEtKStr(IDbFnCtx? Ctx, IAsyncEnumerable<(IdUser, string)> Owner_Key, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<nil> BatSet(IDbFnCtx? Ctx, IAsyncEnumerable<PoKv> Kvs, CT Ct) {
+	public Task<nil> OrdSet(IDbFnCtx? Ctx, IAsyncEnumerable<PoKv> Kvs, CT Ct) {
 		throw new NotImplementedException();
 	}
 

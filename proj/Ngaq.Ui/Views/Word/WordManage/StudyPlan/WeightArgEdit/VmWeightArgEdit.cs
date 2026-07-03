@@ -156,9 +156,9 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 			var po = BuildPoFromFields();
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			if(IsCreateMode){
-				await SvcStudyPlan.BatAddWeightArg(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdAddWeightArg(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcStudyPlan.BatUpdWeightArg(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdUpdWeightArg(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 
 			PoWeightArg = po;
@@ -181,7 +181,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var po = BuildPoFromFields();
 			if(!IsCreateMode && po.Id != IdWeightArg.Zero){
-				await SvcStudyPlan.BatSoftDelWeightArg(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdSoftDelWeightArg(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoWeightArg = new PoWeightArg{
 				Type = EWeightArgType.Json,
@@ -243,7 +243,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 			}
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			var po = await SvcStudyPlan
-				.BatGetWeightCalculatorById(dbCtx, ToolAsyE.ToAsyE([WeightCalculatorId]), Ct)
+				.OrdGetWeightCalculatorById(dbCtx, ToolAsyE.ToAsyE([WeightCalculatorId]), Ct)
 				.FirstOrDefaultAsync(Ct);
 			WeightCalculatorUniqNameText = po?.UniqName ?? "";
 		}catch(Exception e){

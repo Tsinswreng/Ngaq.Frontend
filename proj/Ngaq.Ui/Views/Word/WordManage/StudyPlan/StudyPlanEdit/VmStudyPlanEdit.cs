@@ -147,9 +147,9 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			var po = BuildPoFromFields();
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			if(IsCreateMode){
-				await SvcStudyPlan.BatAddStudyPlan(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdAddStudyPlan(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcStudyPlan.BatUpdStudyPlan(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdUpdStudyPlan(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoStudyPlan = po;
 			BoStudyPlan.PoStudyPlan = ClonePoStudyPlan(po);
@@ -173,7 +173,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var po = BuildPoFromFields();
 			if(!IsCreateMode && po.Id != IdStudyPlan.Zero){
-				await SvcStudyPlan.BatSoftDelStudyPlan(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdSoftDelStudyPlan(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoStudyPlan = new PoStudyPlan();
 			BoStudyPlan = new BoStudyPlan();
@@ -229,7 +229,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			var weightArgId = po.WeightArgId;
 			if(!po.PreFilterId.IsNullOrDefault()){
 				BoStudyPlan.PoPreFilter = await SvcStudyPlan
-					.BatGetPreFilterById(dbCtx, ToolAsyE.ToAsyE([po.PreFilterId]), Ct)
+					.OrdGetPreFilterById(dbCtx, ToolAsyE.ToAsyE([po.PreFilterId]), Ct)
 					.FirstOrDefaultAsync(Ct);
 			}
 			if(curVer != RefRefreshVer){
@@ -237,7 +237,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			}
 			if(!po.WeightCalculatorId.IsNullOrDefault()){
 				BoStudyPlan.PoWeightCalculator = await SvcStudyPlan
-					.BatGetWeightCalculatorById(dbCtx, ToolAsyE.ToAsyE([po.WeightCalculatorId]), Ct)
+					.OrdGetWeightCalculatorById(dbCtx, ToolAsyE.ToAsyE([po.WeightCalculatorId]), Ct)
 					.FirstOrDefaultAsync(Ct);
 			}
 			if(curVer != RefRefreshVer){
@@ -245,7 +245,7 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 			}
 			if(!po.WeightArgId.IsNullOrDefault()){
 				BoStudyPlan.PoWeightArg = await SvcStudyPlan
-					.BatGetWeightArgById(dbCtx, ToolAsyE.ToAsyE([po.WeightArgId]), Ct)
+					.OrdGetWeightArgById(dbCtx, ToolAsyE.ToAsyE([po.WeightArgId]), Ct)
 					.FirstOrDefaultAsync(Ct);
 			}
 			if(curVer != RefRefreshVer){

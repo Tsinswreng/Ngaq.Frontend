@@ -106,9 +106,9 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			if(po.Id == IdPreFilter.Zero){
-				await SvcStudyPlan.BatAddPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdAddPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcStudyPlan.BatUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 			EditingPo = po;
 			PayloadJson = FormatJson(po.Text ?? "");
@@ -135,7 +135,7 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 		}
 
 		try{
-			await SvcStudyPlan.BatSoftDelPreFilter(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([EditingPo]), Ct);
+			await SvcStudyPlan.OrdSoftDelPreFilter(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([EditingPo]), Ct);
 			EditingPo = new PoPreFilter{
 				Type = EPreFilterType.Json,
 			};

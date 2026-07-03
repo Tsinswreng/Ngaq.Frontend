@@ -186,7 +186,7 @@ public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 				return neo;
 			})
 		;
-		await SvcWordV2.BatAddWordProp(dbCtx, ToolAsyE.ToAsyE(addProps), Ct);
+		await SvcWordV2.OrdAddWordProp(dbCtx, ToolAsyE.ToAsyE(addProps), Ct);
 
 		var updProps = draftWord.Props
 			.Where(x=>!x.Id.IsNullOrDefault())
@@ -196,7 +196,7 @@ public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 				return upd;
 			})
 		;
-		await SvcWordV2.BatUpdWordProp(dbCtx, ToolAsyE.ToAsyE(updProps), Ct);
+		await SvcWordV2.OrdUpdWordProp(dbCtx, ToolAsyE.ToAsyE(updProps), Ct);
 
 		if(srcWord is null || hasMovedToOtherWord){
 			return NIL;
@@ -232,7 +232,7 @@ public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 				return neo;
 			})
 		;
-		await SvcWordV2.BatAddWordLearn(dbCtx, ToolAsyE.ToAsyE(addLearns), Ct);
+		await SvcWordV2.OrdAddWordLearn(dbCtx, ToolAsyE.ToAsyE(addLearns), Ct);
 
 		var updLearns = draftWord.Learns
 			.Where(x=>!x.Id.IsNullOrDefault())
@@ -242,7 +242,7 @@ public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 				return upd;
 			})
 		;
-		await SvcWordV2.BatUpdWordLearn(dbCtx, ToolAsyE.ToAsyE(updLearns), Ct);
+		await SvcWordV2.OrdUpdWordLearn(dbCtx, ToolAsyE.ToAsyE(updLearns), Ct);
 
 		if(srcWord is null || hasMovedToOtherWord){
 			return NIL;

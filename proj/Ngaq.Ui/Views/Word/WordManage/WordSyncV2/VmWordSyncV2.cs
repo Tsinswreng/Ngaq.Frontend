@@ -127,7 +127,7 @@ public partial class VmWordSyncV2: ViewModelBase{
 					return;
 				}
 
-				using var packed = await SvcWordV2.PackAllWordsWithDel(UserCtxMgr.GetDbUserCtx(), Ct);
+				using var packed = await SvcWordV2.PackAllWordWithDel(UserCtxMgr.GetDbUserCtx(), Ct);
 				using var file = FileSystem.File.Open(PathExport, FileMode.Create, FileAccess.Write, FileShare.None);
 				await packed.CopyToAsync(file, Ct);
 
@@ -159,7 +159,7 @@ public partial class VmWordSyncV2: ViewModelBase{
 		try{
 			await Task.Run(async()=>{
 				using var file = FileSystem.File.OpenRead(PathImport);
-				await foreach(var _ in SvcWordV2.BatSyncJnWordByBizIdFromStream(
+				await foreach(var _ in SvcWordV2.OrdSyncJnWordByBizIdFromStream(
 					UserCtxMgr.GetDbUserCtx(),
 					file,
 					Ct

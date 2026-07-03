@@ -158,7 +158,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 			Type = ELangIdentType.Bcp47,
 			Code = UiLang,
 		};
-		var Names = SvcNormLang.BatGetTranslatedName(
+		var Names = SvcNormLang.OrdGetTranslatedName(
 			UserCtxMgr.GetDbUserCtx(),
 			TargetLang,
 			ToolAsyE.ToAsyE(Pos.Select(x=>(INormLang)new NormLang{

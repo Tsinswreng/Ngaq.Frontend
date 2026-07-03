@@ -361,7 +361,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		PoNormLang? SrcPo = null;
 		PoNormLang? TgtPo = null;
 		var Index = 0;
-		await foreach(var Po in SvcNormLang.BatGetNormLangByTypeCode(DbUserCtx, Query, Ct).WithCancellation(Ct)){
+		await foreach(var Po in SvcNormLang.OrdGetNormLangByTypeCode(DbUserCtx, Query, Ct).WithCancellation(Ct)){
 			if(Index == 0){
 				SrcPo = Po;
 			}else if(Index == 1){
@@ -625,7 +625,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				Code = UiLang,
 			};
 			List<str?> Names = [];
-			var NameAsyE = SvcNormLang.BatGetTranslatedName(
+			var NameAsyE = SvcNormLang.OrdGetTranslatedName(
 				FrontendUserCtxMgr.GetDbUserCtx(),
 				TargetLang,
 				ToolAsyE.ToAsyE([

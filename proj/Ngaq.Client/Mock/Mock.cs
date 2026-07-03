@@ -67,39 +67,39 @@ public class MockSvcDictionary : ISvcDictionary {
 
 
 public class MockSvcWordV2 : ISvcWordV2 {
-	public Task<object> BatAddJnWord(IDbUserCtx Ctx, IAsyncEnumerable<JnWord> Words, CT Ct) {
+	public Task<object> OrdAddJnWord(IDbUserCtx Ctx, IAsyncEnumerable<JnWord> Words, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatAddNewLearnRecord(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> PoWordLearnAsyE, CT Ct) {
+	public Task<object> OrdAddNewLearnRecord(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> PoWordLearnAsyE, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatAddWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
+	public Task<object> OrdAddWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatAddWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
+	public Task<object> OrdAddWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatChangeId(IDbUserCtx Ctx, IAsyncEnumerable<(IdWord Old, IdWord New)> Ids, CT Ct) {
+	public Task<object> OrdChangeId(IDbUserCtx Ctx, IAsyncEnumerable<(IdWord Old, IdWord New)> Ids, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatSyncByDto(IDbUserCtx Ctx, IAsyncEnumerable<DtoJnWordSyncResult> Dtos, CT Ct) {
+	public Task<object> OrdSyncByDto(IDbUserCtx Ctx, IAsyncEnumerable<DtoJnWordSyncResult> Dtos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<DtoJnWordSyncResult> BatSyncJnWordByBizId(IDbUserCtx Ctx, IAsyncEnumerable<JnWord> JnWords, CT Ct) {
+	public IAsyncEnumerable<DtoJnWordSyncResult> OrdSyncJnWordByBizId(IDbUserCtx Ctx, IAsyncEnumerable<JnWord> JnWords, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<DtoJnWordSyncResult> BatSyncJnWordByBizIdFromStream(IDbUserCtx Ctx, Stream TextWithStream, CT Ct) {
+	public IAsyncEnumerable<DtoJnWordSyncResult> OrdSyncJnWordByBizIdFromStream(IDbUserCtx Ctx, Stream TextWithStream, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<RespUpdBizId> BatUpdHeadLang(IDbUserCtx Ctx, IAsyncEnumerable<PoWord> PoWords, CT Ct) {
+	public IAsyncEnumerable<RespUpdBizId> OrdUpdHeadLang(IDbUserCtx Ctx, IAsyncEnumerable<PoWord> PoWords, CT Ct) {
 		throw new NotImplementedException();
 	}
 
@@ -107,11 +107,11 @@ public class MockSvcWordV2 : ISvcWordV2 {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
+	public Task<object> OrdUpdWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
+	public Task<object> OrdUpdWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
 		throw new NotImplementedException();
 	}
 
@@ -123,7 +123,7 @@ public class MockSvcWordV2 : ISvcWordV2 {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<JnWord> GetAllWordsWithDel(IDbUserCtx Ctx, CT Ct) {
+	public IAsyncEnumerable<JnWord> GetAllWordWithDel(IDbUserCtx Ctx, CT Ct) {
 		throw new NotImplementedException();
 	}
 
@@ -163,7 +163,7 @@ public class MockSvcWordV2 : ISvcWordV2 {
 		throw new NotImplementedException();
 	}
 
-	public Task<Stream> PackAllWordsWithDel(IDbUserCtx Ctx, CT Ct) {
+	public Task<Stream> PackAllWordWithDel(IDbUserCtx Ctx, CT Ct) {
 		throw new NotImplementedException();
 	}
 
@@ -181,63 +181,63 @@ public class MockSvcWordV2 : ISvcWordV2 {
 }
 
 public class MockSvcStudyPlan : ISvcStudyPlan, IStudyPlanGetter {
-	public Task<object> BatAddPreFilter(IDbUserCtx Ctx, IAsyncEnumerable<PoPreFilter> Pos, CT Ct) {
+	public Task<object> OrdAddPreFilter(IDbUserCtx Ctx, IAsyncEnumerable<PoPreFilter> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatAddStudyPlan(IDbUserCtx Ctx, IAsyncEnumerable<PoStudyPlan> Pos, CT Ct) {
+	public Task<object> OrdAddStudyPlan(IDbUserCtx Ctx, IAsyncEnumerable<PoStudyPlan> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatAddWeightArg(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightArg> Pos, CT Ct) {
+	public Task<object> OrdAddWeightArg(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightArg> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatAddWeightCalculator(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightCalculator> Pos, CT Ct) {
+	public Task<object> OrdAddWeightCalculator(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightCalculator> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PoPreFilter?> BatGetPreFilterById(IDbUserCtx Ctx, IAsyncEnumerable<IdPreFilter> Ids, CT Ct) {
+	public IAsyncEnumerable<PoPreFilter?> OrdGetPreFilterById(IDbUserCtx Ctx, IAsyncEnumerable<IdPreFilter> Ids, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PoWeightArg?> BatGetWeightArgById(IDbUserCtx Ctx, IAsyncEnumerable<IdWeightArg> Ids, CT Ct) {
+	public IAsyncEnumerable<PoWeightArg?> OrdGetWeightArgById(IDbUserCtx Ctx, IAsyncEnumerable<IdWeightArg> Ids, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PoWeightCalculator?> BatGetWeightCalculatorById(IDbUserCtx Ctx, IAsyncEnumerable<IdWeightCalculator> Ids, CT Ct) {
+	public IAsyncEnumerable<PoWeightCalculator?> OrdGetWeightCalculatorById(IDbUserCtx Ctx, IAsyncEnumerable<IdWeightCalculator> Ids, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatSoftDelPreFilter(IDbUserCtx Ctx, IAsyncEnumerable<PoPreFilter> Pos, CT Ct) {
+	public Task<object> OrdSoftDelPreFilter(IDbUserCtx Ctx, IAsyncEnumerable<PoPreFilter> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatSoftDelStudyPlan(IDbUserCtx Ctx, IAsyncEnumerable<PoStudyPlan> Pos, CT Ct) {
+	public Task<object> OrdSoftDelStudyPlan(IDbUserCtx Ctx, IAsyncEnumerable<PoStudyPlan> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatSoftDelWeightArg(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightArg> Pos, CT Ct) {
+	public Task<object> OrdSoftDelWeightArg(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightArg> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatSoftDelWeightCalculator(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightCalculator> Pos, CT Ct) {
+	public Task<object> OrdSoftDelWeightCalculator(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightCalculator> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdPreFilter(IDbUserCtx Ctx, IAsyncEnumerable<PoPreFilter> Pos, CT Ct) {
+	public Task<object> OrdUpdPreFilter(IDbUserCtx Ctx, IAsyncEnumerable<PoPreFilter> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdStudyPlan(IDbUserCtx Ctx, IAsyncEnumerable<PoStudyPlan> Pos, CT Ct) {
+	public Task<object> OrdUpdStudyPlan(IDbUserCtx Ctx, IAsyncEnumerable<PoStudyPlan> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdWeightArg(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightArg> Pos, CT Ct) {
+	public Task<object> OrdUpdWeightArg(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightArg> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdWeightCalculator(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightCalculator> Pos, CT Ct) {
+	public Task<object> OrdUpdWeightCalculator(IDbUserCtx Ctx, IAsyncEnumerable<PoWeightCalculator> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
@@ -311,27 +311,27 @@ public class MockSvcStudyPlan : ISvcStudyPlan, IStudyPlanGetter {
 }
 
 public class MockSvcNormLang : ISvcNormLang {
-	public Task<object> BatAddNormLang(IDbUserCtx Ctx, IAsyncEnumerable<PoNormLang> Pos, CT Ct) {
+	public Task<object> OrdAddNormLang(IDbUserCtx Ctx, IAsyncEnumerable<PoNormLang> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PoNormLang?> BatGetNormLangByTypeCode(IDbUserCtx Ctx, IAsyncEnumerable<(ELangIdentType, string)> Type_Code, CT Ct) {
+	public IAsyncEnumerable<PoNormLang?> OrdGetNormLangByTypeCode(IDbUserCtx Ctx, IAsyncEnumerable<(ELangIdentType, string)> Type_Code, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<string?> BatGetTranslatedName(IDbUserCtx Ctx, INormLang TargetLang, IAsyncEnumerable<INormLang> NormLangs, CT Ct) {
+	public IAsyncEnumerable<string?> OrdGetTranslatedName(IDbUserCtx Ctx, INormLang TargetLang, IAsyncEnumerable<INormLang> NormLangs, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<INormLangDetail> BatGetUiLangs(CT CT) {
+	public IAsyncEnumerable<INormLangDetail> OrdGetUiLangs(CT CT) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatSoftDelNormLang(IDbUserCtx Ctx, IAsyncEnumerable<PoNormLang> Pos, CT Ct) {
+	public Task<object> OrdSoftDelNormLang(IDbUserCtx Ctx, IAsyncEnumerable<PoNormLang> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdNormLang(IDbUserCtx Ctx, IAsyncEnumerable<PoNormLang> Pos, CT Ct) {
+	public Task<object> OrdUpdNormLang(IDbUserCtx Ctx, IAsyncEnumerable<PoNormLang> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
@@ -437,15 +437,15 @@ public class MockSvcUserLang : ISvcUserLang {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatAddUserLang(IDbUserCtx Ctx, IAsyncEnumerable<PoUserLang> Pos, CT Ct) {
+	public Task<object> OrdAddUserLang(IDbUserCtx Ctx, IAsyncEnumerable<PoUserLang> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<PoUserLang?> BatGetUserLang(IDbUserCtx Ctx, IAsyncEnumerable<string> UniqNames, CT Ct) {
+	public IAsyncEnumerable<PoUserLang?> OrdGetUserLang(IDbUserCtx Ctx, IAsyncEnumerable<string> UniqNames, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<object> BatUpdUserLang(IDbUserCtx Ctx, IAsyncEnumerable<PoUserLang> Pos, CT Ct) {
+	public Task<object> OrdUpdUserLang(IDbUserCtx Ctx, IAsyncEnumerable<PoUserLang> Pos, CT Ct) {
 		throw new NotImplementedException();
 	}
 

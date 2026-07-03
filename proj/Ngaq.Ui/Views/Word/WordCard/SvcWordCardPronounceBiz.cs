@@ -50,7 +50,7 @@ public class SvcWordCardPronounceBiz: IWordCardPronounceBiz{
 		try{
 			var WordLang = JnWord.Lang.Trim();
 			PoUserLang? mappedUserLang = null;
-			var found = SvcUserLang.BatGetUserLang(
+			var found = SvcUserLang.OrdGetUserLang(
 				DbUserCtx,
 				ToolAsyE.ToAsyE([WordLang]),
 				Ct

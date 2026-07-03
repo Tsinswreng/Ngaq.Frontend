@@ -85,9 +85,9 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			if(po.Id == IdPreFilter.Zero){
-				await SvcStudyPlan.BatAddPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdAddPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcStudyPlan.BatUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 			PoPreFilterJson = FormatJson(JsonSerializer.Stringify(po));
 			LastError = "";
@@ -117,7 +117,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 		}
 
 		try{
-			await SvcStudyPlan.BatSoftDelPreFilter(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+			await SvcStudyPlan.OrdSoftDelPreFilter(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			PoPreFilterJson = "";
 			LastError = "";
 			OnPropertyChanged(nameof(HasError));

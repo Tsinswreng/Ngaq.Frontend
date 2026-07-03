@@ -384,9 +384,9 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 			var dbCtx = UserCtxMgr.GetDbUserCtx();
 			var po = bo.PoPreFilter;
 			if(IsCreateMode){
-				await SvcStudyPlan.BatAddPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdAddPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcStudyPlan.BatUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdUpdPreFilter(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 
 			IsCreateMode = false;
@@ -408,7 +408,7 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 		try{
 			var po = BoPreFilter?.PoPreFilter ?? new PoPreFilter();
 			if(!IsCreateMode){
-				await SvcStudyPlan.BatSoftDelPreFilter(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
+				await SvcStudyPlan.OrdSoftDelPreFilter(UserCtxMgr.GetDbUserCtx(), ToolAsyE.ToAsyE([po]), Ct);
 			}
 			BoPreFilter = MkEmptyBoPreFilter();
 			IsCreateMode = true;

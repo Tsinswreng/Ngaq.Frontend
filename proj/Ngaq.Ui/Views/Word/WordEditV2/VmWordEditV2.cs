@@ -233,7 +233,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			}
 		}
 		if(addPos.Count > 0){
-			await SvcWordV2.BatAddWordProp(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
+			await SvcWordV2.OrdAddWordProp(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
 		}
 
 		// BatUpd
@@ -244,7 +244,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			}
 		}
 		if(updPos.Count > 0){
-			await SvcWordV2.BatUpdWordProp(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
+			await SvcWordV2.OrdUpdWordProp(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
 		}
 
 		// Del
@@ -269,7 +269,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			}
 		}
 		if(addPos.Count > 0){
-			await SvcWordV2.BatAddWordLearn(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
+			await SvcWordV2.OrdAddWordLearn(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
 		}
 
 		// BatUpd
@@ -280,7 +280,7 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			}
 		}
 		if(updPos.Count > 0){
-			await SvcWordV2.BatUpdWordLearn(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
+			await SvcWordV2.OrdUpdWordLearn(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
 		}
 
 		// Del

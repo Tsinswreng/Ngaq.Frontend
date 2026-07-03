@@ -153,9 +153,9 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
 			if(IsCreateMode){
 				// 新增時必須補齊 Owner，否則後端 `CheckOwner` 會拒絕。
 				po.Owner = dbCtx.UserCtx.UserId;
-				await SvcUserLang.BatAddUserLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcUserLang.OrdAddUserLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}else{
-				await SvcUserLang.BatUpdUserLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
+				await SvcUserLang.OrdUpdUserLang(dbCtx, ToolAsyE.ToAsyE([po]), Ct);
 			}
 
 			PoUserLang = po;

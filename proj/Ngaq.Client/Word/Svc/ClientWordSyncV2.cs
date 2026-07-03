@@ -44,7 +44,7 @@ public class ClientWordSyncV2{
 				,0
 				,async(_, ct)=>{
 				// 每次嘗試都重新打包，避免不可 seek 流在 401 重試時發空包。
-				var packed = await SvcWordV2.PackAllWordsWithDel(UserCtxMgr.GetDbUserCtx(), ct);
+				var packed = await SvcWordV2.PackAllWordWithDel(UserCtxMgr.GetDbUserCtx(), ct);
 				var content = new StreamContent(packed);
 				content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 				return content;
@@ -70,7 +70,7 @@ public class ClientWordSyncV2{
 		resp.EnsureSuccessStatusCode();
 
 		using var stream = await resp.Content.ReadAsStreamAsync(Ct);
-		await foreach(var _ in SvcWordV2.BatSyncJnWordByBizIdFromStream(
+		await foreach(var _ in SvcWordV2.OrdSyncJnWordByBizIdFromStream(
 			UserCtxMgr.GetDbUserCtx(),
 			stream,
 			Ct

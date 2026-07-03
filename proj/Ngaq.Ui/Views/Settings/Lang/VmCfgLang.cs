@@ -74,7 +74,7 @@ public partial class VmCfgLang: ViewModelBase, IMk<Ctx>{
 			UiLangOptions.Clear();
 			UiLangCodeSet.Clear();
 			UiLangDisplayToCode.Clear();
-			await foreach(var LangInfo in SvcNormLang.BatGetUiLangs(Ct).WithCancellation(Ct)){
+			await foreach(var LangInfo in SvcNormLang.OrdGetUiLangs(Ct).WithCancellation(Ct)){
 				var Code = (LangInfo.Code ?? "").Trim();
 				var NativeName = (LangInfo.NativeName ?? "").Trim();
 				if(Code == ""){

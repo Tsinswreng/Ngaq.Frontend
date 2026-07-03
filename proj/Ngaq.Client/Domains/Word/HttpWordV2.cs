@@ -30,41 +30,41 @@ public class HttpWordV2 : ISvcWordV2 {
 		this.JsonS = JsonS;
 	}
 
-	public Task<nil> BatAddJnWord(IDbUserCtx Ctx, IAsyncEnumerable<JnWord> Words, CT Ct) {
+	public Task<nil> OrdAddJnWord(IDbUserCtx Ctx, IAsyncEnumerable<JnWord> Words, CT Ct) {
 		return PostReqNoResp(U.BatAddJnWord, Words, Ct);
 	}
 
-	public Task<nil> BatAddNewLearnRecord(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> PoWordLearnAsyE, CT Ct) {
+	public Task<nil> OrdAddNewLearnRecord(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> PoWordLearnAsyE, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<nil> BatAddWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
+	public Task<nil> OrdAddWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<nil> BatAddWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
+	public Task<nil> OrdAddWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<nil> BatChangeId(IDbUserCtx Ctx, IAsyncEnumerable<(IdWord Old, IdWord New)> Ids, CT Ct) {
+	public Task<nil> OrdChangeId(IDbUserCtx Ctx, IAsyncEnumerable<(IdWord Old, IdWord New)> Ids, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<nil> BatSyncByDto(IDbUserCtx Ctx, IAsyncEnumerable<DtoJnWordSyncResult> Dtos, CT Ct) {
+	public Task<nil> OrdSyncByDto(IDbUserCtx Ctx, IAsyncEnumerable<DtoJnWordSyncResult> Dtos, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<DtoJnWordSyncResult> BatSyncJnWordByBizId(
+	public IAsyncEnumerable<DtoJnWordSyncResult> OrdSyncJnWordByBizId(
 		IDbUserCtx Ctx, IAsyncEnumerable<JnWord> JnWords, CT Ct
 	){
 		return PostReqResp<JnWord, DtoJnWordSyncResult>(U.BatSyncJnWordByBizId, JnWords, Ct);
 	}
 
-	public IAsyncEnumerable<DtoJnWordSyncResult> BatSyncJnWordByBizIdFromStream(IDbUserCtx Ctx, Stream TextWithStream, CT Ct) {
+	public IAsyncEnumerable<DtoJnWordSyncResult> OrdSyncJnWordByBizIdFromStream(IDbUserCtx Ctx, Stream TextWithStream, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<RespUpdBizId> BatUpdHeadLang(IDbUserCtx Ctx, IAsyncEnumerable<PoWord> PoWords, CT Ct) {
+	public IAsyncEnumerable<RespUpdBizId> OrdUpdHeadLang(IDbUserCtx Ctx, IAsyncEnumerable<PoWord> PoWords, CT Ct) {
 		return PostReqResp<PoWord, RespUpdBizId>(U.BatUpdHeadLang, PoWords, Ct);
 	}
 
@@ -72,11 +72,11 @@ public class HttpWordV2 : ISvcWordV2 {
 		throw new NotImplementedException();
 	}
 
-	public Task<nil> BatUpdWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
+	public Task<nil> OrdUpdWordLearn(IDbUserCtx Ctx, IAsyncEnumerable<PoWordLearn> WordLearns, CT Ct) {
 		throw new NotImplementedException();
 	}
 
-	public Task<nil> BatUpdWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
+	public Task<nil> OrdUpdWordProp(IDbUserCtx Ctx, IAsyncEnumerable<PoWordProp> WordProps, CT Ct) {
 		throw new NotImplementedException();
 	}
 
@@ -88,7 +88,7 @@ public class HttpWordV2 : ISvcWordV2 {
 		throw new NotImplementedException();
 	}
 
-	public IAsyncEnumerable<JnWord> GetAllWordsWithDel(IDbUserCtx Ctx, CT Ct) {
+	public IAsyncEnumerable<JnWord> GetAllWordWithDel(IDbUserCtx Ctx, CT Ct) {
 		return PostNoReqResp<JnWord>(U.GetAllWordsWithDel, Ct);
 	}
 
@@ -124,7 +124,7 @@ public class HttpWordV2 : ISvcWordV2 {
 		throw new NotImplementedException();
 	}
 
-	public Task<Stream> PackAllWordsWithDel(IDbUserCtx Ctx, CT Ct) {
+	public Task<Stream> PackAllWordWithDel(IDbUserCtx Ctx, CT Ct) {
 		return PostNoReqRawStream(U.Pull, Ct);
 	}
 
