@@ -98,6 +98,13 @@ int.	說得對
 		return NIL;
 	}
 
+	/// 主動結束當前流式寫入窗口。
+	/// 用於用戶取消查詞：保留當前已展示文本，但屏蔽取消後才到達的遲到片段。
+	public nil StopStreaming(){
+		IsFinalized = true;
+		return NIL;
+	}
+
 	/// 播放詞頭讀音：先調用 ISvcTts 取音頻，再調用 IAudioPlayer 播放。
 	public async Task<nil> PlayHead(CT Ct){
 		if(str.IsNullOrWhiteSpace(Head)){

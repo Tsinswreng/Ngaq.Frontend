@@ -272,6 +272,17 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			lock(streamLock){
 				streamedText = StreamedResp.ToString();
 			}
+			if(IsLookupCanceled(ex, Ct)){
+				HandleLookupCanceled(
+					Req,
+					PrevResult,
+					PrevReq,
+					PrevResp,
+					PrevRawOutput,
+					streamedText
+				);
+				return NIL;
+			}
 			var isParseFailed = IsLlmResponseParseFailed(ex);
 			if(isParseFailed){
 				// 解析失敗時保留流式已展示內容，並保留原始輸出供「查看/編輯原始響應」使用。
@@ -304,6 +315,43 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			HandleErr(ex);
 		}
 
+		return NIL;
+	}
+
+	/// 查詞取消不屬於錯誤。
+	/// 若尚未收到任何流式文本，回滾到查詢前；若已收到部分內容，則保留當前已展示文本並停止後續更新。
+	nil HandleLookupCanceled(
+		IReqLlmDict Req,
+		LookupResultSnapshot PrevResult,
+		IReqLlmDict? PrevReq,
+		IRespLlmDict? PrevResp,
+		str PrevRawOutput,
+		str StreamedText
+	){
+		Result?.StopStreaming();
+		if(str.IsNullOrWhiteSpace(StreamedText)){
+			RestoreResultSnapshot(PrevResult);
+			LastReqLlmDict = PrevReq;
+			LastRespLlmDict = PrevResp;
+			LastLlmRawOutput = PrevRawOutput;
+			LogInfo(
+				$"Dictionary lookup canceled before first streamed segment. " +
+				$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}"
+			);
+			return NIL;
+		}
+
+		LastReqLlmDict = Req;
+		LastRespLlmDict = null;
+		LastLlmRawOutput = StreamedText;
+		if(Result is not null && str.IsNullOrWhiteSpace(Result.Description)){
+			Result.Description = StreamedText;
+		}
+		LogInfo(
+			$"Dictionary lookup canceled after partial streamed response. " +
+			$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
+			$"LlmResponse={StreamedText}"
+		);
 		return NIL;
 	}
 
@@ -488,6 +536,18 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	bool IsLlmResponseParseFailed(Exception Ex){
 		if(Ex is IAppErr AppErr){
 			return ReferenceEquals(AppErr.Type, KeysErr.Dictionary.LlmResponseParseFailed);
+		}
+		return false;
+	}
+
+	/// 取消查詞時不應彈「未知錯誤」。
+	/// 這裡遞歸展開 InnerException，兼容 HttpClient / Task 包裝出的取消異常。
+	static bool IsLookupCanceled(Exception Ex, CT Ct){
+		if(Ct.IsCancellationRequested && Ex is OperationCanceledException){
+			return true;
+		}
+		if(Ex.InnerException is not null){
+			return IsLookupCanceled(Ex.InnerException, Ct);
 		}
 		return false;
 	}
