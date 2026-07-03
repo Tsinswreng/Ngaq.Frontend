@@ -54,6 +54,7 @@ public partial class ViewDictionary
 	public OpBtn SearchBtn = new();
 	public OpBtn SaveToWordBtn = new();
 	public OpBtn MenuBtn = new();
+	bool HasQuickSavedCurrentLookup{get;set;} = false;
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -89,6 +90,8 @@ public partial class ViewDictionary
 					Ct=>Ctx?.Lookup(Ct),
 					UiCfg.Inst.MainColor
 				);
+				// 新一輪查詞開始時，快速保存按鈕重新回到可用狀態。
+				o._Button.Click += (s,e)=>ResetQuickSaveBtnState();
 			})
 			.A(SearchTextBox, o=>{
 				Ctx.Bind(o, o=>o.Text,x=>x.Input);
@@ -101,14 +104,14 @@ public partial class ViewDictionary
 				);
 			})
 			.A(SaveToWordBtn, o=>{
-				// 收藏按鈕有兩種入口：
-				// 1. 已查詞：把詞典結果轉成詞條後進入編輯頁。
-				// 2. 未查詞：直接進入自由加詞頁。
-				ToolTip.SetTip(o, I[DictK.AddWords]);
+				// 詞典頁主按鈕改為快速保存：
+				// 1. 已查詞：直接保存到詞庫。
+				// 2. 未查詞：仍直接進入自由加詞頁。
+				ToolTip.SetTip(o, I[DictK.SaveToUserWordLibrary]);
 				InitToolbarBtn(
 					o,
 					Icons.BookmarkOutlineAdd().ToIcon(),
-					OpenSaveOrFreeAdd
+					QuickSaveOrFreeAdd
 				);
 			})
 			.A(MenuBtn, o=>{
@@ -164,12 +167,39 @@ public partial class ViewDictionary
 		return I[DictK.DictionaryUsageGuide_];
 	}
 
-	/// 收藏按鈕根據當前是否已有查詞結果，決定走「查詞轉編輯」還是「自由加詞」。
-	async Task<nil> OpenSaveOrFreeAdd(CT Ct){
+	/// 主按鈕優先走快速保存；尚未查詞時仍保留自由加詞入口。
+	async Task<nil> QuickSaveOrFreeAdd(CT Ct){
+		if(Ctx?.LastReqLlmDict is not null && Ctx.LastRespLlmDict is not null){
+			if(HasQuickSavedCurrentLookup){
+				return NIL;
+			}
+			var ok = await Ctx.QuickSaveToWord(Ct);
+			if(ok){
+				MarkQuickSaveBtnAsSaved();
+			}
+			return NIL;
+		}
+		return OpenFreeAddWordPage();
+	}
+
+	/// 菜單入口保留原先「先進編輯頁再保存」的完整流程。
+	async Task<nil> OpenSaveViaWordEditOrFreeAdd(CT Ct){
 		if(Ctx?.LastReqLlmDict is not null && Ctx.LastRespLlmDict is not null){
 			return await Ctx.ToWordEdit(Ct);
 		}
 		return OpenFreeAddWordPage();
+	}
+
+	nil MarkQuickSaveBtnAsSaved(){
+		HasQuickSavedCurrentLookup = true;
+		SaveToWordBtn._Button.Background = Brushes.Green;
+		return NIL;
+	}
+
+	nil ResetQuickSaveBtnState(){
+		HasQuickSavedCurrentLookup = false;
+		SaveToWordBtn._Button.Background = null;
+		return NIL;
 	}
 
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
@@ -222,6 +252,12 @@ public partial class ViewDictionary
 		var menu = new ContextMenu();
 		var item = menu.Items;
 		item
+		.A(new MenuItem(), o=>{
+			o.Header = Todo.I18n("Edit & Save");
+			o.Click += async(s,e)=>{
+				await OpenSaveViaWordEditOrFreeAdd(default);
+			};
+		})
 		.A(new MenuItem(), o=>{
 			o.Header = I[DictK.Help];
 			o.Click += (s,e)=>{

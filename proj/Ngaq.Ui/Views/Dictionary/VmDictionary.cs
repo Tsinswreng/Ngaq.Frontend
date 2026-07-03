@@ -524,6 +524,33 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		return NIL;
 	}
 
+	/// 將最近一次詞典查詢結果直接合併保存到詞庫。
+	/// 用於詞典頁的快速保存按鈕；成功後不再進入編輯頁。
+	public async Task<bool> QuickSaveToWord(CT Ct){
+		if(AnyNull(SvcWordV2, FrontendUserCtxMgr, LastReqLlmDict, LastRespLlmDict)){
+			ShowToast(I18n[K.CompleteDictionaryQueryBeforeSave]);
+			return false;
+		}
+		var Req = LastReqLlmDict!;
+		var Resp = LastRespLlmDict!;
+		try{
+			var JnWord = await SvcWordV2.LlmDictWordToJnWordWithLearn(
+				FrontendUserCtxMgr.GetDbUserCtx(),
+				Req, Resp, Ct
+			);
+			await SvcWordV2.MergeWord(
+				FrontendUserCtxMgr.GetDbUserCtx(),
+				ToolAsyE.ToAsyE([JnWord]),
+				Ct
+			);
+			ShowToast(I18n[K.Saved]);
+			return true;
+		}catch(Exception Ex){
+			HandleErr(Ex);
+			return false;
+		}
+	}
+
 	/// 判斷是否爲「NormLangToUserLang 未映射」的指定業務異常。
 	bool IsNormLangMappingErr(Exception Ex){
 		if(Ex is IAppErr AppErr){
