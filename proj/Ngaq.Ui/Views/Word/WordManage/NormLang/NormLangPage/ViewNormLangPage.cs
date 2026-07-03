@@ -86,12 +86,20 @@ public partial class ViewNormLangPage
 	protected Control MkTopBar(){
 		var top = new GridStack(IsRow:false);
 		top.SetColDefs([
+			new(1, GUT.Star),
 			new(7, GUT.Star),
 			new(1, GUT.Star),
 			new(1, GUT.Star),
 		]);
+		var clearBtn = new OpBtn();
 		var searchBtn = new OpBtn();
-		top.A(new TextBox(), o=>{
+		top.A(clearBtn, o=>{
+			o.Classes.Add(Cls.FullStretch);
+			o.BtnContent = Icons.CloseX();
+			// 清空按鈕直接複用搜索流程，保持與手動「清空後點搜索」一致。
+			o.SetExe((Ct)=>ClearSearchAndSearch(Ct, searchBtn));
+		})
+		.A(new TextBox(), o=>{
 			SearchInput = o;
 			o.Watermark = I[K.InputLangNameOrCode];
 			o.CBind<Ctx>(o.PropText, x=>x.Input);
@@ -113,6 +121,18 @@ public partial class ViewNormLangPage
 			o.Click += (s,e)=>Ctx?.OpenDetail();
 		});
 		return top.Grid;
+	}
+
+	/// 清空搜索框後立刻重新搜索，等價於「手動刪空文本後再按一次搜索」。
+	async Task<nil> ClearSearchAndSearch(CT Ct, OpBtn SearchBtn){
+		if(SearchInput is not null){
+			SearchInput.Text = "";
+		}
+		if(Ctx is not null){
+			Ctx.Input = "";
+		}
+		await SearchBtn.ClickAndWaitDone(Ct);
+		return NIL;
 	}
 
 	nil FocusAndSelectSearchInput(){
