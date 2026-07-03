@@ -18,7 +18,7 @@
 <!-- 3. 兼容 Android 10（API 29）：临时关闭分区存储限制 -->
 <!-- 4. 声明应用支持的最小/目标SDK（建议添加，明确版本范围） -->
     <application
-        android:label="Ngaq.Ui"
+        android:label="Ngaq"
         android:icon="@drawable/Icon"
         android:networkSecurityConfig="@xml/network_security_config"
 

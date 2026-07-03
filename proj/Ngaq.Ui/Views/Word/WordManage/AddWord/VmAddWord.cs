@@ -1,7 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.AddWord;
 
 using System.Collections.ObjectModel;
-using MethodTimer;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
@@ -50,7 +49,6 @@ public partial class VmAddWord
 		set{SetProperty(ref field, value);}
 	} = "";
 
-	[Time]
 	public async Task<nil> Confirm(CT Ct){
 		if(AnyNull(SvcWord, UserCtxMgr)){
 			return NIL;
