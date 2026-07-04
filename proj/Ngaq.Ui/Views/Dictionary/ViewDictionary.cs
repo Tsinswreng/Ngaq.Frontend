@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
+using System.ComponentModel;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -34,6 +35,7 @@ public partial class ViewDictionary
 		if(Ctx is not null){
 			// 把導航職責留在 View 層，VM 只產生要編輯的業務對象。
 			Ctx.OnOpenWordEdit = OpenWordEditPage;
+			Ctx.PropertyChanged += OnCtxPropertyChanged;
 		}
 		Style();
 		Render();
@@ -54,7 +56,6 @@ public partial class ViewDictionary
 	public OpBtn SearchBtn = new();
 	public OpBtn SaveToWordBtn = new();
 	public OpBtn MenuBtn = new();
-	bool HasQuickSavedCurrentLookup{get;set;} = false;
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -90,8 +91,6 @@ public partial class ViewDictionary
 					Ct=>Ctx?.Lookup(Ct),
 					UiCfg.Inst.MainColor
 				);
-				// 新一輪查詞開始時，快速保存按鈕重新回到可用狀態。
-				o._Button.Click += (s,e)=>ResetQuickSaveBtnState();
 			})
 			.A(SearchTextBox, o=>{
 				Ctx.Bind(o, o=>o.Text,x=>x.Input);
@@ -169,8 +168,15 @@ public partial class ViewDictionary
 
 	/// 主按鈕優先走快速保存；尚未查詞時仍保留自由加詞入口。
 	async Task<nil> QuickSaveOrFreeAdd(CT Ct){
-		if(Ctx?.LastReqLlmDict is not null && Ctx.LastRespLlmDict is not null){
-			if(HasQuickSavedCurrentLookup){
+		if(Ctx is null){
+			return NIL;
+		}
+		if(Ctx.HasLookupStarted){
+			if(!Ctx.CanQuickSaveCurrentLookup || Ctx.LastReqLlmDict is null || Ctx.LastRespLlmDict is null){
+				Ctx.ShowToast(I[DictK.CompleteDictionaryQueryBeforeSave]);
+				return NIL;
+			}
+			if(Ctx.HasQuickSavedCurrentLookup){
 				return NIL;
 			}
 			var ok = await Ctx.QuickSaveToWord(Ct);
@@ -191,15 +197,19 @@ public partial class ViewDictionary
 	}
 
 	nil MarkQuickSaveBtnAsSaved(){
-		HasQuickSavedCurrentLookup = true;
 		SaveToWordBtn._Button.Background = Brushes.Green;
 		return NIL;
 	}
 
-	nil ResetQuickSaveBtnState(){
-		HasQuickSavedCurrentLookup = false;
-		SaveToWordBtn._Button.Background = null;
-		return NIL;
+	/// 收藏按鈕的顏色只是顯示細節；底層保存狀態由 VM 持有。
+	void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+		if(E.PropertyName != nameof(Ctx.HasQuickSavedCurrentLookup)){
+			return;
+		}
+		SaveToWordBtn._Button.Background = Ctx?.HasQuickSavedCurrentLookup == true
+			? Brushes.Green
+			: null
+		;
 	}
 
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。

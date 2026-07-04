@@ -24,10 +24,10 @@
 		"MaxDisplayedWordCount": 999999
 	},
 	"LlmDictionary":{
-		"ApiUrl": "https://api.siliconflow.cn/v1/chat/completions",
-		"Model": "Qwen/Qwen2.5-72B-Instruct",
+		"ApiUrl": "https://api.deepseek.com/v1/chat/completions",
+		"Model": "deepseek-v4-flash",
 		"ApiKey": "",
-		"ExtraBodyJson": ""
+		"ExtraBodyJson": "{\n    \"thinking\": {\"type\": \"disabled\"}\n}"
 	}
 
 

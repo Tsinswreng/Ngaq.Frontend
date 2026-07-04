@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
@@ -96,6 +97,20 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	/// 查詞後顯示結果區，避免首屏空白。
 	public bool ShowLookupResult => HasLookupStarted;
+
+	/// 當前這一輪查詞是否已經完成到可快速保存的階段。
+	/// 這是詞典頁面的業務狀態，不應放在 View 層保存。
+	public bool CanQuickSaveCurrentLookup{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = false;
+
+	/// 當前查詞結果是否已經使用過快速保存。
+	/// 以「本輪查詞結果」為粒度控制收藏按鈕只能成功一次。
+	public bool HasQuickSavedCurrentLookup{
+		get{return field;}
+		set{SetProperty(ref field, value);}
+	} = false;
 
 	public VmSimpleWord? Result{
 		get{return field;}
@@ -213,9 +228,12 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		var PrevResp = LastRespLlmDict;
 		var PrevRawOutput = LastLlmRawOutput;
 		var StreamedResp = new StringBuilder();
+		var PendingUiSeg = new StringBuilder();
 		var streamLock = new object();
+		var UiFlushQueued = new IntBox();
 
 		HasLookupStarted = true;
+		ResetQuickSaveState();
 		Result ??= App.DiOrMk<VmSimpleWord>();
 		Result.StartStreaming(Input.Trim());
 
@@ -229,11 +247,10 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				if(dto.NewSeg is not null){
 					lock(streamLock){
 						StreamedResp.Append(dto.NewSeg);
+						PendingUiSeg.Append(dto.NewSeg);
 					}
 				}
-				Dispatcher.UIThread.Post(()=>{
-					Result.GotNewSeg(dto);
-				});
+				QueueFlushStreamedSegToUi(PendingUiSeg, streamLock, UiFlushQueued);
 				return 0;
 			},
 			OnDone = (dto, ct) => {
@@ -267,6 +284,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				);
 			}
 			LastRespLlmDict = Resp;
+			CanQuickSaveCurrentLookup = true;
 		}catch(Exception ex){
 			str streamedText;
 			lock(streamLock){
@@ -316,6 +334,42 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		}
 
 		return NIL;
+	}
+
+	/// 流式片段很多時，若每段都單獨 Post 到 UI 線程，安卓上容易把點擊事件排在很後面。
+	/// 這裡把待顯示片段先合併，保證 UI 線程同一時刻最多掛一個刷新任務。
+	void QueueFlushStreamedSegToUi(
+		StringBuilder PendingUiSeg,
+		object StreamLock,
+		IntBox UiFlushQueued
+	){
+		if(Interlocked.Exchange(ref UiFlushQueued.Value, 1) != 0){
+			return;
+		}
+		Dispatcher.UIThread.Post(()=>{
+			while(true){
+				str mergedSeg;
+				lock(StreamLock){
+					mergedSeg = PendingUiSeg.ToString();
+					PendingUiSeg.Clear();
+				}
+				if(!str.IsNullOrEmpty(mergedSeg)){
+					Result?.GotNewSeg(new DtoOnNewSeg{
+						NewSeg = mergedSeg,
+					});
+				}
+				Interlocked.Exchange(ref UiFlushQueued.Value, 0);
+				lock(StreamLock){
+					if(PendingUiSeg.Length == 0){
+						break;
+					}
+				}
+				if(Interlocked.Exchange(ref UiFlushQueued.Value, 1) == 0){
+					continue;
+				}
+				break;
+			}
+		});
 	}
 
 	/// 查詞取消不屬於錯誤。
@@ -384,6 +438,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			LastReqLlmDict = Req;
 			LastRespLlmDict = Resp;
 			LastLlmRawOutput = RawOutput;
+			CanQuickSaveCurrentLookup = true;
 		}catch(Exception ex){
 			RestoreResultSnapshot(PrevResult);
 			LastReqLlmDict = PrevReq;
@@ -480,6 +535,11 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		public IList<Pronunciation> Pronunciations{get;set;} = [];
 	}
 
+	/// 用可變字段包一層，避免 lambda 直接捕獲 ref 參數導致編譯錯誤。
+	sealed class IntBox{
+		public i32 Value;
+	}
+
 	/// 將最近一次詞典查詢結果轉為詞庫詞條，然後跳到單詞編輯頁。
 	/// 注意: 此函數本身不落庫；最終保存由 ViewWordEditV2 的 Save 按鈕執行。
 	public async Task<nil> ToWordEdit(CT Ct){
@@ -543,6 +603,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 				ToolAsyE.ToAsyE([JnWord]),
 				Ct
 			);
+			HasQuickSavedCurrentLookup = true;
 			ShowToast(I18n[K.Saved]);
 			return true;
 		}catch(Exception Ex){
@@ -755,6 +816,13 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 			.Replace("\r", "\\r")
 			.Replace("\n", "\\n");
 		return $"{Name}.Length={Safe.Length}; {Name}.Tail={Tail}";
+	}
+
+	/// 開始新查詞前重置快速保存狀態。
+	nil ResetQuickSaveState(){
+		CanQuickSaveCurrentLookup = false;
+		HasQuickSavedCurrentLookup = false;
+		return NIL;
 	}
 }
 
