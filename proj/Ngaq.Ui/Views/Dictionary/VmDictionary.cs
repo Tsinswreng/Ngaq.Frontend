@@ -1,15 +1,12 @@
 namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
-using Avalonia.Threading;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using Ngaq.Core.Infra.Cfg;
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
-using Ngaq.Core.Infra.Errors;
 using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Core.Shared.Dictionary.Models.Po.NormLang;
@@ -20,32 +17,15 @@ using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
-using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
-using Tsinswreng.CsErr;
+using Tsinswreng.CsTools;
+using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 using Ctx = VmDictionary;
-using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.CsTools;
-using Tsinswreng.CsCfg;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	protected VmDictionary(){}
-	public static Ctx Mk(){
-		return new Ctx();
-	}
-
-	public static ObservableCollection<Ctx> Samples = [];
-	static VmDictionary(){
-		#if DEBUG
-		{
-			var o = new Ctx();
-			Samples.Add(o);
-		}
-		#endif
-	}
+	public static partial Ctx Mk();
 
 	IFrontendUserCtxMgr? FrontendUserCtxMgr;
 	ISvcDictionary? SvcDictionary;
@@ -63,13 +43,23 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		this.SvcNormLang = SvcNormLang;
 	}
 
+	public static ObservableCollection<Ctx> Samples = [];
+	static VmDictionary(){
+		#if DEBUG
+		{
+			var o = new Ctx();
+			Samples.Add(o);
+		}
+		#endif
+	}
+
 	/// 最近一次字典查詢請求。轉換到詞庫單詞時必須一起傳入。
 	public IReqLlmDict? LastReqLlmDict{get;set;}
 	/// 最近一次字典查詢完整響應。供「保存到詞庫」按鈕使用。
 	public IRespLlmDict? LastRespLlmDict{get;set;}
 	/// 最近一次 LLM 流式原始輸出文本（用于排查和展示）。
 	public str LastLlmRawOutput{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -77,13 +67,13 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	public Func<JnWord, nil>? OnOpenWordEdit{get;set;}
 
 	public str Input{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
-	}="";
+	} = "";
 
 	/// 是否已執行過查詞。未查詞前用於顯示頁面用法提示。
 	public bool HasLookupStarted{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(ShowUsageGuide));
@@ -101,24 +91,24 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 當前這一輪查詞是否已經完成到可快速保存的階段。
 	/// 這是詞典頁面的業務狀態，不應放在 View 層保存。
 	public bool CanQuickSaveCurrentLookup{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = false;
 
 	/// 當前查詞結果是否已經使用過快速保存。
 	/// 以「本輪查詞結果」為粒度控制收藏按鈕只能成功一次。
 	public bool HasQuickSavedCurrentLookup{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = false;
 
 	public VmSimpleWord? Result{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = App.DiOrMk<VmSimpleWord>();
 
 	public str SrcLang{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				UpdateLangDisplayTexts();
@@ -127,7 +117,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	} = "en";
 
 	public str TgtLang{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				UpdateLangDisplayTexts();
@@ -137,7 +127,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	/// 源語言的界面譯名，用於按鈕顯示。
 	public str SrcLangTranslatedName{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				UpdateLangDisplayTexts();
@@ -147,7 +137,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	/// 目標語言的界面譯名，用於按鈕顯示。
 	public str TgtLangTranslatedName{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				UpdateLangDisplayTexts();
@@ -157,376 +147,107 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	/// 源語言按鈕顯示文本，格式如 `en 英語`。
 	public str SrcLangDisplay{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "en";
 
 	/// 目標語言按鈕顯示文本，格式如 `zh 中文`。
 	public str TgtLangDisplay{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "zh";
 
-	public nil SwapLang(){
-		var tmp = SrcLang;
-		SrcLang = TgtLang;
-		TgtLang = tmp;
-		var tmpName = SrcLangTranslatedName;
-		SrcLangTranslatedName = TgtLangTranslatedName;
-		TgtLangTranslatedName = tmpName;
-		_ = RefreshLangTranslatedNames(default);
-		_ = PersistCurLangs(default);
-		return NIL;
-	}
-
-	public nil ApplySrcNormLang(PoNormLang Po){
-		SrcLang = Po.Code ?? "";
-		_ = RefreshLangTranslatedNames(default);
-		_ = PersistSrcLang(Po, default);
-		return NIL;
-	}
-
-	public nil ApplyTgtNormLang(PoNormLang Po){
-		TgtLang = Po.Code ?? "";
-		_ = RefreshLangTranslatedNames(default);
-		_ = PersistTgtLang(Po, default);
-		return NIL;
-	}
-
-	public async Task<nil> InitLang(CT Ct){
-		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
-			return NIL;
-		}
-		try{
-			var dbCtx = FrontendUserCtxMgr.GetDbUserCtx();
-			var src = await SvcDictionary.GetCurSrcNormLang(dbCtx, Ct);
-			var tgt = await SvcDictionary.GetCurTgtNormLang(dbCtx, Ct);
-			if(src is not null && !str.IsNullOrWhiteSpace(src.Code)){
-				SrcLang = src.Code;
-			}
-			if(tgt is not null && !str.IsNullOrWhiteSpace(tgt.Code)){
-				TgtLang = tgt.Code;
-			}
-			await RefreshLangTranslatedNames(Ct);
-		}catch(Exception ex){
-			HandleErr(ex);
-		}
-		return NIL;
-	}
-
-	public async Task<nil> Lookup(CT Ct){
-		if(string.IsNullOrWhiteSpace(Input)){
-			return NIL;
-		}
-		if(AnyNull(SvcDictionary, FrontendUserCtxMgr, SvcNormLang)){
-			return NIL;
-		}
-		var User = FrontendUserCtxMgr.GetUserCtx();
-		// 先快照當前界面數據：若生成失敗則回滾，避免「內容被清空」。
-		var PrevResult = CaptureResultSnapshot(Result);
-		var PrevReq = LastReqLlmDict;
-		var PrevResp = LastRespLlmDict;
-		var PrevRawOutput = LastLlmRawOutput;
-		var StreamedResp = new StringBuilder();
-		var PendingUiSeg = new StringBuilder();
-		var streamLock = new object();
-		var UiFlushQueued = new IntBox();
-
-		HasLookupStarted = true;
-		ResetQuickSaveState();
-		Result ??= App.DiOrMk<VmSimpleWord>();
-		Result.StartStreaming(Input.Trim());
-
-		var ReqLang = await BuildReqOptLang(User.ToDbUserCtx(), Ct);
-		var Req = new ReqLlmDictEvt{
-			Query = new Query{
-				Term = Input.Trim(),
-			},
-			OptLang = ReqLang,
-			OnNewSeg = (dto, ct) => {
-				if(dto.NewSeg is not null){
-					lock(streamLock){
-						StreamedResp.Append(dto.NewSeg);
-						PendingUiSeg.Append(dto.NewSeg);
-					}
-				}
-				QueueFlushStreamedSegToUi(PendingUiSeg, streamLock, UiFlushQueued);
-				return 0;
-			},
-			OnDone = (dto, ct) => {
-				return 0;
-			},
-		};
-		// 緩存最近一次查詢上下文，便於後續轉換為 JnWord。
-		LastReqLlmDict = Req;
-		LastRespLlmDict = null;
-
-		try{
-			// 先記住流式階段已展示的文本；若最終結構化解析結果缺失描述，則回退到它。
-			var StreamedDescription = Result.Description;
-			var Resp = await SvcDictionary.Lookup(User, Req, Ct);
-			lock(streamLock){
-				LastLlmRawOutput = StreamedResp.ToString();
-			}
-			LogWarn(
-				$"Dictionary raw output after stream lookup. " +
-				$"{DescribeTextTail(nameof(LastLlmRawOutput), LastLlmRawOutput)}"
-			);
-			Result.FromRespLlmDict(Resp);
-			if(
-				str.IsNullOrWhiteSpace(Result.Description)
-				&& !str.IsNullOrWhiteSpace(StreamedDescription)
-			){
-				Result.Description = StreamedDescription;
-				LogWarn(
-					$"Dictionary lookup finalized with empty description, fallback to streamed text. " +
-					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}"
-				);
-			}
-			LastRespLlmDict = Resp;
-			CanQuickSaveCurrentLookup = true;
-		}catch(Exception ex){
-			str streamedText;
-			lock(streamLock){
-				streamedText = StreamedResp.ToString();
-			}
-			if(IsLookupCanceled(ex, Ct)){
-				HandleLookupCanceled(
-					Req,
-					PrevResult,
-					PrevReq,
-					PrevResp,
-					PrevRawOutput,
-					streamedText
-				);
-				return NIL;
-			}
-			var isParseFailed = IsLlmResponseParseFailed(ex);
-			if(isParseFailed){
-				// 解析失敗時保留流式已展示內容，並保留原始輸出供「查看/編輯原始響應」使用。
-				LastReqLlmDict = Req;
-				LastRespLlmDict = null;
-				LastLlmRawOutput = streamedText;
-				if(
-					str.IsNullOrWhiteSpace(Result?.Description)
-					&& !str.IsNullOrWhiteSpace(streamedText)
-				){
-					Result ??= App.DiOrMk<VmSimpleWord>();
-					Result.Description = streamedText;
-				}
-				LogWarn(
-					$"Dictionary lookup parse failed, keeping streamed content. " +
-					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
-					$"LlmResponse={streamedText}"
-				);
-			}else{
-				RestoreResultSnapshot(PrevResult);
-				LastReqLlmDict = PrevReq;
-				LastRespLlmDict = PrevResp;
-				LastLlmRawOutput = PrevRawOutput;
-				LogError(
-					$"Dictionary lookup failed. " +
-					$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
-					$"LlmResponse={streamedText}"
-				);
-			}
-			HandleErr(ex);
-		}
-
-		return NIL;
-	}
+	public partial nil SwapLang();
+	public partial nil ApplySrcNormLang(PoNormLang Po);
+	public partial nil ApplyTgtNormLang(PoNormLang Po);
+	public partial Task<nil> InitLang(CT Ct);
+	public partial Task<nil> Lookup(CT Ct);
 
 	/// 流式片段很多時，若每段都單獨 Post 到 UI 線程，安卓上容易把點擊事件排在很後面。
 	/// 這裡把待顯示片段先合併，保證 UI 線程同一時刻最多掛一個刷新任務。
-	void QueueFlushStreamedSegToUi(
+	private partial void QueueFlushStreamedSegToUi(
 		StringBuilder PendingUiSeg,
 		object StreamLock,
 		IntBox UiFlushQueued
-	){
-		if(Interlocked.Exchange(ref UiFlushQueued.Value, 1) != 0){
-			return;
-		}
-		Dispatcher.UIThread.Post(()=>{
-			while(true){
-				str mergedSeg;
-				lock(StreamLock){
-					mergedSeg = PendingUiSeg.ToString();
-					PendingUiSeg.Clear();
-				}
-				if(!str.IsNullOrEmpty(mergedSeg)){
-					Result?.GotNewSeg(new DtoOnNewSeg{
-						NewSeg = mergedSeg,
-					});
-				}
-				Interlocked.Exchange(ref UiFlushQueued.Value, 0);
-				lock(StreamLock){
-					if(PendingUiSeg.Length == 0){
-						break;
-					}
-				}
-				if(Interlocked.Exchange(ref UiFlushQueued.Value, 1) == 0){
-					continue;
-				}
-				break;
-			}
-		});
-	}
+	);
 
 	/// 查詞取消不屬於錯誤。
 	/// 若尚未收到任何流式文本，回滾到查詢前；若已收到部分內容，則保留當前已展示文本並停止後續更新。
-	nil HandleLookupCanceled(
+	private partial nil HandleLookupCanceled(
 		IReqLlmDict Req,
 		LookupResultSnapshot PrevResult,
 		IReqLlmDict? PrevReq,
 		IRespLlmDict? PrevResp,
 		str PrevRawOutput,
 		str StreamedText
-	){
-		Result?.StopStreaming();
-		if(str.IsNullOrWhiteSpace(StreamedText)){
-			RestoreResultSnapshot(PrevResult);
-			LastReqLlmDict = PrevReq;
-			LastRespLlmDict = PrevResp;
-			LastLlmRawOutput = PrevRawOutput;
-			LogInfo(
-				$"Dictionary lookup canceled before first streamed segment. " +
-				$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}"
-			);
-			return NIL;
-		}
-
-		LastReqLlmDict = Req;
-		LastRespLlmDict = null;
-		LastLlmRawOutput = StreamedText;
-		if(Result is not null && str.IsNullOrWhiteSpace(Result.Description)){
-			Result.Description = StreamedText;
-		}
-		LogInfo(
-			$"Dictionary lookup canceled after partial streamed response. " +
-			$"Input={Input.Trim()}, SrcLang={SrcLang}, TgtLang={TgtLang}, " +
-			$"LlmResponse={StreamedText}"
-		);
-		return NIL;
-	}
+	);
 
 	/// 用編輯後的原始文本重新解析詞典結果，不重調 LLM。
-	public Task<nil> ReparseFromRawOutput(str RawOutput, CT Ct){
-		if(str.IsNullOrWhiteSpace(RawOutput)){
-			ShowDialog(I18n[K.RawOutputEmptyCannotParse]);
-			return Task.FromResult<nil>(NIL);
-		}
-		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
-			return Task.FromResult<nil>(NIL);
-		}
-		var PrevResult = CaptureResultSnapshot(Result);
-		var PrevReq = LastReqLlmDict;
-		var PrevResp = LastRespLlmDict;
-		var PrevRawOutput = LastLlmRawOutput;
-		try{
-			HasLookupStarted = true;
-			LogWarn(
-				$"Dictionary raw output before manual reparse. " +
-				$"{DescribeTextTail(nameof(RawOutput), RawOutput)}"
-			);
-			var Req = BuildFallbackReqLlmDict();
-			var Resp = SvcDictionary.ParseRawOutput(RawOutput);
-			Result ??= App.DiOrMk<VmSimpleWord>();
-			Result.FromRespLlmDict(Resp);
-			if(str.IsNullOrWhiteSpace(Result.Description)){
-				Result.Description = RawOutput;
-			}
-			LastReqLlmDict = Req;
-			LastRespLlmDict = Resp;
-			LastLlmRawOutput = RawOutput;
-			CanQuickSaveCurrentLookup = true;
-		}catch(Exception ex){
-			RestoreResultSnapshot(PrevResult);
-			LastReqLlmDict = PrevReq;
-			LastRespLlmDict = PrevResp;
-			LastLlmRawOutput = PrevRawOutput;
-			LogError($"Dictionary reparse from raw output failed. RawOutput={RawOutput}");
-			HandleErr(ex);
-		}
-		return Task.FromResult<nil>(NIL);
-	}
+	public partial Task<nil> ReparseFromRawOutput(str RawOutput, CT Ct);
 
 	/// 構造查詞請求中的語言信息。
 	/// 優先從標準語言表中補齊 NativeName / EnglishName，避免把不完整的語言信息傳給後端。
-	async Task<OptLang> BuildReqOptLang(IDbUserCtx DbUserCtx, CT Ct){
-		if(SvcNormLang is null){
-			return BuildFallbackReqLlmDict().OptLang;
-		}
-
-		var Query = ToolAsyE.ToAsyE([
-			(ELangIdentType.Bcp47, SrcLang),
-			(ELangIdentType.Bcp47, TgtLang),
-		]);
-		PoNormLang? SrcPo = null;
-		PoNormLang? TgtPo = null;
-		var Index = 0;
-		await foreach(var Po in SvcNormLang.OrdGetNormLangByTypeCode(DbUserCtx, Query, Ct).WithCancellation(Ct)){
-			if(Index == 0){
-				SrcPo = Po;
-			}else if(Index == 1){
-				TgtPo = Po;
-			}
-			Index++;
-		}
-
-		return new OptLang{
-			SrcLang = ToNormLangDetail(SrcLang, SrcPo),
-			TgtLangs = [ToNormLangDetail(TgtLang, TgtPo)],
-		};
-	}
+	private partial Task<OptLang> BuildReqOptLang(IDbUserCtx DbUserCtx, CT Ct);
 
 	/// 無需訪問後端時的兜底請求。
 	/// 例如「編輯原始響應後重解析」場景，只保留當前界面上可直接取得的語言代碼。
-	ReqLlmDictEvt BuildFallbackReqLlmDict(){
-		return new ReqLlmDictEvt{
-			Query = new Query{
-				Term = Input.Trim(),
-			},
-			OptLang = new OptLang{
-				SrcLang = ToNormLangDetail(SrcLang, null),
-				TgtLangs = [ToNormLangDetail(TgtLang, null)],
-			},
-		};
-	}
+	private partial ReqLlmDictEvt BuildFallbackReqLlmDict();
 
 	/// 從標準語言實體映射出請求用 DTO。
 	/// 若查不到資料，至少保留 BCP47 代碼，避免請求結構缺失。
-	static NormLangDetail ToNormLangDetail(str Code, PoNormLang? Po){
-		return new NormLangDetail{
-			Type = ELangIdentType.Bcp47,
-			Code = Code,
-			NativeName = Po?.NativeName ?? "",
-			EnglishName = Po?.EnglishName ?? "",
-		};
-	}
+	private static partial NormLangDetail ToNormLangDetail(str Code, PoNormLang? Po);
 
 	/// 查詢前快照：失敗時恢復到此狀態。
-	LookupResultSnapshot CaptureResultSnapshot(VmSimpleWord? Cur){
-		if(Cur is null){
-			return new LookupResultSnapshot();
-		}
-		return new LookupResultSnapshot{
-			Head = Cur.Head,
-			Description = Cur.Description,
-			Pronunciations = Cur.Pronunciations.Select(p=>new Pronunciation{
-				TextType = p.TextType,
-				Text = p.Text,
-			}).ToList(),
-		};
-	}
+	private partial LookupResultSnapshot CaptureResultSnapshot(VmSimpleWord? Cur);
 
 	/// 查詢失敗回滾 UI 文本。
-	nil RestoreResultSnapshot(LookupResultSnapshot Snapshot){
-		Result ??= App.DiOrMk<VmSimpleWord>();
-		Result.Head = Snapshot.Head;
-		Result.Description = Snapshot.Description;
-		Result.Pronunciations = Snapshot.Pronunciations;
-		return NIL;
-	}
+	private partial nil RestoreResultSnapshot(LookupResultSnapshot Snapshot);
+
+	/// 將最近一次詞典查詢結果轉為詞庫詞條，然後跳到單詞編輯頁。
+	/// 注意: 此函數本身不落庫；最終保存由 ViewWordEditV2 的 Save 按鈕執行。
+	public partial Task<nil> ToWordEdit(CT Ct);
+
+	/// 將最近一次詞典查詢結果直接合併保存到詞庫。
+	/// 用於詞典頁的快速保存按鈕；成功後不再進入編輯頁。
+	public partial Task<bool> QuickSaveToWord(CT Ct);
+
+	/// 判斷是否爲「NormLangToUserLang 未映射」的指定業務異常。
+	private partial bool IsNormLangMappingErr(Exception Ex);
+
+	/// 判斷是否爲「LLM 響應解析失敗」業務異常。
+	private partial bool IsLlmResponseParseFailed(Exception Ex);
+
+	/// 取消查詞時不應彈「未知錯誤」。
+	/// 這裡遞歸展開 InnerException，兼容 HttpClient / Task 包裝出的取消異常。
+	private static partial bool IsLookupCanceled(Exception Ex, CT Ct);
+
+	/// 打開語言映射配置頁。
+	private partial obj? OpenNormLangMappingPage();
+
+	/// 跳到 WordEditV2，由用戶在編輯頁手動點 Save 才真正保存。
+	private partial obj? GoToWordEditPage(JnWord JnWord);
+
+	/// 語言未映射時的兜底詞條構造：保留查詢頭詞、源語和描述/讀音，供用戶在編輯頁手動確認。
+	private partial JnWord BuildFallbackJnWord(IReqLlmDict Req, IRespLlmDict Resp);
+
+	private partial Task<nil> PersistCurLangs(CT Ct);
+	private partial Task<nil> PersistSrcLang(PoNormLang Po, CT Ct);
+	private partial Task<nil> PersistTgtLang(PoNormLang Po, CT Ct);
+
+	/// 按當前 UI 語言批量獲取源/目標語言譯名，供語言切換按鈕顯示。
+	private partial Task<nil> RefreshLangTranslatedNames(CT Ct);
+
+	/// 更新語言按鈕最終文本；查不到譯名時僅顯示語言代碼。
+	private partial nil UpdateLangDisplayTexts();
+
+	/// 語言代碼與譯名拼成單行顯示，避免 View 層自己拼接字符串。
+	private static partial str FormatLangDisplay(str Code, str? TranslatedName);
+
+	/// 只記錄文本尾部的可見診斷信息，避免把整段原始輸出完整刷進日誌。
+	private static partial str DescribeTextTail(str Name, str? Text);
+
+	/// 開始新查詞前重置快速保存狀態。
+	private partial nil ResetQuickSaveState();
 
 	/// Lookup 失敗回滾用 DTO。
 	sealed class LookupResultSnapshot{
@@ -539,290 +260,4 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	sealed class IntBox{
 		public i32 Value;
 	}
-
-	/// 將最近一次詞典查詢結果轉為詞庫詞條，然後跳到單詞編輯頁。
-	/// 注意: 此函數本身不落庫；最終保存由 ViewWordEditV2 的 Save 按鈕執行。
-	public async Task<nil> ToWordEdit(CT Ct){
-		if(AnyNull(SvcWordV2, FrontendUserCtxMgr, LastReqLlmDict, LastRespLlmDict)){
-			ShowToast(I18n[K.CompleteDictionaryQueryBeforeSave]);
-			return NIL;
-		}
-		var Req = LastReqLlmDict!;
-		var Resp = LastRespLlmDict!;
-		try{
-			// step 1: 先調用 ISvcWordV2 的轉換函數（按需求固定順序）。
-			var JnWord = await SvcWordV2.LlmDictWordToJnWordWithLearn(
-				FrontendUserCtxMgr.GetDbUserCtx(),
-				Req, Resp, Ct
-			);
-			// step 2: 轉換成功後再跳轉到編輯頁。
-			GoToWordEditPage(JnWord);
-		}catch(Exception Ex){
-			// step 3: 捕獲特定語言映射異常，提供兩個選項。
-			if(!IsNormLangMappingErr(Ex)){
-				HandleErr(Ex);
-			}
-			var BtnGoCfg = new Button();
-			BtnGoCfg.SetContent(I18n[K.GoToLanguageConfigPage]);
-			BtnGoCfg.Click += (s,e)=>{
-				_ = OpenNormLangMappingPage();
-			};
-			var BtnSkipCfg = new Button();
-			BtnSkipCfg.SetContent(I18n[K.SkipConfigAndGoEditPage]);
-			BtnSkipCfg.Click += (s,e)=>{
-				_ = GoToWordEditPage(BuildFallbackJnWord(Req, Resp));
-			};
-			ShowDialog(
-				I18n[K.LanguageMappingNotConfiguredChooseNext],
-				[
-					BtnGoCfg,
-					BtnSkipCfg,
-				]
-			);
-			return NIL;
-		}
-		return NIL;
-	}
-
-	/// 將最近一次詞典查詢結果直接合併保存到詞庫。
-	/// 用於詞典頁的快速保存按鈕；成功後不再進入編輯頁。
-	public async Task<bool> QuickSaveToWord(CT Ct){
-		if(AnyNull(SvcWordV2, FrontendUserCtxMgr, LastReqLlmDict, LastRespLlmDict)){
-			ShowToast(I18n[K.CompleteDictionaryQueryBeforeSave]);
-			return false;
-		}
-		var Req = LastReqLlmDict!;
-		var Resp = LastRespLlmDict!;
-		try{
-			var JnWord = await SvcWordV2.LlmDictWordToJnWordWithLearn(
-				FrontendUserCtxMgr.GetDbUserCtx(),
-				Req, Resp, Ct
-			);
-			await SvcWordV2.MergeWord(
-				FrontendUserCtxMgr.GetDbUserCtx(),
-				ToolAsyE.ToAsyE([JnWord]),
-				Ct
-			);
-			HasQuickSavedCurrentLookup = true;
-			ShowToast(I18n[K.Saved]);
-			return true;
-		}catch(Exception Ex){
-			HandleErr(Ex);
-			return false;
-		}
-	}
-
-	/// 判斷是否爲「NormLangToUserLang 未映射」的指定業務異常。
-	bool IsNormLangMappingErr(Exception Ex){
-		if(Ex is IAppErr AppErr){
-			return ReferenceEquals(AppErr.Type, KeysErr.Word.NormLangToUserLangIsNotMapped);
-		}
-		return false;
-	}
-
-	/// 判斷是否爲「LLM 響應解析失敗」業務異常。
-	bool IsLlmResponseParseFailed(Exception Ex){
-		if(Ex is IAppErr AppErr){
-			return ReferenceEquals(AppErr.Type, KeysErr.Dictionary.LlmResponseParseFailed);
-		}
-		return false;
-	}
-
-	/// 取消查詞時不應彈「未知錯誤」。
-	/// 這裡遞歸展開 InnerException，兼容 HttpClient / Task 包裝出的取消異常。
-	static bool IsLookupCanceled(Exception Ex, CT Ct){
-		if(Ct.IsCancellationRequested && Ex is OperationCanceledException){
-			return true;
-		}
-		if(Ex.InnerException is not null){
-			return IsLookupCanceled(Ex.InnerException, Ct);
-		}
-		return false;
-	}
-
-	/// 打開語言映射配置頁。
-	obj? OpenNormLangMappingPage(){
-		// 直接進入新增映射頁，並預填當前源語言，減少用戶操作步驟。
-		var View = new ViewNormLangToUserLangEdit();
-		if(View.Ctx is not null){
-			View.Ctx.SetCreateMode(true);
-			View.Ctx.FromPoNormLangToUserLang(null);
-			View.Ctx.PoNormLang = SrcLang;
-		}
-		ViewNavi?.GoTo(ToolView.WithTitle(I18n[K.AddNormLangToUserLang], View));
-		return NIL;
-	}
-
-	/// 跳到 WordEditV2，由用戶在編輯頁手動點 Save 才真正保存。
-	obj? GoToWordEditPage(JnWord JnWord){
-		if(OnOpenWordEdit is null){
-			ShowDialog(I18n[K.WordEditorOpenerNotReady]);
-			return NIL;
-		}
-		OnOpenWordEdit(JnWord);
-		return NIL;
-	}
-
-	/// 語言未映射時的兜底詞條構造：保留查詢頭詞、源語和描述/讀音，供用戶在編輯頁手動確認。
-	JnWord BuildFallbackJnWord(IReqLlmDict Req, IRespLlmDict Resp){
-		var Head = !str.IsNullOrWhiteSpace(Resp.Head)
-			? Resp.Head
-			: Req.Query.Term
-		;
-		var Lang = Req.OptLang.SrcLang.Code ?? "";
-		var Props = new List<PoWordProp>();
-
-		// 把詞典描述映射成 description 屬性，後續可在編輯頁繼續調整。
-		foreach(var Descr in Resp.Descrs){
-			if(str.IsNullOrWhiteSpace(Descr)){
-				continue;
-			}
-			Props.Add(new PoWordProp{
-				KType = EKvType.Str,
-				KStr = KeysProp.Inst.description,
-				VType = EKvType.Str,
-				VStr = Descr,
-			});
-		}
-
-		// 把讀音也保留爲 pronunciation 屬性，避免查詢信息丟失。
-		foreach(var Pron in Resp.Pronunciations){
-			var Value = str.IsNullOrWhiteSpace(Pron.TextType)
-				? Pron.Text
-				: $"{Pron.TextType}: {Pron.Text}"
-			;
-			if(str.IsNullOrWhiteSpace(Value)){
-				continue;
-			}
-			Props.Add(new PoWordProp{
-				KType = EKvType.Str,
-				KStr = KeysProp.Inst.pronunciation,
-				VType = EKvType.Str,
-				VStr = Value,
-			});
-		}
-
-		var R = new JnWord{
-			Word = new PoWord{
-				Head = Head ?? "",
-				Lang = Lang,
-			},
-			Props = Props,
-			Learns = [],
-		};
-		R.EnsureForeignId();
-		return R;
-	}
-
-	async Task<nil> PersistCurLangs(CT Ct){
-		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
-			return NIL;
-		}
-		try{
-			var dbCtx = FrontendUserCtxMgr.GetDbUserCtx();
-			var src = new PoNormLang{
-				Type = ELangIdentType.Bcp47,
-				Code = SrcLang,
-			};
-			var tgt = new PoNormLang{
-				Type = ELangIdentType.Bcp47,
-				Code = TgtLang,
-			};
-			await SvcDictionary.SetCurSrcNormLang(dbCtx, src, Ct);
-			await SvcDictionary.SetCurTgtNormLang(dbCtx, tgt, Ct);
-		}catch(Exception ex){
-			HandleErr(ex);
-		}
-		return NIL;
-	}
-
-	async Task<nil> PersistSrcLang(PoNormLang Po, CT Ct){
-		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
-			return NIL;
-		}
-		try{
-			await SvcDictionary.SetCurSrcNormLang(FrontendUserCtxMgr.GetDbUserCtx(), Po, Ct);
-		}catch(Exception ex){
-			HandleErr(ex);
-		}
-		return NIL;
-	}
-
-	async Task<nil> PersistTgtLang(PoNormLang Po, CT Ct){
-		if(AnyNull(SvcDictionary, FrontendUserCtxMgr)){
-			return NIL;
-		}
-		try{
-			await SvcDictionary.SetCurTgtNormLang(FrontendUserCtxMgr.GetDbUserCtx(), Po, Ct);
-		}catch(Exception ex){
-			HandleErr(ex);
-		}
-		return NIL;
-	}
-
-	/// 按當前 UI 語言批量獲取源/目標語言譯名，供語言切換按鈕顯示。
-	async Task<nil> RefreshLangTranslatedNames(CT Ct){
-		if(AnyNull(SvcNormLang, FrontendUserCtxMgr)){
-			UpdateLangDisplayTexts();
-			return NIL;
-		}
-		try{
-			var UiLang = KeysClientCfg.Lang.GetFrom(AppCfg.Inst) ?? "en";
-			var TargetLang = new NormLang{
-				Type = ELangIdentType.Bcp47,
-				Code = UiLang,
-			};
-			List<str?> Names = [];
-			var NameAsyE = SvcNormLang.OrdGetTranslatedName(
-				FrontendUserCtxMgr.GetDbUserCtx(),
-				TargetLang,
-				ToolAsyE.ToAsyE([
-					(INormLang)new NormLang{Type = ELangIdentType.Bcp47, Code = SrcLang},
-					(INormLang)new NormLang{Type = ELangIdentType.Bcp47, Code = TgtLang},
-				]),
-				Ct
-			);
-			await foreach(var Name in NameAsyE.WithCancellation(Ct)){
-				Names.Add(Name);
-			}
-			SrcLangTranslatedName = Names.Count > 0 ? (Names[0] ?? "") : "";
-			TgtLangTranslatedName = Names.Count > 1 ? (Names[1] ?? "") : "";
-		}catch(Exception ex){
-			HandleErr(ex);
-		}
-		return NIL;
-	}
-
-	/// 更新語言按鈕最終文本；查不到譯名時僅顯示語言代碼。
-	nil UpdateLangDisplayTexts(){
-		SrcLangDisplay = FormatLangDisplay(SrcLang, SrcLangTranslatedName);
-		TgtLangDisplay = FormatLangDisplay(TgtLang, TgtLangTranslatedName);
-		return NIL;
-	}
-
-	/// 語言代碼與譯名拼成單行顯示，避免 View 層自己拼接字符串。
-	static str FormatLangDisplay(str Code, str? TranslatedName){
-		if(str.IsNullOrWhiteSpace(TranslatedName)){
-			return Code;
-		}
-		return $"{Code} {TranslatedName}";
-	}
-
-	/// 只記錄文本尾部的可見診斷信息，避免把整段原始輸出完整刷進日誌。
-	static str DescribeTextTail(str Name, str? Text){
-		var Safe = Text ?? "";
-		var TailLen = Math.Min(80, Safe.Length);
-		var Tail = Safe[^TailLen..]
-			.Replace("\r", "\\r")
-			.Replace("\n", "\\n");
-		return $"{Name}.Length={Safe.Length}; {Name}.Tail={Tail}";
-	}
-
-	/// 開始新查詞前重置快速保存狀態。
-	nil ResetQuickSaveState(){
-		CanQuickSaveCurrentLookup = false;
-		HasQuickSavedCurrentLookup = false;
-		return NIL;
-	}
 }
-
