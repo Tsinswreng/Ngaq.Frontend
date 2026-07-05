@@ -15,13 +15,29 @@ using Ngaq.Backend.Sql;
 using Ngaq.Core.Infra.Log;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra.I18n;
+using Serilog;
 using Tsinswreng.CsCfg;
 using Tsinswreng.CsTools;
 using MediaManager;
+using Serilog.Extensions.Logging;
 using Tsinswreng.CsI18n;
 
 sealed class Program {
+	/// Windows 入口日誌文件夾名稱。
+	/// 放在 exe 同目錄下，便於直接隨程序一起排障。
+	private const str LogDirName = "logs";
 
+	/// 日誌文件前綴。Serilog 會在 rolling file 模式下自動補日期後綴。
+	private const str LogFileName = "ngaq-.log";
+
+	/// 單個日誌文件大小上限: 10 MiB。
+	/// 超限後會自動切分，避免單文件無限膨脹。
+	private const i32 LogFileSizeLimitBytes = 10 * 1024 * 1024;
+
+	/// 僅保留最近 14 份日誌文件，避免總體積無限增長。
+	private const i32 RetainedFileCountLimit = 14;
+
+	/// 根據命令行參數決定配置文件路徑。
 	static str GetCfgFilePath(string[] args) {
 		var CfgFilePath = "";
 		if (args.Length > 0) {
@@ -36,13 +52,52 @@ sealed class Program {
 		return CfgFilePath;
 	}
 
+	/// 初始化 Windows 入口的全局日誌源頭。
+	/// 優先使用 Serilog 同時輸出到 console 與 rolling file；
+	/// 若文件 sink 初始化失敗，則回退到僅 console，避免啓動流程直接中斷。
+	static void InitAppLog() {
+		try {
+			var LoggerFactory = BuildWindowsLoggerFactory();
+			AppLog.UseLoggerFactory(LoggerFactory, nameof(Ngaq.Windows));
+		} catch (Exception Err) {
+			AppLog.UseConsoleLogger(nameof(Ngaq.Windows), LogLevel.Information);
+			AppLog.Inst.LogError(Err, "Failed to initialize Windows file logger. Falling back to console only.");
+		}
+	}
+
+	/// 構建 Windows 專用 logger factory。
+	/// 這裏把兩個 sink 都包進 async sink，盡量減少日誌 IO 對主線程的阻塞。
+	static ILoggerFactory BuildWindowsLoggerFactory() {
+		var LogDirPath = Path.Combine(AppContext.BaseDirectory, LogDirName);
+		var LogFilePath = Path.Combine(LogDirPath, LogFileName);
+		Directory.CreateDirectory(LogDirPath);
+
+		var SerilogLogger = new global::Serilog.LoggerConfiguration()
+			.MinimumLevel.Information()
+			.Enrich.FromLogContext()
+			.WriteTo.Async(Cfg => Cfg.Console())
+			.WriteTo.Async(Cfg => Cfg.File(
+				path: LogFilePath,
+				rollingInterval: global::Serilog.RollingInterval.Day,
+				retainedFileCountLimit: RetainedFileCountLimit,
+				fileSizeLimitBytes: LogFileSizeLimitBytes,
+				rollOnFileSizeLimit: true,
+				shared: true,
+				buffered: true
+			))
+			.CreateLogger();
+
+		return new SerilogLoggerFactory(SerilogLogger, dispose: true);
+	}
+
 	// Initialization code. Don't use any Avalonia, third-party APIs or any
 	// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
 	// yet and stuff might break.
 
 	[STAThread]
 	public static void Main(string[] args) {
-		AppLog.UseConsoleLogger(nameof(Ngaq.Windows), LogLevel.Information);
+		// 先把全局日誌源頭接好，後面的配置讀取與 DI 啓動都可以直接復用同一個 logger。
+		InitAppLog();
 		if(args.Length > 1 && args[0] == "--version"){
 			System.Console.WriteLine(1757779054280);
 		}
