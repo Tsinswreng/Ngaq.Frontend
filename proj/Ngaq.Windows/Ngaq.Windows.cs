@@ -82,8 +82,7 @@ sealed class Program {
 				retainedFileCountLimit: RetainedFileCountLimit,
 				fileSizeLimitBytes: LogFileSizeLimitBytes,
 				rollOnFileSizeLimit: true,
-				shared: true,
-				buffered: true
+				shared: true
 			))
 			.CreateLogger();
 
