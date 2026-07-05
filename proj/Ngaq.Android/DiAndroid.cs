@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Ngaq.Android.Domains.Clipboard;
 using Ngaq.Core.Android.Audio;
 using Ngaq.Core.Frontend.Clipboard;
+using Ngaq.Core.Infra.Log;
 using Ngaq.Core.Shared.Audio;
 
 public static class DiAndroid{
@@ -14,8 +15,7 @@ adb logcat -c # 清除日誌
 # 显示该 Tag 的所有级别日志（V/D/I/W/E/F），并保留时间戳格式
 adb logcat Tsinswreng.Ngaq:V *:S -v time
  */
-		var AndroidLogger = new AndroidLogger("Tsinswreng.Ngaq");
-		z.AddSingleton<ILogger>(AndroidLogger);
+		z.AddSingleton<ILogger>(_=>AppLog.Inst);
 		z.AddSingleton<IAudioPlayer, AndroidAudioPlayer>();
 		// 覆蓋 UI 層默認剪貼板服務，改用 Android 原生 ClipboardManager。
 		z.AddSingleton<ISvcClipboard, AndroidSvcClipboard>();

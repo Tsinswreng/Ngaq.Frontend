@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Browser;
 using Microsoft.Extensions.DependencyInjection;
 using Ngaq.Core;
+using Ngaq.Core.Infra.Log;
 using Ngaq.Ui;
 using Ngaq.Client;
 namespace Ngaq.Browser;
@@ -11,6 +12,7 @@ internal sealed partial class Program {
 	private static async Task Main(string[] args){
 		var I = 0;
 		try{
+			AppLog.UseLogger(new BrowserLogger());
 			var svc = new ServiceCollection();
 			svc
 				.SetupCore()

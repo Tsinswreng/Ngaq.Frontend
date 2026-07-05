@@ -4,6 +4,7 @@ using Ngaq.Browser.Infra;
 using Ngaq.Client.Mock;
 using Ngaq.Core.Frontend.ImgBg;
 using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Infra.Log;
 using Ngaq.Core.Infra.Url;
 using Ngaq.Core.Shared.Audio;
 using Ngaq.Core.Shared.Dictionary.Svc;
@@ -27,7 +28,7 @@ public static class DiUi{
 		z.AddSingleton<IImgGetter, MockImgGetter>();
 		z.AddSingleton<ISvcUserLang, MockSvcUserLang>();
 		z.AddSingleton<IFrontendUserCtxMgr>(FrontendUserCtxMgr.Inst);
-		z.AddSingleton<ILogger, BrowserLogger>();
+		z.AddSingleton<ILogger>(_=>AppLog.Inst);
 		return z;
 	}
 }

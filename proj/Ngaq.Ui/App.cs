@@ -14,6 +14,7 @@ using Live.Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ngaq.Core.Frontend.Hotkey;
+using Ngaq.Core.Infra.Log;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.ViewModels;
 using Ngaq.Ui.Views;
@@ -28,18 +29,18 @@ public partial class App :Application
 	,ILiveView
 #endif
 {
-	public static ILogger? Logger{get;protected set;} = null!;
+	public static ILogger? Logger{get;protected set;} = AppLog.Inst;
 	public static T GetRSvc<T>()
 		where T : class
 	{
-		Logger??=App.SvcProvider.GetRequiredService<ILogger>();
+		Logger ??= AppLog.Inst;
 		Logger?.LogInformation("GetRSvc: "+typeof(T));
 		return App.SvcProvider.GetRequiredService<T>();
 	}
 	public static T? GetSvc<T>()
 		where T : class
 	{
-		Logger??=App.SvcProvider.GetRequiredService<ILogger>();
+		Logger ??= AppLog.Inst;
 		Logger?.LogInformation("GetRSvc: "+typeof(T));
 		return App.SvcProvider.GetService<T>();
 	}
@@ -61,6 +62,7 @@ public partial class App :Application
 	public static IServiceProvider SvcProvider { get; private set; } = null!;
 	public static void SetSvcProvider(IServiceProvider SvcProvider){
 		App.SvcProvider = SvcProvider;
+		Logger = AppLog.Inst;
 	}
 
 

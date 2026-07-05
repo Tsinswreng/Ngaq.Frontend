@@ -137,6 +137,10 @@ public partial class VmDictionary{
 			lock(streamLock){
 				LastLlmRawOutput = StreamedResp.ToString();
 			}
+			LogInfo(
+				$"{MkDiagStamp()} {nameof(Lookup)} returned. " +
+				$"Input={Input.Trim()}, StreamedLen={StreamedResp.Length}"
+			);
 			LogWarn(
 				$"Dictionary raw output after stream lookup. " +
 				$"{DescribeTextTail(nameof(LastLlmRawOutput), LastLlmRawOutput)}"
@@ -154,6 +158,10 @@ public partial class VmDictionary{
 			}
 			LastRespLlmDict = Resp;
 			CanQuickSaveCurrentLookup = true;
+			LogInfo(
+				$"{MkDiagStamp()} {nameof(Lookup)} ready-for-quick-save. " +
+				$"HasResp={LastRespLlmDict is not null}, CanQuickSave={CanQuickSaveCurrentLookup}"
+			);
 		}catch(Exception ex){
 			str streamedText;
 			lock(streamLock){
@@ -434,6 +442,10 @@ public partial class VmDictionary{
 		var Req = LastReqLlmDict!;
 		var Resp = LastRespLlmDict!;
 		try{
+			LogInfo(
+				$"{MkDiagStamp()} {nameof(QuickSaveToWord)} started. " +
+				$"Head={Resp.Head}, SrcLang={SrcLang}, TgtLang={TgtLang}"
+			);
 			var JnWord = await SvcWordV2.LlmDictWordToJnWordWithLearn(
 				FrontendUserCtxMgr.GetDbUserCtx(),
 				Req, Resp, Ct
@@ -444,9 +456,17 @@ public partial class VmDictionary{
 				Ct
 			);
 			HasQuickSavedCurrentLookup = true;
+			LogInfo(
+				$"{MkDiagStamp()} {nameof(QuickSaveToWord)} finished. " +
+				$"HasQuickSaved={HasQuickSavedCurrentLookup}"
+			);
 			ShowToast(I18n[K.Saved]);
 			return true;
 		}catch(Exception Ex){
+			LogError(
+				$"{MkDiagStamp()} {nameof(QuickSaveToWord)} failed. " +
+				$"Head={Resp.Head}, SrcLang={SrcLang}, TgtLang={TgtLang}"
+			);
 			HandleErr(Ex);
 			return false;
 		}
@@ -645,6 +665,10 @@ public partial class VmDictionary{
 			.Replace("\r", "\\r")
 			.Replace("\n", "\\n");
 		return $"{Name}.Length={Safe.Length}; {Name}.Tail={Tail}";
+	}
+
+	private static partial str MkDiagStamp(){
+		return $"[DiagTs={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}]";
 	}
 
 	private partial nil ResetQuickSaveState(){

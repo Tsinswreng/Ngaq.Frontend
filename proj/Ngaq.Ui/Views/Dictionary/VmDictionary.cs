@@ -246,6 +246,9 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 只記錄文本尾部的可見診斷信息，避免把整段原始輸出完整刷進日誌。
 	private static partial str DescribeTextTail(str Name, str? Text);
 
+	/// 臨時診斷用時間戳，便於對比「查詞完成」與「點擊收藏」的先後順序。
+	private static partial str MkDiagStamp();
+
 	/// 開始新查詞前重置快速保存狀態。
 	private partial nil ResetQuickSaveState();
 

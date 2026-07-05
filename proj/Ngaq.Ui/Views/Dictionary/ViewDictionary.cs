@@ -171,6 +171,15 @@ public partial class ViewDictionary
 		if(Ctx is null){
 			return NIL;
 		}
+		Ctx.LogInfo(
+			$"[DiagTs={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}] " +
+			$"{nameof(QuickSaveOrFreeAdd)} entered. " +
+			$"HasLookupStarted={Ctx.HasLookupStarted}, " +
+			$"CanQuickSave={Ctx.CanQuickSaveCurrentLookup}, " +
+			$"HasReq={Ctx.LastReqLlmDict is not null}, " +
+			$"HasResp={Ctx.LastRespLlmDict is not null}, " +
+			$"HasQuickSaved={Ctx.HasQuickSavedCurrentLookup}"
+		);
 		if(Ctx.HasLookupStarted){
 			if(!Ctx.CanQuickSaveCurrentLookup || Ctx.LastReqLlmDict is null || Ctx.LastRespLlmDict is null){
 				Ctx.ShowToast(I[DictK.CompleteDictionaryQueryBeforeSave]);

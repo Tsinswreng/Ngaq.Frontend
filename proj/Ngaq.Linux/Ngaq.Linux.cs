@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Avalonia;
 using Avalonia.Markup.Declarative;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Ngaq.Client;
 using Ngaq.Core;
 using Ngaq.Core.Infra.Cfg;
@@ -11,6 +12,7 @@ using Ngaq.Core.Infra.Url;
 using Ngaq.Backend;
 using Ngaq.Backend.Di;
 using Ngaq.Backend.Sql;
+using Ngaq.Core.Infra.Log;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra.I18n;
 using Tsinswreng.CsCfg;
@@ -40,6 +42,7 @@ sealed class Program {
 
 	[STAThread]
 	public static void Main(string[] args) {
+		AppLog.UseConsoleLogger(nameof(Ngaq.Linux), LogLevel.Information);
 		if(args.Length > 1 && args[0] == "--version"){
 			System.Console.WriteLine(1757779054280);
 		}

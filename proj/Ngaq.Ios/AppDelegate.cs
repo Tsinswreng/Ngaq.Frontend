@@ -4,6 +4,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.iOS;
 using Avalonia.Media;
+using Microsoft.Extensions.Logging;
+using Ngaq.Core.Infra.Log;
 
 namespace Ngaq.Ui.iOS;
 
@@ -15,6 +17,11 @@ namespace Ngaq.Ui.iOS;
 public partial class AppDelegate : AvaloniaAppDelegate<App>
 #pragma warning restore CA1711 // Identifiers should not have incorrect suffix
 {
+	protected override void OnFrameworkInitializationCompleted(){
+		AppLog.UseConsoleLogger(nameof(Ngaq.Ui.iOS), LogLevel.Information);
+		base.OnFrameworkInitializationCompleted();
+	}
+
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
         return base.CustomizeAppBuilder(builder)

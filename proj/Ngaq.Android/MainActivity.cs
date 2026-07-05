@@ -13,6 +13,7 @@ using Ngaq.Backend.Di;
 using Ngaq.Client;
 using Ngaq.Core;
 using Ngaq.Core.Infra.Cfg;
+using Ngaq.Core.Infra.Log;
 using Ngaq.Core.Infra.Url;
 using Ngaq.Ui;
 using Ngaq.Ui.Infra.I18n;
@@ -124,6 +125,8 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 	}
 
 	private void Init(){
+		// Android 入口直接把 logcat logger 掛到全局源頭，後續 DI 與 App.Logger 共用同一出口。
+		AppLog.UseLogger(new AndroidLogger("Tsinswreng.Ngaq"));
 		var appContext = global::Android.App.Application.Context;
 		var externalFileDirObj = appContext.GetExternalFilesDir(null)
 			?? throw new Exception("Cannot get ExternalFilesDir");
