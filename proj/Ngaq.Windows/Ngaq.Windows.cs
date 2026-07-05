@@ -55,9 +55,7 @@ sealed class Program {
 當改作 設多源配置、訪問配置項時 優先讀用戶配置、尋不見汶尋Gui配置。
 保存旹只寫入Gui配置、緣用戶配置潙只讀。
  */
-			System.Console.WriteLine(
-				"pwd: " + Directory.GetCurrentDirectory()
-			);
+			AppLog.Inst.LogInformation("pwd: " + Directory.GetCurrentDirectory());
 			var DualSrcCfg = AppCfg.Inst;
 			var CfgPath = GetCfgFilePath(args);
 

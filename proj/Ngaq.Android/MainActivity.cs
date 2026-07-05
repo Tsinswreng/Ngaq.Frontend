@@ -8,6 +8,7 @@ using Avalonia;
 using Avalonia.Android;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Ngaq.Backend;
 using Ngaq.Backend.Di;
 using Ngaq.Client;
@@ -88,7 +89,7 @@ public partial class MainActivity : AvaloniaMainActivity<App>{
 	public override void OnWindowFocusChanged(bool hasFocus){
 		base.OnWindowFocusChanged(hasFocus);
 		_hasWindowFocus = hasFocus;
-		Log.Info("Ngaq.Android", $"MainActivity.OnWindowFocusChanged hasFocus={hasFocus}");
+		AppLog.Inst.LogInformation($"MainActivity.OnWindowFocusChanged hasFocus={hasFocus}");
 		if(hasFocus){
 			TryConsumePendingDictionaryLookupIntent();
 		}
