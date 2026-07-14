@@ -137,10 +137,6 @@ public partial class VmDictionary{
 			lock(streamLock){
 				LastLlmRawOutput = StreamedResp.ToString();
 			}
-			LogInfo(
-				$"{MkDiagStamp()} {nameof(Lookup)} returned. " +
-				$"Input={Input.Trim()}, StreamedLen={StreamedResp.Length}"
-			);
 			LogWarn(
 				$"Dictionary raw output after stream lookup. " +
 				$"{DescribeTextTail(nameof(LastLlmRawOutput), LastLlmRawOutput)}"
@@ -158,10 +154,6 @@ public partial class VmDictionary{
 			}
 			LastRespLlmDict = Resp;
 			CanQuickSaveCurrentLookup = true;
-			LogInfo(
-				$"{MkDiagStamp()} {nameof(Lookup)} ready-for-quick-save. " +
-				$"HasResp={LastRespLlmDict is not null}, CanQuickSave={CanQuickSaveCurrentLookup}"
-			);
 		}catch(Exception ex){
 			str streamedText;
 			lock(streamLock){
@@ -222,28 +214,33 @@ public partial class VmDictionary{
 			return;
 		}
 		Dispatcher.UIThread.Post(()=>{
-			while(true){
-				str mergedSeg;
-				lock(StreamLock){
-					mergedSeg = PendingUiSeg.ToString();
-					PendingUiSeg.Clear();
-				}
-				if(!str.IsNullOrEmpty(mergedSeg)){
-					Result?.GotNewSeg(new DtoOnNewSeg{
-						NewSeg = mergedSeg,
-					});
-				}
-				Interlocked.Exchange(ref UiFlushQueued.Value, 0);
-				lock(StreamLock){
-					if(PendingUiSeg.Length == 0){
-						break;
-					}
-				}
-				if(Interlocked.Exchange(ref UiFlushQueued.Value, 1) == 0){
-					continue;
-				}
-				break;
+			str MergedSeg;
+			lock(StreamLock){
+				MergedSeg = PendingUiSeg.ToString();
+				PendingUiSeg.Clear();
 			}
+
+			// step 1: 每次 Post 只刷新當前這一批文本。
+			// 之前這裡會在 UI 線程裏 while(true) 一次吃完整個 backlog，
+			// 安卓上容易把 hover / click 等輸入事件一直排在後面，
+			// 造成「解析明明結束了，但收藏按鈕還像卡死」的假象。
+			if(!str.IsNullOrEmpty(MergedSeg)){
+				Result?.GotNewSeg(new DtoOnNewSeg{
+					NewSeg = MergedSeg,
+				});
+			}
+
+			// step 2: 先釋放「已有刷新任務」標記，讓新到達的片段可自行排隊。
+			Interlocked.Exchange(ref UiFlushQueued.Value, 0);
+
+			// step 3: 若清空當前批次後又積壓了新片段，重新 Post 下一輪。
+			// 這裡故意不在當前回調裏 while 連刷，避免長時間霸佔 UI 線程。
+			lock(StreamLock){
+				if(PendingUiSeg.Length == 0){
+					return;
+				}
+			}
+			QueueFlushStreamedSegToUi(PendingUiSeg, StreamLock, UiFlushQueued);
 		});
 	}
 
@@ -442,10 +439,6 @@ public partial class VmDictionary{
 		var Req = LastReqLlmDict!;
 		var Resp = LastRespLlmDict!;
 		try{
-			LogInfo(
-				$"{MkDiagStamp()} {nameof(QuickSaveToWord)} started. " +
-				$"Head={Resp.Head}, SrcLang={SrcLang}, TgtLang={TgtLang}"
-			);
 			var JnWord = await SvcWordV2.LlmDictWordToJnWordWithLearn(
 				FrontendUserCtxMgr.GetDbUserCtx(),
 				Req, Resp, Ct
@@ -456,17 +449,9 @@ public partial class VmDictionary{
 				Ct
 			);
 			HasQuickSavedCurrentLookup = true;
-			LogInfo(
-				$"{MkDiagStamp()} {nameof(QuickSaveToWord)} finished. " +
-				$"HasQuickSaved={HasQuickSavedCurrentLookup}"
-			);
 			ShowToast(I18n[K.Saved]);
 			return true;
 		}catch(Exception Ex){
-			LogError(
-				$"{MkDiagStamp()} {nameof(QuickSaveToWord)} failed. " +
-				$"Head={Resp.Head}, SrcLang={SrcLang}, TgtLang={TgtLang}"
-			);
 			HandleErr(Ex);
 			return false;
 		}
@@ -665,10 +650,6 @@ public partial class VmDictionary{
 			.Replace("\r", "\\r")
 			.Replace("\n", "\\n");
 		return $"{Name}.Length={Safe.Length}; {Name}.Tail={Tail}";
-	}
-
-	private static partial str MkDiagStamp(){
-		return $"[DiagTs={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}]";
 	}
 
 	private partial nil ResetQuickSaveState(){

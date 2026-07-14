@@ -9,9 +9,7 @@ namespace Ngaq.Ui.Views.Word.WordInfo;
 using Ctx = VmWordInfo;
 using K = KeysUiI18nCommon;
 public partial class VmWordInfo
-	:ViewModelBase
-	,IMk<Ctx>
-	//,IVmWord
+	:ViewModelBase, IMk<Ctx>
 {
 	public static Ctx Mk(){
 		return new Ctx();

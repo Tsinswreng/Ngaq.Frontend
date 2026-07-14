@@ -62,7 +62,7 @@ public partial class VmBaseWordListCard
 	}
 
 	public IWordForLearn? WordForLearn{
-		get{return field;}
+		get;
 		set{
 			ForceSetProp(ref field, value);
 			if(value == null){return;}
@@ -76,7 +76,7 @@ public partial class VmBaseWordListCard
 	}
 
 	public str Head{
-		get{return field;}
+		get;
 		set{
 			if(Bo!=null){Bo.Head = value;}
 			SetProperty(ref field, value);
@@ -84,7 +84,7 @@ public partial class VmBaseWordListCard
 	} = "";
 
 	public str Lang{
-		get{return field;}
+		get;
 		set{
 			if(Bo!=null){Bo.Lang = value;}
 			SetProperty(ref field, value);
@@ -92,7 +92,7 @@ public partial class VmBaseWordListCard
 	} = "";
 
 	public u64? Index{
-		get{return field;}
+		get;
 		set{
 			if(Bo!=null){Bo.Index = value;}
 			SetProperty(ref field, value);
@@ -101,7 +101,7 @@ public partial class VmBaseWordListCard
 
 
 	public f64? Weight{
-		get{return field;}
+		get;
 		set{
 			if(Bo!=null){Bo.Weight = value;}
 			SetProperty(ref field, value);
@@ -109,7 +109,7 @@ public partial class VmBaseWordListCard
 	}
 
 	public IDictionary<ELearn, IList<ILearnRecord>> Learn_Records{
-		get{return field;}
+		get;
 		set{
 			if(Bo!=null){Bo.Learn_Records = value;}
 			ForceSetProp(ref field, value);
@@ -119,7 +119,7 @@ public partial class VmBaseWordListCard
 	} = new Dictionary<ELearn, IList<ILearnRecord>>();
 
 	public IList<ILearnRecord> SavedLearnRecords{
-		get{return field;}
+		get;
 		set{
 			if(Bo!=null){Bo.LearnRecords = value;}
 			//OnPropertyChanged(nameof(field));
@@ -128,18 +128,18 @@ public partial class VmBaseWordListCard
 	}= new List<ILearnRecord>();
 
 	public i64 LastLearnedTime{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = 0;
 
 
 	public IBrush LearnedColor{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=Brushes.Transparent;
 
 	public IBrush FontColor{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = Brushes.White;
 

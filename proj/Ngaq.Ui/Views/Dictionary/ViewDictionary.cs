@@ -5,6 +5,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
 using System.ComponentModel;
+using Avalonia.Interactivity;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -56,6 +57,9 @@ public partial class ViewDictionary
 	public OpBtn SearchBtn = new();
 	public OpBtn SaveToWordBtn = new();
 	public OpBtn MenuBtn = new();
+	GridStack? _langGrid;
+	GridStack? _searchGrid;
+	Grid? _resultArea;
 
 	protected nil Render(){
 		this.SetContent(Root.Grid, o=>{
@@ -63,8 +67,10 @@ public partial class ViewDictionary
 		});
 
 		var LangGrid = new GridStack(IsRow: false);
+		_langGrid = LangGrid;
 		Root.A(LangGrid.Grid, o=>{
 			LangGrid.ColDefs = new("*,Auto,*");
+			o.ZIndex = 20;
 		});
 		{{
 			LangGrid.A(MkLangButton(), o=>{
@@ -79,8 +85,10 @@ public partial class ViewDictionary
 		}}
 
 		var SearchGrid = new GridStack(IsRow: false);
+		_searchGrid = SearchGrid;
 		Root.A(SearchGrid.Grid, o=>{
 			SearchGrid.ColDefs = new("1*,8*,1*,1*");
+			o.ZIndex = 20;
 		});
 		{{
 			SearchGrid
@@ -171,15 +179,6 @@ public partial class ViewDictionary
 		if(Ctx is null){
 			return NIL;
 		}
-		Ctx.LogInfo(
-			$"[DiagTs={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}] " +
-			$"{nameof(QuickSaveOrFreeAdd)} entered. " +
-			$"HasLookupStarted={Ctx.HasLookupStarted}, " +
-			$"CanQuickSave={Ctx.CanQuickSaveCurrentLookup}, " +
-			$"HasReq={Ctx.LastReqLlmDict is not null}, " +
-			$"HasResp={Ctx.LastRespLlmDict is not null}, " +
-			$"HasQuickSaved={Ctx.HasQuickSavedCurrentLookup}"
-		);
 		if(Ctx.HasLookupStarted){
 			if(!Ctx.CanQuickSaveCurrentLookup || Ctx.LastReqLlmDict is null || Ctx.LastRespLlmDict is null){
 				Ctx.ShowToast(I[DictK.CompleteDictionaryQueryBeforeSave]);
@@ -210,20 +209,36 @@ public partial class ViewDictionary
 		return NIL;
 	}
 
+	/// 快速收藏按鈕在「未收藏」狀態下應恢復到主題默認按鈕樣式，
+	/// 不能把 Background 直接設為 null。
+	/// 在 Avalonia 下，局部設 null 容易把可命中區域退化成只剩內容附近，
+	/// 表現爲「看起來整個按鈕都在，但只有中心圖標附近能點」。
+	nil ResetQuickSaveBtnToDefaultStyle(){
+		SaveToWordBtn._Button.ClearValue(Button.BackgroundProperty);
+		SaveToWordBtn._Button.ClearValue(Button.BorderBrushProperty);
+		return NIL;
+	}
+
 	/// 收藏按鈕的顏色只是顯示細節；底層保存狀態由 VM 持有。
 	void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
 		if(E.PropertyName != nameof(Ctx.HasQuickSavedCurrentLookup)){
 			return;
 		}
-		SaveToWordBtn._Button.Background = Ctx?.HasQuickSavedCurrentLookup == true
-			? Brushes.Green
-			: null
-		;
+		if(Ctx?.HasQuickSavedCurrentLookup == true){
+			MarkQuickSaveBtnAsSaved();
+			return;
+		}
+		ResetQuickSaveBtnToDefaultStyle();
 	}
 
 	/// 結果區：未查詞時顯示灰色用法提示，查詞後切到 `ViewSimpleWord`。
 	Control MkResultArea(){
 		var Area = new Grid();
+		_resultArea = Area;
+		Area.ZIndex = 0;
+		Area.ClipToBounds = true;
+		// 結果區與上方工具欄留出固定縫隙，避免邊界像素落到 ScrollViewer 命中區。
+		Area.Margin = new Avalonia.Thickness(0, UiCfg.Inst.BaseFontSize * 0.35, 0, 0);
 		Area.A(new ScrollViewer(), o=>{
 			Ctx.Bind(o, IsVisibleProperty, x=>x.ShowLookupResult, Mode: BindingMode.OneWay);
 			o.SetContent(new ViewSimpleWord(), o=>{

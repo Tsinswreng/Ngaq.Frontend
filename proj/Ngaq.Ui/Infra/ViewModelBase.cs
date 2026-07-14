@@ -42,6 +42,13 @@ public partial class ViewModelBase
 		ViewNavi = MgrViewNavi.Inst.ViewNavi;
 	}
 
+	public bool IsInited{get;set;} = false;
+	public void CheckInited(){
+		if(!IsInited){
+			throw new InvalidOperationException(Todo.I18n("ViewModel Not Inited"));
+		}
+	}
+
 	[Impl(typeof(IViewNaviHolder))]
 	[Obsolete(@$"用 {nameof(AppViewBase.ViewNavi)}。
 	不應該在ViewModel層做視圖跳轉

@@ -42,14 +42,13 @@ public partial class VmLearnWords
 	}
 
 	public Cfg_ CfgUi = new();
-	ISvcWord SvcWordV1;
-	ISvcWordV2 SvcWordV2;
-	IFrontendUserCtxMgr UserCtxMgr;
+	ISvcWordV2 SvcWordV2 = default!;
+	IFrontendUserCtxMgr UserCtxMgr = default!;
 
-	MgrLearn MgrLearn;
-	IImgGetter SvcImg;
-	ICfgAccessor Cfg;
-	IWordCardPronounceBiz? WordCardPronounceBiz;
+	MgrLearn MgrLearn = default!;
+	IImgGetter SvcImg = default!;
+	ICfgAccessor Cfg = default!;
+	IWordCardPronounceBiz? WordCardPronounceBiz = default!;
 	public VmLearnWords(
 		ISvcWord SvcWord
 		,ISvcWordV2 SvcWordV2
@@ -60,7 +59,6 @@ public partial class VmLearnWords
 		,IWordCardPronounceBiz? WordCardPronounceBiz
 	){
 		this.SvcImg = SvcImg;
-		this.SvcWordV1 = SvcWord;
 		this.SvcWordV2 = SvcWordV2;
 		this.UserCtxMgr = UserCtxMgr;
 		this.MgrLearn = MgrLearn;
@@ -68,6 +66,7 @@ public partial class VmLearnWords
 		this.WordCardPronounceBiz = WordCardPronounceBiz;
 		CurWordInfo.SetPromptBeforeStart();
 		_Init();
+		IsInited = true;
 	}
 
 	nil _Init(){
@@ -271,9 +270,7 @@ public partial class VmLearnWords
 	private readonly ConcurrentQueue<Bitmap> _bgCache = new();
 
 	public async Task<nil> ChangeBg(){
-		if(AnyNull(Cfg)){
-			return NIL;
-		}
+		CheckInited();
 		try{
 			var EnableRandomBackground = Cfg.Get(KeysClientCfg.Word.EnableRandomBackground);
 			if(!EnableRandomBackground){

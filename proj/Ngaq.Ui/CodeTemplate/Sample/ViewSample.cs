@@ -29,7 +29,8 @@ public partial class ViewSample
 
 
 	//大多數場景下我們用GridStack作爲視圖的根節點。
-	//GridStack支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。每次Add時會自動設置行號或列號 因此不要手動設計行/列號
+	//GridStack支持 或全爲行 或全爲列 的佈局 不建議同時設置行和例。
+	//每次Add時會自動設置行號或列號 因此不要手動設計行/列號
 	//優先使用GridStack、別用原生Grid 除非你要顯示手動設置行和列
 	GridStack Root = new(IsRow: true);//IsRow: true 表示行佈局
 	//視圖的初始化羅輯寫在Render裏
@@ -74,7 +75,7 @@ public partial class ViewSample
 		}).A(new Button(), b=>{
 			//初始化ContentControl.Content時使用SetContent擴展方法、不要直接給Content賦值
 			b.SetContent(new TextBlock(), t=>{
-				t.Text = I[K.ButtonOne];//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣。
+				t.Text = I[K.ButtonOne];//項目要支持i18n。禁止直接硬編碼。臨時硬編碼要寫成這樣: t.Text = Todo.I18n("按鈕1");
 			});
 //你也可以直接給o.Content賦值 o.Content = new TextBlock(){Text="按鈕一"};
 //按鈕綁定事件的寫法
@@ -84,7 +85,6 @@ public partial class ViewSample
 		}).A(new ScrollViewer(), Sv=>{
 			Sv.SetContent(new StackPanel(), Sp=>{
 				Sp.A(new OpBtn(), o=>{
-					//UI中硬編碼的字符串都要這樣寫Todo
 					o._Button.Content = I[K.CallBackendService];
 					o.SetExe(Ct=>Ctx?.CallService(Ct));
 				}).A(MkList());
