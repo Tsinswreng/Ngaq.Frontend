@@ -28,7 +28,6 @@ using PC = PsdCls;
 
 public partial class ViewLearnWords
 	:AppViewBase<Ctx>
-	,IViewLearnWord
 {
 	public OpBtn? StartBtn{get;set;}
 	public OpBtn? SaveBtn{get;set;}
@@ -40,48 +39,9 @@ public partial class ViewLearnWords
 	protected Ctx? SubscribedCtx;
 	protected ObservableCollection<VmWordListCard>? SubscribedVmWordCards;
 
-	[Impl]
+
 	public IList<IViewWordListCard>? WordListCards{
 		get=>WordCardCtrls;
-	}
-
-	[Impl]
-	public IViewWordInfo? WordInfo{
-		get => WordInfoCtrl;
-	}
-
-	[Impl]
-	public async Task<nil> ClickStart(CT Ct){
-		await ClickBtn(StartBtn, Ct);
-		return NIL;
-	}
-
-	[Impl]
-	public async Task<nil> ClickSave(CT Ct){
-		await ClickBtn(SaveBtn, Ct);
-		return NIL;
-	}
-
-	[Impl]
-	public async Task<nil> ClickReset(CT Ct){
-		await ClickBtn(ResetBtn, Ct);
-		return NIL;
-	}
-
-	[Impl]
-	public async Task<nil> ClickSettings(CT Ct){
-		await ClickBtn(SettingsBtn, Ct);
-		return NIL;
-	}
-
-	[Impl]
-	public async Task<nil> ClickWordCard(u64 Pos, CT Ct){
-		var cards = WordListCards;
-		if(cards is null || Pos >= (u64)cards.Count){
-			return NIL;
-		}
-		await cards[(int)Pos].Click(Ct);
-		return NIL;
 	}
 
 	public ViewLearnWords(){
@@ -110,8 +70,8 @@ public partial class ViewLearnWords
 		};
 		WordInfoCtrl?.PropertyChanged += (s,e)=>{
 			if(
-				e.PropertyName == nameof(IViewWordInfo.HeadText)
-				|| e.PropertyName == nameof(IViewWordInfo.Descrs)
+				e.PropertyName == nameof(VmWordInfo.Head)
+				|| e.PropertyName == nameof(VmWordInfo.Descrs)
 			){
 				RaisePropertyChanged(nameof(WordInfo));
 			}

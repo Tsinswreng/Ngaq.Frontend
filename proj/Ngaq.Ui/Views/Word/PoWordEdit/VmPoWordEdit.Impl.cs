@@ -9,12 +9,14 @@ using Tsinswreng.CsTempus;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class VmPoWordEdit{
+	/// 保留原始時間字串語義，讓表單可直接進行雙向繫結。
 	public partial nil LoadFromPo(PoWord Po){
 		WordIdText = Po.Id.ToString(); Head = Po.Head; Lang = Po.Lang; StoredAtIso = Po.StoredAt.ToIso();
 		DelAtUnixMs = Po.DelAt.IsNullOrDefault() ? "" : (Po.DelAt.Value+"");
 		BizCreatedAtIso = Po.BizCreatedAt.ToIso(); BizUpdatedAtIso = Po.BizUpdatedAt.ToIso();
 		return NIL;
 	}
+	/// 依欄位順序驗證，第一個失敗原因回傳給頁面錯誤列。
 	public partial bool TryApplyToPo(PoWord Po, out str Err){
 		Err = "";
 		if(str.IsNullOrWhiteSpace(Head)){Err = I18n[K.HeadIsRequired]; return false;}

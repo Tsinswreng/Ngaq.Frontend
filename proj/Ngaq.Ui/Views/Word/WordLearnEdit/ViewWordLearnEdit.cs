@@ -60,14 +60,14 @@ public partial class ViewWordLearnEdit: AppViewBase{
 			o.Margin = new(10, 6, 10, 6);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.MainColor;
-			o.Content = Icons.Save().ToIcon().WithText(I[K.Save]);
+			o.SetContent(Icons.Save().ToIcon().WithText(I[K.Save]));
 			o.Click += (s, e)=>ViewNavi?.Back();
 		});
 		root.A(new Button(), o=>{
 			o.Margin = new(10, 0, 10, 10);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
-			o.Content = Icons.Delete().ToIcon().WithText(I[K.Remove]);
+			o.SetContent(Icons.Delete().ToIcon().WithText(I[K.Remove]));
 			o.Click += async (s, e)=>{
 				if(Ctx is null){
 					return;

@@ -9,7 +9,7 @@ public partial class VmWordLearnEdit: ViewModelBase{
 	public Func<CT, Task<bool>>? OnDelete{get;set;}
 	/// 正在編輯的學習記錄行。
 	public VmWordLearnRow Row{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = VmWordLearnRow.NewRow();
 	/// 轉發父頁提供的刪除操作。

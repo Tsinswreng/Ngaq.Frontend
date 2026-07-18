@@ -25,7 +25,6 @@ using Tsinswreng.Avln.Dsl;
 /// 屬性分頁：列表 + 新增，點行進入編輯頁。
 public partial class ViewWordPropPage
 	: AppViewBase
-	, IViewWordPropPage
 {
 	public VmWordPropPage? Ctx{
 		get{return DataContext as VmWordPropPage;}

@@ -56,7 +56,7 @@ public partial class ViewWordLearnPage: AppViewBase{
 		var o = new Button();
 		o.Margin = new(10, 10, 10, 4);
 		o.StretchCenter();
-		o.Content = Icons.Add().ToIcon().WithText(" "+I[K.AddLearn]);
+		o.SetContent(Icons.Add().ToIcon().WithText(" "+I[K.AddLearn]));
 		return o;
 	}
 

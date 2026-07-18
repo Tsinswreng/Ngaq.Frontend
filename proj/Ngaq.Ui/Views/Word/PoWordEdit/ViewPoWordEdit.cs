@@ -20,7 +20,6 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 /// PoWord 基本信息編輯頁。
 public partial class ViewPoWordEdit
 	: AppViewBase<Ctx>
-	, IViewPoWordEdit
 {
 	public SelectableTextBlock? IdCtrl{get;set;}
 	public TextBox? HeadCtrl{get;set;}
@@ -33,81 +32,13 @@ public partial class ViewPoWordEdit
 	static readonly IValueConverter IsoConverter = new IsoToTempusConverter();
 	static readonly IValueConverter DelAtConverter = new DelAtUnixMsToTempusConverter();
 
+	/// 建構後立即建立控件樹；資料內容由宿主後置注入的 Ctx 提供。
 	public ViewPoWordEdit(){
 		Render();
 	}
 
-	[Impl]
-	public str? Id{
-		get{return IdCtrl?.Text;}
-	}
-
-	[Impl]
-	public str? Head{
-		get{return HeadCtrl?.Text;}
-		set{
-			if(HeadCtrl is not null){
-				HeadCtrl.Text = value;
-			}
-		}
-	}
-
-	[Impl]
-	public str? Lang{
-		get{return LangCtrl?.Text;}
-		set{
-			if(LangCtrl is not null){
-				LangCtrl.Text = value;
-			}
-		}
-	}
-
-	[Impl]
-	public str? StoredAt{
-		get{return StoredAtCtrl?.Tempus?.ToIso() ?? "";}
-		set{
-			if(StoredAtCtrl is not null){
-				StoredAtCtrl.Tempus = ParseIso(value);
-			}
-		}
-	}
-
-	[Impl]
-	public str? BizCreatedAt{
-		get{return BizCreatedAtCtrl?.Tempus?.ToIso() ?? "";}
-		set{
-			if(BizCreatedAtCtrl is not null){
-				BizCreatedAtCtrl.Tempus = ParseIso(value);
-			}
-		}
-	}
-
-	[Impl]
-	public str? BizUpdatedAt{
-		get{return BizUpdatedAtCtrl?.Tempus?.ToIso() ?? "";}
-		set{
-			if(BizUpdatedAtCtrl is not null){
-				BizUpdatedAtCtrl.Tempus = ParseIso(value);
-			}
-		}
-	}
-
-	[Impl]
-	public str? DelAt{
-		get{
-			var tempus = DelAtCtrl?.Tempus;
-			if(tempus is null){
-				return "";
-			}
-			return tempus.Value.Value.ToString(CultureInfo.InvariantCulture);
-		}
-		set{
-			if(DelAtCtrl is not null){
-				DelAtCtrl.Tempus = ParseUnixMs(value);
-			}
-		}
-	}
-
+	
+	/// 建立可捲動的基本資料表單，避免小尺寸視窗裁切時間欄位。
 	void Render(){
 		var sv = new ScrollViewer();
 		sv.SetContent(new StackPanel(), sp=>{
@@ -189,6 +120,7 @@ public partial class ViewPoWordEdit
 		return MkFieldRow(Label, tb);
 	}
 
+	/// 以標籤在上、輸入控件在下的垂直結構統一所有字段布局。
 	Control MkFieldRow(str Label, Control Input){
 		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
 		sp.A(new TextBlock(), o=>{

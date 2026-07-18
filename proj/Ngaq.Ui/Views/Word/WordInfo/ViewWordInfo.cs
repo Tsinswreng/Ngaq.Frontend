@@ -32,7 +32,6 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
 public partial class ViewWordInfo
 	: AppViewBase<Ctx>
-	,IViewWordInfo
 {
 
 	public ViewWordInfo() {
@@ -45,21 +44,6 @@ public partial class ViewWordInfo
 		OnCtxChanged();
 	}
 
-
-	[Impl]
-	public str HeadText{
-		get{return HeadTextCtrl?.Text ?? "";}
-	}
-
-	[Impl]
-	public IList<str>? Descrs{
-		get{
-			return DescriptionTextCtrls
-				.Where(x => x.Parent is not null)
-				.Select(x => x.Text ?? "")
-				.ToList();
-		}
-	}
 
 	/// 樣式類名枚舉，避免直接硬編碼 class 字符串。
 	public partial class Cls {
@@ -159,22 +143,11 @@ public partial class ViewWordInfo
 		}
 		DescriptionTextCtrls.Clear();
 		SyncSidePaneVisibility();
-		NotifyOutputChanged(nameof(HeadText));
-		NotifyOutputChanged(nameof(Descrs));
 		return NIL;
 	}
 
 	/// 其他 prop 集合變更後同步刷新右欄顯示狀態。
 	protected void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E) {
-		if (E.PropertyName == nameof(Ctx.Head)) {
-			NotifyOutputChanged(nameof(HeadText));
-		}
-		if (
-			E.PropertyName == nameof(Ctx.DescriptionWordProps)
-			|| E.PropertyName == nameof(Ctx.Descrs)
-		) {
-			NotifyOutputChanged(nameof(Descrs));
-		}
 		if (
 			E.PropertyName == nameof(Ctx.DescriptionWordProps)
 			|| E.PropertyName == nameof(Ctx.SideWordProps)
