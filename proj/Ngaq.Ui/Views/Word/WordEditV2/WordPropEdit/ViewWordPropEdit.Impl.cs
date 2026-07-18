@@ -19,6 +19,8 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmWordPropEdit;
+using Ngaq.Ui.Infra.Ctrls;
+
 /// 單行屬性編輯頁。
 public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 	public partial ViewWordPropEdit(){
@@ -29,7 +31,6 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 		var root = new GridStack(IsRow: true);
 		root.Grid.SetRowDefs([
 			new(8, GUT.Star),
-			new(1, GUT.Auto),
 			new(1, GUT.Auto),
 		]);
 		root.A(new ScrollViewer(), sv=>{
@@ -69,32 +70,47 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 				}));
 			});
 		});
-		root.A(new Button(), o=>{
-			SaveBtn = o;
-			o.Margin = new(10, 6, 10, 6);
-			o.StretchCenter();
-			o.Background = UiCfg.Inst.MainColor;
-			o.SetContent(Icons.Save().ToIcon().WithText(I[K.Save]));
-			o.Click += (s, e)=>ViewNavi?.Back();
-		});
-		root.A(new Button(), o=>{
-			DeleteBtn = o;
-			o.Margin = new(10, 0, 10, 10);
+		var bar = new GridStack(IsRow: false);
+		bar.Grid.SetColDefs([
+			new(1, GUT.Star),
+			new(1, GUT.Star),
+		]);
+		bar.Grid.Margin = new(10, 6, 10, 10);
+		bar.A(new Button(), o=>{
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.SetContent(Icons.Delete().ToIcon().WithText(I[K.Remove]));
 			o.Click += async (s, e)=>{
-				if(Ctx is null){
+				if(Ctx is null || Ctx.Row.DmlState == EDmlState.Added){
+					if(Ctx is not null) Ctx.OnDeletedByView();
+					ViewNavi?.Back();
 					return;
 				}
-				var ok = await Ctx.Delete(default);
-				if(ok){
+				try{
+					await Ctx.DelDirect();
+					Ctx.OnDeletedByView();
 					ViewNavi?.Back();
+				}catch(Exception ex){
+					// let VM handle error display
+				}
+			};
+		}).A(new Button(), o=>{
+			o.StretchCenter();
+			o.Background = UiCfg.Inst.MainColor;
+			o.SetContent(Icons.Save().ToIcon().WithText(I[K.Save]));
+			o.Click += async (s, e)=>{
+				if(Ctx is null) return;
+				try{
+					await Ctx.SaveDirect();
+					ViewNavi?.Back();
+				}catch(Exception ex){
+					// let VM handle error display
 				}
 			};
 		});
+		root.A(bar.Grid);
 		this.SetContent(root.Grid);
-	}
+		}
 	partial void OnCtxChanged(){
 		if(SubscribedCtx is not null){
 			SubscribedCtx.PropertyChanged -= OnEditVmPropertyChanged;

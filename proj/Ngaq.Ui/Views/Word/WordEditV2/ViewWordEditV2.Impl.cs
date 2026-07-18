@@ -39,14 +39,24 @@ public partial class ViewWordEditV2{
 			return;
 		}
 		Ctx.WordPropPage.OnEditRequested += Row=>{
-			var EditVm = new VmWordPropEdit{Row = Row};
-			EditVm.OnDelete = Ct=>Ctx?.DeletePropRow(Row, Ct) ?? Task.FromResult(false);
+			Row.Raw.WordId = Ctx.Draft?.Word.Id ?? Row.Raw.WordId;
+			var EditVm = Ctx.MkPropEdit();
+			EditVm.Row = Row;
+			EditVm.Deleted += deletedRow => {
+				Ctx.WordPropPage.RemovePersistedRow(deletedRow);
+				Ctx.SyncDeletedPropToLocalState(deletedRow.Raw.Id);
+			};
 			var EditView = new ViewWordPropEdit{Ctx = EditVm};
 			ViewNavi?.GoTo(ToolView.WithTitle(I[K.EditProp], EditView));
 		};
 		Ctx.WordLearnPage.OnEditRequested += Row=>{
-			var EditVm = new VmWordLearnEdit{Row = Row};
-			EditVm.OnDelete = Ct=>Ctx?.DeleteLearnRow(Row, Ct) ?? Task.FromResult(false);
+			Row.Raw.WordId = Ctx.Draft?.Word.Id ?? Row.Raw.WordId;
+			var EditVm = Ctx.MkLearnEdit();
+			EditVm.Row = Row;
+			EditVm.Deleted += deletedRow => {
+				Ctx.WordLearnPage.RemovePersistedRow(deletedRow);
+				Ctx.SyncDeletedLearnToLocalState(deletedRow.Raw.Id);
+			};
 			var EditView = new ViewWordLearnEdit{Ctx = EditVm};
 			ViewNavi?.GoTo(ToolView.WithTitle(I[K.EditLearn], EditView));
 		};

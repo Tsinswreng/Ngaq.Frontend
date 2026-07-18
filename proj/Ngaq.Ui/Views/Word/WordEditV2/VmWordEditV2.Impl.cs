@@ -12,7 +12,9 @@ using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Word.WordEditV2.PoWordEdit;
+using Ngaq.Ui.Views.Word.WordEditV2.WordLearnEdit;
 using Ngaq.Ui.Views.Word.WordEditV2.WordLearnPage;
+using Ngaq.Ui.Views.Word.WordEditV2.WordPropEdit;
 using Ngaq.Ui.Views.Word.WordEditV2.WordPropPage;
 using Tsinswreng.CsTools;
 using Tsinswreng.CsCore;
@@ -130,12 +132,6 @@ public partial class VmWordEditV2{
 		if(hasMovedToOtherWord){
 			Draft.SetIdEtEnsureFKey(finalId);
 		}
-
-		var wordId = Draft.Word.Id;
-		await SavePropsAtomized(dbCtx, wordId, Ct);
-		await SaveLearnsAtomized(dbCtx, wordId, Ct);
-		WordPropPage.OnSaved();
-		WordLearnPage.OnSaved();
 		return NIL;
 	}
 
@@ -151,132 +147,9 @@ public partial class VmWordEditV2{
 		return resp.FinalId;
 	}
 
-	/// 根據行 DmlState 原子化保存 Props：Added → BatAdd / Modified → BatUpd / Removed → Del。
-	private async partial Task<nil> SavePropsAtomized(IDbUserCtx DbCtx, IdWord WordId, CT Ct){
-		if(SvcWordV2 is null){
-			return NIL;
-		}
-
-		// BatAdd
-		var addPos = new List<PoWordProp>();
-		foreach(var r in WordPropPage.AddedRows){
-			if(r.TryToPo(WordId, out var po, out _)){
-				addPos.Add(po);
-			}
-		}
-		if(addPos.Count > 0){
-			await SvcWordV2.OrdAddWordProp(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
-		}
-
-		// BatUpd
-		var updPos = new List<PoWordProp>();
-		foreach(var r in WordPropPage.ModifiedRows){
-			if(r.TryToPo(WordId, out var po, out _)){
-				updPos.Add(po);
-			}
-		}
-		if(updPos.Count > 0){
-			await SvcWordV2.OrdUpdWordProp(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
-		}
-
-		// Del
-		if(WordPropPage.RemovedRows.Count > 0){
-			var ids = WordPropPage.RemovedRows.Select(r => r.Raw.Id);
-			await SvcWordV2.DelWordPropInId(DbCtx, ToolAsyE.ToAsyE(ids), Ct);
-		}
-		return NIL;
-	}
-
-	/// 根據行 DmlState 原子化保存 Learns：Added → BatAdd / Modified → BatUpd / Removed → Del。
-	private async partial Task<nil> SaveLearnsAtomized(IDbUserCtx DbCtx, IdWord WordId, CT Ct){
-		if(SvcWordV2 is null){
-			return NIL;
-		}
-
-		// BatAdd
-		var addPos = new List<PoWordLearn>();
-		foreach(var r in WordLearnPage.AddedRows){
-			if(r.TryToPo(WordId, out var po, out _)){
-				addPos.Add(po);
-			}
-		}
-		if(addPos.Count > 0){
-			await SvcWordV2.OrdAddWordLearn(DbCtx, ToolAsyE.ToAsyE(addPos), Ct);
-		}
-
-		// BatUpd
-		var updPos = new List<PoWordLearn>();
-		foreach(var r in WordLearnPage.ModifiedRows){
-			if(r.TryToPo(WordId, out var po, out _)){
-				updPos.Add(po);
-			}
-		}
-		if(updPos.Count > 0){
-			await SvcWordV2.OrdUpdWordLearn(DbCtx, ToolAsyE.ToAsyE(updPos), Ct);
-		}
-
-		// Del
-		if(WordLearnPage.RemovedRows.Count > 0){
-			var ids = WordLearnPage.RemovedRows.Select(r => r.Raw.Id);
-			await SvcWordV2.DelWordLearnInId(DbCtx, ToolAsyE.ToAsyE(ids), Ct);
-		}
-		return NIL;
-	}
-
-	/// 屬性編輯頁按刪除時直接調對應刪除接口；新建未保存行只做本地移除。
-	public async partial Task<bool> DeletePropRow(VmWordPropRow Row, CT Ct){
-		if(Row.DmlState == EDmlState.Added){
-			WordPropPage.RemoveRow(Row);
-			return true;
-		}
-		if(AnyNull(SvcWordV2, UserCtxMgr)){
-			return false;
-		}
-		try{
-			await SvcWordV2.DelWordPropInId(
-				UserCtxMgr.GetDbUserCtx(),
-				ToolAsyE.ToAsyE([Row.Raw.Id]),
-				Ct
-			);
-			WordPropPage.RemovePersistedRow(Row);
-			SyncDeletedPropToLocalState(Row.Raw.Id);
-			ShowToast(I18n[K.Deleted]);
-			return true;
-		}catch(Exception ex){
-			LastError = ex.Message;
-			HandleErr(ex);
-			return false;
-		}
-	}
-
-	/// 學習記錄的刪除規則與屬性一致：已有數據立刻落庫，新建行僅本地撤銷。
-	public async partial Task<bool> DeleteLearnRow(VmWordLearnRow Row, CT Ct){
-		if(Row.DmlState == EDmlState.Added){
-			WordLearnPage.RemoveRow(Row);
-			return true;
-		}
-		if(AnyNull(SvcWordV2, UserCtxMgr)){
-			return false;
-		}
-		try{
-			await SvcWordV2.DelWordLearnInId(
-				UserCtxMgr.GetDbUserCtx(),
-				ToolAsyE.ToAsyE([Row.Raw.Id]),
-				Ct
-			);
-			WordLearnPage.RemovePersistedRow(Row);
-			SyncDeletedLearnToLocalState(Row.Raw.Id);
-			ShowToast(I18n[K.Deleted]);
-			return true;
-		}catch(Exception ex){
-			LastError = ex.Message;
-			HandleErr(ex);
-			return false;
-		}
-	}
 
 	/// 單行已直接落庫刪除後，同步清理本地草稿與源數據，避免後續保存又把它帶回來。
-	partial void SyncDeletedPropToLocalState(IdWordProp Id){
+	public partial void SyncDeletedPropToLocalState(IdWordProp Id){
 		if(Draft is not null){
 			Draft.Props = Draft.Props.Where(x=>x.Id != Id).ToList();
 		}
@@ -288,7 +161,7 @@ public partial class VmWordEditV2{
 	}
 
 	/// Learn 的本地同步與 Prop 相同。
-	partial void SyncDeletedLearnToLocalState(IdWordLearn Id){
+	public partial void SyncDeletedLearnToLocalState(IdWordLearn Id){
 		if(Draft is not null){
 			Draft.Learns = Draft.Learns.Where(x=>x.Id != Id).ToList();
 		}
@@ -328,16 +201,14 @@ public partial class VmWordEditV2{
 		if(!PoWordEdit.TryApplyToPo(Draft.Word, out Err)){
 			return false;
 		}
-		if(!WordPropPage.TryBuildPoProps(Draft.Word.Id, out var nextProps, out var propErr)){
-			Err = propErr;
-			return false;
-		}
-		if(!WordLearnPage.TryBuildPoLearns(Draft.Word.Id, out var nextLearns, out var learnErr)){
-			Err = learnErr;
-			return false;
-		}
-		Draft.Props = nextProps;
-		Draft.Learns = nextLearns;
 		return true;
+	}
+
+	public partial VmWordPropEdit MkPropEdit(){
+		return new VmWordPropEdit(SvcWordV2, UserCtxMgr);
+	}
+
+	public partial VmWordLearnEdit MkLearnEdit(){
+		return new VmWordLearnEdit(SvcWordV2, UserCtxMgr);
 	}
 }

@@ -29,7 +29,6 @@ public partial class ViewWordLearnEdit: AppViewBase{
 		root.Grid.SetRowDefs([
 			new(8, GUT.Star),
 			new(1, GUT.Auto),
-			new(1, GUT.Auto),
 		]);
 		root.A(new ScrollViewer(), sv=>{
 			sv.SetContent(new StackPanel(), sp=>{
@@ -41,28 +40,37 @@ public partial class ViewWordLearnEdit: AppViewBase{
 				sp.A(MkTempusRow(I[K.Biz_CreatedAt], CBE.Mk<VmWordLearnRow>(x=>x.BizCreatedAtIso, Mode: BindingMode.TwoWay, Converter: new IsoToTempusConverter())));
 			});
 		});
-		root.A(new Button(), o=>{
-			o.Margin = new(10, 6, 10, 6);
-			o.StretchCenter();
-			o.Background = UiCfg.Inst.MainColor;
-			o.SetContent(Icons.Save().ToIcon().WithText(I[K.Save]));
-			o.Click += (s, e)=>ViewNavi?.Back();
-		});
-		root.A(new Button(), o=>{
-			o.Margin = new(10, 0, 10, 10);
+		var bar = new GridStack(IsRow: false);
+		bar.Grid.SetColDefs([
+			new(1, GUT.Star),
+			new(1, GUT.Star),
+		]);
+		bar.Grid.Margin = new(10, 6, 10, 10);
+		bar.A(new Button(), o=>{
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.SetContent(Icons.Delete().ToIcon().WithText(I[K.Remove]));
 			o.Click += async (s, e)=>{
-				if(Ctx is null){
+				if(Ctx is null || Ctx.Row.DmlState == EDmlState.Added){
+					if(Ctx is not null) Ctx.OnDeletedByView();
+					ViewNavi?.Back();
 					return;
 				}
-				var ok = await Ctx.Delete(default);
-				if(ok){
-					ViewNavi?.Back();
-				}
+				await Ctx.DelDirect();
+				Ctx.OnDeletedByView();
+				ViewNavi?.Back();
+			};
+		}).A(new Button(), o=>{
+			o.StretchCenter();
+			o.Background = UiCfg.Inst.MainColor;
+			o.SetContent(Icons.Save().ToIcon().WithText(I[K.Save]));
+			o.Click += async (s, e)=>{
+				if(Ctx is null) return;
+				await Ctx.SaveDirect();
+				ViewNavi?.Back();
 			};
 		});
+		root.A(bar.Grid);
 		this.SetContent(root.Grid);
 	}
 	partial void OnCtxChanged(){

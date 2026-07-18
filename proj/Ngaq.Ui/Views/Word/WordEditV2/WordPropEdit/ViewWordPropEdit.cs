@@ -19,6 +19,8 @@ using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmWordPropEdit;
+using Ngaq.Ui.Infra.Ctrls;
+
 /// 單行屬性編輯頁。
 public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 	/// 顯示屬性識別碼的唯讀控件，供檢視目前編輯目標。
@@ -36,9 +38,9 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 	/// 輸入整數類型屬性值的控件。
 	public TextBox? VI64Ctrl;
 	/// 返回屬性列表的保存按鈕。
-	public Button? SaveBtn;
+	public OpBtn? SaveBtn;
 	/// 刪除目前屬性資料列的按鈕。
-	public Button? DeleteBtn;
+	public OpBtn? DeleteBtn;
 	/// 承載全部輸入控件的表單容器，供後置注入的行 ViewModel 綁定。
 	public StackPanel? EditorForm;
 	/// 記錄已掛接通知的 ViewModel，避免在資料上下文切換時遺留訂閱。
