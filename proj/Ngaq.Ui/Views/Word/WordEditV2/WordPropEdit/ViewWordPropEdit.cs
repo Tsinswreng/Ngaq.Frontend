@@ -21,8 +21,27 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmWordPropEdit;
 /// 單行屬性編輯頁。
 public partial class ViewWordPropEdit: AppViewBase<Ctx>{
-
+	/// 顯示屬性識別碼的唯讀控件，供檢視目前編輯目標。
+	public SelectableTextBlock? IdCtrl;
+	/// 選擇屬性鍵類型的控件。
+	public ComboBox? KTypeCtrl;
+	/// 輸入或選擇字串類型屬性鍵的控件。
+	public ComboBox? KStrCtrl;
+	/// 輸入整數類型屬性鍵的控件。
+	public TextBox? KI64Ctrl;
+	/// 選擇屬性值類型的控件。
+	public ComboBox? VTypeCtrl;
+	/// 輸入字串類型屬性值的控件。
+	public TextBox? VStrCtrl;
+	/// 輸入整數類型屬性值的控件。
+	public TextBox? VI64Ctrl;
+	/// 返回屬性列表的保存按鈕。
+	public Button? SaveBtn;
+	/// 刪除目前屬性資料列的按鈕。
+	public Button? DeleteBtn;
+	/// 承載全部輸入控件的表單容器，供後置注入的行 ViewModel 綁定。
 	public StackPanel? EditorForm;
+	/// 記錄已掛接通知的 ViewModel，避免在資料上下文切換時遺留訂閱。
 	public Ctx? SubscribedCtx;
 
 	IReadOnlyList<str> KvTypeOptions => [
@@ -61,16 +80,16 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 	partial void ApplyRowCtx();
 
 	/// 建立 IdSelectableRow 所需的 UI 組件，供頁面組裝時重用。
-	private partial Control MkIdSelectableRow(str Label, IBinding Binding);
+	private partial Control MkIdSelectableRow(str Label, IBinding Binding, Action<SelectableTextBlock> Init);
 
 	/// 建立 InputRow 所需的 UI 組件，供頁面組裝時重用。
-	private partial Control MkInputRow(str Label, IBinding Binding);
+	private partial Control MkInputRow(str Label, IBinding Binding, Action<TextBox> Init);
 
 	/// 建立 ComboRow 所需的 UI 組件，供頁面組裝時重用。
-	private partial Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding);
+	private partial Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding, Action<ComboBox> Init);
 
 	/// 建立 EditableComboRow 所需的 UI 組件，供頁面組裝時重用。
-	private partial Control MkEditableComboRow(str Label, IEnumerable<str> Items, IBinding Binding);
+	private partial Control MkEditableComboRow(str Label, IEnumerable<str> Items, IBinding Binding, Action<ComboBox> Init);
 
 	/// 建立 FieldRow 所需的 UI 組件，供頁面組裝時重用。
 	private partial Control MkFieldRow(str Label, Control Input);

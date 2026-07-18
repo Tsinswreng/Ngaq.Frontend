@@ -37,8 +37,12 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 				EditorForm = sp;
 				sp.Margin = new(10);
 				sp.Spacing = 8;
-				sp.A(MkIdSelectableRow(I[K.Id], CBE.Mk<VmWordPropRow>(x=>x.IdText, Mode: BindingMode.OneWay)));
-				sp.A(MkComboRow(I[K.KType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay)));
+				sp.A(MkIdSelectableRow(I[K.Id], CBE.Mk<VmWordPropRow>(x=>x.IdText, Mode: BindingMode.OneWay), o=>{
+					IdCtrl = o;
+				}));
+				sp.A(MkComboRow(I[K.KType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.KTypeIndex, Mode: BindingMode.TwoWay), o=>{
+					KTypeCtrl = o;
+				}));
 				sp.A(MkEditableComboRow(
 					I[K.KeyStr],
 					PropKeyDisplayOptions,
@@ -46,15 +50,27 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 						x=>x.KStrText,
 						Mode: BindingMode.TwoWay,
 						Converter: new PropKeyDisplayConverter(this)
-					)
+					),
+					o=>{
+						KStrCtrl = o;
+					}
 				));
-				sp.A(MkInputRow(I[K.KeyI64], CBE.Mk<VmWordPropRow>(x=>x.KI64Text, Mode: BindingMode.TwoWay)));
-				sp.A(MkComboRow(I[K.VType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.VTypeIndex, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(I[K.VStr], CBE.Mk<VmWordPropRow>(x=>x.VStrText, Mode: BindingMode.TwoWay)));
-				sp.A(MkInputRow(I[K.VI64], CBE.Mk<VmWordPropRow>(x=>x.VI64Text, Mode: BindingMode.TwoWay)));
+				sp.A(MkInputRow(I[K.KeyI64], CBE.Mk<VmWordPropRow>(x=>x.KI64Text, Mode: BindingMode.TwoWay), o=>{
+					KI64Ctrl = o;
+				}));
+				sp.A(MkComboRow(I[K.VType], KvTypeOptions, CBE.Mk<VmWordPropRow>(x=>x.VTypeIndex, Mode: BindingMode.TwoWay), o=>{
+					VTypeCtrl = o;
+				}));
+				sp.A(MkInputRow(I[K.VStr], CBE.Mk<VmWordPropRow>(x=>x.VStrText, Mode: BindingMode.TwoWay), o=>{
+					VStrCtrl = o;
+				}));
+				sp.A(MkInputRow(I[K.VI64], CBE.Mk<VmWordPropRow>(x=>x.VI64Text, Mode: BindingMode.TwoWay), o=>{
+					VI64Ctrl = o;
+				}));
 			});
 		});
 		root.A(new Button(), o=>{
+			SaveBtn = o;
 			o.Margin = new(10, 6, 10, 6);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.MainColor;
@@ -62,6 +78,7 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 			o.Click += (s, e)=>ViewNavi?.Back();
 		});
 		root.A(new Button(), o=>{
+			DeleteBtn = o;
 			o.Margin = new(10, 0, 10, 10);
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
@@ -103,26 +120,30 @@ public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 			EditorForm.DataContext = Ctx?.Row;
 		}
 	}
-	private partial Control MkIdSelectableRow(str Label, IBinding Binding){
+	private partial Control MkIdSelectableRow(str Label, IBinding Binding, Action<SelectableTextBlock> Init){
 		var tb = new SelectableTextBlock{
 			FontSize = UiCfg.Inst.BaseFontSize*0.8,
 			TextWrapping = TextWrapping.Wrap,
 		};
+		Init(tb);
 		tb.Bind(TextBlock.TextProperty, Binding);
 		return MkFieldRow(Label, tb);
 	}
-	private partial Control MkInputRow(str Label, IBinding Binding){
+	private partial Control MkInputRow(str Label, IBinding Binding, Action<TextBox> Init){
 		var tb = new TextBox();
+		Init(tb);
 		tb.Bind(TextBox.TextProperty, Binding);
 		return MkFieldRow(Label, tb);
 	}
-	private partial Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
+	private partial Control MkComboRow(str Label, IEnumerable<str> Items, IBinding Binding, Action<ComboBox> Init){
 		var cb = new ComboBox{ItemsSource = Items};
+		Init(cb);
 		cb.Bind(ComboBox.SelectedIndexProperty, Binding);
 		return MkFieldRow(Label, cb);
 	}
-	private partial Control MkEditableComboRow(str Label, IEnumerable<str> Items, IBinding Binding){
+	private partial Control MkEditableComboRow(str Label, IEnumerable<str> Items, IBinding Binding, Action<ComboBox> Init){
 		var cb = new ComboBox{IsEditable = true, ItemsSource = Items};
+		Init(cb);
 		cb.Bind(ComboBox.TextProperty, Binding);
 		return MkFieldRow(Label, cb);
 	}
