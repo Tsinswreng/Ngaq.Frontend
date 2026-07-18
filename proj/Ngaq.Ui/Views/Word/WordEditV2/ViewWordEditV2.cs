@@ -20,11 +20,7 @@ public partial class ViewWordEditV2: AppViewBase<Ctx>{
 	public ViewWordPropPage? WordPropPage{get;set;}
 	/// 單詞學習記錄分頁，供宿主存取學習列表與新增入口。
 	public ViewWordLearnPage? WordLearnPage{get;set;}
-	/// 刪除成功後通知呼叫端關閉或刷新來源頁。
-	public event EventHandler? DoneDelete;
-	/// 保存成功後通知呼叫端同步來源資料。
-	public event EventHandler? DoneSave;
-	/// 固定承載分頁、錯誤列與操作列的三列根版面。
+	/// 固定承載分頁與錯誤列的兩列根版面。
 	public GridStack Root = new(IsRow: true);
 	/// 建立頁面、取得 ViewModel，並掛接子頁編輯事件。
 	public partial ViewWordEditV2();
@@ -37,6 +33,4 @@ public partial class ViewWordEditV2: AppViewBase<Ctx>{
 
 	/// 建立與 ViewModel 錯誤狀態同步的提示列。
 	private partial Control MkErrBar();
-	/// 建立刪除及保存操作列。
-	private partial Control MkBottomBar();
 }

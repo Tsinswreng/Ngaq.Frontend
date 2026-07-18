@@ -9,10 +9,14 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Components.TempusBox;
+using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Tools;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.Avln.Dsl;
+using Tsinswreng.Avln.Grid;
 using Tsinswreng.CsTempus;
 using Ctx = VmPoWordEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
@@ -50,8 +54,26 @@ public partial class ViewPoWordEdit
 			sp.A(MkTempusRow(I[K.SoftDeleteTime], CBE.Mk<Ctx>(x=>x.DelAtUnixMs, Mode: BindingMode.TwoWay, Converter: DelAtConverter), o=>{
 				DelAtCtrl = o;
 			}));
+			sp.A(MkBottomBar());
 		});
 		this.SetContent(sv);
+	}
+	private partial Control MkBottomBar(){
+		var Grid = new GridStack(IsRow: false);
+		Grid.Grid.SetColDefs([new(1, GUT.Star), new(1, GUT.Star)]);
+		Grid.Grid.Margin = new(0, 8, 0, 0);
+		Grid.A(new OpBtn(), O=>{
+			DeleteBtn = O;
+			O._Button.Background = UiCfg.Inst.DelBtnBg;
+			O._Button.StretchCenter();
+			O.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
+		}).A(new OpBtn(), O=>{
+			SaveBtn = O;
+			O._Button.Background = UiCfg.Inst.MainColor;
+			O._Button.StretchCenter();
+			O.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
+		});
+		return Grid.Grid;
 	}
 	private partial Control MkTempusRow(str Label, IBinding Binding){
 		var tb = new TempusBox();

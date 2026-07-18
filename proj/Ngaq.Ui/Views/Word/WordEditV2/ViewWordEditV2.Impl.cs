@@ -30,8 +30,8 @@ public partial class ViewWordEditV2{
 
 	partial void Render(){
 		this.SetContent(Root.Grid);
-		Root.SetRowDefs([new(9, GUT.Star), new(1, GUT.Auto), new(1, GUT.Auto)]);
-		Root.A(MkTabs()).A(MkErrBar()).A(MkBottomBar());
+		Root.SetRowDefs([new(9, GUT.Star), new(1, GUT.Auto)]);
+		Root.A(MkTabs()).A(MkErrBar());
 	}
 
 	partial void HookSubPageEvents(){
@@ -56,6 +56,8 @@ public partial class ViewWordEditV2{
 		var Tab = new TabControl();
 		var PoWordEdit = new ViewPoWordEdit{Ctx = Ctx?.PoWordEdit};
 		this.PoWordEdit = PoWordEdit;
+		PoWordEdit.DeleteBtn?.SetExe(Ct=>Ctx?.Delete(Ct));
+		PoWordEdit.SaveBtn?.SetExe(Ct=>Ctx?.Save(Ct));
 		Tab.Bind(Tab.PropSelectedIndex, CBE.Mk<Ctx>(X=>X.TabIndex, Mode: BindingMode.TwoWay));
 		Tab.Items.A(new TabItem(), O=>{
 			O.Header = I[K.Basic];
@@ -77,27 +79,5 @@ public partial class ViewWordEditV2{
 			Text.Bind(TextBlock.TextProperty, CBE.Mk<Ctx>(X=>X.LastError, Mode: BindingMode.OneWay));
 		});
 		return Border;
-	}
-
-	private partial Control MkBottomBar(){
-		var Grid = new GridStack(IsRow: false);
-		Grid.Grid.SetColDefs([new(1, GUT.Star), new(1, GUT.Star)]);
-		Grid.Grid.Margin = new(10, 8, 10, 10);
-		Grid.A(new OpBtn(), O=>{
-			DeleteBtn = O;
-			O._Button.Background = UiCfg.Inst.DelBtnBg;
-			O._Button.StretchCenter();
-			O.BtnContent = Icons.Delete().ToIcon().WithText(I[K.Delete]);
-			O.SetExe(Ct=>Ctx?.Delete(Ct));
-			O.HookDoneEvent(()=>DoneDelete?.Invoke(this, EventArgs.Empty));
-		}).A(new OpBtn(), O=>{
-			SaveBtn = O;
-			O._Button.Background = UiCfg.Inst.MainColor;
-			O._Button.StretchCenter();
-			O.BtnContent = Icons.Save().ToIcon().WithText(I[K.Save]);
-			O.SetExe(Ct=>Ctx?.Save(Ct));
-			O.HookDoneEvent(()=>DoneSave?.Invoke(this, EventArgs.Empty));
-		});
-		return Grid.Grid;
 	}
 }

@@ -52,6 +52,8 @@ public partial class ViewPoWordEdit
 
 	/// 建立可捲動的基本資料表單，避免小尺寸視窗裁切時間欄位。
 	partial void Render();
+	/// 建立附在基本資料表單底部的刪除及保存操作列。
+	private partial Control MkBottomBar();
 
 	/// 建立 TempusRow 所需的 UI 組件，供頁面組裝時重用。
 	private partial Control MkTempusRow(str Label, IBinding Binding);
