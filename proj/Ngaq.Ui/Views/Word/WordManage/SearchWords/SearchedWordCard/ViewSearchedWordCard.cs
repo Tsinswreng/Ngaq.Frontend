@@ -1,5 +1,6 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -49,7 +50,7 @@ public partial class ViewSearchedWordCard
 	protected nil Render(){
 		this.SetContent(Root.Grid);
 		Root.SetRowDefs([
-			new(4, GUT.Auto),
+			new(3, GUT.Auto),
 			new(8, GUT.Auto),
 		]);
 

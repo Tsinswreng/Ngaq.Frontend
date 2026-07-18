@@ -2,6 +2,7 @@ namespace Ngaq.Ui.Views.Word.WordEditV2;
 
 using Ngaq.Core.Frontend.User;
 using Ngaq.Core.Infra;
+using Ngaq.Core.Model.Po.Kv;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Model.Po.Learn_;
 using Ngaq.Core.Shared.Word.Models.Learn_;
@@ -45,37 +46,37 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	}
 
 	public IJnWord? Src{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 
 	public JnWord? Draft{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 
 	public i32 TabIndex{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 
 	public VmPoWordEdit PoWordEdit{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new();
 
 	public VmWordPropPage WordPropPage{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new();
 
 	public VmWordLearnPage WordLearnPage{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new();
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(HasError));
@@ -86,12 +87,12 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
 	public bool IsDirty{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 
 	public ESaveMode SaveMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = ESaveMode.DetailOps;
 
@@ -289,6 +290,81 @@ public partial class VmWordEditV2: ViewModelBase, IMk<Ctx>{
 			await SvcWordV2.DelWordLearnInId(DbCtx, ToolAsyE.ToAsyE(ids), Ct);
 		}
 		return NIL;
+	}
+
+	/// 屬性編輯頁按刪除時直接調對應刪除接口；新建未保存行只做本地移除。
+	public async Task<bool> DeletePropRow(VmWordPropRow Row, CT Ct){
+		if(Row.DmlState == EDmlState.Added){
+			WordPropPage.RemoveRow(Row);
+			return true;
+		}
+		if(AnyNull(SvcWordV2, UserCtxMgr)){
+			return false;
+		}
+		try{
+			await SvcWordV2.DelWordPropInId(
+				UserCtxMgr.GetDbUserCtx(),
+				ToolAsyE.ToAsyE([Row.Raw.Id]),
+				Ct
+			);
+			WordPropPage.RemovePersistedRow(Row);
+			SyncDeletedPropToLocalState(Row.Raw.Id);
+			ShowToast(I18n[K.Deleted]);
+			return true;
+		}catch(Exception ex){
+			LastError = ex.Message;
+			HandleErr(ex);
+			return false;
+		}
+	}
+
+	/// 學習記錄的刪除規則與屬性一致：已有數據立刻落庫，新建行僅本地撤銷。
+	public async Task<bool> DeleteLearnRow(VmWordLearnRow Row, CT Ct){
+		if(Row.DmlState == EDmlState.Added){
+			WordLearnPage.RemoveRow(Row);
+			return true;
+		}
+		if(AnyNull(SvcWordV2, UserCtxMgr)){
+			return false;
+		}
+		try{
+			await SvcWordV2.DelWordLearnInId(
+				UserCtxMgr.GetDbUserCtx(),
+				ToolAsyE.ToAsyE([Row.Raw.Id]),
+				Ct
+			);
+			WordLearnPage.RemovePersistedRow(Row);
+			SyncDeletedLearnToLocalState(Row.Raw.Id);
+			ShowToast(I18n[K.Deleted]);
+			return true;
+		}catch(Exception ex){
+			LastError = ex.Message;
+			HandleErr(ex);
+			return false;
+		}
+	}
+
+	/// 單行已直接落庫刪除後，同步清理本地草稿與源數據，避免後續保存又把它帶回來。
+	void SyncDeletedPropToLocalState(IdWordProp Id){
+		if(Draft is not null){
+			Draft.Props = Draft.Props.Where(x=>x.Id != Id).ToList();
+		}
+		// 來源對象不一定是 JnWord 具體類，很多入口只保證是 IJnWord。
+		// 直接按接口回寫，避免重新進編輯頁時仍讀到舊內存快照。
+		if(Src is not null){
+			Src.Props = Src.Props.Where(x=>x.Id != Id).ToList();
+		}
+	}
+
+	/// Learn 的本地同步與 Prop 相同。
+	void SyncDeletedLearnToLocalState(IdWordLearn Id){
+		if(Draft is not null){
+			Draft.Learns = Draft.Learns.Where(x=>x.Id != Id).ToList();
+		}
+		// 同上：回寫接口對象本身，確保列表卡片/詳情頁再次打開時拿到的是新狀態。
+		if(Src is not null){
+			Src.Learns = Src.Learns.Where(x=>x.Id != Id).ToList();
+		}
 	}
 
 	public async Task<nil> Delete(CT Ct){

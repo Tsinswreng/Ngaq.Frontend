@@ -4,8 +4,8 @@ using System;
 using System.Collections.ObjectModel;
 using Avalonia.Threading;
 using Ngaq.Core.Infra;
-using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Frontend.User;
+using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Components.PageBar;
@@ -41,15 +41,15 @@ public partial class VmSearchWords: ViewModelBase, IWordCardMenuAction{
 		#endif
 	}
 
-	ISvcWord? SvcWord;
+	ISvcWordV2? SvcWordV2;
 	IFrontendUserCtxMgr? IUserCtxMgr;
 	IWordCardPronounceBiz? WordCardPronounceBiz;
 	public VmSearchWords(
 		IFrontendUserCtxMgr? IUserCtxMgr
-		,ISvcWord? SvcWord
+		,ISvcWordV2? SvcWordV2
 		,IWordCardPronounceBiz? WordCardPronounceBiz
 	):this(){
-		this.SvcWord = SvcWord;
+		this.SvcWordV2 = SvcWordV2;
 		this.IUserCtxMgr = IUserCtxMgr;
 		this.WordCardPronounceBiz = WordCardPronounceBiz;
 	}
@@ -62,8 +62,8 @@ public partial class VmSearchWords: ViewModelBase, IWordCardMenuAction{
 		set{SetProperty(ref _Input, value);}
 	}
 
-	protected IList<ITypedObj> _GotWords = new List<ITypedObj>();
-	public IList<ITypedObj> GotWords{
+	protected IList<DtoWordSearchHit> _GotWords = new List<DtoWordSearchHit>();
+	public IList<DtoWordSearchHit> GotWords{
 		get{return _GotWords;}
 		set{SetProperty(ref _GotWords, value);}
 	}
@@ -75,11 +75,7 @@ public partial class VmSearchWords: ViewModelBase, IWordCardMenuAction{
 
 	protected async Task<nil> SearchAsy(CT Ct=default){
 		await Task.Run(async()=>{
-			if(SvcWord is null || IUserCtxMgr is null){
-				return;
-			}
-			var UserCtx = IUserCtxMgr.GetUserCtx();
-			if(UserCtx is null){
+			if(SvcWordV2 is null || IUserCtxMgr is null){
 				return;
 			}
 			var pageQry = PageBar.ToPageQry();
@@ -87,7 +83,7 @@ public partial class VmSearchWords: ViewModelBase, IWordCardMenuAction{
 			var req = new ReqSearchWord{
 				RawStr = Input,
 			};
-			var R = await SvcWord.PageSearch(UserCtx, pageQry, req, Ct);
+			var R = await SvcWordV2.PageSearch(IUserCtxMgr.GetDbUserCtx(), pageQry, req, Ct);
 
 			Dispatcher.UIThread.Post(()=>{
 				GotWords = [];//勿刪

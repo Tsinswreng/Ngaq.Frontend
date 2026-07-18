@@ -2,7 +2,7 @@ namespace Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
 using System.Collections.ObjectModel;
 using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Models.Learn_;
-using Ngaq.Core.Word.Models.Dto;
+using Ngaq.Core.Shared.Word.Models.Dto;
 using Tsinswreng.CsTools;
 using Ctx = VmSearchedWordCard;
 using Ngaq.Ui.Views.Word.WordCard;
@@ -18,20 +18,25 @@ public partial class VmSearchedWordCard
 		#endif
 	}
 
-	public static JnWord GetJnWordFromTypedObj(ITypedObj Obj){
-		if(Obj.Type == typeof(JnWord)){
-			return (JnWord)Obj.Data!;
-		}else{
-			var Dto = (DtoJnWordEtAsset)(Obj.Data!);
-			return Dto.JnWord;
-		}
+	public static JnWord GetJnWordFromHit(DtoWordSearchHit Hit){
+		return Hit.JnWord;
 	}
 
-	public ITypedObj? TypedObj{get;set;}
+	public DtoWordSearchHit? SearchHit{get;set;}
 
-	public Ctx FromTypedObj(ITypedObj Obj){
-		TypedObj = Obj;
-		WordForLearn = new WordForLearn(GetJnWordFromTypedObj(Obj));
+	public str HitKindText{
+		get;
+		set{SetProperty(ref field, value);}
+	} = "";
+
+	public str HitAssetIdText{
+		get;
+		set{SetProperty(ref field, value);}
+	} = "";
+
+	public Ctx FromSearchHit(DtoWordSearchHit Hit){
+		SearchHit = Hit;
+		WordForLearn = new WordForLearn(GetJnWordFromHit(Hit));
 		Init();
 		return this;
 	}
@@ -49,6 +54,8 @@ public partial class VmSearchedWordCard
 			Learn_Records = Bo.Learn_Records;
 			SavedLearnRecords = Bo.LearnRecords;
 			LastLearnedTime = Bo.LastLearnedTime_();
+			HitKindText = FmtHitKind(SearchHit?.HitKind);
+			HitAssetIdText = FmtHitAssetId(SearchHit);
 			if(Learn_Records.TryGetValue(ELearn.Add, out var AddRecords)){
 				FontColor = AddCntToFontColor(
 					(u64)AddRecords.Count
@@ -60,6 +67,28 @@ public partial class VmSearchedWordCard
 			HandleErr(e);
 		}
 		return NIL;
+	}
+
+	static str FmtHitKind(EWordSearchHitKind? Kind){
+		return Kind switch{
+			EWordSearchHitKind.Word => "Word",
+			EWordSearchHitKind.WordProp => "Prop",
+			EWordSearchHitKind.WordLearn => "Learn",
+			_ => "",
+		};
+	}
+
+	static str FmtHitAssetId(DtoWordSearchHit? Hit){
+		if(Hit is null){
+			return "";
+		}
+		if(Hit.HitKind == EWordSearchHitKind.WordProp){
+			return Hit.WordProp?.Id.ToString()??"";
+		}
+		if(Hit.HitKind == EWordSearchHitKind.WordLearn){
+			return Hit.WordLearn?.Id.ToString()??"";
+		}
+		return Hit.JnWord.Word.Id.ToString();
 	}
 
 	public IdDel? DelAt{

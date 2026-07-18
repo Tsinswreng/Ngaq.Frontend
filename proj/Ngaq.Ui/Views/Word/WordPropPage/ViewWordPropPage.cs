@@ -20,6 +20,7 @@ using Avalonia.Interactivity;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.Avln.Grid;
+using Tsinswreng.Avln.Dsl;
 
 /// 屬性分頁：列表 + 新增，點行進入編輯頁。
 public partial class ViewWordPropPage
@@ -63,7 +64,7 @@ public partial class ViewWordPropPage
 			});
 		});
 		root.A(MkGrid());
-		Content = root.Grid;
+		this.SetContent(root.Grid);
 	}
 
 	OpBtn MkBtnAdd(){

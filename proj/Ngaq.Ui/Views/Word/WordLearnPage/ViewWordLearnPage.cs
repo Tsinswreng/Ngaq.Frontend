@@ -18,6 +18,7 @@ using Avalonia;
 using Ngaq.Ui.Tools;
 using Avalonia.Interactivity;
 using Tsinswreng.Avln.Grid;
+using Tsinswreng.Avln.Dsl;
 
 /// 學習記錄分頁：列表 + 新增，點行進入編輯頁。
 public partial class ViewWordLearnPage: AppViewBase{
@@ -48,7 +49,7 @@ public partial class ViewWordLearnPage: AppViewBase{
 			};
 		});
 		root.A(MkGrid());
-		Content = root.Grid;
+		this.SetContent(root.Grid);
 	}
 
 	Button MkBtnAdd(){

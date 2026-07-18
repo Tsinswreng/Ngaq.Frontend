@@ -52,6 +52,13 @@ public partial class VmWordLearnPage: ViewModelBase{
 		return NIL;
 	}
 
+	/// 已直接調後端刪除成功的行，只更新本地列表，不再掛到總保存刪除隊列。
+	public nil RemovePersistedRow(VmWordLearnRow Row){
+		Rows.Remove(Row);
+		RemovedRows.Remove(Row);
+		return NIL;
+	}
+
 	public nil RequestEdit(VmWordLearnRow Row){
 		OnEditRequested?.Invoke(Row);
 		return NIL;

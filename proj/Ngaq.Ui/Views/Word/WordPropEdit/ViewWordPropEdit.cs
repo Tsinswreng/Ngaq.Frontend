@@ -14,6 +14,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordPropPage;
 using Tsinswreng.Avln.Grid;
+using Tsinswreng.Avln.Dsl;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
@@ -95,14 +96,17 @@ public partial class ViewWordPropEdit: AppViewBase{
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Remove]);
-			o.Click += (s, e)=>{
-				if(Ctx is not null){
-					Ctx.OnRemove?.Invoke(Ctx.Row);
+			o.Click += async (s, e)=>{
+				if(Ctx is null){
+					return;
 				}
-				ViewNavi?.Back();
+				var ok = await Ctx.Delete(default);
+				if(ok){
+					ViewNavi?.Back();
+				}
 			};
 		});
-		Content = root.Grid;
+		this.SetContent(root.Grid);
 	}
 
 	/// 與 LearnEdit 同理，表單直接綁行 Vm，避免嵌套綁定丟失初值。
@@ -163,8 +167,9 @@ public partial class ViewWordPropEdit: AppViewBase{
 
 	Control MkFieldRow(str Label, Control Input){
 		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		sp.Children.Add(Input);
+		sp.A(new TextBlock(), o=>{
+			o.Text = Label;
+		}).A(Input);
 		return sp;
 	}
 

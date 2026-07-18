@@ -12,6 +12,7 @@ using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Infra;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
+using Tsinswreng.Avln.Dsl;
 using Tsinswreng.CsTempus;
 using Ctx = VmPoWordEdit;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
@@ -134,7 +135,7 @@ public partial class ViewPoWordEdit
 				DelAtCtrl = o;
 			}));
 		});
-		Content = sv;
+		this.SetContent(sv);
 	}
 
 	Control MkTempusRow(str Label, IBinding Binding){
@@ -190,8 +191,9 @@ public partial class ViewPoWordEdit
 
 	Control MkFieldRow(str Label, Control Input){
 		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		sp.Children.Add(Input);
+		sp.A(new TextBlock(), o=>{
+			o.Text = Label;
+		}).A(Input);
 		return sp;
 	}
 

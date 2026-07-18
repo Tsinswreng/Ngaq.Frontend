@@ -51,6 +51,13 @@ public partial class VmWordPropPage: ViewModelBase{
 		return NIL;
 	}
 
+	/// 已直接調後端刪除成功的行，只從當前列表摘除，不再進 `RemovedRows` 等待總保存。
+	public nil RemovePersistedRow(VmWordPropRow Row){
+		Rows.Remove(Row);
+		RemovedRows.Remove(Row);
+		return NIL;
+	}
+
 	public nil RequestEdit(VmWordPropRow Row){
 		OnEditRequested?.Invoke(Row);
 		return NIL;

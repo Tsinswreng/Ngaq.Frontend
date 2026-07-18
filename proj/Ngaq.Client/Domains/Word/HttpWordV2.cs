@@ -10,6 +10,7 @@ using Ngaq.Core.Shared.Word.Models.Po.Learn;
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Core.Tools.Json;
+using Tsinswreng.CsPage;
 using Tsinswreng.CsTools;
 using U = Ngaq.Core.Infra.Url.KeysUrl.WordV2;
 
@@ -242,6 +243,10 @@ public class HttpWordV2 : ISvcWordV2 {
 	}
 
 	public Task<object> HardDelSoftDeleted(IDbUserCtx Ctx, CT Ct) {
+		throw new NotImplementedException();
+	}
+
+	public Task<IPage<DtoWordSearchHit>> PageSearch(IDbUserCtx Ctx, IPageQry PageQry, ReqSearchWord Req, CT Ct) {
 		throw new NotImplementedException();
 	}
 

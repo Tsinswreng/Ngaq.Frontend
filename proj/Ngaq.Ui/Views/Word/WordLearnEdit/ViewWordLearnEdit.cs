@@ -12,6 +12,7 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Word.WordLearnPage;
 using Tsinswreng.Avln.Grid;
+using Tsinswreng.Avln.Dsl;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.CsTempus;
@@ -67,14 +68,17 @@ public partial class ViewWordLearnEdit: AppViewBase{
 			o.StretchCenter();
 			o.Background = UiCfg.Inst.DelBtnBg;
 			o.Content = Icons.Delete().ToIcon().WithText(I[K.Remove]);
-			o.Click += (s, e)=>{
-				if(Ctx is not null){
-					Ctx.OnRemove?.Invoke(Ctx.Row);
+			o.Click += async (s, e)=>{
+				if(Ctx is null){
+					return;
 				}
-				ViewNavi?.Back();
+				var ok = await Ctx.Delete(default);
+				if(ok){
+					ViewNavi?.Back();
+				}
 			};
 		});
-		Content = root.Grid;
+		this.SetContent(root.Grid);
 	}
 
 	/// 編輯表單直接綁到行 Vm，自避開 `Ctx.Row.Xxx` 這種嵌套綁定在後置注入時失效的問題。
@@ -132,8 +136,9 @@ public partial class ViewWordLearnEdit: AppViewBase{
 
 	Control MkFieldRow(str Label, Control Input){
 		var sp = new StackPanel{Orientation = Orientation.Vertical, Spacing = 3};
-		sp.Children.Add(new TextBlock{Text = Label});
-		sp.Children.Add(Input);
+		sp.A(new TextBlock(), o=>{
+			o.Text = Label;
+		}).A(Input);
 		return sp;
 	}
 

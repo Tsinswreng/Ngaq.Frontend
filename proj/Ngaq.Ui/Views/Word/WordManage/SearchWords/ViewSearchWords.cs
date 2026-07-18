@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
 using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Components.PageBar;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
@@ -108,12 +109,12 @@ public partial class ViewSearchWords
 		R.ItemsPanel = new FuncTemplate<Panel?>(()=>{
 			return new VirtualizingStackPanel();
 		});
-		R.ItemTemplate = new FuncDataTemplate<ITypedObj>((typedObj, b)=>{
+		R.ItemTemplate = new FuncDataTemplate<DtoWordSearchHit>((hit, b)=>{
 			var R = new Button();
 			var View = new ViewSearchedWordCard(){Ctx = new VmSearchedWordCard()};
-			if(typedObj == null){return View;};
+			if(hit == null){return View;};
 
-			View.Ctx.FromTypedObj(typedObj);
+			View.Ctx.FromSearchHit(hit);
 			R.Content = View;
 			if(!AnyNull(View.Ctx.WordForLearn?.JnWord)){
 				R.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, View.Ctx.WordForLearn.JnWord);
@@ -122,7 +123,7 @@ public partial class ViewSearchWords
 			}
 			R.Click += (s,e)=>{
 				var Target = new ViewWordEditV2();
-				var jnWord = VmSearchedWordCard.GetJnWordFromTypedObj(typedObj);
+				var jnWord = VmSearchedWordCard.GetJnWordFromHit(hit);
 				if(AnyNull(Target.Ctx, jnWord)){
 					return;
 				}

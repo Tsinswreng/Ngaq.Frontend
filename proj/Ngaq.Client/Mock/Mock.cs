@@ -178,6 +178,10 @@ public class MockSvcWordV2 : ISvcWordV2 {
 	public IAsyncEnumerable<JnWord> UnpackJnWords(Stream TextWithStream, CT Ct) {
 		throw new NotImplementedException();
 	}
+
+	public Task<IPage<DtoWordSearchHit>> PageSearch(IDbUserCtx Ctx, IPageQry PageQry, ReqSearchWord Req, CT Ct) {
+		throw new NotImplementedException();
+	}
 }
 
 public class MockSvcStudyPlan : ISvcStudyPlan, IStudyPlanGetter {
