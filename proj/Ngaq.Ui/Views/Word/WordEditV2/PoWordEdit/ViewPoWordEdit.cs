@@ -21,12 +21,19 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewPoWordEdit
 	: AppViewBase<Ctx>
 {
+	/// 顯示單詞識別碼的唯讀文字控制項，供使用者複製與核對資料來源。
 	public SelectableTextBlock? IdCtrl{get;set;}
+	/// 編輯單詞詞頭的輸入控制項；保存前必須具備非空值。
 	public TextBox? HeadCtrl{get;set;}
+	/// 編輯單詞語言標記的輸入控制項；保存前必須具備非空值。
 	public TextBox? LangCtrl{get;set;}
+	/// 編輯資料入庫時間的時間控制項。
 	public TempusBox? StoredAtCtrl{get;set;}
+	/// 編輯業務建立時間的時間控制項。
 	public TempusBox? BizCreatedAtCtrl{get;set;}
+	/// 編輯業務最後更新時間的時間控制項。
 	public TempusBox? BizUpdatedAtCtrl{get;set;}
+	/// 編輯軟刪除時間的時間控制項；空值代表資料未被軟刪除。
 	public TempusBox? DelAtCtrl{get;set;}
 
 	/// 將 ISO 字串轉為可由 TempusBox 編輯的時間值。
@@ -37,7 +44,7 @@ public partial class ViewPoWordEdit
 	/// 建構後立即建立控件樹；資料內容由宿主後置注入的 Ctx 提供。
 	public partial ViewPoWordEdit();
 
-	
+
 	/// 建立可捲動的基本資料表單，避免小尺寸視窗裁切時間欄位。
 	partial void Render();
 
