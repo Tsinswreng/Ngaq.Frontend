@@ -10,6 +10,7 @@ using Avalonia.Media;
 using Ngaq.Core.Infra;
 using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Infra;
+using Ngaq.Ui.Infra.Ctrls;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using Tsinswreng.Avln.Dsl;
@@ -21,6 +22,10 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 public partial class ViewPoWordEdit
 	: AppViewBase<Ctx>
 {
+	/// 觸發資料層刪除的按鈕，完成後由宿主處理刪除完成通知。
+	public OpBtn? DeleteBtn{get;set;}
+	/// 提交基本資料草稿的按鈕，完成後由宿主處理保存完成通知。
+	public OpBtn? SaveBtn{get;set;}
 	/// 顯示單詞識別碼的唯讀文字控制項，供使用者複製與核對資料來源。
 	public SelectableTextBlock? IdCtrl{get;set;}
 	/// 編輯單詞詞頭的輸入控制項；保存前必須具備非空值。
