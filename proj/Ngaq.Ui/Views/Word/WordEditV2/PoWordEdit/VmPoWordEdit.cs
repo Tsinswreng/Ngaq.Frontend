@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.PoWordEdit;
+namespace Ngaq.Ui.Views.Word.WordEditV2.PoWordEdit;
 
 using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Ui.Infra;

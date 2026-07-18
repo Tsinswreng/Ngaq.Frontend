@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordLearnEdit;
+namespace Ngaq.Ui.Views.Word.WordEditV2.WordLearnEdit;
 
 public partial class VmWordLearnEdit{
 	/// 未注入刪除策略時拒絕執行，避免 View 繞過父頁的資料一致性處理。

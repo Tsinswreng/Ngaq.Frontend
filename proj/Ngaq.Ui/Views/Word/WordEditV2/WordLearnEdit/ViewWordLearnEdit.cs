@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordLearnEdit;
+namespace Ngaq.Ui.Views.Word.WordEditV2.WordLearnEdit;
 
 using Avalonia;
 using Avalonia.Controls;
@@ -10,7 +10,7 @@ using Ngaq.Ui.Components.TempusBox;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordLearnPage;
+using Ngaq.Ui.Views.Word.WordEditV2.WordLearnPage;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.Avln.Dsl;
 using Tsinswreng.AvlnTools.Dsl;

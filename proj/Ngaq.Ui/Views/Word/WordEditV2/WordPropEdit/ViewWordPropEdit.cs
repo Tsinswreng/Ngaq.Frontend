@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordPropEdit;
+namespace Ngaq.Ui.Views.Word.WordEditV2.WordPropEdit;
 
 using System;
 using Avalonia;
@@ -12,7 +12,7 @@ using Ngaq.Core.Shared.Word.Models.Po.Kv;
 using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordPropPage;
+using Ngaq.Ui.Views.Word.WordEditV2.WordPropPage;
 using Tsinswreng.Avln.Grid;
 using Tsinswreng.Avln.Dsl;
 using Tsinswreng.AvlnTools.Dsl;

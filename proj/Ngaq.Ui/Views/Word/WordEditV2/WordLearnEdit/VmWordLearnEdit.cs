@@ -1,7 +1,7 @@
-namespace Ngaq.Ui.Views.Word.WordLearnEdit;
+namespace Ngaq.Ui.Views.Word.WordEditV2.WordLearnEdit;
 
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Views.Word.WordLearnPage;
+using Ngaq.Ui.Views.Word.WordEditV2.WordLearnPage;
 
 /// 單行學習記錄編輯頁 ViewModel。
 public partial class VmWordLearnEdit: ViewModelBase{

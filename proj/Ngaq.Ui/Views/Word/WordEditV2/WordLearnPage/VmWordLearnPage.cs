@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordLearnPage;
+namespace Ngaq.Ui.Views.Word.WordEditV2.WordLearnPage;
 
 using System.Collections.ObjectModel;
 using System.Globalization;

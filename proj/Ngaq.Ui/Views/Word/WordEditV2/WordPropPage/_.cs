@@ -1,4 +1,4 @@
-namespace Ngaq.Ui.Views.Word.WordPropPage;
+namespace Ngaq.Ui.Views.Word.WordEditV2.WordPropPage;
 
 file class DirDoc{
 	str Doc =

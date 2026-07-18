@@ -3,7 +3,7 @@ namespace Ngaq.Ui.Views.Word.WordEditV2;
 using Avalonia.Controls;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Views.Word.PoWordEdit;
+using Ngaq.Ui.Views.Word.WordEditV2.PoWordEdit;
 using Tsinswreng.Avln.Grid;
 using Ctx = VmWordEditV2;
 

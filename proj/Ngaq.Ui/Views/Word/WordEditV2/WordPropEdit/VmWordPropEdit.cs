@@ -1,7 +1,7 @@
-namespace Ngaq.Ui.Views.Word.WordPropEdit;
+namespace Ngaq.Ui.Views.Word.WordEditV2.WordPropEdit;
 
 using Ngaq.Ui.Infra;
-using Ngaq.Ui.Views.Word.WordPropPage;
+using Ngaq.Ui.Views.Word.WordEditV2.WordPropPage;
 
 /// 單行屬性編輯頁 ViewModel。
 public partial class VmWordPropEdit: ViewModelBase{
