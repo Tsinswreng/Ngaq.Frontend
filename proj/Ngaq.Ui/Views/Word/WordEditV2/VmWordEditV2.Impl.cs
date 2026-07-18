@@ -341,5 +341,3 @@ public partial class VmWordEditV2{
 		return true;
 	}
 }
-
-

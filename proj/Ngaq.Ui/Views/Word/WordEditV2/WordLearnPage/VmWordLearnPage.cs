@@ -30,62 +30,26 @@ public partial class VmWordLearnPage: ViewModelBase{
 	/// 已修改的行（DmlState == Modified），保存時走 BatUpd。
 	public IEnumerable<VmWordLearnRow> ModifiedRows => Rows.Where(r => r.DmlState == EDmlState.Modified);
 
-	public nil LoadFromPoLearns(IList<PoWordLearn> Learns){
-		Rows = new ObservableCollection<VmWordLearnRow>(Learns.Select(VmWordLearnRow.FromPo));
-		return NIL;
-	}
+	/// 將持久化資料載入編輯用的 ViewModel 狀態。
+	public partial nil LoadFromPoLearns(IList<PoWordLearn> Learns);
 
-	public nil AddRow(){
-		Rows.Add(VmWordLearnRow.NewRow());
-		return NIL;
-	}
+	/// 建立並加入新的編輯項目。
+	public partial nil AddRow();
 
 	/// 新增行直接移除；已存在的行標記爲 Removed，保存時再刪。
-	public nil RemoveRow(VmWordLearnRow Row){
-		if(Row.DmlState == EDmlState.Added){
-			Rows.Remove(Row);
-		}else{
-			Row.DmlState = EDmlState.Removed;
-			Rows.Remove(Row);
-			RemovedRows.Add(Row);
-		}
-		return NIL;
-	}
+	public partial nil RemoveRow(VmWordLearnRow Row);
 
 	/// 已直接調後端刪除成功的行，只更新本地列表，不再掛到總保存刪除隊列。
-	public nil RemovePersistedRow(VmWordLearnRow Row){
-		Rows.Remove(Row);
-		RemovedRows.Remove(Row);
-		return NIL;
-	}
+	public partial nil RemovePersistedRow(VmWordLearnRow Row);
 
-	public nil RequestEdit(VmWordLearnRow Row){
-		OnEditRequested?.Invoke(Row);
-		return NIL;
-	}
+	/// 執行 RequestEdit 所代表的內部協調操作。
+	public partial nil RequestEdit(VmWordLearnRow Row);
 
 	/// 保存成功後重置所有行狀態。
-	public nil OnSaved(){
-		foreach(var row in Rows){
-			row.DmlState = EDmlState.Unchanged;
-		}
-		RemovedRows.Clear();
-		return NIL;
-	}
+	public partial nil OnSaved();
 
-	public bool TryBuildPoLearns(IdWord WordId, out List<PoWordLearn> Learns, out str Err){
-		Learns = [];
-		Err = "";
-		for(i32 i = 0; i < Rows.Count; i++){
-			var row = Rows[i];
-			if(!row.TryToPo(WordId, out var po, out var rowErr)){
-				Err = I18n.Get(K.Learn__Err__, i+1, rowErr);
-				return false;
-			}
-			Learns.Add(po);
-		}
-		return true;
-	}
+	/// 驗證目前狀態並嘗試完成轉換；失敗時透過回傳值提供原因。
+	public partial bool TryBuildPoLearns(IdWord WordId, out List<PoWordLearn> Learns, out str Err);
 }
 
 /// 學習記錄行 ViewModel。
@@ -96,7 +60,7 @@ public partial class VmWordLearnRow: ViewModelBase{
 		ELearn.Fgt,
 	];
 
-	public PoWordLearn Raw{get;set;} = new();
+	public  PoWordLearn Raw{get;set;} = new();
 
 	/// 行記錄 DML 狀態：決定保存時走 BatAdd/BatUpd/Del。
 	public EDmlState DmlState{get;set;}
@@ -139,69 +103,23 @@ public partial class VmWordLearnRow: ViewModelBase{
 	public str LearnResultDisplayText => TranslateLearnResult(GetLearnResultByIndex(LearnResultIndex));
 
 	/// 只有 Unchanged → Modified 才切換，保持 Added / Removed 不被意外覆蓋。
-	void MarkModified(){
-		if(DmlState == EDmlState.Unchanged){
-			DmlState = EDmlState.Modified;
-		}
-	}
+	partial void MarkModified();
 
-	public static VmWordLearnRow NewRow(){
-		return new VmWordLearnRow{
-			Raw = new PoWordLearn{
-				Id = new IdWordLearn(),
-			},
-			LearnResultIndex = 0,
-			// 放最後，覆蓋屬性初始化時觸發的 MarkModified
-			DmlState = EDmlState.Added,
-		};
-	}
+	/// 執行 NewRow 所代表的內部協調操作。
+	public static partial VmWordLearnRow NewRow();
 
-	public static VmWordLearnRow FromPo(PoWordLearn Po){
-		return new VmWordLearnRow{
-			Raw = (PoWordLearn)Po.ShallowCloneSelf(),
-			LearnResultIndex = GetLearnResultIndex(Po.LearnResult),
-			BizCreatedAtIso = Po.BizCreatedAt.ToIso(),
-			// 放最後，覆蓋屬性初始化時觸發的 MarkModified
-			DmlState = EDmlState.Unchanged,
-		};
-	}
+	/// 執行 FromPo 所代表的內部協調操作。
+	public static partial VmWordLearnRow FromPo(PoWordLearn Po);
 
-	public bool TryToPo(IdWord WordId, out PoWordLearn Po, out str Err){
-		Err = "";
-		Po = (PoWordLearn)Raw.ShallowCloneSelf();
-		Po.WordId = WordId;
-		Po.LearnResult = GetLearnResultByIndex(LearnResultIndex);
-		try{
-			Po.BizCreatedAt = UnixMs.FromIso(BizCreatedAtIso);
-		}catch{
-			Err = I18n[K.BizCreatedAtMustBeIsoTime];
-			return false;
-		}
-		return true;
-	}
+	/// 驗證目前狀態並嘗試完成轉換；失敗時透過回傳值提供原因。
+	public partial bool TryToPo(IdWord WordId, out PoWordLearn Po, out str Err);
 
-	static i32 GetLearnResultIndex(ELearn Learn){
-		for(i32 i = 0; i < LearnResults.Count; i++){
-			if(LearnResults[i] == Learn){
-				return i;
-			}
-		}
-		return 0;
-	}
+	/// 根據目前狀態取得對應的顯示或轉換結果。
+	private static partial i32 GetLearnResultIndex(ELearn Learn);
 
-	static ELearn GetLearnResultByIndex(i32 Index){
-		if(Index < 0 || Index >= LearnResults.Count){
-			return ELearn.Add;
-		}
-		return LearnResults[Index];
-	}
+	/// 根據目前狀態取得對應的顯示或轉換結果。
+	private static partial ELearn GetLearnResultByIndex(i32 Index);
 
-	public str TranslateLearnResult(ELearn Learn){
-		return Learn switch{
-			ELearn.Add => I18n[K.Learn_Add],
-			ELearn.Rmb => I18n[K.Learn_Rmb],
-			ELearn.Fgt => I18n[K.Learn_Fgt],
-			_ => Learn.ToString(),
-		};
-	}
+	/// 將內部列舉或鍵值轉換為使用者可讀的顯示文字。
+	public partial str TranslateLearnResult(ELearn Learn);
 }

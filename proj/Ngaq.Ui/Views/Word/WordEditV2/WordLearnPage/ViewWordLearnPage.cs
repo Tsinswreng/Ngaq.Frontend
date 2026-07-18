@@ -31,132 +31,35 @@ public partial class ViewWordLearnPage: AppViewBase{
 	INotifyCollectionChanged? RowsNotifier;
 	VmWordLearnPage? SubscribedCtx;
 
-	public ViewWordLearnPage(){
-		Render();
-		DataContextChanged += (s, e)=>OnCtxChanged();
-	}
+	public partial ViewWordLearnPage();
 
-	void Render(){
-		var root = new GridStack(IsRow: true);
-		root.Grid.SetRowDefs([
-			new(1, GUT.Auto),
-			new(9, GUT.Star),
-		]);
-		root.A(MkBtnAdd(), o=>{
-			o.Click += (s, e)=>{
-				Ctx?.AddRow();
-				RebuildGrid();
-			};
-		});
-		root.A(MkGrid());
-		this.SetContent(root.Grid);
-	}
+	/// 依既定版面與綁定狀態建立此頁的控制項樹。
+	partial void Render();
 
-	Button MkBtnAdd(){
-		var o = new Button();
-		o.Margin = new(10, 10, 10, 4);
-		o.StretchCenter();
-		o.SetContent(Icons.Add().ToIcon().WithText(" "+I[K.AddLearn]));
-		return o;
-	}
+	/// 建立 BtnAdd 所需的 UI 組件，供頁面組裝時重用。
+	private partial Button MkBtnAdd();
 
-	Control MkGrid(){
-		Grid = new TreeDataGrid{
-			Margin = new(10, 4, 10, 10),
-			MinHeight = 260,
-			HorizontalAlignment = HAlign.Stretch,
-		};
-		Grid.Styles.Add(
-			Sty.OfType<TreeDataGridRow>(x=>x.Class(":pointerover"))
-			.Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(46, 46, 46)))
-		);
-		Grid.Styles.Add(
-			Sty.OfType<TreeDataGridRow>(x=>x.Class(":pressed"))
-			.Set(x=>x.Background, new SolidColorBrush(Color.FromRgb(70, 70, 70)))
-		);
-		Grid.AddHandler(InputElement.TappedEvent, OnGridTapped, RoutingStrategies.Bubble, true);
-		RebuildGrid();
-		return Grid;
-	}
+	/// 建立 Grid 所需的 UI 組件，供頁面組裝時重用。
+	private partial Control MkGrid();
 
-	void RebuildGrid(){
-		if(Ctx is null || Grid is null){
-			return;
-		}
-		var source = new FlatTreeDataGridSource<VmWordLearnRow>(Ctx.Rows){
-			Columns = {
-				new TextColumn<VmWordLearnRow, str>("", x=>GetIdxText(x), width: new GridLength(1, GUT.Auto)),
-				new TextColumn<VmWordLearnRow, str>(I[K.LearnResult], x=>x.LearnResultDisplayText, width: new GridLength(1, GUT.Auto)),
-				new TextColumn<VmWordLearnRow, str>(I[K.Biz_CreatedAt], x=>x.BizCreatedAtDisplay, width: new GridLength(1, GUT.Star)),
-			},
-		};
-		Grid.Source = source;
-	}
+	/// 依目前 ViewModel 狀態重建呈現資料，確保列表與編輯狀態一致。
+	partial void RebuildGrid();
 
 	/// `Ctx` 後置注入後才有真正的行數據，這裏補建表格源。
-	void OnCtxChanged(){
-		if(SubscribedCtx is not null){
-			SubscribedCtx.PropertyChanged -= OnCtxPropertyChanged;
-			SubscribedCtx = null;
-		}
-		if(RowsNotifier is not null){
-			RowsNotifier.CollectionChanged -= OnRowsChanged;
-			RowsNotifier = null;
-		}
-		if(Ctx is null){
-			return;
-		}
-		SubscribedCtx = Ctx;
-		Ctx.PropertyChanged += OnCtxPropertyChanged;
-		HookRowsChanged();
-		RebuildGrid();
-	}
+	partial void OnCtxChanged();
 
 	/// `LoadFromPoLearns` 會直接替換 `Rows`，需重新綁定集合事件。
-	void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
-		if(E.PropertyName == nameof(VmWordLearnPage.Rows)){
-			HookRowsChanged();
-			RebuildGrid();
-		}
-	}
+	partial void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E);
 
-	void HookRowsChanged(){
-		if(RowsNotifier is not null){
-			RowsNotifier.CollectionChanged -= OnRowsChanged;
-		}
-		RowsNotifier = Ctx?.Rows;
-		if(RowsNotifier is not null){
-			RowsNotifier.CollectionChanged += OnRowsChanged;
-		}
-	}
+	/// 掛接必要的資料或事件監聽，讓後續狀態變更能反映到畫面。
+	partial void HookRowsChanged();
 
-	void OnRowsChanged(object? Sender, NotifyCollectionChangedEventArgs E){
-		RebuildGrid();
-	}
+	/// 處理 RowsChanged 事件，維持頁面狀態與資料來源同步。
+	partial void OnRowsChanged(object? Sender, NotifyCollectionChangedEventArgs E);
 
-	str GetIdxText(VmWordLearnRow Row){
-		if(Ctx is null){
-			return "";
-		}
-		var idx = Ctx.Rows.IndexOf(Row);
-		return idx < 0 ? "" : (idx+1)+"";
-	}
+	/// 根據目前狀態取得對應的顯示或轉換結果。
+	private partial str GetIdxText(VmWordLearnRow Row);
 
-	void OnGridTapped(object? Sender, TappedEventArgs E){
-		if(Ctx is null){
-			return;
-		}
-		if(E.Source is not StyledElement src){
-			return;
-		}
-		for(StyledElement? cur = src; cur is not null; cur = cur.Parent){
-			if(cur is TreeDataGridRow row){
-				if(row.DataContext is VmWordLearnRow vmRow){
-					Ctx.RequestEdit(vmRow);
-					E.Handled = true;
-				}
-				return;
-			}
-		}
-	}
+	/// 處理 GridTapped 事件，維持頁面狀態與資料來源同步。
+	partial void OnGridTapped(object? Sender, TappedEventArgs E);
 }
