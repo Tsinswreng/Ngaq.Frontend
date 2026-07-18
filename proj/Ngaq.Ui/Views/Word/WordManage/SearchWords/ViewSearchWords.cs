@@ -1,209 +1,47 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords;
 
 using Avalonia.Controls;
-using Avalonia.Controls.Templates;
-using Avalonia.Input;
-using Avalonia.Media;
-using CommunityToolkit.Mvvm.Input;
-using Ngaq.Core.Shared.Word.Models;
-using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Components.PageBar;
-using Ngaq.Ui.Icons;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
-using Ngaq.Ui.Tools;
-using Ngaq.Ui.Views.Word.WordCard;
-using Ngaq.Ui.Views.Word.WordEditV2;
-using Ngaq.Ui.Views.Word.WordManage.AddWord;
-using Ngaq.Ui.Views.Word.WordManage.UserLang.UserLangPage;
-using Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
-using Ngaq.Ui.Views.Word.WordManage.WordSyncV2;
-using Tsinswreng.AvlnTools.Dsl;
-using Tsinswreng.AvlnTools.Tools;
-using Tsinswreng.CsTools;
-using Ctx = VmSearchWords;
-using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Tsinswreng.Avln.Grid;
+using Ctx = VmSearchWords;
 
-//TODO 改名爲 UserWordPage / UserWordManage
-public partial class ViewSearchWords
-	:AppViewBase<Ctx>
-	,I_MkTitleMenu
-{
+/// 用戶詞庫搜索、分頁瀏覽與入口導航頁。
+public partial class ViewSearchWords: AppViewBase<Ctx>, I_MkTitleMenu{
+	/// 頁面根版面。
+	public GridStack Root = new(IsRow: true);
+	/// 搜索欄水平版面。
+	public GridStack SearchGrid = new(IsRow: false);
+	/// 執行當前關鍵字搜索的按鈕。
+	public OpBtn? SearchBtn;
+	/// 輸入搜索關鍵字的控件。
+	public TextBox? SearchInputCtrl;
+	/// 開啟自由加詞頁的按鈕。
+	public OpBtn? FreeAddBtn;
+	/// 顯示搜索命中的虛擬化列表。
+	public ItemsControl? WordListCtrl;
+	/// 承載搜索結果列表的捲動容器。
+	public ScrollViewer? WordListScroll;
+	/// 與搜索 ViewModel 共享分頁狀態的子 View。
+	public ViewPageBar? PageBarView;
 
-	public ViewSearchWords(){
-		Ctx = App.GetRSvc<Ctx>();
-		Style();
-		Render();
-	}
-
-	public partial class Cls{}
-
-	protected nil Style(){
-		return NIL;
-	}
-
-	GridStack Root = new GridStack(IsRow: true);
-
-	protected nil Render(){
-		this.SetContent(Root.Grid, o=>{
-			o.SetRowDefs([
-				new(1, GUT.Auto),
-				new(1, GUT.Star),
-				new(1, GUT.Auto),
-			]);
-		});
-		var SearchGrid = new GridStack(IsRow: false);
-		Root.A(SearchGrid.Grid, o=>{
-			o.SetColDefs([
-				new(6, GUT.Auto),
-				new(1, GUT.Star),
-				new(1, GUT.Auto),
-			]);
-		});
-
-				{{
-			var searchBtn = new OpBtn();
-			var freeAddBtn = new OpBtn();
-			SearchGrid.A(searchBtn, o=>{
-				o.BtnContent = Icons.Search().ToIcon();
-				o.SetExe((Ct)=>Ctx?.InitSearchAsy(Ct));
-				o._Button.StretchCenter();
-				o._Button.Background = UiCfg.Inst.MainColor;
-			})
-			.A(new TextBox(), o=>{
-				o.Watermark = I[K.SearchUserWords];
-				o.CBind<Ctx>(o.PropText,x=>x.Input);
-				o.KeyBindings.Add(
-					new KeyBinding{
-						Gesture = new (Key.Enter),
-						Command = new RelayCommand(()=>searchBtn.PerformClick())
-					}
-				);
-			})
-			.A(freeAddBtn, o=>{
-				// 搜索頁直接提供自由加詞入口，避免必須先搜到既有詞才能進編輯頁。
-				o.BtnContent = Icons.Add().ToIcon();
-				o.SetExe((Ct)=>Task.FromResult(OpenFreeAddWordPage()));
-				o._Button.StretchCenter();
-			});
-		}}
-		Root.A(new ScrollViewer(), scrl=>{
-			scrl.SetContent(_ListWordCard(), o=>{
-				o.CBind<Ctx>(
-					ItemsControl.ItemsSourceProperty
-					,x=>x.GotWords
-					,Mode: BindingMode.OneWay
-				);
-			});
-		})
-		.A(MkPageBar(), o=>{
-			o.HorizontalAlignment = HAlign.Center;
-		});
-
-		return NIL;
-	}
-
-	Control _ListWordCard(){
-		var R = new ItemsControl();
-		R.ItemsPanel = new FuncTemplate<Panel?>(()=>{
-			return new VirtualizingStackPanel();
-		});
-		R.ItemTemplate = new FuncDataTemplate<DtoWordSearchHit>((hit, b)=>{
-			var R = new Button();
-			var View = new ViewSearchedWordCard(){Ctx = new VmSearchedWordCard()};
-			if(hit == null){return View;};
-
-			View.Ctx.FromSearchHit(hit);
-			R.Content = View;
-			if(!AnyNull(View.Ctx.WordForLearn?.JnWord)){
-				R.ContextMenu = ViewWordListCard.MkWordCardCtxMenu(Ctx, View.Ctx.WordForLearn.JnWord);
-			}else{
-				Ctx?.ShowDialog(I[K.WordNotFound]);
-			}
-			R.Click += (s,e)=>{
-				var Target = new ViewWordEditV2();
-				var jnWord = VmSearchedWordCard.GetJnWordFromHit(hit);
-				if(AnyNull(Target.Ctx, jnWord)){
-					return;
-				}
-				Target.Ctx.FromJnWord(jnWord);
-				var titleStr = jnWord.Head;
-				var titled = ToolView.WithTitle(titleStr, Target);
-				ViewNavi?.GoTo(titled);
-			};
-			R.Styles.Add(new Style().Set(
-				BackgroundProperty
-				,Brushes.Transparent
-			));
-			R.Styles.Add(new Style().NoMargin().NoPadding());
-			return R;
-		});
-		return R;
-	}
-
-	Control MkPageBar(){
-		var view = new ViewPageBar();
-		if(Ctx is not null){
-			view.Ctx = Ctx.PageBar;
-		}
-		return view;
-	}
-
-	/// 頂欄菜單：收納單詞同步頁入口（V1 + V2）。
-	/// <returns>標題菜單控件。</returns>
-	public Control MkTitleMenu(){
-		var menu = new ContextMenu();
-		menu.Items.A(new MenuItem(), o=>{
-			var title = I[K.AddWordsFromText];
-			o.Header = title;
-			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(
-					ToolView.WithTitle(
-						title,
-						new ViewAddWord()
-					)
-				);
-			};
-		});
-		menu.Items.A(new MenuItem(), o=>{
-			var title = I[K.UserLang];
-			o.Header = title;
-			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(
-					ToolView.WithTitle(
-						title,
-						new ViewUserLangPage()
-					)
-				);
-			};
-		});
-		menu.Items.A(new MenuItem(), o=>{
-			var title = I[K.WordsLibBackupEtSync];
-			o.Header = title;
-			o.Click += (s,e)=>{
-				ViewNavi?.GoTo(
-					ToolView.WithTitle(
-						title,
-						new ViewWordSyncV2()
-					)
-				);
-			};
-		});
-		return menu;
-	}
-
-	/// 搜索頁的自由加詞：直接打開空白的 WordEditV2 草稿。
-	nil OpenFreeAddWordPage(){
-		var view = new ViewWordEditV2();
-		if(view.Ctx is null){
-			Ctx?.ShowDialog(I[K.WordEditorContextIsNull]);
-			return NIL;
-		}
-		view.Ctx.InitFreeAddDraft();
-		ViewNavi?.GoTo(ToolView.WithTitle(I[K.AddWords], view));
-		return NIL;
-	}
+	/// 取得頁面 ViewModel，初始化樣式並建立控件樹。
+	public partial ViewSearchWords();
+	/// 初始化此頁專屬樣式；目前保留作為後續擴展入口。
+	partial void InitStyle();
+	/// 建立搜索欄、結果列表及分頁列。
+	partial void Render();
+	/// 建立虛擬化搜索結果列表與命中卡片模板。
+	private partial Control MkWordList();
+	/// 依選取命中建立並打開單詞編輯頁。
+	private partial void OpenWordEditor(Ngaq.Core.Shared.Word.Models.Dto.DtoWordSearchHit Hit);
+	/// 建立並注入頁面共用分頁狀態的分頁子 View。
+	private partial Control MkPageBar();
+	/// 建立標題列選單中的新增、語言與同步入口。
+	public partial Control MkTitleMenu();
+	/// 建立導向指定 View 的單一標題選單項。
+	private partial MenuItem MkMenuItem(str Title, Func<Control> MkView);
+	/// 建立空白草稿並打開自由加詞編輯頁。
+	private partial nil OpenFreeAddWordPage();
 }
-
-

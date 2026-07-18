@@ -1,104 +1,32 @@
 namespace Ngaq.Ui.Views.Word.WordManage.SearchWords.SearchedWordCard;
+
 using System.Collections.ObjectModel;
-using Ngaq.Core.Shared.Word.Models;
-using Ngaq.Core.Shared.Word.Models.Learn_;
-using Ngaq.Core.Shared.Word.Models.Dto;
-using Tsinswreng.CsTools;
-using Ctx = VmSearchedWordCard;
-using Ngaq.Ui.Views.Word.WordCard;
 using Ngaq.Core.Shared.User.Models.Po;
+using Ngaq.Core.Shared.Word.Models;
+using Ngaq.Core.Shared.Word.Models.Dto;
+using Ngaq.Ui.Views.Word.WordCard;
+using Ctx = VmSearchedWordCard;
 
-public partial class VmSearchedWordCard
-	:VmBaseWordListCard
-{
-
+/// 將搜索命中轉成可供詞卡顯示的 ViewModel，同時保留命中來源。
+public partial class VmSearchedWordCard: VmBaseWordListCard{
+	/// 調試環境中的卡片樣例集合。
 	public new static ObservableCollection<Ctx> Samples = [];
-	static VmSearchedWordCard(){
-		#if DEBUG
-		#endif
-	}
-
-	public static JnWord GetJnWordFromHit(DtoWordSearchHit Hit){
-		return Hit.JnWord;
-	}
-
+	/// 原始搜索命中。
 	public DtoWordSearchHit? SearchHit{get;set;}
-
-	public str HitKindText{
-		get;
-		set{SetProperty(ref field, value);}
-	} = "";
-
-	public str HitAssetIdText{
-		get;
-		set{SetProperty(ref field, value);}
-	} = "";
-
-	public Ctx FromSearchHit(DtoWordSearchHit Hit){
-		SearchHit = Hit;
-		WordForLearn = new WordForLearn(GetJnWordFromHit(Hit));
-		Init();
-		return this;
-	}
-
-	protected override nil Init(){
-		try{
-			if(Bo == null){
-				return NIL;
-			}
-			DelAt = Bo.DelAt;
-			Head = Bo.Head;
-			Lang = Bo.Lang;
-			Index = Bo.Index;
-			Weight = Bo.Weight;
-			Learn_Records = Bo.Learn_Records;
-			SavedLearnRecords = Bo.LearnRecords;
-			LastLearnedTime = Bo.LastLearnedTime_();
-			HitKindText = FmtHitKind(SearchHit?.HitKind);
-			HitAssetIdText = FmtHitAssetId(SearchHit);
-			if(Learn_Records.TryGetValue(ELearn.Add, out var AddRecords)){
-				FontColor = AddCntToFontColor(
-					(u64)AddRecords.Count
-				);
-			}
-
-			return NIL;
-		}catch(Exception e){
-			HandleErr(e);
-		}
-		return NIL;
-	}
-
-	static str FmtHitKind(EWordSearchHitKind? Kind){
-		return Kind switch{
-			EWordSearchHitKind.Word => "Word",
-			EWordSearchHitKind.WordProp => "Prop",
-			EWordSearchHitKind.WordLearn => "Learn",
-			_ => "",
-		};
-	}
-
-	static str FmtHitAssetId(DtoWordSearchHit? Hit){
-		if(Hit is null){
-			return "";
-		}
-		if(Hit.HitKind == EWordSearchHitKind.WordProp){
-			return Hit.WordProp?.Id.ToString()??"";
-		}
-		if(Hit.HitKind == EWordSearchHitKind.WordLearn){
-			return Hit.WordLearn?.Id.ToString()??"";
-		}
-		return Hit.JnWord.Word.Id.ToString();
-	}
-
-	public IdDel? DelAt{
-		get=>field;
-		set {
-			if (Bo is not null && value is not null) {
-				Bo.DelAt = value.Value;
-			}
-			SetProperty(ref field, value);
-		}
-	}
-
+	/// 命中資產類型的顯示文字。
+	public str HitKindText{get;set;} = "";
+	/// 命中資產識別碼的顯示文字。
+	public str HitAssetIdText{get;set;} = "";
+	/// 聚合根的軟刪時間，用於詞卡呈現刪除狀態。
+	public IdDel? DelAt{get;set;}
+	/// 從搜索命中取出所屬的完整單詞聚合。
+	public static partial JnWord GetJnWordFromHit(DtoWordSearchHit Hit);
+	/// 載入命中資料並更新所有詞卡展示屬性。
+	public partial Ctx FromSearchHit(DtoWordSearchHit Hit);
+	/// 將基類資料映射為搜索結果卡片的展示狀態。
+	protected override partial nil Init();
+	/// 將命中類型轉為搜索卡片使用的簡短文字。
+	private static partial str FmtHitKind(EWordSearchHitKind? Kind);
+	/// 依命中類型取得對應聚合根或資產的識別碼文字。
+	private static partial str FmtHitAssetId(DtoWordSearchHit? Hit);
 }

@@ -42,8 +42,12 @@ public partial class ViewModelBase
 		ViewNavi = MgrViewNavi.Inst.ViewNavi;
 	}
 
+	public void Init(){
+		IsInited = true;
+	}
+
 	public bool IsInited{get;set;} = false;
-	public void CheckInited(){
+	public void CheckInit(){
 		if(!IsInited){
 			throw new InvalidOperationException(Todo.I18n("ViewModel Not Inited"));
 		}

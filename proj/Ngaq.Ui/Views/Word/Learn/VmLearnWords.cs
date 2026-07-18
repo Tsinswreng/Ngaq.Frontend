@@ -270,7 +270,7 @@ public partial class VmLearnWords
 	private readonly ConcurrentQueue<Bitmap> _bgCache = new();
 
 	public async Task<nil> ChangeBg(){
-		CheckInited();
+		CheckInit();
 		try{
 			var EnableRandomBackground = Cfg.Get(KeysClientCfg.Word.EnableRandomBackground);
 			if(!EnableRandomBackground){
