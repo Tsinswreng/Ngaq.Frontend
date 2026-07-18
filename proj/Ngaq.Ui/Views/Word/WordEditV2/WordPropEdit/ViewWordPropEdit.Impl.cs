@@ -18,9 +18,9 @@ using Tsinswreng.Avln.Dsl;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
-
+using Ctx = VmWordPropEdit;
 /// 單行屬性編輯頁。
-public partial class ViewWordPropEdit: AppViewBase{
+public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 	public partial ViewWordPropEdit(){
 		Render();
 		DataContextChanged += (s, e)=>OnCtxChanged();

@@ -18,16 +18,12 @@ using Tsinswreng.Avln.Dsl;
 using Tsinswreng.AvlnTools.Dsl;
 using Tsinswreng.AvlnTools.Tools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
-
+using Ctx = VmWordPropEdit;
 /// 單行屬性編輯頁。
-public partial class ViewWordPropEdit: AppViewBase{
-	public VmWordPropEdit? Ctx{
-		get{return DataContext as VmWordPropEdit;}
-		set{DataContext = value;}
-	}
+public partial class ViewWordPropEdit: AppViewBase<Ctx>{
 
-	StackPanel? EditorForm;
-	VmWordPropEdit? SubscribedCtx;
+	public StackPanel? EditorForm;
+	public Ctx? SubscribedCtx;
 
 	IReadOnlyList<str> KvTypeOptions => [
 		I[K.KvTypeStr],
