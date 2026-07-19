@@ -52,9 +52,9 @@ public partial class ViewDictionary{
 			this.SetContent(Root.Grid, o=>{
 				Root.RowDefs = new("Auto,Auto,*");
 			});
-	
+
 			var LangGrid = new GridStack(IsRow: false);
-			_langGrid = LangGrid;
+			_LangGrid = LangGrid;
 			Root.A(LangGrid.Grid, o=>{
 				LangGrid.ColDefs = new("*,Auto,*");
 				o.ZIndex = 20;
@@ -70,7 +70,7 @@ public partial class ViewDictionary{
 					o.Click += (s, e) => OpenNormLangSelector(false);
 				});
 			}}
-	
+
 			var SearchGrid = new GridStack(IsRow: false);
 			_searchGrid = SearchGrid;
 			Root.A(SearchGrid.Grid, o=>{
@@ -114,9 +114,9 @@ public partial class ViewDictionary{
 					o._Button.Click += (s,e)=>OpenTitleMenuNear(o._Button);
 				});
 			}}
-	
+
 			Root.A(MkResultArea());
-	
+
 			return NIL;
 		}
 

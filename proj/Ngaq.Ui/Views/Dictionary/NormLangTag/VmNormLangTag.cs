@@ -15,12 +15,12 @@ public partial class VmNormLangTag: ViewModelBase, IMk<Ctx>{
 
 	/// 語言代碼採用的標識類型。
 	public ELangIdentType Type{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = ELangIdentType.Bcp47;
 	/// 語言代碼；同時作為自定義文字空白時的後備顯示內容。
 	public str Code{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(DisplayText));
@@ -29,7 +29,7 @@ public partial class VmNormLangTag: ViewModelBase, IMk<Ctx>{
 	} = "";
 	/// 用戶為快捷欄設定的短文字；空白表示直接顯示 Code。
 	public str Text{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(DisplayText));
@@ -38,12 +38,12 @@ public partial class VmNormLangTag: ViewModelBase, IMk<Ctx>{
 	} = "";
 	/// 標準語言的本地名稱，供編輯頁辨識語言，不強制顯示在快捷 Tag 上。
 	public str NativeName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 	/// 當前 Tag 是否代表詞典正在使用的源語言。
 	public bool IsSelected{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = false;
 	/// Tag 最終顯示文字；自定義文字空白時回退到語言代碼。

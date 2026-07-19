@@ -14,10 +14,10 @@ public partial class ViewNormLangTag: AppViewBase<Ctx>{
 	/// 承載短標籤文字與點擊行為的按鈕。
 	public Button? TagButton;
 
-	/// 建立按內容自適應寬度的 Tag 按鈕。
+
 	private partial void Render();
-	/// 初始化普通狀態與當前源語言狀態的視覺樣式。
+
 	private partial void InitStyle();
-	/// 將點擊事件轉發給詞典頁。
+
 	private partial void Select();
 }
