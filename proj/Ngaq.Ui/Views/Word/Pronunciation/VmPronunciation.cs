@@ -40,7 +40,7 @@ public partial class VmPronunciation: ViewModelBase, IMk<Ctx>{
 	public Pronunciation? Raw{get;set;}
 
 	public str Text{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 

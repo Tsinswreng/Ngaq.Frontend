@@ -49,69 +49,69 @@ public partial class VmStudyPlanEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = false;
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
 	public str PoIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoUniqName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoDescr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PreFilterIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PreFilterUniqNameText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str WeightCalculatorIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str WeightCalculatorUniqNameText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str WeightArgIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str WeightArgUniqNameText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public PoStudyPlan PoStudyPlan{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new();
 
 	public BoStudyPlan BoStudyPlan{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new();
 

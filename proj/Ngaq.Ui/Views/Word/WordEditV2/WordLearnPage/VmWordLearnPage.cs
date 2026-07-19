@@ -17,7 +17,7 @@ public partial class VmWordLearnPage: ViewModelBase{
 	public event Action<VmWordLearnRow>? OnEditRequested;
 
 	public ObservableCollection<VmWordLearnRow> Rows{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 
@@ -66,7 +66,7 @@ public partial class VmWordLearnRow: ViewModelBase{
 	public EDmlState DmlState{get;set;}
 
 	public i32 LearnResultIndex{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();
@@ -78,7 +78,7 @@ public partial class VmWordLearnRow: ViewModelBase{
 	public str IdText => Raw.Id.ToString();
 
 	public str BizCreatedAtIso{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();

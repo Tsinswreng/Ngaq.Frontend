@@ -45,7 +45,7 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = true;
 
@@ -63,32 +63,32 @@ public partial class VmNormLangToUserLangEdit: ViewModelBase, IMk<Ctx>{
 	public bool ShowNormLangTypeField => true;
 
 	public str PoIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoNormLang{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoUserLang{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoDescr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public i32 PoNormLangTypeIndex{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = 0;
 
 	public PoNormLangToUserLang PoNormLangToUserLang{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new PoNormLangToUserLang{
 		NormLangType = ELangIdentType.Bcp47,

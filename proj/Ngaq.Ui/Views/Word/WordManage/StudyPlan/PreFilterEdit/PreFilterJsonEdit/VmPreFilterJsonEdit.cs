@@ -47,7 +47,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -55,7 +55,7 @@ public class VmPreFilterJsonEdit: ViewModelBase, IMk<Ctx>{
 
 	/// 唯一 JSON 編輯字段。
 	public str PoPreFilterJson{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

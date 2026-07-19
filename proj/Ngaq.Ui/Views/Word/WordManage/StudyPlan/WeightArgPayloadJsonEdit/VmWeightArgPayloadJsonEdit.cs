@@ -30,14 +30,14 @@ public class VmWeightArgPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 	Action<str>? OnApply{get;set;}
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
 	public str PayloadJson{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

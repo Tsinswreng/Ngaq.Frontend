@@ -71,12 +71,12 @@ public partial class VmEditJsonWord: ViewModelBase, IMk<Ctx>{
 	}
 
 	public IJnWord? Src{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 
 	public IJnWord? Bo{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 

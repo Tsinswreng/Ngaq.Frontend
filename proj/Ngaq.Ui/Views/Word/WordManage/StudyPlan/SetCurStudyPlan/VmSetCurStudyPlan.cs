@@ -42,17 +42,17 @@ public partial class VmSetCurStudyPlan: ViewModelBase, IMk<Ctx>{
 	}
 
 	public str CurId{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str CurUniqName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str CurDescr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

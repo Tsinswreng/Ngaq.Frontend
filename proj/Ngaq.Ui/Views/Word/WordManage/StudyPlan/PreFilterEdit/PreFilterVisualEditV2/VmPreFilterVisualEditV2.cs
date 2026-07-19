@@ -81,24 +81,24 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 
 	public class VmFilterItemRow: ViewModelBase{
 		public i32 OperationIndex{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = (i32)EFilterOperationMode.Eq;
 
 		public i32 ValueTypeIndex{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = (i32)EValueType.String;
 
 		public str ValuesText{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = "";
 	}
 
 	public class VmFieldValueRow: ViewModelBase{
 		public str Value{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = "";
 	}
@@ -117,19 +117,19 @@ public class VmPreFilterVisualEditV2: ViewModelBase, IMk<Ctx>{
 	}
 
 	public BoPreFilter BoPreFilter{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = MkEmptyBoPreFilter();
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = true;
 

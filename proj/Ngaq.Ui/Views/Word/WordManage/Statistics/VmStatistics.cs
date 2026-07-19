@@ -78,17 +78,17 @@ public partial class VmStatistics: ViewModelBase{
 	}
 
 	public UnixMs TimeStart{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=UnixMs.FromDateTime(DateTime.Now.AddMonths(-2));
 
 	public UnixMs TimeEnd{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=new UnixMs();
 
 	public i64 IntervalNoUnit{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(TimeInterval));
@@ -97,7 +97,7 @@ public partial class VmStatistics: ViewModelBase{
 	}=1;
 
 	public ETimeUnit IntervalUnit{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(TimeInterval));
@@ -123,7 +123,7 @@ public partial class VmStatistics: ViewModelBase{
 	];
 
 	public i32 LearnResultIndex{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(LearnResult));
@@ -137,12 +137,12 @@ public partial class VmStatistics: ViewModelBase{
 
 
 	// public IList<f64> Times{
-	// 	get{return field;}
+	// 	get;
 	// 	set{SetProperty(ref field, value);}
 	// }=[];
 
 	// public IList<f64> Cnts{
-	// 	get{return field;}
+	// 	get;
 	// 	set{SetProperty(ref field, value);}
 	// }=[];
 
@@ -167,7 +167,7 @@ public partial class VmStatistics: ViewModelBase{
 	}
 
 	public List<Coordinates> Points{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=[];
 

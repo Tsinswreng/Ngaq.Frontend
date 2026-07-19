@@ -50,12 +50,12 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 
 	/// 當前頁面是否爲新增模式。true=新增，false=編輯既有實體。
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = true;
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -73,27 +73,27 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 	public bool ShowTypeField => TypeOptions.Count > 1;
 
 	public str PoIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoUniqName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoDescr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public i32 PoTypeIndex{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = 1;
 
 	public str WeightCalculatorUniqNameText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -101,13 +101,13 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 
 	/// 主頁只顯示 Payload 預覽，完整編輯放到 JSON 子頁。
 	public str PayloadTextPreview{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// 實際要保存的 Payload 文本。
 	public str PayloadText{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				RefreshPayloadPreview();
@@ -117,7 +117,7 @@ public partial class VmWeightArgEdit: ViewModelBase, IMk<Ctx>{
 
 	/// 當前編輯中的實體快照。
 	public PoWeightArg PoWeightArg{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new PoWeightArg{
 		Type = EWeightArgType.Json,

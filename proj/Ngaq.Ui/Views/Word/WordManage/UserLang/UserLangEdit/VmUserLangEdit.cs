@@ -54,13 +54,13 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
 
 	/// 當前頁面是否爲新增模式。`true=新增`，`false=編輯既有實體`。
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = true;
 
 	/// 最近一次錯誤文本。
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -85,37 +85,37 @@ public partial class VmUserLangEdit: ViewModelBase, IMk<Ctx>{
 
 	/// Id 只讀文本。
 	public str PoIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// UniqName 輸入。
 	public str PoUniqName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// 描述輸入。
 	public str PoDescr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// RelLang（如 BCP47 字符串）輸入。
 	public str PoRelLang{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// 語言標識類型下拉索引。
 	public i32 PoRelLangTypeIndex{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = 0;
 
 	/// 當前編輯中的 Po 快照。
 	public PoUserLang PoUserLang{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new PoUserLang{
 		RelLangType = ELangIdentType.Bcp47,

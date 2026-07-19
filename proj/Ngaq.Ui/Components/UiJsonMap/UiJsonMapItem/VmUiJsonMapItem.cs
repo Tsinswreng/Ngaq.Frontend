@@ -24,7 +24,7 @@ public partial class VmJsonMapItem: ViewModelBase, IMk<Ctx>{
 	}
 
 	public IUiJsonMapItem? UiMapItem{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 
@@ -87,12 +87,12 @@ public partial class VmJsonMapItem: ViewModelBase, IMk<Ctx>{
 	}
 
 	public str DisplayName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 
 	public str Descr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 

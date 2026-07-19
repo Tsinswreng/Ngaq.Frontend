@@ -41,7 +41,7 @@ public partial class VmUserProfile: ViewModelBase{
 
 	/// 顯示在個人頁面的 UserId 文本。
 	public str UserIdRepr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = AppI18n.Inst[K.NotLoggedIn];
 
@@ -62,7 +62,7 @@ public partial class VmUserProfile: ViewModelBase{
 
 /*
 	public str YYY{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
  */

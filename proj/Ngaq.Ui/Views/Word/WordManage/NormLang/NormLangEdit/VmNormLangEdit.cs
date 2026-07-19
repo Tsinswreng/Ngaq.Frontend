@@ -44,12 +44,12 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = true;
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -69,37 +69,37 @@ public partial class VmNormLangEdit: ViewModelBase, IMk<Ctx>{
 	public bool ShowTypeField => true;
 
 	public str PoIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoCode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoNativeName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoEnglishName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoWeightText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "0";
 
 	public i32 PoTypeIndex{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = 0;
 
 	public PoNormLang PoNormLang{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new PoNormLang{
 		Type = ELangIdentType.Bcp47,

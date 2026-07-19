@@ -96,38 +96,38 @@ public partial class VmWordInfo
 	//public JnWord? BoWord{get;set;}
 
 	public str Id{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 
 
 	public str Head{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str Lang{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 
 	public IList<str> Descrs{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 
 
 	/// description 在信息頁也保留逐條 prop，便於直接跳到既有 WordProp 編輯框。
 	public IList<PoWordProp> DescriptionWordProps{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 
 	/// 側欄按單條 prop 展示，便於每項直接掛編輯入口。
 	public IList<PoWordProp> SideWordProps{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 

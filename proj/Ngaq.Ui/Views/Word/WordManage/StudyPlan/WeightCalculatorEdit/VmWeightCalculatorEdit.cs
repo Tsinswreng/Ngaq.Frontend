@@ -46,12 +46,12 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 
 	/// 當前頁面是否爲新增模式。true=新增，false=編輯既有實體。
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = true;
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -69,33 +69,33 @@ public partial class VmWeightCalculatorEdit: ViewModelBase, IMk<Ctx>{
 	public bool ShowTypeField => TypeOptions.Count > 1;
 
 	public str PoIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoUniqName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoDescr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public i32 PoTypeIndex{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = 2;
 
 	public str PayloadText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// 當前編輯中的實體快照。
 	public PoWeightCalculator PoWeightCalculator{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = new PoWeightCalculator{
 		Type = EWeightCalculatorType.JsV1,

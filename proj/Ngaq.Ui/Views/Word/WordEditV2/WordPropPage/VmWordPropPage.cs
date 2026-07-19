@@ -16,7 +16,7 @@ public partial class VmWordPropPage: ViewModelBase{
 	public event Action<VmWordPropRow>? OnEditRequested;
 
 	public ObservableCollection<VmWordPropRow> Rows{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 
@@ -67,7 +67,7 @@ public partial class VmWordPropRow: ViewModelBase{
 	public EDmlState DmlState{get;set;}
 
 	public i32 KTypeIndex{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();
@@ -76,7 +76,7 @@ public partial class VmWordPropRow: ViewModelBase{
 	} = 0;
 
 	public str KStrText{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();
@@ -85,7 +85,7 @@ public partial class VmWordPropRow: ViewModelBase{
 	} = "";
 
 	public str KI64Text{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();
@@ -94,7 +94,7 @@ public partial class VmWordPropRow: ViewModelBase{
 	} = "0";
 
 	public i32 VTypeIndex{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();
@@ -103,7 +103,7 @@ public partial class VmWordPropRow: ViewModelBase{
 	} = 0;
 
 	public str VStrText{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();
@@ -112,7 +112,7 @@ public partial class VmWordPropRow: ViewModelBase{
 	} = "";
 
 	public str VI64Text{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				MarkModified();

@@ -40,12 +40,12 @@ public partial class VmAddWord
 	}
 
 	public str Text{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str ErrStr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

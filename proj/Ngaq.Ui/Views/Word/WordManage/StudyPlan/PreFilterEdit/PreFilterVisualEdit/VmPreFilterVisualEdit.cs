@@ -85,24 +85,24 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 
 	public class VmFilterItemRow: ViewModelBase{
 		public i32 OperationIndex{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = (i32)EFilterOperationMode.Eq;
 
 		public i32 ValueTypeIndex{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = (i32)EValueType.String;
 
 		public str ValuesText{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = "";
 	}
 
 	public class VmFieldValueRow: ViewModelBase{
 		public str Value{
-			get{return field;}
+			get;
 			set{SetProperty(ref field, value);}
 		} = "";
 	}
@@ -123,24 +123,24 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public BoPreFilter BoPreFilter{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = MkEmptyBoPreFilter();
 
 	public str PoTextPreview{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public bool HasError => !str.IsNullOrWhiteSpace(LastError);
 
 	public bool IsCreateMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = true;
 
@@ -164,27 +164,27 @@ public class VmPreFilterVisualEdit: ViewModelBase, IMk<Ctx>{
 	public bool ShowPoTypeField => PoTypeOptions.Count > 1;
 
 	public str PoIdText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoUniqName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str PoDescr{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public i32 PoTypeIndex{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = 0;
 
 	public str PreFilterVersion{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "1.0.0.0";
 

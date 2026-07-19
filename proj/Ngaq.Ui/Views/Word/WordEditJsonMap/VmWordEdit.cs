@@ -27,7 +27,7 @@ public partial class VmWordEdit: ViewModelBase, IMk<Ctx>{
 
 
 	public IJnWord? JnWord{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=null;
 

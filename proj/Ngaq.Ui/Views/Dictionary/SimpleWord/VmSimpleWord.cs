@@ -68,19 +68,19 @@ int.	說得對
 
 	/// 當前查詞結果的詞頭。
 	public str Head{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// 當前查詞結果的讀音列表。
 	public IList<Pronunciation> Pronunciations{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 
 	/// 當前查詞結果的合併釋義文本。
 	public str Description{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

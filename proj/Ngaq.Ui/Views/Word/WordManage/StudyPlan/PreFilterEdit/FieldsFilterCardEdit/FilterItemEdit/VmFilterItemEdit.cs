@@ -25,17 +25,17 @@ public class VmFilterItemEdit: ViewModelBase, IMk<Ctx>{
 	public IReadOnlyList<str> ValueTypeOptions => Owner?.ValueTypeOptionsDisplay ?? [];
 
 	public str SelectedOperation{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str SelectedValueType{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public str ValuesText{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

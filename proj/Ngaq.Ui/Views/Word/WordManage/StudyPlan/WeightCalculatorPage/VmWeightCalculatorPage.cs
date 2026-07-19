@@ -58,14 +58,14 @@ public partial class VmWeightCalculatorPage: ViewModelBase, IMk<Ctx>{
 	public VmPageBar PageBar{get;set;} = null!;
 
 	public str Input{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	public ObservableCollection<RowWeightCalculator> Rows{get;set;} = [];
 
 	public bool IsSelectMode{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(CanCreate));

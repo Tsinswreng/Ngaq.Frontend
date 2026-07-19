@@ -15,7 +15,7 @@ public partial class VmLlmRawOutputEdit: ViewModelBase, IMk<Ctx>{
 
 	/// 可編輯的原始輸出文本。
 	public str RawOutput{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

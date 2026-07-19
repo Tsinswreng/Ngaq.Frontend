@@ -22,12 +22,12 @@ public partial class VmSearchWords: ViewModelBase, IWordCardMenuAction{
 	public VmPageBar PageBar{get;set;} = null!;
 	/// 使用者輸入的搜索關鍵字。
 	public str Input{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 	/// 當前頁搜索命中；保留命中資產資訊。
 	public IList<DtoWordSearchHit> GotWords{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 	/// 調試環境中的頁面樣例集合。

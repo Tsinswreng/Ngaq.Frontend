@@ -40,7 +40,7 @@ public partial class VmUiJsonMap: ViewModelBase, IMk<Ctx>{
 
 
 	public ObservableCollection<VmJsonMapItem> ItemVms{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}=[];
 

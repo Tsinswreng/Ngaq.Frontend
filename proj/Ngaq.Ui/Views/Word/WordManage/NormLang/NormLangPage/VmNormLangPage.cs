@@ -60,7 +60,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	public VmPageBar PageBar{get;set;} = null!;
 
 	public str Input{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -69,7 +69,7 @@ public partial class VmNormLangPage: ViewModelBase, IMk<Ctx>{
 	public bool CanCreate => true;
 
 	public bool IsSelectMode{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = false;
 

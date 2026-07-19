@@ -69,7 +69,7 @@ public partial class VmAboutMe: ViewModelBase{
 
 	/// 控制 UserId 區域點擊後的跳轉目標。
 	public bool IsLoggedIn{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 

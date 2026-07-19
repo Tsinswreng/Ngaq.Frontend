@@ -51,13 +51,13 @@ public partial class VmWordSyncV2: ViewModelBase{
 
 	/// 導出文件路徑。
 	public str PathExport{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
 	/// 導入文件路徑。
 	public str PathImport{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

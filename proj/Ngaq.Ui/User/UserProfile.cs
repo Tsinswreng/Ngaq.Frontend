@@ -24,27 +24,27 @@ public interface IUserProfile{
 
 public class UserProfile:ObservableObject, IUserProfile {
 	public IdUser UserId{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 	public str? UniqName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 	public str? NickName{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 	public str? Email{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 	public str? AvatarUrl{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 	public IImage? AvatarImg{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}
 }

@@ -63,7 +63,7 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 	}
 
 	public str LastError{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -73,7 +73,7 @@ public class VmPreFilterPayloadJsonEdit: ViewModelBase, IMk<Ctx>{
 	/// 供文本編輯器雙向同步的載荷 JSON 文本。
 	/// </summary>
 	public str PayloadJson{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 

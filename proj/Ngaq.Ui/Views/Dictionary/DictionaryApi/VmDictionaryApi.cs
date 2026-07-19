@@ -46,7 +46,7 @@ public partial class VmDictionaryApi: ViewModelBase, IMk<Ctx>{
 	}
 
 	public IList<DictionaryApiWord> Words{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = [];
 

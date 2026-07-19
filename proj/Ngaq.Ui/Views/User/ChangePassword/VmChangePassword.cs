@@ -34,17 +34,17 @@ public partial class VmChangePassword: ViewModelBase, IMk<Ctx>{
 	#endregion 依賴注入
 
 	public str OldPassword{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 
 	public str NewPassword{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 
 	public str ConfirmPassword{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	}="";
 

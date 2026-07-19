@@ -66,7 +66,7 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 
 	/// 搜索輸入文本（按 UniqName 模糊查詢）。
 	public str Input{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
@@ -75,7 +75,7 @@ public partial class VmUserLangPage: ViewModelBase, IMk<Ctx>{
 
 	/// 是否處於選擇模式（供其他頁面復用本分頁視圖挑選 UserLang）。
 	public bool IsSelectMode{
-		get{return field;}
+		get;
 		set{
 			if(SetProperty(ref field, value)){
 				OnPropertyChanged(nameof(ShowManageActions));

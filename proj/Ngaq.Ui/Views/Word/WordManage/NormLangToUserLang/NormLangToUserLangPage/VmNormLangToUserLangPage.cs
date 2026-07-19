@@ -56,7 +56,7 @@ public partial class VmNormLangToUserLangPage: ViewModelBase, IMk<Ctx>{
 
 	/// 搜索文本，同時匹配 NormLang / UserLang。
 	public str Input{
-		get{return field;}
+		get;
 		set{SetProperty(ref field, value);}
 	} = "";
 
