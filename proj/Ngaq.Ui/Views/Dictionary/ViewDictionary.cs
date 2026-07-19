@@ -7,6 +7,7 @@ using Ngaq.Core.Shared.Word.Models;
 using Ngaq.Core.Shared.Word.Models.Dto;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
+using Ngaq.Ui.Views.Dictionary.NormLangTag;
 using Tsinswreng.Avln.Grid;
 using Ctx = VmDictionary;
 
@@ -36,13 +37,27 @@ public partial class ViewDictionary
 	public OpBtn MenuBtn = new();
 	/// 承載源語言、互換與目標語言按鈕的水平版面。
 	GridStack? _langGrid;
+	/// 承載源語言快捷 Tag 滾動區與固定編輯按鈕的水平版面。
+	GridStack? _srcLangTagBar;
+	/// 顯示源語言快捷 Tag 的橫向滾動容器。
+	public ScrollViewer? SrcLangTagScroll;
+	/// 承載所有源語言快捷 Tag 的橫向版面。
+	public GridStack SrcLangTagList = new(IsRow: false);
+	/// 打開快捷標籤專用編輯頁的按鈕。
+	public OpBtn SrcLangTagEditBtn = new();
 	/// 承載搜索、輸入、保存與選單按鈕的水平版面。
 	GridStack? _searchGrid;
 	/// 在使用提示與查詞結果之間切換的結果容器。
 	Grid? _resultArea;
 
-	/// 建立語言列、搜索工具列與結果區。
+	/// 建立源語言快捷欄、語言列、搜索工具列與結果區。
 	protected partial nil Render();
+	/// 建立可橫向滾動的源語言快捷 Tag 與固定編輯按鈕。
+	private partial Control MkSrcLangTagBar();
+	/// 建立單個源語言快捷 Tag，並接通直接切換源語言的事件。
+	private partial Control MkSrcLangTag(VmNormLangTag Tag);
+	/// 打開快捷標籤專用編輯頁。
+	private partial void OpenSrcLangTagEditor();
 	/// 建立共用樣式的語言選擇按鈕。
 	private partial Button MkLangButton();
 	/// 建立交換源語言與目標語言的按鈕。

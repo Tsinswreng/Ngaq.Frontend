@@ -18,6 +18,7 @@ using Ngaq.Core.Shared.Word.Models.Po.Word;
 using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
+using Ngaq.Ui.Views.Dictionary.NormLangTag;
 using Tsinswreng.CsTools;
 using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 
@@ -159,11 +160,24 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		set{SetProperty(ref field, value);}
 	} = "zh";
 
+	/// 詞典頁源語言快捷標籤；集合順序與本地配置文件一致。
+	/// 沒有配置時保持空集合，不自動加入任何語言。
+	public ObservableCollection<VmNormLangTag> SrcLangTags{
+		get;
+		set{SetProperty(ref field, value);}
+	} = [];
+
 	public partial nil SwapLang();
 	public partial nil ApplySrcNormLang(PoNormLang Po);
 	public partial nil ApplyTgtNormLang(PoNormLang Po);
 	public partial Task<nil> InitLang(CT Ct);
 	public partial Task<nil> Lookup(CT Ct);
+	/// 從本地配置讀取源語言快捷標籤，並補齊最新標準語言資料。
+	public partial Task<nil> LoadSrcLangTags(CT Ct);
+	/// 由快捷 Tag 直接切換源語言；目標語言保持不變。
+	public partial nil ApplySrcNormLangTag(VmNormLangTag Tag);
+	/// 用編輯頁保存後的結果整體替換快捷欄，並同步當前選中狀態。
+	public partial nil ReplaceSrcLangTags(IEnumerable<VmNormLangTag> Tags);
 
 	/// 流式片段很多時，若每段都單獨 Post 到 UI 線程，安卓上容易把點擊事件排在很後面。
 	/// 這裡把待顯示片段先合併，保證 UI 線程同一時刻最多掛一個刷新任務。
@@ -238,6 +252,14 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 
 	/// 按當前 UI 語言批量獲取源/目標語言譯名，供語言切換按鈕顯示。
 	private partial Task<nil> RefreshLangTranslatedNames(CT Ct);
+
+	/// 按當前源語言更新所有快捷 Tag 的選中狀態。
+	private partial nil RefreshSrcLangTagSelection();
+	/// 將快捷標籤配置解析為運行時 ViewModel；找不到標準語言時仍保留 Code。
+	private partial Task<VmNormLangTag> LoadSrcLangTag(
+		Ngaq.Core.Shared.Dictionary.Models.CfgDictionarySrcLangTag Cfg,
+		CT Ct
+	);
 
 	/// 更新語言按鈕最終文本；查不到譯名時僅顯示語言代碼。
 	private partial nil UpdateLangDisplayTexts();
