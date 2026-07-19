@@ -24,23 +24,25 @@ using K = Ngaq.Ui.Infra.I18n.KeysUiI18nCommon;
 using Ctx = VmDictionary;
 
 public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
+
 	protected VmDictionary(){}
 	public static partial Ctx Mk();
 
-	IFrontendUserCtxMgr? FrontendUserCtxMgr;
-	ISvcDictionary? SvcDictionary;
-	ISvcWordV2? SvcWordV2;
-	ISvcNormLang? SvcNormLang;
+	IFrontendUserCtxMgr FrontendUserCtxMgr = default!;
+	ISvcDictionary SvcDictionary = default!;
+	ISvcWordV2 SvcWordV2 = default!;
+	ISvcNormLang SvcNormLang = default!;
 	public VmDictionary(
-		ISvcDictionary? SvcDictionary
-		,IFrontendUserCtxMgr? FrontendUserCtxMgr
-		,ISvcWordV2? SvcWordV2
-		,ISvcNormLang? SvcNormLang
+		ISvcDictionary SvcDictionary
+		,IFrontendUserCtxMgr FrontendUserCtxMgr
+		,ISvcWordV2 SvcWordV2
+		,ISvcNormLang SvcNormLang
 	){
 		this.SvcDictionary = SvcDictionary;
 		this.FrontendUserCtxMgr = FrontendUserCtxMgr;
 		this.SvcWordV2 = SvcWordV2;
 		this.SvcNormLang = SvcNormLang;
+		base.Init();
 	}
 
 	public static ObservableCollection<Ctx> Samples = [];

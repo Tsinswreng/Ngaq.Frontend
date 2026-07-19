@@ -2,22 +2,24 @@ namespace Ngaq.Ui.Views.Dictionary.SimpleWord;
 
 using System.Collections.ObjectModel;
 using Ngaq.Core.Frontend.User;
-using Ngaq.Core.Infra;
 using Ngaq.Core.Shared.Audio;
 using Ngaq.Core.Shared.Dictionary.Models;
 using Ngaq.Core.Shared.Dictionary.Svc;
 using Ngaq.Core.Shared.Word.Models.DictionaryApi;
 using Ngaq.Ui.Infra;
-
 using Ctx = VmSimpleWord;
-public partial class VmSimpleWord: ViewModelBase, IMk<Ctx>{
-	//蔿從構造函數依賴注入、故以靜態工廠代無參構造器
-	protected VmSimpleWord(){}
-	public static Ctx Mk(){
-		return new Ctx();
-	}
 
+/// 保存簡明查詞結果，並協調流式文本狀態與詞頭讀音播放。
+public partial class VmSimpleWord: ViewModelBase, IMk<Ctx>{
+	/// 供靜態工廠建立無依賴實例；依賴注入使用唯一的公開構造器。
+	protected partial VmSimpleWord();
+	/// 建立不注入服務的簡明查詞結果 ViewModel。
+	public static partial Ctx Mk();
+
+	/// 設計期與調試期使用的示例集合。
 	public static ObservableCollection<Ctx> Samples = [];
+
+	/// 初始化調試示例；靜態構造器無法使用 partial，故保留在聲明文件。
 	static VmSimpleWord(){
 		#if DEBUG
 		{
@@ -36,144 +38,53 @@ int.	說得對
 		#endif
 	}
 
-	/// TTS服務：把詞頭轉成可播放音頻。
+	/// TTS 服務：把詞頭轉成可播放音頻。
 	ISvcTts? SvcTts;
 	/// 音頻播放器：真正執行播放。
 	IAudioPlayer? AudioPlayer;
-	/// 字典服務：用於拿到當前源語言配置。
+	/// 字典服務：用於取得當前源語言配置。
 	ISvcDictionary? SvcDictionary;
-	/// 前端用戶上下文：獲取 DB 上下文給字典服務。
+	/// 前端用戶上下文：取得字典服務所需的數據庫上下文。
 	IFrontendUserCtxMgr? FrontendUserCtxMgr;
 
-	public VmSimpleWord(
-		ISvcTts? SvcTts
-		,IAudioPlayer? AudioPlayer
-		,ISvcDictionary? SvcDictionary
-		,IFrontendUserCtxMgr? FrontendUserCtxMgr
-	){
-		this.SvcTts = SvcTts;
-		this.AudioPlayer = AudioPlayer;
-		this.SvcDictionary = SvcDictionary;
-		this.FrontendUserCtxMgr = FrontendUserCtxMgr;
-	}
+	/// 注入讀音播放所需的服務。
+	public partial VmSimpleWord(
+		ISvcTts? SvcTts,
+		IAudioPlayer? AudioPlayer,
+		ISvcDictionary? SvcDictionary,
+		IFrontendUserCtxMgr? FrontendUserCtxMgr
+	);
 
+	/// 用最終結構化響應更新詞頭、讀音與釋義，並關閉流式寫入窗口。
+	public partial nil FromRespLlmDict(IRespLlmDict Resp);
+	/// 開始新的流式查詢並重置本輪展示狀態。
+	public partial nil StartStreaming(str QueryTerm);
+	/// 接收尚未最終定稿的流式響應片段。
+	public partial nil GotNewSeg(DtoOnNewSeg NewSeg);
+	/// 主動結束流式寫入窗口，同時保留已展示文本。
+	public partial nil StopStreaming();
+	/// 按當前源語言合成並播放詞頭讀音。
+	public partial Task<nil> PlayHead(CT Ct);
 
-	public nil FromRespLlmDict(IRespLlmDict Resp){
-		// 最終結構化結果一旦落下，就不再接受晚到的流式片段覆蓋 UI 文本。
-		IsFinalized = true;
-		Head = Resp.Head;
-		Pronunciations = Resp.Pronunciations.Select(p => new Pronunciation{
-			TextType = p.TextType,
-			Text = p.Text,
-		}).ToList();
-		var ParsedDescription = string.Join("\n", Resp.Descrs);
-		// 解析出的描述為空時，保留流式階段已展示的文本，避免界面在收尾時變空白。
-		if(!string.IsNullOrWhiteSpace(ParsedDescription)){
-			Description = ParsedDescription;
-		}
-		return NIL;
-	}
-
-
-	/// 開始新的流式查詢，重置狀態
-
-	public nil StartStreaming(string QueryTerm){
-		// 新一輪查詞開始時重新打開流式寫入窗口。
-		IsFinalized = false;
-		Head = QueryTerm;
-		Description = "";
-		return NIL;
-	}
-
-
-	/// 接收流式響應的新片段
-
-	public nil GotNewSeg(DtoOnNewSeg NewSeg){
-		// UI 執行緒中的流式片段可能晚於最終結果到達；
-		// 若本輪已完成最終解析，則忽略這些遲到片段，避免把尾巴再拼回去。
-		if(IsFinalized){
-			return NIL;
-		}
-		Description += NewSeg.NewSeg;
-		return NIL;
-	}
-
-	/// 主動結束當前流式寫入窗口。
-	/// 用於用戶取消查詞：保留當前已展示文本，但屏蔽取消後才到達的遲到片段。
-	public nil StopStreaming(){
-		IsFinalized = true;
-		return NIL;
-	}
-
-	/// 播放詞頭讀音：先調用 ISvcTts 取音頻，再調用 IAudioPlayer 播放。
-	public async Task<nil> PlayHead(CT Ct){
-		if(str.IsNullOrWhiteSpace(Head)){
-			LogWarn($"{nameof(PlayHead)} skipped: Head is empty.");
-			return NIL;
-		}
-		if(AnyNull(SvcTts, AudioPlayer, SvcDictionary, FrontendUserCtxMgr)){
-			return NIL;
-		}
-
-		try{
-			str UsedLangCode = "en";
-			// Android 對主線程網絡請求有限制；這裡把「取音頻 + 播放」整段放到後台執行。
-			await Task.Run(async ()=>{
-				// step 1: 取當前詞典源語言，作為 TTS 的語言參數。
-				var SrcLangPo = await SvcDictionary.GetCurSrcNormLang(
-					FrontendUserCtxMgr.GetDbUserCtx(),
-					Ct
-				);
-				var Lang = new NormLang{
-					Type = ELangIdentType.Bcp47,
-					Code = "en",
-				};
-				if(SrcLangPo is not null && !str.IsNullOrWhiteSpace(SrcLangPo.Code)){
-					Lang.Type = SrcLangPo.Type;
-					Lang.Code = SrcLangPo.Code;
-				}else{
-					LogWarn($"{nameof(PlayHead)}: CurSrcNormLang is null, fallback to en.");
-				}
-				UsedLangCode = Lang.Code;
-
-				// step 2: 把詞頭傳給 ISvcTts，獲取音頻數據。
-				var Audio = await SvcTts.GetAudio(
-					Head.Trim(),
-					Lang
-				);
-
-				// step 3: 調用播放器播放（按返回音頻類型自動處理）。
-				await AudioPlayer.Play(Audio, Ct);
-			}, Ct);
-			LogInfo($"{nameof(PlayHead)} success. Head={Head.Trim()}, Lang={UsedLangCode}");
-		}catch(Exception Ex){
-			LogError($"{nameof(PlayHead)} failed. Head={Head.Trim()}");
-			HandleErr(Ex);
-		}
-
-		return NIL;
-	}
-
-
-
+	/// 當前查詞結果的詞頭。
 	public str Head{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}="";
+	} = "";
 
+	/// 當前查詞結果的讀音列表。
 	public IList<Pronunciation> Pronunciations{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}=[];
+	} = [];
 
-
+	/// 當前查詞結果的合併釋義文本。
 	public str Description{
 		get{return field;}
 		set{SetProperty(ref field, value);}
-	}="";
+	} = "";
 
-	/// 當前這一輪查詞是否已經收到最終結構化結果。
-	/// 用來屏蔽 UI 線程中晚到的流式文本片段。
+	/// 當前查詞是否已收到最終結果或被主動停止。
+	/// 定稿後忽略 UI 線程中晚到的流式片段。
 	bool IsFinalized{get;set;} = false;
-
 }
