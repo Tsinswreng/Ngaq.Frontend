@@ -41,8 +41,10 @@ public partial class ViewDictionary
 	public GridStack? _SrcLangTagBar;
 	/// 顯示源語言快捷 Tag 的橫向滾動容器。
 	public ScrollViewer? SrcLangTagScroll;
-	/// 承載所有源語言快捷 Tag 的橫向版面。
-	public GridStack SrcLangTagList = new(IsRow: false);
+	/// 承載動態數量源語言快捷 Tag 的橫向流式版面。
+	public StackPanel SrcLangTagList = new(){
+		Orientation = Avalonia.Layout.Orientation.Horizontal,
+	};
 	/// 打開快捷標籤專用編輯頁的按鈕。
 	public OpBtn SrcLangTagEditBtn = new();
 	/// 承載搜索、輸入、保存與選單按鈕的水平版面。
@@ -58,6 +60,8 @@ public partial class ViewDictionary
 	private partial Control MkSrcLangTagBar();
 	/// 建立單個源語言快捷 Tag，並接通直接切換源語言的事件。
 	private partial Control MkSrcLangTag(VmNormLangTag Tag);
+	/// 按 ViewModel 當前集合重建橫向快捷 Tag 控件列。
+	private partial void RebuildSrcLangTags();
 	/// 打開快捷標籤專用編輯頁。
 	private partial void OpenSrcLangTagEditor();
 	/// 建立共用樣式的語言選擇按鈕。

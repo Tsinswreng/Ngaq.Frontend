@@ -115,6 +115,7 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 		set{
 			if(SetProperty(ref field, value)){
 				UpdateLangDisplayTexts();
+				RefreshSrcLangTagSelection();
 			}
 		}
 	} = "en";
@@ -256,10 +257,12 @@ public partial class VmDictionary: ViewModelBase, IMk<Ctx>{
 	/// 按當前源語言更新所有快捷 Tag 的選中狀態。
 	private partial nil RefreshSrcLangTagSelection();
 	/// 將快捷標籤配置解析為運行時 ViewModel；找不到標準語言時仍保留 Code。
-	private partial Task<VmNormLangTag> LoadSrcLangTag(
+	private partial VmNormLangTag LoadSrcLangTag(
 		Ngaq.Core.Shared.Dictionary.Models.CfgDictionarySrcLangTag Cfg,
-		CT Ct
+		PoNormLang? Po
 	);
+	/// 建立大小寫不敏感的語言身份鍵，供批量查詢結果按配置順序回填。
+	private static partial str SrcLangTagKey(ELangIdentType Type, str? Code);
 
 	/// 更新語言按鈕最終文本；查不到譯名時僅顯示語言代碼。
 	private partial nil UpdateLangDisplayTexts();

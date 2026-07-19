@@ -1,6 +1,7 @@
 namespace Ngaq.Ui.Views.Dictionary;
 
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.Input;
@@ -12,6 +13,8 @@ using Ngaq.Ui.Infra;
 using Ngaq.Ui.Infra.Ctrls;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.LlmRawOutputEdit;
+using Ngaq.Ui.Views.Dictionary.NormLangTag;
+using Ngaq.Ui.Views.Dictionary.NormLangTagEdit;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
 using Ngaq.Ui.Views.Word.WordEditV2;
 using Ngaq.Ui.Views.Word.WordManage.NormLang.NormLangPage;
@@ -38,9 +41,12 @@ public partial class ViewDictionary{
 			}
 			Style();
 			Render();
-			this.Loaded += (s, e) => {
+			this.Loaded += async(s, e) => {
 				//SearchTextBox?.Focus(); //在手機端會直接彈出輸入法、效果不佳
-				_ = Ctx?.InitLang(default);
+				if(Ctx is not null){
+					await Ctx.InitLang(default);
+					await Ctx.LoadSrcLangTags(default);
+				}
 			};
 		}
 
@@ -50,8 +56,10 @@ public partial class ViewDictionary{
 
 	protected partial nil Render(){
 			this.SetContent(Root.Grid, o=>{
-				Root.RowDefs = new("Auto,Auto,*");
+				Root.RowDefs = new("Auto,Auto,Auto,*");
 			});
+
+			Root.A(MkSrcLangTagBar());
 
 			var LangGrid = new GridStack(IsRow: false);
 			_LangGrid = LangGrid;
@@ -119,6 +127,58 @@ public partial class ViewDictionary{
 
 			return NIL;
 		}
+
+	private partial Control MkSrcLangTagBar(){
+		var Bar = new GridStack(IsRow: false);
+		_SrcLangTagBar = Bar;
+		Bar.SetColDefs([new(1, GUT.Star), new(1, GUT.Auto)]);
+		Bar.A(new ScrollViewer(), O=>{
+			SrcLangTagScroll = O;
+			O.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+			O.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+			O.SetContent(SrcLangTagList);
+		})
+		.A(SrcLangTagEditBtn, O=>{
+			O.BtnContent = Icons.Edit().ToIcon();
+			O._Button.StretchCenter();
+			O.SetExe(Ct=>{
+				OpenSrcLangTagEditor();
+				return Task.FromResult<nil>(NIL);
+			});
+		});
+		RebuildSrcLangTags();
+		return Bar.Grid;
+	}
+
+	private partial Control MkSrcLangTag(VmNormLangTag Tag){
+		var View = new ViewNormLangTag{Ctx = Tag};
+		View.OnSelected += X=>Ctx?.ApplySrcNormLangTag(X);
+		return View;
+	}
+
+	private partial void RebuildSrcLangTags(){
+		SrcLangTagList = new StackPanel{
+			Orientation = Orientation.Horizontal,
+		};
+		SrcLangTagScroll?.SetContent(SrcLangTagList);
+		if(Ctx is null){
+			return;
+		}
+		foreach(var Tag in Ctx.SrcLangTags){
+			SrcLangTagList.A(MkSrcLangTag(Tag));
+		}
+	}
+
+	private partial void OpenSrcLangTagEditor(){
+		var View = new ViewNormLangTagEdit();
+		if(View.Ctx is not null && Ctx is not null){
+			View.Ctx.FromTags(Ctx.SrcLangTags);
+			View.Ctx.SetOnSaved(Tags=>{
+				_ = Ctx.ReplaceSrcLangTags(Tags);
+			});
+		}
+		ViewNavi?.GoTo(ToolView.WithTitle(Todo.I18n("Edit source language shortcuts"), View));
+	}
 
 	private partial Button MkLangButton(){
 			var R = new Button();
@@ -198,6 +258,10 @@ public partial class ViewDictionary{
 		}
 
 	private partial void OnCtxPropertyChanged(object? Sender, PropertyChangedEventArgs E){
+			if(E.PropertyName == nameof(Ctx.SrcLangTags)){
+				RebuildSrcLangTags();
+				return;
+			}
 			if(E.PropertyName != nameof(Ctx.HasQuickSavedCurrentLookup)){
 				return;
 			}

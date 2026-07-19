@@ -22,6 +22,7 @@ using Ngaq.Core.Shared.Word.Svc;
 using Ngaq.Ui.Infra;
 using Ngaq.Ui.Tools;
 using Ngaq.Ui.Views.Dictionary.SimpleWord;
+using Ngaq.Ui.Views.Dictionary.NormLangTag;
 using Ngaq.Ui.Views.Word.WordManage.NormLangToUserLang.NormLangToUserLangEdit;
 using Tsinswreng.CsErr;
 using Tsinswreng.AvlnTools.Dsl;
@@ -202,6 +203,57 @@ public partial class VmDictionary{
 			HandleErr(ex);
 		}
 
+		return NIL;
+	}
+
+	public async partial Task<nil> LoadSrcLangTags(CT Ct){
+		var Cfgs = DictionarySrcLangTagCfg.Load(AppCfg.Inst);
+		var PosByKey = new Dictionary<str, PoNormLang>();
+		if(SvcNormLang is not null && FrontendUserCtxMgr is not null && Cfgs.Count > 0){
+			try{
+				var Query = ToolAsyE.ToAsyE(
+					Cfgs.Select(X=>(X.Type, X.Code))
+				);
+				var Pos = SvcNormLang.OrdGetNormLangByTypeCode(
+					FrontendUserCtxMgr.GetDbUserCtx(),
+					Query,
+					Ct
+				);
+				await foreach(var Po in Pos.WithCancellation(Ct)){
+					if(Po is not null){
+						PosByKey[SrcLangTagKey(Po.Type, Po.Code)] = Po;
+					}
+				}
+			}catch(Exception Ex){
+				HandleErr(Ex);
+			}
+		}
+
+		var Tags = new ObservableCollection<VmNormLangTag>();
+		foreach(var Cfg in Cfgs){
+			PosByKey.TryGetValue(SrcLangTagKey(Cfg.Type, Cfg.Code), out var Po);
+			Tags.Add(LoadSrcLangTag(Cfg, Po));
+		}
+		SrcLangTags = Tags;
+		RefreshSrcLangTagSelection();
+		return NIL;
+	}
+
+	public partial nil ApplySrcNormLangTag(VmNormLangTag Tag){
+		if(Tag.IsLang(ELangIdentType.Bcp47, SrcLang)){
+			return NIL;
+		}
+		ApplySrcNormLang(new PoNormLang{
+			Type = Tag.Type,
+			Code = Tag.Code,
+			NativeName = Tag.NativeName,
+		});
+		return NIL;
+	}
+
+	public partial nil ReplaceSrcLangTags(IEnumerable<VmNormLangTag> Tags){
+		SrcLangTags = new ObservableCollection<VmNormLangTag>(Tags);
+		RefreshSrcLangTagSelection();
 		return NIL;
 	}
 
@@ -628,6 +680,28 @@ public partial class VmDictionary{
 			HandleErr(ex);
 		}
 		return NIL;
+	}
+
+	private partial nil RefreshSrcLangTagSelection(){
+		foreach(var Tag in SrcLangTags){
+			Tag.IsSelected = Tag.IsLang(ELangIdentType.Bcp47, SrcLang);
+		}
+		return NIL;
+	}
+
+	private partial VmNormLangTag LoadSrcLangTag(
+		CfgDictionarySrcLangTag Cfg,
+		PoNormLang? Po
+	){
+		var R = VmNormLangTag.Mk();
+		R.FromCfg(Cfg, Po);
+		R.IsSelected = R.IsLang(ELangIdentType.Bcp47, SrcLang);
+		return R;
+	}
+
+	/// 建立大小寫不敏感的語言身份鍵，供批量查詢結果回填配置順序。
+	private static partial str SrcLangTagKey(ELangIdentType Type, str? Code){
+		return $"{(i32)Type}:{(Code ?? "").Trim().ToUpperInvariant()}";
 	}
 
 	private partial nil UpdateLangDisplayTexts(){
